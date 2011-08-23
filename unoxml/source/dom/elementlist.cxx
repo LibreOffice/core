@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@ namespace DOM
 {
 
     CElementList::CElementList(const CElement* aElement, const OUString& aName)
-        : m_pElement(aElement)
+        : m_pElement(aElement)        
         , m_aName(aName)
         , xURI(0)
         , m_bRebuild(sal_True)
@@ -45,7 +45,7 @@ namespace DOM
     }
 
     CElementList::CElementList(const CElement* aElement, const OUString& aName, const OUString& aURI)
-        : m_pElement(aElement)
+        : m_pElement(aElement)        
         , m_aName(aName)
         , m_aURI(aURI)
         , m_bRebuild(sal_True)
@@ -78,7 +78,7 @@ namespace DOM
     void CElementList::buildlist(xmlNodePtr pNode, sal_Bool start)
     {
         // bail out if no rebuild is needed
-        if (start) {
+        if (start) {             
             if (!m_bRebuild)
             {
                 return;
@@ -87,12 +87,12 @@ namespace DOM
                 m_bRebuild = sal_False; // don't rebuild until tree is mutated
             }
         }
-
+        
         while (pNode != NULL )
         {
-            if (pNode->type == XML_ELEMENT_NODE && strcmp((char*)pNode->name, (char*)xName)==0)
+            if (pNode->type == XML_ELEMENT_NODE && strcmp((char*)pNode->name, (char*)xName)==0) 
             {
-                if (xURI == NULL)
+                if (xURI == NULL) 
                     m_nodevector.push_back(pNode);
                 else
                     if (pNode->ns != NULL && strcmp((char*)pNode->ns->href, (char*)xURI) == 0)
@@ -104,7 +104,7 @@ namespace DOM
             else break; // fold back
         }
     }
-
+        
     /**
     The number of nodes in the list.
     */
@@ -119,7 +119,7 @@ namespace DOM
     */
     Reference< XNode > SAL_CALL CElementList::item(sal_Int32 index) throw (RuntimeException)
     {
-        if (index < 0) throw RuntimeException();
+        if (index < 0) throw RuntimeException();        
         buildlist(static_cast<const CNode*>(m_pElement)->m_aNodePtr);
         return Reference< XNode >(CNode::get(m_nodevector[index]));
     }

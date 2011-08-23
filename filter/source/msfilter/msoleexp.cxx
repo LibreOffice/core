@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -172,7 +172,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                 {{SO3_SCH_CLASSID_60}, {SO3_SCH_CLASSID_50},
                  {SO3_SCH_CLASSID_40}, {SO3_SCH_CLASSID_30 }}},
             { 0, "",
-                {{SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50},    // SJ: !!!! SO3_SDRAW_CLASSID is only available up from
+                {{SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50},	// SJ: !!!! SO3_SDRAW_CLASSID is only available up from
                  {SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50 }}}, // ver 5.0, it is purpose to have double entrys here.
 
             { 0xffff,0,
@@ -203,7 +203,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
         }
     }
 
-    if( pExpFilter )                        // use this filter for the export
+    if( pExpFilter )				        // use this filter for the export
     {
         try
         {
@@ -272,7 +272,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                         aSize.Width = 5000;
                         aSize.Height = 5000;
                     }
-
+                    
                     //Rectangle aVisArea = xSfxIPObj->GetVisArea( ASPECT_CONTENT );
                     sal_Int32 pRect[4];
                     //pRect[0] = aVisArea.Left();

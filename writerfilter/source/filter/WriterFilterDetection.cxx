@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -134,7 +134,7 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
                     {
                         bWord = true;
                         if( !sTypeName.getLength() )
-                            sTypeName = ::rtl::OUString(
+                            sTypeName = ::rtl::OUString( 
                                     RTL_CONSTASCII_STRINGPARAM( "writer_MS_Word_2007" ), RTL_TEXTENCODING_ASCII_US);
                         break;
                     }

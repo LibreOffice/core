@@ -1,0 +1,507 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+#include "glob.hrc"
+String STR_LAYOUT
+{
+    Text [ de ] = "Layout" ;
+    Text [ en-US ] = "Layout" ;
+    Text[ pt ] = "Configuração";
+    Text[ ru ] = "Разметка";
+    Text[ el ] = "Διάταξη";
+    Text[ nl ] = "Lay-out";
+    Text[ fr ] = "Mise en page";
+    Text[ es ] = "Diseño";
+    Text[ fi ] = "Asettelu";
+    Text[ ca ] = "Format";
+    Text[ it ] = "Layout";
+    Text[ da ] = "Layout";
+    Text[ sv ] = "Layout";
+    Text[ pl ] = "Układ";
+    Text[ pt-BR ] = "Layout";
+    Text[ th ] = "เค้าโครง";
+    Text[ ja ] = "レイアウト";
+    Text[ ko ] = "레이아웃";
+    Text[ zh-CN ] = "版式";
+    Text[ zh-TW ] = "版式";
+    Text[ tr ] = "Sayfa düzeni";
+    Text[ hi-IN ] = "अभिन्यास";
+    Text[ ar ] = "تخطيط";
+    Text[ he ] = "‮פריסה‬";
+};
+String STR_CONTROLS
+{
+    Text [ de ] = "Controls" ;
+    Text [ en-US ] = "Controls" ;
+    Text[ pt ] = "Controlos";
+    Text[ ru ] = "Элементы управления";
+    Text[ el ] = "Στοιχεία ελέγχου";
+    Text[ nl ] = "Controls";
+    Text[ fr ] = "Contrôles";
+    Text[ es ] = "Controles";
+    Text[ fi ] = "Ohjausobjektit";
+    Text[ ca ] = "Controls";
+    Text[ it ] = "Campi di controllo";
+    Text[ da ] = "Kontrolelementer";
+    Text[ sv ] = "Controls";
+    Text[ pl ] = "Formanty";
+    Text[ pt-BR ] = "Controles";
+    Text[ th ] = "ตัวควบคุม";
+    Text[ ja ] = "コントロール";
+    Text[ ko ] = "컨트롤";
+    Text[ zh-CN ] = "控件";
+    Text[ zh-TW ] = "控制項";
+    Text[ tr ] = "Komut alanları";
+    Text[ hi-IN ] = "नियंत्रण";
+    Text[ ar ] = "عناصر تحكم";
+    Text[ he ] = "‮פקדים‬";
+};
+String STR_CHARTVIEWSHELL
+{
+    Text [ de ] = "Diagrammmodus" ;
+    Text [ en-US ] = "Chart mode" ;
+    Text[ pt ] = "Modo Gráfico";
+    Text[ ru ] = "Режим диаграммы";
+    Text[ el ] = "Κατάσταση διαγράμματος";
+    Text[ nl ] = "Diagrammodus";
+    Text[ fr ] = "Mode Diagramme";
+    Text[ es ] = "Modo diagrama";
+    Text[ fi ] = "Kaaviotila";
+    Text[ ca ] = "Mode del diagrama";
+    Text[ it ] = "Modo diagramma";
+    Text[ da ] = "Diagrammodus";
+    Text[ sv ] = "Diagramläge";
+    Text[ pl ] = "Tryb wykresu";
+    Text[ pt-BR ] = "Modo Gráfico";
+    Text[ th ] = "โหมดแผนภูมิ";
+    Text[ ja ] = "グラフ モード";
+    Text[ ko ] = "차트 모드";
+    Text[ zh-CN ] = "图表模式";
+    Text[ zh-TW ] = "圖表模式";
+    Text[ tr ] = "Şema kipi";
+    Text[ hi-IN ] = "चार्ट प्रकार";
+    Text[ ar ] = "وضع الرسم البياني";
+    Text[ he ] = "‮תרשים‬";
+};
+String STR_STDOBJECTBARSHELL
+{
+    Text [ de ] = "Diagrammleiste" ;
+    Text [ en-US ] = "Chart Bar" ;
+    Text[ pt ] = "Barra de gráficos";
+    Text[ ru ] = "Панель диаграммы";
+    Text[ el ] = "Γραμμή διαγράμματος";
+    Text[ nl ] = "Diagrammenbalk";
+    Text[ fr ] = "Barre de diagramme";
+    Text[ es ] = "Barra de diagramas";
+    Text[ fi ] = "Kaaviopalkki";
+    Text[ ca ] = "Barra del diagrama";
+    Text[ it ] = "Barra dei diagrammi";
+    Text[ da ] = "Diagramlinje";
+    Text[ sv ] = "Diagramlist";
+    Text[ pl ] = "Słupek na wykresie";
+    Text[ pt-BR ] = "Barra de Gráficos";
+    Text[ th ] = "แถบแผนภูมิ";
+    Text[ ja ] = "グラフバー";
+    Text[ ko ] = "차트 모음";
+    Text[ zh-CN ] = "图表栏";
+    Text[ zh-TW ] = "圖表工具列";
+    Text[ tr ] = "Şema çubuğu";
+    Text[ hi-IN ] = "चार्ट पट्टी";
+    Text[ ar ] = "شريط الرسم البياني";
+    Text[ he ] = "‮תרשים פסים‬";
+};
+String STR_APPLICATIONOBJECTBAR
+{
+    Text [ de ] = "Funktionsleiste" ;
+    Text [ en-US ] = "Function Bar" ;
+    Text[ pt ] = "Barra de funções";
+    Text[ ru ] = "Панель функций";
+    Text[ el ] = "Γραμμή λειτουργιών";
+    Text[ nl ] = "Werkbalk";
+    Text[ fr ] = "Barre de fonctions";
+    Text[ es ] = "Barra de funciones";
+    Text[ fi ] = "Toimintorivi";
+    Text[ ca ] = "Barra de funcions";
+    Text[ it ] = "Barra delle funzioni";
+    Text[ da ] = "Funktionslinje";
+    Text[ sv ] = "Funktionslist";
+    Text[ pl ] = "Pasek funkcji";
+    Text[ pt-BR ] = "Barra de Funções";
+    Text[ th ] = "แถบฟังก์ชั่น";
+    Text[ ja ] = "ファンクションバー";
+    Text[ ko ] = "기능 모음";
+    Text[ zh-CN ] = "功能栏";
+    Text[ zh-TW ] = "工具列";
+    Text[ tr ] = "İşlev çubuğu";
+    Text[ hi-IN ] = "फंक्शन् पट्टी";
+    Text[ ar ] = "شريط المهام";
+    Text[ he ] = "‮סרגל פעולות נפוצות‬";
+};
+String STR_TITLE_MAIN
+{
+    Text [ de ] = "Haupttitel" ;
+    Text [ en-US ] = "Main title" ;
+    Text[ pt ] = "Título principal";
+    Text[ ru ] = "Главный заголовок";
+    Text[ el ] = "Κύριος τίτλος";
+    Text[ nl ] = "Hoofdtitel";
+    Text[ fr ] = "Titre principal";
+    Text[ es ] = "Título principal";
+    Text[ fi ] = "Pääotsikko";
+    Text[ ca ] = "Títol principal";
+    Text[ it ] = "Titolo principale";
+    Text[ da ] = "Overskrift";
+    Text[ sv ] = "Huvudrubrik";
+    Text[ pl ] = "Tytuł główny";
+    Text[ pt-BR ] = "Título principal";
+    Text[ th ] = "ชื่อหลัก";
+    Text[ ja ] = "メインタイトル";
+    Text[ ko ] = "주 제목";
+    Text[ zh-CN ] = "主标题";
+    Text[ zh-TW ] = "主標題";
+    Text[ tr ] = "Ana başlık";
+    Text[ hi-IN ] = "मुख्य शीर्षक";
+    Text[ ar ] = "العنوان الرئيسي";
+    Text[ he ] = "‮כותרת ראשית‬";
+};
+String STR_TITLE_SUB
+{
+    Text [ de ] = "Untertitel" ;
+    Text [ en-US ] = "Subtitle" ;
+    Text[ pt ] = "Subtítulo";
+    Text[ ru ] = "Подзаголовок";
+    Text[ el ] = "Υπότιτλος";
+    Text[ nl ] = "Subtitel";
+    Text[ fr ] = "Sous-titre ";
+    Text[ es ] = "Subtítulo";
+    Text[ fi ] = "Alaotsikko";
+    Text[ ca ] = "Subtítol";
+    Text[ it ] = "Sottotitolo";
+    Text[ da ] = "Undertitel";
+    Text[ sv ] = "Underrubrik";
+    Text[ pl ] = "Podtytuł";
+    Text[ pt-BR ] = "Subtítulo";
+    Text[ th ] = "ชื่อรอง";
+    Text[ ja ] = "サブタイトル";
+    Text[ ko ] = "부제";
+    Text[ zh-CN ] = "分标题";
+    Text[ zh-TW ] = "分標題";
+    Text[ tr ] = "Alt başlık";
+    Text[ hi-IN ] = "अधीन शीर्षक";
+    Text[ ar ] = "العنوان الفرعي";
+    Text[ he ] = "‮תת כותרת‬";
+};
+String STR_DIAGRAM_TITLE_X_AXIS
+{
+    Text [ de ] = "X-Achsentitel" ;
+    Text [ en-US ] = "X axis title" ;
+    Text[ pt ] = "Título do eixo X";
+    Text[ ru ] = "Заголовок оси X";
+    Text[ el ] = "Τίτλος άξονα Χ";
+    Text[ nl ] = "Titel X-as";
+    Text[ fr ] = "Titre de l'axe X";
+    Text[ es ] = "Título del eje X";
+    Text[ fi ] = "X-akselin otsikko";
+    Text[ ca ] = "Títol de l'eix X";
+    Text[ it ] = "Titolo asse X";
+    Text[ da ] = "X-aksetitel";
+    Text[ sv ] = "X-axelrubrik";
+    Text[ pl ] = "Tytuł osi X";
+    Text[ pt-BR ] = "Título do eixo X";
+    Text[ th ] = "ชื่อแกน X ";
+    Text[ ja ] = "X軸タイトル";
+    Text[ ko ] = "X 축 제목";
+    Text[ zh-CN ] = "X 轴标题";
+    Text[ zh-TW ] = "X-軸標題";
+    Text[ tr ] = "X ekseni başlığı";
+    Text[ hi-IN ] = "X अक्षरेखा शीर्षक";
+    Text[ ar ] = "عنوان المحور س";
+    Text[ he ] = "‮כותרת ציר X‬";
+};
+String STR_DIAGRAM_TITLE_Y_AXIS
+{
+    Text [ de ] = "Y-Achsentitel" ;
+    Text [ en-US ] = "Y axis title" ;
+    Text[ pt ] = "Título do eixo Y";
+    Text[ ru ] = "Заголовок оси Y";
+    Text[ el ] = "Τίτλος άξονα Y";
+    Text[ nl ] = "Titel Y-as";
+    Text[ fr ] = "Titre de l'axe Y";
+    Text[ es ] = "Título del eje Y";
+    Text[ fi ] = "Y-akselin otsikko";
+    Text[ ca ] = "Títol de l'eix Y";
+    Text[ it ] = "Titolo asse Y";
+    Text[ da ] = "Y-aksetitel";
+    Text[ sv ] = "Y-axelrubrik";
+    Text[ pl ] = "Tytuł osi Y";
+    Text[ pt-BR ] = "Título do eixo Y";
+    Text[ th ] = "ชื่อแกน Y ";
+    Text[ ja ] = "Y軸タイトル";
+    Text[ ko ] = "Y축 제목";
+    Text[ zh-CN ] = "Y 轴标题";
+    Text[ zh-TW ] = "Y-軸標題";
+    Text[ tr ] = "Y ekseni başlığı";
+    Text[ hi-IN ] = "Y axis title";
+    Text[ ar ] = "عنوان المحور ص";
+    Text[ he ] = "‮כותרת ציר Y‬";
+};
+String STR_DIAGRAM_TITLE_Z_AXIS
+{
+    Text [ de ] = "Z-Achsentitel" ;
+    Text [ en-US ] = "Z axis title" ;
+    Text[ pt ] = "Título do eixo Z";
+    Text[ ru ] = "Заголовок оси Z";
+    Text[ el ] = "Τίτλος άξονα Z";
+    Text[ nl ] = "Titel Z-as";
+    Text[ fr ] = "Titre de l'axe Z";
+    Text[ es ] = "Título del eje Z";
+    Text[ fi ] = "Z-akselin otsikko";
+    Text[ ca ] = "Títol de l'eix Z";
+    Text[ it ] = "Titolo asse Z";
+    Text[ da ] = "Z-aksetitel";
+    Text[ sv ] = "Z-axelrubrik";
+    Text[ pl ] = "Tytuł osi Z";
+    Text[ pt-BR ] = "Título do eixo Z";
+    Text[ th ] = "ชื่อแกน Z ";
+    Text[ ja ] = "Z軸タイトル";
+    Text[ ko ] = "Z축 제목";
+    Text[ zh-CN ] = "Z 轴标题";
+    Text[ zh-TW ] = "Z-軸標題";
+    Text[ tr ] = "Z ekseni başlığı";
+    Text[ hi-IN ] = "Z अक्षरेखा शीर्षक";
+    Text[ ar ] = "عنوان المحور ع";
+    Text[ he ] = "‮כותרת ציר Z‬";
+};
+String STR_COLUMN
+{
+    Text [ de ] = "Spalte $(N)" ;
+    Text [ x-comment ] = "the parameter $(N) is replaced by the number of a column";
+    Text [ en-US ] = "Column $(N) " ;
+    Text[ pt ] = "Coluna $(N)";
+    Text[ ru ] = "Столбец $(N)";
+    Text[ el ] = "Στήλη $(N)";
+    Text[ nl ] = "Kolom $(N)";
+    Text[ fr ] = "Colonne $(N)";
+    Text[ es ] = "Columna $(N)";
+    Text[ fi ] = "Sarake $(N) ";
+    Text[ ca ] = "Columna $(N) ";
+    Text[ it ] = "Colonna $(N)";
+    Text[ da ] = "Kolonne $(N)";
+    Text[ sv ] = "Kolumn $(N)";
+    Text[ pl ] = "Kolumna $(N)";
+    Text[ pt-BR ] = "Coluna $(N) ";
+    Text[ th ] = "คอลัมน์ $(N) ";
+    Text[ ja ] = "列 $(N)";
+    Text[ ko ] = "열 $(N)";
+    Text[ zh-CN ] = "列 $(N)";
+    Text[ zh-TW ] = "欄 $(N)";
+    Text[ tr ] = "Sütun $(N)";
+    Text[ hi-IN ] = "स्तंभ $(N)";
+    Text[ ar ] = "العمود  $(N)";
+    Text[ he ] = "‮עמודה $(N) ‬";
+};
+String STR_ROW
+{
+    Text [ de ] = "Zeile $(N)" ;
+    Text [ x-comment ] = "the parameter $(N) is replaced by the number of a row";
+    Text [ en-US ] = "Row $(N)" ;
+    Text[ pt ] = "Linha $(N)";
+    Text[ ru ] = "Строка $(N)";
+    Text[ el ] = "Γραμμή $(N)";
+    Text[ nl ] = "Rij $(N)";
+    Text[ fr ] = "Ligne $(N)";
+    Text[ es ] = "Fila $(N)";
+    Text[ fi ] = "Rivi $(N)";
+    Text[ ca ] = "Fila $(N)";
+    Text[ it ] = "Riga $(N)";
+    Text[ da ] = "Række $(N)";
+    Text[ sv ] = "Rad $(N)";
+    Text[ pl ] = "Wiersz $(N)";
+    Text[ pt-BR ] = "Linha $(N) ";
+    Text[ th ] = "แถว $(N)";
+    Text[ ja ] = "行 $(N)";
+    Text[ ko ] = "행$(N)";
+    Text[ zh-CN ] = "行 $(N)";
+    Text[ zh-TW ] = "列 $(N)";
+    Text[ tr ] = "Satır $(N)";
+    Text[ hi-IN ] = "Row $(N)";
+    Text[ ar ] = "الصف $(N)";
+    Text[ he ] = "‮ שורה $(N)‬";
+};
+String STR_STLSHEET_TITLE_MAIN
+{
+    Text  = "Haupttitel" ;
+};
+String STR_STLSHEET_TITLE_SUB
+{
+    Text = "Untertitel" ;
+};
+String STR_STLSHEET_TITLE_X_AXIS
+{
+    Text  = "X-Achsentitel" ;
+};
+String STR_STLSHEET_TITLE_Y_AXIS
+{
+    Text  = "Y-Achsentitel" ;
+};
+String STR_STLSHEET_TITLE_Z_AXIS
+{
+    Text = "Z-Achsentitel" ;
+};
+String STR_STLSHEET_DATAROWS
+{
+    Text  = "Datenzeilen" ;
+};
+String STR_STLSHEET_DATACOLS
+{
+    Text  = "Datenspalten" ;
+};
+String STR_STLSHEET_DATAVALUES
+{
+    Text  = "Datenwerte" ;
+};
+String STR_STLSHEET_DATADESCR
+{
+    Text  = "Datenbeschriftung" ;
+};
+String STR_STLSHEET_LEGEND
+{
+    Text  = "Legende" ;
+};
+String STR_NO_LOGARITHMIC_MIN_VALUES
+{
+    Text [ de ] = "Negative und Null-Werte können nicht logarithmisch dargestellt werden." ;
+    Text [ en-US ] = "Negative and zero values cannot be logarithmicaly portrayed." ;
+    Text[ pt ] = "Valores zero e negativos não podem ser representados de forma logarítmica.";
+    Text[ ru ] = "Невозможно представить логарифмически отрицательные и нулевые значения.";
+    Text[ el ] = "Δεν είναι δυνατόν να γίνει λογαριθμητική παράσταση αρνητικών και μηδενικών τιμών.";
+    Text[ nl ] = "Negatieve waarden en nul-waarden kunnen niet logaritmisch worden weergegeven.";
+    Text[ fr ] = "Valeurs négatives et valeurs zéro ne peuvent être affichées sous forme de logarithme";
+    Text[ es ] = "No es posible representar logarítmicamente valores cero o valores negativos.";
+    Text[ fi ] = "Negatiivisia arvoja ja nollaa ei voi kuvata logaritmisesti.";
+    Text[ ca ] = "No és possible representar logarítmicament valors zero o valors negatius.";
+    Text[ it ] = "Valori nulli e negativi non possono essere rappresentati logaritmamente.";
+    Text[ da ] = "Negative værdier og nulværdier kan ikke vises logaritmisk.";
+    Text[ sv ] = "Negativa värden och nollvärden kan inte visas logaritmiskt.";
+    Text[ pl ] = "Wartości ujemne i zerowe nie mogą zostać przedstawione logarytmicznie.";
+    Text[ pt-BR ] = "Valores nulos e negativos não podem ser apresentados de forma logarítmica.";
+    Text[ th ] = "ไม่สามารถอธิบายทางลอการิธึมค่าลบและศูนย์ได้";
+    Text[ ja ] = "マイナス値とゼロは対数表示できません。";
+    Text[ ko ] = "(－) 또는 0 값은 로그로 표현될 수 없습니다.";
+    Text[ zh-CN ] = "负数和零无法以对数的形式表示。";
+    Text[ zh-TW ] = "負數和零無法以對數的形式表示。";
+    Text[ tr ] = "Negatif ve sıfır değerleri, logaritmik olarak görüntülenemez.";
+    Text[ hi-IN ] = "ऋणात्मक सख्याँओ एवं शुन्य का लघुगणक नहीं होता है।";
+    Text[ ar ] = "لا يمكن عرض القيم السلبية وقيم الصفر لوغاريتمياً.";
+    Text[ he ] = "‮לא ניתן להציג ערכים שליליים או אפס בתרשים לוגריתמי.‬";
+};
+String STR_NO_MIN_VALUES
+{
+    Text [ de ] = "Der Diagrammtyp kann keine negativen Werte darstellen." ;
+    Text [ en-US ] = "The selected chart type cannot portay negative values." ;
+    Text[ pt ] = "O tipo de gráfico não pode apresentar valor negativos.";
+    Text[ ru ] = "Выбранный тип диаграммы не может представить отрицательные значения.";
+    Text[ el ] = "Ο τύπος διαγράμματος δεν έχει δυνατότητα εμφάνισης αρνητικών τιμών.";
+    Text[ nl ] = "In dit diagramtype kunnen geen negatieve waarden worden weergeven.";
+    Text[ fr ] = "Ce type de diagramme ne peut représenter des valeurs négatives.";
+    Text[ es ] = "Este tipo de diagrama no puede representar valores negativos.";
+    Text[ fi ] = "Valittu kaaviotyyppi ei voi kuvata negatiivisia arvoja.";
+    Text[ ca ] = "El tipus de diagrama seleccionat no pot representar valors negatius.";
+    Text[ it ] = "Il tipo di diagramma non può rappresentare valori negativi.";
+    Text[ da ] = "Denne diagramtype kan ikke vise negative værdier.";
+    Text[ sv ] = "Diagramtypen kan inte visa negativa värden.";
+    Text[ pl ] = "Wybrany typ wykresu nie może przedstawiać wartości ujemnych.";
+    Text[ pt-BR ] = "O tipo de gráfico selecionado não pode apresentar valores negativos.";
+    Text[ th ] = "ชนิดของแผนภูมิที่เลือกไม่สามารถอธิบายค่าลบได้";
+    Text[ ja ] = "このグラフの種類はマイナス値を表すことができません。";
+    Text[ ko ] = "선택된 차트의 유형은 (－）값을 표현할 수 없습니다.";
+    Text[ zh-CN ] = "此类图表不能显示负数值。";
+    Text[ zh-TW ] = "此類圖表不能顯示負數值。";
+    Text[ tr ] = "Bu şema tipi, negatif değerleri görüntüleyemiyor.";
+    Text[ hi-IN ] = "चुना हुआ चार्ट वर्ग क्षयराशि मूल्यों को वर्णन नहीं कर सकता है ।";
+    Text[ ar ] = "هذا النوع من الرسوم البيانية لا يمكنه عرض القيم السلبية.";
+    Text[ he ] = "‮סוג התרשים הנבחר אינו מסוגל להציג ערכים שליליים.‬";
+};
+String STR_ONLY_ABS_VALUES
+{
+    Text [ de ] = "Der Diagrammtyp kann keinen Wertebereich mit unterschiedlichem Vorzeichen darstellen.\nEs werden Absolutwerte angenommen." ;
+    Text [ en-US ] = "This chart type cannot portray value areas with different signs.\nThe values will be shown as absolutes without signs." ;
+    Text[ pt ] = "Este tipo de gráfico não pode apresentar áreas de valor com sinais diferentes.\n São aceites valores absolutos.";
+    Text[ ru ] = "Этот тип диаграммы не может представить область значений с различными знаками.\nПоэтому будут показаны абсолютные значения.";
+    Text[ el ] = "Ο τύπος διαγράμματος δεν έχει δυνατότητα εμφάνισης περιοχής τιμών με διαφορετικά πρόσημα.\nΘα αναγνωριστούν ως απόλυτες τιμές.";
+    Text[ nl ] = "In dit diagramtype kan geen waardenbereik met verschillende voortekens worden weergeven.\nEr worden absolute waarden aangenomen.";
+    Text[ fr ] = "Ce type de diagramme ne peut représenter des plages valeurs de signes différents.\nLes valeurs absolues seront acceptées.";
+    Text[ es ] = "Este tipo de diagrama no puede representar una gama de valores con signos diferentes.\nSe aceptan valores absolutos.";
+    Text[ fi ] = "Tässä kaaviotyypissä ei voi kuvata arvoalueita, joissa on sekä negatiivisia että positiivisia arvoja.\nArvot kuvataan itseisarvoina ilman etumerkkejä.";
+    Text[ ca ] = "Aquest tipus de diagrama no pot representar una gamma de valors amb signes diferents.\nS'accepten valors absoluts.";
+    Text[ it ] = "Il tipo di diagramma non può visualizzare aree di dati con diversi segni.\nVengono accettati solo valori assoluti.";
+    Text[ da ] = "Denne diagramtype kan ikke vise et værdiområde med forskelligt fortegn.\nVærdierne bliver vist som absolutværdier, dvs. uden hensyntagen til fortegn.";
+    Text[ sv ] = "Diagramtypen kan inte visa värdeområden med olika förtecken.\nAbsolutvärden visas.";
+    Text[ pl ] = "Ten typ wykresu nie może przedstawiać obszarów wartości o różnych znakach.\nZostaną pokazane wartości absolutne (bez znaków).";
+    Text[ pt-BR ] = "Este tipo de gráfico não pode apresentar valores de área com sinais diferentes.\n Os valores serão mostrados como valores absolutos sem sinal.";
+    Text[ th ] = "ชนิดแผนภูมินี้ไม่สามารถพื้นที่ของค่าด้วยสัญลักษณ์ที่ต่างกันได้\nค่าจะถูกแสดงเป็นค่าสัมบูรณ์โดยไม่มีสัญลักษณ์";
+    Text[ ja ] = "このグラフの種類は異なる符号の付く数値の範囲を表示できません。\n絶対値が採用されます。";
+    Text[ ko ] = "선택된 차트의 유형은 여러가지 부호가 붙은 값 구역을 표현할 수 없습니다.\n절대값으로 간주됩니다.";
+    Text[ zh-CN ] = "此图表类型无法显示含有不同正负号的数值区域。\n只能够处理绝对值。";
+    Text[ zh-TW ] = "此圖表類型無法顯示含有不同正負號的數值區域。\n只接受絕對值。";
+    Text[ tr ] = "Bu şema tipi, farklı işaretleri olan değer aralıklarını görüntüleyemiyor.\nMutlak değerler görüntülenecek.";
+    Text[ hi-IN ] = "चुना हुआ चार्ट् वर्ग मूल्य वीस्तीर्णों को अलग-अलग चिन्ह से वर्णन नहीं कर सकता है ।\nमूल्य को चिन्ह रहित निश्चित रूप से दिखाया जाएगा ।";
+    Text[ ar ] = "لا يمكن لنمط الرسم البياني هذا إظهار نطاق قيم بعلامات مختلفة.\nسوف يتم قبول القيم المطلقة.";
+    Text[ he ] = "‮סוג התרשים הזה אינו מסוגל להציג ערכים בעלי סימנים הפוכים.\nולכן הערכים יוצגו כערכים מוחלטים ללא סימנים.‬";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

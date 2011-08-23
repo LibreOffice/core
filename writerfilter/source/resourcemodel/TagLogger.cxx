@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,14 +42,14 @@ namespace writerfilter
 
         mAttrs.push_back(aAttr);
     }
-
+    
     void XMLTag::addAttr(string sName, const ::rtl::OUString & sValue)
     {
-        addAttr(sName,
+        addAttr(sName, 
                 OUStringToOString
                 (sValue, RTL_TEXTENCODING_ASCII_US).getStr());
     }
-
+    
     void XMLTag::addAttr(string sName, sal_uInt32 nValue)
     {
         static char buffer[256];
@@ -64,13 +64,13 @@ void XMLTag::addAttr(string sName, uno::Any aAny)
     string aTmpStrString;
 
     static char buffer[256];
-
+    
     try
     {
         sal_Int32 nInt = 0;
         aAny >>= nInt;
 
-        snprintf(buffer, sizeof(buffer), "%" SAL_PRIdINT32,
+        snprintf(buffer, sizeof(buffer), "%" SAL_PRIdINT32, 
                  nInt);
 
         aTmpStrInt = buffer;
@@ -95,7 +95,7 @@ void XMLTag::addAttr(string sName, uno::Any aAny)
         aTmpStrFloat = "exception";
     }
 
-    try
+    try 
     {
         ::rtl::OUString aStr;
         aAny >>= aStr;
@@ -105,9 +105,9 @@ void XMLTag::addAttr(string sName, uno::Any aAny)
     catch (uno::Exception aExcept)
     {
         aTmpStrString = "exception";
-    }
+    }        
 
-    addAttr(sName, "i:" + aTmpStrInt + " f:" + aTmpStrFloat + " s:" +
+    addAttr(sName, "i:" + aTmpStrInt + " f:" + aTmpStrFloat + " s:" + 
             aTmpStrString);
 }
 
@@ -234,7 +234,7 @@ void XMLTag::chars(const ::rtl::OUString & rChars)
     {
         mFileName = rName;
     }
-
+    
     TagLogger::Pointer_t TagLogger::getInstance(const char * name)
     {
         if (tagLoggers == NULL)
@@ -283,12 +283,12 @@ void XMLTag::chars(const ::rtl::OUString & rChars)
         currentTag()->addTag(pTag);
         mTags.push(pTag);
     }
-
+    
     void TagLogger::attribute(const string & name, const string & value)
     {
         currentTag()->addAttr(name, value);
     }
-
+    
     void TagLogger::attribute(const string & name, const ::rtl::OUString & value)
     {
         currentTag()->addAttr(name, value);
@@ -303,61 +303,61 @@ void TagLogger::attribute(const string & name, const uno::Any aAny)
 {
     currentTag()->addAttr(name, aAny);
 }
-
+    
     void TagLogger::addTag(XMLTag::Pointer_t pTag)
     {
         currentTag()->addTag(pTag);
     }
-
+    
     void TagLogger::chars(const string & rChars)
     {
         currentTag()->chars(xmlify(rChars));
     }
-
+    
     void TagLogger::chars(const ::rtl::OUString & rChars)
     {
         chars(OUStringToOString(rChars, RTL_TEXTENCODING_ASCII_US).getStr());
     }
-
+    
     void TagLogger::endElement(const string & name)
     {
         string nameRemoved = currentTag()->getTag();
-
+        
         if (name == nameRemoved)
             mTags.pop();
         else {
             XMLTag::Pointer_t pTag(new XMLTag("end.mismatch"));
             pTag->addAttr("name", name);
             pTag->addAttr("top", nameRemoved);
-
+            
             currentTag()->addTag(pTag);
         }
 
     }
-
+    
     void TagLogger::endDocument()
     {
         mTags.pop();
     }
-
+    
     ostream & TagLogger::output(ostream & o) const
     {
         return mpRoot->output(o);
     }
-
+    
     void TagLogger::dump(const char * name)
     {
         TagLoggerHashMap_t::iterator aIt(tagLoggers->find(name));
         if (aIt != tagLoggers->end())
         {
-            string fileName;
+            string fileName;            
             char * temp = getenv("TAGLOGGERTMP");
-
+            
             if (temp != NULL)
                 fileName += temp;
             else
                 fileName += "/tmp";
-
+            
             string sPrefix = aIt->second->mFileName;
             size_t nLastSlash = sPrefix.find_last_of('/');
             size_t nLastBackslash = sPrefix.find_last_of('\\');
@@ -366,7 +366,7 @@ void TagLogger::attribute(const string & name, const uno::Any aAny)
                 nCutPos = nLastBackslash;
             if (nCutPos < sPrefix.size())
                 sPrefix = sPrefix.substr(nCutPos + 1);
-
+            
             fileName += "/";
             fileName += sPrefix;
             fileName +=".";
@@ -377,11 +377,11 @@ void TagLogger::attribute(const string & name, const uno::Any aAny)
             aIt->second->output(dumpStream);
         }
     }
-
+    
     PropertySetToTagHandler::~PropertySetToTagHandler()
     {
     }
-
+    
     void PropertySetToTagHandler::resolve
     (XMLTag & rTag, writerfilter::Reference<Properties>::Pointer_t pProps)
     {
@@ -392,43 +392,43 @@ void TagLogger::attribute(const string & name, const uno::Any aAny)
             rTag.addTag(aHandler.getTag());
         }
     }
-
+    
     void PropertySetToTagHandler::attribute(Id name, Value & val)
     {
         XMLTag::Pointer_t pTag(new XMLTag("attribute"));
-
+        
         pTag->addAttr("name", (*QNameToString::Instance())(name));
         pTag->addAttr("value", val.toString());
-
+        
         resolve(*pTag, val.getProperties());
-
+        
         mpTag->addTag(pTag);
     }
-
+    
     void PropertySetToTagHandler::sprm(Sprm & rSprm)
     {
         XMLTag::Pointer_t pTag(new XMLTag("sprm"));
-
+        
         string sName;
-
+        
         if (mpIdToString != IdToString::Pointer_t())
             sName = mpIdToString->toString(rSprm.getId());
-
+        
         pTag->addAttr("name", sName);
-
+        
         static char sBuffer[256];
-        snprintf(sBuffer, sizeof(sBuffer),
-                 "0x%" SAL_PRIxUINT32 ", %" SAL_PRIuUINT32, rSprm.getId(),
+        snprintf(sBuffer, sizeof(sBuffer), 
+                 "0x%" SAL_PRIxUINT32 ", %" SAL_PRIuUINT32, rSprm.getId(), 
                  rSprm.getId());
         pTag->addAttr("id", sBuffer);
         pTag->addAttr("value", rSprm.getValue()->toString());
-
+        
         resolve(*pTag, rSprm.getProps());
-
+        
         mpTag->addTag(pTag);
     }
-
-
+    
+    
 XMLTag::Pointer_t unoPropertySetToTag(uno::Reference<beans::XPropertySet> rPropSet)
 {
     uno::Reference<beans::XPropertySetInfo> xPropSetInfo(rPropSet->getPropertySetInfo());
@@ -441,16 +441,16 @@ XMLTag::Pointer_t unoPropertySetToTag(uno::Reference<beans::XPropertySet> rPropS
         XMLTag::Pointer_t pPropTag(new XMLTag("property"));
 
         ::rtl::OUString sName(aProps[i].Name);
-
+        
         pPropTag->addAttr("name", sName);
-        try
+        try 
         {
             pPropTag->addAttr("value", rPropSet->getPropertyValue(sName));
         }
         catch (uno::Exception aException)
         {
             XMLTag::Pointer_t pException(new XMLTag("exception"));
-
+            
             pException->chars("getPropertyValue(\"");
             pException->chars(sName);
             pException->chars("\")");

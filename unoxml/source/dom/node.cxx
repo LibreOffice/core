@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,12 +43,18 @@
 #include "attr.hxx"
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
-
+#include "rtl/instance.hxx"
+#include "osl/mutex.hxx"
 #include "../events/eventdispatcher.hxx"
 #include "../events/mutationevent.hxx"
 
 #include <boost/bind.hpp>
 #include <algorithm>
+
+namespace {
+//see CNode::remove
+    struct NodeMutex: public ::rtl::Static<osl::Mutex, NodeMutex> {};
+}
 
 namespace DOM
 {
@@ -111,7 +117,7 @@ namespace DOM
 
         Context::NamespaceVectorType::value_type::const_iterator aIter;
         if( (aIter=std::find_if(rContext.maNamespaces.back().begin(),
-                                rContext.maNamespaces.back().end(),
+                                rContext.maNamespaces.back().end(), 
                                 boost::bind(std::equal_to<OString>(),
                                             boost::bind(&Context::Namespace::getPrefix,
                                                         _1),
@@ -131,6 +137,18 @@ namespace DOM
 
     void CNode::remove(const xmlNodePtr aNode)
     {
+        //Using the guard here protects against races when at the same time
+        //CNode::get() is called. This fix helps in many cases but is still
+        //incorrect. remove is called from ~CNode. That is, while the object
+        //is being destructed it can still be obtained by calling CNode::get().
+        //Another bug currently prevents the correct destruction of CNodes. So
+        //the destructor is rarely called.
+        //
+        //Doing this right would probably mean to store WeakReferences in the
+        //map and also guard oder functions. To keep the risk at a minimum
+        //we keep this imperfect fix for the upcoming release and fix it later
+        //properly (http://qa.openoffice.org/issues/show_bug.cgi?id=113682)
+        ::osl::MutexGuard guard(NodeMutex::get());
         nodemap_t::iterator i = CNode::theNodeMap.find(aNode);
         if (i != CNode::theNodeMap.end())
         {
@@ -145,7 +163,8 @@ namespace DOM
         CNode* pNode = 0;
         if (aNode == NULL)
             return 0;
-
+        //see CNode::remove
+        ::osl::MutexGuard guard(NodeMutex::get());
         //check whether there is already an instance for this node
         nodemap_t::const_iterator i = CNode::theNodeMap.find(aNode);
         if (i != CNode::theNodeMap.end())
@@ -161,7 +180,7 @@ namespace DOM
             switch (aNode->type)
             {
             case XML_ELEMENT_NODE:
-                // m_aNodeType = NodeType::ELEMENT_NODE;
+                // m_aNodeType = NodeType::ELEMENT_NODE;                
                 pNode = static_cast< CNode* >(new CElement(aNode));
                 break;
             case XML_TEXT_NODE:
@@ -361,7 +380,7 @@ namespace DOM
         // default: do nothing
     }
 
-    /**
+    /**    
     Adds the node newChild to the end of the list of children of this node.
     */
     Reference< XNode > CNode::appendChild(const Reference< XNode >& newChild)
@@ -433,7 +452,7 @@ namespace DOM
             }
 
             // libxml can do optimizations, when appending nodes.
-            // if res != cur, something was optimized and the newchild-wrapper
+            // if res != cur, something was optimized and the newchild-wrapper 
             // should be updated
             if (cur != res)
                 CNode::remove(cur);
@@ -467,7 +486,7 @@ namespace DOM
     }
 
     /**
-    Returns a duplicate of this node, i.e., serves as a generic copy
+    Returns a duplicate of this node, i.e., serves as a generic copy 
     constructor for nodes.
     */
     Reference< XNode > CNode::cloneNode(sal_Bool bDeep)
@@ -485,13 +504,13 @@ namespace DOM
     }
 
     /**
-    A NamedNodeMap containing the attributes of this node (if it is an Element)
+    A NamedNodeMap containing the attributes of this node (if it is an Element) 
     or null otherwise.
     */
     Reference< XNamedNodeMap > CNode::getAttributes()
         throw (RuntimeException)
     {
-        // return empty reference
+        // return empty reference 
         // only element node may override this impl
         return Reference< XNamedNodeMap>();
 
@@ -544,7 +563,7 @@ namespace DOM
     }
 
     /**
-    Returns the local part of the qualified name of this node.
+    Returns the local part of the qualified name of this node.    
     */
     OUString SAL_CALL CNode::getLocalName()
         throw (RuntimeException)
@@ -601,22 +620,22 @@ namespace DOM
         throw (RuntimeException)
     {
         /*
-        Interface        nodeName               nodeValue                       attributes
+        Interface  	     nodeName  	            nodeValue  	                    attributes
         --------------------------------------------------------------------------------------
-        Attr             name of attribute      value of attribute              null
-        CDATASection     "#cdata-section"       content of the CDATA Section    null
-        Comment          "#comment"             content of the comment          null
-        Document         "#document"            null                            null
-        DocumentFragment "#document-fragment"   null                            null
-        DocumentType     document type name     null                            null
-        Element          tag name               null                            NamedNodeMap
-        Entity           entity name            null                            null
-        EntityReference  name of entity         null                            null
-                         referenced
-        Notation         notation name          null                            null
-        Processing\      target                 entire content excluding        null
-        Instruction                             the target
-        Text             "#text"                content of the text node        null
+        Attr 	         name of attribute 	    value of attribute 	            null
+        CDATASection 	 "#cdata-section" 	    content of the CDATA Section 	null
+        Comment 	     "#comment" 	        content of the comment 	        null
+        Document 	     "#document" 	        null 	                        null
+        DocumentFragment "#document-fragment" 	null 	                        null
+        DocumentType 	 document type name 	null 	                        null
+        Element 	     tag name 	            null 	                        NamedNodeMap
+        Entity 	         entity name 	        null 	                        null
+        EntityReference  name of entity         null 	                        null
+                         referenced 	        
+        Notation 	     notation name 	        null 	                        null
+        Processing\   	 target                 entire content excluding        null 
+        Instruction 	                        the target 	                                                                        
+        Text 	         "#text" 	            content of the text node     	null
         */
         OUString aName;
         return aName;
@@ -729,7 +748,7 @@ namespace DOM
             const Reference< XNode >& newChild, const Reference< XNode >& refChild)
         throw (RuntimeException, DOMException)
     {
-
+ 
         if (newChild->getOwnerDocument() != getOwnerDocument()) {
             DOMException e;
             e.Code = DOMExceptionType_WRONG_DOCUMENT_ERR;
@@ -773,9 +792,9 @@ namespace DOM
     }
 
     /**
-    Puts all Text nodes in the full depth of the sub-tree underneath this
+    Puts all Text nodes in the full depth of the sub-tree underneath this 
     Node, including attribute nodes, into a "normal" form where only structure
-    (e.g., elements, comments, processing instructions, CDATA sections, and
+    (e.g., elements, comments, processing instructions, CDATA sections, and 
     entity references) separates Text nodes, i.e., there are neither adjacent
     Text nodes nor empty Text nodes.
     */
@@ -838,8 +857,8 @@ namespace DOM
         }
 
         /*DOMNodeRemoved
-         * Fired when a node is being removed from its parent node.
-         * This event is dispatched before the node is removed from the tree.
+         * Fired when a node is being removed from its parent node. 
+         * This event is dispatched before the node is removed from the tree. 
          * The target of this event is the node being removed.
          *   Bubbles: Yes
          *   Cancelable: No
@@ -976,16 +995,16 @@ namespace DOM
     }
 
         // --- XEventTarget
-    void SAL_CALL CNode::addEventListener(const OUString& eventType,
-        const Reference< com::sun::star::xml::dom::events::XEventListener >& listener,
+    void SAL_CALL CNode::addEventListener(const OUString& eventType, 
+        const Reference< com::sun::star::xml::dom::events::XEventListener >& listener, 
         sal_Bool useCapture)
         throw (RuntimeException)
     {
         events::CEventDispatcher::addListener(m_aNodePtr, eventType, listener, useCapture);
     }
 
-    void SAL_CALL CNode::removeEventListener(const OUString& eventType,
-        const Reference< com::sun::star::xml::dom::events::XEventListener >& listener,
+    void SAL_CALL CNode::removeEventListener(const OUString& eventType, 
+        const Reference< com::sun::star::xml::dom::events::XEventListener >& listener, 
         sal_Bool useCapture)
         throw (RuntimeException)
     {

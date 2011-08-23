@@ -96,7 +96,7 @@ public:
                             ::rtl::OUString& rKey,
                             ::rtl::OUString& rValue,
                             const ::rtl::OUString& rKeyValue );
-
+                            
 private:
                         VbaHelper();
                         ~VbaHelper();

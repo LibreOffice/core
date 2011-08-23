@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ typedef enum {START,READCH,EOL,POCMD,EXPCMD,SETCMD,SETCH,WRITE,EEND,QUIT} tnode;
 // class T602ImportFilter
 //
 
-struct inistruct
+struct inistruct 
 {
         bool showcomm;      // true   show comment lines
         bool forcecode;     // false  the user has changed the encoding with something else than @CT
@@ -137,7 +137,7 @@ class T602ImportFilterDialog : public cppu::WeakImplHelper4 <
     // XPropertyAccess
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                             SAL_CALL getPropertyValues() throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL   setPropertyValues( const ::com::sun::star::uno::Sequence<
+        virtual void SAL_CALL	setPropertyValues( const ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::beans::PropertyValue >& aProps )
                                 throw (::com::sun::star::beans::UnknownPropertyException,
                                         ::com::sun::star::beans::PropertyVetoException,
@@ -156,7 +156,7 @@ class T602ImportFilter : public cppu::WeakImplHelper5 <
     com::sun::star::document::XImporter,
     com::sun::star::document::XExtendedFilterDetection,
     com::sun::star::lang::XInitialization,
-    com::sun::star::lang::XServiceInfo
+    com::sun::star::lang::XServiceInfo    
 >
 {
 private:

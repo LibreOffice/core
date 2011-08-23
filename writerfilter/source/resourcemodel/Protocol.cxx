@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ void StreamProtocol::endCharacterGroup()
 
 void StreamProtocol::text(const sal_uInt8 * data, size_t len)
 {
-    ::rtl::OUString sText((const sal_Char*) data, len,
+    ::rtl::OUString sText((const sal_Char*) data, len, 
                           RTL_TEXTENCODING_MS_1252);
     m_pTagLogger->startElement("protocol-text");
     m_pTagLogger->chars(sText);
@@ -119,7 +119,7 @@ void StreamProtocol::props(writerfilter::Reference<Properties>::Pointer_t ref)
     m_pTagLogger->endElement("protocol-props");
 }
 
-void StreamProtocol::table(Id name,
+void StreamProtocol::table(Id name, 
                            writerfilter::Reference<Table>::Pointer_t ref)
 {
     m_pTagLogger->startElement("protocol-table");
@@ -128,7 +128,7 @@ void StreamProtocol::table(Id name,
     m_pTagLogger->endElement("protocol-table");
 }
 
-void StreamProtocol::substream(Id name,
+void StreamProtocol::substream(Id name, 
                                writerfilter::Reference<Stream>::Pointer_t ref)
 {
     m_pTagLogger->startElement("protocol-substream");
@@ -146,25 +146,25 @@ void StreamProtocol::info(const string & rInfo)
 void StreamProtocol::startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape )
 {
     m_pTagLogger->element("protocol-startShape");
-
+    
     m_pStream->startShape(xShape);
 }
 
 void StreamProtocol::endShape()
 {
     m_pTagLogger->element("protocol-endShape");
-
+    
     m_pStream->endShape();
 }
 
-/*
-    PropertiesProtocol
+/* 
+    PropertiesProtocol 
 */
 
 PropertiesProtocol::PropertiesProtocol(Properties * pProperties,
                                        TagLogger::Pointer_t pTagLogger)
 : m_pProperties(pProperties), m_pTagLogger(pTagLogger)
-{
+{    
 }
 
 PropertiesProtocol::~PropertiesProtocol()
@@ -205,7 +205,7 @@ TableProtocol::~TableProtocol()
 {
 }
 
-void TableProtocol::entry(int pos,
+void TableProtocol::entry(int pos, 
                           writerfilter::Reference<Properties>::Pointer_t ref)
 {
     m_pTagLogger->startElement("protocol-entry");

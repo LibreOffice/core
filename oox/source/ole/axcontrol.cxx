@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1658,7 +1658,7 @@ ControlModelRef EmbeddedControl::createModel( const OUString& rClassId )
     // embedded controls are form component instances
     if( mxModel.get() )
         mxModel->setFormComponentMode();
-
+    
     return mxModel;
 }
 
@@ -1705,7 +1705,7 @@ Reference< XControlModel > EmbeddedForm::convertAndInsert( const EmbeddedControl
         Reference< XIndexContainer > xFormIC( createForm(), UNO_SET_THROW );
         sal_Int32 nNewIndex = xFormIC->getCount();
         xFormIC->insertByIndex( nNewIndex, Any( xFormComp ) );
-
+        
         // convert the control properties
         if( rControl.convertProperties( xCtrlModel, *this ) )
             return xCtrlModel;

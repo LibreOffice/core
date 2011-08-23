@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,12 +42,12 @@ using namespace rtl;
 /** this struct describes one entry in a zip file */
 struct ZipEntry
 {
-    OString name;           /* the name we used */
-    sal_Int32 offset;       /* where the header starts */
-    sal_Int32 endOffset;    /* where the file data ends */
+    OString name;			/* the name we used */
+    sal_Int32 offset;		/* where the header starts */
+    sal_Int32 endOffset;	/* where the file data ends */
     sal_Int32 crc;
-    sal_Int32 modTime;      /* dos mod time & date */
-    sal_Int32 fileLen;      /* file size, in bytes */
+    sal_Int32 modTime;		/* dos mod time & date */
+    sal_Int32 fileLen;		/* file size, in bytes */
 };
 
 /** put one byte inside this stream */
@@ -153,7 +153,7 @@ void ZipFile::writeLocalHeader(ZipEntry *e)
     oslDateTime aDate;
     osl_getDateTimeFromTimeValue( &aTime, &aDate );
 
-    e->modTime = ((aDate.Year - 1980) << 25) | (aDate.Month << 21) |    (aDate.Day << 16) |
+    e->modTime = ((aDate.Year - 1980) << 25) | (aDate.Month << 21) |	(aDate.Day << 16) |
     (aDate.Hours << 11) | (aDate.Minutes << 5) | (aDate.Seconds >> 1);
 
     e->fileLen = e->endOffset - e->offset - zf_lfhSIZE - e->name.getLength();
@@ -162,21 +162,21 @@ void ZipFile::writeLocalHeader(ZipEntry *e)
     {
         mnRC = mrFile.setPos( Pos_Absolut, e->offset );
 
-        writeLong(zf_LFHSIGValue);                              // magic number
-        writeShort(zf_Vers(1, 0));                              // extract version
-        writeShort(0);                                          // flags
-        writeShort(zf_compNone);                                // compression method
-        writeLong(e->modTime);                                  // file mod date & time
-        writeLong(e->crc);                                      // file crc
-        writeLong(e->fileLen);                                  // compressed size
-        writeLong(e->fileLen);                                  // uncompressed size
-        writeShort((sal_Int16) e->name.getLength());                    // name length
-        writeShort(0);                                          // extra length field
+        writeLong(zf_LFHSIGValue);								// magic number
+        writeShort(zf_Vers(1, 0));								// extract version
+        writeShort(0);											// flags
+        writeShort(zf_compNone);								// compression method
+        writeLong(e->modTime);									// file mod date & time
+        writeLong(e->crc);										// file crc
+        writeLong(e->fileLen);									// compressed size
+        writeLong(e->fileLen);									// uncompressed size
+        writeShort((sal_Int16) e->name.getLength());					// name length
+        writeShort(0);											// extra length field
 
         if( !isError() )
         {
             sal_uInt64 nWritten;
-            mnRC = mrFile.write( e->name.getStr(), e->name.getLength(), nWritten ); // file name
+            mnRC = mrFile.write( e->name.getStr(), e->name.getLength(), nWritten );	// file name
             OSL_ASSERT( nWritten == (sal_uInt64)e->name.getLength() );
             if( !isError() )
             {
@@ -189,26 +189,26 @@ void ZipFile::writeLocalHeader(ZipEntry *e)
 /* write a zipentry in the central dir to the zipfile */
 void ZipFile::writeCentralDir(ZipEntry *e)
 {
-    writeLong(zf_CDHSIGValue);              // magic number
-    writeShort(zf_Vers(1, 0));              // version made by
-    writeShort(zf_Vers(1, 0));              // vers to extract
-    writeShort(0);                          // flags
-    writeShort(zf_compNone);                // compression method
-    writeLong(e->modTime);                  // file mod time & date
+    writeLong(zf_CDHSIGValue);				// magic number
+    writeShort(zf_Vers(1, 0));				// version made by
+    writeShort(zf_Vers(1, 0));				// vers to extract
+    writeShort(0);							// flags
+    writeShort(zf_compNone);				// compression method
+    writeLong(e->modTime);					// file mod time & date
     writeLong(e->crc);
-    writeLong(e->fileLen);                  // compressed file size
-    writeLong(e->fileLen);                  // uncompressed file size
-    writeShort((sal_Int16) e->name.getLength());    // name length
-    writeShort(0);                          // extra field length
-    writeShort(0);                          // file comment length
-    writeShort(0);                          // disk number start
-    writeShort(0);                          // internal file attributes
-    writeLong(0);                           // external file attributes
-    writeLong(e->offset);                   // offset w.r.t disk
+    writeLong(e->fileLen);					// compressed file size
+    writeLong(e->fileLen);					// uncompressed file size
+    writeShort((sal_Int16) e->name.getLength());	// name length
+    writeShort(0);							// extra field length 
+    writeShort(0);							// file comment length
+    writeShort(0);							// disk number start
+    writeShort(0);							// internal file attributes
+    writeLong(0);							// external file attributes
+    writeLong(e->offset);					// offset w.r.t disk
     if( !isError() )
     {
         sal_uInt64 nWritten;
-        mrFile.write( e->name.getStr(), e->name.getLength(), nWritten );    // file name
+        mrFile.write( e->name.getStr(), e->name.getLength(), nWritten );	// file name
         OSL_ASSERT( nWritten == (sal_uInt64)e->name.getLength() );
     }
 }
@@ -216,14 +216,14 @@ void ZipFile::writeCentralDir(ZipEntry *e)
 /* write the end of the central dir to the zipfile */
 void ZipFile::writeEndCentralDir(sal_Int32 nCdOffset, sal_Int32 nCdSize)
 {
-    writeLong(zf_ECDSIGValue);      // magic number
-    writeShort(0);                  // disk num
-    writeShort(0);                  // disk with central dir
-    writeShort( static_cast< sal_Int16 >( maEntries.size() ) ); // number of file entries
-    writeShort( static_cast< sal_Int16 >( maEntries.size() ) ); // number of file entries
-    writeLong(nCdSize);             // central dir size
+    writeLong(zf_ECDSIGValue);		// magic number
+    writeShort(0);					// disk num
+    writeShort(0);					// disk with central dir 
+    writeShort( static_cast< sal_Int16 >( maEntries.size() ) );	// number of file entries
+    writeShort( static_cast< sal_Int16 >( maEntries.size() ) );	// number of file entries
+    writeLong(nCdSize);				// central dir size
     writeLong(nCdOffset);
-    writeShort(0);                  // comment len
+    writeShort(0);					// comment len
 }
 
 
@@ -310,7 +310,7 @@ bool ZipFile::close()
         {
             sal_uInt64 nCdSize;
             mrFile.getPos( nCdSize );
-
+                
             nCdSize -= nCdOffset;
 
             if( !isError() )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -245,7 +245,7 @@ MSCodec_Std97::~MSCodec_Std97 ()
     rtl_cipher_destroy (m_hCipher);
 }
 
-#if DEBUG_MSO_ENCRYPTION_STD97
+#if DEBUG_MSO_ENCRYPTION_STD97    
 static void lcl_PrintKeyData(const sal_uInt8* pKeyData, const char* msg)
 {
     printf("pKeyData: (%s)\n", msg);
@@ -260,9 +260,9 @@ static void lcl_PrintKeyData(const sal_uInt8* pKeyData, const char* msg)
 static void lcl_PrintKeyData(const sal_uInt8* /*pKeyData*/, const char* /*msg*/)
 {
 }
-#endif
+#endif    
 
-#if DEBUG_MSO_ENCRYPTION_STD97
+#if DEBUG_MSO_ENCRYPTION_STD97    
 static void lcl_PrintDigest(const sal_uInt8* pDigest, const char* msg)
 {
     printf("digest: (%s)\n", msg);
@@ -274,15 +274,15 @@ static void lcl_PrintDigest(const sal_uInt8* pDigest, const char* msg)
 static void lcl_PrintDigest(const sal_uInt8* /*pDigest*/, const char* /*msg*/)
 {
 }
-#endif
+#endif    
 
 void MSCodec_Std97::InitKey (
     const sal_uInt16 pPassData[16],
     const sal_uInt8  pUnique[16])
 {
-#if DEBUG_MSO_ENCRYPTION_STD97
+#if DEBUG_MSO_ENCRYPTION_STD97    
     fprintf(stdout, "MSCodec_Std97::InitKey: --begin\n");fflush(stdout);
-#endif
+#endif    
     sal_uInt8 pKeyData[64];
     int       i, n;
 
@@ -343,11 +343,11 @@ bool MSCodec_Std97::VerifyKey (
 {
     // both the salt data and salt digest (hash) come from the document being imported.
 
-#if DEBUG_MSO_ENCRYPTION_STD97
+#if DEBUG_MSO_ENCRYPTION_STD97    
     fprintf(stdout, "MSCodec_Std97::VerifyKey: \n");
     lcl_PrintDigest(pSaltData, "salt data");
     lcl_PrintDigest(pSaltDigest, "salt hash");
-#endif
+#endif    
     bool result = false;
 
     if (InitCipher(0))
@@ -412,7 +412,7 @@ bool MSCodec_Std97::CreateSaltDigest( const sal_uInt8 nSaltData[16], sal_uInt8 n
 {
 #if DEBUG_MSO_ENCRYPTION_STD97
     lcl_PrintDigest(pSaltData, "salt data");
-#endif
+#endif    
     bool result = false;
 
     if (InitCipher(0))
@@ -500,12 +500,12 @@ void MSCodec_Std97::GetEncryptKey (
     const sal_uInt8 pSalt[16],
     sal_uInt8 pSaltData[16],
     sal_uInt8 pSaltDigest[16])
-{
+{    
     if (InitCipher(0))
     {
         sal_uInt8 pDigest[RTL_DIGEST_LENGTH_MD5];
         sal_uInt8 pBuffer[64];
-
+      
         rtl_cipher_encode (
             m_hCipher, pSalt, 16, pSaltData, sizeof(pBuffer));
 
@@ -514,15 +514,15 @@ void MSCodec_Std97::GetEncryptKey (
         pBuffer[16] = 0x80;
         (void)memset (pBuffer + 17, 0, sizeof(pBuffer) - 17);
         pBuffer[56] = 0x80;
-
+        
         rtl_digest_updateMD5 (
             m_hDigest, pBuffer, sizeof(pBuffer));
         rtl_digest_rawMD5 (
             m_hDigest, pDigest, sizeof(pDigest));
-
+       
         rtl_cipher_encode (
             m_hCipher, pDigest, 16, pSaltDigest, 16);
-
+        
         (void)memset (pBuffer, 0, sizeof(pBuffer));
         (void)memset (pDigest, 0, sizeof(pDigest));
     }

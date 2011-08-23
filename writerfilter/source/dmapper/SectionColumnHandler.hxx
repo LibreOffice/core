@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ class WRITERFILTER_DLLPRIVATE SectionColumnHandler : public Properties
     bool        bSep;
     std::vector<_Column> aCols;
 
-    _Column   aTempColumn;
+    _Column   aTempColumn;    
 
 public:
     SectionColumnHandler();
@@ -66,7 +66,7 @@ public:
     sal_Int32   GetSpace() const { return nSpace; }
     sal_Int32   GetNum() const { return nNum; }
     bool        IsSeparator() const { return bSep; }
-
+    
     const std::vector<_Column>& GetColumns() const { return aCols;}
 
 };

@@ -202,8 +202,8 @@ namespace testdoctok
             ::ucb::ContentBroker::deinitialize();
         }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
+        // Change the following lines only, if you add, remove or rename 
+        // member functions of the current class, 
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(test);
@@ -211,7 +211,7 @@ namespace testdoctok
         CPPUNIT_TEST(testOpenFile);
         //CPPUNIT_TEST(testTraversal);
         CPPUNIT_TEST(testEvents);
-        CPPUNIT_TEST(testEnd);
+        CPPUNIT_TEST(testEnd);        
         CPPUNIT_TEST_SUITE_END();
     }; // class test
 

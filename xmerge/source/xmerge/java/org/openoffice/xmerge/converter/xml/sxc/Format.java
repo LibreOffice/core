@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,21 +33,21 @@ import java.awt.Color;
  *  This class specifies the format for a given spreadsheet cell.
  *
  *  @author  Mark Murnane
- *  @author  Martin Maher (Extended Style Support)
+ *  @author	 Martin Maher (Extended Style Support)
  */
 public class Format implements Cloneable {
 
     /**  Horizontal Alignment Constants. */
-    final public static int RIGHT_ALIGN     = 0x01;
-    final public static int CENTER_ALIGN    = 0x02;
-    final public static int LEFT_ALIGN      = 0x03;
-    final public static int JUST_ALIGN      = 0x04;
-
+    final public static int RIGHT_ALIGN		= 0x01;
+    final public static int CENTER_ALIGN	= 0x02;
+    final public static int LEFT_ALIGN		= 0x03;
+    final public static int JUST_ALIGN		= 0x04;
+    
     /**  Vertical Alignment Constants. */
-    final public static int TOP_ALIGN       = 0x01;
-    final public static int MIDDLE_ALIGN    = 0x02;
-    final public static int BOTTOM_ALIGN    = 0x03;
-
+    final public static int TOP_ALIGN		= 0x01;
+    final public static int MIDDLE_ALIGN	= 0x02;
+    final public static int BOTTOM_ALIGN	= 0x03;
+    
     /** Indicates <i>bold</i> text. */
     final public static int BOLD        = 0x01;
     /** Indicates <i>italic</i> text. */
@@ -60,13 +60,13 @@ public class Format implements Cloneable {
     final public static int SUPERSCRIPT = 0x10;
     /** Indicates <i>subscripted</i> text. */
     final public static int SUBSCRIPT   = 0x20;
-
-    final public static int LEFT_BORDER     = 0x40;
-    final public static int RIGHT_BORDER    = 0x80;
-    final public static int TOP_BORDER      = 0x100;
+    
+    final public static int LEFT_BORDER		= 0x40;
+    final public static int RIGHT_BORDER	= 0x80;
+    final public static int TOP_BORDER   	= 0x100;
     final public static int BOTTOM_BORDER   = 0x200;
-
-    final public static int WORD_WRAP       = 0x400;
+    
+    final public static int WORD_WRAP		= 0x400;
 
     private int align;
     private int vertAlign;
@@ -74,14 +74,14 @@ public class Format implements Cloneable {
     private String value;
     private String formatSpecifier;
     private int decimalPlaces;
-
+    
     /** Font name. */
     private String fontName;
     /** Font size in points. */
     protected int sizeInPoints;
-
+    
     private Color foreground, background;
-
+    
     /** Values of text attributes. */
     protected int attributes = 0;
     /** Bitwise mask of text attributes. */
@@ -91,9 +91,9 @@ public class Format implements Cloneable {
      *  Constructor for creating a new <code>Format</code>.
      */
     public Format() {
-        clearFormatting();
+        clearFormatting();    
     }
-
+   
     /**
      * Constructor that creates a new <code>Format</code> object
      * by setting all the format attributes.
@@ -107,7 +107,7 @@ public class Format implements Cloneable {
     }
 
     /**
-     *  Constructor for creating a new <code>Format</code> object
+     *  Constructor for creating a new <code>Format</code> object 
      *  based on an existing one.
      *
      *  @param  fmt  <code>Format</code> to copy.
@@ -117,7 +117,7 @@ public class Format implements Cloneable {
         value = fmt.getValue();
         formatSpecifier = fmt.getFormatSpecifier();
         decimalPlaces = fmt.getDecimalPlaces();
-
+        
         attributes = fmt.attributes;
         mask = fmt.mask;
 
@@ -128,7 +128,7 @@ public class Format implements Cloneable {
         background = fmt.getBackground();
         sizeInPoints = fmt.sizeInPoints;
     }
-
+    
 
     /**
      *  Reset this <code>Format</code> description.
@@ -147,7 +147,7 @@ public class Format implements Cloneable {
        foreground = null;
        background = null;
     }
-
+     
     /**
      *  Set one or more text attributes to <i>on</i>.
      *
@@ -157,22 +157,22 @@ public class Format implements Cloneable {
         mask |= flags;
         if(toggle) {
             attributes |= flags;
-        } else {
+        } else { 
             attributes &= ~flags;
         }
     }
-
+ 
     /**
      *  Return true if the <code>attribute</code> is set to <i>on</i>
      *
      *  @param  attribute  Attribute to check ({@link #BOLD},
      *                     {@link #ITALIC}, etc.)
      *
-     *  @return  true if <code>attribute</code> is set to <i>on</i>,
+     *  @return  true if <code>attribute</code> is set to <i>on</i>, 
      *           otherwise false.
      */
     public boolean getAttribute(int attribute) {
-        if ((mask & attribute) == 0)
+        if ((mask & attribute) == 0) 
             return false;
         return (!((attributes & attribute) == 0));
     }
@@ -191,13 +191,13 @@ public class Format implements Cloneable {
     public boolean isSet(int attribute) {
         return (!((mask & attribute) == 0));
     }
-
-
+    
+    
     /**
      *  Set the formatting category of this object, ie number, date,
-     *  currency.The <code>OfficeConstants</code> class contains string
+     *  currency.The <code>OfficeConstants</code> class contains string 
      *  constants for the category types.
-     *
+     * 
      *  @see  org.openoffice.xmerge.converter.xml.OfficeConstants
      *
      *  @param   newCategory  The name of the category to be set.
@@ -205,7 +205,7 @@ public class Format implements Cloneable {
     public void setCategory(String newCategory) {
         category = newCategory;
     }
-
+    
      /**
       *  Return the formatting category of the object.
       *
@@ -220,22 +220,22 @@ public class Format implements Cloneable {
      /**
       *  In the case of Formula returns the value of the formula.
       *
-      *  @return  The value of the formula
+      *  @return  The value of the formula 
       */
      public String getValue() {
          return value;
      }
-
+     
      /**
      *  In the case of formula the contents are set as the formula string and
      *  the value of the formula is a formatting attribute.
      *
-     *  @param   newValue the formuala value
+     *  @param   newValue the formuala value 
      */
     public void setValue(String newValue) {
         value = newValue;
     }
-
+    
 
      /**
       *  Set the <code>Format</code> specifier for this category.
@@ -245,7 +245,7 @@ public class Format implements Cloneable {
      public void setFormatSpecifier(String formatString) {
          formatSpecifier = formatString;
      }
-
+     
 
      /**
       *  Get the <code>Format</code> specifier for this category.
@@ -255,17 +255,17 @@ public class Format implements Cloneable {
      public String getFormatSpecifier() {
          return formatSpecifier;
      }
-
-
+     
+     
      /**
       *  Set the precision of the number to be displayed.
-      *
+      * 
       *  @param  precision  The number of decimal places to display.
       */
      public void setDecimalPlaces(int precision) {
          decimalPlaces = precision;
      }
-
+     
 
      /**
       *  Get the number of decimal places displayed.
@@ -275,17 +275,17 @@ public class Format implements Cloneable {
      public int getDecimalPlaces() {
          return decimalPlaces;
      }
-
-
+     
+     
      /**
       *  Set the font used for this cell.
-      *
+      * 
       *  @param  fontName  The name of the font.
       */
      public void setFontName(String fontName) {
          this.fontName = fontName;
      }
-
+     
 
      /**
       *  Get the font used for this cell.
@@ -295,16 +295,16 @@ public class Format implements Cloneable {
      public String getFontName() {
          return fontName;
      }
-
+     
      /**
       *  Set the font used for this cell.
-      *
+      * 
       *  @param  fontName  The name of the font.
       */
      public void setFontSize(int fontSize) {
          sizeInPoints = fontSize;
      }
-
+     
 
      /**
       *  Get the font used for this cell.
@@ -313,17 +313,17 @@ public class Format implements Cloneable {
       */
      public int getFontSize() {
          return sizeInPoints;
-     }
+     } 
 
       /**
       *  Set the alignmen used for this cell.
-      *
+      * 
       *  @param  fontName  The name of the font.
       */
      public void setVertAlign(int vertAlign) {
          this.vertAlign = vertAlign;
      }
-
+     
 
      /**
       *  Get the alignment used for this cell.
@@ -332,17 +332,17 @@ public class Format implements Cloneable {
       */
      public int getVertAlign() {
          return vertAlign;
-     }
+     }  
 
       /**
       *  Set the alignmen used for this cell.
-      *
+      * 
       *  @param  fontName  The name of the font.
       */
      public void setAlign(int align) {
          this.align = align;
      }
-
+     
 
      /**
       *  Get the alignment used for this cell.
@@ -351,10 +351,10 @@ public class Format implements Cloneable {
       */
      public int getAlign() {
          return align;
-     }
+     }    
      /**
       *  Set the Foreground <code>Color</code> for this cell.
-      *
+      * 
       *  @param  color  A <code>Color</code> object representing the
       *                 foreground color.
       */
@@ -362,7 +362,7 @@ public class Format implements Cloneable {
          if(c!=null)
             foreground = new Color(c.getRGB());
      }
-
+     
 
      /**
       *  Get the Foreground <code>Color</code> for this cell.
@@ -372,11 +372,11 @@ public class Format implements Cloneable {
      public Color getForeground() {
          return foreground;
      }
-
+     
 
      /**
       *  Set the Background <code>Color</code> for this cell
-      *
+      * 
       *  @param  color  A <code>Color</code> object representing
       *                 the background color.
       */
@@ -385,7 +385,7 @@ public class Format implements Cloneable {
              background = new Color(c.getRGB());
      }
 
-
+     
      /**
       *  Get the Foreground <code>Color</code> for this cell
       *
@@ -404,36 +404,36 @@ public class Format implements Cloneable {
          return new String("Value : " + getValue() + " Category : " + getCategory());
      }
 
-    /**
+    /** 
      * Tests if the current <code>Format</code> object has default attribute
      * values.
      *
-     * @return true if it contains default value
+     * @return true if it contains default value 
      */
     public boolean isDefault() {
 
         Format rhs = new Format();
 
-        if (rhs.attributes!= attributes)
+        if (rhs.attributes!= attributes) 
                 return false;
-
-        if (foreground!=rhs.foreground)
+        
+        if (foreground!=rhs.foreground) 
+            return false;
+            
+        if (background!=rhs.background) 
             return false;
 
-        if (background!=rhs.background)
-            return false;
-
-        if (rhs.align!= align)
+        if (rhs.align!= align) 
                 return false;
 
-        if (rhs.vertAlign!= vertAlign)
+        if (rhs.vertAlign!= vertAlign) 
                 return false;
-
+        
         return true;
     }
-
+    
     /**
-     *  Return true if <code>style</code> specifies as much or less
+     *  Return true if <code>style</code> specifies as much or less 
      *  than this <code>Style</code>, and nothing it specifies
      *  contradicts this <code>Style</code>.
      *
@@ -443,33 +443,33 @@ public class Format implements Cloneable {
      *           otherwise.
      */
     public boolean isSubset(Format rhs) {
-        if (rhs.getClass() != this.getClass())
+        if (rhs.getClass() != this.getClass()) 
                 return false;
-
-        if (rhs.attributes!= attributes)
+        
+        if (rhs.attributes!= attributes) 
                 return false;
-
+        
         if (rhs.sizeInPoints != 0) {
-            if (sizeInPoints != rhs.sizeInPoints)
+            if (sizeInPoints != rhs.sizeInPoints) 
                 return false;
         }
 
         if (fontName!=rhs.fontName)
             return false;
-
-        if (foreground!=rhs.foreground)
+            
+        if (foreground!=rhs.foreground) 
+            return false;
+            
+        if (background!=rhs.background) 
             return false;
 
-        if (background!=rhs.background)
-            return false;
-
-        if (rhs.align!= align)
+        if (rhs.align!= align) 
                 return false;
 
-        if (rhs.vertAlign!= vertAlign)
+        if (rhs.vertAlign!= vertAlign) 
                 return false;
 
         return true;
-    }
+    }	 
 }
 

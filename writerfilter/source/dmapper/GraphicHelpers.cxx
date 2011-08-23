@@ -44,14 +44,14 @@ void PositionHandler::attribute( Id aName, Value& rVal )
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_line
                 };
 
-                static sal_Int16 pVertRelations[] =
+                static sal_Int16 pVertRelations[] = 
                 {
                     text::RelOrientation::PAGE_PRINT_AREA,
                     text::RelOrientation::PAGE_FRAME,
                     text::RelOrientation::FRAME,
                     text::RelOrientation::TEXT_LINE
                 };
-
+                
                 for ( int i = 0; i < 4; i++ )
                 {
                     if ( pVertRelValues[i] == sal_uInt32( nIntValue ) )
@@ -70,14 +70,14 @@ void PositionHandler::attribute( Id aName, Value& rVal )
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_character
                 };
 
-                static sal_Int16 pHoriRelations[] =
+                static sal_Int16 pHoriRelations[] = 
                 {
                     text::RelOrientation::PAGE_PRINT_AREA,
                     text::RelOrientation::PAGE_FRAME,
                     text::RelOrientation::FRAME,
                     text::RelOrientation::CHAR,
                 };
-
+                
                 for ( int i = 0; i < 4; i++ )
                 {
                     if ( pHoriRelValues[i] == sal_uInt32( nIntValue ) )
@@ -93,12 +93,12 @@ void PositionHandler::sprm( Sprm& rSprm )
 {
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
-
+    
     switch ( rSprm.getId( ) )
     {
         case NS_ooxml::LN_CT_PosV_align:
             {
-                static Id pVertValues[] =
+                static Id pVertValues[] = 
                 {
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_AlignV_top,
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_AlignV_bottom,
@@ -125,7 +125,7 @@ void PositionHandler::sprm( Sprm& rSprm )
             break;
         case NS_ooxml::LN_CT_PosH_align:
             {
-                static Id pHoriValues[] =
+                static Id pHoriValues[] = 
                 {
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_AlignH_left,
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_AlignH_right,
@@ -177,7 +177,7 @@ void WrapHandler::attribute( Id aName, Value& rVal )
             break;
         case NS_ooxml::LN_CT_Wrap_side:
             m_nSide = sal_Int32( rVal.getInt( ) );
-            break;
+            break; 
         default:;
     }
 }

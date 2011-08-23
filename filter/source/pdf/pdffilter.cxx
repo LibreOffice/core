@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,8 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
 
-#include "pdffilter.hxx"
-#include "pdfexport.hxx"
+#include "pdffilter.hxx" 
+#include "pdfexport.hxx" 
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <svl/outstrm.hxx>
@@ -56,8 +56,8 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 {
     Reference< XOutputStream >  xOStm;
     Sequence< PropertyValue >   aFilterData;
-    sal_Int32                   nLength = rDescriptor.getLength();
-    const PropertyValue*        pValue = rDescriptor.getConstArray();
+    sal_Int32					nLength = rDescriptor.getLength();
+    const PropertyValue*		pValue = rDescriptor.getConstArray();
     sal_Bool                    bRet = sal_False;
     Reference< task::XStatusIndicator > xStatusIndicator;
 
@@ -104,7 +104,7 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 // the encryption is not available when exporting directly, since the encryption is off by default and the selection
 // (encrypt or not) is not persistent; it's available through macro though,
 // provided the correct property values are set, see help
-//
+// 
 // now, the relative link stuff
         aCfgItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportLinksRelativeFsys" ) ), sal_False );
         aCfgItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "PDFViewSelection" ) ), 0 );
@@ -119,7 +119,7 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     {
         PDFExport       aExport( mxSrcDoc, xStatusIndicator, mxMSF );
         ::utl::TempFile aTempFile;
-
+        
         aTempFile.EnableKillingFile();
         bRet = aExport.Export( aTempFile.GetURL(), aFilterData );
 
@@ -164,7 +164,7 @@ class FocusWindowWaitCursor
             m_pFocusWindow->RemoveEventListener( LINK( this, FocusWindowWaitCursor, DestroyedLink ) );
         }
     }
-
+    
     DECL_LINK( DestroyedLink, VclWindowEvent* );
 };
 
@@ -175,7 +175,7 @@ IMPL_LINK( FocusWindowWaitCursor, DestroyedLink, VclWindowEvent*, pEvent )
     return 0;
 }
 
-sal_Bool SAL_CALL PDFFilter::filter( const Sequence< PropertyValue >& rDescriptor )
+sal_Bool SAL_CALL PDFFilter::filter( const Sequence< PropertyValue >& rDescriptor ) 
     throw (RuntimeException)
 {
     FocusWindowWaitCursor aCur;
@@ -193,7 +193,7 @@ void SAL_CALL PDFFilter::cancel( ) throw (RuntimeException)
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL PDFFilter::setSourceDocument( const Reference< XComponent >& xDoc )
+void SAL_CALL PDFFilter::setSourceDocument( const Reference< XComponent >& xDoc ) 
     throw (IllegalArgumentException, RuntimeException)
 {
     mxSrcDoc = xDoc;
@@ -201,7 +201,7 @@ void SAL_CALL PDFFilter::setSourceDocument( const Reference< XComponent >& xDoc 
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL PDFFilter::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& )
+void SAL_CALL PDFFilter::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& ) 
     throw (Exception, RuntimeException)
 {
 }
@@ -218,7 +218,7 @@ OUString PDFFilter_getImplementationName ()
 
 #define SERVICE_NAME "com.sun.star.document.PDFFilter"
 
-sal_Bool SAL_CALL PDFFilter_supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL PDFFilter_supportsService( const OUString& ServiceName ) 
     throw (RuntimeException)
 {
     return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ) );
@@ -245,7 +245,7 @@ Reference< XInterface > SAL_CALL PDFFilter_createInstance( const Reference< XMul
 
 // -----------------------------------------------------------------------------
 
-OUString SAL_CALL PDFFilter::getImplementationName()
+OUString SAL_CALL PDFFilter::getImplementationName() 
     throw (RuntimeException)
 {
     return PDFFilter_getImplementationName();
@@ -253,7 +253,7 @@ OUString SAL_CALL PDFFilter::getImplementationName()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SAL_CALL PDFFilter::supportsService( const OUString& rServiceName )
+sal_Bool SAL_CALL PDFFilter::supportsService( const OUString& rServiceName ) 
     throw (RuntimeException)
 {
     return PDFFilter_supportsService( rServiceName );

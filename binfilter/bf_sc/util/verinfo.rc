@@ -1,0 +1,153 @@
+/*************************************************************************
+*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+*************************************************************************/
+
+#define VERSION			4
+#define SUBVERSION		0
+#define VERVARIANT		0
+// .0 + VER_CONCEPT
+// .100 + VER_ALPHA
+// .200 + VER_BETA
+// .300 + VER_GAMMA
+// .500 + VER_FINAL
+//#define VER_CONCEPT		0
+//#define VER_BETA		0
+#define VER_FINAL		0
+
+#define VER_DAY			22
+#define VER_MONTH		11
+#define VER_YEAR		96
+
+// -----------------------------------------------------------------------
+
+#if !defined(ENGLISH)
+#define LG_D 					// generate always german version
+#endif
+#define VER_FIRSTYEAR	93
+
+#include <windows.h>
+#include "verinfo.hrc"
+
+#ifdef WIN32
+#define FOR_WIN_X " 95 / Windows NT 3.51 / 4.0"
+#else
+#define FOR_WIN_X
+#endif
+
+// -----------------------------------------------------------------------
+// 				language/character set specification table
+// -----------------------------------------------------------------------
+
+RCD_LANGUAGE rcdata
+{
+#ifdef LG_D
+	"040704B0", 	// Germany -> Unicode
+	"040704E4", 	// Germany -> Windows, Multilingual
+#else
+	"040904B0", 	// Germany -> Unicode
+	"040904E4", 	// USA -> Windows, Multilingual
+#endif
+	"04090000", 	// USA -> 7-Bit-ASCII
+	0				// end of table
+}
+
+// -----------------------------------------------------------------------
+// 				version information
+// -----------------------------------------------------------------------
+
+VS_VERSION_INFO versioninfo
+	fileversion    VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+	productversion VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+	fileflagsmask 0x3F
+	fileflags
+#if defined(DEBUG)
+	VS_FF_DEBUG |
+#endif
+#ifdef VER_PREL
+	VS_FF_PRERELEASE |
+#endif
+	0
+#ifndef WIN32
+	fileos VOS_DOS_WINDOWS16
+#else
+	fileos VOS_NT_WINDOWS32
+#endif
+	filetype VFT_APP
+	{
+		block "StringFileInfo"
+		{
+#ifdef LG_D
+			block "040704E4"
+			{
+				// German StringTable
+				value "CompanyName",		"Star Division GmbH\0"
+				value "ProductName",		"StarCalc für Windows" FOR_WIN_X "\0"
+				value "FileDescription",	"StarCalc " S_VERSION "\0"
+				value "FileVersion",		PPS(VER_LEVEL) "\0"
+				value "ProductVersion",		PPS(VER_LEVEL) "\0"
+				value "OriginalFilename",	"SC.DLL\0"
+				value "InternalName",		"SCALC4\0"
+				value "LegalCopyright",		S_CRIGHT " Star Division GmbH\0"
+				value "LegalTrademarks",
+					"International CorrectSpell® und International Electronic Thesaurus © "
+					"1993-1996 Inso Corporation. Alle Rechte vorbehalten.\0"
+			}
+#else
+			block "040904E4"
+			{
+				// International StringTable
+				value "CompanyName", 		"Star Division GmbH\0"
+				value "ProductName", 		"StarCalc for Windows" FOR_WIN_X "\0"
+				value "FileDescription",	"StarCalc " S_VERSION "\0"
+				value "FileVersion",		PPS(VER_LEVEL) "\0"
+				value "ProductVersion",		PPS(VER_LEVEL) "\0"
+				value "OriginalFilename",	"SC.DLL\0"
+				value "InternalName", 		"SCALC4\0"
+				value "LegalCopyright", 	S_CRIGHT " Star Division GmbH\0"
+				value "LegalTrademarks",
+					"International CorrectSpell® and International Electronic Thesaurus © "
+					"1993-1996 Inso Corporation. All rights reserved.\0"
+			}
+#endif
+		}
+
+		block "VarFileInfo"
+		{
+#ifdef LG_D
+			value "Translation", 0x0407, 1252
+#else
+			value "Translation", 0x0409, 1252
+#endif
+		}
+	}
+
+// version binary entry
+VS_VERSION_INFO rcdata
+{
+	0xF0, "sc", 0x0F, VER_YEAR, VER_MONTH, VER_DAY,
+	VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+};
+

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,9 +84,9 @@ Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( s
 
     switch( aElementToken )
     {
-    case NMSP_PPT|XML_sldMaster:        // CT_SlideMaster
-    case NMSP_PPT|XML_handoutMaster:    // CT_HandoutMaster
-    case NMSP_PPT|XML_sld:              // CT_CommonSlideData
+    case NMSP_PPT|XML_sldMaster:		// CT_SlideMaster
+    case NMSP_PPT|XML_handoutMaster:	// CT_HandoutMaster
+    case NMSP_PPT|XML_sld:				// CT_CommonSlideData
     {
         AttributeList attribs( xAttribs );
 
@@ -99,14 +99,14 @@ Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( s
 
         break;
     }
-    case NMSP_PPT|XML_notes:            // CT_NotesSlide
-    case NMSP_PPT|XML_notesMaster:      // CT_NotesMaster
+    case NMSP_PPT|XML_notes:			// CT_NotesSlide
+    case NMSP_PPT|XML_notesMaster:		// CT_NotesMaster
         break;
-    case NMSP_PPT|XML_cSld:             // CT_CommonSlideData
+    case NMSP_PPT|XML_cSld:				// CT_CommonSlideData
         maSlideName = xAttribs->getOptionalValue(XML_name);
         break;
 
-    case NMSP_PPT|XML_spTree:           // CT_GroupShape
+    case NMSP_PPT|XML_spTree:			// CT_GroupShape
         {
             xRet.set( new PPTShapeGroupContext(
                 *this, mpSlidePersistPtr, meShapeLocation, mpSlidePersistPtr->getShapes(),
@@ -138,31 +138,31 @@ Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( s
         break;
 
     // BackgroundGroup
-    case NMSP_PPT|XML_bgPr:             // CT_BackgroundProperties
+    case NMSP_PPT|XML_bgPr:				// CT_BackgroundProperties
         {
             FillPropertiesPtr pFillPropertiesPtr( new FillProperties );
             xRet.set( new BackgroundPropertiesContext( *this, *pFillPropertiesPtr ) );
             mpSlidePersistPtr->setBackgroundProperties( pFillPropertiesPtr );
         }
         break;
-    case NMSP_PPT|XML_bgRef:            // a:CT_StyleMatrixReference
+    case NMSP_PPT|XML_bgRef:			// a:CT_StyleMatrixReference
         break;
 
-    case NMSP_PPT|XML_clrMap:           // CT_ColorMapping
+    case NMSP_PPT|XML_clrMap:			// CT_ColorMapping
         {
             oox::drawingml::ClrMapPtr pClrMapPtr( new oox::drawingml::ClrMap() );
             xRet.set( new oox::drawingml::clrMapContext( *this, xAttribs, *pClrMapPtr ) );
             mpSlidePersistPtr->setClrMap( pClrMapPtr );
         }
         break;
-    case NMSP_PPT|XML_clrMapOvr:        // CT_ColorMappingOverride
-    case NMSP_PPT|XML_sldLayoutIdLst:   // CT_SlideLayoutIdList
+    case NMSP_PPT|XML_clrMapOvr:		// CT_ColorMappingOverride
+    case NMSP_PPT|XML_sldLayoutIdLst:	// CT_SlideLayoutIdList
         break;
-    case NMSP_PPT|XML_txStyles:         // CT_SlideMasterTextStyles
+    case NMSP_PPT|XML_txStyles:			// CT_SlideMasterTextStyles
         xRet.set( new SlideMasterTextStylesContext( *this, mpSlidePersistPtr ) );
         break;
-    case NMSP_PPT|XML_custDataLst:      // CT_CustomerDataList
-    case NMSP_PPT|XML_tagLst:           // CT_TagList
+    case NMSP_PPT|XML_custDataLst:		// CT_CustomerDataList
+    case NMSP_PPT|XML_tagLst:			// CT_TagList
         break;
     }
 

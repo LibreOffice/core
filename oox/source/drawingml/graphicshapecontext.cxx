@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -121,16 +121,16 @@ Reference< XFastContextHandler > GraphicalObjectFrameContext::createFastChildCon
     switch( aElementToken &(~NMSP_MASK) )
     {
     // CT_ShapeProperties
-    case XML_nvGraphicFramePr:      // CT_GraphicalObjectFrameNonVisual
+    case XML_nvGraphicFramePr:		// CT_GraphicalObjectFrameNonVisual
         break;
-    case XML_xfrm:                  // CT_Transform2D
+    case XML_xfrm:					// CT_Transform2D
         xRet.set( new Transform2DContext( *this, xAttribs, *mpShapePtr ) );
         break;
-    case XML_graphic:               // CT_GraphicalObject
+    case XML_graphic:				// CT_GraphicalObject
         xRet.set( this );
         break;
 
-        case XML_graphicData :          // CT_GraphicalObjectData
+        case XML_graphicData :			// CT_GraphicalObjectData
         {
             OUString sUri( xAttribs->getOptionalValue( XML_uri ) );
             if ( sUri.equalsAscii( "http://schemas.openxmlformats.org/presentationml/2006/ole" ) )

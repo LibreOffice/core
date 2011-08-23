@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -130,7 +130,7 @@ void ResolveTextFields( XmlFilterBase& rFilter )
                             aURL = CREATE_OUSTRING( "#" ).concat( xNamed->getName() );
                             xPropSet->setPropertyValue( sURL, Any( aURL ) );
                             Reference< text::XTextContent > xContent( rTextField.xTextField, UNO_QUERY);
-                            Reference< text::XTextRange > xTextRange( rTextField.xTextCursor, UNO_QUERY );
+                            Reference< text::XTextRange > xTextRange( rTextField.xTextCursor, UNO_QUERY );						
                             rTextField.xText->insertTextContent( xTextRange, xContent, sal_True );
                         }
                         catch( uno::Exception& )
@@ -138,7 +138,7 @@ void ResolveTextFields( XmlFilterBase& rFilter )
                         }
                     }
                 }
-            }
+            }		
         }
     }
 }
@@ -281,7 +281,7 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                 }
             }
         }
-        ResolveTextFields( rFilter );
+        ResolveTextFields( rFilter ); 
     }
     catch( uno::Exception& )
     {
@@ -294,7 +294,7 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
 
     }
 
-    // todo error handling;
+    // todo	error handling;
     if ( rxStatusIndicator.is() )
         rxStatusIndicator->end();
 }
@@ -346,7 +346,7 @@ bool PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
     {
         const OUString sLayout = CREATE_OUSTRING( "Layout" );
         uno::Reference< beans::XPropertySet > xSet( xSlide, uno::UNO_QUERY_THROW );
-        xSet->setPropertyValue( sLayout, Any( pMasterPersistPtr->getLayoutFromValueToken() ) );
+        xSet->setPropertyValue(	sLayout, Any( pMasterPersistPtr->getLayoutFromValueToken() ) );
     }
     while( xSlide->getCount() )
     {
@@ -378,7 +378,7 @@ bool PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
                 xPropertySet->setPropertyValue( sIsHeaderVisible, Any( aHeaderFooter.mbHeader ) );
             xPropertySet->setPropertyValue( sIsFooterVisible, Any( aHeaderFooter.mbFooter ) );
             xPropertySet->setPropertyValue( sIsDateTimeVisible, Any( aHeaderFooter.mbDateTime ) );
-            xPropertySet->setPropertyValue( sIsPageNumberVisible, Any( aHeaderFooter.mbSlideNumber ) );
+            xPropertySet->setPropertyValue( sIsPageNumberVisible, Any( aHeaderFooter.mbSlideNumber ) );	
         }
         catch( uno::Exception& )
         {

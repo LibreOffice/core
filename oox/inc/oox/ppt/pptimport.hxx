@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,11 +58,11 @@ public:
     virtual const oox::drawingml::table::TableStyleListPtr getTableStyles();
     virtual ::oox::drawingml::chart::ChartConverter& getChartConverter();
 
-    void                                                    setActualSlidePersist( SlidePersistPtr pActualSlidePersist ){ mpActualSlidePersist = pActualSlidePersist; };
-    std::map< rtl::OUString, oox::drawingml::ThemePtr >&    getThemes(){ return maThemes; };
-    std::vector< SlidePersistPtr >&                         getDrawPages(){ return maDrawPages; };
-    std::vector< SlidePersistPtr >&                         getMasterPages(){ return maMasterPages; };
-    std::vector< SlidePersistPtr >&                         getNotesPages(){ return maNotesPages; };
+    void													setActualSlidePersist( SlidePersistPtr pActualSlidePersist ){ mpActualSlidePersist = pActualSlidePersist; };
+    std::map< rtl::OUString, oox::drawingml::ThemePtr >&	getThemes(){ return maThemes; };
+    std::vector< SlidePersistPtr >&							getDrawPages(){ return maDrawPages; };
+    std::vector< SlidePersistPtr >&							getMasterPages(){ return maMasterPages; };
+    std::vector< SlidePersistPtr >&							getNotesPages(){ return maNotesPages; };
 
     sal_Int32 getSchemeColor( sal_Int32 nToken ) const;
 
@@ -71,10 +71,10 @@ private:
     virtual ::rtl::OUString implGetImplementationName() const;
 
 private:
-    rtl::OUString                                       maTableStyleListPath;
-    oox::drawingml::table::TableStyleListPtr            mpTableStyleList;
+    rtl::OUString										maTableStyleListPath;
+    oox::drawingml::table::TableStyleListPtr			mpTableStyleList;
 
-    SlidePersistPtr                                     mpActualSlidePersist;
+    SlidePersistPtr										mpActualSlidePersist;
     std::map< rtl::OUString, oox::drawingml::ThemePtr > maThemes;
 
     std::vector< SlidePersistPtr > maDrawPages;

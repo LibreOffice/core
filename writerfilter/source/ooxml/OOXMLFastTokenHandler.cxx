@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,27 +38,27 @@ namespace ooxml
 using namespace ::std;
 
 OOXMLFastTokenHandler::OOXMLFastTokenHandler
-(css::uno::Reference< css::uno::XComponentContext > const & context)
+(css::uno::Reference< css::uno::XComponentContext > const & context) 
 : m_xContext(context)
 {}
 
 // ::com::sun::star::xml::sax::XFastTokenHandler:
-::sal_Int32 SAL_CALL OOXMLFastTokenHandler::getToken(const ::rtl::OUString & Identifier)
+::sal_Int32 SAL_CALL OOXMLFastTokenHandler::getToken(const ::rtl::OUString & Identifier) 
     throw (css::uno::RuntimeException)
-{
+{        
     ::sal_Int32 nResult = OOXML_FAST_TOKENS_END;
 
     struct tokenmap::token * pToken =
         tokenmap::Perfect_Hash::in_word_set
-        (OUStringToOString(Identifier, RTL_TEXTENCODING_ASCII_US).getStr(),
+        (OUStringToOString(Identifier, RTL_TEXTENCODING_ASCII_US).getStr(), 
          Identifier.getLength());
 
     if (pToken != NULL)
         nResult = pToken->nToken;
 
 #ifdef DEBUG_TOKEN
-    clog << "getToken: "
-         << OUStringToOString(Identifier, RTL_TEXTENCODING_ASCII_US).getStr()
+    clog << "getToken: " 
+         << OUStringToOString(Identifier, RTL_TEXTENCODING_ASCII_US).getStr() 
          << ", " << nResult
          << endl;
 #endif
@@ -66,7 +66,7 @@ OOXMLFastTokenHandler::OOXMLFastTokenHandler
     return nResult;
 }
 
-::rtl::OUString SAL_CALL OOXMLFastTokenHandler::getIdentifier(::sal_Int32 Token)
+::rtl::OUString SAL_CALL OOXMLFastTokenHandler::getIdentifier(::sal_Int32 Token) 
     throw (css::uno::RuntimeException)
 {
     ::rtl::OUString sResult;
@@ -74,21 +74,21 @@ OOXMLFastTokenHandler::OOXMLFastTokenHandler
     if ( Token >= 0 || Token < OOXML_FAST_TOKENS_END )
     {
         static ::rtl::OUString aTokens[OOXML_FAST_TOKENS_END];
-
+        
         if (aTokens[Token].getLength() == 0)
             aTokens[Token] = ::rtl::OUString::createFromAscii
                 (tokenmap::wordlist[Token].name);
     }
-
+        
     return sResult;
 }
 
-css::uno::Sequence< ::sal_Int8 > SAL_CALL OOXMLFastTokenHandler::getUTF8Identifier(::sal_Int32 Token)
+css::uno::Sequence< ::sal_Int8 > SAL_CALL OOXMLFastTokenHandler::getUTF8Identifier(::sal_Int32 Token) 
     throw (css::uno::RuntimeException)
 {
     if ( Token < 0  || Token >= OOXML_FAST_TOKENS_END )
         return css::uno::Sequence< ::sal_Int8 >();
-
+        
     return css::uno::Sequence< ::sal_Int8 >(reinterpret_cast< const sal_Int8 *>(tokenmap::wordlist[Token].name), strlen(tokenmap::wordlist[Token].name));
 }
 
@@ -96,17 +96,17 @@ css::uno::Sequence< ::sal_Int8 > SAL_CALL OOXMLFastTokenHandler::getUTF8Identifi
 (const css::uno::Sequence< ::sal_Int8 > & Identifier) throw (css::uno::RuntimeException)
 {
     ::sal_Int32 nResult = OOXML_FAST_TOKENS_END;
-
+    
     struct tokenmap::token * pToken =
         tokenmap::Perfect_Hash::in_word_set
-        (reinterpret_cast<const char *>(Identifier.getConstArray()),
+        (reinterpret_cast<const char *>(Identifier.getConstArray()), 
          Identifier.getLength());
 
     if (pToken != NULL)
         nResult = pToken->nToken;
 
 #ifdef DEBUG_TOKEN
-    clog << "getTokenFromUTF8: "
+    clog << "getTokenFromUTF8: " 
          << string(reinterpret_cast<const char *>
                    (Identifier.getConstArray()), Identifier.getLength())
          << ", " << nResult

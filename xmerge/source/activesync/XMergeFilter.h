@@ -56,16 +56,16 @@ public:
 
 
     /********** IUnknown methods **********/
-    STDMETHODIMP            QueryInterface(REFIID iid, void **ppvObject);
-    STDMETHODIMP_(ULONG)    AddRef();
-    STDMETHODIMP_(ULONG)    Release();
+    STDMETHODIMP			QueryInterface(REFIID iid, void **ppvObject);
+    STDMETHODIMP_(ULONG)	AddRef();
+    STDMETHODIMP_(ULONG)	Release();
 
     /********** ICeFileFilter methods *********/
-    STDMETHODIMP            FilterOptions(HWND hwndParent);
-    STDMETHODIMP            FormatMessage(DWORD dwFlags, DWORD dwMessageId, DWORD dwLanguageId,
+    STDMETHODIMP			FilterOptions(HWND hwndParent);
+    STDMETHODIMP			FormatMessage(DWORD dwFlags, DWORD dwMessageId, DWORD dwLanguageId,
                                           LPTSTR lpBuffer, DWORD nSize, va_list *Arguments, DWORD *pcb);
-    STDMETHODIMP            NextConvertFile(int nConversion, CFF_CONVERTINFO *pci,
-                                            CFF_SOURCEFILE *psf, CFF_DESTINATIONFILE *pdf,
+    STDMETHODIMP			NextConvertFile(int nConversion, CFF_CONVERTINFO *pci, 
+                                            CFF_SOURCEFILE *psf, CFF_DESTINATIONFILE *pdf, 
                                             volatile BOOL *pbCancel, CF_ERROR *perr);
 
 };

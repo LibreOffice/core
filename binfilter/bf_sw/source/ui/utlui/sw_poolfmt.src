@@ -1,0 +1,740 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+#include "poolfmt.hrc"
+
+ // -----------------
+ // Format-Namen
+ // -----------------
+String STR_POOLCHR_FOOTNOTE
+{
+    Text = "Footnote Characters" ;
+};
+String STR_POOLCHR_PAGENO
+{
+    Text = "Page Number" ;
+};
+String STR_POOLCHR_LABEL
+{
+    Text = "Caption Characters" ;
+};
+String STR_POOLCHR_DROPCAPS
+{
+    Text = "Drop Caps" ;
+};
+String STR_POOLCHR_NUM_LEVEL
+{
+    Text = "Numbering Symbols" ;
+};
+String STR_POOLCHR_BUL_LEVEL
+{
+    Text = "Bullets" ;
+};
+String STR_POOLCHR_INET_NORMAL
+{
+    Text = "Internet Link" ;
+};
+String STR_POOLCHR_INET_VISIT
+{
+    Text = "Visited Internet Link" ;
+};
+String STR_POOLCHR_JUMPEDIT
+{
+    Text = "Placeholder" ;
+};
+String STR_POOLCHR_TOXJUMP
+{
+    Text = "Index Link" ;
+};
+String STR_POOLCHR_ENDNOTE
+{
+    Text = "Endnote Characters" ;
+};
+String STR_POOLCHR_LINENUM
+{
+    Text = "Line numbering" ;
+};
+String STR_POOLCHR_IDX_MAIN_ENTRY
+{
+    Text = "Main index entry";
+};
+String STR_POOLCHR_FOOTNOTE_ANCHOR
+{
+    Text = "Footnote anchor";
+};
+String STR_POOLCHR_ENDNOTE_ANCHOR
+{
+    Text = "Endnote anchor";
+};
+String STR_POOLCHR_HTML_EMPHASIS
+{
+    Text = "Emphasis" ;
+};
+String STR_POOLCHR_HTML_CITIATION
+{
+    Text = "Quotation" ;
+};
+String STR_POOLCHR_HTML_STRONG
+{
+    Text = "Strong Emphasis" ;
+};
+String STR_POOLCHR_HTML_CODE
+{
+    Text = "Source Text" ;
+};
+String STR_POOLCHR_HTML_SAMPLE
+{
+    Text = "Example" ;
+};
+String STR_POOLCHR_HTML_KEYBOARD
+{
+    Text = "User Entry" ;
+};
+String STR_POOLCHR_HTML_VARIABLE
+{
+    Text = "Variable" ;
+};
+String STR_POOLCHR_HTML_DEFINSTANCE
+{
+    Text = "Definition" ;
+
+};
+String STR_POOLCHR_HTML_TELETYPE
+{
+
+    Text = "Teletype" ;
+};
+
+// Rahmenvorlagen
+String STR_POOLFRM_FRAME
+{
+    Text = "Frame" ;
+};
+String STR_POOLFRM_GRAPHIC
+{
+    Text = "Graphics" ;
+};
+String STR_POOLFRM_OLE
+{
+    Text = "OLE" ;
+};
+String STR_POOLFRM_FORMEL
+{
+    Text = "Formula" ;
+};
+String STR_POOLFRM_MARGINAL
+{
+    Text = "Marginalia" ;
+};
+String STR_POOLFRM_WATERSIGN
+{
+    Text = "Watermark" ;
+};
+String STR_POOLFRM_LABEL
+{
+    Text = "Labels" ;
+};
+ // -----------------
+ // Vorlagen-Namen
+ // -----------------
+String STR_POOLCOLL_STANDARD
+{
+    Text = "Default" ;
+};
+String STR_POOLCOLL_TEXT
+{
+    Text = "Text body" ;
+};
+String STR_POOLCOLL_TEXT_IDENT
+{
+    Text = "First line indent" ;
+};
+String STR_POOLCOLL_TEXT_NEGIDENT
+{
+    Text = "Hanging indent" ;
+};
+String STR_POOLCOLL_TEXT_MOVE
+{
+    Text = "Text body indent" ;
+
+};
+String STR_POOLCOLL_GREETING
+{
+    Text = "Complimentary close" ;
+
+};
+String STR_POOLCOLL_SIGNATURE
+{
+    Text = "Signature" ;
+};
+String STR_POOLCOLL_HEADLINE_BASE
+{
+    Text = "Heading" ;
+};
+String STR_POOLCOLL_NUMBUL_BASE
+{
+    Text = "List" ;
+};
+String STR_POOLCOLL_REGISTER_BASE
+{
+    Text = "Index" ;
+};
+String STR_POOLCOLL_CONFRONTATION
+{
+    Text = "List Indent" ;
+};
+String STR_POOLCOLL_MARGINAL
+{
+    Text = "Marginalia" ;
+};
+String STR_POOLCOLL_HEADLINE1
+{
+    Text = "Heading 1" ;
+};
+String STR_POOLCOLL_HEADLINE2
+{
+    Text = "Heading 2" ;
+};
+String STR_POOLCOLL_HEADLINE3
+{
+    Text = "Heading 3" ;
+};
+String STR_POOLCOLL_HEADLINE4
+{
+    Text = "Heading 4" ;
+};
+String STR_POOLCOLL_HEADLINE5
+{
+    Text = "Heading 5" ;
+};
+String STR_POOLCOLL_HEADLINE6
+{
+    Text = "Heading 6" ;
+};
+String STR_POOLCOLL_HEADLINE7
+{
+    Text = "Heading 7" ;
+};
+String STR_POOLCOLL_HEADLINE8
+{
+    Text = "Heading 8" ;
+};
+String STR_POOLCOLL_HEADLINE9
+{
+    Text = "Heading 9" ;
+};
+String STR_POOLCOLL_HEADLINE10
+{
+    Text = "Heading 10" ;
+};
+String STR_POOLCOLL_NUM_LEVEL1S
+{
+    Text = "Numbering 1 Start" ;
+};
+String STR_POOLCOLL_NUM_LEVEL1
+{
+    Text = "Numbering 1" ;
+};
+String STR_POOLCOLL_NUM_LEVEL1E
+{
+    Text = "Numbering 1 End" ;
+};
+String STR_POOLCOLL_NUM_NONUM1
+{
+    Text = "Numbering 1 Cont." ;
+};
+String STR_POOLCOLL_NUM_LEVEL2S
+{
+    Text = "Numbering 2 Start" ;
+};
+String STR_POOLCOLL_NUM_LEVEL2
+{
+    Text = "Numbering 2" ;
+};
+String STR_POOLCOLL_NUM_LEVEL2E
+{
+    Text = "Numbering 2 End" ;
+};
+String STR_POOLCOLL_NUM_NONUM2
+{
+    Text = "Numbering 2 Cont." ;
+};
+String STR_POOLCOLL_NUM_LEVEL3S
+{
+    Text = "Numbering 3 Start" ;
+};
+String STR_POOLCOLL_NUM_LEVEL3
+{
+    Text = "Numbering 3" ;
+};
+String STR_POOLCOLL_NUM_LEVEL3E
+{
+    Text = "Numbering 3 End" ;
+};
+String STR_POOLCOLL_NUM_NONUM3
+{
+    Text = "Numbering 3 Cont." ;
+};
+String STR_POOLCOLL_NUM_LEVEL4S
+{
+    Text = "Numbering 4 Start" ;
+};
+String STR_POOLCOLL_NUM_LEVEL4
+{
+    Text = "Numbering 4" ;
+};
+String STR_POOLCOLL_NUM_LEVEL4E
+{
+    Text = "Numbering 4 End" ;
+};
+String STR_POOLCOLL_NUM_NONUM4
+{
+    Text = "Numbering 4 Cont." ;
+};
+String STR_POOLCOLL_NUM_LEVEL5S
+{
+    Text = "Numbering 5 Start" ;
+};
+String STR_POOLCOLL_NUM_LEVEL5
+{
+    Text = "Numbering 5" ;
+};
+String STR_POOLCOLL_NUM_LEVEL5E
+{
+    Text = "Numbering 5 End" ;
+};
+String STR_POOLCOLL_NUM_NONUM5
+{
+    Text = "Numbering 5 Cont." ;
+};
+String STR_POOLCOLL_BUL_LEVEL1S
+{
+    Text = "List 1 Start" ;
+};
+String STR_POOLCOLL_BUL_LEVEL1
+{
+    Text = "List 1" ;
+};
+String STR_POOLCOLL_BUL_LEVEL1E
+{
+    Text = "List 1 End" ;
+};
+String STR_POOLCOLL_BUL_NONUM1
+{
+    Text = "List 1 Cont." ;
+};
+String STR_POOLCOLL_BUL_LEVEL2S
+{
+    Text = "List 2 Start" ;
+};
+String STR_POOLCOLL_BUL_LEVEL2
+{
+    Text = "List 2" ;
+};
+String STR_POOLCOLL_BUL_LEVEL2E
+{
+    Text = "List 2 End" ;
+};
+String STR_POOLCOLL_BUL_NONUM2
+{
+    Text = "List 2 Cont." ;
+};
+String STR_POOLCOLL_BUL_LEVEL3S
+{
+    Text = "List 3 Start" ;
+};
+String STR_POOLCOLL_BUL_LEVEL3
+{
+    Text = "List 3" ;
+};
+String STR_POOLCOLL_BUL_LEVEL3E
+{
+    Text = "List 3 End" ;
+};
+String STR_POOLCOLL_BUL_NONUM3
+{
+    Text = "List 3 Cont." ;
+};
+String STR_POOLCOLL_BUL_LEVEL4S
+{
+    Text = "List 4 Start" ;
+};
+String STR_POOLCOLL_BUL_LEVEL4
+{
+    Text = "List 4" ;
+};
+String STR_POOLCOLL_BUL_LEVEL4E
+{
+    Text = "List 4 End" ;
+};
+String STR_POOLCOLL_BUL_NONUM4
+{
+    Text = "List 4 Cont." ;
+};
+String STR_POOLCOLL_BUL_LEVEL5S
+{
+    Text = "List 5 Start" ;
+};
+String STR_POOLCOLL_BUL_LEVEL5
+{
+    Text = "List 5" ;
+};
+String STR_POOLCOLL_BUL_LEVEL5E
+{
+    Text = "List 5 End" ;
+};
+String STR_POOLCOLL_BUL_NONUM5
+{
+    Text = "List 5 Cont." ;
+};
+String STR_POOLCOLL_HEADER
+{
+    Text = "Header" ;
+};
+String STR_POOLCOLL_HEADERL
+{
+    Text = "Header left" ;
+};
+String STR_POOLCOLL_HEADERR
+{
+    Text = "Header right" ;
+};
+String STR_POOLCOLL_FOOTER
+{
+    Text = "Footer" ;
+};
+String STR_POOLCOLL_FOOTERL
+{
+    Text = "Footer left" ;
+};
+String STR_POOLCOLL_FOOTERR
+{
+    Text = "Footer right" ;
+};
+String STR_POOLCOLL_TABLE
+{
+    Text = "Table Contents" ;
+};
+String STR_POOLCOLL_TABLE_HDLN
+{
+    Text = "Table Heading" ;
+};
+String STR_POOLCOLL_FRAME
+{
+    Text = "Frame contents" ;
+};
+String STR_POOLCOLL_FOOTNOTE
+{
+    Text = "Footnote" ;
+};
+String STR_POOLCOLL_ENDNOTE
+{
+    Text = "Endnote" ;
+};
+String STR_POOLCOLL_LABEL
+{
+    Text = "Caption" ;
+};
+String STR_POOLCOLL_LABEL_ABB
+{
+    Text = "Illustration" ;
+};
+String STR_POOLCOLL_LABEL_TABLE
+{
+    Text = "Table" ;
+};
+String STR_POOLCOLL_LABEL_FRAME
+{
+    Text = "Text" ;
+};
+String STR_POOLCOLL_LABEL_DRAWING
+{
+    Text = "Drawing";
+};
+String STR_POOLCOLL_JAKETADRESS
+{
+    Text = "Addressee" ;
+};
+String STR_POOLCOLL_SENDADRESS
+{
+    Text = "Sender" ;
+};
+String STR_POOLCOLL_TOX_IDXH
+{
+    Text = "Index Heading" ;
+};
+String STR_POOLCOLL_TOX_IDX1
+{
+    Text = "Index 1" ;
+};
+String STR_POOLCOLL_TOX_IDX2
+{
+    Text = "Index 2" ;
+};
+String STR_POOLCOLL_TOX_IDX3
+{
+    Text = "Index 3" ;
+};
+String STR_POOLCOLL_TOX_IDXBREAK
+{
+    Text = "Index Separator" ;
+};
+String STR_POOLCOLL_TOX_CNTNTH
+{
+    Text = "Contents Heading" ;
+};
+String STR_POOLCOLL_TOX_CNTNT1
+{
+    Text = "Contents 1" ;
+};
+String STR_POOLCOLL_TOX_CNTNT2
+{
+    Text = "Contents 2" ;
+};
+String STR_POOLCOLL_TOX_CNTNT3
+{
+    Text = "Contents 3" ;
+};
+String STR_POOLCOLL_TOX_CNTNT4
+{
+    Text = "Contents 4" ;
+};
+String STR_POOLCOLL_TOX_CNTNT5
+{
+    Text = "Contents 5" ;
+};
+String STR_POOLCOLL_TOX_CNTNT6
+{
+    Text = "Contents 6" ;
+};
+String STR_POOLCOLL_TOX_CNTNT7
+{
+    Text = "Contents 7" ;
+};
+String STR_POOLCOLL_TOX_CNTNT8
+{
+    Text = "Contents 8" ;
+};
+String STR_POOLCOLL_TOX_CNTNT9
+{
+    Text = "Contents 9" ;
+};
+String STR_POOLCOLL_TOX_CNTNT10
+{
+    Text = "Contents 10" ;
+};
+String STR_POOLCOLL_TOX_USERH
+{
+    Text = "User Index Heading" ;
+};
+String STR_POOLCOLL_TOX_USER1
+{
+    Text = "User Index 1" ;
+};
+String STR_POOLCOLL_TOX_USER2
+{
+    Text = "User Index 2" ;
+};
+String STR_POOLCOLL_TOX_USER3
+{
+    Text = "User Index 3" ;
+};
+String STR_POOLCOLL_TOX_USER4
+{
+    Text = "User Index 4" ;
+};
+String STR_POOLCOLL_TOX_USER5
+{
+    Text = "User Index 5" ;
+};
+String STR_POOLCOLL_TOX_USER6
+{
+    Text = "User Index 6" ;
+};
+String STR_POOLCOLL_TOX_USER7
+{
+    Text = "User Index 7" ;
+};
+String STR_POOLCOLL_TOX_USER8
+{
+    Text = "User Index 8" ;
+};
+String STR_POOLCOLL_TOX_USER9
+{
+    Text = "User Index 9" ;
+};
+String STR_POOLCOLL_TOX_USER10
+{
+    Text = "User Index 10" ;
+};
+String STR_POOLCOLL_TOX_ILLUSH
+{
+    Text = "Illustration Index Heading";
+};
+String STR_POOLCOLL_TOX_ILLUS1
+{
+    Text = "Illustration Index 1";
+};
+String STR_POOLCOLL_TOX_OBJECTH
+{
+    Text = "Object index heading";
+};
+String STR_POOLCOLL_TOX_OBJECT1
+{
+    Text = "Object index 1";
+};
+String STR_POOLCOLL_TOX_TABLESH
+{
+    Text = "Table index heading";
+};
+String STR_POOLCOLL_TOX_TABLES1
+{
+    Text = "Table index 1";
+};
+String STR_POOLCOLL_TOX_AUTHORITIESH
+{
+    Text = "Bibliography Heading";
+};
+String STR_POOLCOLL_TOX_AUTHORITIES1
+{
+    Text = "Bibliography 1";
+};
+String STR_POOLCOLL_DOC_TITEL
+{
+    Text = "Title" ;
+};
+String STR_POOLCOLL_DOC_SUBTITEL
+{
+    Text = "Subtitle" ;
+};
+String STR_POOLCOLL_HTML_BLOCKQUOTE
+{
+    Text = "Quotations" ;
+};
+String STR_POOLCOLL_HTML_PRE
+{
+    Text = "Preformatted Text" ;
+};
+String STR_POOLCOLL_HTML_HR
+{
+    Text = "Horizontal Line" ;
+};
+String STR_POOLCOLL_HTML_DD
+{
+    Text = "List Contents" ;
+};
+String STR_POOLCOLL_HTML_DT
+{
+    Text = "List Heading" ;
+};
+String STR_POOLPAGE_STANDARD
+{
+    Text = "Default" ;
+};
+String STR_POOLPAGE_FIRST
+{
+    Text = "First Page" ;
+};
+String STR_POOLPAGE_LEFT
+{
+    Text = "Left Page" ;
+};
+String STR_POOLPAGE_RIGHT
+{
+    Text = "Right Page" ;
+};
+String STR_POOLPAGE_JAKET
+{
+    Text = "Envelope" ;
+};
+String STR_POOLPAGE_REGISTER
+{
+    Text = "Index" ;
+};
+String STR_POOLPAGE_HTML
+{
+    Text = "HTML" ;
+};
+String STR_POOLPAGE_FOOTNOTE
+{
+    Text = "Footnote" ;
+};
+String STR_POOLPAGE_ENDNOTE
+{
+    Text = "Endnote" ;
+};
+String STR_POOLNUMRULE_NUM1
+{
+    Text = "Numbering 1" ;
+};
+String STR_POOLNUMRULE_NUM2
+{
+    Text = "Numbering 2" ;
+};
+String STR_POOLNUMRULE_NUM3
+{
+    Text = "Numbering 3" ;
+};
+String STR_POOLNUMRULE_NUM4
+{
+    Text = "Numbering 4" ;
+};
+String STR_POOLNUMRULE_NUM5
+{
+    Text = "Numbering 5" ;
+};
+String STR_POOLNUMRULE_BUL1
+{
+    Text = "List 1" ;
+};
+String STR_POOLNUMRULE_BUL2
+{
+    Text = "List 2" ;
+};
+String STR_POOLNUMRULE_BUL3
+{
+    Text = "List 3" ;
+};
+String STR_POOLNUMRULE_BUL4
+{
+    Text = "List 4" ;
+};
+String STR_POOLNUMRULE_BUL5
+{
+    Text = "List 5" ;
+};
+
+String STR_POOLCHR_RUBYTEXT
+{
+    Text = "Rubies";
+};
+
+String STR_POOLCHR_VERT_NUM
+{
+    Text = "Vertical Numbering Symbols";
+};
+

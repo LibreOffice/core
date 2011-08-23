@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1506,7 +1506,7 @@ void WorksheetData::finalizeUsedArea()
         maUsedArea.StartColumn = maUsedArea.EndColumn = 0;
     if( maUsedArea.StartRow > maUsedArea.EndRow )
         maUsedArea.StartRow = maUsedArea.EndRow = 0;
-
+        
     /*  Register the used area of this sheet in global view settings. The
         global view settings will set the visible area if this document is an
         embedded OLE object. */

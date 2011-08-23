@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace oox { namespace ppt {
         : ContextHandler( rParent )
         , maTimeNodeList( aTimeNodeList )
         , mbInBldGraphic( false )
-        ,   mbBuildAsOne( false )
+        ,	mbBuildAsOne( false )
     {
     }
 
@@ -89,9 +89,9 @@ namespace oox { namespace ppt {
             AttributeList attribs( xAttribs );
             OUString sShapeId = xAttribs->getOptionalValue( XML_spid );
 // TODO
-//      bool uiExpand = attribs.getBool( XML_uiExpand, true );
+//		bool uiExpand = attribs.getBool( XML_uiExpand, true );
                 /* this is unsigned */
-//      sal_uInt32 nGroupId =  attribs.getUnsignedInteger( XML_grpId, 0 );
+//		sal_uInt32 nGroupId =  attribs.getUnsignedInteger( XML_grpId, 0 );
             break;
         }
         case NMSP_DRAWINGML|XML_bldDgm:

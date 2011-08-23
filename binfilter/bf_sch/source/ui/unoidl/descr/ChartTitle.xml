@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>sch</module-name>
+    <component-description>
+        <author>Bjoern Milcke</author>
+        <name>com.sun.star.comp.office.ChartTitle</name>
+        <description>
+    This component provides main-/subtitle of the chart and
+    titles of axis objects
+</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.chart.ChartTitle</supported-service>
+        <supported-service>com.sun.star.drawing.Shape</supported-service>
+        <supported-service>com.sun.star.style.CharacterProperties</supported-service>
+        <supported-service>com.sun.star.xml.UserDefinedAttributeSupplier</supported-service>
+    </component-description>
+</module-description>

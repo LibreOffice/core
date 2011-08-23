@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -193,7 +193,7 @@ TypeDetection::~TypeDetection()
         {
             sType = impl_detectTypeDeepOnly(stlDescriptor, lUsedDetectors);
         }
-
+        
         //*******************************************
         // flat detection failed
         // pure deep detection failed
@@ -945,7 +945,7 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
          ++pIt                      )
     {
         const ::rtl::OUString& sDetectService = *pIt;
-
+        
         OUStringList::const_iterator pAlreadyUsed = ::std::find(lInsideUsedDetectors.begin(), lInsideUsedDetectors.end(), sDetectService);
         if (pAlreadyUsed != lInsideUsedDetectors.end())
             continue;
@@ -963,7 +963,7 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
 -----------------------------------------------*/
 void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescriptor)
 {
-    // try to seek to 0 ...
+    // try to seek to 0 ... 
     // But because XSeekable is an optional interface ... try it only .-)
     css::uno::Reference< css::io::XInputStream > xStream = rDescriptor.getUnpackedValueOrDefault(
                                                             ::comphelper::MediaDescriptor::PROP_INPUTSTREAM(),
@@ -998,7 +998,7 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     // seek to 0 is an optional feature to be more robust against
     // "simple implemented detect services" .-)
     impl_seekStreamToZero(rDescriptor);
-
+        
     css::uno::Reference< css::document::XExtendedFilterDetection > xDetector;
     css::uno::Reference< css::lang::XMultiServiceFactory >         xSMGR;
 
@@ -1015,16 +1015,16 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     xDetector = css::uno::Reference< css::document::XExtendedFilterDetection >(
             xSMGR->createInstance(sDetectService),
             css::uno::UNO_QUERY);
-
+            
     if ( ! xDetector.is())
         return ::rtl::OUString();
-
+    
     ::rtl::OUString sDeepType;
     try
     {
         // start deep detection
         // Dont forget to convert stl descriptor to its uno representation.
-
+    
         /* Attention!
                 You have to use an explicit instance of this uno sequence ...
                 Because its used as an in out parameter. And in case of a temp. used object
@@ -1043,11 +1043,11 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
             // document without a problem .-)
             sDeepType = ::rtl::OUString();
         }
-
+            
     // seek to 0 is an optional feature to be more robust against
     // "simple implemented detect services" .-)
     impl_seekStreamToZero(rDescriptor);
-
+        
     // analyze the results
     // a) detect service returns "" => return "" too and remove TYPE/FILTER prop from descriptor
     // b) returned type is unknown  => return "" too and remove TYPE/FILTER prop from descriptor
@@ -1058,7 +1058,7 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     sal_Bool bValidType = impl_validateAndSetTypeOnDescriptor(rDescriptor, sDeepType);
     if (bValidType)
         return sDeepType;
-
+    
     return ::rtl::OUString();
 }
 
@@ -1073,17 +1073,17 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     aLock.clear();
     // <- SAFE
 
-    css::uno::Reference< css::task::XInteractionHandler > xInteraction =
+    css::uno::Reference< css::task::XInteractionHandler > xInteraction = 
         rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER(),
         css::uno::Reference< css::task::XInteractionHandler >());
-
+        
     if (!xInteraction.is())
         return ::rtl::OUString();
-
+        
     ::rtl::OUString sURL =
         rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_URL(),
         ::rtl::OUString());
-
+        
     css::uno::Reference< css::io::XInputStream > xStream =
         rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_INPUTSTREAM(),
         css::uno::Reference< css::io::XInputStream >());
@@ -1098,37 +1098,37 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
         (!xStream.is()                                         ) || // non existing file !
         (sURL.equalsIgnoreAsciiCaseAsciiL("private:stream", 14))    // not a good idea .-)
        )
-        return ::rtl::OUString();
-
+        return ::rtl::OUString();       
+        
     try
     {
         // create a new request to ask user for it's decision about the usable filter
         ::framework::RequestFilterSelect* pRequest = new ::framework::RequestFilterSelect(sURL);
         css::uno::Reference< css::task::XInteractionRequest > xRequest(static_cast< css::task::XInteractionRequest* >(pRequest), css::uno::UNO_QUERY_THROW);
         xInteraction->handle(xRequest);
-
+    
         // "Cancel" pressed? => return with error
         if (pRequest->isAbort())
             return ::rtl::OUString();
-
+        
         // "OK" pressed => verify the selected filter, get it's coressponding
         // type and return it. (BTW: We must update the media descriptor here ...)
         // The user selected explicitly a filter ... but normaly we are interested on
         // a type here only. But we must be shure, that the selected filter is used
         // too and no ambigous filter registration disturb us .-)
-
+        
         ::rtl::OUString sFilter = pRequest->getFilter();
         if (!impl_validateAndSetFilterOnDescriptor(rDescriptor, sFilter))
             return ::rtl::OUString();
-
+        
         ::rtl::OUString sType;
         rDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] >>= sType;
         return sType;
     }
     catch(const css::uno::Exception&)
         {}
-
-    return ::rtl::OUString();
+        
+    return ::rtl::OUString();        
 }
 
 /*-----------------------------------------------

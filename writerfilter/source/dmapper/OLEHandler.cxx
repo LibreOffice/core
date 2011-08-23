@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -104,12 +104,12 @@ void OLEHandler::attribute(Id rName, Value & rVal)
         case NS_ooxml::LN_shape:
         /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
         {
-            uno::Reference< drawing::XShape > xTempShape;
+            uno::Reference< drawing::XShape > xTempShape; 
             rVal.getAny() >>= xTempShape;
             if( xTempShape.is() )
             {
                 m_xShape.set( xTempShape );
-
+                
                 try
                 {
                     m_aShapeSize = xTempShape->getSize();
@@ -119,8 +119,8 @@ void OLEHandler::attribute(Id rName, Value & rVal)
                     PropertyNameSupplier& rNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
                     xShapeProps->getPropertyValue( rNameSupplier.GetName( PROP_BITMAP ) ) >>= m_xReplacement;
-
-                    xShapeProps->setPropertyValue(
+               
+                    xShapeProps->setPropertyValue( 
                         rNameSupplier.GetName( PROP_SURROUND ),
                         uno::makeAny( m_nWrapMode ) );
                 }
@@ -130,10 +130,10 @@ void OLEHandler::attribute(Id rName, Value & rVal)
                     clog << "Exception in OLE Handler: ";
                     clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
 #endif
-                }
+                }    
             }
         }
-        break;
+        break;        
         default:
             OSL_ENSURE( false, "unknown attribute");
     }
@@ -147,7 +147,7 @@ void OLEHandler::sprm(Sprm & rSprm)
     switch( nSprmId )
     {
         case NS_ooxml::LN_OLEObject_OLEObject:
-        {
+        {    
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get())
             {
@@ -166,11 +166,11 @@ void OLEHandler::sprm(Sprm & rSprm)
                 m_nWrapMode = pHandler->getWrapMode( );
 
                 try
-                {
+                { 
                     uno::Reference< beans::XPropertySet > xShapeProps( m_xShape, uno::UNO_QUERY_THROW );
                     PropertyNameSupplier& rNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
-                    xShapeProps->setPropertyValue(
+                    xShapeProps->setPropertyValue( 
                         rNameSupplier.GetName( PROP_SURROUND ),
                         uno::makeAny( m_nWrapMode ) );
                 }
@@ -180,7 +180,7 @@ void OLEHandler::sprm(Sprm & rSprm)
                     clog << "Exception in OLE Handler: ";
                     clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
 #endif
-                }
+                } 
             }
         }
         break;

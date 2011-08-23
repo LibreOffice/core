@@ -30,11 +30,12 @@
 #pragma warning( push, 1 )
 #endif
 #include "WordPerfectCollector.hxx"
+#include <libwpd/WPDocument.h>
 #if defined _MSC_VER
 #pragma warning( pop )
 #endif
 
-WordPerfectCollector::WordPerfectCollector(WPXInputStream *pInput, DocumentHandler *pHandler) :
+WordPerfectCollector::WordPerfectCollector(WPSInputStream *pInput, DocumentHandler *pHandler) :
     DocumentCollector(pInput, pHandler)
 {
 }
@@ -43,7 +44,7 @@ WordPerfectCollector::~WordPerfectCollector()
 {
 }
 
-bool WordPerfectCollector::parseSourceDocument(WPXInputStream &input)
+bool WordPerfectCollector::parseSourceDocument(WPSInputStream &input)
 {
         WPDResult result = WPDocument::parse(&input, static_cast<WPXHLListenerImpl *>(this));
         if (result != WPD_OK)

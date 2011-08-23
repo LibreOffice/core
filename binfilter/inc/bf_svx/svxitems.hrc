@@ -1,0 +1,169 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SVXITEMS_HRC
+#define _SVXITEMS_HRC
+
+// include ------------------------------------------------------------------
+
+#ifndef _SOLAR_HRC
+#include <bf_svtools/solar.hrc>
+#endif
+
+// BOOL ---------------------------------------------------------------------
+#define RID_SVXITEMS_TRUE					(RID_SVXITEMS_START +  0)
+#define RID_SVXITEMS_FALSE					(RID_SVXITEMS_START +  1)
+
+// Extras -------------------------------------------------------------------
+
+// SvxSearchItem ------------------------------------------------------------
+// Kommando
+#define RID_SVXITEMS_SEARCHCMD_BEGIN		(RID_SVXITEMS_START + 10)
+// Vorlagen
+#define RID_SVXITEMS_SEARCHSTYLE_BEGIN		(RID_SVXITEMS_START + 14)
+// Zellen-Typ
+#define RID_SVXITEMS_SEARCHIN_BEGIN			(RID_SVXITEMS_START + 20)
+// Applikation
+#define RID_SVXITEMS_SEARCHAPP_BEGIN		(RID_SVXITEMS_START + 25)
+
+// enum SvxBreak ------------------------------------------------------------
+#define RID_SVXITEMS_BREAK_BEGIN			(RID_SVXITEMS_START + 30)
+
+// enum SvxShadowLocation ---------------------------------------------------
+#define RID_SVXITEMS_SHADOW_BEGIN			(RID_SVXITEMS_START + 40)
+
+// enum BrushStyle ----------------------------------------------------------
+#define RID_SVXITEMS_BRUSHSTYLE_BEGIN		(RID_SVXITEMS_START + 45)
+
+// enum ColorName -----------------------------------------------------------
+
+// enum FontFamily -------------------------------------------------------
+#define RID_SVXITEMS_FONTFAMILY_BEGIN		(RID_SVXITEMS_START + 100)
+#define RID_SVXITEMS_FONTFAMILY_DONTKNOW	(RID_SVXITEMS_START + 100)
+#define RID_SVXITEMS_FONTFAMILY_DECORATIVE	(RID_SVXITEMS_START + 101)
+#define RID_SVXITEMS_FONTFAMILY_MODERN		(RID_SVXITEMS_START + 102)
+#define RID_SVXITEMS_FONTFAMILY_ROMAN		(RID_SVXITEMS_START + 103)
+#define RID_SVXITEMS_FONTFAMILY_SCRIPT		(RID_SVXITEMS_START + 104)
+#define RID_SVXITEMS_FONTFAMILY_SWISS		(RID_SVXITEMS_START + 105)
+#define RID_SVXITEMS_FONTFAMILY_SYSTEM		(RID_SVXITEMS_START + 106)
+
+// enum FontPitch --------------------------------------------------------
+#define RID_SVXITEMS_FONTPITCH_BEGIN		(RID_SVXITEMS_START + 110)
+#define RID_SVXITEMS_FONTPITCH_DONTKNOW		(RID_SVXITEMS_START + 110)
+#define RID_SVXITEMS_FONTPITCH_FIXED		(RID_SVXITEMS_START + 111)
+#define RID_SVXITEMS_FONTPITCH_VARIABLE		(RID_SVXITEMS_START + 112)
+
+// enum FontItalic -------------------------------------------------------
+#define RID_SVXITEMS_ITALIC_BEGIN			(RID_SVXITEMS_START + 115)
+
+// enum FontWeight -------------------------------------------------------
+
+// enum FontStrikeout ----------------------------------------------------
+
+// enum CharSet ----------------------------------------------------------
+#define RID_SVXITEMS_CHARSET_BEGIN			(RID_SVXITEMS_START + 145)
+#define RID_SVXITEMS_CHARSET_DONTKNOW		(RID_SVXITEMS_START + 145)
+#define RID_SVXITEMS_CHARSET_ANSI			(RID_SVXITEMS_START + 146)
+#define RID_SVXITEMS_CHARSET_MAC			(RID_SVXITEMS_START + 147)
+#define RID_SVXITEMS_CHARSET_IBMPC_437		(RID_SVXITEMS_START + 148)
+#define RID_SVXITEMS_CHARSET_IBMPC_850		(RID_SVXITEMS_START + 149)
+#define RID_SVXITEMS_CHARSET_IBMPC_860		(RID_SVXITEMS_START + 150)
+#define RID_SVXITEMS_CHARSET_IBMPC_861		(RID_SVXITEMS_START + 151)
+#define RID_SVXITEMS_CHARSET_IBMPC_863		(RID_SVXITEMS_START + 152)
+#define RID_SVXITEMS_CHARSET_IBMPC_865		(RID_SVXITEMS_START + 153)
+#define RID_SVXITEMS_CHARSET_SYSTEM			(RID_SVXITEMS_START + 154)
+#define RID_SVXITEMS_CHARSET_SYMBOL			(RID_SVXITEMS_START + 155)
+
+// enum CASEMAP ----------------------------------------------------------
+
+// enum ESCAPEMENT -------------------------------------------------------
+
+// enum FontUnderline ----------------------------------------------------
+
+// enum SvxAdjust -----------------------------------------------------------
+
+// DB-Server-Connect --------------------------------------------------------
+//!!! Platz lassen
+
+// enum SvxAdjust -----------------------------------------------------------
+
+// type names of slots; needed for attribute list on search & replace dialogue
+#define RID_PARA_VERTALIGN					(RID_ATTR_BEGIN + 925)
+
+// Umrandungslinien
+
+// Metric-Texte
+
+// enum SvxCellHorJustify
+
+// enum SvxCellVerJustify
+
+// enum SvxCellOrientation
+
+// Id's fuer BoolItems
+
+// Complete-Texte -----------------------------------------------------------
+
+#define RID_SVXITEMS_PAGE_NUM_BEGIN			(RID_SVXITEMS_START + 499)
+#define RID_SVXITEMS_PAGE_USAGE_LEFT		(RID_SVXITEMS_START + 507)
+#define RID_SVXITEMS_PAGE_USAGE_RIGHT		(RID_SVXITEMS_START + 508)
+#define RID_SVXITEMS_PAGE_USAGE_ALL			(RID_SVXITEMS_START + 509)
+#define RID_SVXITEMS_PAGE_USAGE_MIRROR		(RID_SVXITEMS_START + 510)
+
+
+// enum FontEmphasisMark ---------------------------------------------------
+#define RID_SVXITEMS_EMPHASIS_BEGIN_STYLE	(RID_SVXITEMS_START + 530)
+
+#define RID_SVXITEMS_TWOLINES_OFF			(RID_SVXITEMS_START + 545)
+#define RID_SVXITEMS_TWOLINES				(RID_SVXITEMS_START + 546)
+
+
+
+#define RID_SVXITEMS_CHARROTATE_OFF			(RID_SVXITEMS_START + 556)
+#define RID_SVXITEMS_CHARROTATE				(RID_SVXITEMS_START + 557)
+#define RID_SVXITEMS_CHARROTATE_FITLINE		(RID_SVXITEMS_START + 558)
+
+
+#define RID_SVXITEMS_RELIEF_BEGIN			(RID_SVXITEMS_START + 561)
+#define RID_SVXITEMS_RELIEF_NONE			(RID_SVXITEMS_START + 561)
+#define RID_SVXITEMS_RELIEF_ENGRAVED		(RID_SVXITEMS_START + 563)
+#define RID_SVXITEMS_RELIEF_END				(RID_SVXITEMS_START + 564)
+
+
+
+#define RID_SVXITEMS_PARASNAPTOGRID_ON                     (RID_SVXITEMS_START + 575)
+#define RID_SVXITEMS_PARASNAPTOGRID_OFF                    (RID_SVXITEMS_START + 576)
+
+// Ueberlaufpruefung --------------------------------------------------------
+
+// Resource-Id's
+#define ACT_RID_SVXITEMS_END    RID_SVXITEMS_PARASNAPTOGRID_OFF
+#if ACT_RID_SVXITEMS_END > RID_SVXITEMS_END
+#error Resource-Ueberlauf in #line, #file
+#endif
+
+#endif
+

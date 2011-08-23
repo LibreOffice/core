@@ -1,0 +1,378 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+/* StarView resource file */
+
+#include "svdstr.hrc"
+ // Ab hier gecachte Strings
+ //String STR_ObjNameSingulXTXT {
+ //    Text="Textfortsetzungsrahmen";
+ //    Text[ENGLISH]="drawobject";
+ //    Text[norwegian]="Tegneobjekt";
+ //    Text[italian]="Disegna oggetto";
+ //    Text[portuguese_brazilian]="Desenhar objeto";
+ //    Text[portuguese]="Desenhar objecto";
+ //    Text[finnish]="Piirto-objekti";
+ //    Text[danish]="Tegneobjekt";
+ //    Text[french]="Drawobject";
+ //    Text[swedish]="Ritobjekt";
+ //    Text[dutch]="Tekenobject";
+ //    Text[spanish]="Objeto de dibujo";
+ //    Text[english_us]="drawobject";
+ //};
+ //String STR_ObjNamePluralXTXT {
+ //    Text="Textfortsetzungsrahmen";
+ //    Text[ENGLISH]="drawobjects";
+ //    Text[norwegian]="Tegneobjektr";
+ //    Text[italian]="Disegna  oggetti";
+ //    Text[portuguese_brazilian]="Desenhar objetos";
+ //    Text[portuguese]="Desenhar objectos";
+ //    Text[finnish]="Piirto-objektit";
+ //    Text[danish]="Tegneobjekter";
+ //    Text[french]="Drawobjects";
+ //    Text[swedish]="Ritobjekt";
+ //    Text[dutch]="Tekenobjecten";
+ //    Text[spanish]="Objetos de dibujo";
+ //    Text[english_us]="drawobjects";
+ //};
+ //String STR_ObjNameSingulXTXT {
+ //    Text="Textfortsetzungsrahmen";
+ //    Text[ENGLISH]="drawobject";
+ //    Text[norwegian]="Tegneobjekt";
+ //    Text[italian]="Disegna oggetto";
+ //    Text[portuguese_brazilian]="Desenhar objeto";
+ //    Text[portuguese]="Desenhar objecto";
+ //    Text[finnish]="Piirto-objekti";
+ //    Text[danish]="Tegneobjekt";
+ //    Text[french]="Drawobject";
+ //    Text[swedish]="Ritobjekt";
+ //    Text[dutch]="Tekenobject";
+ //    Text[spanish]="Objeto de dibujo";
+ //    Text[english_us]="drawobject";
+ //};
+ //String STR_ObjNamePluralXTXT {
+ //    Text="Textfortsetzungsrahmen";
+ //    Text[ENGLISH]="drawobjects";
+ //    Text[norwegian]="Tegneobjektr";
+ //    Text[italian]="Disegna  oggetti";
+ //    Text[portuguese_brazilian]="Desenhar objetos";
+ //    Text[portuguese]="Desenhar objectos";
+ //    Text[finnish]="Piirto-objektit";
+ //    Text[danish]="Tegneobjekter";
+ //    Text[french]="Drawobjects";
+ //    Text[swedish]="Ritobjekt";
+ //    Text[dutch]="Tekenobjecten";
+ //    Text[spanish]="Objetos de dibujo";
+ //    Text[english_us]="drawobjects";
+ //};
+// Neu ab 537: Namen fuer 3D-Objekte
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+String STR_ViewTextEdit
+{
+    Text [ de ] = "TextEdit: Absatz %a, Zeile %z, Spalte %s" ;
+    Text [ en-US ] = "TextEdit: Paragraph %a, Row %z, Column %s" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "EditarTexto: Parágrafo %a, Linha %z, Coluna %s";
+    Text[ ru ] = "Правка текста: Абзац %a, Строка %z, Столбец %s";
+    Text[ el ] = "Επεξεργασία κειμένου: Παράγραφος %a, Γραμμή %z, Στήλη %s";
+    Text[ nl ] = "TextEdit: Alinea %a, Rij %r, Kolom %k";
+    Text[ fr ] = "TextEdit : Paragraphe %a, Ligne %z, Colonne %s";
+    Text[ es ] = "Editar Texto: Párrafo %a, Línea %z, Columna %s";
+    Text[ fi ] = "Tekstin muokkaus: Kappale %a, Rivi %z, Sarake %s";
+    Text[ ca ] = "Edita Text: Paràgraf %a, Línia %z, Columna %s";
+    Text[ it ] = "TextEdit: Paragrafo %a, Riga %z, Colonna %s";
+    Text[ sk ] = "Editor textu: Odstavec %a, Riadok %z, Stĺpec %s";
+    Text[ da ] = "Tekstredigering: Afsnit %a, Række %z, Kolonne %s";
+    Text[ sv ] = "TextEdit: Stycke %a, Rad %z, Kolumn %s";
+    Text[ pl ] = "Edytuj tekst: Akapit %a, Wiersz %z, Kolumna %s";
+    Text[ pt-BR ] = "Editar Texto: Parágrafo %a, Linha %z, Coluna %s";
+    Text[ th ] = "แก้ไขข้อความ: ย่อหน้า %a, แถว %z, คอลัมน์ %s";
+    Text[ ja ] = "テキスト編集: 段落%a、行%z、列%s";
+    Text[ ko ] = "텍스트 편집: 단락 %a, 행 %z, 열 %s";
+    Text[ zh-CN ] = "编辑文字：段落%a，行%z，栏%s";
+    Text[ zh-TW ] = "編輯文字：段落%a，行%z，欄%s";
+    Text[ tr ] = "Metin düzenleme: Paragraf %a, Satır %z, Sütun %s";
+    Text[ hi-IN ] = "टेक्स्ट् संपादन: परिच्छेद %a, पंक्ति %z, स्तम्भ %s";
+    Text[ ar ] = "تحرير النص: الفقرة %a، السطر %z، العمود %s";
+    Text[ he ] = "‮עריכת טקסט: פיסקה %a, שורה %z, עמודה %s‬";
+};
+
+String STR_ViewMarkPoints
+{
+    Text [ de ] = "Markiere Punkte" ;
+    Text [ en-US ] = "Mark points" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Marcar pontos";
+    Text[ ru ] = "Отметить точки";
+    Text[ el ] = "Σήμανση σημείων";
+    Text[ nl ] = "Markeer punten";
+    Text[ fr ] = "Sélectionner des points";
+    Text[ es ] = "Marcar puntos";
+    Text[ fi ] = "Merkitse kohdat";
+    Text[ ca ] = "Marca els punts";
+    Text[ it ] = "Contrassegna punti";
+    Text[ sk ] = "Označiť body";
+    Text[ da ] = "Marker punkter";
+    Text[ sv ] = "Markera punkter";
+    Text[ pl ] = "Zaznacz punkty";
+    Text[ pt-BR ] = "Marcar pontos";
+    Text[ th ] = "ทำเครื่องหมายจุด";
+    Text[ ja ] = "制御点を選択します";
+    Text[ ko ] = "점 선택 표시";
+    Text[ zh-CN ] = "选择接点";
+    Text[ zh-TW ] = "選取接點";
+    Text[ tr ] = "Noktaları seç";
+    Text[ hi-IN ] = "बिन्दुओं को सूचित करो";
+    Text[ ar ] = "تحديد نقاط";
+    Text[ he ] = "‮סימון נקודות‬";
+};
+
+String STR_ViewMarkGluePoints
+{
+    Text [ de ] = "Markiere Klebepunkte" ;
+    Text [ en-US ] = "Mark glue points" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Marcar pontos de colagem";
+    Text[ ru ] = "Выделить точки соединения";
+    Text[ el ] = "Σήμανση σημείων κόλλησης";
+    Text[ nl ] = "Markeer plakpunten";
+    Text[ fr ] = "Marquer les points de collage";
+    Text[ es ] = "Marcar puntos de adhesión";
+    Text[ fi ] = "Merkitse kiinnityskohdat";
+    Text[ ca ] = "Marca els punts de cola";
+    Text[ it ] = "Contrassegna punti di incollaggio";
+    Text[ sk ] = "Označiť záchytné body";
+    Text[ da ] = "Marker klæbepunkter";
+    Text[ sv ] = "Markera fästpunkter";
+    Text[ pl ] = "Zaznacz punkty sklejania";
+    Text[ pt-BR ] = "Marcar pontos de adesão";
+    Text[ th ] = "ทำเครื่องหมายจุดเชื่อม";
+    Text[ ja ] = "接着点を選択します";
+    Text[ ko ] = "접착점 선택 표시";
+    Text[ zh-CN ] = "标记粘结点";
+    Text[ zh-TW ] = "選取接點";
+    Text[ tr ] = "Yapıştırma noktalarını seç";
+    Text[ hi-IN ] = "ग्लू बिन्दुओं को सूचित करो";
+    Text[ ar ] = "تحديد نقاط اللصق";
+    Text[ he ] = "‮סימון נקודות הדבקה‬";
+};
+String STR_ViewMarkMoreGluePoints
+{
+    Text [ de ] = "Markiere weitere Klebepunkte" ;
+    Text [ en-US ] = "Mark additional glue points" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Marcar pontos de colagem adicionais";
+    Text[ ru ] = "Выделить остальные точки соединения";
+    Text[ el ] = "Σήμανση επιπλέον σημείων κόλλησης";
+    Text[ nl ] = "Markeer andere plakpunten";
+    Text[ fr ] = "Sélectionner des points de collage supplémentaires";
+    Text[ es ] = "Marcar puntos de adhesión adicionales";
+    Text[ fi ] = "Merkitse lisäkiinnityskohdat";
+    Text[ ca ] = "Marca els punts de cola addicionals";
+    Text[ it ] = "Contrassegna punti di incollaggio aggiuntivi";
+    Text[ sk ] = "Označiť ďalšie záchytné body";
+    Text[ da ] = "Marker flere klæbepunkter";
+    Text[ sv ] = "Markera ytterligare fästpunkter";
+    Text[ pl ] = "Zaznacz dodatkowe punkty sklejania";
+    Text[ pt-BR ] = "Marcar pontos de adesão adicionais";
+    Text[ th ] = "ทำเครื่องหมายจุดเชื่อมเพิ่มเติม";
+    Text[ ja ] = "ほかの接着点も選択";
+    Text[ ko ] = "기타 접착점 선택 표시";
+    Text[ zh-CN ] = "标记其他的粘结点";
+    Text[ zh-TW ] = "選取其他的接點";
+    Text[ tr ] = "Ek yapıştırma noktaları seç";
+    Text[ hi-IN ] = "अधिकतर ग्लू बिन्दुओं को सूचित करो";
+    Text[ ar ] = "تحديد نقاط لصق أخرى";
+    Text[ he ] = "‮סימון נקודות הדבקה נוספות‬";
+};
+ ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+ ////////////////////////////////////////////////////////////////////////////////////////////////////
+ ////////////////////////////////////////////////////////////////////////////////////////////////////
+ ////////////////////////////////////////////////////////////////////////////////////////////////////
+ // Ende der gecachten Strings
+
+ // und hier noch Bitmaps
+Bitmap BMAP_GrafikEi { File = "grafikei.bmp" ; };
+
+// Strings fuer den Vorlagen-Dialog
+
+// Strings fuer den Vorlagen-Dialog
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// #100499#
+
+// #101928#
+
+// ******************************************************************* EOF

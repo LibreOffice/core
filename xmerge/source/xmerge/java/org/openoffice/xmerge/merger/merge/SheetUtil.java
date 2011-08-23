@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,12 +36,12 @@ import org.openoffice.xmerge.ConverterCapabilities;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 
 
-/**
+/** 
  *  Utility methods to handle sheet XML tree.
  */
 public class SheetUtil {
 
-    /**
+    /** 
      *  <p>Empty the content of a cell value.   This includes the following:
      *  </p>
      *
@@ -59,14 +59,14 @@ public class SheetUtil {
         NamedNodeMap attrNodes = node.getAttributes();
 
         if (attrNodes != null) {
-
-            // empty the first text:p node.
+            
+            // empty the first text:p node. 
             // Note: it's not necessary only string type cell contain text:p
             // basically, all different type of cell will contain one
             Element cell = (Element)node;
 
             // get the paragraph node list
-            NodeList paraNodes =
+            NodeList paraNodes = 
                 cell.getElementsByTagName(OfficeConstants.TAG_PARAGRAPH);
 
             Node firstParaNode = paraNodes.item(0);
@@ -77,8 +77,8 @@ public class SheetUtil {
                 parent.removeChild(firstParaNode);
             }
 
-            // check all the attributes and remove those we supported in
-            // converter
+            // check all the attributes and remove those we supported in 
+            // converter 
             // NOTE: for attribute list, refer to section 4.7.2 in specification
             int len = attrNodes.getLength();
 

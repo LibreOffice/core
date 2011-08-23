@@ -1,0 +1,123 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+ // pragma -------------------------------------------------------------------
+
+ // include ------------------------------------------------------------------
+#include "dialogs.hrc"
+#include "impgrf.hrc"
+ // --------------------------------------------------------------------------
+Resource RID_SVXRES_IMPORTGRAPHIC
+{
+    String STR_PATH_NOT_FOUND1
+    {
+        Text [ de ] = "Das Verzeichnis '" ;
+        Text [ en-US ] = "The directory '" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "O directório '";
+        Text[ ru ] = "Каталог '";
+        Text[ el ] = "Ο κατάλογος '";
+        Text[ nl ] = "Map '";
+        Text[ fr ] = "Le répertoire '";
+        Text[ es ] = "El directorio '";
+        Text[ fi ] = "Hakemistoa";
+        Text[ ca ] = "El directori ";
+        Text[ it ] = "La cartella '";
+        Text[ sk ] = "Adresár '";
+        Text[ da ] = "Biblioteket '";
+        Text[ sv ] = "Katalogen '";
+        Text[ pl ] = "Katalog '";
+        Text[ pt-BR ] = "O diretório";
+        Text[ th ] = "ไดเร็กทอรี่ '";
+        Text[ ja ] = "ディレクトリ'";
+        Text[ ko ] = "디렉토리 '";
+        Text[ zh-CN ] = "这个目录 '";
+        Text[ zh-TW ] = "這個目錄<";
+        Text[ tr ] = "Dizin '";
+        Text[ hi-IN ] = "डैरक्टरी '";
+        Text[ ar ] = "الدليل '";
+        Text[ he ] = "Das Verzeichnis '";
+    };
+    String STR_LINK
+    {
+        Text [ de ] = "~Verknüpfen" ;
+        Text [ en-US ] = "~Link" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "~Ligar";
+        Text[ ru ] = "Связать";
+        Text[ el ] = "Σύνδεση";
+        Text[ nl ] = "~Koppelen";
+        Text[ fr ] = "~Lien";
+        Text[ es ] = "~Vincular";
+        Text[ fi ] = "~Linkitä";
+        Text[ ca ] = "~Enllaça";
+        Text[ it ] = "~Collega";
+        Text[ sk ] = "~Odkaz";
+        Text[ da ] = "Kæd";
+        Text[ sv ] = "Lä~nka";
+        Text[ pl ] = "Połą~cz";
+        Text[ pt-BR ] = "~Vincular";
+        Text[ th ] = "เ~ชื่อมโยง";
+        Text[ ja ] = "リンク(~L)";
+        Text[ ko ] = "연결(~L)";
+        Text[ zh-CN ] = "链接(~L)";
+        Text[ zh-TW ] = "連結(~L)";
+        Text[ tr ] = "~Bağlantı oluştur";
+        Text[ hi-IN ] = "~लिंक";
+        Text[ ar ] = "ربط";
+        Text[ he ] = "~Verknüpfen";
+    };
+    String STR_PREVIEW
+    {
+        Text [ de ] = "V~orschau" ;
+        Text [ en-US ] = "Pr~eview" ;
+        Text [ x-comment ] = " ";
+        Text[ pt ] = "~Visualizar";
+        Text[ ru ] = "Просмотр";
+        Text[ el ] = "Προεπισκόπηση";
+        Text[ nl ] = "~Voorbeeld";
+        Text[ fr ] = "A~perçu";
+        Text[ es ] = "~Previsualización";
+        Text[ fi ] = "Esi~katselu";
+        Text[ ca ] = "~Previsualització";
+        Text[ it ] = "Ante~prima";
+        Text[ sk ] = "~Náhľad";
+        Text[ da ] = "Eksempel";
+        Text[ sv ] = "~Förhandsvisning";
+        Text[ pl ] = "Po~dgląd";
+        Text[ pt-BR ] = "Vi~sualizar";
+        Text[ th ] = "แส~ดงตัวอย่าง";
+        Text[ ja ] = "プレビュー(~E)";
+        Text[ ko ] = "미리 보기(~E)";
+        Text[ zh-CN ] = "预览(~E)";
+        Text[ zh-TW ] = "預覽(~E)";
+        Text[ tr ] = "Ö~nizleme";
+        Text[ hi-IN ] = "पूर्व~दृश्य";
+        Text[ ar ] = "معاينة";
+        Text[ he ] = "V~orschau";
+    };
+};

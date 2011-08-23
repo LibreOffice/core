@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,15 +47,15 @@
 class SvxPathControl_Impl : public Control
 {
 private:
-    Control*        m_pFocusCtrl;
+    Control*		m_pFocusCtrl;
 
 public:
     SvxPathControl_Impl( Window* pParent, const ResId& rId ) :
         Control( pParent, rId ), m_pFocusCtrl( NULL ) {}
 
-    void            SetFocusControl( Control* pCtrl ) { m_pFocusCtrl = pCtrl; }
+    void			SetFocusControl( Control* pCtrl ) { m_pFocusCtrl = pCtrl; }
 
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual long	Notify( NotifyEvent& rNEvt );
 };
 
 // --------------------------------------------------------------------
@@ -65,8 +65,8 @@ class HeaderBar;
 class XMLFilterListBox : public SvTabListBox
 {
 private:
-    bool        mbFirstPaint;
-    HeaderBar*  mpHeaderBar;
+    bool		mbFirstPaint;
+    HeaderBar* 	mpHeaderBar;
 
     DECL_LINK( TabBoxScrollHdl_Impl, SvTabListBox* );
     DECL_LINK( HeaderSelect_Impl, HeaderBar* );
@@ -85,7 +85,7 @@ public:
 
     void changeEntry( const filter_info_impl* pInfo );
 
-    virtual void    Paint( const Rectangle& rRect );
+    virtual void	Paint( const Rectangle& rRect );
 };
 
 // --------------------------------------------------------------------
@@ -104,27 +104,27 @@ public:
 
     void ShowWindow();
 
-    void    onNew();
-    void    onEdit();
-    void    onTest();
-    void    onDelete();
-    void    onSave();
-    void    onOpen();
-    void    onClose();
+    void	onNew();
+    void	onEdit();
+    void	onTest();
+    void	onDelete();
+    void	onSave();
+    void	onOpen();
+    void	onClose();
 
-    void    updateStates();
+    void	updateStates();
 
-    virtual long    Notify( NotifyEvent& rNEvt );
+    virtual long	Notify( NotifyEvent& rNEvt );
 
-    bool    isClosable();
+    bool	isClosable();
 
     static ResMgr* mpResMgr;
 
 private:
-    void    initFilterList();
-    void    disposeFilterList();
+    void	initFilterList();
+    void	disposeFilterList();
 
-    bool    insertOrEdit( filter_info_impl* pNewInfo, const filter_info_impl* pOldInfo = NULL );
+    bool	insertOrEdit( filter_info_impl* pNewInfo, const filter_info_impl* pOldInfo = NULL );
 
     rtl::OUString createUniqueFilterName( const rtl::OUString& rUIName );
     rtl::OUString createUniqueTypeName( const rtl::OUString& rTypeName );
@@ -139,18 +139,18 @@ private:
 
     std::vector< filter_info_impl* > maFilterVector;
 
-    XMLFilterListBox*   mpFilterListBox;
-    SvxPathControl_Impl maCtrlFilterList;
-    PushButton  maPBNew;
-    PushButton  maPBEdit;
-    PushButton  maPBTest;
-    PushButton  maPBDelete;
-    PushButton  maPBSave;
-    PushButton  maPBOpen;
-    HelpButton  maPBHelp;
-    PushButton  maPBClose;
+    XMLFilterListBox*	mpFilterListBox;
+    SvxPathControl_Impl	maCtrlFilterList;
+    PushButton	maPBNew;
+    PushButton	maPBEdit;
+    PushButton	maPBTest;
+    PushButton	maPBDelete;
+    PushButton	maPBSave;
+    PushButton	maPBOpen;
+    HelpButton	maPBHelp;
+    PushButton	maPBClose;
 
-    bool    mbIsClosable;
+    bool	mbIsClosable;
 
     ::rtl::OUString sTemplatePath;
     ::rtl::OUString sDocTypePrefix;

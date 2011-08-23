@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,8 +83,8 @@ Reference< XFastContextHandler > ShapeContext::createFastChildContext( sal_Int32
     switch( getToken( aElementToken ) )
     {
     // nvSpPr CT_ShapeNonVisual begin
-//  case XML_drElemPr:
-//      break;
+//	case XML_drElemPr:
+//		break;
     case XML_cNvPr:
     {
         AttributeList aAttribs( xAttribs );

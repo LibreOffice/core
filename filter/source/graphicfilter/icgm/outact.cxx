@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -177,7 +177,7 @@ void CGMOutAct::SetGradientStyle( sal_uInt32 nStyle, double /*fRatio*/ )
         break;
         case 4 :
         {
-            mpGradient->Style = awt::GradientStyle_RADIAL;          // CONICAL
+            mpGradient->Style = awt::GradientStyle_RADIAL;			// CONICAL
         }
         break;
         case 3 :

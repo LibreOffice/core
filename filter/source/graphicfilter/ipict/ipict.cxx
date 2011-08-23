@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,8 +77,8 @@ private:
     Size          aActOvalSize;
     Font          aActFont;
 
-    Fraction        aHRes;
-    Fraction        aVRes;
+    Fraction		aHRes;
+    Fraction		aVRes;
 
     BOOL Callback(USHORT nPercent);
 
@@ -157,54 +157,54 @@ public:
 
 //------------------------------------------------------------------------------------------------
 
-#define SETBYTE                                         \
-    switch ( nPixelSize )                               \
-    {                                                   \
-        case 1 :                                        \
-            pAcc->SetPixel( ny, nx++, nDat >> 7 );      \
-            if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat >> 6 );      \
-            if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat >> 5 );      \
-            if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat >> 4 );      \
-            if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat >> 3 );      \
-            if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat >> 2 );      \
-            if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat >> 1 );      \
-            if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat );           \
-            break;                                      \
-        case 2 :                                        \
-            pAcc->SetPixel( ny, nx++, nDat >> 6 );      \
-            if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat >> 4 & 3);   \
-            if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat >> 2 & 3 );  \
-            if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat & 3);        \
-            break;                                      \
-        case 4 :                                        \
-            pAcc->SetPixel( ny, nx++, nDat >> 4 );      \
-            if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat );           \
-            break;                                      \
-        case 8 :                                        \
-            pAcc->SetPixel( ny, nx++, nDat );           \
-            break;                                      \
+#define SETBYTE											\
+    switch ( nPixelSize )								\
+    {													\
+        case 1 :										\
+            pAcc->SetPixel( ny, nx++, nDat >> 7 );		\
+            if ( nx == nWidth ) break;					\
+            pAcc->SetPixel( ny, nx++, nDat >> 6 );		\
+            if ( nx == nWidth ) break;					\
+            pAcc->SetPixel( ny, nx++, nDat >> 5 );		\
+            if ( nx == nWidth ) break;					\
+            pAcc->SetPixel( ny, nx++, nDat >> 4 );		\
+            if ( nx == nWidth ) break;					\
+            pAcc->SetPixel( ny, nx++, nDat >> 3 );		\
+            if ( nx == nWidth ) break;					\
+            pAcc->SetPixel( ny, nx++, nDat >> 2 );		\
+            if ( nx == nWidth ) break;					\
+            pAcc->SetPixel( ny, nx++, nDat >> 1 );		\
+            if ( nx == nWidth ) break;					\
+            pAcc->SetPixel( ny, nx++, nDat );			\
+            break;										\
+        case 2 :										\
+            pAcc->SetPixel( ny, nx++, nDat >> 6 );		\
+            if ( nx == nWidth ) break;					\
+            pAcc->SetPixel( ny, nx++, nDat >> 4 & 3);	\
+            if ( nx == nWidth ) break;					\
+            pAcc->SetPixel( ny, nx++, nDat >> 2 & 3 );	\
+            if ( nx == nWidth ) break;					\
+            pAcc->SetPixel( ny, nx++, nDat & 3);		\
+            break;										\
+        case 4 :										\
+            pAcc->SetPixel( ny, nx++, nDat >> 4 );		\
+            if ( nx == nWidth ) break;					\
+            pAcc->SetPixel( ny, nx++, nDat );			\
+            break;										\
+        case 8 :										\
+            pAcc->SetPixel( ny, nx++, nDat );			\
+            break;										\
     }
 
 //------------------------------------------------------------------------------------------------
 
-#define BITMAPERROR                                     \
-{                                                       \
-    if ( pAcc )                                         \
-        aBitmap.ReleaseAccess( pAcc );                  \
-    if ( pReadAcc )                                     \
-        aBitmap.ReleaseAccess( pReadAcc );              \
-    return 0xffffffff;                                  \
+#define	BITMAPERROR										\
+{														\
+    if ( pAcc )											\
+        aBitmap.ReleaseAccess( pAcc );					\
+    if ( pReadAcc )										\
+        aBitmap.ReleaseAccess( pReadAcc );				\
+    return 0xffffffff;									\
 }
 
 //=================== Methoden von PictReader ==============================
@@ -216,7 +216,7 @@ void PictReader::SetLineColor( const Color& rColor )
 
 void PictReader::SetFillColor( const Color& rColor )
 {
-    pVirDev->SetFillColor( rColor );
+    pVirDev->SetFillColor( rColor ); 
 }
 
 BOOL PictReader::Callback(USHORT /*nPercent*/)
@@ -293,7 +293,7 @@ Color PictReader::ReadColor()
     Color aCol;
 
     *pPict >> nCol;
-    switch (nCol)
+    switch (nCol) 
     {
         case  33: aCol=Color( COL_BLACK );        break;
         case  30: aCol=Color( COL_WHITE );        break;
@@ -602,9 +602,9 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
 
 ULONG PictReader::ReadAndDrawText()
 {
-    char        nByteLen;
-    sal_uInt32  nLen, nDataLen;
-    sal_Char    sText[256];
+    char		nByteLen;
+    sal_uInt32	nLen, nDataLen;
+    sal_Char	sText[256];
 
     DrawingMethod(PDM_TEXT);
     *pPict >> nByteLen; nLen=((ULONG)nByteLen)&0x000000ff;
@@ -623,15 +623,15 @@ ULONG PictReader::ReadAndDrawText()
 ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTable, Rectangle* pSrcRect,
                                     Rectangle* pDestRect, BOOL bMode, BOOL bMaskRgn )
 {
-    Bitmap              aBitmap;
-    BitmapWriteAccess*  pAcc = NULL;
-    BitmapReadAccess*   pReadAcc = NULL;
-    USHORT              ny, nx, nColTabSize;
-    USHORT              nRowBytes, nBndX, nBndY, nWidth, nHeight, nVersion, nPackType, nPixelType,
+    Bitmap				aBitmap;
+    BitmapWriteAccess*	pAcc = NULL;
+    BitmapReadAccess*	pReadAcc = NULL;
+    USHORT				ny, nx, nColTabSize;
+    USHORT				nRowBytes, nBndX, nBndY, nWidth, nHeight, nVersion, nPackType, nPixelType,
                         nPixelSize, nCmpCount, nCmpSize;
-    sal_uInt32          nPackSize, nPlaneBytes, nHRes, nVRes;
-    BYTE                nDat, nRed, nGreen, nBlue, nDummy;
-    ULONG               i, nDataSize = 0;
+    sal_uInt32			nPackSize, nPlaneBytes, nHRes, nVRes;
+    BYTE				nDat, nRed, nGreen, nBlue, nDummy;
+    ULONG				i, nDataSize = 0;
 
     // In nDataSize wird mitgerechnet, wie gross die gesammten Daten sind.
     nDataSize = 0;
@@ -649,7 +649,7 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
     nWidth = nWidth - nBndX;
 
     if ( ( nRowBytes & 0x8000 ) != 0 )
-    {   // it is a PixMap
+    {	// it is a PixMap
         nRowBytes &= 0x3fff;
         *pPict >> nVersion >> nPackType >> nPackSize >> nHRes >> nVRes >> nPixelType >>
                     nPixelSize >> nCmpCount >> nCmpSize >> nPlaneBytes;
@@ -706,7 +706,7 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
     // ggf. Quell-Rechteck einlesen:
     if ( pSrcRect != 0)
     {
-        USHORT  nTop, nLeft, nBottom, nRight;
+        USHORT	nTop, nLeft, nBottom, nRight;
         *pPict >> nTop >> nLeft >> nBottom >> nRight;
         *pSrcRect = Rectangle( (ULONG)nLeft, (ULONG)nTop, (ULONG)nRight, (ULONG)nBottom );
         nDataSize += 8;
@@ -738,18 +738,18 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
         nDataSize += (ULONG)nSize;
     }
 
-//  aSMem << (nHRes/1665L) << (nVRes/1665L) << ((ULONG)0) << ((ULONG)0);
+//	aSMem << (nHRes/1665L) << (nVRes/1665L) << ((ULONG)0) << ((ULONG)0);
 
     // Lese und Schreibe Bitmap-Bits:
     if ( nPixelSize == 1 || nPixelSize == 2 || nPixelSize == 4 || nPixelSize == 8 )
     {
-        BYTE    nByteCountAsByte, nFlagCounterByte;
-        USHORT  nByteCount, nCount, nSrcBPL, nDestBPL;
+        BYTE	nByteCountAsByte, nFlagCounterByte;
+        USHORT	nByteCount, nCount, nSrcBPL, nDestBPL;
 
         if      ( nPixelSize == 1 ) nSrcBPL = ( nWidth + 7 ) >> 3;
-        else if ( nPixelSize == 2 ) nSrcBPL = ( nWidth + 3 ) >> 2;
-        else if ( nPixelSize == 4 ) nSrcBPL = ( nWidth + 1 ) >> 1;
-        else                        nSrcBPL = nWidth;
+        else if ( nPixelSize == 2 )	nSrcBPL = ( nWidth + 3 ) >> 2;
+        else if ( nPixelSize == 4 )	nSrcBPL = ( nWidth + 1 ) >> 1;
+        else						nSrcBPL = nWidth;
         nDestBPL = ( nSrcBPL + 3 ) & 0xfffc;
         if ( nRowBytes < nSrcBPL || nRowBytes > nDestBPL )
             BITMAPERROR;
@@ -812,9 +812,9 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
     }
     else if ( nPixelSize == 16 )
     {
-        BYTE    nByteCountAsByte, nFlagCounterByte;
-        USHORT  nByteCount, nCount, nDestBPL,nD;
-        ULONG   nSrcBitsPos;
+        BYTE	nByteCountAsByte, nFlagCounterByte;
+        USHORT	nByteCount, nCount, nDestBPL,nD;
+        ULONG	nSrcBitsPos;
 
         if ( nRowBytes < 2 * nWidth )
             BITMAPERROR;
@@ -856,10 +856,10 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
                     if ( (nFlagCounterByte & 0x80) == 0)
                     {
                         nCount=((USHORT)nFlagCounterByte)+1;
-                        if ( nCount + nx > nWidth)              // SJ: the RLE decoding seems not to be correct here,
-                            nCount = nWidth - nx;               // I don't want to change this until I have a bugdoc for
-                        for (i=0; i<nCount; i++)                // this case. Have a look at 32bit, there I changed the
-                        {                                       // encoding, so that it is used a straight forward array
+                        if ( nCount + nx > nWidth)				// SJ: the RLE decoding seems not to be correct here,
+                            nCount = nWidth - nx;				// I don't want to change this until I have a bugdoc for
+                        for (i=0; i<nCount; i++)				// this case. Have a look at 32bit, there I changed the
+                        {										// encoding, so that it is used a straight forward array
                             *pPict >> nD;
                             nRed = (BYTE)( nD >> 7 );
                             nGreen = (BYTE)( nD >> 2 );
@@ -889,10 +889,10 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
     }
     else if (nPixelSize==32)
     {
-        BYTE                nByteCountAsByte, nFlagCounterByte;
-        USHORT              nByteCount, nCount;
-        ULONG               nSrcBitsPos;
-        BitmapColor         aBitmapColor;
+        BYTE				nByteCountAsByte, nFlagCounterByte;
+        USHORT				nByteCount, nCount;
+        ULONG				nSrcBitsPos;
+        BitmapColor			aBitmapColor;
         if ( ( pReadAcc = aBitmap.AcquireReadAccess() ) == NULL )
             BITMAPERROR;
         if ( nRowBytes != 4*nWidth )
@@ -995,13 +995,13 @@ void PictReader::ReadHeader()
     char nC;
     short y1,x1,y2,x2;
 
-    sal_Char    sBuf[ 3 ];
+    sal_Char	sBuf[ 3 ];
     pPict->SeekRel( 10 );
     pPict->Read( sBuf, 3 );
     if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && ( sBuf[ 2 ] == 0x01 || sBuf[ 2 ] == 0x02 ) )
-        pPict->SeekRel( -13 );      // this maybe a pict from a ms document
+        pPict->SeekRel( -13 );		// this maybe a pict from a ms document
     else
-        pPict->SeekRel( 512 - 13 ); // 512 Bytes Muell am Anfang
+        pPict->SeekRel( 512 - 13 );	// 512 Bytes Muell am Anfang
 
     pPict->SeekRel(2);              // Lo-16-bits von "picture size"
     *pPict >> y1 >> x1 >> y2 >> x2; // Rahmen-Rechteck des Bildes
@@ -1016,10 +1016,10 @@ void PictReader::ReadHeader()
     {
         *pPict >> nC;
         if ( nC == 0x01 )
-            IsVersion2 = FALSE;         // Version 1
-        else                            // Version 2 oder hoeher
+            IsVersion2 = FALSE;			// Version 1
+        else							// Version 2 oder hoeher
         {
-            short   nExtVer;
+            short	nExtVer;
             // 3 Bytes ueberspringen, um auf
             // ExtVersion2 oder Version2 zu kommen
             pPict->SeekRel( 3 );
@@ -1039,7 +1039,7 @@ void PictReader::ReadHeader()
                 fVRes /= 65536;
                 aHRes /= fHRes;
                 aVRes /= fVRes;
-                *pPict >> y1 >> x1 >> y2 >> x2;     // reading the optimal bounding rect
+                *pPict >> y1 >> x1 >> y2 >> x2;		// reading the optimal bounding rect
                 aBoundingRect=Rectangle( x1,y1, --x2, --y2 );
                 pPict->SeekRel( -22 );
             }
@@ -1129,8 +1129,8 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         else if (nUSHORT ==   22) aActFont.SetFamily(FAMILY_MODERN);
         else if (nUSHORT <= 1023) aActFont.SetFamily(FAMILY_SWISS);
         else                      aActFont.SetFamily(FAMILY_ROMAN);
-        if      ( nUSHORT == 23 ) aActFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
-        else    aActFont.SetCharSet( gsl_getSystemTextEncoding() );
+        if		( nUSHORT == 23 ) aActFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
+        else	aActFont.SetCharSet( gsl_getSystemTextEncoding() );
         eActMethod=PDM_UNDEFINED;
         nDataSize=2;
         break;
@@ -1350,8 +1350,8 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         break;
 
     case 0x002c: { // fontName
-        char        sFName[ 256 ], nByteLen;
-        sal_uInt16  nLen;
+        char		sFName[ 256 ], nByteLen;
+        sal_uInt16	nLen;
         *pPict >> nUSHORT; nDataSize=nUSHORT+2;
         *pPict >> nUSHORT;
         if      (nUSHORT <=    1) aActFont.SetFamily(FAMILY_SWISS);
@@ -1793,9 +1793,9 @@ ULONG PictReader::ReadData(USHORT nOpcode)
 
 void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 {
-    USHORT          nOpcode;
-    BYTE            nOneByteOpcode;
-    ULONG           nSize, nPos, nStartPos, nEndPos, nPercent, nLastPercent;
+    USHORT			nOpcode;
+    BYTE			nOneByteOpcode;
+    ULONG			nSize, nPos, nStartPos, nEndPos, nPercent, nLastPercent;
 
     pPict               = &rStreamPict;
     nOrigPos            = pPict->Tell();
@@ -1809,7 +1809,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     eActBackStyle       = BRUSH_SOLID;
     nActPenSize         = 1;
     eActROP             = ROP_OVERPAINT;
-    eActMethod          = PDM_UNDEFINED;
+    eActMethod			= PDM_UNDEFINED;
     aActOvalSize        = Size(1,1);
 
     aActFont.SetCharSet( gsl_getSystemTextEncoding() );
@@ -1895,8 +1895,8 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 extern "C" BOOL __LOADONCALLAPI GraphicImport( SvStream& rIStm, Graphic & rGraphic, FilterConfigItem*, BOOL )
 {
     GDIMetaFile aMTF;
-    PictReader  aPictReader;
-    BOOL        bRet = FALSE;
+    PictReader	aPictReader;
+    BOOL		bRet = FALSE;
 
     aPictReader.ReadPict( rIStm, aMTF );
 

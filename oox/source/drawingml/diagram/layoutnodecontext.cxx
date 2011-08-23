@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -204,9 +204,9 @@ LayoutNodeContext::LayoutNodeContext( ContextHandler& rParent,
     mpNode->setName( xAttribs->getOptionalValue( XML_name ) );
     // TODO shall we even bother?
     // b or t
-//  sal_Int32 nChOrder = xAttributes->getOptionalValueToken( XML_chOrder, XML_b );
-//  OUString sMoveWith = xAttributes->getOptionalValue( XML_moveWith );
-//  OUString sStyleLbl = xAttributes->getOptionalValue( XML_styleLbl );
+//	sal_Int32 nChOrder = xAttributes->getOptionalValueToken( XML_chOrder, XML_b );
+//	OUString sMoveWith = xAttributes->getOptionalValue( XML_moveWith );
+//	OUString sStyleLbl = xAttributes->getOptionalValue( XML_styleLbl );
 }
 
 

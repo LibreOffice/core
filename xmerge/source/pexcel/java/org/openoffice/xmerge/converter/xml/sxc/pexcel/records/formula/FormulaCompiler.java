@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,78 +31,78 @@ import java.util.*;
 import org.openoffice.xmerge.util.Debug;
 
 /**
- * FormulaCompiler converts Calc formula string into PocketXL bytes
+ * FormulaCompiler converts Calc formula string into PocketXL bytes 
  * and PocketXL formula bytes into Calc Formula strings
- *
+ * 
  * For converting from infix to Reverse Polish (or Postfix) notation the string is
  * converted into a vector of Tokens and then re-ordered based on a modified version
  * of the standard Infix to RPN conversion algorithms.
  * <pre>
- *  Infix2Rpn(tokens)
- *      while have more tokens
- *          if token is operand
- *              push to stack
- *          else if token is function, argument separater, or open bracket
- *              push token
- *              extract tokens to matching close bracket into param
- *              Infix2Rpn(param)
- *          else if token is close bracket
- *              pop from stack into result until close bracket or function
- *          else
- *              while stack.top.priority >= token.priority
- *                  add stack.pop to result
- *              push token onto stack
+ *	Infix2Rpn(tokens)
+ *		while have more tokens
+ *			if token is operand 
+ *				push to stack
+ *			else if token is function, argument separater, or open bracket
+ *				push token
+ *				extract tokens to matching close bracket into param
+ *				Infix2Rpn(param)
+ *			else if token is close bracket
+ *				pop from stack into result until close bracket or function
+ *			else 
+ *				while stack.top.priority >= token.priority
+ *					add stack.pop to result
+ *				push token onto stack
  * </pre>
  * For converting from RPN to Infix the following algorithm is applied:
  * <pre>
- *      while have more tokens
- *          if token is operand
- *              push token to stack
- *          else if token is function or operator
- *              pop from stack number of args required by token
- *              apply token to params to make expr
- *              push expr to stack
- *      return stack.pop
+ * 		while have more tokens
+ * 			if token is operand
+ *				push token to stack
+ *			else if token is function or operator
+ *				pop from stack number of args required by token
+ *				apply token to params to make expr
+ *				push expr to stack
+ *		return stack.pop
  * </pre>
  */
 public class FormulaCompiler {
     /**
-     *  Constructs a FormulaCompiler object
+     *	Constructs a FormulaCompiler object
      */
     public FormulaCompiler() {
     }
-
+    
     private boolean isPercent(Token pt) {
         return pt.getTokenID() == TokenConstants.TPERCENT;
     }
-
+    
     private boolean isOpenBrace(Token pt) {
         return pt.getTokenID() == TokenConstants.TPAREN;
     }
-
+    
     private boolean isCloseBrace(Token pt) {
         return pt.getValue().compareTo(")") == 0;
     }
-
+    
     private boolean isParamDelimiter(Token pt) {
         return pt.getTokenID() == TokenConstants.TARGSEP;
-    }
+    }    
 
     private boolean isBinaryOperator(Token pt) {
         return false;
     }
-
+    
     /**
      * Re-order into Infix format
-     * @param   tokens  The tokens in RPN form
-     * @return  The vector of tokens re-ordered in Infix notation
+     * @param	tokens	The tokens in RPN form
+     * @return	The vector of tokens re-ordered in Infix notation
      */
     public Vector RPN2Infix(Vector tokens) {
         Vector infixExpr = new Vector(15);
         ListIterator iter = tokens.listIterator();
         Stack evalStack = new Stack();
         Stack args = new Stack();
-
+        
         while (iter.hasNext()) {
             Token pt = (Token)iter.next();
             if (pt.isOperand()) {
@@ -119,15 +119,15 @@ public class FormulaCompiler {
         }
         return (Vector)evalStack.elementAt(0);
     }
-
+    
     /**
      * Convert the infix expression to RPN. Note that open brackets are saved onto the stack to preserve the users bracketing.
      * <p>Also note that the open bracket following functions is not pushed onto the stack - it is always implied when
      * writing out results
      *
-     * @param   tokens  The vector of tokens in Infix form
+     * @param	tokens	The vector of tokens in Infix form
      *
-     * @return  A vector of tokens for the expression in Reverse Polish Notation order
+     * @return	A vector of tokens for the expression in Reverse Polish Notation order
      */
     public Vector infix2RPN(Vector tokens) {
         Vector rpnExpr = new Vector(15);
@@ -135,7 +135,7 @@ public class FormulaCompiler {
         ListIterator iter = tokens.listIterator();
         while (iter.hasNext()) {
             Token pt = (Token)iter.next();
-
+            
             if (pt.isOperand()) { //Operands are output immediately
                 rpnExpr.add(pt);
             } else if (pt.isFunction() || isParamDelimiter(pt) || isOpenBrace(pt)) { //Extract parameters after afunction or comma
@@ -144,7 +144,7 @@ public class FormulaCompiler {
                     iter.next();
                 }
                 Vector param = extractParameter(iter);
-                Debug.log(Debug.TRACE, "Extracted parameter " + param);
+                Debug.log(Debug.TRACE, "Extracted parameter " + param);        
                 rpnExpr.addAll(infix2RPN(param));
             } else if (isCloseBrace(pt)) { //Pop off stack till you meet a function or an open bracket
                 Token tmpTok = null;
@@ -159,13 +159,13 @@ public class FormulaCompiler {
                             rpnExpr.add(tmpTok);
                         }
                         if (tmpTok.isFunction() || isOpenBrace(tmpTok)) {
-                            bPop = false;
+                            bPop = false;        
                         }
                     }
                 }
             } else {
                 if (!evalStack.isEmpty()) {
-                    while (!evalStack.isEmpty() &&
+                    while (!evalStack.isEmpty() && 
                             (((Token)evalStack.peek()).getTokenPriority() >=pt.getTokenPriority())) {
                         Token topTok = (Token)evalStack.peek();
                         if (topTok.isFunction() || isOpenBrace(topTok)) {
@@ -174,10 +174,10 @@ public class FormulaCompiler {
                            rpnExpr.add(evalStack.pop());
                     }
                 }
-                evalStack.push(pt);
+                evalStack.push(pt);                
             }
         }
-
+        
         while (!evalStack.isEmpty()) {
             Token topTok = (Token)evalStack.peek();
             if (!(isOpenBrace(topTok) || isParamDelimiter(topTok))) { //Don't output brackets and commas
@@ -190,7 +190,7 @@ public class FormulaCompiler {
         }
         return rpnExpr;
     }
-
+    
     /**
      * Extract a parameter or bracketed sub-expression
      * @param iter an iterator into the list
@@ -199,10 +199,10 @@ public class FormulaCompiler {
     protected Vector extractParameter(ListIterator iter) {
         Vector param = new Vector(5);
         int subExprCount = 0;
-
+        
         while (iter.hasNext()) {
             Token pt = (Token)iter.next();
-            Debug.log(Debug.TRACE, "Token is " + pt + " and subExprCount is " + subExprCount);
+            Debug.log(Debug.TRACE, "Token is " + pt + " and subExprCount is " + subExprCount);        
             if (isOpenBrace(pt)) {
                 subExprCount++;
                 param.add(pt);
@@ -223,12 +223,12 @@ public class FormulaCompiler {
         }
         return param;
     }
-
+    
     /**
      * Given the operator and it's operators
-     * @param   pt  The operator token
-     * @param   args    The arguments for this operator
-     * @return  A correctly ordered expression
+     * @param 	pt	The operator token
+     * @param	args	The arguments for this operator
+     * @return	A correctly ordered expression
      */
     protected Vector makeExpression(Token pt, Stack args) {
         Vector tmp = new Vector(5);

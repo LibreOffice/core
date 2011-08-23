@@ -1,0 +1,12 @@
+UDK_3_0_0 {
+    global:
+        CreateSmDocShellDll;
+        CreateObjSmDocShellDll;
+        InitSmDll;
+        DeInitSmDll;
+        component_getImplementationEnvironment;
+        component_writeInfo;
+        component_getFactory;
+    local:
+        *;
+};

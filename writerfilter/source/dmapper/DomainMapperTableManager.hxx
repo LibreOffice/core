@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,12 +49,12 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     sal_Int32       m_nHeaderRepeat; //counter of repeated headers - if == -1 then the repeating stops
     sal_Int32       m_nTableWidth; //might be set directly or has to be calculated from the column positions
     bool            m_bOOXML;
-    ::rtl::OUString m_sTableStyleName;
+    ::rtl::OUString m_sTableStyleName;    
     PropertyMapPtr  m_pTableStyleTextProperies;
 
     ::std::vector< IntVectorPtr >  m_aTableGrid;
     ::std::vector< IntVectorPtr >  m_aGridSpans;
-
+    
     TablePropertiesHandler   *m_pTablePropsHandler;
     PropertyMapPtr            m_pStyleProps;
 
@@ -115,7 +115,7 @@ public:
         else
            DomainMapperTableManager_Base_t::insertTableProps( pProps );
     };
-
+    
 };
 
 }}

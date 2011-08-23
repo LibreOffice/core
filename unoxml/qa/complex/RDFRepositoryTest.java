@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ import com.sun.star.rdf.*;
  * Test case for service com.sun.star.rdf.Repository
  * Currently, this service is implemented in
  * unoxml/source/rdf/librdf_repository.cxx
- *
+ * 
  * @author mst
  */
 public class RDFRepositoryTest extends ComplexTestCase

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,15 +51,15 @@ class OOXMLStreamImpl : public OOXMLStream
     uno::Reference<xml::sax::XFastTokenHandler> mxFastTokenHandler;
 
     StreamType_t mnStreamType;
-
+    
     rtl::OUString msId;
     rtl::OUString msPath;
     rtl::OUString msTarget;
 
-    bool lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
+    bool lcl_getTarget(uno::Reference<embed::XRelationshipAccess> 
                        xRelationshipAccess,
-                       StreamType_t nStreamType,
-                       const ::rtl::OUString & rId,
+                       StreamType_t nStreamType, 
+                       const ::rtl::OUString & rId, 
                        ::rtl::OUString & rDocumentTarget);
 public:
     typedef boost::shared_ptr<OOXMLStreamImpl> Pointer_t;
@@ -68,7 +68,7 @@ public:
     (OOXMLStreamImpl & rStream, StreamType_t nType);
     OOXMLStreamImpl
     (uno::Reference<uno::XComponentContext> xContext,
-     uno::Reference<io::XInputStream> xStorageStream,
+     uno::Reference<io::XInputStream> xStorageStream, 
      StreamType_t nType);
     OOXMLStreamImpl(OOXMLStreamImpl & rStream, const rtl::OUString & rId);
 
@@ -82,7 +82,7 @@ public:
     virtual ::rtl::OUString getTargetForId(const ::rtl::OUString & rId);
     virtual const ::rtl::OUString & getTarget() const;
 
-    virtual uno::Reference<xml::sax::XFastTokenHandler>
+    virtual uno::Reference<xml::sax::XFastTokenHandler> 
     getFastTokenHandler(uno::Reference<uno::XComponentContext> rContext);
 
     void setInputStream(uno::Reference<io::XInputStream> rxInputStream);

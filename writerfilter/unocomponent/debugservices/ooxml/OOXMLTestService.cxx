@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,47 +99,47 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
 #endif
 
         rtl::OUString arg=aArguments[0];
-
+        
         ::comphelper::setProcessServiceFactory(xServiceFactory);
-
+        
         uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess
             (xFactory->createInstanceWithContext
              (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                              ("com.sun.star.ucb.SimpleFileAccess")),
+                              ("com.sun.star.ucb.SimpleFileAccess")), 
               xContext), uno::UNO_QUERY_THROW );
-
+        
         rtl_uString *dir=NULL;
         osl_getProcessWorkingDir(&dir);
         rtl::OUString absFileUrl;
         osl_getAbsoluteFileURL(dir, arg.pData, &absFileUrl.pData);
         rtl_uString_release(dir);
-
-        uno::Reference<io::XInputStream> xInputStream =
+        
+        uno::Reference<io::XInputStream> xInputStream = 
             xFileAccess->openFileRead(absFileUrl);
-        ooxml::OOXMLStream::Pointer_t pDocStream =
+        ooxml::OOXMLStream::Pointer_t pDocStream = 
             ooxml::OOXMLDocumentFactory::createStream(xContext, xInputStream);
-
+        
         ooxml::OOXMLDocument::Pointer_t pDocument
             (ooxml::OOXMLDocumentFactory::createDocument(pDocStream));
-
-#if 0
+        
+#if 0        
         uno::Reference<text::XTextDocument> xDocument
             (xFactory->createInstanceWithContext
              (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                              ("com.sun.star.text.TextDocument")),
+                              ("com.sun.star.text.TextDocument")), 
               xContext), uno::UNO_QUERY_THROW );
         uno::Reference<frame::XModel> xModel
             (xDocument, uno::UNO_QUERY_THROW);
-
+        
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier
             (xDocument, uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XShapes> xShapes
             (xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW);
-
+        
         pDocument->setModel(xModel);
         pDocument->setShapes(xShapes);
 #endif
-
+        
         Stream::Pointer_t pStream = createStreamHandler();
         pDocument->resolve(*pStream);
 

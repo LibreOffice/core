@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,33 +48,33 @@ namespace writerfilter {
 namespace dmapper
 {
 class DomainMapper;
-
+        
 using namespace std;
-
+        
 struct SettingsTable_Impl;
-
+        
 class WRITERFILTER_DLLPRIVATE SettingsTable : public Properties, public Table
 {
     SettingsTable_Impl *m_pImpl;
-
+            
  public:
     SettingsTable(  DomainMapper& rDMapper,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xTextFactory
             );
     virtual ~SettingsTable();
-
+            
     // Properties
     virtual void attribute(Id Name, Value & val);
     virtual void sprm(Sprm & sprm);
-
+            
     // Table
     virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
-
+            
     //returns default TabStop in 1/100th mm
     int GetDefaultTabStop() const;
 
     void ApplyProperties( uno::Reference< text::XTextDocument > xDoc );
-
+            
 };
 typedef boost::shared_ptr< SettingsTable >          SettingsTablePtr;
 }}

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -445,7 +445,7 @@ WW8Value::Pointer_t createValue(const rtl::OUString & rStr)
     return WW8Value::Pointer_t(new WW8StringValue(rStr));
 }
 
-writerfilter::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t 
 WW8PropertiesValue::getProperties()
 {
     return mRef;

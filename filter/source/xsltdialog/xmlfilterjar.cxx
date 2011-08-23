@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,6 +101,10 @@ static OUString encodeZipUri( const OUString& rURI )
 
 static Reference< XInterface > addFolder( Reference< XInterface >& xRootFolder, Reference< XSingleServiceFactory >& xFactory, const OUString& rName ) throw( Exception )
 {
+    if ( rName.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( ".." ) ) )
+      || rName.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) ) )
+        throw lang::IllegalArgumentException();
+
     Sequence< Any > aArgs(1);
     aArgs[0] <<= (sal_Bool)sal_True;
 
@@ -124,7 +128,7 @@ static void _addFile( Reference< XInterface >& xRootFolder, Reference< XSingleSe
     Reference< XActiveDataSink > xSink( xFactory->createInstance(), UNO_QUERY );
     Reference< XUnoTunnel > xTunnel( xSink, UNO_QUERY );
     if( xSink.is() && xTunnel.is())
-    {
+    {    
         Reference< XNameContainer > xNameContainer(xRootFolder, UNO_QUERY );
         xNameContainer->insertByName(aName = encodeZipUri( aName ), makeAny(xTunnel));
         xSink->setInputStream( xInput );
@@ -141,7 +145,7 @@ static void addFile( Reference< XInterface > xRootFolder, Reference< XSingleServ
 
 void XMLFilterJarHelper::addFile( Reference< XInterface > xRootFolder, Reference< XSingleServiceFactory > xFactory, const OUString& rSourceFile ) throw( Exception )
 {
-    if( rSourceFile.getLength() &&
+    if( rSourceFile.getLength() && 
         (rSourceFile.compareToAscii( RTL_CONSTASCII_STRINGPARAM("http:") ) != 0) &&
         (rSourceFile.compareToAscii( RTL_CONSTASCII_STRINGPARAM("shttp:") ) != 0) &&
         (rSourceFile.compareToAscii( RTL_CONSTASCII_STRINGPARAM("jar:") ) != 0) &&
@@ -201,7 +205,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
             {
                 const filter_info_impl* pFilter = (*aIter);
 
-                Reference< XInterface > xFilterRoot( addFolder( xRootFolder, xFactory, pFilter->maFilterName ) );
+                Reference< XInterface > xFilterRoot( addFolder( xRootFolder, xFactory, pFilter->maFilterName ) );	
 
                 if( xFilterRoot.is() )
                 {
@@ -217,7 +221,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
                     }
                     catch( com::sun::star::container::ElementExistException&)
                     {
-                    // in case of same named import / export XSLT the latter
+                    // in case of same named import / export XSLT the latter 
                     // is ignored
                         DBG_ERROR( "XMLFilterJarHelper::same named xslt filter exception!" );
                     }
@@ -362,6 +366,10 @@ bool XMLFilterJarHelper::copyFile( Reference< XHierarchicalNameAccess > xIfc, OU
     {
         OUString szPackagePath( encodeZipUri( rURL.copy( sVndSunStarPackage.getLength() ) ) );
 
+        if ( ::comphelper::OStorageHelper::PathHasSegment( szPackagePath, OUString( RTL_CONSTASCII_USTRINGPARAM( ".." ) ) )
+          || ::comphelper::OStorageHelper::PathHasSegment( szPackagePath, OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) ) )
+            throw lang::IllegalArgumentException();
+
         if( xIfc->hasByHierarchicalName( szPackagePath ) )
         {
             Reference< XActiveDataSink > xFileEntry;
@@ -370,7 +378,7 @@ bool XMLFilterJarHelper::copyFile( Reference< XHierarchicalNameAccess > xIfc, OU
             if( xFileEntry.is() )
             {
                 Reference< XInputStream > xIS( xFileEntry->getInputStream() );
-
+    
                 INetURLObject aBaseURL( rTargetURL );
 
                 rURL = URIHelper::SmartRel2Abs( aBaseURL, szPackagePath, Link(), false );

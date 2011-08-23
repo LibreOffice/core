@@ -1,0 +1,709 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SVX_DIALOGS_HRC
+#define _SVX_DIALOGS_HRC
+
+// include ------------------------------------------------------------------
+
+#include <bf_svx/svxids.hrc>
+
+// Resource-Id's ------------------------------------------------------------
+
+// Bitte FIRSTFREE pflegen!!! (gilt nicht f"ur Strings)
+#define RID_SVX_FIRSTFREE                   253
+
+// ResId fuer die Hintergrund-TabPage
+
+// ResId fuer die Tabulator-TabPage
+
+// ResId's fuer die Zeichen-TabPages
+#define RID_SVXPAGE_CHAR_STD				(RID_SVX_START +   3)
+#define RID_SVXPAGE_CHAR_EXT				(RID_SVX_START +   4)
+// new char pages
+
+// ResId fuer die Umrahmung-TabPage
+
+// ResId's fuer die Absatz-TabPages
+
+// ResId fuer den Notizzettel-Dialog
+
+// ResId fuer den ImportClipboard-Dialog
+#define RID_SVXDLG_CLIPBOARD                (RID_SVX_START +   9)
+
+// ResId fuer den Sonderzeichen-Dialog
+
+// allgemeine DBMgr-Dialoge
+#define RID_SVX_DBSELDLG                    (RID_SVX_START +  11)
+#define RID_SVX_DBEDDLG                     (RID_SVX_START +  12)
+#define RID_SVX_DBLOGON                     (RID_SVX_START +  13)
+#define RID_SVX_RECDLG                      (RID_SVX_START +  14)
+#define RID_SVX_BRSEEKDLG                   (RID_SVX_START +  15)
+#define RID_SVX_BRCFGDLG                    (RID_SVX_START +  16)
+#define RID_SVX_BRSORTDLG                   (RID_SVX_START +  17)
+
+// ResId fuer den Suchen/Ersetzen-Dialog
+
+// ResId fuer die PageDialog
+#define RID_SVXQBX_DELETE_HEADFOOT          (RID_SVX_START +  28)
+
+// ResId fuer die Linguistik-Dialoge
+
+// ResIds fuer HM-QueryBoxen und Error-Strings
+#define RID_SVXQB_THESAURUS                 (RID_SVX_START +  33)
+#define RID_SVXQB_CONTINUE                  (RID_SVX_START +  34)
+#define RID_SVXQB_BODYTEXT                  (RID_SVX_START +  35)
+#define RID_SVXQB_SPECIAL                   (RID_SVX_START +  36)
+#define RID_SVXQB_SPECIAL_FORCED            (RID_SVX_START +  37)
+// + 38 ist vergeben, siehe RID_SVXDLG_THES_LANGUAGE
+#define RID_SVXQB_BW_CONTINUE               (RID_SVX_START +  39)
+
+// ResId fuer den BB-Dialog
+
+// ResId fuer die Zahlenformate-Page
+
+// ResId's fuer Dialoge aus StarDraw
+
+
+
+
+
+
+#define RID_SVXDLG_3D						(RID_SVX_START +  70)
+#define RID_SVXPAGE_LIGHT3D					(RID_SVX_START +  71)
+#define RID_SVXPAGE_3DATTR					(RID_SVX_START +  72)
+
+
+
+// Ids fuer FrameBitmaps durch ImageList ersetzt
+// 67 bis 78 frei
+
+// ResId fuer den Gitter- und Raster-Dialog
+#define RID_SVXDLG_GRID                     (RID_SVX_START +  79)
+
+// ResId's fuer Undo-TbxControls
+#define RID_SVXTBX_UNDO                     (RID_SVX_START +  81)
+
+// Alignment-TabPage
+#define RID_SVXPAGE_ALIGNMENT               (RID_SVX_START +  90)
+
+// Resource mit Bitmaps fuer die CheckListBox
+
+// Menu fuers Lineal
+#define RID_SVXMN_RULER                     (RID_SVX_START +  92)
+
+// FontWork-Dialog
+
+// FontWork-ValueSet-Bitmaps
+
+#define RID_SVXBMP_SHADOW_XDIST             (RID_SVX_START + 110)
+#define RID_SVXBMP_SHADOW_YDIST             (RID_SVX_START + 111)
+#define RID_SVXBMP_SHADOW_ANGLE             (RID_SVX_START + 112)
+#define RID_SVXBMP_SHADOW_SIZE              (RID_SVX_START + 113)
+
+
+
+// Dialog bzw TabPage fuer Labelobjekte
+
+//ResId fuer TabPage Raster
+
+// ResId fuer TextAttribut-Dialog
+
+// ResId fuer InternetPage
+#define RID_SVXPAGE_INTERNET                (RID_SVX_START + 154)
+
+// ResId fuer MailPage
+#define RID_SVXPAGE_MAIL                    (RID_SVX_START + 155)
+
+// ResId fuer FontSubstitution
+#define RID_SVX_FONT_SUBSTITUTION			(RID_SVX_START + 18)
+
+//InetDlg
+//#define RID_SVXDLG_INTERNET					(RID_SVX_START + 156)
+#define RID_SVXPAGE_INET_CACHE              (RID_SVX_START + 158)
+#define RID_SVXPAGE_INET_TYPE               (RID_SVX_START + 159)
+
+#define RID_SVXPAGE_BROWSER_OTHER           (RID_SVX_START + 202)
+#define RID_CACHE_EXTRA_DLG                 (RID_SVX_START + 203)
+
+// OnlineRegistration
+#define RID_SVXDLG_REGISTER     			(RID_SVX_START + 193)
+#define RID_SVXPAGE_REGISTER_1     			(RID_SVX_START + 194)
+#define RID_SVXPAGE_REGISTER_2     			(RID_SVX_START + 195)
+#define RID_SVXPAGE_REGISTER_3     			(RID_SVX_START + 196)
+#define RID_SVXPAGE_REGISTER_4     			(RID_SVX_START + 197)
+#define RID_SVXPAGE_REGISTER_5     			(RID_SVX_START + 198)
+#define RID_SVXPAGE_REGISTER_6     			(RID_SVX_START + 199)
+
+// ResId fuer Measure-Dialog
+
+// 3D-Entfernung/Perspektive Bitmaps
+#define RID_SVXBMP_3D_DISTANCE_01           (RID_SVX_START + 162)
+#define RID_SVXBMP_3D_DISTANCE_02           (RID_SVX_START + 163)
+#define RID_SVXBMP_3D_DISTANCE_03           (RID_SVX_START + 164)
+#define RID_SVXBMP_3D_DISTANCE_04           (RID_SVX_START + 165)
+#define RID_SVXBMP_3D_DISTANCE_05           (RID_SVX_START + 166)
+#define RID_SVXBMP_3D_DISTANCE_06           (RID_SVX_START + 167)
+#define RID_SVXBMP_3D_DISTANCE_07           (RID_SVX_START + 168)
+#define RID_SVXBMP_3D_DISTANCE_08           (RID_SVX_START + 169)
+#define RID_SVXBMP_3D_DISTANCE_09           (RID_SVX_START + 170)
+#define RID_SVXBMP_3D_DISTANCE_10           (RID_SVX_START + 171)
+
+#define RID_SVXBMP_3D_FOCAL_LENGTH_01       (RID_SVX_START + 172)
+#define RID_SVXBMP_3D_FOCAL_LENGTH_02       (RID_SVX_START + 173)
+#define RID_SVXBMP_3D_FOCAL_LENGTH_03       (RID_SVX_START + 174)
+#define RID_SVXBMP_3D_FOCAL_LENGTH_04       (RID_SVX_START + 175)
+#define RID_SVXBMP_3D_FOCAL_LENGTH_05       (RID_SVX_START + 176)
+#define RID_SVXBMP_3D_FOCAL_LENGTH_06       (RID_SVX_START + 177)
+#define RID_SVXBMP_3D_FOCAL_LENGTH_07       (RID_SVX_START + 178)
+#define RID_SVXBMP_3D_FOCAL_LENGTH_08       (RID_SVX_START + 179)
+#define RID_SVXBMP_3D_FOCAL_LENGTH_09       (RID_SVX_START + 180)
+#define RID_SVXBMP_3D_FOCAL_LENGTH_10		(RID_SVX_START + 181)
+
+// fuer ToolboxControls Alignment und Drawobjekte
+#define RID_SVXTBX_DRAW						(RID_SVX_START + 189)
+#define RID_SVXTBX_ALIGNMENT				(RID_SVX_START + 190)
+
+
+// Ids fuer Autokorrektur
+#define RID_SVX_AUTOCORR					(RID_SVX_START + 192)
+
+// Auswahl ext. Linguitik
+#define RID_SVX_OPT_EXT_LINGU               (RID_SVX_START + 193)
+
+// Extra Dialog f"ur Option Pfade
+
+// TabPage und Dialog f"ur LDAP-Server
+#define RID_SVXPAGE_LDAP					(RID_SVX_START + 204)
+#define RID_SVXDLG_LDAP						(RID_SVX_START + 205)
+
+// Dialog fuer Funktionen
+#define RID_SVXDLG_CALCFUNC					(RID_SVX_START + 206)
+
+// Errorbox f"ur Optionen/Pfade
+#define RID_SVXERR_OPT_DOUBLEPATHS			(RID_SVX_START + 208)
+
+// Messboxen f"ur Optionen/Benutzerdaten
+#define RID_SVXQB_CHANGEDATA				(RID_SVX_START + 214)
+
+// ResId fuer den ImportGraphic-Dialog
+#define RID_SVXRES_IMPORTGRAPHIC            (RID_SVX_START + 499)
+
+#define RID_SVXERR_OPT_PROXYPORTS			(RID_SVX_START + 224)
+
+
+// ResId's für Hyperlink-Dialog-Tabpages
+
+// ResId's for Starone impl. bitmaps
+//STRIP003 #define RID_UNODRAW_OBJECTS					(RID_SVX_START + 233)
+//STRIP003 #define RID_UNODRAW_OLE2					(RID_SVX_START + 234)
+//STRIP003 #define RID_UNODRAW_GRAPHICS				(RID_SVX_START + 235)
+
+// ResId fuer Distribute-Dialog
+
+// tabpage for graphic cropping
+
+#define RID_SVXIMG_CHECKED					(RID_SVX_START + 244)
+
+
+
+#define RID_SVXPAGE_SSO     				(RID_SVX_START + 251)
+
+
+
+
+#define RID_SVXIMG_SAVE_H					(RID_SVX_START + 284)
+
+
+// Strings ------------------------------------------------------------------
+
+// Strings fuer die Sprachen (HM-Abhaengig)
+#define RID_SVXSTR_LANGUAGE_BEGIN           (RID_SVX_START +   0)
+
+// Messages im DBMgr-Bereich
+#define RID_SVXSTR_DBINI                    (RID_SVX_START +  60)
+#define RID_SVXSTR_DBDRV                    (RID_SVX_START +  61)
+#define RID_SVXSTR_NODBDRV                  (RID_SVX_START +  62)
+#define RID_SVXSTR_DBCANTOPEN               (RID_SVX_START +  63)
+#define RID_SVXSTR_DBINACTIVE               (RID_SVX_START +  64)
+#define RID_SVXSTR_SELECT                   (RID_SVX_START +  65)
+#define RID_SVXSTR_DESELECT                 (RID_SVX_START +  66)
+#define RID_SVXSTR_MERGE                    (RID_SVX_START +  67)
+#define RID_SVXSTR_INSERT                   (RID_SVX_START +  68)
+#define RID_SVXSTR_NOSELECT                 (RID_SVX_START +  69)
+#define RID_SVXSTR_CANT_OPEN_DB             (RID_SVX_START +  70)
+#define RID_SVXSTR_INVALID_RECORD           (RID_SVX_START +  71)
+#define RID_SVXSTR_NOSET_MATCHING           (RID_SVX_START +  72)
+
+// Strings aus dem Suchen-Dialog
+
+// Strings fuer die HM-Strings
+#define RID_SVXSTR_HMSTATUS_BEGIN           (RID_SVX_START +  90)
+
+// Strings fuers Paperformat
+
+#define RID_SVXSTRARY_PAPERSIZE_STD			(RID_SVX_START + 142)
+#define RID_SVXSTRARY_PAPERSIZE_DRAW		(RID_SVX_START + 143)
+#define RID_SVXSTR_FULLSIZE                 (RID_SVX_START + 144)
+
+// ResIds fuer die verschiedenen Strings des PageDlgs
+#define RID_SVXSTR_CALC_PAGE                (RID_SVX_START + 146)
+#define RID_SVXSTR_DRAW_PAGE                (RID_SVX_START + 147)
+
+
+// HM_ERR
+
+// Strings aus den StarDraw-Dialogen
+#define RID_SVXSTR_GRADIENT                 (RID_SVX_START + 161)
+#define RID_SVXSTR_BITMAP                   (RID_SVX_START + 167)
+#define RID_SVXSTR_LINESTYLE                (RID_SVX_START + 173)
+#define RID_SVXSTR_COLOR                    (RID_SVX_START + 179)
+#define RID_SVXSTR_HATCH                    (RID_SVX_START + 180)
+
+// Strings der ToolBox-Controls aus tbcontrl.cxx
+
+// Strings der UndoTbxControls
+#define RID_SVXSTR_UNDO                     (RID_SVX_START + 200)
+#define RID_SVXSTR_REDO                     (RID_SVX_START + 201)
+#define RID_SVXSTR_ACTION                   (RID_SVX_START + 202)
+#define RID_SVXSTR_ACTIONS                  (RID_SVX_START + 203)
+
+
+// Strings fuer ColorTabPage
+
+// "Tabelle"
+
+// Strings von der Hatch-Tabpage
+
+// Strings der Linienenden-TabPage
+#define RID_SVXSTR_LINEEND                  (RID_SVX_START + 237)
+// weitere ID bei 219
+
+// String-ResId fuer den ImportGraphic-Dialog
+
+// Strings des Lineals
+#define RID_SVXSTR_RULER_START              (RID_SVX_START + 245)
+
+// unbekannte Farbe im Zeichen- oder Umrandungs-Dialog
+
+// File-/Grafik-Link String, Dialog Name
+#define RID_SVXSTR_FILELINK                 (RID_SVX_START + 255)
+#define RID_SVXSTR_GRAFIKLINK               (RID_SVX_START + 256)
+#define RID_SVXSTR_GRFLINKPROGRESS          (RID_SVX_START + 258)
+
+// Schlie"ssen (im TabDialog Line/Area)
+
+// FontWork-ValueSet-Strings
+
+// Farben-Strings
+#define RID_SVXSTR_BLACK                    (RID_SVX_START + 275)
+#define RID_SVXSTR_BLUE                     (RID_SVX_START + 276)
+#define RID_SVXSTR_GREEN                    (RID_SVX_START + 277)
+#define RID_SVXSTR_CYAN                     (RID_SVX_START + 278)
+#define RID_SVXSTR_RED                      (RID_SVX_START + 279)
+#define RID_SVXSTR_MAGENTA                  (RID_SVX_START + 280)
+#define RID_SVXSTR_BROWN                    (RID_SVX_START + 281)
+#define RID_SVXSTR_GREY                     (RID_SVX_START + 282)
+#define RID_SVXSTR_LIGHTGREY                (RID_SVX_START + 283)
+#define RID_SVXSTR_LIGHTBLUE                (RID_SVX_START + 284)
+#define RID_SVXSTR_LIGHTGREEN               (RID_SVX_START + 285)
+#define RID_SVXSTR_LIGHTCYAN                (RID_SVX_START + 286)
+#define RID_SVXSTR_LIGHTRED                 (RID_SVX_START + 287)
+#define RID_SVXSTR_LIGHTMAGENTA             (RID_SVX_START + 288)
+#define RID_SVXSTR_YELLOW                   (RID_SVX_START + 289)
+#define RID_SVXSTR_WHITE                    (RID_SVX_START + 290)
+#define RID_SVXSTR_BLUEGREY                 (RID_SVX_START + 291)
+#define RID_SVXSTR_ORANGE                   (RID_SVX_START + 292)
+
+// Linienenden-Strings
+#define RID_SVXSTR_ARROW                    (RID_SVX_START + 300)
+#define RID_SVXSTR_SQUARE                   (RID_SVX_START + 301)
+#define RID_SVXSTR_CIRCLE                   (RID_SVX_START + 302)
+
+
+// String-Arrays
+#define RID_SVXSTR_LANGUAGE_TABLE           (RID_SVX_START + 310)
+#define RID_SVXSTR_FIELDUNIT_TABLE			(RID_SVX_START + 311)
+#define RID_SVXSTR_TEXTENCODING_TABLE		(RID_SVX_START + 312)
+
+// Strings fuer die Optionen-TabPages
+
+// Hyperlink-Dlg
+#define RID_SVXMN_HYPERLINK					(RID_SVX_START + 321)
+// Hyperlink-QueryBoxen
+#define RID_SVXQB_NOCONNECT					(RID_SVX_START + 322)
+#define RID_SVXQB_DONTEXIST					(RID_SVX_START + 323)
+//color configuration
+#define RID_SVXQB_DELETE_COLOR_CONFIG       (RID_SVX_START + 324)
+
+// Graphic filter
+#define RID_SVX_GRFFILTER_START				(RID_SVX_START + 330)
+#define RID_SVX_GRFFILTER_DLG_SOLARIZE		(RID_SVX_START + 333)
+
+#define RID_SVXERRCODE                      (RID_SVX_START + 350)
+#define RID_SVXERRCTX                       (RID_SVX_START + 351)
+
+// Define - Bereich fuer Gallery
+// !!! aus diesem Bereich keine Defines benutzen !!!
+#define RID_SVX_GALLERY_START               (RID_SVX_START + 360)
+#define RID_SVX_GALLERY_END                 (RID_SVX_START + 410)
+
+#define RID_SVXSTR_MEM_ERROR				(RID_SVX_START + 415)
+#define RID_SVXSTR_DLG_TITLE_INFO			(RID_SVX_START + 416)
+
+// Define - Bereich fuer BmpMaskierung
+// !!! aus diesem Bereich keine Defines benutzen !!!
+#define RID_SVX_BMPMASK_START               (RID_SVX_START + 420)
+#define RID_SVX_BMPMASK_END                 (RID_SVX_START + 440)
+
+// Define - Bereich fuer IMAP-Editor
+// !!! aus diesem Bereich keine Defines benutzen !!!
+#define RID_SVX_IMAP_START					(RID_SVX_START + 450)
+#define RID_SVX_IMAP_END					(RID_SVX_START + 460)
+
+// Define - Bereich fuer Contour-Editor
+// !!! aus diesem Bereich keine Defines benutzen !!!
+#define RID_SVX_CONTOUR_START				(RID_SVX_START + 461)
+#define RID_SVX_CONTOUR_END					(RID_SVX_START + 471)
+
+
+#define RID_SVX_RELOAD_NORMAL               (RID_SVX_START + 480)
+#define RID_SVX_RELOAD_SPECIAL	            (RID_SVX_START + 481)
+
+// ResId's fuer SvxMultiFileDialog
+
+// Defines fuer die 3D-Engine
+// RID_SVX_END == (RID_SVX_START + 499) !!!
+// am besten ab 520 frei (RB)
+// seit der Erfindung eigener Resourcen fuer jedes Projekt kann es hier keine
+// Obergrenze geben (abgesehen von USHRT_MAX) (os)
+#define RID_STR_FULLNUMS_START				(RID_SVX_START + 500)
+#define RID_STR_BULLET_THEME                (RID_SVX_START + 508)
+
+// ResIds for graphics drawmode
+
+// Strings for Plugin-Filedialog
+
+
+// BM: some additional standard colors
+#define RID_SVXSTR_VIOLET					(RID_SVX_START + 540)
+#define RID_SVXSTR_BORDEAUX					(RID_SVX_START + 541)
+#define RID_SVXSTR_PALE_YELLOW				(RID_SVX_START + 542)
+#define RID_SVXSTR_PALE_GREEN				(RID_SVX_START + 543)
+#define RID_SVXSTR_DKVIOLET					(RID_SVX_START + 544)
+#define RID_SVXSTR_SALMON					(RID_SVX_START + 545)
+#define RID_SVXSTR_SEABLUE					(RID_SVX_START + 546)
+#define RID_SVXSTR_COLOR_SUN				(RID_SVX_START + 547)
+
+// JP: string resource ids for table-autoformat-names, used in SW/SC
+// !!! Urgent: the order of Ids is persistent. New Ids have to append !!!
+#define RID_SVXSTR_TBLAFMT_BEGIN   			(RID_SVX_START + 560)
+#define RID_SVXSTR_TBLAFMT_3D   			RID_SVXSTR_TBLAFMT_BEGIN
+#define RID_SVXSTR_TBLAFMT_BLACK1 			(RID_SVX_START + 561)
+#define RID_SVXSTR_TBLAFMT_BLACK2 			(RID_SVX_START + 562)
+#define RID_SVXSTR_TBLAFMT_BLUE 			(RID_SVX_START + 563)
+#define RID_SVXSTR_TBLAFMT_BROWN 			(RID_SVX_START + 564)
+#define RID_SVXSTR_TBLAFMT_CURRENCY			(RID_SVX_START + 565)
+#define RID_SVXSTR_TBLAFMT_CURRENCY_3D		(RID_SVX_START + 566)
+#define RID_SVXSTR_TBLAFMT_CURRENCY_GRAY	(RID_SVX_START + 567)
+#define RID_SVXSTR_TBLAFMT_CURRENCY_LAVENDER	(RID_SVX_START + 568)
+#define RID_SVXSTR_TBLAFMT_CURRENCY_TURQUOISE	(RID_SVX_START + 569)
+#define RID_SVXSTR_TBLAFMT_GRAY   			(RID_SVX_START + 570)
+#define RID_SVXSTR_TBLAFMT_GREEN   			(RID_SVX_START + 571)
+#define RID_SVXSTR_TBLAFMT_LAVENDER			(RID_SVX_START + 572)
+#define RID_SVXSTR_TBLAFMT_RED				(RID_SVX_START + 573)
+#define RID_SVXSTR_TBLAFMT_TURQUOISE		(RID_SVX_START + 574)
+#define RID_SVXSTR_TBLAFMT_YELLOW			(RID_SVX_START + 575)
+#define RID_SVXSTR_TBLAFMT_END  			(RID_SVX_START + 576)
+
+
+// string resources for XLineJoint item
+
+// Default-Color-Names
+#define RID_SVXSTR_BLACK_DEF                (RID_SVX_START + 595)
+#define RID_SVXSTR_BLUE_DEF                 (RID_SVX_START + 596)
+#define RID_SVXSTR_GREEN_DEF                (RID_SVX_START + 597)
+#define RID_SVXSTR_CYAN_DEF                 (RID_SVX_START + 598)
+#define RID_SVXSTR_RED_DEF                  (RID_SVX_START + 599)
+#define RID_SVXSTR_MAGENTA_DEF              (RID_SVX_START + 600)
+#define RID_SVXSTR_BROWN_DEF                (RID_SVX_START + 601)
+#define RID_SVXSTR_GREY_DEF                 (RID_SVX_START + 602)
+#define RID_SVXSTR_LIGHTGREY_DEF            (RID_SVX_START + 603)
+#define RID_SVXSTR_LIGHTBLUE_DEF            (RID_SVX_START + 604)
+#define RID_SVXSTR_LIGHTGREEN_DEF           (RID_SVX_START + 605)
+#define RID_SVXSTR_LIGHTCYAN_DEF            (RID_SVX_START + 606)
+#define RID_SVXSTR_LIGHTRED_DEF             (RID_SVX_START + 607)
+#define RID_SVXSTR_LIGHTMAGENTA_DEF         (RID_SVX_START + 608)
+#define RID_SVXSTR_YELLOW_DEF               (RID_SVX_START + 609)
+#define RID_SVXSTR_WHITE_DEF                (RID_SVX_START + 610)
+#define RID_SVXSTR_BLUEGREY_DEF             (RID_SVX_START + 611)
+#define RID_SVXSTR_ORANGE_DEF               (RID_SVX_START + 612)
+#define RID_SVXSTR_VIOLET_DEF				(RID_SVX_START + 613)
+#define RID_SVXSTR_BORDEAUX_DEF				(RID_SVX_START + 614)
+#define RID_SVXSTR_PALE_YELLOW_DEF			(RID_SVX_START + 615)
+#define RID_SVXSTR_PALE_GREEN_DEF			(RID_SVX_START + 616)
+#define RID_SVXSTR_DKVIOLET_DEF				(RID_SVX_START + 617)
+#define RID_SVXSTR_SALMON_DEF				(RID_SVX_START + 618)
+#define RID_SVXSTR_SEABLUE_DEF				(RID_SVX_START + 619)
+#define RID_SVXSTR_COLOR_SUN_DEF			(RID_SVX_START + 620)
+
+// Default-Gradient-Names
+#define RID_SVXSTR_GRDT0_DEF				(RID_SVX_START + 631)
+#define RID_SVXSTR_GRDT1_DEF				(RID_SVX_START + 632)
+#define RID_SVXSTR_GRDT2_DEF				(RID_SVX_START + 633)
+#define RID_SVXSTR_GRDT3_DEF				(RID_SVX_START + 634)
+#define RID_SVXSTR_GRDT4_DEF				(RID_SVX_START + 635)
+#define RID_SVXSTR_GRDT5_DEF				(RID_SVX_START + 636)
+#define RID_SVXSTR_GRDT6_DEF				(RID_SVX_START + 637)
+#define RID_SVXSTR_GRDT7_DEF				(RID_SVX_START + 638)
+#define RID_SVXSTR_GRDT8_DEF				(RID_SVX_START + 639)
+#define RID_SVXSTR_GRDT9_DEF				(RID_SVX_START + 640)
+#define RID_SVXSTR_GRDT0					(RID_SVX_START + 641)
+#define RID_SVXSTR_GRDT1					(RID_SVX_START + 642)
+#define RID_SVXSTR_GRDT2					(RID_SVX_START + 643)
+#define RID_SVXSTR_GRDT3					(RID_SVX_START + 644)
+#define RID_SVXSTR_GRDT4					(RID_SVX_START + 645)
+#define RID_SVXSTR_GRDT5					(RID_SVX_START + 646)
+#define RID_SVXSTR_GRDT6					(RID_SVX_START + 647)
+#define RID_SVXSTR_GRDT7					(RID_SVX_START + 648)
+#define RID_SVXSTR_GRDT8					(RID_SVX_START + 649)
+#define RID_SVXSTR_GRDT9					(RID_SVX_START + 650)
+#define RID_SVXSTR_GRDT_DEF_START			RID_SVXSTR_GRDT0_DEF
+#define RID_SVXSTR_GRDT_DEF_END				RID_SVXSTR_GRDT9_DEF
+#define RID_SVXSTR_GRDT_START				RID_SVXSTR_GRDT0
+#define RID_SVXSTR_GRDT_END					RID_SVXSTR_GRDT9
+
+// Default-Hatch-Names
+#define RID_SVXSTR_HATCH0_DEF				(RID_SVX_START + 661)
+#define RID_SVXSTR_HATCH1_DEF				(RID_SVX_START + 662)
+#define RID_SVXSTR_HATCH2_DEF				(RID_SVX_START + 663)
+#define RID_SVXSTR_HATCH3_DEF				(RID_SVX_START + 664)
+#define RID_SVXSTR_HATCH4_DEF				(RID_SVX_START + 665)
+#define RID_SVXSTR_HATCH5_DEF				(RID_SVX_START + 666)
+#define RID_SVXSTR_HATCH6_DEF				(RID_SVX_START + 667)
+#define RID_SVXSTR_HATCH7_DEF				(RID_SVX_START + 668)
+#define RID_SVXSTR_HATCH8_DEF				(RID_SVX_START + 669)
+#define RID_SVXSTR_HATCH9_DEF				(RID_SVX_START + 670)
+#define RID_SVXSTR_HATCH10_DEF				(RID_SVX_START + 671)
+#define RID_SVXSTR_HATCH0					(RID_SVX_START + 672)
+#define RID_SVXSTR_HATCH1					(RID_SVX_START + 673)
+#define RID_SVXSTR_HATCH2					(RID_SVX_START + 674)
+#define RID_SVXSTR_HATCH3					(RID_SVX_START + 675)
+#define RID_SVXSTR_HATCH4					(RID_SVX_START + 676)
+#define RID_SVXSTR_HATCH5					(RID_SVX_START + 677)
+#define RID_SVXSTR_HATCH6					(RID_SVX_START + 678)
+#define RID_SVXSTR_HATCH7					(RID_SVX_START + 679)
+#define RID_SVXSTR_HATCH8					(RID_SVX_START + 680)
+#define RID_SVXSTR_HATCH9					(RID_SVX_START + 681)
+#define RID_SVXSTR_HATCH10					(RID_SVX_START + 682)
+#define RID_SVXSTR_HATCH_DEF_START			RID_SVXSTR_HATCH0_DEF
+#define RID_SVXSTR_HATCH_DEF_END			RID_SVXSTR_HATCH10_DEF
+#define RID_SVXSTR_HATCH_START				RID_SVXSTR_HATCH0
+#define RID_SVXSTR_HATCH_END				RID_SVXSTR_HATCH10
+
+// strings for error messsages of OpenGraphics dialog
+
+// Default-Bitmap-Names
+#define RID_SVXSTR_BMP0_DEF					(RID_SVX_START + 691)
+#define RID_SVXSTR_BMP1_DEF					(RID_SVX_START + 692)
+#define RID_SVXSTR_BMP2_DEF					(RID_SVX_START + 693)
+#define RID_SVXSTR_BMP3_DEF					(RID_SVX_START + 694)
+#define RID_SVXSTR_BMP4_DEF					(RID_SVX_START + 695)
+#define RID_SVXSTR_BMP5_DEF					(RID_SVX_START + 696)
+#define RID_SVXSTR_BMP6_DEF					(RID_SVX_START + 697)
+#define RID_SVXSTR_BMP7_DEF					(RID_SVX_START + 698)
+#define RID_SVXSTR_BMP8_DEF					(RID_SVX_START + 699)
+#define RID_SVXSTR_BMP9_DEF					(RID_SVX_START + 700)
+#define RID_SVXSTR_BMP10_DEF				(RID_SVX_START + 701)
+#define RID_SVXSTR_BMP11_DEF				(RID_SVX_START + 702)
+#define RID_SVXSTR_BMP12_DEF				(RID_SVX_START + 703)
+#define RID_SVXSTR_BMP13_DEF				(RID_SVX_START + 704)
+#define RID_SVXSTR_BMP14_DEF				(RID_SVX_START + 705)
+#define RID_SVXSTR_BMP15_DEF				(RID_SVX_START + 706)
+#define RID_SVXSTR_BMP16_DEF				(RID_SVX_START + 707)
+#define RID_SVXSTR_BMP17_DEF				(RID_SVX_START + 708)
+#define RID_SVXSTR_BMP18_DEF				(RID_SVX_START + 709)
+#define RID_SVXSTR_BMP19_DEF				(RID_SVX_START + 710)
+#define RID_SVXSTR_BMP20_DEF				(RID_SVX_START + 711)
+#define RID_SVXSTR_BMP21_DEF				(RID_SVX_START + 712)
+#define RID_SVXSTR_BMP0						(RID_SVX_START + 713)
+#define RID_SVXSTR_BMP1						(RID_SVX_START + 714)
+#define RID_SVXSTR_BMP2						(RID_SVX_START + 715)
+#define RID_SVXSTR_BMP3						(RID_SVX_START + 716)
+#define RID_SVXSTR_BMP4						(RID_SVX_START + 717)
+#define RID_SVXSTR_BMP5						(RID_SVX_START + 718)
+#define RID_SVXSTR_BMP6						(RID_SVX_START + 719)
+#define RID_SVXSTR_BMP7						(RID_SVX_START + 720)
+#define RID_SVXSTR_BMP8						(RID_SVX_START + 721)
+#define RID_SVXSTR_BMP9						(RID_SVX_START + 722)
+#define RID_SVXSTR_BMP10					(RID_SVX_START + 723)
+#define RID_SVXSTR_BMP11					(RID_SVX_START + 724)
+#define RID_SVXSTR_BMP12					(RID_SVX_START + 725)
+#define RID_SVXSTR_BMP13					(RID_SVX_START + 726)
+#define RID_SVXSTR_BMP14					(RID_SVX_START + 727)
+#define RID_SVXSTR_BMP15					(RID_SVX_START + 728)
+#define RID_SVXSTR_BMP16					(RID_SVX_START + 729)
+#define RID_SVXSTR_BMP17					(RID_SVX_START + 730)
+#define RID_SVXSTR_BMP18					(RID_SVX_START + 731)
+#define RID_SVXSTR_BMP19					(RID_SVX_START + 732)
+#define RID_SVXSTR_BMP20					(RID_SVX_START + 733)
+#define RID_SVXSTR_BMP21					(RID_SVX_START + 734)
+#define RID_SVXSTR_BMP_DEF_START			RID_SVXSTR_BMP0_DEF
+#define RID_SVXSTR_BMP_DEF_END				RID_SVXSTR_BMP21_DEF
+#define RID_SVXSTR_BMP_START				RID_SVXSTR_BMP0
+#define RID_SVXSTR_BMP_END					RID_SVXSTR_BMP21
+
+// Default-Linestyle-Names
+#define RID_SVXSTR_DASH0_DEF				(RID_SVX_START + 740)
+#define RID_SVXSTR_DASH1_DEF				(RID_SVX_START + 741)
+#define RID_SVXSTR_DASH2_DEF				(RID_SVX_START + 742)
+#define RID_SVXSTR_DASH3_DEF				(RID_SVX_START + 743)
+#define RID_SVXSTR_DASH4_DEF				(RID_SVX_START + 744)
+#define RID_SVXSTR_DASH5_DEF				(RID_SVX_START + 745)
+#define RID_SVXSTR_DASH6_DEF				(RID_SVX_START + 746)
+#define RID_SVXSTR_DASH7_DEF				(RID_SVX_START + 747)
+#define RID_SVXSTR_DASH8_DEF				(RID_SVX_START + 748)
+#define RID_SVXSTR_DASH9_DEF				(RID_SVX_START + 749)
+#define RID_SVXSTR_DASH10_DEF				(RID_SVX_START + 750)
+#define RID_SVXSTR_DASH11_DEF				(RID_SVX_START + 751)
+#define RID_SVXSTR_DASH0					(RID_SVX_START + 752)
+#define RID_SVXSTR_DASH1					(RID_SVX_START + 753)
+#define RID_SVXSTR_DASH2					(RID_SVX_START + 754)
+#define RID_SVXSTR_DASH3					(RID_SVX_START + 755)
+#define RID_SVXSTR_DASH4					(RID_SVX_START + 756)
+#define RID_SVXSTR_DASH5					(RID_SVX_START + 757)
+#define RID_SVXSTR_DASH6					(RID_SVX_START + 758)
+#define RID_SVXSTR_DASH7					(RID_SVX_START + 759)
+#define RID_SVXSTR_DASH8					(RID_SVX_START + 760)
+#define RID_SVXSTR_DASH9					(RID_SVX_START + 761)
+#define RID_SVXSTR_DASH10					(RID_SVX_START + 762)
+#define RID_SVXSTR_DASH11					(RID_SVX_START + 763)
+#define RID_SVXSTR_DASH_DEF_START			RID_SVXSTR_DASH0_DEF
+#define RID_SVXSTR_DASH_DEF_END				RID_SVXSTR_DASH11_DEF
+#define RID_SVXSTR_DASH_START				RID_SVXSTR_DASH0
+#define RID_SVXSTR_DASH_END					RID_SVXSTR_DASH11
+
+// Default-Line-End-Names
+#define RID_SVXSTR_LEND0_DEF				(RID_SVX_START + 770)
+#define RID_SVXSTR_LEND1_DEF				(RID_SVX_START + 771)
+#define RID_SVXSTR_LEND2_DEF				(RID_SVX_START + 772)
+#define RID_SVXSTR_LEND3_DEF				(RID_SVX_START + 773)
+#define RID_SVXSTR_LEND4_DEF				(RID_SVX_START + 774)
+#define RID_SVXSTR_LEND5_DEF				(RID_SVX_START + 775)
+#define RID_SVXSTR_LEND6_DEF				(RID_SVX_START + 776)
+#define RID_SVXSTR_LEND7_DEF				(RID_SVX_START + 777)
+#define RID_SVXSTR_LEND8_DEF				(RID_SVX_START + 778)
+#define RID_SVXSTR_LEND9_DEF				(RID_SVX_START + 779)
+#define RID_SVXSTR_LEND10_DEF				(RID_SVX_START + 780)
+#define RID_SVXSTR_LEND11_DEF				(RID_SVX_START + 781)
+#define RID_SVXSTR_LEND0					(RID_SVX_START + 782)
+#define RID_SVXSTR_LEND1					(RID_SVX_START + 783)
+#define RID_SVXSTR_LEND2					(RID_SVX_START + 784)
+#define RID_SVXSTR_LEND3					(RID_SVX_START + 785)
+#define RID_SVXSTR_LEND4					(RID_SVX_START + 786)
+#define RID_SVXSTR_LEND5					(RID_SVX_START + 787)
+#define RID_SVXSTR_LEND6					(RID_SVX_START + 788)
+#define RID_SVXSTR_LEND7					(RID_SVX_START + 789)
+#define RID_SVXSTR_LEND8					(RID_SVX_START + 790)
+#define RID_SVXSTR_LEND9					(RID_SVX_START + 791)
+#define RID_SVXSTR_LEND10					(RID_SVX_START + 792)
+#define RID_SVXSTR_LEND11					(RID_SVX_START + 793)
+#define RID_SVXSTR_LEND_DEF_START			RID_SVXSTR_LEND0_DEF
+#define RID_SVXSTR_LEND_DEF_END				RID_SVXSTR_LEND11_DEF
+#define RID_SVXSTR_LEND_START				RID_SVXSTR_LEND0
+#define RID_SVXSTR_LEND_END					RID_SVXSTR_LEND11
+
+
+
+// strings for error messsages in dictionary updates
+
+
+// strings for graphic attributes/undo
+
+// weitere ResId fuer die Linguistik-Dialoge
+
+// Japanese search options TabPage
+
+// Default-transparence-gradient-names
+#define RID_SVXSTR_TRASNGR0_DEF				(RID_SVX_START + 850)
+#define RID_SVXSTR_TRASNGR0					(RID_SVX_START + 851)
+#define RID_SVXSTR_TRASNGR_DEF_START		RID_SVXSTR_TRASNGR0_DEF
+#define RID_SVXSTR_TRASNGR_DEF_END			RID_SVXSTR_TRASNGR0_DEF
+#define RID_SVXSTR_TRASNGR_START			RID_SVXSTR_TRASNGR0
+#define RID_SVXSTR_TRASNGR_END				RID_SVXSTR_TRASNGR0
+
+#define RID_SVXSTR_BORDER_CONTROL           (RID_SVX_START + 852)
+
+// Accessibility strings.  The actual string ids are defined in
+// svx/inc/accessibility.hrc, the strings are defined in
+// svx/source/accessibility/accessibility.src
+#define RID_SVXSTR_ACCESSIBILITY_START      (RID_SVX_START + 860)
+#define RID_SVXSTR_ACCESSIBILITY_END        (RID_SVX_START + 950)
+
+// string resources for svx::FrameDirectionListBox
+
+
+#define RID_SVXSTR_TABLE_PRESET_START		(RID_SVX_START + 969)
+//changed by jmeng begin
+#define RID_SVXSTR_TABLE_PRESET_END			(RID_SVXSTR_TABLE_PRESET_START+4)
+//changed by jmeng end
+
+#define RID_SVXSTR_PARA_PRESET_START		(RID_SVXSTR_TABLE_PRESET_END+1)
+//changed by jmeng begin
+#define RID_SVXSTR_PARA_PRESET_END			(RID_SVXSTR_PARA_PRESET_START+4)
+//changed by jmeng end
+
+#define RID_SVXSTR_SHADOW_STYLE_START		(RID_SVXSTR_PARA_PRESET_END+1)
+//changed by jmeng begin
+#define RID_SVXSTR_SHADOW_STYLE_END			(RID_SVXSTR_SHADOW_STYLE_START+4)
+//changed by jmeng end
+
+
+// ----------------------------------------------------------------------------
+// if we have _a_lot_ time, we should group the resource ids by type, instead
+// of grouping them by semantics. The reason is that resource ids have to be
+// unique relative to a fixed type (you can't have two dialogs with the same
+// resource id), but they do not need to be unique gloablly (means you can have
+// a dialog and a string, both with the same id)
+// I suggest sticking to per-type ids instead of per-semantic ids, this is
+// better maintainable (IMO), and does not waste that much ids
+// fs@openoffice.org
+
+// ----------------------------------------------------------------------------
+// "Window" resource ids
+
+#define RID_SVX_WND_COMMON_LINGU			( RID_SVX_START +  0 )
+
+// ----------------------------------------------------------------------------
+// "ModalDialog" resource ids
+
+
+// pb: next free string resource id
+
+// ----------------------------------------------------------------------------
+
+#endif
+

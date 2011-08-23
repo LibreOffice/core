@@ -1,7 +1,7 @@
 /************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ import com.sun.star.uno.UnoRuntime;
  *  we can convert between oledata between Wordml and OOo flat.
  *  To use it, we need a running OOo. There are two ways to get the XMultiServiceFactory.
  *  When called by OOo xslt filter, an XMultiServiceFactory will be add to the transformer
- *  by setParameter(), then we can get it using getParameter(). Another way is using an
+ *  by setParameter(), then we can get it using getParameter(). Another way is using an 
  *  XConnection to connect to a running OOo. We connect to a running OOo, we need know the
  *  uno url. It can be set in the xslt script. The default uno url is:
  *  "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager"
@@ -171,7 +171,7 @@ public class XSLTFilterOLEExtracter {
             int resultLength = decompresser.inflate(result);
             decompresser.end();
 
-            //return the base64 string of the uncompressed data
+            //return the base64 string of the uncompressed data            
             return Base64.encodeBytes(result);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -238,7 +238,7 @@ public class XSLTFilterOLEExtracter {
             }
         }
     }
-    //decode the base64 string and insert the length and the compressed data of it to
+    //decode the base64 string and insert the length and the compressed data of it to 
     //the root storage as a sub stream under aName
     public void insertSubStorage(String aName, String aBase64) {
         try {
@@ -349,7 +349,7 @@ public class XSLTFilterOLEExtracter {
         XComponent xComponent = (XComponent) UnoRuntime.queryInterface(
                 XComponent.class, bridge);
 
-        // get the remote instance
+        // get the remote instance 
         x = bridge.getInstance(a[2]);
 
         // Did the remote server export this object ?

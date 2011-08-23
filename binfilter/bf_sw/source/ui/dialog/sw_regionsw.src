@@ -1,0 +1,401 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+#include "regionsw.hrc"
+#include "cmdid.h"
+#include "globals.hrc"
+#include "helpid.h"
+/*************************************************************************
+
+    Dialog "Bereich einfuegen"
+
+*************************************************************************/
+#define FT_SUBREG_TEXT \
+    Text [ de ] = "Berei~ch" ; \
+    Text [ en-US ] = "~Section" ; \
+    Text [ x-comment ] = "��; ���: ������ - -";	\
+    Text[ pt ] = "Secção";\
+    Text[ ru ] = "Раздел";\
+    Text[ el ] = "Ε~νότητα";\
+    Text[ nl ] = "~Bereik";\
+    Text[ fr ] = "~Section";\
+    Text[ es ] = "~Sección";\
+    Text[ fi ] = "Osa";\
+    Text[ ca ] = "~Secció";\
+    Text[ it ] = "~Sezione";\
+    Text[ sk ] = "Obla~sť";\
+    Text[ da ] = "Område";\
+    Text[ sv ] = "~Område";\
+    Text[ pl ] = "~Sekcja";\
+    Text[ pt-BR ] = "~Seção";\
+    Text[ th ] = "~ส่วน";\
+    Text[ ja ] = "範囲(~S)";\
+    Text[ ko ] = "구역(~S)";\
+    Text[ zh-CN ] = "区域(~S)";\
+    Text[ zh-TW ] = "區域(~S)";\
+    Text[ tr ] = "Bölüm";\
+    Text[ hi-IN ] = "~विभाग";\
+    Text[ ar ] = "النطاق";\
+    Text[ he ] = "‮מיקטע‬";\
+
+#define CB_HIDE_TEXT \
+    Text [ de ] = "Aus~blenden" ; \
+    Text [ en-US ] = "H~ide" ; \
+    Text[ pt ] = "~Ocultar";\
+    Text[ ru ] = "Скрыть";\
+    Text[ el ] = "Α~πόκρυψη";\
+    Text[ nl ] = "~Verbergen";\
+    Text[ fr ] = "~Masquer";\
+    Text[ es ] = "Ocultar";\
+    Text[ fi ] = "Piilotettu";\
+    Text[ ca ] = "O~cult";\
+    Text[ it ] = "Nascondi";\
+    Text[ sk ] = "S~kryť";\
+    Text[ da ] = "Skjul";\
+    Text[ sv ] = "~Dölj";\
+    Text[ pl ] = "Ukr~yj";\
+    Text[ pt-BR ] = "~Ocultar";\
+    Text[ th ] = "ซ่~อน";\
+    Text[ ja ] = "非表示(~I)";\
+    Text[ ko ] = "숨기기(~I)";\
+    Text[ zh-CN ] = "隐入(~I)";\
+    Text[ zh-TW ] = "隱入(~I)";\
+    Text[ tr ] = "Gizle";\
+    Text[ hi-IN ] = "छि~पाओ";\
+    Text[ ar ] = "مخفي";\
+    Text[ he ] = "Aus~blenden";\
+
+#define FL_HIDE_TEXT \
+    Text [ de ] = "Ausblenden" ; \
+    Text [ en-US ] = "Hide" ; \
+    Text[ pt ] = "Ocultar";\
+    Text[ ru ] = "Скрыть";\
+    Text[ el ] = "Απόκρυψη";\
+    Text[ nl ] = "Verbergen";\
+    Text[ fr ] = "Masquer";\
+    Text[ es ] = "Ocultar";\
+    Text[ fi ] = "Piilotettu";\
+    Text[ ca ] = "Ocult";\
+    Text[ it ] = "Nascondi";\
+    Text[ sk ] = "Skryť";\
+    Text[ da ] = "Skjul";\
+    Text[ sv ] = "Dölj";\
+    Text[ pl ] = "Ukryj";\
+    Text[ pt-BR ] = "Oculto";\
+    Text[ th ] = "ซ่อน";\
+    Text[ ja ] = "表示しない";\
+    Text[ ko ] = "숨기기";\
+    Text[ zh-CN ] = "隐藏";\
+    Text[ zh-TW ] = "隱入";\
+    Text[ tr ] = "Gizle";\
+    Text[ hi-IN ] = "छिपाओ";\
+    Text[ ar ] = "مخفي";\
+    Text[ he ] = "Ausblenden";\
+
+#define CB_CONDITION_TEXT  \
+    Text [ de ] = "Mi~t Bedingung" ; \
+    Text [ en-US ] = "~With Condition" ; \
+    Text[ pt ] = "~Com condição";\
+    Text[ ru ] = "При условии";\
+    Text[ el ] = "Με συνθήκ~η";\
+    Text[ nl ] = "~Met conditie";\
+    Text[ fr ] = "Sous ~condition";\
+    Text[ es ] = "Con condición";\
+    Text[ fi ] = "Ehdolla";\
+    Text[ ca ] = "Amb ~condició";\
+    Text[ it ] = "Con condi~zione";\
+    Text[ sk ] = "S ~podmienkou";\
+    Text[ da ] = "Med betingelse";\
+    Text[ sv ] = "Med v~illkor";\
+    Text[ pl ] = "~Uwzględniając warunek";\
+    Text[ pt-BR ] = "~Com condição";\
+    Text[ th ] = "~ด้วยเงื่อนไข";\
+    Text[ ja ] = "条件付き(~W)";\
+    Text[ ko ] = "다음의 조건을 포함(~W)";\
+    Text[ zh-CN ] = "附加条件(~W)";\
+    Text[ zh-TW ] = "附加條件(~W)";\
+    Text[ tr ] = "~Koşullu";\
+    Text[ hi-IN ] = "~शर्त के सहित";\
+    Text[ ar ] = "بشرط";\
+    Text[ he ] = "Mi~t Bedingung";\
+
+#define FL_FILE_TEXT \
+    Text [ de ] = "Verknüpfung" ; \
+    Text [ en-US ] = "Link" ; \
+    Text[ pt ] = "Ligação";\
+    Text[ ru ] = "Связь";\
+    Text[ el ] = "Σύνδεση";\
+    Text[ nl ] = "Koppeling";\
+    Text[ fr ] = "Lien";\
+    Text[ es ] = "Vínculo";\
+    Text[ fi ] = "Linkki";\
+    Text[ ca ] = "Enllaç";\
+    Text[ it ] = "Collegamento";\
+    Text[ sk ] = "Odkaz";\
+    Text[ da ] = "Kæde";\
+    Text[ sv ] = "Länk";\
+    Text[ pl ] = "Łącze";\
+    Text[ pt-BR ] = "Vínculo";\
+    Text[ th ] = "เชื่อมโยง";\
+    Text[ ja ] = "リンク(L)";\
+    Text[ ko ] = "링크";\
+    Text[ zh-CN ] = "链接";\
+    Text[ zh-TW ] = "捷徑";\
+    Text[ tr ] = "Bağlantı";\
+    Text[ hi-IN ] = "लिंक";\
+    Text[ ar ] = "ارتباط";\
+    Text[ he ] = "Verknüpfung";\
+
+#define CB_FILE_TEXT\
+        Text [ de ] = "~Verknüpfen" ; \
+    Text [ en-US ] = "~Link";	\
+    Text[ pt ] = "~Ligação";\
+    Text[ ru ] = "~Связать";\
+    Text[ el ] = "~Σύνδεση";\
+    Text[ nl ] = "~Koppelen";\
+    Text[ fr ] = "~Lier";\
+    Text[ es ] = "~Vínculo";\
+    Text[ fi ] = "Linkitä";\
+    Text[ ca ] = "En~llaç";\
+    Text[ it ] = "~Collegamento";\
+    Text[ sk ] = "O~dkaz";\
+    Text[ da ] = "~Kæd";\
+    Text[ sv ] = "~Länka";\
+    Text[ pl ] = "Połąc~z";\
+    Text[ pt-BR ] = "~Vínculo";\
+    Text[ th ] = "เ~ชื่อมโยง";\
+    Text[ ja ] = "リンク(~L)";\
+    Text[ ko ] = "연결(~L)";\
+    Text[ zh-CN ] = "链接(~L)";\
+    Text[ zh-TW ] = "捷徑(~L)";\
+    Text[ tr ] = "~Bağlantı";\
+    Text[ hi-IN ] = "~की संख्या";\
+    Text[ ar ] = "ارتباط";\
+    Text[ he ] = "~Verknüpfen";\
+
+#define CB_DDE_TEXT \
+    Text [ de ] = "~DDE" ; \
+    Text [ en-US ] = "DD~E" ; \
+    Text[ pt ] = "~DDE";\
+    Text[ ru ] = "~DDE";\
+    Text[ el ] = "~DDE";\
+    Text[ nl ] = "~DDE";\
+    Text[ fr ] = "DDE";\
+    Text[ es ] = "~DDE";\
+    Text[ fi ] = "DDE";\
+    Text[ ca ] = "DD~E";\
+    Text[ it ] = "~DDE";\
+    Text[ sk ] = "DD~E";\
+    Text[ da ] = "DDE";\
+    Text[ sv ] = "DD~E";\
+    Text[ pl ] = "~DDE";\
+    Text[ pt-BR ] = "~DDE";\
+    Text[ th ] = "DD~E";\
+    Text[ ja ] = "DD~E";\
+    Text[ ko ] = "DD~E";\
+    Text[ zh-CN ] = "DD~E";\
+    Text[ zh-TW ] = "DD~E";\
+    Text[ tr ] = "DD~E";\
+    Text[ hi-IN ] = "DD~E";\
+    Text[ ar ] = "DDE~";\
+    Text[ he ] = "~DDE";\
+
+#define FT_DDE_TEXT \
+    Text [ de ] = "DDE~-Befehl" ; \
+    Text [ en-US ] = "DDE ~command" ; \
+    Text[ pt ] = "~Comando DDE";\
+    Text[ ru ] = "Команда DDE~";\
+    Text[ el ] = "~Εντολή DDE";\
+    Text[ nl ] = "~DDE-opdracht";\
+    Text[ fr ] = "Commande ~DDE";\
+    Text[ es ] = "~Orden DDE";\
+    Text[ fi ] = "DDE-komento";\
+    Text[ ca ] = "~Ordre DDE";\
+    Text[ it ] = "Comando DDE";\
+    Text[ sk ] = "DDE ~príkaz";\
+    Text[ da ] = "DDE-kommando";\
+    Text[ sv ] = "DDE-~kommando";\
+    Text[ pl ] = "P~olecenie DDE";\
+    Text[ pt-BR ] = "~Comando DDE";\
+    Text[ th ] = "~คำสั่ง DDE ";\
+    Text[ ja ] = "DDE指示(~C)";\
+    Text[ ko ] = "DDE 명령(~C)";\
+    Text[ zh-CN ] = "DDE 指令(~C)";\
+    Text[ zh-TW ] = "DDE - 指令(~C)";\
+    Text[ tr ] = "DDE komutu";\
+    Text[ hi-IN ] = "DDE ~आज्ञा";\
+    Text[ ar ] = "أمر DDE";\
+    Text[ he ] = "DDE~-Befehl";\
+
+#define FT_FILE_TEXT \
+    Text [ de ] = "Dateina~me" ; \
+    Text [ en-US ] = "~File name" ; \
+    Text[ pt ] = "~Nome do ficheiro";\
+    Text[ ru ] = "Имя файла";\
+    Text[ el ] = "Όνο~μα αρχείου";\
+    Text[ nl ] = "~Bestandsnaam";\
+    Text[ fr ] = "Nom de ~fichier";\
+    Text[ es ] = "~Nombre de archivo";\
+    Text[ fi ] = "Tiedoston nimi";\
+    Text[ ca ] = "Nom del ~fitxer";\
+    Text[ it ] = "Nome file";\
+    Text[ sk ] = "~Meno súboru";\
+    Text[ da ] = "Filnavn";\
+    Text[ sv ] = "~Filnamn";\
+    Text[ pl ] = "~Nazwa pliku";\
+    Text[ pt-BR ] = "~Nome do arquivo";\
+    Text[ th ] = "ชื่อแ~ฟ้ม";\
+    Text[ ja ] = "ファイル名(~F)";\
+    Text[ ko ] = "파일 이름(~F)";\
+    Text[ zh-CN ] = "文件名(~F)";\
+    Text[ zh-TW ] = "檔案名稱(~F)";\
+    Text[ tr ] = "Dosya adı";\
+    Text[ hi-IN ] = "~फाइल नाम";\
+    Text[ ar ] = "اسم الملف";\
+    Text[ he ] = "‮שם קובץ‬";\
+
+#define GB_HIDE_TEXT \
+    Text [ de ] = "Verstecken" ; \
+    Text [ en-US ] = "Hide"; \
+    Text[ pt ] = "Ocultar";\
+    Text[ ru ] = "Скрыть";\
+    Text[ el ] = "Απόκρυψη";\
+    Text[ nl ] = "Verbergen";\
+    Text[ fr ] = "Masquer";\
+    Text[ es ] = "Ocultar";\
+    Text[ fi ] = "Piilota";\
+    Text[ ca ] = "Oculta";\
+    Text[ it ] = "Nascondi";\
+    Text[ sk ] = "Skryť";\
+    Text[ da ] = "Skjult";\
+    Text[ sv ] = "Dölj";\
+    Text[ pl ] = "Ukryj";\
+    Text[ pt-BR ] = "Ocultar";\
+    Text[ th ] = "ซ่อน";\
+    Text[ ja ] = "隠す";\
+    Text[ ko ] = "숨기기";\
+    Text[ zh-CN ] = "隐入";\
+    Text[ zh-TW ] = "隱入";\
+    Text[ tr ] = "Gizle";\
+    Text[ hi-IN ] = "छिपाओ";\
+    Text[ ar ] = "إخفاء";\
+    Text[ he ] = "Verstecken";\
+
+#define GB_OPTIONS_TEXT \
+    Text [ de ] = "Optionen" ; \
+    Text [ en-US ] = "Options" ; \
+    Text[ pt ] = "Opções";\
+    Text[ ru ] = "Параметры";\
+    Text[ el ] = "Επιλογές";\
+    Text[ nl ] = "Opties";\
+    Text[ fr ] = "Options";\
+    Text[ es ] = "Opciones";\
+    Text[ fi ] = "Asetukset";\
+    Text[ ca ] = "Opcions";\
+    Text[ it ] = "Opzioni";\
+    Text[ sk ] = "Nastavenia";\
+    Text[ da ] = "Indstillinger";\
+    Text[ sv ] = "Alternativ";\
+    Text[ pl ] = "Opcje";\
+    Text[ pt-BR ] = "Opções";\
+    Text[ th ] = "ตัวเลือก";\
+    Text[ ja ] = "オプション";\
+    Text[ ko ] = "옵션";\
+    Text[ zh-CN ] = "选项";\
+    Text[ zh-TW ] = "選項";\
+    Text[ tr ] = "Seçenekler";\
+    Text[ hi-IN ] = "विकल्प ";\
+    Text[ ar ] = "الخيارات";\
+    Text[ he ] = "‮אפשרויות‬";\
+
+#define FL_PROTECT_TEXT \
+        Text [ de ] = "Schreibschutz" ;\
+    Text [ en-US ] = "Write protection";	\
+    Text[ pt ] = "Protecção contra escrita";\
+    Text[ ru ] = "Защита от изменений";\
+    Text[ el ] = "Προστασία εγγραφής";\
+    Text[ nl ] = "Schrijfbeveiliging";\
+    Text[ fr ] = "Protection contre les modifications";\
+    Text[ es ] = "Protección contra modificaciones";\
+    Text[ fi ] = "Kirjoitussuojaus";\
+    Text[ ca ] = "Protecció contra escriptura";\
+    Text[ it ] = "Protetto";\
+    Text[ sk ] = "Ochrana proti zápisu";\
+    Text[ da ] = "Skrivebeskyttet";\
+    Text[ sv ] = "Skrivskydd";\
+    Text[ pl ] = "Zabezpieczenie przed zapisem";\
+    Text[ pt-BR ] = "Proteção contra gravação";\
+    Text[ th ] = "ป้องกันการเขียน";\
+    Text[ ja ] = "書き込み保護";\
+    Text[ ko ] = "쓰기 보호";\
+    Text[ zh-CN ] = "防改写";\
+    Text[ zh-TW ] = "唯讀";\
+    Text[ tr ] = "Zarf metin yönü";\
+    Text[ hi-IN ] = "लिखने से सुरक्षित";\
+    Text[ ar ] = "Write protection";\
+    Text[ he ] = "Schreibschutz";\
+
+#define CB_PASSWD_TEXT\
+        Text [ de ] = "Mit Kenn~wort" ;\
+    Text [ en-US ] = "Wit~h password";	\
+    Text[ pt ] = "Com ~senha";\
+    Text[ ru ] = "Паролем";\
+    Text[ el ] = "Με κω~δικό πρόσβασης";\
+    Text[ nl ] = "~Met wachtwoord";\
+    Text[ fr ] = "Avec mot de ~passe";\
+    Text[ es ] = "Con c~ontraseña";\
+    Text[ fi ] = "Myös salasana";\
+    Text[ ca ] = "Am~b contrasenya";\
+    Text[ it ] = "Con pass~word";\
+    Text[ sk ] = "S ~heslom";\
+    Text[ da ] = "~Med adgangskode";\
+    Text[ sv ] = "~Med lösenord";\
+    Text[ pl ] = "~Za pomocą hasła";\
+    Text[ pt-BR ] = "Com ~senha";\
+    Text[ th ] = "ด้ว~ยรหัสผ่าน";\
+    Text[ ja ] = "パスワードを使用(~H)";\
+    Text[ ko ] = "암호 사용(~H)";\
+    Text[ zh-CN ] = "使用密码(~H)";\
+    Text[ zh-TW ] = "採用密碼(~H)";\
+    Text[ tr ] = "Şifre ile";\
+    Text[ hi-IN ] = "कूटशब्द ~सहित";\
+    Text[ ar ] = "With password";\
+    Text[ he ] = "Mit Kenn~wort";\
+
+/*************************************************************************
+
+    Dialog "Bereiche bearbeiten"
+
+*************************************************************************/
+
+
+
+
+
+
+

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,11 +75,11 @@ public:
     ::rtl::OUString sStyleName1;
     PropertyMapPtr  pProperties;
     ::rtl::OUString sConvertedStyleName;
-
+    
 #ifdef DEBUG_DOMAINMAPPER
     virtual XMLTag::Pointer_t toTag();
 #endif
-
+    
     StyleSheetEntry();
     virtual ~StyleSheetEntry();
 };
@@ -120,12 +120,12 @@ public:
 private:
     void resolveAttributeProperties(Value & val);
     void resolveSprmProps(Sprm & sprm_);
-    void applyDefaults(bool bParaProperties);
+    void applyDefaults(bool bParaProperties); 
 };
 typedef boost::shared_ptr< StyleSheetTable >    StyleSheetTablePtr;
 
 
-class WRITERFILTER_DLLPRIVATE TableStyleSheetEntry :
+class WRITERFILTER_DLLPRIVATE TableStyleSheetEntry : 
     public StyleSheetEntry
 {
 private:
@@ -143,11 +143,11 @@ public:
     // fixes some possible properties conflicts, like borders ones.
     void AddTblStylePr( TblStyleType nType, PropertyMapPtr pProps );
 
-    // Gets all the properties
+    // Gets all the properties 
     //     + corresponding to the mask,
     //     + from the parent styles
     PropertyMapPtr GetProperties( sal_Int32 nMask );
-
+    
 #ifdef DEBUG_DOMAINMAPPER
     virtual XMLTag::Pointer_t toTag();
 #endif

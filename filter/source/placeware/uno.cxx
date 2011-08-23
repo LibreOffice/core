@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,9 +67,9 @@ sal_Bool SAL_CALL component_writeInfo(
         try
         {
             Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PlaceWareExportFilter_getImplementationName() ) );
+                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PlaceWareExportFilter_getImplementationName() ) ); 
             xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
-
+            
             const Sequence< OUString > & rSNL = PlaceWareExportFilter_getSupportedServiceNames();
             const OUString * pArray = rSNL.getConstArray();
             for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
@@ -89,7 +89,7 @@ void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
     void * pRet = 0;
-
+    
     OUString implName = OUString::createFromAscii( pImplName );
     if ( pServiceManager && implName.equals(PlaceWareExportFilter_getImplementationName()) )
     {
@@ -97,14 +97,14 @@ void * SAL_CALL component_getFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
             OUString::createFromAscii( pImplName ),
             PlaceWareExportFilter_createInstance, PlaceWareExportFilter_getSupportedServiceNames() ) );
-
+        
         if (xFactory.is())
         {
             xFactory->acquire();
             pRet = xFactory.get();
         }
     }
-
+    
     return pRet;
 }
 }

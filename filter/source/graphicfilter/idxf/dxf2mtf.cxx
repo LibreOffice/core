@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -106,7 +106,7 @@ DXFLineInfo DXF2GDIMetaFile::LTypeToDXFLineInfo(const char * sLineType)
 // ####
             // x = (sal_Int32) rTransform.TransLineWidth( pLT->fDash[i] * pDXF->getGlobalLineTypeScale() );
             if ( x >= 0.0 ) {
-                if ( aDXFLineInfo.nDotCount == 0 ) {
+                if ( aDXFLineInfo.nDotCount == 0 ) { 
                     aDXFLineInfo.nDotCount ++;
                     aDXFLineInfo.fDotLen = x;
                 }
@@ -463,7 +463,7 @@ void DXF2GDIMetaFile::DrawTextEntity(const DXFTextEntity & rE, const DXFTransfor
     double fA;
     USHORT nHeight;
     short nAng;
-    ByteString  aStr( rE.sText );
+    ByteString	aStr( rE.sText );
     DXFTransform aT( DXFTransform(rE.fXScale,rE.fHeight,1.0,rE.fRotAngle,rE.aP0), rTransform );
     aT.TransDir(DXFVector(0,1,0),aV);
     nHeight=(USHORT)(aV.Abs()+0.5);
@@ -523,7 +523,7 @@ void DXF2GDIMetaFile::DrawAttribEntity(const DXFAttribEntity & rE, const DXFTran
         USHORT nHeight;
         short nAng;
         ByteString aStr( rE.sText );
-        DXFTransform aT( DXFTransform( rE.fXScale, rE.fHeight, 1.0, rE.fRotAngle, rE.aP0 ), rTransform );
+        DXFTransform aT( DXFTransform( rE.fXScale, rE.fHeight, 1.0, rE.fRotAngle, rE.aP0 ), rTransform ); 
         aT.TransDir(DXFVector(0,1,0),aV);
         nHeight=(USHORT)(aV.Abs()+0.5);
         fA=aT.CalcRotAngle();
@@ -640,7 +640,7 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
                     const DXFEdgeType* pEdge = rPathData.aEdges[ i ];
                     switch( pEdge->nEdgeType )
                     {
-                        case 1 :
+                        case 1 : 
                         {
                             Point aPt;
                             rTransform.Transform( ((DXFEdgeTypeLine*)pEdge)->aStartPoint, aPt );
@@ -916,14 +916,14 @@ BOOL DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
                 fScale = 0;  // -Wall added this...
             }
             else {
-//              if (fWidth<500.0 || fHeight<500.0 || fWidth>32767.0 || fHeight>32767.0) {
+//				if (fWidth<500.0 || fHeight<500.0 || fWidth>32767.0 || fHeight>32767.0) {
                     if (fWidth>fHeight)
                         fScale=10000.0/fWidth;
                     else
                         fScale=10000.0/fHeight;
-//              }
-//              else
-//                  fScale=1.0;
+//				}
+//				else
+//					fScale=1.0;
                 aTransform=DXFTransform(fScale,-fScale,fScale,
                                         DXFVector(-pDXF->aBoundingBox.fMinX*fScale,
                                                    pDXF->aBoundingBox.fMaxY*fScale,
@@ -936,14 +936,14 @@ BOOL DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     else {
         fHeight=pVPort->fHeight;
         fWidth=fHeight*pVPort->fAspectRatio;
-//      if (fWidth<500.0 || fHeight<500.0 || fWidth>32767.0 || fHeight>32767.0) {
+//		if (fWidth<500.0 || fHeight<500.0 || fWidth>32767.0 || fHeight>32767.0) {
             if (fWidth>fHeight)
                 fScale=10000.0/fWidth;
             else
                 fScale=10000.0/fHeight;
-//      }
-//      else
-//          fScale=1.0;
+//		}
+//		else
+//			fScale=1.0;
         aTransform=DXFTransform(
             DXFTransform(pVPort->aDirection,pVPort->aTarget),
             DXFTransform(

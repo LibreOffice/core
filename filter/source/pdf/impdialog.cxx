@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -143,7 +143,7 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     if ( mbSelectionPresent )
     {
         Reference< drawing::XShapes > xShapes;
-        if ( ( maSelection >>= xShapes ) == sal_False ) // XShapes is always a selection
+        if ( ( maSelection >>= xShapes ) == sal_False )	// XShapes is always a selection
         {
             // even if nothing is selected in writer the selection is not empty
             Reference< container::XIndexAccess > xIndexAccess;
@@ -511,7 +511,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
     maNfQuality.Enable( bUseLosslessCompression == sal_False );
 
     maCbReduceImageResolution.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl ) );
-    const sal_Bool  bReduceImageResolution = paParent->mbReduceImageResolution;
+    const sal_Bool	bReduceImageResolution = paParent->mbReduceImageResolution;
     maCbReduceImageResolution.Check( bReduceImageResolution );
     String aStrRes( String::CreateFromInt32( paParent->mnMaxImageResolution ) );
     aStrRes.Append( String( RTL_CONSTASCII_USTRINGPARAM( " DPI" ) ) );
@@ -547,9 +547,9 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
     maLbFormsFormat.Enable( paParent->mbExportFormFields );
     maCbAllowDuplicateFieldNames.Check( paParent->mbAllowDuplicateFieldNames );
     maCbAllowDuplicateFieldNames.Enable( paParent->mbExportFormFields );
-
+    
     maCbExportBookmarks.Check( paParent->mbExportBookmarks );
-
+    
     maCbExportNotes.Check( paParent->mbExportNotes );
 
     if ( mbIsPresentation )
@@ -1022,7 +1022,7 @@ ImpPDFTabSecurityPage::ImpPDFTabSecurityPage( Window* i_pParent,
     maUserPwdSet( PDFFilterResId( STR_USER_PWD_SET ) ),
     maUserPwdUnset( PDFFilterResId( STR_USER_PWD_UNSET ) ),
 
-    maPbOwnerPwd( this, PDFFilterResId( BTN_OWNER_PWD ) ),
+    maPbOwnerPwd( this,	PDFFilterResId( BTN_OWNER_PWD ) ),
     maFtOwnerPwd( this, PDFFilterResId( FT_OWNER_PWD ) ),
     maOwnerPwdSet( PDFFilterResId( STR_OWNER_PWD_SET ) ),
     maOwnerPwdUnset( PDFFilterResId( STR_OWNER_PWD_UNSET ) ),
@@ -1048,18 +1048,18 @@ ImpPDFTabSecurityPage::ImpPDFTabSecurityPage( Window* i_pParent,
 {
     maUserPwdSet.Append( sal_Unicode( '\n' ) );
     maUserPwdSet.Append( String( PDFFilterResId( STR_USER_PWD_ENC ) ) );
-
+    
     maUserPwdUnset.Append( sal_Unicode( '\n' ) );
     maUserPwdUnset.Append( String( PDFFilterResId( STR_USER_PWD_UNENC ) ) );
-
+    
     maOwnerPwdSet.Append( sal_Unicode( '\n' ) );
     maOwnerPwdSet.Append( String( PDFFilterResId( STR_OWNER_PWD_REST ) ) );
-
+    
     maOwnerPwdUnset.Append( sal_Unicode( '\n' ) );
     maOwnerPwdUnset.Append( String( PDFFilterResId( STR_OWNER_PWD_UNREST ) ) );
-
+    
     FreeResource();
-
+    
     maFtUserPwd.SetText( maUserPwdUnset );
     maFtOwnerPwd.SetText( maOwnerPwdUnset );
 
@@ -1178,7 +1178,7 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
 
 // set the status of this windows, according to the PDFA selection
     enablePermissionControls();
-
+    
     if( paParent && paParent->GetTabPage( RID_PDF_TAB_GENER ) )
         ImplPDFASecurityControl(
             !( ( ImpPDFTabGeneralPage* )paParent->GetTabPage( RID_PDF_TAB_GENER ) )->IsPdfaSelected() );
@@ -1214,9 +1214,9 @@ IMPL_LINK( ImpPDFTabSecurityPage, ClickmaPbOwnerPwdHdl, void*, EMPTYARG )
 void ImpPDFTabSecurityPage::enablePermissionControls()
 {
     maFtUserPwd.SetText( (msUserPassword.Len() > 0 && IsEnabled()) ? maUserPwdSet : maUserPwdUnset );
-
+    
     sal_Bool bLocalEnable = (msOwnerPassword.Len() > 0) && IsEnabled();
-
+    
     maFtOwnerPwd.SetText( bLocalEnable ? maOwnerPwdSet : maOwnerPwdUnset );
 
     maFlPrintPermissions.Enable( bLocalEnable );
@@ -1356,7 +1356,7 @@ void ImpPDFTabLinksPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
 // the control states, or the saved is used
 // to form the stored selection
     paParent->mnViewPDFMode = 0;
-    if( mbOpnLnksBrowserUserState )
+    if(	mbOpnLnksBrowserUserState )
         paParent->mnViewPDFMode = 2;
     else if( mbOpnLnksLaunchUserState )
         paParent->mnViewPDFMode = 1;

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,23 +43,23 @@
 \************************************************************************/
 
 DlgExportEPPM::DlgExportEPPM( FltCallDialogParameter& rPara ) :
-                ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_EPPM, *rPara.pResMgr ) ),
-                rFltCallPara        ( rPara ),
-                aGrpFormat          ( this, ResId( GRP_FORMAT, *rPara.pResMgr ) ),
-                aRBRaw              ( this, ResId( RB_RAW, *rPara.pResMgr ) ),
-                aRBASCII            ( this, ResId( RB_ASCII, *rPara.pResMgr ) ),
-                aBtnOK              ( this, ResId( BTN_OK, *rPara.pResMgr ) ),
-                aBtnCancel          ( this, ResId( BTN_CANCEL, *rPara.pResMgr ) ),
-                aBtnHelp            ( this, ResId( BTN_HELP, *rPara.pResMgr ) ),
-                pMgr                ( rPara.pResMgr )
+                ModalDialog			( rPara.pWindow, ResId( DLG_EXPORT_EPPM, *rPara.pResMgr ) ),
+                rFltCallPara		( rPara ),
+                aGrpFormat			( this, ResId( GRP_FORMAT, *rPara.pResMgr ) ),
+                aRBRaw				( this, ResId( RB_RAW, *rPara.pResMgr ) ),
+                aRBASCII			( this, ResId( RB_ASCII, *rPara.pResMgr ) ),
+                aBtnOK				( this, ResId( BTN_OK, *rPara.pResMgr ) ),
+                aBtnCancel			( this, ResId( BTN_CANCEL, *rPara.pResMgr ) ),
+                aBtnHelp			( this, ResId( BTN_HELP, *rPara.pResMgr ) ),
+                pMgr				( rPara.pResMgr )
 {
     FreeResource();
 
     // Config-Parameter lesen
 
-    String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/PPM" ) );
+    String	aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/PPM" ) );
     pConfigItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
-    sal_Int32   nFormat = pConfigItem->ReadInt32( String( ResId( KEY_FORMAT, *pMgr ) ), 0 );
+    sal_Int32	nFormat = pConfigItem->ReadInt32( String( ResId( KEY_FORMAT, *pMgr ) ), 0 );
 
     BOOL bCheck = FALSE;
     if ( !nFormat )
@@ -85,7 +85,7 @@ DlgExportEPPM::~DlgExportEPPM()
 IMPL_LINK( DlgExportEPPM, OK, void *, EMPTYARG )
 {
     // Config-Parameter schreiben
-    sal_Int32   nFormat = 0;
+    sal_Int32	nFormat = 0;
     if ( aRBASCII.IsChecked() )
         nFormat++;
     pConfigItem->WriteInt32( String( ResId( KEY_FORMAT, *pMgr ) ), nFormat );

@@ -1,0 +1,4 @@
+lg	legacy	:	
+lg	legacy									usr1	-	all	lg_mkout		NULL
+lg	legacysmgr\prj								get		-	all	lg_prj			NULL
+lg	legacysmgr\source\legacy			nmake	-	all	lg_legacy	NULL

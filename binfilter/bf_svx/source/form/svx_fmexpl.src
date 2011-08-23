@@ -1,0 +1,945 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+#include "svxids.hrc"
+#include "fmresids.hrc"
+#include "fmexpl.hrc"
+#include "globlmn.hrc"
+Menu RID_FMEXPLORER_POPUPMENU
+{
+    ItemList  =
+    {
+        MenuItem
+        {
+            Identifier = SID_FM_NEW ;
+            HelpID = SID_FM_NEW ;
+            Text [ de ] = "~Neu" ;
+            Text [ en-US ] = "~New" ;
+            SubMenu = Menu
+            {
+                ItemList  =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_FM_NEW_FORM ;
+                        HelpID = SID_FM_NEW_FORM ;
+                        Text [ de ] = "~Formular" ;
+                        Text [ en-US ] = "Form" ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "~Formulário";
+                        Text[ ru ] = "~Форма";
+                        Text[ el ] = "~Φόρμα";
+                        Text[ nl ] = "~Formulier";
+                        Text[ fr ] = "~Formulaire";
+                        Text[ es ] = "~Formulario";
+                        Text[ fi ] = "Lomake";
+                        Text[ ca ] = "Formulari";
+                        Text[ it ] = "Formulario";
+                        Text[ sk ] = "Formulár";
+                        Text[ da ] = "~Formular";
+                        Text[ sv ] = "~Formulär";
+                        Text[ pl ] = "Formularz";
+                        Text[ pt-BR ] = "Formulário";
+                        Text[ th ] = "แบบฟอร์ม";
+                        Text[ ja ] = "フォーム";
+                        Text[ ko ] = "양식";
+                        Text[ zh-CN ] = "表单";
+                        Text[ zh-TW ] = "表單";
+                        Text[ tr ] = "Forum";
+                        Text[ hi-IN ] = "फ़ॉर्म";
+                        Text[ ar ] = "استمارة";
+                        Text[ he ] = "‮טופס‬";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_NEW_HIDDEN ;
+                        HelpID = SID_FM_NEW_HIDDEN ;
+                        Text [ de ] = "~verstecktes Control" ;
+                        Text [ en-US ] = "Hidden Control" ;
+                        Text [ x-comment ] = " ";
+                        Text[ pt ] = "Controlo o~culto";
+                        Text[ ru ] = "Скрытый элемент управления";
+                        Text[ el ] = "Κρυ~φό στοιχείο ελέγχου";
+                        Text[ nl ] = "~verborgen controle";
+                        Text[ fr ] = "C~ontrôle masqué";
+                        Text[ es ] = "~Control oculto";
+                        Text[ fi ] = "Piilotettu ohjausobjekti";
+                        Text[ ca ] = "Control ocult";
+                        Text[ it ] = "Controllo nascosto";
+                        Text[ sk ] = "Skrytý ovládací prvok";
+                        Text[ da ] = "Skjult kontrol";
+                        Text[ sv ] = "~Dold kontroll";
+                        Text[ pl ] = "Ukryty formant";
+                        Text[ pt-BR ] = "Controle oculto";
+                        Text[ th ] = "ตัวควบคุมที่ซ่อน";
+                        Text[ ja ] = "隠しコントロール";
+                        Text[ ko ] = "숨겨진 컨트롤";
+                        Text[ zh-CN ] = "隐入的控制";
+                        Text[ zh-TW ] = "隱入的控制項";
+                        Text[ tr ] = "Gizli komut alanı";
+                        Text[ hi-IN ] = "छिपा हुआ नियंत्रण";
+                        Text[ ar ] = "عنصر تحكم مخفي";
+                        Text[ he ] = "‮פקד מוסתר‬";
+                    };
+                };
+            };
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "Novo";
+            Text[ ru ] = "Созд~ать";
+            Text[ el ] = "~Δημιουργία";
+            Text[ nl ] = "~Nieuw";
+            Text[ fr ] = "Nouveau";
+            Text[ es ] = "N~uevo";
+            Text[ fi ] = "~Uusi";
+            Text[ ca ] = "~Nou";
+            Text[ it ] = "Nuovo";
+            Text[ sk ] = "~Nový";
+            Text[ da ] = "~Ny(t)";
+            Text[ sv ] = "~Nytt";
+            Text[ pl ] = "~Nowy";
+            Text[ pt-BR ] = "~Novo";
+            Text[ th ] = "ใ~หม่";
+            Text[ ja ] = "新規作成(~N)";
+            Text[ ko ] = "새로 만들기(~N)";
+            Text[ zh-CN ] = "新建(~N)";
+            Text[ zh-TW ] = "開啟新檔(~N)";
+            Text[ tr ] = "~Yeni";
+            Text[ hi-IN ] = "~नया";
+            Text[ ar ] = "~جديد";
+            Text[ he ] = "‮חדש‬";
+        };
+        MenuItem
+        {
+            Text [ de ] = "Ersetzen durch";
+            Identifier = SID_FM_CHANGECONTROLTYPE ;
+            HelpID = SID_FM_CHANGECONTROLTYPE ;
+            Text [ en-US ] = "Replace with";
+            Text[ pt ] = "Substituir por";
+            Text[ ru ] = "Заменить на";
+            Text[ el ] = "Αντικατάσταση με";
+            Text[ nl ] = "Vervangen door";
+            Text[ fr ] = "Remplacer par";
+            Text[ es ] = "Reemplazar por";
+            Text[ fi ] = "Korvaa objektilla";
+            Text[ ca ] = "Reemplaça amb";
+            Text[ it ] = "Sostituisci con";
+            Text[ sk ] = "Nahradiť za";
+            Text[ da ] = "Erstat med";
+            Text[ sv ] = "Ersätt med";
+            Text[ pl ] = "Zamień na";
+            Text[ pt-BR ] = "Substituir por";
+            Text[ th ] = "แทนที่ด้วย";
+            Text[ ja ] = "置き換え";
+            Text[ ko ] = "바꾸기";
+            Text[ zh-CN ] = "替换成";
+            Text[ zh-TW ] = "更替成";
+            Text[ tr ] = "Şununla değiştir...";
+            Text[ hi-IN ] = "से प्रतिस्थापित करो";
+            Text[ ar ] = "استبدال بـ";
+            Text[ he ] = "‮להחליף ב‬";
+            Text[ de ] = "Ersetzen durch";
+        };
+        MenuItem { ITEM_EDIT_CUT };
+        MenuItem { ITEM_EDIT_COPY };
+        MenuItem { ITEM_EDIT_PASTE };
+        MenuItem
+        {
+            Identifier = SID_FM_DELETE ;
+            HelpID = SID_FM_DELETE ;
+            Text [ de ] = "~Löschen" ;
+            Text [ en-US ] = "~Delete" ;
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "E~liminar";
+            Text[ ru ] = "Удалить";
+            Text[ el ] = "Διαγρα~φή";
+            Text[ nl ] = "Wi~ssen";
+            Text[ fr ] = "~Supprimer";
+            Text[ es ] = "~Borrar";
+            Text[ fi ] = "~Poista";
+            Text[ ca ] = "~Suprimeix";
+            Text[ it ] = "Elimina";
+            Text[ sk ] = "~Zmazať";
+            Text[ da ] = "~Slet";
+            Text[ sv ] = "~Radera";
+            Text[ pl ] = "~Usuń";
+            Text[ pt-BR ] = "E~xcluir";
+            Text[ th ] = "~ลบ";
+            Text[ ja ] = "削除(~D)";
+            Text[ ko ] = "삭제(~D)";
+            Text[ zh-CN ] = "删除(~D)";
+            Text[ zh-TW ] = "刪除(~D)";
+            Text[ tr ] = "Sil";
+            Text[ hi-IN ] = "~मिटाओ";
+            Text[ ar ] = "حذف";
+            Text[ he ] = "‮מחיקה‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_TAB_DIALOG ;
+            HelpID = SID_FM_TAB_DIALOG ;
+            Text [ de ] = "~Aktivierungsreihenfolge ..." ;
+            Text [ en-US ] = "Tab Order..." ;
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "Sequência de ~activação...";
+            Text[ ru ] = "Порядок активирования";
+            Text[ el ] = "Σ~ειρά ενεργοποίησης...";
+            Text[ nl ] = "Volgorde van a~ctivering";
+            Text[ fr ] = "Séquence d'activation ...";
+            Text[ es ] = "~Secuencia de activación...";
+            Text[ fi ] = "Sarkainjärjestys...";
+            Text[ ca ] = "Ordre de les pestanyes...";
+            Text[ it ] = "Sequenza di attivazione...";
+            Text[ sk ] = "Poradie aktivácie...";
+            Text[ da ] = "Aktiveringsrækkefølge...";
+            Text[ sv ] = "~Ordningsföljd för aktivering...";
+            Text[ pl ] = "Kolejność aktywacji...";
+            Text[ pt-BR ] = "Ordem da Tabulação...";
+            Text[ th ] = "ลำดับระยะกั้น...";
+            Text[ ja ] = "タブオーダー...";
+            Text[ ko ] = "활성화 순서...";
+            Text[ zh-CN ] = "轮换顺序...";
+            Text[ zh-TW ] = "啟動順序...";
+            Text[ tr ] = "Etkinleştirme sırası...";
+            Text[ hi-IN ] = "टॉब क्रम...";
+            Text[ ar ] = "ترتيب التنشيط...";
+            Text[ he ] = "‮סדר הטאבים‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_RENAME_OBJECT ;
+            HelpID = SID_FM_RENAME_OBJECT ;
+            Text [ de ] = "~Umbenennen" ;
+            Text [ en-US ] = "~Rename" ;
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "Mudar ~nome";
+            Text[ ru ] = "Переименовать";
+            Text[ el ] = "Μετονομασία";
+            Text[ nl ] = "~Naam wijzigen";
+            Text[ fr ] = "~Renommer";
+            Text[ es ] = "~Cambiar nombre";
+            Text[ fi ] = "~Nimeä uudelleen";
+            Text[ ca ] = "~Reanomena";
+            Text[ it ] = "Rinomina";
+            Text[ sk ] = "P~remenovať";
+            Text[ da ] = "Omdøb";
+            Text[ sv ] = "~Byt namn";
+            Text[ pl ] = "~Zmień nazwę";
+            Text[ pt-BR ] = "~Renomear";
+            Text[ th ] = "เ~ปลี่ยนชื่อ";
+            Text[ ja ] = "名前の変更(~R)";
+            Text[ ko ] = "이름 바꾸기(~R)";
+            Text[ zh-CN ] = "重命名(~R)";
+            Text[ zh-TW ] = "重新命名(~R)";
+            Text[ tr ] = "Yeniden adlandır";
+            Text[ hi-IN ] = "~पुनः नाम दो";
+            Text[ ar ] = "إعادة تسمية";
+            Text[ he ] = "‮שינוי שם‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_SHOW_PROPERTY_BROWSER ;
+            HelpID = SID_FM_SHOW_PROPERTY_BROWSER ;
+            Text [ de ] = "~Eigenschaften" ;
+            Text [ en-US ] = "Propert~ies" ;
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "~Propriedades";
+            Text[ ru ] = "Свойства";
+            Text[ el ] = "Ιδιότητ~ες";
+            Text[ nl ] = "~Eigenschappen";
+            Text[ fr ] = "~Propriétés";
+            Text[ es ] = "~Propiedades";
+            Text[ fi ] = "~Ominaisuudet";
+            Text[ ca ] = "Propie~tats";
+            Text[ it ] = "Proprietà";
+            Text[ sk ] = "Vlastnost~i";
+            Text[ da ] = "Egenskaber";
+            Text[ sv ] = "~Egenskaper";
+            Text[ pl ] = "~Właściwości";
+            Text[ pt-BR ] = "~Propriedades";
+            Text[ th ] = "คุณสม~บัติ";
+            Text[ ja ] = "プロパティ(~I)";
+            Text[ ko ] = "등록 정보(~I)";
+            Text[ zh-CN ] = "属性(~I)";
+            Text[ zh-TW ] = "屬性(~I)";
+            Text[ tr ] = "Özellikler";
+            Text[ hi-IN ] = "वि~शेषतायें";
+            Text[ ar ] = "خصائص";
+            Text[ he ] = "‮מאפיינים‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_OPEN_READONLY ;
+            HelpID = SID_FM_OPEN_READONLY ;
+            Text [ de ] = "Im Ent~wurfsmodus öffnen" ;
+            Text [ en-US ] = "Open in Design Mode" ;
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "Abrir no modo Es~boço";
+            Text[ ru ] = "Открыть в режиме проектирования";
+            Text[ el ] = "Άνοιγμα σε κατάσταση σ~χεδιασμού";
+            Text[ nl ] = "In ~ontwerpmodus openen";
+            Text[ fr ] = "Ouvrir en mode C~onception";
+            Text[ es ] = "~Abrir en modo diseño";
+            Text[ fi ] = "Avaa suunnittelutilassa";
+            Text[ ca ] = "Obre en mode disseny";
+            Text[ it ] = "Apri nel modo bozza";
+            Text[ sk ] = "Otvoriť v režime návrhu";
+            Text[ da ] = "Åbn i udkasttilstand";
+            Text[ sv ] = "Öppna i ~utkastläge";
+            Text[ pl ] = "Otwórz w trybie projektu";
+            Text[ pt-BR ] = "Abrir no Modo Esboço";
+            Text[ th ] = "เปิดในโหมดออกแบบ";
+            Text[ ja ] = "デザインモードで開く";
+            Text[ ko ] = "디자인 모드에서 열기";
+            Text[ zh-CN ] = "用设计模式打开";
+            Text[ zh-TW ] = "開啟設計模式";
+            Text[ tr ] = "Tasarım kipinde aç";
+            Text[ hi-IN ] = "डिसैन् प्रकार में खोलो";
+            Text[ ar ] = "فتح في وضع التصميم";
+            Text[ he ] = "‮פתיחה במצב עיצוב‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_AUTOCONTROLFOCUS ;
+            HelpID = SID_FM_AUTOCONTROLFOCUS ;
+            Text [ de ] = "Automatischer Kontrollelement-Fokus";
+            Text [ en-US ] = "Automatic Control Focus";
+            Text[ pt ] = "Foco automático de controlo";
+            Text[ ru ] = "Автофокус для элемента управления";
+            Text[ el ] = "Αυτόματη εστίαση στοιχείου ελέγχου";
+            Text[ nl ] = "Automatische controle focus";
+            Text[ fr ] = "Focalisation automatique sur l'élément de contrôle";
+            Text[ es ] = "Foco automático de control";
+            Text[ fi ] = "Automaattinen kohdistuksen ohjaus";
+            Text[ ca ] = "Focus automàtic de control";
+            Text[ it ] = "Punto focale automatico di controllo";
+            Text[ sk ] = "Automaticky zamerať ovládací prvok";
+            Text[ da ] = "Automatisk kontrolelement-fokus";
+            Text[ sv ] = "Automatisk fokus för kontrollelement";
+            Text[ pl ] = "Automatyczne ogniskowanie na formancie";
+            Text[ pt-BR ] = "Controle de Foco Automático";
+            Text[ th ] = "โฟกัสการควบคุมอัตโนมัติ";
+            Text[ ja ] = "オートコントロールフォーカス";
+            Text[ ko ] = "자동 초점 컨트롤 ";
+            Text[ zh-CN ] = "自动对准控制单元";
+            Text[ zh-TW ] = "自動對準控制項";
+            Text[ tr ] = "Otomatik odaklanma komutu";
+            Text[ hi-IN ] = "स्वचालित नियंत्रण केन्द्रिभूत";
+            Text[ ar ] = "تركيز تلقائي لعنصر التحكم";
+            Text[ he ] = "‮בקרת מיקוד אוטומטית‬";
+        };
+    };
+};
+
+Menu RID_FMSHELL_CONVERSIONMENU
+{
+    ItemList  =
+    {
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_EDIT ;
+            HelpID = SID_FM_CONVERTTO_EDIT ;
+            Text [ de ] = "~Textfeld" ;
+            Text [ en-US ] = "~Text Box";
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "~Caixa de texto";
+            Text[ ru ] = "Текстовое поле";
+            Text[ el ] = "Πεδίο ~κειμένου";
+            Text[ nl ] = "~Tekstveld";
+            Text[ fr ] = "Zone de ~texte";
+            Text[ es ] = "~Campo de texto";
+            Text[ fi ] = "~Tekstikehys";
+            Text[ ca ] = "Quadre de ~text";
+            Text[ it ] = "Campo di ~testo";
+            Text[ sk ] = "~Textové pole";
+            Text[ da ] = "Tekstfelt";
+            Text[ sv ] = "~Textfält";
+            Text[ pl ] = "Pole ~tekstowe";
+            Text[ pt-BR ] = "~Caixa de Texto";
+            Text[ th ] = "กล่อง~ข้อความ";
+            Text[ ja ] = "テキストボックス(~T)";
+            Text[ ko ] = "텍스트 필드(~T)";
+            Text[ zh-CN ] = "文本框(~T)";
+            Text[ zh-TW ] = "文字方塊(~T)";
+            Text[ tr ] = "Metin alanı";
+            Text[ hi-IN ] = "~टेक्स्ट् बॉक्स्";
+            Text[ ar ] = "حقل نص";
+            Text[ he ] = "‮תיבת טקסט‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_BUTTON ;
+            HelpID = SID_FM_CONVERTTO_BUTTON ;
+            Text [ de ] = "~Schältfläche" ;
+            Text [ en-US ] = "~Button";
+            Text[ pt ] = "~Botão";
+            Text[ ru ] = "Кнопка";
+            Text[ el ] = "Πεδίο επιλογή~ς";
+            Text[ nl ] = "~Knop";
+            Text[ fr ] = "~Bouton";
+            Text[ es ] = "~Botón";
+            Text[ fi ] = "~Painike";
+            Text[ ca ] = "~Botó";
+            Text[ it ] = "~Pulsante";
+            Text[ sk ] = "~Tlačidlo";
+            Text[ da ] = "Knap";
+            Text[ sv ] = "~Kommandoknapp";
+            Text[ pl ] = "~Przycisk";
+            Text[ pt-BR ] = "~Botão";
+            Text[ th ] = "~ปุ่ม";
+            Text[ ja ] = "ボタン(~B)";
+            Text[ ko ] = "버튼(~B)";
+            Text[ zh-CN ] = "按钮(~B)";
+            Text[ zh-TW ] = "按鈕(~B)";
+            Text[ tr ] = "Düğme";
+            Text[ hi-IN ] = "~बटन";
+            Text[ ar ] = "زر ضغط";
+            Text[ he ] = "‮כפתור‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_FIXEDTEXT ;
+            HelpID = SID_FM_CONVERTTO_FIXEDTEXT ;
+            Text [ de ] = "~Beschriftungsfeld" ;
+            Text [ en-US ] = "La~bel field";
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "Campo de ~rótulo";
+            Text[ ru ] = "Надпись";
+            Text[ el ] = "Πεδίο ε~πιγραφής";
+            Text[ nl ] = "~Titelveld";
+            Text[ fr ] = "~Champ d'étiquette";
+            Text[ es ] = "~Campo de etiqueta";
+            Text[ fi ] = "~Selitekenttä";
+            Text[ ca ] = "Cam~p d'etiqueta";
+            Text[ it ] = "Testo ~fisso";
+            Text[ sk ] = "~Popisné pole";
+            Text[ da ] = "Etiketfelt";
+            Text[ sv ] = "~Etikettfält";
+            Text[ pl ] = "Pole ~etykiety";
+            Text[ pt-BR ] = "~Campo de rótulo";
+            Text[ th ] = "ป้าย~ชื่อเขตข้อมูล";
+            Text[ ja ] = "ラベルフィールド(~B)";
+            Text[ ko ] = "레이블 필드(~B)";
+            Text[ zh-CN ] = "标签字段(~B)";
+            Text[ zh-TW ] = "標籤欄位(~B)";
+            Text[ tr ] = "Etiket alanı";
+            Text[ hi-IN ] = "लेबि~ल क्षेत्र";
+            Text[ ar ] = "حقل عنونة";
+            Text[ he ] = "‮שדה תוית‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_GROUPBOX ;
+            HelpID = SID_FM_CONVERTTO_GROUPBOX ;
+            Text [ de ] = "~Gruppierungsrahmen" ;
+            Text [ en-US ] = "G~roup Box";
+            Text[ pt ] = "Campo de g~rupo";
+            Text[ ru ] = "Групповой блок";
+            Text[ el ] = "Πλαίσιο ~ομαδοποίησης";
+            Text[ nl ] = "~Groepskader";
+            Text[ fr ] = "Zone de ~groupe";
+            Text[ es ] = "~Marco de grupo";
+            Text[ fi ] = "~Ryhmittele ruudut";
+            Text[ ca ] = "Quadre de g~rup";
+            Text[ it ] = "Casella di ~gruppo";
+            Text[ sk ] = "Zo~skupenie";
+            Text[ da ] = "Gruppeboks";
+            Text[ sv ] = "~Grupperingsram";
+            Text[ pl ] = "Pole g~rupy:";
+            Text[ pt-BR ] = "Caixa de ~Grupo";
+            Text[ th ] = "จัด~กลุ่มกล่อง";
+            Text[ ja ] = "グループボックス(~R)";
+            Text[ ko ] = "그룹 상자(~R)";
+            Text[ zh-CN ] = "小组框(~R)";
+            Text[ zh-TW ] = "群組方塊(~R)";
+            Text[ tr ] = "Grup çerçevesi";
+            Text[ hi-IN ] = "~समूह बॉक्स्";
+            Text[ ar ] = "كادر تجميع";
+            Text[ he ] = "‮תיבת קבוצה‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_LISTBOX ;
+            HelpID = SID_FM_CONVERTTO_LISTBOX ;
+            Text [ de ] = "~Listenfeld" ;
+            Text [ en-US ] = "L~ist Box";
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "Caixa de ~listagem";
+            Text[ ru ] = "Список";
+            Text[ el ] = "Πεδίο ~λίστας";
+            Text[ nl ] = "Ke~uzelijst";
+            Text[ fr ] = "Zone de ~liste";
+            Text[ es ] = "L~istado";
+            Text[ fi ] = "~Luetteloruutu";
+            Text[ ca ] = "Quadre de ll~ista";
+            Text[ it ] = "~Casella di riepilogo";
+            Text[ sk ] = "Pole ~zoznamu";
+            Text[ da ] = "Rulleliste";
+            Text[ sv ] = "L~istruta";
+            Text[ pl ] = "Pole l~isty";
+            Text[ pt-BR ] = "Caixa de ~listagem";
+            Text[ th ] = "กล่องรา~ยการ";
+            Text[ ja ] = "リストボックス(~I)";
+            Text[ ko ] = "목록 필드(~I)";
+            Text[ zh-CN ] = "列表框(~I)";
+            Text[ zh-TW ] = "清單方塊(~I)";
+            Text[ tr ] = "Liste alanı";
+            Text[ hi-IN ] = "सू~ची बॉक्स्";
+            Text[ ar ] = "مربع قائمة";
+            Text[ he ] = "‮תיבת רשימה‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_CHECKBOX ;
+            HelpID = SID_FM_CONVERTTO_CHECKBOX ;
+            Text [ de ] = "~Markierfeld" ;
+            Text [ en-US ] = "~Check Box";
+            Text[ pt ] = "Caixa de ~verificação";
+            Text[ ru ] = "Флажок";
+            Text[ el ] = "Πεδίο σή~μανσης";
+            Text[ nl ] = "~Markeerveld";
+            Text[ fr ] = "~Case à cocher";
+            Text[ es ] = "~Casilla de verificación";
+            Text[ fi ] = "~Valintaruutu";
+            Text[ ca ] = "~Casella de verificació";
+            Text[ it ] = "Casella di controllo";
+            Text[ sk ] = "~Zaškrtávacie políčko";
+            Text[ da ] = "Afkrydsningsfelt";
+            Text[ sv ] = "Kr~yssruta";
+            Text[ pl ] = "~Pole wyboru";
+            Text[ pt-BR ] = "~Caixa de verificação";
+            Text[ th ] = "กล่อง~กาเครื่องหมาย";
+            Text[ ja ] = "チェックボックス(~C)";
+            Text[ ko ] = "확인란(~C)";
+            Text[ zh-CN ] = "复选框(~C)";
+            Text[ zh-TW ] = "核取方塊(~C)";
+            Text[ tr ] = "Seçme kutusu";
+            Text[ hi-IN ] = "चे~क् बॉक्स्";
+            Text[ ar ] = "خانة اختيار";
+            Text[ he ] = "‮תיבת סימון‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_RADIOBUTTON ;
+            HelpID = SID_FM_CONVERTTO_RADIOBUTTON ;
+            Text [ de ] = "~Optionsfeld" ;
+            Text [ en-US ] = "~Radio Button";
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "B~otão de opção";
+            Text[ ru ] = "~Кнопка выбора вариантов";
+            Text[ el ] = "Πεδί~ο επιλογών";
+            Text[ nl ] = "~Optieveld";
+            Text[ fr ] = "Bouton ~radio";
+            Text[ es ] = "~Campo de opción";
+            Text[ fi ] = "~Valintanappi";
+            Text[ ca ] = "~Camp d'opció";
+            Text[ it ] = "Pulsante di scelta";
+            Text[ sk ] = "P~repínač";
+            Text[ da ] = "Alternativfelt";
+            Text[ sv ] = "~Alternativfält";
+            Text[ pl ] = "~Pole opcji";
+            Text[ pt-BR ] = "~Botão de Seleção";
+            Text[ th ] = "ปุ่ม~วิทยุ";
+            Text[ ja ] = "ラジオボタン(~R)";
+            Text[ ko ] = "옵션 필드(~R)";
+            Text[ zh-CN ] = "选项字段(~R)";
+            Text[ zh-TW ] = "選項欄位(~R)";
+            Text[ tr ] = "Seçenek düğmesi";
+            Text[ hi-IN ] = "~रेडियो बटन";
+            Text[ ar ] = "زر خيار";
+            Text[ he ] = "‮כפתור רדיו‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_COMBOBOX ;
+            HelpID = SID_FM_CONVERTTO_COMBOBOX ;
+            Text [ de ] = "~Kombinationsfeld" ;
+            Text [ en-US ] = "Combo Bo~x";
+            Text[ pt ] = "Caixa de com~binação";
+            Text[ ru ] = "Поле со списком";
+            Text[ el ] = "Πεδίο ~συνδυασμού";
+            Text[ nl ] = "~Combinatieveld";
+            Text[ fr ] = "Zone ~combinée";
+            Text[ es ] = "Cu~adro combinado";
+            Text[ fi ] = "~Yhdistelmäruutu";
+            Text[ ca ] = "Q~uadre combinat";
+            Text[ it ] = "Casella com~binata";
+            Text[ sk ] = "~Kombinované pole";
+            Text[ da ] = "Kombinationsboks";
+            Text[ sv ] = "~Kombinationsfält";
+            Text[ pl ] = "Pole ~kombi";
+            Text[ pt-BR ] = "Cai~xa de Combinação";
+            Text[ th ] = "กล่~องคอมโบ้ ";
+            Text[ ja ] = "コンボボックス(~X)";
+            Text[ ko ] = "콤보 상자(~X)";
+            Text[ zh-CN ] = "组合框(~X)";
+            Text[ zh-TW ] = "組合方框(~X)";
+            Text[ tr ] = "Kombinasyon alanı";
+            Text[ hi-IN ] = "कॉम्बो ~बॉक्स्";
+            Text[ ar ] = "مربع تحرير وسرد";
+            Text[ he ] = "‮תיבה משולבת‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_IMAGEBUTTON ;
+            HelpID = SID_FM_CONVERTTO_IMAGEBUTTON ;
+            Text [ de ] = "~Grafische Schaltfläche" ;
+            Text [ en-US ] = "I~mage Button";
+            Text[ pt ] = "Botão ~gráfico";
+            Text[ ru ] = "Графическая кнопка";
+            Text[ el ] = "~Γραφικό πεδίο επιλογής";
+            Text[ nl ] = "~Afbeeldingenknop";
+            Text[ fr ] = "Bouton ~picto";
+            Text[ es ] = "Botón g~ráfico";
+            Text[ fi ] = "~Kuvapainike";
+            Text[ ca ] = "Botó g~ràfic";
+            Text[ it ] = "P~ulsante immagine";
+            Text[ sk ] = "~Obrázkové tlačidlo";
+            Text[ da ] = "Grafisk knap";
+            Text[ sv ] = "~Grafisk kommandoknapp";
+            Text[ pl ] = "~Przycisk obrazkowy";
+            Text[ pt-BR ] = "Botão de I~magem";
+            Text[ th ] = "ปุ่มรูปภา~พ";
+            Text[ ja ] = "イメージボタン(~M)";
+            Text[ ko ] = "이미지 버튼(~M)";
+            Text[ zh-CN ] = "图形按钮(~M)";
+            Text[ zh-TW ] = "圖形按鈕(~M)";
+            Text[ tr ] = "Grafiksel düğme";
+            Text[ hi-IN ] = "चित्र ब~टन";
+            Text[ ar ] = "مفتاح مصوّر";
+            Text[ he ] = "‮כפתור צלם‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_FILECONTROL ;
+            HelpID = SID_FM_CONVERTTO_FILECONTROL ;
+            Text [ de ] = "~Dateiauswahl" ;
+            Text [ en-US ] = "~File Selection";
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "~Selecção de ficheiro";
+            Text[ ru ] = "~Выбор файла";
+            Text[ el ] = "Επιλογή ~αρχείου";
+            Text[ nl ] = "~Bestandselectie";
+            Text[ fr ] = "~Sélection de fichier";
+            Text[ es ] = "Selec~ción de archivo";
+            Text[ fi ] = "~Tiedoston valinta";
+            Text[ ca ] = "Selec~ció de fitxer";
+            Text[ it ] = "Scelta file";
+            Text[ sk ] = "Výber ~súboru";
+            Text[ da ] = "Filudvalg";
+            Text[ sv ] = "~Filurval";
+            Text[ pl ] = "Wybór ~plików";
+            Text[ pt-BR ] = "~Seleção de arquivo";
+            Text[ th ] = "เลือกแ~ฟ้ม";
+            Text[ ja ] = "ファイル選択(~F)";
+            Text[ ko ] = "파일 선택(~F)";
+            Text[ zh-CN ] = "选择文件(~F)";
+            Text[ zh-TW ] = "選擇檔案(~F)";
+            Text[ tr ] = "Dosya seçimi";
+            Text[ hi-IN ] = "~फाइल का चुनाव";
+            Text[ ar ] = "اختيار الملف";
+            Text[ he ] = "‮בחירת קובץ‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_DATE ;
+            HelpID = SID_FM_CONVERTTO_DATE ;
+            Text [ de ] = "D~atumsfeld" ;
+            Text [ en-US ] = "~Date Field";
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "Campo para d~ata";
+            Text[ ru ] = "Поле даты";
+            Text[ el ] = "Πεδίο ημερομηνί~ας";
+            Text[ nl ] = "~Datumveld";
+            Text[ fr ] = "Champ de ~date";
+            Text[ es ] = "Campo de ~fecha";
+            Text[ fi ] = "~Päivämääräkenttä";
+            Text[ ca ] = "Camp ~data";
+            Text[ it ] = "Campo ~data";
+            Text[ sk ] = "~Dátumové pole";
+            Text[ da ] = "Datofelt";
+            Text[ sv ] = "~Datumfält";
+            Text[ pl ] = "Pole ~daty";
+            Text[ pt-BR ] = "~Campo de Data";
+            Text[ th ] = "เขตข้อมูล~วันที่";
+            Text[ ja ] = "日付フィールド(~D)";
+            Text[ ko ] = "날짜 필드(~D)";
+            Text[ zh-CN ] = "日期字段(~D)";
+            Text[ zh-TW ] = "日期欄位(~D)";
+            Text[ tr ] = "Tarih alanı";
+            Text[ hi-IN ] = "~दिनांक क्षेत्र";
+            Text[ ar ] = "حقل التاريخ";
+            Text[ he ] = "‮שדה תאריך‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_TIME ;
+            HelpID = SID_FM_CONVERTTO_TIME ;
+            Text [ de ] = "~Zeitfeld" ;
+            Text [ en-US ] = "Tim~e Field";
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "Campo ~horário";
+            Text[ ru ] = "Поле времени";
+            Text[ el ] = "Πεδίο ώ~ρας";
+            Text[ nl ] = "~Tijdveld";
+            Text[ fr ] = "Champ ~horaire";
+            Text[ es ] = "Campo ~horario";
+            Text[ fi ] = "~Aikakenttä";
+            Text[ ca ] = "Camp t~emps";
+            Text[ it ] = "Campo ~orario";
+            Text[ sk ] = "Č~asové pole";
+            Text[ da ] = "Klokkeslætsfelt";
+            Text[ sv ] = "~Tidsfält";
+            Text[ pl ] = "~Pol~e godziny";
+            Text[ pt-BR ] = "Campo de ~hora";
+            Text[ th ] = "เขตข้อมูลเว~ลา";
+            Text[ ja ] = "時刻フィールド(~E)";
+            Text[ ko ] = "시간 필드(~E)";
+            Text[ zh-CN ] = "时间字段(~E)";
+            Text[ zh-TW ] = "時間欄位(~E)";
+            Text[ tr ] = "Zaman alanı";
+            Text[ hi-IN ] = "सम~य क्षेत्र";
+            Text[ ar ] = "حقل الوقت";
+            Text[ he ] = "‮שדה זמן‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_NUMERIC ;
+            HelpID = SID_FM_CONVERTTO_NUMERIC ;
+            Text [ de ] = "~Numerisches Feld" ;
+            Text [ en-US ] = "~Numerical Field";
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "~Campo ~numérico";
+            Text[ ru ] = "Числовое поле";
+            Text[ el ] = "Αρι~θμητικό πεδίο";
+            Text[ nl ] = "~Numeriek veld";
+            Text[ fr ] = "Champ ~numérique";
+            Text[ es ] = "C~ampo numérico";
+            Text[ fi ] = "~Numeerinen kenttä";
+            Text[ ca ] = "C~amp numèric";
+            Text[ it ] = "Campo ~numerico";
+            Text[ sk ] = "Čísel~né pole";
+            Text[ da ] = "Numerisk felt";
+            Text[ sv ] = "~Numeriskt fält";
+            Text[ pl ] = "~Pole liczbowe";
+            Text[ pt-BR ] = "~Campo numérico";
+            Text[ th ] = "เขตข้อมูล~ตัวเลข";
+            Text[ ja ] = "数値フィールド(~N)";
+            Text[ ko ] = "숫자 필드(~N)";
+            Text[ zh-CN ] = "数字字段(~N)";
+            Text[ zh-TW ] = "數字欄位(~N)";
+            Text[ tr ] = "Sayısal alan";
+            Text[ hi-IN ] = "~संख्या क्षेत्र";
+            Text[ ar ] = "حقل رقمي";
+            Text[ he ] = "‮שדה מספרי‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_CURRENCY ;
+            HelpID = SID_FM_CONVERTTO_CURRENCY ;
+            Text [ de ] = "~Währungsfeld" ;
+            Text [ en-US ] = "C~urrency Field";
+            Text[ pt ] = "Campo para moe~da";
+            Text[ ru ] = "Денежное поле";
+            Text[ el ] = "Πε~δίο νομίσματος";
+            Text[ nl ] = "~Valutaveld";
+            Text[ fr ] = "Champ ~monétaire";
+            Text[ es ] = "Cam~po de moneda";
+            Text[ fi ] = "~Valuuttakenttä";
+            Text[ ca ] = "Camp m~oneda";
+            Text[ it ] = "Campo di ~valuta";
+            Text[ sk ] = "~Menové pole";
+            Text[ da ] = "Valutafelt";
+            Text[ sv ] = "V~alutafält";
+            Text[ pl ] = "Pole ~walutowe";
+            Text[ pt-BR ] = "~Campo Monetário";
+            Text[ th ] = "เขตข้อมูลส~กุลเงิน";
+            Text[ ja ] = "通貨フィールド(~U)";
+            Text[ ko ] = "통화 필드(~U)";
+            Text[ zh-CN ] = "货币字段(~U)";
+            Text[ zh-TW ] = "貨幣欄位(~U)";
+            Text[ tr ] = "Para birimi alanı";
+            Text[ hi-IN ] = "~मुद्रा क्षेत्र";
+            Text[ ar ] = "حقل العملة";
+            Text[ he ] = "‮שדה מטבע‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_PATTERN ;
+            HelpID = SID_FM_CONVERTTO_PATTERN ;
+            Text [ de ] = "Mask~iertes Feld" ;
+            Text [ en-US ] = "~Pattern Field";
+            Text[ pt ] = "~Campo mascarado";
+            Text[ ru ] = "Поле с маской ввода";
+            Text[ el ] = "Καλ~υμμένο πεδίο";
+            Text[ nl ] = "~Patroonveld";
+            Text[ fr ] = "Champ ~masqué";
+            Text[ es ] = "Campo enmascarado";
+            Text[ fi ] = "~Kuviokenttä";
+            Text[ ca ] = "Camp s~eleccionat";
+            Text[ it ] = "Campo a ~maschera";
+            Text[ sk ] = "Pole ~vzorky";
+            Text[ da ] = "Maskeret felt";
+            Text[ sv ] = "~Maskerat fält";
+            Text[ pl ] = "~Pole wzorca";
+            Text[ pt-BR ] = "~Campo Padrão";
+            Text[ th ] = "เขตข้อมูล~ลวดลาย";
+            Text[ ja ] = "パターンフィールド(~P)";
+            Text[ ko ] = "패턴 필드(~P)";
+            Text[ zh-CN ] = "掩码字段(~P)";
+            Text[ zh-TW ] = "遮罩欄位(~P)";
+            Text[ tr ] = "Maskelenmiş alan";
+            Text[ hi-IN ] = "~नमूना क्षेत्र";
+            Text[ ar ] = "حقل مُقنَّع";
+            Text[ he ] = "‮שדה תבנית‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_IMAGECONTROL ;
+            HelpID = SID_FM_CONVERTTO_IMAGECONTROL ;
+            Text [ de ] = "G~rafisches Kontrollfeld" ;
+            Text [ en-US ] = "Ima~ge Control";
+            Text[ pt ] = "Controlo g~ráfico";
+            Text[ ru ] = "Графический элемент управления";
+            Text[ el ] = "Γ~ραφικό πεδίο ελέγχου";
+            Text[ nl ] = "Grafisch c~ontroleveld";
+            Text[ fr ] = "Contrôle ~picto";
+            Text[ es ] = "Control de ima~gen";
+            Text[ fi ] = "~Kuvan ohjaus";
+            Text[ ca ] = "Control d'imat~ge";
+            Text[ it ] = "Campo di controllo ~immagine";
+            Text[ sk ] = "Ovl~ádacie pole obrázku";
+            Text[ da ] = "Grafisk kontrolelement";
+            Text[ sv ] = "Gra~fiskt kontrollfält";
+            Text[ pl ] = "~Formant obrazkowy";
+            Text[ pt-BR ] = "Controle de ~imagem";
+            Text[ th ] = "ควบคุมภา~พ";
+            Text[ ja ] = "イメージコントロールフィールド(~G)";
+            Text[ ko ] = "이미지 컨트롤(~G)";
+            Text[ zh-CN ] = "图式控制(~G)";
+            Text[ zh-TW ] = "圖式控制項(~G)";
+            Text[ tr ] = "Grafiksel komut alanı";
+            Text[ hi-IN ] = "चित्र नियंत्र~ण";
+            Text[ ar ] = "عنصر تحكم رسومي";
+            Text[ he ] = "‮בקרת צלם‬";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_FORMATTED ;
+            HelpID = SID_FM_CONVERTTO_FORMATTED ;
+            Text [ de ] = "~Formatiertes Feld" ;
+            Text [ en-US ] = "Fo~rmatted Field";
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "Campo ~formatado";
+            Text[ ru ] = "Поле с форматированием";
+            Text[ el ] = "Μορ~φοποιημένο πεδίο";
+            Text[ nl ] = "Opge~maakt veld";
+            Text[ fr ] = "~Champ formaté";
+            Text[ es ] = "Campo for~mateado";
+            Text[ fi ] = "~Muotoiltu kenttä";
+            Text[ ca ] = "Camp fo~rmatat";
+            Text[ it ] = "Campo fo~rmattato";
+            Text[ sk ] = "Fo~rmátované pole";
+            Text[ da ] = "Formateret felt";
+            Text[ sv ] = "Fo~rmaterat fält";
+            Text[ pl ] = "Pole fo~rmatowane";
+            Text[ pt-BR ] = "Campo ~formatado";
+            Text[ th ] = "เขตข้อมูลการจัดรูปแ~บบ";
+            Text[ ja ] = "書式設定されたフィールド(~R)";
+            Text[ ko ] = "서식 있는 필드(~R)";
+            Text[ zh-CN ] = "格式化的字段(~R)";
+            Text[ zh-TW ] = "格式化的欄位(~R)";
+            Text[ tr ] = "Formatlı alan";
+            Text[ hi-IN ] = "रचना किया हु~आ क्षेत्र";
+            Text[ ar ] = "حقل مُنسَّق";
+            Text[ he ] = "‮שדה מעוצב‬";
+        };
+    };
+};
+
+#define NAVIGATOR_IMAGEIDS \
+    IdList = \
+    { \
+        RID_SVXIMG_BUTTON ; \
+        RID_SVXIMG_RADIOBUTTON ; \
+        RID_SVXIMG_CHECKBOX ; \
+        RID_SVXIMG_FIXEDTEXT ; \
+        RID_SVXIMG_GROUPBOX ; \
+        RID_SVXIMG_EDIT ; \
+        RID_SVXIMG_LISTBOX ; \
+        RID_SVXIMG_COMBOBOX ; \
+        RID_SVXIMG_URLBUTTON ; \
+        RID_SVXIMG_CONTROL ; \
+        RID_SVXIMG_FORM ; \
+        RID_SVXIMG_FORMS ; \
+        RID_SVXIMG_COLLAPSEDNODE ; \
+        RID_SVXIMG_EXPANDEDNODE ; \
+        RID_SVXIMG_IMAGEBUTTON ; \
+        RID_SVXIMG_FILECONTROL ; \
+        RID_SVXIMG_DATEFIELD ; \
+        RID_SVXIMG_TIMEFIELD ; \
+        RID_SVXIMG_NUMERICFIELD ; \
+        RID_SVXIMG_CURRENCYFIELD ; \
+        RID_SVXIMG_PATTERNFIELD ; \
+        RID_SVXIMG_HIDDEN ; \
+        RID_SVXIMG_IMAGECONTROL ; \
+        RID_SVXIMG_GRID ; \
+        RID_SVXIMG_FILTER ; \
+        RID_SVXIMG_FORMATTEDFIELD ; \
+        RID_SVXIMG_DATE_N_TIME_FIELDS ; \
+        RID_SVXIMG_FIELD ; \
+    }; \
+    IdCount = 28
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -58,7 +58,7 @@ _WriterDocumentState::_WriterDocumentState() :
 {
 }
 
-DocumentCollector::DocumentCollector(WPXInputStream *pInput, DocumentHandler *pHandler) :
+DocumentCollector::DocumentCollector(WPSInputStream *pInput, DocumentHandler *pHandler) :
         mpInput(pInput),
         mpHandler(pHandler),
     mbUsed(false),
@@ -226,7 +226,7 @@ void DocumentCollector::_writePageMasters(DocumentHandler *pHandler)
 }
 
 bool DocumentCollector::_writeTargetDocument(DocumentHandler *pHandler)
-{
+{        
     WRITER_DEBUG_MSG(("WriterWordPerfect: Document Body: Printing out the header stuff..\n"));
     WPXPropertyList xBlankAttrList;
 
@@ -275,11 +275,11 @@ bool DocumentCollector::_writeTargetDocument(DocumentHandler *pHandler)
 
     mpHandler->startElement("office:automatic-styles", xBlankAttrList);
 
-    for (std::map<WPXString, ParagraphStyle *, ltstr>::iterator iterTextStyle = mTextStyleHash.begin();
-             iterTextStyle != mTextStyleHash.end(); iterTextStyle++)
+    for (std::map<WPXString, ParagraphStyle *, ltstr>::iterator iterTextStyle = mTextStyleHash.begin(); 
+             iterTextStyle != mTextStyleHash.end(); iterTextStyle++) 
         {
         // writing out the paragraph styles
-        if (strcmp((iterTextStyle->second)->getName().cstr(), "Standard"))
+        if (strcmp((iterTextStyle->second)->getName().cstr(), "Standard")) 
                 {
             // don't write standard paragraph "no styles" style
             (iterTextStyle->second)->write(pHandler);
@@ -287,8 +287,8 @@ bool DocumentCollector::_writeTargetDocument(DocumentHandler *pHandler)
     }
 
         // span styles..
-    for (std::map<WPXString, SpanStyle *, ltstr>::iterator iterSpanStyle = mSpanStyleHash.begin();
-             iterSpanStyle != mSpanStyleHash.end(); iterSpanStyle++)
+    for (std::map<WPXString, SpanStyle *, ltstr>::iterator iterSpanStyle = mSpanStyleHash.begin(); 
+             iterSpanStyle != mSpanStyleHash.end(); iterSpanStyle++) 
         {
                 (iterSpanStyle->second)->write(pHandler);
     }
@@ -351,7 +351,7 @@ WPXString propListToStyleKey(const WPXPropertyList & xPropList)
 WPXString getParagraphStyleKey(const WPXPropertyList & xPropList, const WPXPropertyListVector & xTabStops)
 {
         WPXString sKey = propListToStyleKey(xPropList);
-
+        
         WPXString sTabStops;
         sTabStops.sprintf("[num-tab-stops:%i]", xTabStops.count());
         WPXPropertyListVector::Iter i(xTabStops);
@@ -430,10 +430,10 @@ void DocumentCollector::openSection(const WPXPropertyList &propList, const WPXPr
         mfSectionSpaceAfter = propList["fo:margin-bottom"]->getFloat();
         WPXString sSectionName;
         sSectionName.sprintf("Section%i", mSectionStyles.size());
-
+        
         SectionStyle *pSectionStyle = new SectionStyle(propList, columns, sSectionName.cstr());
         mSectionStyles.push_back(pSectionStyle);
-
+        
         TagOpenElement *pSectionOpenElement = new TagOpenElement("text:section");
         pSectionOpenElement->addAttribute("text:style-name", pSectionStyle->getName());
         pSectionOpenElement->addAttribute("text:name", pSectionStyle->getName());
@@ -466,16 +466,16 @@ void DocumentCollector::openParagraph(const WPXPropertyList &propList, const WPX
 {
     // FIXMENOW: What happens if we open a footnote inside a table? do we then inherit the footnote's style
     // from "Table Contents"
-
+    
     WPXPropertyList *pPersistPropList = new WPXPropertyList(propList);
     ParagraphStyle *pStyle = NULL;
 
     if (mWriterDocumentState.mbFirstElement && mpCurrentContentElements == &mBodyElements)
     {
-        // we don't have to go through the fuss of determining if the paragraph style is
+        // we don't have to go through the fuss of determining if the paragraph style is 
         // unique in this case, because if we are the first document element, then we
         // are singular. Neither do we have to determine what our parent style is-- we can't
-        // be inside a table in this case (the table would be the first document element
+        // be inside a table in this case (the table would be the first document element 
         //in that case)
         pPersistPropList->insert("style:parent-style-name", "Standard");
         WPXString sName;
@@ -503,10 +503,10 @@ void DocumentCollector::openParagraph(const WPXPropertyList &propList, const WPX
 
         if (mTextStyleHash.find(sKey) == mTextStyleHash.end()) {
             WPXString sName;
-            sName.sprintf("S%i", mTextStyleHash.size());
-
+            sName.sprintf("S%i", mTextStyleHash.size()); 
+            
             pStyle = new ParagraphStyle(pPersistPropList, tabStops, sName);
-
+    
             mTextStyleHash[sKey] = pStyle;
         }
         else
@@ -539,11 +539,11 @@ void DocumentCollector::openSpan(const WPXPropertyList &propList)
         {
         // allocate a new paragraph style
         sName.sprintf("Span%i", mSpanStyleHash.size());
-        SpanStyle *pStyle = new SpanStyle(sName.cstr(), propList);
+        SpanStyle *pStyle = new SpanStyle(sName.cstr(), propList);                
 
         mSpanStyleHash[sSpanHashKey] = pStyle;
     }
-    else
+    else 
         {
         sName.sprintf("%s", mSpanStyleHash.find(sSpanHashKey)->second->getName().cstr());
     }
@@ -574,7 +574,7 @@ void DocumentCollector::defineOrderedListLevel(const WPXPropertyList &propList)
     // from the list that is just being defined (listIDs differ) OR (3) we can tell that the user actually
     // is starting a new list at level 1 (and only level 1)
     if (pOrderedListStyle == NULL || pOrderedListStyle->getListID() != id  ||
-        (propList["libwpd:level"] && propList["libwpd:level"]->getInt()==1 &&
+        (propList["libwpd:level"] && propList["libwpd:level"]->getInt()==1 && 
              (propList["text:start-value"] && (unsigned int)(propList["text:start-value"]->getInt()) != (miLastListNumber+1))))
     {
         WRITER_DEBUG_MSG(("Attempting to create a new ordered list style (listid: %i)\n", id));
@@ -711,13 +711,13 @@ void DocumentCollector::openListElement(const WPXPropertyList &propList, const W
 
         WPXString sKey = getParagraphStyleKey(*pPersistPropList, tabStops);
 
-        if (mTextStyleHash.find(sKey) == mTextStyleHash.end())
+        if (mTextStyleHash.find(sKey) == mTextStyleHash.end()) 
         {
                 WPXString sName;
-                sName.sprintf("S%i", mTextStyleHash.size());
-
+                sName.sprintf("S%i", mTextStyleHash.size()); 
+        
                 pStyle = new ParagraphStyle(pPersistPropList, tabStops, sName);
-
+                
                 mTextStyleHash[sKey] = pStyle;
         }
         else
@@ -733,7 +733,7 @@ void DocumentCollector::openListElement(const WPXPropertyList &propList, const W
 
     mpCurrentContentElements->push_back(static_cast<DocumentElement *>(pOpenListElement));
     mpCurrentContentElements->push_back(static_cast<DocumentElement *>(pOpenListElementParagraph));
-
+        
     mbListElementOpened = true;
     mbListElementParagraphOpened = true;
     mbListContinueNumbering = false;
@@ -769,7 +769,7 @@ void DocumentCollector::openFootnote(const WPXPropertyList &propList)
     mpCurrentContentElements->push_back(static_cast<DocumentElement *>(new TagCloseElement("text:footnote-citation")));
 
     mpCurrentContentElements->push_back(static_cast<DocumentElement *>(new TagOpenElement("text:footnote-body")));
-
+    
     mWriterDocumentState.mbInNote = true;
 }
 
@@ -833,7 +833,7 @@ void DocumentCollector::openTable(const WPXPropertyList &propList, const WPXProp
     pTableOpenElement->addAttribute("table:style-name", sTableName.cstr());
     mpCurrentContentElements->push_back(static_cast<DocumentElement *>(pTableOpenElement));
 
-    for (int i=0; i<pTableStyle->getNumColumns(); i++)
+    for (int i=0; i<pTableStyle->getNumColumns(); i++) 
         {
         TagOpenElement *pTableColumnOpenElement = new TagOpenElement("table:table-column");
         WPXString sColumnStyleName;
@@ -858,7 +858,7 @@ void DocumentCollector::openTableRow(const WPXPropertyList &propList)
     sTableRowStyleName.sprintf("%s.Row%i", mpCurrentTableStyle->getName().cstr(), mpCurrentTableStyle->getNumTableRowStyles());
     TableRowStyle *pTableRowStyle = new TableRowStyle(propList, sTableRowStyleName.cstr());
     mpCurrentTableStyle->addTableRowStyle(pTableRowStyle);
-
+    
     TagOpenElement *pTableRowOpenElement = new TagOpenElement("table:table-row");
     pTableRowOpenElement->addAttribute("table:style-name", sTableRowStyleName);
     mpCurrentContentElements->push_back(static_cast<DocumentElement *>(pTableRowOpenElement));
@@ -884,7 +884,7 @@ void DocumentCollector::openTableCell(const WPXPropertyList &propList)
     TagOpenElement *pTableCellOpenElement = new TagOpenElement("table:table-cell");
     pTableCellOpenElement->addAttribute("table:style-name", sTableCellStyleName);
     if (propList["table:number-columns-spanned"])
-                pTableCellOpenElement->addAttribute("table:number-columns-spanned",
+                pTableCellOpenElement->addAttribute("table:number-columns-spanned", 
                                                     propList["table:number-columns-spanned"]->getStr().cstr());
         if (propList["table:number-rows-spanned"])
                 pTableCellOpenElement->addAttribute("table:number-rows-spanned",

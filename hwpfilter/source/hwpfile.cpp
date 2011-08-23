@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,16 +116,16 @@ int HWPFile::ReadHwpFile(HStream & stream)
 {
     if (Open(stream) != HWP_NoError)
         return State();
-//  printf("HWPFile::ReadHwpFile\n");
+//	printf("HWPFile::ReadHwpFile\n");
     InfoRead();
-//  printf("HWPFile::InfoRead Done.\n");
+//	printf("HWPFile::InfoRead Done.\n");
     FontRead();
-//  printf("HWPFile::FontRead Done.\n");
+//	printf("HWPFile::FontRead Done.\n");
     StyleRead();
-//  printf("HWPFile::StyleRead Done.\n");
+//	printf("HWPFile::StyleRead Done.\n");
     AddColumnInfo();
     ParaListRead();
-//  printf("HWPFile::ParaListRead Done.\n");
+//	printf("HWPFile::ParaListRead Done.\n");
     TagsRead();
     //printf("HWPFile::TagsRead Done. State: %d\n", State());
 

@@ -9,7 +9,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
 WPXSvInputStream::WPXSvInputStream( Reference< XInputStream > xStream ) :
-        WPXInputStream(true),
+        WPSInputStream(),
         mxChildStorage(),
         mxChildStream(),
         mxStream(xStream),
@@ -83,7 +83,7 @@ int WPXSvInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
 
     int retVal = 0;
     if (tmpOffset < 0)
-    {
+    {	
         tmpOffset = 0;
         retVal = -1;
     }

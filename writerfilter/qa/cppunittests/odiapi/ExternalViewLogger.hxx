@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,11 +39,11 @@
 #include <boost/shared_ptr.hpp>
 
 namespace util {
-
+ 
   struct NodeDescription
   {
     typedef boost::shared_ptr<NodeDescription> Pointer_t;
-
+    
     NodeDescription(const std::string& parent, const std::string& refersTo, const std::string& value, bool inUse);
 
     std::string mParentNodeId;
@@ -51,14 +51,14 @@ namespace util {
     std::string mNodeValue;
     bool mInUse;
   };
-
+  
   /** A file logger
    */
   class ExternalViewLoggerImpl : public Logger
   {
   public:
     ExternalViewLoggerImpl(const std::string& fileName);
-
+  
     virtual void beginTree();
     virtual void endTree();
 
@@ -78,10 +78,10 @@ namespace util {
 
   private:
     typedef std::map<std::string, NodeDescription::Pointer_t> NodeContainer_t;
-
+    
     std::string mFileName;
     NodeContainer_t mNodeContainer;
-    std::ofstream mFile;
+    std::ofstream mFile;  
     std::stack<std::string> mParentNodeStack;
   };
 

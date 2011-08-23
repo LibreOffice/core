@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ protected:
     virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(RuntimeException);
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
-    virtual Dialog* createDialog( Window* pParent );
+    virtual Dialog*	createDialog( Window* pParent );
     virtual void executedDialog( sal_Int16 nExecutionResult );
     virtual Reference< XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(RuntimeException);
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
@@ -76,9 +76,9 @@ protected:
     virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException);
 
 public:
-
+    
                 PDFDialog( const Reference< XMultiServiceFactory >& rxMSF );
-    virtual     ~PDFDialog();
+    virtual		~PDFDialog();
 };
 
 // -----------------------------------------------------------------------------

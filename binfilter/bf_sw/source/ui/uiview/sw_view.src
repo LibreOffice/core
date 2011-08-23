@@ -1,0 +1,361 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+#include <bf_svx/svxids.hrc>
+#include <bf_svx/globlmn.hrc>
+#include "view.hrc"
+#include "shells.hrc"
+#include "globals.hrc"
+#include "popup.hrc"
+#include "helpid.h"
+#include "cmdid.h"
+
+
+String STR_NUM_LEVEL
+{
+    Text [ de ] = "Ebene " ;
+    Text [ en-US ] = "Level " ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Nível ";
+    Text[ ru ] = "Уровень  ";
+    Text[ el ] = "Επίπεδο ";
+    Text[ nl ] = "Niveau";
+    Text[ fr ] = "Niveau ";
+    Text[ es ] = "Nivel  ";
+    Text[ fi ] = "Taso ";
+    Text[ ca ] = "Nivell ";
+    Text[ it ] = "Livello ";
+    Text[ sk ] = "Úroveň ";
+    Text[ da ] = "Niveau ";
+    Text[ sv ] = "Nivå ";
+    Text[ pl ] = "Poziom  ";
+    Text[ pt-BR ] = "Nível";
+    Text[ th ] = "ระดับ ";
+    Text[ ja ] = "レベル ";
+    Text[ ko ] = "수준 ";
+    Text[ zh-CN ] = "级 ";
+    Text[ zh-TW ] = "級 ";
+    Text[ tr ] = "Düzey ";
+    Text[ hi-IN ] = "स्तर";
+    Text[ ar ] = "المستوى";
+    Text[ he ] = "Ebene";
+};
+
+String RID_TOOLS_TOOLBOX
+{
+    Text [ de ] = "Werkzeugleiste" ;
+    Text [ en-US ] = "Main Toolbar" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Barra de ferramentas";
+    Text[ ru ] = "Панель инструментов";
+    Text[ el ] = "Κύρια γραμμή εργαλείων";
+    Text[ nl ] = "Werktuigbalk";
+    Text[ fr ] = "Barre d'instruments";
+    Text[ es ] = "Barra de herramientas";
+    Text[ fi ] = "Päätyökalurivi";
+    Text[ ca ] = "Barra d'eines principal";
+    Text[ it ] = "Barra degli strumenti";
+    Text[ sk ] = "Hlavný panel nástrojov";
+    Text[ da ] = "Værktøjslinje";
+    Text[ sv ] = "Verktygslist";
+    Text[ pl ] = "Główny pasek narzędzi";
+    Text[ pt-BR ] = "Barra de Ferramentas Principal";
+    Text[ th ] = "แถบเครื่องมือหลัก";
+    Text[ ja ] = "標準ツールバー";
+    Text[ ko ] = "주 도구 모음";
+    Text[ zh-CN ] = "主工具栏";
+    Text[ zh-TW ] = "主工具列";
+    Text[ tr ] = "Ana araç çubuğu";
+    Text[ hi-IN ] = "मुख्य औज़ार पट्टी";
+    Text[ ar ] = "شريط الأدوات";
+    Text[ he ] = "‮סרגל ראשי‬";
+};
+
+String STR_READONLY_SEL
+{
+    Text [ de ] = "schreibgeschützt" ;
+    Text [ en-US ] = "read-only";
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "só leitura";
+    Text[ ru ] = "только для чтения";
+    Text[ el ] = "μόνο για ανάγνωση";
+    Text[ nl ] = "Alleen-lezen";
+    Text[ fr ] = "en lecture seule";
+    Text[ es ] = "sólo lectura";
+    Text[ fi ] = "Vain luku";
+    Text[ ca ] = "només de lectura";
+    Text[ it ] = "a sola lettura";
+    Text[ sk ] = "len na čítanie";
+    Text[ da ] = "skrivebeskyttet";
+    Text[ sv ] = "skrivskyddad";
+    Text[ pl ] = "Tylko do odczytu";
+    Text[ pt-BR ] = "somente leitura";
+    Text[ th ] = "อ่านอย่างเดียว";
+    Text[ ja ] = "読み取り専用";
+    Text[ ko ] = "읽기 전용";
+    Text[ zh-CN ] = "防改写";
+    Text[ zh-TW ] = "唯讀";
+    Text[ tr ] = "okuma amaçlı";
+    Text[ hi-IN ] = "केवल पढ़ने केलिए";
+    Text[ ar ] = "للقراءة فقط";
+    Text[ he ] = "‮קריאה בלבד‬";
+};
+
+String MN_SRCVIEW_POPUPMENU
+{
+    Text [ de ] = "HTML - Quelltext" ;
+    Text [ en-US ] = "HTML source" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Fonte HTML";
+    Text[ ru ] = "Исходный текст в формате HTML";
+    Text[ el ] = "Αρχείο προέλευσης HTML";
+    Text[ nl ] = "HTML-brontekst";
+    Text[ fr ] = "Texte source HTML";
+    Text[ es ] = "Texto fuente HTML";
+    Text[ fi ] = "HTML-lähde";
+    Text[ ca ] = "Font HTML";
+    Text[ it ] = "Testo sorgente HTML";
+    Text[ sk ] = "Zdrojový HTML text";
+    Text[ da ] = "HTML-kildetekst";
+    Text[ sv ] = "HTML-källtext";
+    Text[ pl ] = "Tekst źródłowy HTML";
+    Text[ pt-BR ] = "Origem HTML";
+    Text[ th ] = "แหล่ง HTML ";
+    Text[ ja ] = "HTML ソーステキスト";
+    Text[ ko ] = "HTML 원본";
+    Text[ zh-CN ] = "HTML 源文本";
+    Text[ zh-TW ] = "HTML 原始檔";
+    Text[ tr ] = "HTML kodu";
+    Text[ hi-IN ] = "HTML मूल";
+    Text[ ar ] = "نص مصدر HTML";
+    Text[ he ] = "HTML‮קוד ‬";
+};
+
+ToolBox RID_TOOLS_TOOLBOX
+{
+    HelpID = HID_TOOLS_TOOLBOX ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    LineSpacing = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Scroll = TRUE ;
+    Align = BOXALIGN_LEFT ;
+    Hide = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = FN_INSERT_CTRL ;
+            HelpID = HID_INSERT_CTRL ;
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_INSERT_FIELD_CTRL ;
+            HelpID = HID_INSERT_FIELD_CTRL ;
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_INSERT_OBJ_CTRL ;
+            HelpID = HID_INSERT_OBJ_CTRL ;
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_INSERT_DRAW
+        };
+        ToolBoxItem
+        {
+            ITEM_FORM_CONFIG
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_GLOSSARY_DLG ;
+            HelpID = FN_GLOSSARY_DLG ;
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_INSERT_CAPTION;
+            HelpID = FN_INSERT_CAPTION ;
+            Hide = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_INSERT_IDX_ENTRY_DLG;
+            HelpId = FN_INSERT_IDX_ENTRY_DLG;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_INSERT_REF_FIELD;
+            HelpID = FN_INSERT_REF_FIELD ;
+            Hide = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_SHADOWCURSOR ;
+            HelpID = FN_SHADOWCURSOR ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_SPELLING_DLG ;
+            HelpID = FN_SPELLING_DLG ;
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_AUTOSPELL_CHECK
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_HYPHENATE_OPT_DLG;
+            HelpID = FN_HYPHENATE_OPT_DLG;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_THESAURUS_DLG;
+            HelpID = FN_THESAURUS_DLG;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_SEARCH_DLG ;
+            HelpID = SID_SEARCH_DLG ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_VIEW_DATA_SOURCE_BROWSER ;
+            HelpID = SID_VIEW_DATA_SOURCE_BROWSER ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_ZOOM;
+            HelpID = SID_ATTR_ZOOM ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_VIEW_META_CHARS ;
+            HelpID = FN_VIEW_META_CHARS ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_VIEW_FIELDNAME ;
+            HelpID = FN_VIEW_FIELDNAME ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_VIEW_GRAPHIC ;
+            HelpID = FN_VIEW_GRAPHIC ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BROWSER_MODE ;
+            HelpID = SID_BROWSER_MODE ;
+        };
+    };
+};
+Menu MN_SRCVIEW_POPUPMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONT
+        };
+        MenuItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONTHEIGHT
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = SID_SOURCEVIEW ;
+            HelpID = HID_SOURCEVIEW ;
+            Text [ de ] = "HTML-Quelltext" ;
+            Text [ en-US ] = "HTML Source" ;
+            Text [ x-comment ] = " ";
+            Text[ pt ] = "Fonte HTML";
+            Text[ ru ] = "Исходный текст в формате HTML";
+            Text[ el ] = "Κείμενο προέλευσης HTML";
+            Text[ nl ] = "HTML-brontekst";
+            Text[ fr ] = "Texte source HTML";
+            Text[ es ] = "Texto fuente HTML";
+            Text[ fi ] = "HTML-lähde";
+            Text[ ca ] = "Font HTML";
+            Text[ it ] = "Testo sorgente HTML";
+            Text[ sk ] = "Zdrojový HTML text";
+            Text[ da ] = "HTML-kildetekst";
+            Text[ sv ] = "HTML-källtext";
+            Text[ pl ] = "Tekst źródłowy HTML";
+            Text[ pt-BR ] = "Origem HTML";
+            Text[ th ] = "แหล่ง HTML ";
+            Text[ ja ] = "HTML ソーステキスト";
+            Text[ ko ] = "HTML 원본";
+            Text[ zh-CN ] = "HTML 源文本";
+            Text[ zh-TW ] = "HTML 原始檔";
+            Text[ tr ] = "HTML kodu";
+            Text[ hi-IN ] = "HTML मूल";
+            Text[ ar ] = "نص مصدر HTML";
+            Text[ he ] = "HTML‮קוד ‬";
+        };
+    };
+};

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ class MSFILTER_DLLPUBLIC SvxImportMSVBasic
 public:
     SvxImportMSVBasic( SfxObjectShell &rDocS, SotStorage &rRoot,
                         BOOL bImportCode = TRUE, BOOL bCopyStorage = TRUE )
-        :   xRoot(&rRoot), rDocSh(rDocS),
+        :	xRoot(&rRoot), rDocSh(rDocS),
             bImport(bImportCode), bCopy(bCopyStorage)
         {}
     // returns the status of import:
@@ -89,7 +89,7 @@ private:
                           const String &rSubStorageName,
                           const std::vector< String >& codeNames,
                           BOOL bAsComment, BOOL bStripped);
-    MSFILTER_DLLPRIVATE bool ImportForms_Impl(const String& rStorageName,
+    MSFILTER_DLLPRIVATE bool ImportForms_Impl(const String& rStorageName, 
         const String &rSubStorageName);
     MSFILTER_DLLPRIVATE BOOL CopyStorage_Impl( const String& rStorageName,
                            const String &rSubStorageName);

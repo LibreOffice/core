@@ -1,0 +1,120 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#define SDR_ResourceBegin            2560
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Achtung: Alle Strings zwischen SDR_StringCacheBegin und
+// SDR_StringCacheEnd muessen buendig aneinander liegen.
+#define SDR_StringCacheBegin         (SDR_ResourceBegin)
+
+//changed by jmeng begin
+#define STR_ObjNameEnd	(SDR_StringCacheBegin + 140)
+//chnaged by jmeng end
+
+#define STR_EditBegin                (STR_ObjNameEnd+1)
+//changed by jmeng begin
+#define STR_EditEnd                  (STR_EditBegin  + 57)
+//changed by jmeng end
+
+#define STR_ExchangeBegin            (STR_EditEnd+1)
+//changed by jmeng begin
+#define STR_ExchangeEnd                  (STR_ExchangeBegin  + 4)
+//changed by jmeng end
+
+
+#define STR_DragBegin                (STR_ExchangeEnd+1)
+//changed by jmeng begin
+#define STR_DragEnd                  (STR_DragBegin +23)
+//changed by jmeng end
+
+#define STR_ViewBegin                (STR_DragEnd+1)
+#define STR_ViewTextEdit             (STR_ViewBegin + 0)
+#define STR_ViewMarkPoints           (STR_ViewBegin + 8)
+#define STR_ViewMarkGluePoints       (STR_ViewBegin +10)
+#define STR_ViewMarkMoreGluePoints   (STR_ViewBegin +11)
+//changed by jmeng begin
+#define STR_ViewEnd                  (STR_ViewBegin +12)
+//changed by jmeng end
+
+#define STR_UndoBegin                (STR_ViewEnd+1)
+//changed by jmeng begin
+#define STR_UndoEnd                  (STR_UndoBegin +15)
+//changed by jmeng end
+
+
+#define STR_LayerBegin               (STR_UndoEnd+1)
+#define STR_StandardLayerName        (STR_LayerBegin +0)
+//changed by jmeng begin
+#define STR_LayerEnd                  (STR_LayerBegin +0)
+//changed by jmeng end
+
+
+#define STR_ItemBegin                    (STR_LayerEnd+1)
+#define STR_ItemValBegin                 (STR_ItemBegin)
+//changed by jmeng begin
+#define STR_ItemValEnd                   (STR_ItemValBegin + 52)
+//changed by jmeng end 
+
+#define STR_ItemNamBegin                 (STR_ItemValEnd+1)
+//changed by jmeng
+#define STR_ItemEnd                      (STR_ItemNamBegin + 73)
+//changed by jmeng
+
+// 64 Resource-Id's reserviert fuer kompatible Erweiterungen
+#define STR_SvDraw_CacheReserve_Begin    (STR_ItemEnd+1)
+#define STR_SvDraw_CacheReserve_End      (STR_SvDraw_CacheReserve_Begin+63)
+#define SDR_StringCacheEnd               (STR_SvDraw_CacheReserve_Begin-1)
+
+#define STR_ErrorBegin                   (STR_SvDraw_CacheReserve_End+1)
+#define STR_SvDraw_ErrorReserve_Begin    (STR_ErrorBegin + 2)
+// hier ist Platz fuer 30 Eintraege
+#define STR_SvDraw_ErrorReserve_End      (STR_SvDraw_ErrorReserve_Begin + 29)
+#define STR_ErrorEnd                     STR_SvDraw_ErrorReserve_End
+
+// 22-05-98: 2 Eintraege fuer die Bitmaps von der StrErrorReserve abgeknapst
+#define BMAP_Begin                       (STR_ErrorEnd+1)
+#define BMAP_GrafikEi                    (BMAP_Begin +0)
+#define BMAP_End                         (BMAP_Begin +1)
+
+// Strings fuer den Vorlagen-Dialog
+#define	SIP_Begin							(BMAP_End)
+
+
+
+
+// #100499#
+
+// #101928#
+
+
+#define SDR_ResourceEnd						(SIP_End)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+

@@ -1,0 +1,840 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+
+
+#include <bf_svtools/style.hrc>
+#include <bf_sfx2/sfx.hrc>
+#include <bf_svx/dialogs.hrc>
+#include <bf_svx/globlmn.hrc>
+#include "cmdid.h"
+#include "globals.hrc"
+#include "app.hrc"
+#include "statstr.hrc"
+#include "swstyle.h"
+#include "comcore.hrc"
+#include "shells.hrc"
+#include "helpid.h"
+
+String RID_SW_NAME
+{
+    Text  = "StarWriter" ;
+};
+
+String STR_PRINT_MERGE_MACRO
+{
+    Text [ de ] = "Serienbriefe drucken" ;
+    Text [ en-US ] = "Print form letters" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Imprimir cartas em série";
+    Text[ ru ] = "Печать сформированных писем";
+    Text[ el ] = "Εκτύπωση εγκυκλίου επιστολής";
+    Text[ nl ] = "Standaardbrieven afdrukken";
+    Text[ fr ] = "Imprimer les lettres types";
+    Text[ es ] = "Imprimir cartas en serie";
+    Text[ fi ] = "Tulosta joukkokirjeet";
+    Text[ ca ] = "Imprimeix les cartes de formulari";
+    Text[ it ] = "Stampa in serie";
+    Text[ sk ] = "Tlačiť štandardný list";
+    Text[ da ] = "Udskriv flettede breve";
+    Text[ sv ] = "Skriv ut standardbrev";
+    Text[ pl ] = "Drukuj listy seryjne";
+    Text[ pt-BR ] = "Imprimir mala direta";
+    Text[ th ] = "พิมพ์แบบตัวอักษร";
+    Text[ ja ] = "差し込み印刷";
+    Text[ ko ] = "편지 양식 인쇄";
+    Text[ zh-CN ] = "打印邮件合并";
+    Text[ zh-TW ] = "合併列印";
+    Text[ tr ] = "Standart mektup yazdır";
+    Text[ hi-IN ] = "फ़ॉर्म पत्रों को छपाई करो";
+    Text[ ar ] = "طباعة خطابات مسلسلة";
+    Text[ he ] = "Serienbriefe drucken";
+};
+
+String STR_PAGE_COUNT_MACRO
+{
+    Text [ de ] = "Änderung der Seitenanzahl" ;
+    Text [ en-US ] = "Changing the page count" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Modificar número de páginas";
+    Text[ ru ] = "Изменение количества страниц";
+    Text[ el ] = "Διόρθωση πλήθους σελιδών";
+    Text[ nl ] = "Wijziging van het aantal pagina's";
+    Text[ fr ] = "Modification du nombre de pages";
+    Text[ es ] = "Modificación del número de páginas";
+    Text[ fi ] = "Muutetaan sivumäärää";
+    Text[ ca ] = "Modificació del número de pàgines";
+    Text[ it ] = "Modifica del numero delle pagine";
+    Text[ sk ] = "Zmeniť číslo stránky";
+    Text[ da ] = "Modificer sideantal";
+    Text[ sv ] = "Ändring av sidantal";
+    Text[ pl ] = "Zmiana liczby stron";
+    Text[ pt-BR ] = "Alterando a contagem de páginas";
+    Text[ th ] = "กำลังเปลี่ยนการนับหน้า";
+    Text[ ja ] = "ページ数の変更";
+    Text[ ko ] = "페이지 수 변경";
+    Text[ zh-CN ] = "更改页数";
+    Text[ zh-TW ] = "變更頁數";
+    Text[ tr ] = "Sayfa sayısının değiştirilmesi";
+    Text[ hi-IN ] = "पृष्ठ गिनती को बदलना";
+    Text[ ar ] = "تغيير عدد الصفحات";
+    Text[ he ] = "Änderung der Seitenanzahl";
+};
+
+ // Image-Liste ----------------------------------------------------------------
+ //Dafuer gibt es jetzt eine Vorsortierung:
+ //1. SID_
+ //2. RID_
+ //3. FN_
+ //4. Ids, die noch aus der Default-Liste entfernt werden muessen
+
+
+
+
+
+
+
+
+ // ShortName!!!
+String STR_HUMAN_SWDOC_NAME
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Text : Dokument */
+    Text [ de ] = "Text" ;
+    Text [ en-US ] = "Text" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Texto";
+    Text[ ru ] = "Текст";
+    Text[ el ] = "Κείμενο";
+    Text[ nl ] = "Tekst";
+    Text[ fr ] = "Texte";
+    Text[ es ] = "Texto";
+    Text[ fi ] = "Teksti";
+    Text[ ca ] = "Text";
+    Text[ it ] = "Testo";
+    Text[ sk ] = "Text";
+    Text[ da ] = "Tekst";
+    Text[ sv ] = "Text";
+    Text[ pl ] = "Tekst";
+    Text[ pt-BR ] = "Texto";
+    Text[ th ] = "ข้อความ";
+    Text[ ja ] = "テキスト";
+    Text[ ko ] = "텍스트";
+    Text[ zh-CN ] = "文字";
+    Text[ zh-TW ] = "文字";
+    Text[ tr ] = "Metin";
+    Text[ hi-IN ] = "टेक्स्ट्";
+    Text[ ar ] = "النص";
+    Text[ he ] = "‮טקסט‬";
+};
+
+String STR_WRITER_DOCUMENT_FULLTYPE_31
+{
+    Text [ de ] = "%PRODUCTNAME 3.0 Text" ;
+    Text [ en-US ] = "Text (%PRODUCTNAME 3.0)" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "%PRODUCTNAME 3.0 Text";
+    Text[ ru ] = "Текст (%PRODUCTNAME 3.0)";
+    Text[ el ] = "Κείμενο (%PRODUCTNAME 3.0)";
+    Text[ nl ] = "%PRODUCTNAME 3.0 Tekst";
+    Text[ fr ] = "%PRODUCTNAME 3.0 Texte";
+    Text[ es ] = "%PRODUCTNAME 3.0 - Texto";
+    Text[ fi ] = "Teksti (%PRODUCTNAME 3.0)";
+    Text[ ca ] = "%PRODUCTNAME 3.0 Text";
+    Text[ it ] = "Test %PRODUCTNAME 3.0";
+    Text[ sk ] = "Text (%PRODUCTNAME 3.0)";
+    Text[ da ] = "%PRODUCTNAME 3.0 tekst";
+    Text[ sv ] = "%PRODUCTNAME 3.0 text";
+    Text[ pl ] = "Tekst %PRODUCTNAME 3.0";
+    Text[ pt-BR ] = "Texto (%PRODUCTNAME 3.0)";
+    Text[ th ] = "ข้อความ (%PRODUCTNAME 3.0)";
+    Text[ ja ] = "%PRODUCTNAME 3.0 テキスト";
+    Text[ ko ] = "%PRODUCTNAME 3.0 텍스트";
+    Text[ zh-CN ] = "%PRODUCTNAME 3.0 文本";
+    Text[ zh-TW ] = "%PRODUCTNAME 3.0 文字文件";
+    Text[ tr ] = "%PRODUCTNAME 3.0 metni";
+    Text[ hi-IN ] = "टेक्स्ट् (%PRODUCTNAME 3.0)";
+    Text[ ar ] = "نص من %PRODUCTNAME 3.0";
+    Text[ he ] = "%PRODUCTNAME 3.0 Text";
+};
+
+String STR_WRITER_DOCUMENT_FULLTYPE_40
+{
+    Text [ de ] = "%PRODUCTNAME 4.0 Text" ;
+    Text [ en-US ] = "Text (%PRODUCTNAME 4.0)" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Texto (%PRODUCTNAME 4.0)";
+    Text[ ru ] = "Текст (%PRODUCTNAME 4.0)";
+    Text[ el ] = "Κείμενο (%PRODUCTNAME 4.0)";
+    Text[ nl ] = "%PRODUCTNAME 4.0 Tekst";
+    Text[ fr ] = "%PRODUCTNAME 4.0 Texte";
+    Text[ es ] = "%PRODUCTNAME 4.0 - Texto";
+    Text[ fi ] = "Teksti (%PRODUCTNAME 4.0)";
+    Text[ ca ] = "%PRODUCTNAME 4.0 text";
+    Text[ it ] = "Testo %PRODUCTNAME 4.0";
+    Text[ sk ] = "Text (%PRODUCTNAME 4.0)";
+    Text[ da ] = "%PRODUCTNAME 4.0 tekst";
+    Text[ sv ] = "%PRODUCTNAME 4.0 text";
+    Text[ pl ] = "Tekst %PRODUCTNAME 4.0";
+    Text[ pt-BR ] = "Texto (%PRODUCTNAME 4.0)";
+    Text[ th ] = "ข้อความ (%PRODUCTNAME 4.0)";
+    Text[ ja ] = "%PRODUCTNAME 4.0 テキスト";
+    Text[ ko ] = "%PRODUCTNAME 4.0 텍스트";
+    Text[ zh-CN ] = "%PRODUCTNAME 4.0 文本";
+    Text[ zh-TW ] = "%PRODUCTNAME 4.0 文字文件";
+    Text[ tr ] = "%PRODUCTNAME 4.0 metni";
+    Text[ hi-IN ] = "टेक्स्ट् (%PRODUCTNAME 4.0";
+    Text[ ar ] = "نص من %PRODUCTNAME 4.0";
+    Text[ he ] = "%PRODUCTNAME 4.0 Text";
+};
+
+String STR_WRITER_DOCUMENT_FULLTYPE_50
+{
+    Text [ de ] = "%PRODUCTNAME 5.0 Text" ;
+    Text [ en-US ] = "Text (%PRODUCTNAME 5.0)" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "%PRODUCTNAME 5.0 Texto";
+    Text[ ru ] = "Текст (%PRODUCTNAME 5.0)";
+    Text[ el ] = "Κείμενο %PRODUCTNAME 5.0";
+    Text[ nl ] = "%PRODUCTNAME 5.0 Tekst";
+    Text[ fr ] = "%PRODUCTNAME 5.0 Texte";
+    Text[ es ] = "%PRODUCTNAME 5.0 - Texto";
+    Text[ fi ] = "Teksti (%PRODUCTNAME 5.0)";
+    Text[ ca ] = "%PRODUCTNAME 5.0 Text";
+    Text[ it ] = "Testo %PRODUCTNAME 5.0";
+    Text[ sk ] = "Text (%PRODUCTNAME 5.0)";
+    Text[ da ] = "%PRODUCTNAME 5.0 Tekst";
+    Text[ sv ] = "%PRODUCTNAME 5.0 text";
+    Text[ pl ] = "%PRODUCTNAME 5.0 - Tekst";
+    Text[ pt-BR ] = "Texto (%PRODUCTNAME 5.0)";
+    Text[ th ] = "ข้อความ (%PRODUCTNAME 5.0)";
+    Text[ ja ] = "%PRODUCTNAME 5.0 文書";
+    Text[ ko ] = "%PRODUCTNAME 5.0 텍스트";
+    Text[ zh-CN ] = "%PRODUCTNAME 5.0 文本";
+    Text[ zh-TW ] = "%PRODUCTNAME 5.0 文字";
+    Text[ tr ] = "Metin (%PRODUCTNAME 5.0)";
+    Text[ hi-IN ] = "टेक्स्ट् (%PRODUCTNAME 5.0";
+    Text[ ar ] = "نص من %PRODUCTNAME 5.0";
+    Text[ he ] = "%PRODUCTNAME 5.0 Text";
+};
+String STR_WRITER_DOCUMENT_FULLTYPE
+{
+    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION Textdokument" ;
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Text Document";
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "%PRODUCTNAME 6.0 Texto";
+    Text[ ru ] = "Текстовый документ (%PRODUCTNAME 6.0)";
+    Text[ el ] = "Έγγραφο κειμένου %PRODUCTNAME 6.0";
+    Text[ nl ] = "%PRODUCTNAME 6.0 Tekstdocument";
+    Text[ fr ] = "%PRODUCTNAME %PRODUCTVERSION Texte";
+    Text[ es ] = "Documento de texto %PRODUCTNAME %PRODUCTVERSION ";
+    Text[ fi ] = "%PRODUCTNAME 6.0 -tekstiasiakirja";
+    Text[ ca ] = "%PRODUCTNAME 6.0 Text";
+    Text[ it ] = "%PRODUCTNAME %PRODUCTVERSION Documento di testo ";
+    Text[ sk ] = "Textový dokument %PRODUCTNAME %PRODUCTVERSION";
+    Text[ da ] = "%PRODUCTNAME 6.0 Tekstdokument";
+    Text[ sv ] = "%PRODUCTNAME %PRODUCTVERSION-textdokument";
+    Text[ pl ] = "%PRODUCTNAME 6.0 - Dokument tekstowy";
+    Text[ pt-BR ] = "Documento Texto %PRODUCTNAME 4.0";
+    Text[ th ] = "ข้อความเอกสาร%PRODUCTNAME 6.0 ";
+    Text[ ja ] = "%PRODUCTNAME %PRODUCTVERSION 文書ドキュメント";
+    Text[ ko ] = "%PRODUCTNAME %PRODUCTVERSION 텍스트 문서";
+    Text[ zh-CN ] = "%PRODUCTNAME %PRODUCTVERSION 文本文档";
+    Text[ zh-TW ] = "%PRODUCTNAME %PRODUCTVERSION 文字文件";
+    Text[ tr ] = "%PRODUCTNAME 6.0 Metin Belgesi";
+    Text[ hi-IN ] = "%PRODUCTNAME 6.0 टेक्स्ट् लेखपत्र";
+    Text[ ar ] = "مستند نص من %PRODUCTNAME 6.0";
+    Text[ he ] = "%PRODUCTNAME 6.0 Text Dokument";
+};
+
+
+
+String STR_UNBENANNT
+{
+    Text [ de ] = "Unbenannt" ;
+    Text [ en-US ] = "Untitled" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Sem nome";
+    Text[ ru ] = "Документ";
+    Text[ el ] = "Δίχως όνομα";
+    Text[ nl ] = "Naamloos";
+    Text[ fr ] = "Sans nom";
+    Text[ es ] = "Sin nombre";
+    Text[ fi ] = "Nimetön";
+    Text[ ca ] = "Sense nom";
+    Text[ it ] = "Senza nome";
+    Text[ sk ] = "Bez_názvu";
+    Text[ da ] = "Ikke-navngivet";
+    Text[ sv ] = "Namnlös";
+    Text[ pl ] = "Bez tytułu";
+    Text[ pt-BR ] = "Sem nome";
+    Text[ th ] = "ไม่มีชื่อ";
+    Text[ ja ] = "無題";
+    Text[ ko ] = "제목 없음";
+    Text[ zh-CN ] = "未命名";
+    Text[ zh-TW ] = "未命名";
+    Text[ tr ] = "Adsız";
+    Text[ hi-IN ] = "नाम रहित";
+    Text[ ar ] = "بدون عنوان";
+    Text[ he ] = "Unbenannt";
+};
+
+
+
+#define NO_LOCALIZE_EXPORT
+
+String RID_BUILDVERSION
+{
+    Text = UPDVER ;
+};
+
+
+
+
+ // ----------------------------
+ // Statusleisten-Ueberschriften
+ // ----------------------------
+
+
+String STR_STATSTR_W4WWRITE
+{
+    Text [ de ] = "Dokument wird exportiert..." ;
+    Text [ en-US ] = "Exporting document..." ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "A exportar documento...";
+    Text[ ru ] = "Экспорт документа...";
+    Text[ el ] = "Εξαγωγή εγγράφου...";
+    Text[ nl ] = "Document wordt geëxporteerd...";
+    Text[ fr ] = "Export du document...";
+    Text[ es ] = "Exportando el documento...";
+    Text[ fi ] = "Viedään asiakirjaa...";
+    Text[ ca ] = "S'està exportant el document...";
+    Text[ it ] = "Il documento viene esportato...";
+    Text[ sk ] = "Prebieha export dokumentu...";
+    Text[ da ] = "Eksporterer dokument";
+    Text[ sv ] = "Dokument exporteras...";
+    Text[ pl ] = "Eksportowanie dokumentu...";
+    Text[ pt-BR ] = "Exportando o documento...";
+    Text[ th ] = "กำลังส่งออกเอกสาร...";
+    Text[ ja ] = "文書のエクスポート...";
+    Text[ ko ] = "문서 내보내기...";
+    Text[ zh-CN ] = "输出文档...";
+    Text[ zh-TW ] = "匯出文件...";
+    Text[ tr ] = "Belge dışa aktarılıyor...";
+    Text[ hi-IN ] = "लेखपत्र को निर्यात कर रहा है...";
+    Text[ ar ] = "جاري تصدير المستند...";
+    Text[ he ] = "Dokument wird exportiert...";
+};
+
+String STR_STATSTR_SWGREAD
+{
+    Text [ de ] = "Dokument wird geladen..." ;
+    Text [ en-US ] = "Loading document..." ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "A carregar documento...";
+    Text[ ru ] = "Загрузка документа...";
+    Text[ el ] = "Το έγγραφο φορτώνεται...";
+    Text[ nl ] = "Document wordt gemaakt...";
+    Text[ fr ] = "Chargement du document...";
+    Text[ es ] = "Cargando el documento...";
+    Text[ fi ] = "Ladataan asiakirjaa...";
+    Text[ ca ] = "S'està carregant el document...";
+    Text[ it ] = "Il documento viene caricato...";
+    Text[ sk ] = "Načíta sa súbor...";
+    Text[ da ] = "Indlæser dokument...";
+    Text[ sv ] = "Dokument laddas...";
+    Text[ pl ] = "Ładowanie dokumentu...";
+    Text[ pt-BR ] = "Carregando o documento...";
+    Text[ th ] = "กำลังโหลดเอกสาร...";
+    Text[ ja ] = "ドキュメントを読み込んでいます...";
+    Text[ ko ] = "문서를 로드하는 중...";
+    Text[ zh-CN ] = "装入文档...";
+    Text[ zh-TW ] = "載入文件...";
+    Text[ tr ] = "Belge yükleniyor...";
+    Text[ hi-IN ] = "लेखपत्र को लोड़ कर रहा है...";
+    Text[ ar ] = "جاري تحميل المستند...";
+    Text[ he ] = "Dokument wird geladen...";
+};
+
+String STR_STATSTR_SWGWRITE
+{
+    Text [ de ] = "Dokument wird gespeichert..." ;
+    Text [ en-US ] = "Saving document..." ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "A guardar documento...";
+    Text[ ru ] = "Сохранение документа...";
+    Text[ el ] = "Αποθήκευση εγγράφου...";
+    Text[ nl ] = "Document wordt opgeslagen...";
+    Text[ fr ] = "Enregistrement du document...";
+    Text[ es ] = "Guardando el documento...";
+    Text[ fi ] = "Tallennetaan asiakirjaa...";
+    Text[ ca ] = "S'està desant el document...";
+    Text[ it ] = "Il documento viene salvato...";
+    Text[ sk ] = "Súbor sa ukladá...";
+    Text[ da ] = "Gemmer dokument...";
+    Text[ sv ] = "Dokument sparas...";
+    Text[ pl ] = "Zapisywanie dokumentu...";
+    Text[ pt-BR ] = "Salvando o documento...";
+    Text[ th ] = "กำลังบันทึกเอกสาร...";
+    Text[ ja ] = "ドキュメントを保存しています...";
+    Text[ ko ] = "문서 저장하는 중...";
+    Text[ zh-CN ] = "存盘文档...";
+    Text[ zh-TW ] = "正在儲存文件...";
+    Text[ tr ] = "Belge kaydediliyor...";
+    Text[ hi-IN ] = "लेखपत्र को संचित कर रहा है...";
+    Text[ ar ] = "جاري حفظ المستند...";
+    Text[ he ] = "Dokument wird gespeichert...";
+};
+
+String STR_STATSTR_REFORMAT
+{
+    Text [ de ] = "Neuformatierung des Dokumentes..." ;
+    Text [ en-US ] = "Repagination..." ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Nova formatação do documento...";
+    Text[ ru ] = "Разбивка на страницы...";
+    Text[ el ] = "Μορφοποίηση εκ νέου του εγγράφου...";
+    Text[ nl ] = "Bezig met nieuwe opmaak...";
+    Text[ fr ] = "Nouveau formatage du document...";
+    Text[ es ] = "Reformateado del documento...";
+    Text[ fi ] = "Uudelleensivutus...";
+    Text[ ca ] = "S'està reformatant el document...";
+    Text[ it ] = "Riformattazione del documento...";
+    Text[ sk ] = "Prestránkovanie...";
+    Text[ da ] = "Genformatering af dokumentet...";
+    Text[ sv ] = "Omformatering av dokumentet...";
+    Text[ pl ] = "Ponowne dzielenie na strony...";
+    Text[ pt-BR ] = "Repaginação...";
+    Text[ th ] = "จัดแบ่งหน้า...";
+    Text[ ja ] = "ドキュメントの新規書式設定...";
+    Text[ ko ] = "문서 서식 다시 지정...";
+    Text[ zh-CN ] = "重新制作文档格式...";
+    Text[ zh-TW ] = "重新製作文件格式...";
+    Text[ tr ] = "Belge yeniden formatlanıyor...";
+    Text[ hi-IN ] = "रिपेजिनेशन...";
+    Text[ ar ] = "إعادة تنسيق المستند...";
+    Text[ he ] = "Neuformatierung des Dokumentes...";
+};
+
+
+
+String STR_STATSTR_SEARCH
+{
+    Text [ de ] = "Suche..." ;
+    Text [ en-US ] = "Search..." ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "A localizar...";
+    Text[ ru ] = "Поиск...";
+    Text[ el ] = "Αναζήτηση...";
+    Text[ nl ] = "Bezig met zoeken...";
+    Text[ fr ] = "Recherche...";
+    Text[ es ] = "Búsqueda...";
+    Text[ fi ] = "Etsi...";
+    Text[ ca ] = "Cerca...";
+    Text[ it ] = "Cerca...";
+    Text[ sk ] = "Hľadať...";
+    Text[ da ] = "Søger...";
+    Text[ sv ] = "Söker...";
+    Text[ pl ] = "Szukaj...";
+    Text[ pt-BR ] = "Pesquisar...";
+    Text[ th ] = "ค้นหา...";
+    Text[ ja ] = "検索...";
+    Text[ ko ] = "찾기...";
+    Text[ zh-CN ] = "搜寻...";
+    Text[ zh-TW ] = "搜尋...";
+    Text[ tr ] = "Ara...";
+    Text[ hi-IN ] = "खोज...";
+    Text[ ar ] = "بحث...";
+    Text[ he ] = "Suche...";
+};
+
+
+
+String STR_STATSTR_LAYOUTINIT
+{
+    Text [ de ] = "Konvertiere..." ;
+    Text [ en-US ] = "Converting..." ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "A converter...";
+    Text[ ru ] = "Преобразование...";
+    Text[ el ] = "Μετατροπή...";
+    Text[ nl ] = "Bezig met converteren...";
+    Text[ fr ] = "Conversion...";
+    Text[ es ] = "Convirtiendo...";
+    Text[ fi ] = "Muunnetaan...";
+    Text[ ca ] = "S'està convertint...";
+    Text[ it ] = "Converti...";
+    Text[ sk ] = "Prebieha konverzia...";
+    Text[ da ] = "Konverterer...";
+    Text[ sv ] = "Konverterar...";
+    Text[ pl ] = "Konwersja...";
+    Text[ pt-BR ] = "Convertendo...";
+    Text[ th ] = "กำลังแปลง...";
+    Text[ ja ] = "変換...";
+    Text[ ko ] = "변환...";
+    Text[ zh-CN ] = "转换...";
+    Text[ zh-TW ] = "轉換...";
+    Text[ tr ] = "Dönüştürülüyor...";
+    Text[ hi-IN ] = "बदल रहा है...";
+    Text[ ar ] = "تحويل...";
+    Text[ he ] = "Konvertiere...";
+};
+
+
+
+
+
+
+
+String STR_STATSTR_SWGPRTOLENOTIFY
+{
+    Text [ de ] = "Objekte Anpassen..." ;
+    Text [ en-US ] = "Adapt Objects...";
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Ajustar objectos...";
+    Text[ ru ] = "Адаптировать объекты...";
+    Text[ el ] = "Προσαρμογή αντικειμένων...";
+    Text[ nl ] = "Objecten aanpassen...";
+    Text[ fr ] = "Adapter les objets...";
+    Text[ es ] = "Ajustar objetos...";
+    Text[ fi ] = "Sovita objektit...";
+    Text[ ca ] = "S'estan adaptant els objectes...";
+    Text[ it ] = "Adatta oggetti...";
+    Text[ sk ] = "Adaptujem objekty...";
+    Text[ da ] = "Tilpas objekter...";
+    Text[ sv ] = "Anpassa objekt...";
+    Text[ pl ] = "Dostosuj obiekty...";
+    Text[ pt-BR ] = "Adaptar Objetos...";
+    Text[ th ] = "ปรับวัตถุ...";
+    Text[ ja ] = "オブジェクトの調整...";
+    Text[ ko ] = "개체 조정...";
+    Text[ zh-CN ] = "调整对象...";
+    Text[ zh-TW ] = "調整物件...";
+    Text[ tr ] = "Nesneleri uyarla...";
+    Text[ hi-IN ] = "वस्तुओं को स्वीकार करो...";
+    Text[ ar ] = "ضبط كائنات...";
+    Text[ he ] = "Objekte Anpassen...";
+};
+
+
+
+Bitmap RID_GRAPHIC_REPLACEBMP
+{
+    File = "grafikei.bmp" ;
+};
+
+Bitmap RID_GRAPHIC_ERRORBMP
+{
+    File = "grafikde.bmp" ;
+};
+
+String STR_TABLE_DEFNAME
+{
+    Text [ de ] = "Tabelle" ;
+    Text [ en-US ] = "Table" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Tabela";
+    Text[ ru ] = "Таблица";
+    Text[ el ] = "Πίνακας";
+    Text[ nl ] = "Tabel";
+    Text[ fr ] = "Tableau";
+    Text[ es ] = "Tabla";
+    Text[ fi ] = "Taulukko";
+    Text[ ca ] = "Taula";
+    Text[ it ] = "Tabella";
+    Text[ sk ] = "Tabuľka";
+    Text[ da ] = "Tabel";
+    Text[ sv ] = "Tabell";
+    Text[ pl ] = "Tabela";
+    Text[ pt-BR ] = "Tabela";
+    Text[ th ] = "ตาราง";
+    Text[ ja ] = "表";
+    Text[ ko ] = "표";
+    Text[ zh-CN ] = "表格";
+    Text[ zh-TW ] = "表格";
+    Text[ tr ] = "Tablo";
+    Text[ hi-IN ] = "सारणी";
+    Text[ ar ] = "جدول";
+    Text[ he ] = "‮טבלה‬";
+};
+
+String STR_GRAPHIC_DEFNAME
+{
+    Text [ de ] = "Grafik" ;
+    Text [ en-US ] = "Graphic" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Imagem";
+    Text[ ru ] = "Графический объект";
+    Text[ el ] = "Γραφικό";
+    Text[ nl ] = "Afbeelding";
+    Text[ fr ] = "Image";
+    Text[ es ] = "Imagen";
+    Text[ fi ] = "Grafiikka";
+    Text[ ca ] = "Imatge";
+    Text[ it ] = "Immagine";
+    Text[ sk ] = "Obrázok";
+    Text[ da ] = "Grafik";
+    Text[ sv ] = "Grafik";
+    Text[ pl ] = "Grafika";
+    Text[ pt-BR ] = "Figura";
+    Text[ th ] = "กราฟิค";
+    Text[ ja ] = "図";
+    Text[ ko ] = "그림";
+    Text[ zh-CN ] = "图形";
+    Text[ zh-TW ] = "圖形";
+    Text[ tr ] = "Grafik";
+    Text[ hi-IN ] = "सुचित्र";
+    Text[ ar ] = "صورة";
+    Text[ he ] = "Grafik";
+};
+
+String STR_OBJECT_DEFNAME
+{
+    Text [ de ] = "Objekt" ;
+    Text [ en-US ] = "Object" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Objecto";
+    Text[ ru ] = "Объект";
+    Text[ el ] = "Αντικείμενο";
+    Text[ nl ] = "Object";
+    Text[ fr ] = "Objet";
+    Text[ es ] = "Objeto";
+    Text[ fi ] = "Objekti";
+    Text[ ca ] = "Objecte";
+    Text[ it ] = "Oggetto";
+    Text[ sk ] = "Objekt";
+    Text[ da ] = "Objekt";
+    Text[ sv ] = "Objekt";
+    Text[ pl ] = "Obiekt";
+    Text[ pt-BR ] = "Objeto";
+    Text[ th ] = "วัตถุ";
+    Text[ ja ] = "オブジェクト";
+    Text[ ko ] = "개체";
+    Text[ zh-CN ] = "对象";
+    Text[ zh-TW ] = "物件";
+    Text[ tr ] = "Nesne";
+    Text[ hi-IN ] = "वस्तु";
+    Text[ ar ] = "كائن";
+    Text[ he ] = "‮אוביקט‬";
+};
+
+String STR_FRAME_DEFNAME
+{
+    Text [ de ] = "Rahmen" ;
+    Text [ en-US ] = "Frame" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Moldura";
+    Text[ ru ] = "Врезка";
+    Text[ el ] = "Πλαίσιο";
+    Text[ nl ] = "Kader";
+    Text[ fr ] = "Cadre";
+    Text[ es ] = "Marco";
+    Text[ fi ] = "Kehys";
+    Text[ ca ] = "Marc";
+    Text[ it ] = "Cornice";
+    Text[ sk ] = "Rámček";
+    Text[ da ] = "Ramme";
+    Text[ sv ] = "Ram";
+    Text[ pl ] = "Ramka";
+    Text[ pt-BR ] = "Moldura";
+    Text[ th ] = "กรอบ";
+    Text[ ja ] = "枠";
+    Text[ ko ] = "프레임";
+    Text[ zh-CN ] = "框";
+    Text[ zh-TW ] = "文字方塊";
+    Text[ tr ] = "Çerçeve";
+    Text[ hi-IN ] = "फ्रेम ";
+    Text[ ar ] = "كادر";
+    Text[ he ] = "‮מסגרת‬";
+};
+String STR_REGION_DEFNAME
+{
+    Text [ de ] = "Bereich" ;
+    Text [ en-US ] = "Section" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Secção";
+    Text[ ru ] = "Раздел";
+    Text[ el ] = "Ενότητα";
+    Text[ nl ] = "Bereik";
+    Text[ fr ] = "Section";
+    Text[ es ] = "Sección";
+    Text[ fi ] = "Osa";
+    Text[ ca ] = "Area";
+    Text[ it ] = "Sezione";
+    Text[ sk ] = "Sekcia";
+    Text[ da ] = "Område";
+    Text[ sv ] = "Område";
+    Text[ pl ] = "Sekcja";
+    Text[ pt-BR ] = "Seção";
+    Text[ th ] = "ส่วน";
+    Text[ ja ] = "範囲";
+    Text[ ko ] = "구역";
+    Text[ zh-CN ] = "区域";
+    Text[ zh-TW ] = "區域";
+    Text[ tr ] = "Bölüm";
+    Text[ hi-IN ] = "विभाग";
+    Text[ ar ] = "نطاق";
+    Text[ he ] = "‮מיקטע‬";
+};
+String STR_NUMRULE_DEFNAME
+{
+    Text [ de ] = "Nummerierung" ;
+    Text [ en-US ] = "Numbering" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Numeração";
+    Text[ ru ] = "Нумерация";
+    Text[ el ] = "Αρίθμηση";
+    Text[ nl ] = "Nummering";
+    Text[ fr ] = "Numérotation";
+    Text[ es ] = "Numeración";
+    Text[ fi ] = "Numerointi";
+    Text[ ca ] = "Numeració";
+    Text[ it ] = "Numerazione";
+    Text[ sk ] = "Číslovanie";
+    Text[ da ] = "Nummerering";
+    Text[ sv ] = "Numrering";
+    Text[ pl ] = "Numeracja";
+    Text[ pt-BR ] = "Numeração";
+    Text[ th ] = "ลำดับตัวเลข";
+    Text[ ja ] = "番号付け";
+    Text[ ko ] = "번호 매기기";
+    Text[ zh-CN ] = "编号";
+    Text[ zh-TW ] = "編號";
+    Text[ tr ] = "Numaralama";
+    Text[ hi-IN ] = "संख्या देना";
+    Text[ ar ] = "الترقيم";
+    Text[ he ] = "‮מיספור‬";
+};
+
+
+
+
+
+String STR_FDLG_TEMPLATE_BUTTON
+{
+    Text [ de ] = "Vorlage" ;
+    Text [ en-US ] = "Style" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Estilo";
+    Text[ ru ] = "Стиль";
+    Text[ el ] = "Πρότυπο";
+    Text[ nl ] = "Sjabloon";
+    Text[ fr ] = "Style";
+    Text[ es ] = "Estilo";
+    Text[ fi ] = "Tyyli";
+    Text[ ca ] = "Estil";
+    Text[ it ] = "Modello";
+    Text[ sk ] = "Štýl";
+    Text[ da ] = "Skabelon";
+    Text[ sv ] = "Formatmall";
+    Text[ pl ] = "Styl";
+    Text[ pt-BR ] = "Estilo";
+    Text[ th ] = "ลักษณะ";
+    Text[ ja ] = "スタイル";
+    Text[ ko ] = "스타일";
+    Text[ zh-CN ] = "样式";
+    Text[ zh-TW ] = "樣式";
+    Text[ tr ] = "Biçim";
+    Text[ hi-IN ] = "शैली";
+    Text[ ar ] = "نمط";
+    Text[ he ] = "Vorlage";
+};
+
+
+
+String STR_PAGEBREAK
+{
+    Text [ de ] = "Umbruch vor neuer Seite" ;
+    Text [ en-US ] = "Break before new page" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Quebra antes de nova página";
+    Text[ ru ] = "Разрыв перед новой страницей";
+    Text[ el ] = "Αλλαγή πριν από νέα σελίδα";
+    Text[ nl ] = "Einde voor nieuwe pagina";
+    Text[ fr ] = "Saut avant nouvelle page";
+    Text[ es ] = "Salto antes de página nueva";
+    Text[ fi ] = "Vaihto ennen uutta sivua";
+    Text[ ca ] = "Salt abans de pàgina nova";
+    Text[ it ] = "Interrompi prima della pagina nuova";
+    Text[ sk ] = "Zalomiť pred novou stránkou";
+    Text[ da ] = "Skift før ny side";
+    Text[ sv ] = "Bryt före ny sida";
+    Text[ pl ] = "Podział przed nową stroną";
+    Text[ pt-BR ] = "Quebrar antes da nova página";
+    Text[ th ] = "แบ่งก่อนขึ้นหน้าใหม่";
+    Text[ ja ] = "新しいページの前で区切る";
+    Text[ ko ] = "새 페이지 앞에서 나누기";
+    Text[ zh-CN ] = "在新一页之前换页";
+    Text[ zh-TW ] = "在新一頁之前換頁";
+    Text[ tr ] = "Yeni sayfa öncesi kesme";
+    Text[ hi-IN ] = "नया पृष्ठ से पहिले खण्डन";
+    Text[ ar ] = "فاصل قبل الصفحة الجديدة";
+    Text[ he ] = "Umbruch vor neuer Seite";
+};
+
+
+/*QueryBox MSG_INS_MERGE_FIELDS
+{
+    HelpId = HID_MAIL_MERGE_INSERT_FIELDS;
+    Buttons = WB_OK_CANCEL ;
+    DefButton = WB_DEF_YES ;
+    Message [ de ] = "M�chten Sie Namen und Adressen aus einer Datenbank verwenden?";
+    Message [ en-US ] = "Do you want to use names and addresses from a database?";
+};
+*/
+
+String RID_MODULE_TOOLBOX
+{
+    Text [ de ] = "Funktionsleiste (Lesemodus)" ;
+    Text [ en-US ] = "Function Bar (viewing mode)" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Barra de funções";
+    Text[ ru ] = "Панель функций";
+    Text[ el ] = "Γραμμή λειτουργιών";
+    Text[ nl ] = "Werkbalk";
+    Text[ fr ] = "Barre de fonctions (mode visualisation)";
+    Text[ es ] = "Barra de funciones (modo vista)";
+    Text[ fi ] = "Toimintorivi";
+    Text[ ca ] = "Barra de funcions";
+    Text[ it ] = "Barra delle funzioni (modo visualizzazione)";
+    Text[ sk ] = "Panel funkcií (mód náhľadu)";
+    Text[ da ] = "Funktionslinje";
+    Text[ sv ] = "Funktionslist (visningsläge)";
+    Text[ pl ] = "Pasek funkcji";
+    Text[ pt-BR ] = "Barra de funções";
+    Text[ th ] = "แถบฟังก์ชั่น";
+    Text[ ja ] = "ファンクションバー（表示モード）";
+    Text[ ko ] = "기능 모음 (보기 모드)";
+    Text[ zh-CN ] = "功能栏(视图模式)";
+    Text[ zh-TW ] = "功能列(檢視模式)";
+    Text[ tr ] = "Fonksiyon Çubuğu";
+    Text[ hi-IN ] = "फंक्शन् पट्टी";
+    Text[ ar ] = "شريط المهام";
+    Text[ he ] = "‮סרגל פעולות נפוצות‬";
+};
+
+

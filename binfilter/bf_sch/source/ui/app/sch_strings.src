@@ -1,0 +1,1058 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+
+#include "strings.hrc"
+String RID_BUILDVERSION
+{
+    Text [ de ] = UPDVER ;
+    Text [ en-US ] = UPDVER ;
+};
+String STR_AREA
+{
+    Text [ de ] = "Fläche" ;
+    Text [ en-US ] = "Area" ;
+    Text[ pt ] = "Preenchimento";
+    Text[ ru ] = "Область";
+    Text[ el ] = "Επιφάνεια";
+    Text[ nl ] = "Vlak";
+    Text[ fr ] = "Remplissage";
+    Text[ es ] = "Área";
+    Text[ fi ] = "Alue";
+    Text[ ca ] = "Àrea";
+    Text[ it ] = "Area";
+    Text[ da ] = "Område";
+    Text[ sv ] = "Yta";
+    Text[ pl ] = "Obszar";
+    Text[ pt-BR ] = "Área";
+    Text[ th ] = "พื้นที่";
+    Text[ ja ] = "エリア";
+    Text[ ko ] = "영역";
+    Text[ zh-CN ] = "充填平面";
+    Text[ zh-TW ] = "充填平面";
+    Text[ tr ] = "Yüzey";
+    Text[ hi-IN ] = "विस्तीर्ण";
+    Text[ ar ] = "تعبئة الكائن";
+    Text[ he ] = "Fläche";
+};
+String STR_LINE
+{
+    Text [ de ] = "Linie" ;
+    Text [ en-US ] = "Line" ;
+    Text[ pt ] = "Linha";
+    Text[ ru ] = "Линия";
+    Text[ el ] = "Γραμμή";
+    Text[ nl ] = "Lijn";
+    Text[ fr ] = "Ligne";
+    Text[ es ] = "Línea";
+    Text[ fi ] = "Viiva";
+    Text[ ca ] = "Línia";
+    Text[ it ] = "Linea";
+    Text[ da ] = "Linje";
+    Text[ sv ] = "Linje";
+    Text[ pl ] = "Linia";
+    Text[ pt-BR ] = "Linha";
+    Text[ th ] = "บรรทัด";
+    Text[ ja ] = "折れ線";
+    Text[ ko ] = "선";
+    Text[ zh-CN ] = "线条";
+    Text[ zh-TW ] = "線條";
+    Text[ tr ] = "Çizgi";
+    Text[ hi-IN ] = "Line";
+    Text[ ar ] = "خط";
+    Text[ he ] = "Linie";
+};
+String STR_LINES
+{
+    Text [ de ] = "Linien" ;
+    Text [ en-US ] = "Lines" ;
+    Text[ pt ] = "Linhas";
+    Text[ ru ] = "Линии";
+    Text[ el ] = "Γραμμές";
+    Text[ nl ] = "Lijnen";
+    Text[ fr ] = "Lignes";
+    Text[ es ] = "Líneas";
+    Text[ fi ] = "Rivit";
+    Text[ ca ] = "Línies";
+    Text[ it ] = "Linee";
+    Text[ da ] = "Linjer";
+    Text[ sv ] = "Linjer";
+    Text[ pl ] = "Linie";
+    Text[ pt-BR ] = "Linhas";
+    Text[ th ] = "บรรทัด";
+    Text[ ja ] = "折れ線";
+    Text[ ko ] = "선";
+    Text[ zh-CN ] = "线条";
+    Text[ zh-TW ] = "線條";
+    Text[ tr ] = "Çizgi";
+    Text[ hi-IN ] = "Lines";
+    Text[ ar ] = "خطوط";
+    Text[ he ] = "Linien";
+};
+String STR_COLUMNS
+{
+    Text [ de ] = "Säulen" ;
+    Text [ en-US ] = "Columns" ;
+    Text[ pt ] = "Barras";
+    Text[ ru ] = "Гистограмма";
+    Text[ el ] = "Στήλες";
+    Text[ nl ] = "kolommen";
+    Text[ fr ] = "Colonnes";
+    Text[ es ] = "Columnas";
+    Text[ fi ] = "Pylväs";
+    Text[ ca ] = "Columnes";
+    Text[ it ] = "Colonne";
+    Text[ da ] = "Søjler";
+    Text[ sv ] = "Staplar";
+    Text[ pl ] = "Kolumny";
+    Text[ pt-BR ] = "Colunas";
+    Text[ th ] = "คอลัมน์์";
+    Text[ ja ] = "縦棒";
+    Text[ ko ] = "단";
+    Text[ zh-CN ] = "柱";
+    Text[ zh-TW ] = "柱";
+    Text[ tr ] = "Sütun";
+    Text[ hi-IN ] = "स्तंभ";
+    Text[ ar ] = "أعمدة";
+    Text[ he ] = "‮טורים‬";
+};
+String STR_BARS
+{
+    Text [ de ] = "Balken" ;
+    Text [ en-US ] = "Bars" ;
+    Text [ x-comment ] = "���: ������ - -";
+    Text[ pt ] = "Barras";
+    Text[ ru ] = "Линейчатая";
+    Text[ el ] = "Ράβδοι";
+    Text[ nl ] = "balken";
+    Text[ fr ] = "Barres";
+    Text[ es ] = "Barras";
+    Text[ fi ] = "Palkit";
+    Text[ ca ] = "Barres";
+    Text[ it ] = "Barre";
+    Text[ da ] = "Liggende søjler";
+    Text[ sv ] = "Liggande staplar";
+    Text[ pl ] = "Słupki";
+    Text[ pt-BR ] = "Barras";
+    Text[ th ] = "แถบ";
+    Text[ ja ] = "横棒";
+    Text[ ko ] = "바";
+    Text[ zh-CN ] = "条";
+    Text[ zh-TW ] = "條";
+    Text[ tr ] = "Çubuk";
+    Text[ hi-IN ] = "पट्टी";
+    Text[ ar ] = "أعمدة";
+    Text[ he ] = "Balken";
+};
+String STR_AREAS
+{
+    Text [ de ] = "Flächen" ;
+    Text [ en-US ] = "Areas" ;
+    Text[ pt ] = "Áreas";
+    Text[ ru ] = "Области";
+    Text[ el ] = "Επιφάνειες";
+    Text[ nl ] = "vlakken";
+    Text[ fr ] = "Zones";
+    Text[ es ] = "Áreas";
+    Text[ fi ] = "Alueet";
+    Text[ ca ] = "Àrees";
+    Text[ it ] = "Aree";
+    Text[ da ] = "Områder";
+    Text[ sv ] = "Ytor";
+    Text[ pl ] = "Obszary";
+    Text[ pt-BR ] = "Áreas";
+    Text[ th ] = "พื้นที่";
+    Text[ ja ] = "エリア";
+    Text[ ko ] = "면";
+    Text[ zh-CN ] = "平面";
+    Text[ zh-TW ] = "平面";
+    Text[ tr ] = "Yüzey";
+    Text[ hi-IN ] = "विस्तीर्ण";
+    Text[ ar ] = "مناطق";
+    Text[ he ] = "Flächen";
+};
+String STR_CIRCLES
+{
+    Text [ de ] = "Kreise" ;
+    Text [ en-US ] = "Pies" ;
+    Text[ pt ] = "Sectores";
+    Text[ ru ] = "Круговая";
+    Text[ el ] = "Κύκλοι";
+    Text[ nl ] = "cirkels";
+    Text[ fr ] = "Secteurs";
+    Text[ es ] = "Círculos";
+    Text[ fi ] = "Ympyräkaaviot";
+    Text[ ca ] = "Diagrames de sectors";
+    Text[ it ] = "Torta";
+    Text[ da ] = "Cirkler";
+    Text[ sv ] = "Cirklar";
+    Text[ pl ] = "Koła";
+    Text[ pt-BR ] = "Pizzas";
+    Text[ th ] = "พาย";
+    Text[ ja ] = "円";
+    Text[ ko ] = "원형";
+    Text[ zh-CN ] = "圆";
+    Text[ zh-TW ] = "圓";
+    Text[ tr ] = "Daire";
+    Text[ hi-IN ] = "वृतखण्ड";
+    Text[ ar ] = "دوائر";
+    Text[ he ] = "Kreise";
+};
+String STR_XY
+{
+    Text [ de ] = "XY-Diagramm" ;
+    Text [ en-US ] = "XY Chart" ;
+    Text[ pt ] = "Gráfico XY";
+    Text[ ru ] = "Диаграмма XY";
+    Text[ el ] = "Διάγραμμα XY";
+    Text[ nl ] = "XY-diagram";
+    Text[ fr ] = "Diagramme XY";
+    Text[ es ] = "Diagrama XY";
+    Text[ fi ] = "XY-kaavio";
+    Text[ ca ] = "Diagrama XY";
+    Text[ it ] = "Diagramma XY";
+    Text[ da ] = "XY-diagram";
+    Text[ sv ] = "XY-diagram";
+    Text[ pl ] = "Wykres XY";
+    Text[ pt-BR ] = "Gráfico XY";
+    Text[ th ] = "แผนภูมิXY ";
+    Text[ ja ] = "散布図";
+    Text[ ko ] = "XY 차트";
+    Text[ zh-CN ] = "XY 图表";
+    Text[ zh-TW ] = "XY-圖表";
+    Text[ tr ] = "XY şeması";
+    Text[ hi-IN ] = "XY चार्ट";
+    Text[ ar ] = "رسم بياني س ص";
+    Text[ he ] = "XY-Diagramm";
+};
+String STR_XYZ
+{
+    Text [ de ] = "XYZ-Diagramm" ;
+    Text [ en-US ] = "XYZ Chart" ;
+    Text[ pt ] = "Gráfico XYZ";
+    Text[ ru ] = "Диаграмма XYZ";
+    Text[ el ] = "Διάγραμμα XYZ";
+    Text[ nl ] = "XYZ-diagram";
+    Text[ fr ] = "Diagramme XYZ";
+    Text[ es ] = "Diagrama XYZ";
+    Text[ fi ] = "XYZ-kaavio";
+    Text[ ca ] = "Diagrama XYZ";
+    Text[ it ] = "Diagramma XYZ";
+    Text[ da ] = "XYZ-diagram";
+    Text[ sv ] = "XYZ-diagram";
+    Text[ pl ] = "Wykres XYZ";
+    Text[ pt-BR ] = "Gráfico XYZ";
+    Text[ th ] = "แผนภูมิXYZ ";
+    Text[ ja ] = "XYZ軸図表";
+    Text[ ko ] = "XYZ 차트";
+    Text[ zh-CN ] = "XYZ 图表";
+    Text[ zh-TW ] = "XYZ-圖表";
+    Text[ tr ] = "XYZ şeması";
+    Text[ hi-IN ] = "XYZ चार्ट ";
+    Text[ ar ] = "رسم بياني س ص ع";
+    Text[ he ] = "XYZ-Diagramm";
+};
+String STR_NORMAL
+{
+    Text [ de ] = "Normal" ;
+    Text [ en-US ] = "Normal" ;
+    Text[ pt ] = "Normal";
+    Text[ ru ] = "Обычная";
+    Text[ el ] = "Κανονικά";
+    Text[ nl ] = "Normaal";
+    Text[ fr ] = "Normal";
+    Text[ es ] = "Normal";
+    Text[ fi ] = "Normaali";
+    Text[ ca ] = "Normal";
+    Text[ it ] = "Normale";
+    Text[ da ] = "Normal";
+    Text[ sv ] = "Normal";
+    Text[ pl ] = "Zwykły";
+    Text[ pt-BR ] = "Normal";
+    Text[ th ] = "ปกติ";
+    Text[ ja ] = "標準";
+    Text[ ko ] = "표준";
+    Text[ zh-CN ] = "一般";
+    Text[ zh-TW ] = "一般";
+    Text[ tr ] = "Normal";
+    Text[ hi-IN ] = "नॉर्मल्";
+    Text[ ar ] = "عادية";
+    Text[ he ] = "Normal";
+};
+String STR_STACKED
+{
+    Text [ de ] = "Gestapelt" ;
+    Text [ en-US ] = "Stacked" ;
+    Text[ pt ] = "Empilhado";
+    Text[ ru ] = "С накоплением";
+    Text[ el ] = "Σε στοίβα";
+    Text[ nl ] = "Gestapeld";
+    Text[ fr ] = "Empilé";
+    Text[ es ] = "En pilas";
+    Text[ fi ] = "Pinottuna";
+    Text[ ca ] = "Apilat";
+    Text[ it ] = "Sovrapposto";
+    Text[ da ] = "Stablet";
+    Text[ sv ] = "Staplat";
+    Text[ pl ] = "Skumulowany";
+    Text[ pt-BR ] = "Empilhado";
+    Text[ th ] = "กองซ้อน";
+    Text[ ja ] = "積み上げ";
+    Text[ ko ] = "누적된";
+    Text[ zh-CN ] = "重叠";
+    Text[ zh-TW ] = "重疊";
+    Text[ tr ] = "Yığılmış";
+    Text[ hi-IN ] = "Stacked";
+    Text[ ar ] = "متراكمة";
+    Text[ he ] = "Gestapelt";
+};
+String STR_PERCENT
+{
+    Text [ de ] = "Prozent" ;
+    Text [ en-US ] = "Percent" ;
+    Text[ pt ] = "Percentual";
+    Text[ ru ] = "Процентная";
+    Text[ el ] = "Ποσοστό (%)";
+    Text[ nl ] = "Procent";
+    Text[ fr ] = "Pourcentage";
+    Text[ es ] = "Porcentaje";
+    Text[ fi ] = "Prosenttia";
+    Text[ ca ] = "Percentatge";
+    Text[ it ] = "Percentuale";
+    Text[ da ] = "Procent";
+    Text[ sv ] = "Procent";
+    Text[ pl ] = "Procent";
+    Text[ pt-BR ] = "Percentual";
+    Text[ th ] = "เปอร์เซ็นต์";
+    Text[ ja ] = "パーセント";
+    Text[ ko ] = "백분율";
+    Text[ zh-CN ] = "百分比";
+    Text[ zh-TW ] = "百分比";
+    Text[ tr ] = "Yüzde";
+    Text[ hi-IN ] = "प्रतिशत";
+    Text[ ar ] = "النسبة المئوية";
+    Text[ he ] = "Prozent";
+};
+
+String STR_DEEP
+{
+    Text [ de ] = "Tief" ;
+    Text [ en-US ] = "Deep" ;
+    Text[ pt ] = "Fundo";
+    Text[ ru ] = "Глубина";
+    Text[ el ] = "Σε βάθος";
+    Text[ nl ] = "met diepte";
+    Text[ fr ] = "Profond";
+    Text[ es ] = "Profundidad";
+    Text[ fi ] = "Syvyys";
+    Text[ ca ] = "Profund";
+    Text[ it ] = "In profondità";
+    Text[ da ] = "Dyb";
+    Text[ sv ] = "Djup";
+    Text[ pl ] = "Głęboki";
+    Text[ pt-BR ] = "Profundo";
+    Text[ th ] = "ลึก";
+    Text[ ja ] = "奥行きあり";
+    Text[ ko ] = "깊이";
+    Text[ zh-CN ] = "深度";
+    Text[ zh-TW ] = "深度";
+    Text[ tr ] = "Derin";
+    Text[ hi-IN ] = "गहरा";
+    Text[ ar ] = "عميقة";
+    Text[ he ] = "Tief";
+};
+
+String STR_2D
+{
+    Text [ de ] = "2D-" ;
+    Text [ en-US ] = "2D " ;
+    Text[ pt ] = "2D-";
+    Text[ ru ] = "Двумерная";
+    Text[ el ] = "2Δ-";
+    Text[ nl ] = "2D-";
+    Text[ fr ] = "2D-";
+    Text[ es ] = "2D-";
+    Text[ fi ] = "Kaksiulotteinen ";
+    Text[ ca ] = "2D ";
+    Text[ it ] = "2D-";
+    Text[ da ] = "2D-";
+    Text[ sv ] = "2D-";
+    Text[ pl ] = "2D";
+    Text[ pt-BR ] = "2D-";
+    Text[ th ] = "2มิติ ";
+    Text[ ja ] = "2D";
+    Text[ ko ] = "2D";
+    Text[ zh-CN ] = "2 维";
+    Text[ zh-TW ] = "平面";
+    Text[ tr ] = "2B-";
+    Text[ hi-IN ] = "2D ";
+    Text[ ar ] = "ثنائي الأبعاد";
+    Text[ he ] = "2D-";
+};
+String STR_3D
+{
+    Text [ de ] = "3D-" ;
+    Text [ en-US ] = "3D " ;
+    Text[ pt ] = "3D-";
+    Text[ ru ] = "Трехмерная";
+    Text[ el ] = "3Δ-";
+    Text[ nl ] = "3D-";
+    Text[ fr ] = "3D-";
+    Text[ es ] = "3D-";
+    Text[ fi ] = "Kolmiulotteisuus ";
+    Text[ ca ] = "3D ";
+    Text[ it ] = "3D-";
+    Text[ da ] = "3D-";
+    Text[ sv ] = "3D-";
+    Text[ pl ] = "3D";
+    Text[ pt-BR ] = "3D-";
+    Text[ th ] = "3มิติ ";
+    Text[ ja ] = "3D";
+    Text[ ko ] = "3D";
+    Text[ zh-CN ] = "3 维";
+    Text[ zh-TW ] = "3D";
+    Text[ tr ] = "3B-";
+    Text[ hi-IN ] = "3D ";
+    Text[ ar ] = "ثلاثي الأبعاد";
+    Text[ he ] = "3D-";
+};
+String STR_DIAGRAM
+{
+    Text [ de ] = "Diagramm" ;
+    Text [ en-US ] = "Chart" ;
+    Text[ pt ] = "Gráfico";
+    Text[ ru ] = "Диаграмма";
+    Text[ el ] = "Διάγραμμα";
+    Text[ nl ] = "Diagram";
+    Text[ fr ] = "Diagramme";
+    Text[ es ] = "Diagrama";
+    Text[ fi ] = "Kaavio";
+    Text[ ca ] = "Diagrama";
+    Text[ it ] = "Diagramma";
+    Text[ da ] = "Diagram";
+    Text[ sv ] = "Diagram";
+    Text[ pl ] = "Wykres";
+    Text[ pt-BR ] = "Gráfico";
+    Text[ th ] = "แผนภูมิ";
+    Text[ ja ] = "グラフ";
+    Text[ ko ] = "차트";
+    Text[ zh-CN ] = "图表";
+    Text[ zh-TW ] = "圖表";
+    Text[ tr ] = "Şema";
+    Text[ hi-IN ] = "चार्ट ";
+    Text[ ar ] = "رسم بياني";
+    Text[ he ] = "‮תרשים‬";
+};
+String STR_DIAGRAM_ROW
+{
+    // $(ROW) can be a number or the caption of the row in quotes
+    Text [ de ] = "Datenreihe $(ROW)" ;
+    Text [ en-US ] = "Data Series $(ROW)" ;
+    Text[ pt ] = "Série de dados $(ROW)";
+    Text[ ru ] = "Ряд данных $(ROW)";
+    Text[ el ] = "Γραμμή δεδομένων $(ROW)";
+    Text[ nl ] = "Gegevensreeks $(ROW)";
+    Text[ fr ] = "Série de données $(ROW)";
+    Text[ es ] = "Serie de datos $(ROW)";
+    Text[ fi ] = "Tietojoukot $(ROW)";
+    Text[ ca ] = "Sèrie de dades $(ROW)";
+    Text[ it ] = "Serie di dati $(ROW)";
+    Text[ da ] = "Dataserie $(ROW)";
+    Text[ sv ] = "Dataserie $(ROW)";
+    Text[ pl ] = "Seria danych $(ROW)";
+    Text[ pt-BR ] = "Série de Dados $(ROW)";
+    Text[ th ] = "ชุดข้อมูล $(ROW)";
+    Text[ ja ] = "系列$(ROW)";
+    Text[ ko ] = "연속 데이터 $(ROW)";
+    Text[ zh-CN ] = "数据组 $(ROW)";
+    Text[ zh-TW ] = "資料欄 $(ROW)";
+    Text[ tr ] = "Veri dizisi $(ROW)";
+    Text[ hi-IN ] = "ड़ॉटा श्रृंखला $(पक्तिं)";
+    Text[ ar ] = "صف البيانات $(ROW)";
+    Text[ he ] = "Datenreihe $(ROW)";
+};
+
+
+
+String STR_DEFAULTVIEW
+{
+    Text [ de ] = "Default" ;
+    Text [ en-US ] = "Default" ;
+    Text[ pt ] = "Padrão";
+    Text[ ru ] = "Стандарт";
+    Text[ el ] = "Προεπιλογή";
+    Text[ nl ] = "Standaard";
+    Text[ fr ] = "Défaut";
+    Text[ es ] = "Predeterminado";
+    Text[ fi ] = "Oletus";
+    Text[ ca ] = "Per defecte";
+    Text[ it ] = "Predefinito";
+    Text[ da ] = "Standard";
+    Text[ sv ] = "Standard";
+    Text[ pl ] = "Domyślnie";
+    Text[ pt-BR ] = "Padrão";
+    Text[ th ] = "ค่าเริ่มต้น";
+    Text[ ja ] = "標準";
+    Text[ ko ] = "기본값";
+    Text[ zh-CN ] = "默认";
+    Text[ zh-TW ] = "默認";
+    Text[ tr ] = "Standart";
+    Text[ hi-IN ] = "अनुपस्थिति";
+    Text[ ar ] = "افتراضي";
+    Text[ he ] = "‮ברירת מחדל‬";
+};
+
+String STR_OPEN_DOCUMENT
+{
+    Text [ de ] = "Dokument laden" ;
+    Text [ en-US ] = "Load document" ;
+    Text[ pt ] = "Carregar documento";
+    Text[ ru ] = "Загрузить документ";
+    Text[ el ] = "Φόρτωση εγγράφου";
+    Text[ nl ] = "Document laden";
+    Text[ fr ] = "Charger un document";
+    Text[ es ] = "Cargar documento";
+    Text[ fi ] = "Lataa asiakirja";
+    Text[ ca ] = "Carrega el document";
+    Text[ it ] = "Apri documento";
+    Text[ da ] = "Indlæs dokument";
+    Text[ sv ] = "Ladda dokument";
+    Text[ pl ] = "Ładuj dokument";
+    Text[ pt-BR ] = "Carregar documento";
+    Text[ th ] = "โหลดเอกสาร";
+    Text[ ja ] = "ドキュメントを読み込む";
+    Text[ ko ] = "문서 로드";
+    Text[ zh-CN ] = "装入文档";
+    Text[ zh-TW ] = "載入文件";
+    Text[ tr ] = "Belge yükle";
+    Text[ hi-IN ] = "Load document";
+    Text[ ar ] = "تحميل المستند";
+    Text[ he ] = "‮טעינת מסמך‬";
+};
+String STR_SAVE_DOCUMENT
+{
+    Text [ en-US ] = "Save document";
+    Text [ de ] = "Dokument speichern" ;
+    Text [ en-US ] = "Save document" ;
+    Text [ de ] = "Dokument speichern" ;
+    Text[ pt ] = "Guardar documento";
+    Text[ ru ] = "Сохранить документ";
+    Text[ el ] = "Αποθήκευση εγγράφου";
+    Text[ nl ] = "Document opslaan";
+    Text[ fr ] = "Enregistrer le document";
+    Text[ es ] = "Guardar documento";
+    Text[ fi ] = "Tallenna asiakirja";
+    Text[ ca ] = "Desa el document";
+    Text[ it ] = "Salva documento";
+    Text[ da ] = "Gem dokument";
+    Text[ sv ] = "Spara dokument";
+    Text[ pl ] = "Zapisz dokument";
+    Text[ pt-BR ] = "Salvar documento";
+    Text[ th ] = "บันทึกเอกสาร";
+    Text[ ja ] = "ドキュメントの保存";
+    Text[ ko ] = "문서 저장";
+    Text[ zh-CN ] = "存盘文档";
+    Text[ zh-TW ] = "儲存文件";
+    Text[ tr ] = "Belgeyi kaydet";
+    Text[ hi-IN ] = "लेखपत्र संचित करो";
+    Text[ ar ] = "حفظ المستند";
+    Text[ he ] = "Dokument speichern";
+};
+String STR_GRAPHIC
+{
+    Text [ de ] = "Chart" ;
+    Text [ en-US ] = "Chart" ;
+    Text[ pt ] = "Chart";
+    Text[ ru ] = "Диаграмма";
+    Text[ el ] = "Διάγραμμα";
+    Text[ nl ] = "Chart";
+    Text[ fr ] = "Diagramme";
+    Text[ es ] = "Diagrama";
+    Text[ fi ] = "Kaavio";
+    Text[ ca ] = "Diagrama";
+    Text[ it ] = "Diagramma";
+    Text[ da ] = "Diagram";
+    Text[ sv ] = "Chart";
+    Text[ pl ] = "Wykres";
+    Text[ pt-BR ] = "Gráfico";
+    Text[ th ] = "แผนภูมิ";
+    Text[ ja ] = "グラフ";
+    Text[ ko ] = "차트";
+    Text[ zh-CN ] = "图表";
+    Text[ zh-TW ] = "圖表";
+    Text[ tr ] = "Şema";
+    Text[ hi-IN ] = "चार्ट";
+    Text[ ar ] = "رسم بياني";
+    Text[ he ] = "‮תרשים‬";
+};
+String STR_CHART_DOCUMENT
+{
+    Text [ de ] = "Diagramm" ;
+    Text [ en-US ] = "Chart" ;
+    Text[ pt ] = "Gráfico";
+    Text[ ru ] = "Диаграмма";
+    Text[ el ] = "Διάγραμμα";
+    Text[ nl ] = "Diagram";
+    Text[ fr ] = "Diagramme";
+    Text[ es ] = "Diagrama";
+    Text[ fi ] = "Kaavio";
+    Text[ ca ] = "Diagrama";
+    Text[ it ] = "Diagramma";
+    Text[ da ] = "Diagram";
+    Text[ sv ] = "Diagram";
+    Text[ pl ] = "Wykres";
+    Text[ pt-BR ] = "Gráfico";
+    Text[ th ] = "แผนภูมิ";
+    Text[ ja ] = "グラフ";
+    Text[ ko ] = "차트";
+    Text[ zh-CN ] = "图表";
+    Text[ zh-TW ] = "圖表";
+    Text[ tr ] = "Şema";
+    Text[ hi-IN ] = "चार्ट";
+    Text[ ar ] = "رسم بياني";
+    Text[ he ] = "‮תרשים‬";
+};
+String STR_CHART_DOCUMENT_FULLTYPE_60
+{
+    Text [ de ] = "%PRODUCTNAME 6.0 Diagramm" ;
+    Text [ en-US ] = "%PRODUCTNAME 6.0 Chart" ;
+    Text[ pt ] = "%PRODUCTNAME 6.0 Gráfico";
+    Text[ ru ] = "Диаграмма %PRODUCTNAME 6.0";
+    Text[ el ] = "%PRODUCTNAME 6.0 Διάγραμμα";
+    Text[ nl ] = "%PRODUCTNAME 6.0 Diagram";
+    Text[ fr ] = "%PRODUCTNAME 6.0 Diagramme";
+    Text[ es ] = "%PRODUCTNAME 6.0 - Diagrama";
+    Text[ fi ] = "%PRODUCTNAME 6.0 Chart";
+    Text[ ca ] = "%PRODUCTNAME 6.0 Diagrama";
+    Text[ it ] = "%PRODUCTNAME 6.0 Diagramma";
+    Text[ da ] = "%PRODUCTNAME 6.0-diagram";
+    Text[ sv ] = "%PRODUCTNAME 6.0 Diagram";
+    Text[ pl ] = "%PRODUCTNAME 6.0 Chart";
+    Text[ pt-BR ] = "%PRODUCTNAME 6.0 Chart";
+    Text[ th ] = "แผนภูมิ%PRODUCTNAME 6.0 ";
+    Text[ ja ] = "%PRODUCTNAME 6.0 グラフ";
+    Text[ ko ] = "%PRODUCTNAME 6.0 차트";
+    Text[ zh-CN ] = "%PRODUCTNAME 6.0 图表";
+    Text[ zh-TW ] = "%PRODUCTNAME 6.0 圖表";
+    Text[ tr ] = "%PRODUCTNAME 6.0 Çizelgesi";
+    Text[ hi-IN ] = "%PRODUCTNAME 6.0 चार्ट";
+    Text[ ar ] = "رسم بياني %PRODUCTNAME 6.0";
+    Text[ he ] = "%PRODUCTNAME 6.0 Diagramm";
+};
+String STR_CHART_DOCUMENT_FULLTYPE_50
+{
+    Text [ de ] = "%PRODUCTNAME 5.0 Diagramm" ;
+    Text [ en-US ] = "%PRODUCTNAME 5.0 Chart" ;
+    Text[ pt ] = "Gráfico (%PRODUCTNAME 5.0)";
+    Text[ ru ] = "Диаграмма %PRODUCTNAME 5.0";
+    Text[ el ] = "Διάγραμμα (%PRODUCTNAME 5.0)";
+    Text[ nl ] = "%PRODUCTNAME 5.0 diagram";
+    Text[ fr ] = "%PRODUCTNAME 5.0 Diagramme";
+    Text[ es ] = "%PRODUCTNAME 5.0 - Diagrama";
+    Text[ fi ] = "%PRODUCTNAME 5.0 Chart";
+    Text[ ca ] = "%PRODUCTNAME 5.0 Diagrama";
+    Text[ it ] = "Diagramma %PRODUCTNAME 5.0";
+    Text[ da ] = "%PRODUCTNAME 5.0 diagram";
+    Text[ sv ] = "%PRODUCTNAME 5.0 Diagram";
+    Text[ pl ] = "%PRODUCTNAME 5.0 Chart";
+    Text[ pt-BR ] = "%PRODUCTNAME 5.0 Chart";
+    Text[ th ] = "แผนภูมิ%PRODUCTNAME 5.0 ";
+    Text[ ja ] = "%PRODUCTNAME 5.0 グラフ";
+    Text[ ko ] = "%PRODUCTNAME 5.0 차트";
+    Text[ zh-CN ] = "%PRODUCTNAME 5.0 图表";
+    Text[ zh-TW ] = "%PRODUCTNAME 5.0 圖表";
+    Text[ tr ] = "%PRODUCTNAME 5.0 şeması";
+    Text[ hi-IN ] = "%PRODUCTNAME 5.0 चार्ट";
+    Text[ ar ] = "رسم بياني %PRODUCTNAME 5.0";
+    Text[ he ] = "%PRODUCTNAME 5.0 Diagramm";
+};
+String STR_CHART_DOCUMENT_FULLTYPE_40
+{
+    Text [ de ] = "%PRODUCTNAME 4.0 Diagramm" ;
+    Text [ en-US ] = "%PRODUCTNAME 4.0 Chart" ;
+    Text[ pt ] = "Gráfico (%PRODUCTNAME 4.0)";
+    Text[ ru ] = "Диаграмма %PRODUCTNAME 4.0";
+    Text[ el ] = "Διάγραμμα (%PRODUCTNAME 4.0)";
+    Text[ nl ] = "%PRODUCTNAME 4.0 diagram";
+    Text[ fr ] = "%PRODUCTNAME 4.0 Diagramme";
+    Text[ es ] = "%PRODUCTNAME 4.0 - Diagrama";
+    Text[ fi ] = "%PRODUCTNAME 4.0 Chart";
+    Text[ ca ] = "%PRODUCTNAME 4.0 Diagrama";
+    Text[ it ] = "Diagramma %PRODUCTNAME 4.0";
+    Text[ da ] = "%PRODUCTNAME 4.0 diagram";
+    Text[ sv ] = "%PRODUCTNAME 4.0 Diagram";
+    Text[ pl ] = "%PRODUCTNAME 4.0 Chart";
+    Text[ pt-BR ] = "%PRODUCTNAME 4.0 Chart";
+    Text[ th ] = "แผนภูมิ%PRODUCTNAME 4.0 ";
+    Text[ ja ] = "%PRODUCTNAME 4.0 グラフ";
+    Text[ ko ] = "%PRODUCTNAME 4.0 차트";
+    Text[ zh-CN ] = "%PRODUCTNAME 4.0 图表";
+    Text[ zh-TW ] = "%PRODUCTNAME 4.0 圖表";
+    Text[ tr ] = "%PRODUCTNAME 4.0 şeması";
+    Text[ hi-IN ] = "%PRODUCTNAME 4.0 चार्ट";
+    Text[ ar ] = "رسم بياني %PRODUCTNAME 4.0";
+    Text[ he ] = "%PRODUCTNAME 4.0 Diagramm";
+};
+String STR_CHART_DOCUMENT_FULLTYPE_31
+{
+    Text [ de ] = "%PRODUCTNAME 3.0 Diagramm" ;
+    Text [ en-US ] = "%PRODUCTNAME 3.0 Chart" ;
+    Text[ pt ] = "Gráfico (%PRODUCTNAME 3.0)";
+    Text[ ru ] = "Диаграмма %PRODUCTNAME 3.0";
+    Text[ el ] = "Διάγραμμα (%PRODUCTNAME 3.0)";
+    Text[ nl ] = "%PRODUCTNAME 3.0 diagram";
+    Text[ fr ] = "%PRODUCTNAME 3.0 Diagramme";
+    Text[ es ] = "%PRODUCTNAME 3.0 - Diagrama";
+    Text[ fi ] = "%PRODUCTNAME 3.0 Chart";
+    Text[ ca ] = "%PRODUCTNAME 3.0 Diagrama";
+    Text[ it ] = "Diagramma %PRODUCTNAME 3.0";
+    Text[ da ] = "%PRODUCTNAME 3.0 diagram";
+    Text[ sv ] = "%PRODUCTNAME 3.0 Diagram";
+    Text[ pl ] = "%PRODUCTNAME 3.0 Chart";
+    Text[ pt-BR ] = "%PRODUCTNAME 3.0 Chart";
+    Text[ th ] = "แผนภูมิ%PRODUCTNAME 3.0 ";
+    Text[ ja ] = "%PRODUCTNAME 3.0 グラフ";
+    Text[ ko ] = "%PRODUCTNAME 3.0 차트";
+    Text[ zh-CN ] = "%PRODUCTNAME 3.0 图表";
+    Text[ zh-TW ] = "%PRODUCTNAME 3.0 圖表";
+    Text[ tr ] = "%PRODUCTNAME 3.0 şeması";
+    Text[ hi-IN ] = "%PRODUCTNAME 3.0 चार्ट";
+    Text[ ar ] = "رسم بياني %PRODUCTNAME 3.0";
+    Text[ he ] = "%PRODUCTNAME 3.0 Diagramm";
+};
+String STR_BAD_PASSWORD_OR_FILE_CORRUPTED
+{
+    Text [ de ] = "Das Kennwort ist falsch oder die Datei beschädigt." ;
+    Text [ en-US ] = "The password is incorrect or the file is damaged." ;
+    Text[ pt ] = "Ou a senha está incorrecta ou o ficheiro danificado.";
+    Text[ ru ] = "Неправильный пароль или файл поврежден.";
+    Text[ el ] = "Ο κωδικός πρόσβασης είναι εσφαλμένος ή το αρχείο ελαττωματικό.";
+    Text[ nl ] = "Het wachtwoord is niet juist of het bestand is beschadigd";
+    Text[ fr ] = "Le mot de passe est incorrect ou le fichier est défectueux.";
+    Text[ es ] = "La contraseña no es válida o el archivo está dañado.";
+    Text[ fi ] = "Salasana on virheellinen tai tiedosto on vahingoittunut.";
+    Text[ ca ] = "La contrasenya no és correcta o el fitxer està danyat.";
+    Text[ it ] = "La password è errata o il file è danneggiato.";
+    Text[ da ] = "Adgangskoden er forkert eller filen er beskadiget.";
+    Text[ sv ] = "Lösenordet är felaktigt eller filen skadad.";
+    Text[ pl ] = "Nieprawidłowe hasło lub uszkodzony plik.";
+    Text[ pt-BR ] = "A senha é invalida ou o arquivo está corrompido.";
+    Text[ th ] = "รหัสผ่านไม่ถูกต้องหรือแฟ้มเสียหาย";
+    Text[ ja ] = "パスワードが間違っているか、またはファイルに問題があります。";
+    Text[ ko ] = "암호가 틀리거나 파일이 손상되었습니다.";
+    Text[ zh-CN ] = "无效的密码或文件已经被损坏。";
+    Text[ zh-TW ] = "無效的密碼或檔案已經被損壞。";
+    Text[ tr ] = "Şifre yanlış veya dosya zarar görmüş.";
+    Text[ hi-IN ] = "The password is incorrect or the file is damaged.";
+    Text[ ar ] = "إما أن كلمة السر غير صحيحة أو أن الملف تالف.";
+    Text[ he ] = "Das Kennwort ist falsch oder die Datei beschädigt.";
+};
+
+
+String STR_REGRESSION_LINEAR
+{
+    Text [ de ] = "Lineare Regression" ;
+    Text [ en-US ] = "Linear regression" ;
+    Text[ pt ] = "Regressão linear";
+    Text[ ru ] = "Линейная регрессия";
+    Text[ el ] = "Γραμμική παλινδρόμηση";
+    Text[ nl ] = "Lineaire regressie";
+    Text[ fr ] = "Régression linéaire";
+    Text[ es ] = "Regresión lineal";
+    Text[ fi ] = "Lineaarinen regressio";
+    Text[ ca ] = "Regressió lineal";
+    Text[ it ] = "Regressione lineare";
+    Text[ da ] = "Lineær regression";
+    Text[ sv ] = "Linjär regression";
+    Text[ pl ] = "Regresja liniowa";
+    Text[ pt-BR ] = "Regressão linear";
+    Text[ th ] = "ถดถอยแบบเส้นตรง";
+    Text[ ja ] = "線形回帰";
+    Text[ ko ] = "선 회귀선";
+    Text[ zh-CN ] = "等差回归";
+    Text[ zh-TW ] = "等差回歸";
+    Text[ tr ] = "Doğrusal regresyon";
+    Text[ hi-IN ] = "Linear regression";
+    Text[ ar ] = "انحدار خطي";
+    Text[ he ] = "Lineare Regression";
+};
+String STR_REGRESSION_LOG
+{
+    Text [ de ] = "Logarithmische Regression" ;
+    Text [ en-US ] = "Logarithm regression" ;
+    Text[ pt ] = "Regressão logarítmica";
+    Text[ ru ] = "Логарифмическая регрессия";
+    Text[ el ] = "Λογαριθμική παλινδρόμηση";
+    Text[ nl ] = "Logaritmische regressie";
+    Text[ fr ] = "Régression logarithmique";
+    Text[ es ] = "Regresión logarítmica";
+    Text[ fi ] = "Logaritminen regressio";
+    Text[ ca ] = "Regressió logarítmica";
+    Text[ it ] = "Regressione logaritmica";
+    Text[ da ] = "Logaritmisk regression";
+    Text[ sv ] = "Logaritmisk regression";
+    Text[ pl ] = "Regresja logarytmiczna";
+    Text[ pt-BR ] = "Regressão logarítmica";
+    Text[ th ] = "ถดถอยแบบลอการิธึม";
+    Text[ ja ] = "対数の回帰";
+    Text[ ko ] = "로그 회귀선";
+    Text[ zh-CN ] = "对数回归";
+    Text[ zh-TW ] = "對數回歸";
+    Text[ tr ] = "Logaritmik regresyon";
+    Text[ hi-IN ] = "लघुगणक रिग्रेश्यन";
+    Text[ ar ] = "انحدار لوغاريتمي";
+    Text[ he ] = "Logarithmische Regression";
+};
+String STR_REGRESSION_EXP
+{
+    Text [ de ] = "Exponentielle Regression" ;
+    Text [ en-US ] = "Exponential Regression" ;
+    Text[ pt ] = "Regressão exponencial";
+    Text[ ru ] = "Экспоненциальная регрессия";
+    Text[ el ] = "Εκθετική παλινδρόμηση";
+    Text[ nl ] = "Exponentiële regressie";
+    Text[ fr ] = "Régression exponentielle";
+    Text[ es ] = "Regresión exponencial";
+    Text[ fi ] = "Eksponentiaalinen regressio";
+    Text[ ca ] = "Regressió exponencial";
+    Text[ it ] = "Regressione esponenziale";
+    Text[ da ] = "Eksponentiel regression";
+    Text[ sv ] = "Exponentiell regression";
+    Text[ pl ] = "Regresja wykładnicza";
+    Text[ pt-BR ] = "Regressão exponencial";
+    Text[ th ] = "ถดถอยแบบเอ็กซ์โปเนนเชียล";
+    Text[ ja ] = "指数の回帰";
+    Text[ ko ] = "지수 회귀선";
+    Text[ zh-CN ] = "指数回归";
+    Text[ zh-TW ] = "指數回歸";
+    Text[ tr ] = "Üstel regresyon";
+    Text[ hi-IN ] = "Exponential Regression";
+    Text[ ar ] = "انحدار أسي";
+    Text[ he ] = "Exponentielle Regression";
+};
+String STR_REGRESSION_POWER
+{
+    Text [ de ] = "Potenzielle Regression" ;
+    Text [ en-US ] = "Power regression" ;
+    Text[ pt ] = "Regressão potencial";
+    Text[ ru ] = "Потенциальная регрессия";
+    Text[ el ] = "Δυναμική παλινδρόμηση";
+    Text[ nl ] = "Potentiële regressie";
+    Text[ fr ] = "Régression potentielle";
+    Text[ es ] = "Regresión potencial";
+    Text[ fi ] = "Polynomiregressio";
+    Text[ ca ] = "Regressió potencial";
+    Text[ it ] = "Regressione potenziale";
+    Text[ da ] = "Potentiel regression";
+    Text[ sv ] = "Potentiell regression";
+    Text[ pl ] = "Regresja potęgowa";
+    Text[ pt-BR ] = "Regressão de potência";
+    Text[ th ] = "กำลังการถดถอย";
+    Text[ ja ] = "乗羃の回帰";
+    Text[ ko ] = "퍼텐셜회귀선";
+    Text[ zh-CN ] = "位能回归";
+    Text[ zh-TW ] = "指數回歸";
+    Text[ tr ] = "Kuvvet regresyonu";
+    Text[ hi-IN ] = "पवर रिग्रेश्यन";
+    Text[ ar ] = "انحدار القدرة";
+    Text[ he ] = "Potenzielle Regression";
+};
+
+String STR_STATISTICS_IN_LEGEND
+{
+    // comment
+    Text [ x-comment ] = "BM: This determines how a statistics string (STR_REGRESSION_...) appears in the legend, e.g. in german \"Lineare Regression, Spalte 3\" will appear for \"$(STATTYP), $(ROWNAME)\"";
+    // comment
+    Text [ de ] = "$(STATTYP), $(ROWNAME)";
+    Text [ en-US ] = "$(STATTYP), $(ROWNAME) " ;
+    Text[ pt ] = "$(STATTYP), $(ROWNAME)";
+    Text[ ru ] = "$(STATTYP), $(ROWNAME)";
+    Text[ el ] = "$(STATTYP), $(ROWNAME)";
+    Text[ nl ] = "$(STATTYP), $(ROWNAME)";
+    Text[ fr ] = "$(STATTYP), $(ROWNAME)";
+    Text[ es ] = "$(STATTYP), $(ROWNAME)";
+    Text[ fi ] = "$(STATTYP), $(ROWNAME) ";
+    Text[ ca ] = "$(STATTYP), $(ROWNAME) ";
+    Text[ it ] = "$(STATTYP), $(ROWNAME)";
+    Text[ da ] = "$(STATTYP), $(ROWNAME)";
+    Text[ sv ] = "$(STATTYP), $(ROWNAME)";
+    Text[ pl ] = "$(STATTYP), $(ROWNAME)";
+    Text[ pt-BR ] = "$(STATTYP), $(ROWNAME)";
+    Text[ th ] = "$(STATTYP), $(ROWNAME) ";
+    Text[ ja ] = "$(STATTYP)、$(ROWNAME)";
+    Text[ ko ] = "$(STATTYP), $(ROWNAME)";
+    Text[ zh-CN ] = "$(STATTYP)， $(ROWNAME)";
+    Text[ zh-TW ] = "$(STATTYP), $(ROWNAME)";
+    Text[ tr ] = "$(STATTYP), $(ROWNAME)";
+    Text[ hi-IN ] = "$(STATTYP), $(ROWNAME) ";
+    Text[ ar ] = "$(STATTYP), $(ROWNAME)";
+    Text[ he ] = "$(STATTYP), $(ROWNAME) ";
+};
+
+
+
+
+
+//-----------------------------------
+
+//-----------------------------------
+
+//-----------------------------------
+
+//-----------------------------------
+//-----------------------------------
+//-----------------------------------
+
+
+// some strings merged using arguments now
+
+
+
+
+// some more strings for QuickHelp
+
+
+
+
+
+
+
+
+
+
+
+//-----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,13 +58,13 @@
 //============================== PictWriter ===================================
 
 struct PictWriterAttrStackMember {
-    struct PictWriterAttrStackMember *  pSucc;
-    Color                               aLineColor;
-    Color                               aFillColor;
-    RasterOp                            eRasterOp;
-    Font                                aFont;
-    MapMode                             aMapMode;
-    Rectangle                           aClipRect;
+    struct PictWriterAttrStackMember *	pSucc;
+    Color								aLineColor;
+    Color								aFillColor;
+    RasterOp							eRasterOp;
+    Font								aFont;
+    MapMode								aMapMode;
+    Rectangle							aClipRect;
 };
 
 
@@ -88,29 +88,29 @@ private:
     SvStream * pPict;
 
     // Aktuelle Attribute im Quell-Metafile:
-    Color       aLineColor;
-    Color       aFillColor;
-    RasterOp    eSrcRasterOp;
-    Font        aSrcFont;
-    MapMode     aSrcMapMode;
-    MapMode     aTargetMapMode;
-    Rectangle   aClipRect;
+    Color		aLineColor;
+    Color		aFillColor;
+    RasterOp	eSrcRasterOp;
+    Font		aSrcFont;
+    MapMode		aSrcMapMode;
+    MapMode		aTargetMapMode;
+    Rectangle	aClipRect;
     PictWriterAttrStackMember * pAttrStack;
 
     // Aktuelle Attribute im Ziel-Metafile, und ob sie gueltig sind
-    BOOL        bDstBkPatVisible;   BOOL bDstBkPatValid;
-    BYTE        nDstTxFace;         BOOL bDstTxFaceValid;
-    RasterOp    eDstTxMode;         BOOL bDstTxModeValid;
-    USHORT      nDstPnSize;         BOOL bDstPnSizeValid;
-    RasterOp    eDstPnMode;         BOOL bDstPnModeValid;
-    PictPattern aDstPnPat;          BOOL bDstPnPatValid;
-    BOOL        bDstFillPatVisible; BOOL bDstFillPatValid;
-    USHORT      nDstTxSize;         BOOL bDstTxSizeValid;
-    Color       aDstFgCol;          BOOL bDstFgColValid;
-    Color       aDstBkCol;          BOOL bDstBkColValid;
-    Point       aDstPenPosition;    BOOL bDstPenPositionValid;
-    Point       aDstTextPosition;   BOOL bDstTextPositionValid;
-    String      aDstFontName; USHORT nDstFontNameId; BOOL bDstFontNameValid;
+    BOOL		bDstBkPatVisible;   BOOL bDstBkPatValid;
+    BYTE        nDstTxFace;			BOOL bDstTxFaceValid;
+    RasterOp    eDstTxMode;			BOOL bDstTxModeValid;
+    USHORT      nDstPnSize;			BOOL bDstPnSizeValid;
+    RasterOp    eDstPnMode;			BOOL bDstPnModeValid;
+    PictPattern aDstPnPat;			BOOL bDstPnPatValid;
+    BOOL		bDstFillPatVisible;	BOOL bDstFillPatValid;
+    USHORT      nDstTxSize;			BOOL bDstTxSizeValid;
+    Color       aDstFgCol;			BOOL bDstFgColValid;
+    Color       aDstBkCol;			BOOL bDstBkColValid;
+    Point       aDstPenPosition;	BOOL bDstPenPositionValid;
+    Point       aDstTextPosition;	BOOL bDstTextPositionValid;
+    String		aDstFontName; USHORT nDstFontNameId; BOOL bDstFontNameValid;
 
     ULONG nNumberOfActions;  // Anzahl der Actions im GDIMetafile
     ULONG nNumberOfBitmaps;  // Anzahl der Bitmaps
@@ -354,7 +354,7 @@ Rectangle PictWriter::MapRectangle( const Rectangle& rRect )
 void PictWriter::WriteRectangle(const Rectangle & rRect)
 {
     Rectangle aRect( MapRectangle( rRect ) );
-    *pPict  << (sal_Int16)aRect.Top() << (sal_Int16)aRect.Left()
+    *pPict	<< (sal_Int16)aRect.Top() << (sal_Int16)aRect.Left()
             << (sal_Int16)aRect.Bottom() << (sal_Int16)aRect.Right();
 }
 
@@ -447,7 +447,7 @@ void PictWriter::ConvertLinePattern(PictPattern & rPat, BOOL bVisible)
 {
     if( bVisible )
     {
-        rPat.nHi=0xffffffff;
+        rPat.nHi=0xffffffff; 
         rPat.nLo=0xffffffff;
     }
     else
@@ -461,7 +461,7 @@ void PictWriter::ConvertFillPattern(PictPattern & rPat, BOOL bVisible)
 {
     if( bVisible )
     {
-        rPat.nHi=0xffffffff;
+        rPat.nHi=0xffffffff; 
         rPat.nLo=0xffffffff;
     }
     else
@@ -716,7 +716,7 @@ void PictWriter::WriteOpcode_FontName(const Font & rFont)
 
     if (bDstFontNameValid==FALSE || nDstFontNameId!=nFontId || aDstFontName!=rFont.GetName())
     {
-        ByteString aByteString( rFont.GetName(), gsl_getSystemTextEncoding() );
+        ByteString aByteString( rFont.GetName(), gsl_getSystemTextEncoding() );		
         sal_uInt16 nFontNameLen = aByteString.Len();
         if ( nFontNameLen )
         {
@@ -738,8 +738,8 @@ void PictWriter::WriteOpcode_ClipRect( const Rectangle& rRect )
     Rectangle aRect( MapRectangle( rRect ) );
     aRect.nBottom++;
     aRect.nRight++;
-    *pPict  << (sal_uInt16)1    // opcode 1
-            << (sal_uInt16)10   // data size
+    *pPict	<< (sal_uInt16)1	// opcode 1 
+            << (sal_uInt16)10	// data size 
             << (sal_Int16)aRect.Top() << (sal_Int16)aRect.Left()
             << (sal_Int16)aRect.Bottom() << (sal_Int16)aRect.Right();
     aClipRect = aRect;
@@ -754,7 +754,7 @@ void PictWriter::WriteOpcode_Rect(PictDrawingMethod eMethod, const Rectangle & r
         case PDM_ERASE:  oc=0x0032; break;
         case PDM_INVERT: oc=0x0033; break;
         case PDM_FILL:   oc=0x0034; break;
-        default:         oc=0;      break;   // -Wall a default for oc...
+        default:		 oc=0;		break;   // -Wall a default for oc...
     }
     *pPict << oc;
     WriteRectangle(rRect);
@@ -770,7 +770,7 @@ void PictWriter::WriteOpcode_SameRect(PictDrawingMethod eMethod)
         case PDM_ERASE:  oc=0x003a; break;
         case PDM_INVERT: oc=0x003b; break;
         case PDM_FILL:   oc=0x003c; break;
-        default:         oc=0;      break;   // -Wall a default for oc...
+        default:		 oc=0;		break;   // -Wall a default for oc...
     }
     *pPict << oc;
 }
@@ -785,7 +785,7 @@ void PictWriter::WriteOpcode_RRect(PictDrawingMethod eMethod, const Rectangle & 
         case PDM_ERASE:  oc=0x0042; break;
         case PDM_INVERT: oc=0x0043; break;
         case PDM_FILL:   oc=0x0044; break;
-        default:         oc=0;      break;   // -Wall a default for oc...
+        default:		 oc=0;		break;   // -Wall a default for oc...
     }
     *pPict << oc;
     WriteRectangle(rRect);
@@ -801,7 +801,7 @@ void PictWriter::WriteOpcode_SameRRect(PictDrawingMethod eMethod)
         case PDM_ERASE:  oc=0x004a; break;
         case PDM_INVERT: oc=0x004b; break;
         case PDM_FILL:   oc=0x004c; break;
-        default:         oc=0;      break;   // -Wall a default for oc...
+        default:		 oc=0;		break;   // -Wall a default for oc...
     }
     *pPict << oc;
 }
@@ -816,7 +816,7 @@ void PictWriter::WriteOpcode_Oval(PictDrawingMethod eMethod, const Rectangle & r
         case PDM_ERASE:  oc=0x0052; break;
         case PDM_INVERT: oc=0x0053; break;
         case PDM_FILL:   oc=0x0054; break;
-        default:         oc=0;      break;   // -Wall a default for oc...
+        default:		 oc=0;		break;   // -Wall a default for oc...
     }
     *pPict << oc;
     WriteRectangle(rRect);
@@ -832,7 +832,7 @@ void PictWriter::WriteOpcode_SameOval(PictDrawingMethod eMethod)
         case PDM_ERASE:  oc=0x005a; break;
         case PDM_INVERT: oc=0x005b; break;
         case PDM_FILL:   oc=0x005c; break;
-        default:         oc=0;      break;   // -Wall a default for oc...
+        default:		 oc=0;		break;   // -Wall a default for oc...
     }
     *pPict << oc;
 }
@@ -848,7 +848,7 @@ void PictWriter::WriteOpcode_Arc(PictDrawingMethod eMethod, const Rectangle & rR
         case PDM_ERASE:  oc=0x0062; break;
         case PDM_INVERT: oc=0x0063; break;
         case PDM_FILL:   oc=0x0064; break;
-        default:         oc=0;      break;   // -Wall a default for oc...
+        default:		 oc=0;		break;   // -Wall a default for oc...
     }
     *pPict << oc;
     WriteRectangle(rRect);
@@ -866,7 +866,7 @@ void PictWriter::WriteOpcode_SameArc(PictDrawingMethod eMethod, const Rectangle 
         case PDM_ERASE:  oc=0x006a; break;
         case PDM_INVERT: oc=0x006b; break;
         case PDM_FILL:   oc=0x006c; break;
-        default:         oc=0;      break;   // -Wall a default for oc...
+        default:		 oc=0;		break;   // -Wall a default for oc...
     }
     *pPict << oc;
     WriteArcAngles(rRect,rStartPt,rEndPt);
@@ -884,7 +884,7 @@ void PictWriter::WriteOpcode_Poly(PictDrawingMethod eMethod, const Polygon & rPo
         case PDM_ERASE:  oc=0x0072; break;
         case PDM_INVERT: oc=0x0073; break;
         case PDM_FILL:   oc=0x0074; break;
-        default:         oc=0;      break;   // -Wall a default for oc...
+        default:		 oc=0;		break;   // -Wall a default for oc...
     }
     *pPict << oc;
     WritePolygon(rPoly);
@@ -893,13 +893,13 @@ void PictWriter::WriteOpcode_Poly(PictDrawingMethod eMethod, const Polygon & rPo
 
 void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, const Bitmap & rBitmap)
 {
-    BitmapReadAccess*   pAcc = NULL;
-    Bitmap              aBitmap( rBitmap );
+    BitmapReadAccess*	pAcc = NULL;
+    Bitmap				aBitmap( rBitmap );
 
-    ULONG   nWidth, nHeight, nDstRowBytes, nx, nc, ny, nCount, nColTabSize, i;
-    ULONG   nDstRowPos, nSrcRowBytes, nEqu3, nPos, nDstMapPos;
-    USHORT  nBitsPerPixel, nPackType;
-    BYTE    *pComp[4], *pPix, *pTemp;
+    ULONG	nWidth, nHeight, nDstRowBytes, nx, nc, ny, nCount, nColTabSize, i;
+    ULONG	nDstRowPos, nSrcRowBytes, nEqu3, nPos, nDstMapPos;
+    USHORT	nBitsPerPixel, nPackType;
+    BYTE	*pComp[4], *pPix, *pTemp;
     BYTE    nEquData = 0;
     BYTE    nFlagCounterByte, nRed, nGreen, nBlue;
 
@@ -917,7 +917,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
     nBitsPerPixel = aBitmap.GetBitCount();
 
     // export code below only handles four discrete cases
-    nBitsPerPixel =
+    nBitsPerPixel = 
         nBitsPerPixel <= 1 ? 1 : nBitsPerPixel <= 4 ? 4 : nBitsPerPixel <= 8 ? 8 : 24;
 
     nWidth = pAcc->Width();
@@ -980,8 +980,8 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
         // Position der Map-Daten in Ziel merken:
         nDstMapPos=pPict->Tell();
 
-        if ( nPackType == 1 )               // bei 24 bits nWidth == 1 !!
-        {                                   // nicht packen
+        if ( nPackType == 1 )				// bei 24 bits nWidth == 1 !!
+        {									// nicht packen
             for ( ny = 0; ny < nHeight; ny++ )
             {
                 *pPict << (BYTE)0;
@@ -989,11 +989,11 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                 *pPict << (BYTE)pAcc->GetPixel( ny, 0 ).GetGreen();
                 *pPict << (BYTE)pAcc->GetPixel( ny, 0 ).GetBlue();
                 // Prozente zaehlen, Callback, Fehler pruefen:
-                nActBitmapPercent = ( ny * 70 / nHeight ) + 30; // (30% machten schon das Schreiben der Win-BMP-Datei aus)
+                nActBitmapPercent = ( ny * 70 / nHeight ) + 30;	// (30% machten schon das Schreiben der Win-BMP-Datei aus)
                 MayCallback();
             }
         }
-        else    // packen ( PackType == 4 )
+        else	// packen ( PackType == 4 )
         {
             // Speicher fuer Zeilen-Zwischen-Datenstruktur allozieren:
             for ( nc = 0; nc < 4; nc++ )
@@ -1064,8 +1064,8 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                         // Jetzt einen Komprimierungs-Record erzeugen (falls oben mindestens 3
                         // gleiche Bytes gefunden):
                         if ( nx < nWidth )
-                        {               // Hinweis: es gilt nx==nEqu3 (hoffentlich)
-                            nCount=3;   // Drei Bytes sind gleich, wie weiter oben herausgefunden.
+                        {				// Hinweis: es gilt nx==nEqu3 (hoffentlich)
+                            nCount=3;	// Drei Bytes sind gleich, wie weiter oben herausgefunden.
                                         // Pruefen, ob es weitere gleiche Bytes gibts (dabei Max.-Record-Groesse beachten):
                             while ( nx + nCount < nWidth && nCount < 128 )
                             {
@@ -1090,7 +1090,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                 pPict->Seek( nPos );
 
                 // Prozente zaehlen, Callback, Fehler pruefen:
-                nActBitmapPercent = ( ny * 70 / nHeight ) + 30; // (30% machten schon das Schreiben der Win-BMP-Datei aus)
+                nActBitmapPercent = ( ny * 70 / nHeight ) + 30;	// (30% machten schon das Schreiben der Win-BMP-Datei aus)
                 MayCallback();
             }
             // Aufraeumen:
@@ -1099,7 +1099,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
         }
     }
     else
-    {   // nicht 24-Bit also Opcode 'PackBitsRect' erzeugen:
+    {	// nicht 24-Bit also Opcode 'PackBitsRect' erzeugen:
 
         // Bei 1-Bit-Bildern ignorieren manche Import-Filter die Palette und nehmen statt
         // dessen die Vorder- und Hintergrundfarbe:
@@ -1170,7 +1170,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
         WritePoint( Point( rPoint.X() + rSize.Width(), rPoint.Y() + rSize.Height() ) );
 
         // Transfer mode schreiben:
-        *pPict << (USHORT)0;            // (?)
+        *pPict << (USHORT)0;			// (?)
 
         // Speicher fuer eine Zeile allozieren:
         pPix = new BYTE[ nSrcRowBytes ];
@@ -1205,11 +1205,11 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
             }
 
             if ( nPackType == 1 )
-            {   // nicht packen
+            {	// nicht packen
                 pPict->Write( pPix, nDstRowBytes );
             }
             else
-            {   // Packen (nPackType==0)
+            {	// Packen (nPackType==0)
 
                 // Anfang der Zeile im Ziel merken:
                 nDstRowPos = pPict->Tell();
@@ -1259,7 +1259,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                     // Jetzt einen Komprimierungs-Record erzeugen (falls oben mindestens 3
                     // gleiche Bytes gefunden):
                     if ( nx < nDstRowBytes )
-                    {   // Hinweis: es gilt nx==nEqu3 (hoffentlich)
+                    {	// Hinweis: es gilt nx==nEqu3 (hoffentlich)
                         nCount = 3; // Drei Bytes sind gleich, wie weiter oben herausgefunden.
                         // Pruefen, ob es weitere gleiche Bytes gibts (dabei Max.-Record-Groesse beachten):
                         while ( nx + nCount < nDstRowBytes && nCount < 128 )
@@ -1441,7 +1441,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
     nACount=rMTF.GetActionCount();
 
-    for (nA=0; nA<nACount; nA++)
+    for (nA=0; nA<nACount; nA++)	
     {
         pMA = rMTF.GetAction(nA);
 
@@ -1705,7 +1705,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             {
                 const MetaPolyPolygonAction* pA = (const MetaPolyPolygonAction*) pMA;
 
-                const PolyPolygon& rPolyPoly = pA->GetPolyPolygon();
+                const PolyPolygon& rPolyPoly = pA->GetPolyPolygon();				
                 sal_uInt16 nPolyCount = rPolyPoly.Count();
                 PolyPolygon aSimplePolyPoly( rPolyPoly );
                 for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
@@ -1903,7 +1903,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             {
                 VirtualDevice           aVDev;
                 GDIMetaFile             aTmpMtf;
-                const MetaHatchAction*  pA = (const MetaHatchAction*) pMA;
+                const MetaHatchAction*	pA = (const MetaHatchAction*) pMA;
 
                 aVDev.SetMapMode( aTargetMapMode );
                 aVDev.AddHatchActions( pA->GetPolyPolygon(), pA->GetHatch(), aTmpMtf );
@@ -2088,8 +2088,8 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                     if ( pAt->aClipRect != aClipRect )
                     {
                         Rectangle aRect( pAt->aClipRect );
-                        *pPict  << (sal_uInt16)1    // opcode 1
-                                << (sal_uInt16)10   // data size
+                        *pPict	<< (sal_uInt16)1	// opcode 1 
+                                << (sal_uInt16)10	// data size 
                                 << (sal_Int16)aRect.Top() << (sal_Int16)aRect.Left()
                                 << (sal_Int16)aRect.Bottom() << (sal_Int16)aRect.Right();
                     }
@@ -2129,15 +2129,15 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             case META_FLOATTRANSPARENT_ACTION:
             {
                 const MetaFloatTransparentAction* pA = (const MetaFloatTransparentAction*) pMA;
-
-                GDIMetaFile     aTmpMtf( pA->GetGDIMetaFile() );
-                Point           aSrcPt( aTmpMtf.GetPrefMapMode().GetOrigin() );
-                const Size      aSrcSize( aTmpMtf.GetPrefSize() );
-                const Point     aDestPt( pA->GetPoint() );
-                const Size      aDestSize( pA->GetSize() );
-                const double    fScaleX = aSrcSize.Width() ? (double) aDestSize.Width() / aSrcSize.Width() : 1.0;
-                const double    fScaleY = aSrcSize.Height() ? (double) aDestSize.Height() / aSrcSize.Height() : 1.0;
-                long            nMoveX, nMoveY;
+                
+                GDIMetaFile		aTmpMtf( pA->GetGDIMetaFile() );
+                Point			aSrcPt( aTmpMtf.GetPrefMapMode().GetOrigin() );
+                const Size		aSrcSize( aTmpMtf.GetPrefSize() );
+                const Point		aDestPt( pA->GetPoint() );
+                const Size		aDestSize( pA->GetSize() );
+                const double	fScaleX = aSrcSize.Width() ? (double) aDestSize.Width() / aSrcSize.Width() : 1.0;
+                const double	fScaleY = aSrcSize.Height() ? (double) aDestSize.Height() / aSrcSize.Height() : 1.0;
+                long			nMoveX, nMoveY;
 
                 if( fScaleX != 1.0 || fScaleY != 1.0 )
                 {
@@ -2171,8 +2171,8 @@ void PictWriter::WriteHeader(const GDIMetaFile & rMTF)
 {
     USHORT  i;
     Size aSize( rMTF.GetPrefSize() );
-    Point aPoint;
-    Rectangle   aRect( aPoint, aSize );
+    Point aPoint;	
+    Rectangle	aRect( aPoint, aSize );
 
     // 512 Bytes "Muell" am Anfang:
     for (i=0;i<128;i++) *pPict << (sal_uInt32)0;
@@ -2197,7 +2197,7 @@ void PictWriter::WriteHeader(const GDIMetaFile & rMTF)
 
     // viele Import-Filter verlangen die Angabe eines
     // Clipping-Bereichs am Anfang
-
+    
     WriteOpcode_ClipRect( aRect );
 }
 

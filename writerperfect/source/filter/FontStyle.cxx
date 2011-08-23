@@ -1,8 +1,8 @@
-/* FontStyle: Stores (and writes) font-based information that is needed at
+/* FontStyle: Stores (and writes) font-based information that is needed at 
  * the head of an OO document.
  *
  * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
- *
+ * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
  *
  */
 
-/* "This product is not manufactured, approved, or supported by
+/* "This product is not manufactured, approved, or supported by 
  * Corel Corporation or Corel Corporation Limited."
  */
 #include "FontStyle.hxx"
@@ -34,12 +34,12 @@ FontStyle::FontStyle(const char *psName, const char *psFontFamily) : Style(psNam
 {
 }
 
-FontStyle::~FontStyle()
+FontStyle::~FontStyle() 
 {
 }
 
 void FontStyle::write(DocumentHandler *pHandler) const
-{
+{        
     TagOpenElement styleOpen("style:font-decl");
     styleOpen.addAttribute("style:name", getName());
     styleOpen.addAttribute("fo:font-family", msFontFamily);

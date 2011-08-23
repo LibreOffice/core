@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -221,7 +221,7 @@ const char * DXFGroupReader::GetS(USHORT nG)
 {
     if (nG<10) return S0_9[nG];
     else if ( nG == 100 )
-        return S100;
+        return S100;    
     else if ( nG == 102 )
         return S102;
     else
@@ -273,9 +273,9 @@ void DXFGroupReader::SetS(USHORT nG, const char * sS)
 
 void DXFGroupReader::ReadLine(char * ptgt)
 {
-    ByteString  aStr;
-    ULONG       nLen;
-
+    ByteString	aStr;
+    ULONG		nLen;
+    
     DXFReadLine( rIS, aStr );
 
     nLen = aStr.Len();

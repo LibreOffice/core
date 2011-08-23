@@ -281,7 +281,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
         }
     }
     OSL_ENSURE( nModuleCount == aModules.size(), "VbaProject::importVba - invalid module count" );
-
+    
     /*  The directory does not contain the real type of the modules, it
         distinguishes only between 'procedural' and 'document' (the latter
         includes class and form modules). Now, the exact type of all modules

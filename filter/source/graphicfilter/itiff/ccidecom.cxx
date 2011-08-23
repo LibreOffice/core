@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -141,7 +141,7 @@ const CCIHuffmanTableEntry CCIWhiteTable[CCIWhiteTableSize]={
     { 2432, 0x001d, 12 },
     { 2496, 0x001e, 12 },
     { 2560, 0x001f, 12 },
-    { 9999, 0x0001, 12 }    //  EOL
+    { 9999, 0x0001, 12 }	//	EOL
 };
 
 //---------------------------- Black-Run ------------------------------
@@ -253,7 +253,7 @@ const CCIHuffmanTableEntry CCIBlackTable[CCIBlackTableSize]={
     { 2432, 0x001d, 12 },
     { 2496, 0x001e, 12 },
     { 2560, 0x001f, 12 },
-    { 9999, 0x0001, 12 }    //  EOL
+    { 9999, 0x0001, 12 }	//	EOL
 };
 
 
@@ -435,7 +435,7 @@ const CCIHuffmanTableEntry CCIWhiteTableSave[CCIWhiteTableSize]={
     { 2432, 0x001d, 12 },
     { 2496, 0x001e, 12 },
     { 2560, 0x001f, 12 },
-    { 9999, 0x0001, 12 }    //  EOL
+    { 9999, 0x0001, 12 }	//	EOL
 };
 
 const CCIHuffmanTableEntry CCIBlackTableSave[CCIBlackTableSize]={
@@ -543,7 +543,7 @@ const CCIHuffmanTableEntry CCIBlackTableSave[CCIBlackTableSize]={
     { 2432, 0x001d, 12 },
     { 2496, 0x001e, 12 },
     { 2560, 0x001f, 12 },
-    { 9999, 0x0001, 12 }    //  EOL
+    { 9999, 0x0001, 12 }	//	EOL
 };
 
 
@@ -579,12 +579,12 @@ const CCIHuffmanTableEntry CCIUncompTableSave[CCIUncompTableSize]={
 
 
 CCIDecompressor::CCIDecompressor( ULONG nOpts, UINT32 nImageWidth ) :
-    bTableBad   ( FALSE ),
-    bStatus     ( FALSE ),
-    pByteSwap   ( NULL ),
-    nWidth      ( nImageWidth ),
-    nOptions    ( nOpts ),
-    pLastLine   ( NULL )
+    bTableBad	( FALSE ),
+    bStatus		( FALSE ),
+    pByteSwap	( NULL ),
+    nWidth		( nImageWidth ),
+    nOptions	( nOpts ),
+    pLastLine	( NULL )
 {
     if ( nOpts & CCI_OPTION_INVERSEBITORDER )
     {
@@ -639,7 +639,7 @@ BOOL CCIDecompressor::DecompressScanline( BYTE * pTarget, ULONG nTargetBits )
     BYTE * pSrc,* pDst;
     BOOL b2D;
 
-    if ( nEOLCount >= 5 )   // RTC( Return To Controller )
+    if ( nEOLCount >= 5 )	// RTC( Return To Controller )
         return TRUE;
 
     if ( bStatus == FALSE )
@@ -660,7 +660,7 @@ BOOL CCIDecompressor::DecompressScanline( BYTE * pTarget, ULONG nTargetBits )
                 nInputBitsBufSize = nOldInputBitsBufSize;
                 nInputBitsBuf = nOldInputBitsBuf;
                 pIStream->Seek( nCurPos );
-                nOptions &=~ CCI_OPTION_EOL;                // CCITT Group 3 - Compression Type 2
+                nOptions &=~ CCI_OPTION_EOL;				// CCITT Group 3 - Compression Type 2
             }
             bFirstEOL = FALSE;
         }
@@ -673,7 +673,7 @@ BOOL CCIDecompressor::DecompressScanline( BYTE * pTarget, ULONG nTargetBits )
         }
     }
 
-    if ( nEOLCount >= 5 )   // RTC( Return To Controller )
+    if ( nEOLCount >= 5 )	// RTC( Return To Controller )
         return TRUE;
 
     // ggf. eine weisse vorherige Zeile herstellen fuer 2D:
@@ -766,8 +766,8 @@ void CCIDecompressor::MakeLookUp(const CCIHuffmanTableEntry * pHufTab,
 
 BOOL CCIDecompressor::ReadEOL( UINT32 /*nMaxFillBits*/ )
 {
-    USHORT  nCode;
-    BYTE    nByte;
+    USHORT	nCode;
+    BYTE	nByte;
 
     // if (nOptions&CCI_OPTION_BYTEALIGNEOL) nMaxFillBits=7; else nMaxFillBits=0;
     // Buuuh: Entweder wird die Option in itiff.cxx nicht richtig gesetzt (-> Fehler in Doku)
@@ -965,7 +965,7 @@ void CCIDecompressor::Read1DScanlineData(BYTE * pTarget, USHORT nTargetBits)
         }
         if ( nCodeBits == 0 )
         {
-            return;             // das koennen sich jetzt um FuellBits handeln
+            return;				// das koennen sich jetzt um FuellBits handeln
         }
         nEOLCount = 0;
         // Zuviele Daten ?

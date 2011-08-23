@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ namespace writerfilter {
 using namespace ::com::sun::star;
 using namespace ::std;
 
-/**
+/** 
     Reference to an resource that generates events and sends them to a
     handler.
 
@@ -80,7 +80,7 @@ using namespace ::std;
     type of the reference's target. It determines the type of the handler!
 
     Example:
-
+    
     A Word document can be represented as a stream of events. Event
     types in a Word document are text, properties, tables, starts and
     ends of groups. These can be handled by a stream handler (@see
@@ -92,7 +92,7 @@ template <class T>
 class WRITERFILTER_DLLPUBLIC Reference
 {
 public:
-    /**
+    /** 
         Pointer to reference
 
         @attention The ownership of a reference is transfered when
@@ -141,7 +141,7 @@ public:
        @param  sprm      the SPRM received
     */
     virtual void sprm(Sprm & sprm) = 0;
-
+    
 };
 
 /**
@@ -157,7 +157,7 @@ public:
        @param pos     position of the entry in the table
        @param ref     reference to properties of the entry
      */
-    virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) = 0;
+    virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) = 0;    
 };
 
 /**
@@ -192,7 +192,7 @@ public:
        Receives start mark for group with the same section properties.
      */
     virtual void startSectionGroup() = 0;
-
+    
     /**
        Receives end mark for group with the same section properties.
     */
@@ -256,16 +256,16 @@ public:
        @param name     name of the table
        @param ref      referecne to the table
      */
-    virtual void table(Id name,
+    virtual void table(Id name, 
                        writerfilter::Reference<Table>::Pointer_t ref) = 0;
-
-    /**
+    
+    /** 
         Receives a substream.
 
         @param name    name of the substream
         @param ref     reference to the substream
     */
-    virtual void substream(Id name,
+    virtual void substream(Id name, 
                            writerfilter::Reference<Stream>::Pointer_t ref) = 0;
 
 
@@ -386,15 +386,15 @@ Stream::Pointer_t WRITERFILTER_DLLPUBLIC createStreamHandler();
 
     void WRITERFILTER_DLLPUBLIC analyzerIds();
     Stream::Pointer_t WRITERFILTER_DLLPUBLIC createAnalyzer();
-
+    
     void WRITERFILTER_DLLPUBLIC logger(string prefix, string message);
-
+    
     void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<Properties>::Pointer_t props);
     void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, sal_uInt32 n);
-    void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
-                                     const rtl::OUString & /*str*/);
+    void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & /*o*/, const char * /*name*/, 
+                                     const rtl::OUString & /*str*/); 
     void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<BinaryObj>::Pointer_t binary);
-
+    
 }
 
 

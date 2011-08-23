@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ void CGM::ImplDoClass0()
         break;
         case 0x02 : ComOut( CGM_LEVEL1, "End MetaFile" )
         {
-            if ( mpBitmapInUse )                            // vorhandene grafik verarbeiten,
+            if ( mpBitmapInUse )							// vorhandene grafik verarbeiten,
             {
                 CGMBitmapDescriptor* pBmpDesc = mpBitmapInUse->GetBitmap();
                 // irgendetwas mit der Bitmap anfangen
@@ -69,19 +69,19 @@ void CGM::ImplDoClass0()
                 mbPicture = mbFirstOutPut = sal_True;
                 mbFigure = sal_False;
                 mnAct4PostReset = 0;
-                if ( mpChart == NULL )      // normal CGM Files determines "BeginPic"
-                    mpOutAct->InsertPage();     // as the next slide
+                if ( mpChart == NULL )		// normal CGM Files determines "BeginPic"
+                    mpOutAct->InsertPage();		// as the next slide
             }
         }
         break;
         case 0x04 : ComOut( CGM_LEVEL1, "Begin Picture Body" )
             mbPictureBody = sal_True;
         break;
-        case 0x05 : ComOut( CGM_LEVEL1, "   End Picture" )
+        case 0x05 : ComOut( CGM_LEVEL1, "	End Picture" )
         {
             if ( mbPicture )
             {
-                if ( mpBitmapInUse )                            // vorhandene grafik verarbeiten,
+                if ( mpBitmapInUse )							// vorhandene grafik verarbeiten,
                 {
                     CGMBitmapDescriptor* pBmpDesc = mpBitmapInUse->GetBitmap();
                     // irgendetwas mit der Bitmap anfangen
@@ -89,8 +89,8 @@ void CGM::ImplDoClass0()
                     delete mpBitmapInUse;
                     mpBitmapInUse = NULL;
                 }
-                mpOutAct->EndFigure();                          // eventuelle figuren schliessen
-                mpOutAct->EndGrouping();                        // eventuelle gruppierungen noch abschliessen
+                mpOutAct->EndFigure();							// eventuelle figuren schliessen
+                mpOutAct->EndGrouping();						// eventuelle gruppierungen noch abschliessen
                 *pElement = *pCopyOfE;
                 mbFigure = mbFirstOutPut = mbPicture = mbPictureBody = sal_False;
             }
@@ -118,8 +118,8 @@ void CGM::ImplDoClass0()
         case 0x10 : ComOut( CGM_LEVEL3, "End Compound Line" ) break;
         case 0x11 : ComOut( CGM_LEVEL3, "Begin Compound Text Path" ) break;
         case 0x12 : ComOut( CGM_LEVEL3, "End Compound Text Path" ) break;
-        case 0x13 : ComOut( CGM_LEVEL3, "Begin Tile Array" ) break;                 // NS
-        case 0x14 : ComOut( CGM_LEVEL3, "End Tile Array" ) break;                   // NS
+        case 0x13 : ComOut( CGM_LEVEL3, "Begin Tile Array" ) break;					// NS
+        case 0x14 : ComOut( CGM_LEVEL3, "End Tile Array" ) break;					// NS
         case 0xff : ComOut( CGM_GDSF_ONLY, "Filter Setup" ) break;
         case 0xfe : ComOut( CGM_GDSF_ONLY, "Begin Block Text Region" ) break;
         case 0xfd : ComOut( CGM_GDSF_ONLY, "End Block Text Region" ) break;

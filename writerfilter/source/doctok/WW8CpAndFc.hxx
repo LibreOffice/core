@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 #include <iostream>
 
 namespace writerfilter {
-namespace doctok
+namespace doctok 
 {
 using namespace ::std;
 
@@ -62,8 +62,8 @@ struct Cp
     Cp(sal_uInt32 nCp_) : nCp(nCp_) {}
 
     /**
-       Returns the WW8 character position.
-
+       Returns the WW8 character position. 
+       
        @return the WW8 character position
     */
     sal_uInt32 get() const { return nCp; }
@@ -75,8 +75,8 @@ struct Cp
     */
     void set(sal_uInt32 nCp_) { nCp = nCp_; }
 
-    /**
-       Calculate CP moved backward.
+    /**       
+       Calculate CP moved backward.       
 
        None of the involved CPs is changed.
 
@@ -87,8 +87,8 @@ struct Cp
     sal_uInt32 operator - (const Cp & rCp) const
     { return nCp - rCp.nCp; }
 
-    /**
-       Calculate CP moved forward.
+    /**       
+       Calculate CP moved forward.       
 
        None of the involved CPs is changed.
 
@@ -140,15 +140,15 @@ struct Fc
 
     Fc() : mnFc(0), mbComplex(false) {}
 
-    Fc(sal_uInt32 nFc, bool bComplex = true)
-    : mnFc(nFc), mbComplex(bComplex)
+    Fc(sal_uInt32 nFc, bool bComplex = true) 
+    : mnFc(nFc), mbComplex(bComplex) 
     {}
 
     sal_uInt32 complexFactor() const { return mbComplex ? 1 : 2; }
 
     /**
-       Returns the WW8 character position.
-
+       Returns the WW8 character position. 
+       
        @return the WW8 character position
     */
     sal_uInt32 get() const { return mnFc; }
@@ -188,7 +188,7 @@ struct Fc
     { return (mnFc - rFc.mnFc) / complexFactor(); }
 
     /**
-       Calculate FC moved backward.
+       Calculate FC moved backward.       
 
        None of the involved FCs is changed.
 
@@ -200,7 +200,7 @@ struct Fc
     { return Fc(mnFc - n * complexFactor(), mbComplex); }
 
     /**
-       Calculate FC moved forward.
+       Calculate FC moved forward.       
 
        None of the involved FCs is changed.
 
@@ -223,7 +223,7 @@ struct Fc
 
 /**
    A character position and a corresponding file character position
-   paired.
+   paired.   
  */
 class CpAndFc
 {
@@ -242,7 +242,7 @@ private:
        property type
     */
     PropertyType mType;
-
+        
 public:
     CpAndFc() {}
     CpAndFc(const Cp & rCp, const Fc & rFc, PropertyType eType_);
@@ -264,7 +264,7 @@ public:
 
     /**
        Return if FC is complex.
-
+    
        @retval true    FC is complex
        @retval false   else
      */
@@ -347,7 +347,7 @@ struct CpAndFcHash
     size_t operator()(const CpAndFc & rCpAndFc) const
     {
         CpHash aHash;
-
+        
         return aHash(rCpAndFc.getCp());
     }
 };

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,24 +44,24 @@
 \************************************************************************/
 
 DlgExportEPCT::DlgExportEPCT( FltCallDialogParameter& rPara ) :
-                ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_EPCT, *rPara.pResMgr ) ),
-                rFltCallPara        ( rPara ),
-                aBtnOK              ( this, ResId( BTN_OK, *rPara.pResMgr ) ),
-                aBtnCancel          ( this, ResId( BTN_CANCEL, *rPara.pResMgr ) ),
-                aBtnHelp            ( this, ResId( BTN_HELP, *rPara.pResMgr ) ),
-                aRbOriginal         ( this, ResId( RB_ORIGINAL, *rPara.pResMgr ) ),
-                aRbSize             ( this, ResId( RB_SIZE, *rPara.pResMgr ) ),
-                aGrpMode            ( this, ResId( GRP_MODE, *rPara.pResMgr ) ),
-                aFtSizeX            ( this, ResId( FT_SIZEX, *rPara.pResMgr ) ),
-                aMtfSizeX           ( this, ResId( MTF_SIZEX, *rPara.pResMgr ) ),
-                aFtSizeY            ( this, ResId( FT_SIZEY, *rPara.pResMgr ) ),
-                aMtfSizeY           ( this, ResId( MTF_SIZEY, *rPara.pResMgr ) ),
-                aGrpSize            ( this, ResId( GRP_SIZE, *rPara.pResMgr ) ),
-                pMgr                ( rPara.pResMgr )
+                ModalDialog			( rPara.pWindow, ResId( DLG_EXPORT_EPCT, *rPara.pResMgr ) ),
+                rFltCallPara		( rPara ),
+                aBtnOK				( this, ResId( BTN_OK, *rPara.pResMgr ) ),
+                aBtnCancel			( this, ResId( BTN_CANCEL, *rPara.pResMgr ) ),
+                aBtnHelp			( this, ResId( BTN_HELP, *rPara.pResMgr ) ),
+                aRbOriginal			( this, ResId( RB_ORIGINAL, *rPara.pResMgr ) ),
+                aRbSize				( this, ResId( RB_SIZE, *rPara.pResMgr ) ),
+                aGrpMode			( this, ResId( GRP_MODE, *rPara.pResMgr ) ),
+                aFtSizeX			( this, ResId( FT_SIZEX, *rPara.pResMgr ) ),
+                aMtfSizeX			( this, ResId( MTF_SIZEX, *rPara.pResMgr ) ),
+                aFtSizeY			( this, ResId( FT_SIZEY, *rPara.pResMgr ) ),
+                aMtfSizeY			( this, ResId( MTF_SIZEY, *rPara.pResMgr ) ),
+                aGrpSize			( this, ResId( GRP_SIZE, *rPara.pResMgr ) ),
+                pMgr				( rPara.pResMgr )
 {
     FreeResource();
 
-    String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/PCT" ) );
+    String	aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/PCT" ) );
     pConfigItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
 
     aBtnOK.SetClickHdl( LINK( this, DlgExportEPCT, OK ) );
@@ -100,7 +100,7 @@ DlgExportEPCT::DlgExportEPCT( FltCallDialogParameter& rPara ) :
             aMtfSizeX.SetUnit( rPara.eFieldUnit );
             aMtfSizeY.SetUnit( rPara.eFieldUnit );
         }
-        break;
+        break;	
     }
     if ( nStrMode == 1 )
     {
@@ -123,7 +123,7 @@ DlgExportEPCT::~DlgExportEPCT()
 |*
 |* Speichert eingestellte Werte in ini-Datei
 |*
-\****************************************   ********************************/
+\****************************************	********************************/
 
 IMPL_LINK( DlgExportEPCT, OK, void *, EMPTYARG )
 {

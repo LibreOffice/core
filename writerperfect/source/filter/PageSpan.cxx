@@ -80,9 +80,9 @@ PageSpan::~PageSpan()
 }
 
 int PageSpan::getSpan() const
-{
-        if (mxPropList["libwpd:num-pages"])
-                return mxPropList["libwpd:num-pages"]->getInt();
+{ 
+        if (mxPropList["libwpd:num-pages"]) 
+                return mxPropList["libwpd:num-pages"]->getInt(); 
 
         return 0; // should never happen
 }
@@ -90,8 +90,8 @@ int PageSpan::getSpan() const
 void PageSpan::writePageMaster(const int iNum, DocumentHandler *pHandler) const
 {
         WPXPropertyList propList;
-
-    WPXString sPageMasterName;
+        
+    WPXString sPageMasterName; 
         sPageMasterName.sprintf("PM%i", iNum /* +2 */);
         propList.insert("style:name", sPageMasterName);
 
@@ -103,7 +103,7 @@ void PageSpan::writePageMaster(const int iNum, DocumentHandler *pHandler) const
     if (!tempPropList["style:footnote-max-height"])
         tempPropList.insert("style:footnote-max-height", WPXString("0inch"));
         pHandler->startElement("style:properties", tempPropList);
-
+    
     WPXPropertyList footnoteSepPropList;
     footnoteSepPropList.insert("style:width", WPXString("0.0071inch"));
     footnoteSepPropList.insert("style:distance-before-sep", WPXString("0.0398inch"));
@@ -112,13 +112,13 @@ void PageSpan::writePageMaster(const int iNum, DocumentHandler *pHandler) const
     footnoteSepPropList.insert("style:rel-width", WPXString("25%"));
     footnoteSepPropList.insert("style:color", WPXString("#000000"));
     pHandler->startElement("style:footnote-sep", footnoteSepPropList);
-
+    
     pHandler->endElement("style:footnote-sep");
         pHandler->endElement("style:properties");
         pHandler->endElement("style:page-master");
 }
 
-void PageSpan::writeMasterPages(const int iStartingNum, const int iPageMasterNum, const bool bLastPageSpan,
+void PageSpan::writeMasterPages(const int iStartingNum, const int iPageMasterNum, const bool bLastPageSpan, 
                                 DocumentHandler *pHandler) const
 {
     int iSpan = 0;

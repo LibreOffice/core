@@ -72,10 +72,10 @@
 #include <memory>
 
 #ifndef C2S
-#define C2S(cChar)  String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
+#define C2S(cChar)	String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
 #endif
 #ifndef C2U
-#define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
+#define C2U(cChar)	rtl::OUString::createFromAscii(cChar)
 #endif
 
 using namespace ::com::sun::star;
@@ -1212,10 +1212,10 @@ sal_Int16 OCX_Control::ImportBorder(sal_uInt16 nSpecialEffect,
     sal_uInt16 nBorderStyle) const
 {
     if ((nSpecialEffect == 0) && (nBorderStyle == 0))
-        return 0;   //No Border
+        return 0;	//No Border
     else if ((nSpecialEffect == 0) && (nBorderStyle == 1))
-        return 2;   //Flat Border
-    return 1;   //3D Border
+        return 2;	//Flat Border
+    return 1;	//3D Border
 }
 
 sal_uInt8 OCX_Control::ExportBorder(sal_uInt16 nBorder,sal_uInt8 &rBorderStyle)
@@ -2792,7 +2792,7 @@ sal_Bool OCX_ListBox::Import(com::sun::star::uno::Reference<
     aTmp = bool2any(bTemp);
     rPropSet->setPropertyValue( WW8_ASCII2STR("MultiSelection"), aTmp);
 
-#if 0       //Don't delete this for now until I figure out if I can make this
+#if 0		//Don't delete this for now until I figure out if I can make this
     if (pValue)
     {
         aTmp <<= lclCreateOUString( pValue, nValueLen );
@@ -4444,7 +4444,8 @@ OCX_map aOCXTab[] =
     {&OCX_GroupBox::Create,"",
         form::FormComponentType::GROUPBOX,""},
     {&OCX_ProgressBar::Create,"",
-        form::FormComponentType::CONTROL,""}
+        form::FormComponentType::CONTROL,""},
+    {&HTML_TextBox::Create,"5512D124-5CC6-11CF-8d67-00aa00bdce1d", form::FormComponentType::TEXTFIELD,"TextBox"},
 };
 
 const int NO_OCX = sizeof( aOCXTab ) / sizeof( *aOCXTab );
@@ -5142,6 +5143,103 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
     return sal_True;
 }
 
+
+sal_Bool HTML_TextBox::Import(com::sun::star::uno::Reference<
+    com::sun::star::beans::XPropertySet> &rPropSet)
+{
+    uno::Any aTmp(&sName,getCppuType((OUString *)0));
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
+
+    aTmp = bool2any( fEnabled != 0 );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
+
+    aTmp = bool2any( fLocked != 0 );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("ReadOnly"), aTmp);
+
+    aTmp = bool2any( fHideSelection != 0 );
+    rPropSet->setPropertyValue( WW8_ASCII2STR( "HideInactiveSelection" ), aTmp);
+
+    aTmp <<= ImportColor(mnForeColor);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
+
+    aTmp <<= ImportColor(mnBackColor);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
+
+    aTmp <<= ImportBorder(nSpecialEffect,nBorderStyle);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Border"), aTmp);
+
+    aTmp <<= ImportColor( nBorderColor );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("BorderColor"), aTmp);
+
+    aTmp = bool2any( fMultiLine != 0 );
+    rPropSet->setPropertyValue( WW8_ASCII2STR("MultiLine"), aTmp);
+
+    sal_uInt16 nTmp = static_cast<sal_uInt16>(nMaxLength);
+    aTmp <<= nTmp;
+    rPropSet->setPropertyValue( WW8_ASCII2STR("MaxTextLen"), aTmp);
+
+
+    sal_Bool bTemp1,bTemp2;
+    uno::Any aBarsH,aBarsV;
+    switch(nScrollBars)
+    {
+        case 1:
+            bTemp1 = sal_True;
+            bTemp2 = sal_False;
+            break;
+        case 2:
+            bTemp1 = sal_False;
+            bTemp2 = sal_True;
+            break;
+        case 3:
+            bTemp1 = sal_True;
+            bTemp2 = sal_True;
+            break;
+        case 0:
+        default:
+            bTemp1 = sal_False;
+            bTemp2 = sal_False;
+            break;
+    }
+
+    aBarsH = bool2any(bTemp1);
+    aBarsV = bool2any(bTemp2);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("HScroll"), aBarsH);
+    rPropSet->setPropertyValue( WW8_ASCII2STR("VScroll"), aBarsV);
+
+    nTmp = nPasswordChar;
+    aTmp <<= nTmp;
+    rPropSet->setPropertyValue( WW8_ASCII2STR("EchoChar"), aTmp);
+
+    if (pValue)
+    {
+        aTmp <<= lclCreateOUString( pValue, nValueLen );
+        // DefaultText seems to no longer be in UnoEditControlModel
+        if ( bSetInDialog )
+        {
+            rPropSet->setPropertyValue( WW8_ASCII2STR("Text"), aTmp);
+        }
+        else
+        {
+            rPropSet->setPropertyValue( WW8_ASCII2STR("DefaultText"), aTmp);
+        }
+    }
+
+    //	aFontData.Import(rPropSet);
+    return sal_True;
+}
+
+sal_Bool HTML_TextBox::Read(SotStorageStream *pS)
+{
+  return sal_True;
+}
+
+sal_Bool HTML_TextBox::ReadFontData(SotStorageStream *pS)
+{
+  return sal_True;
+}
+
+
 // Doesn't really read anything but just skips the
 // record.
 sal_Bool OCX_TabStrip::Read(SotStorageStream *pS)
@@ -5357,7 +5455,7 @@ sal_Bool OCX_Image::WriteContents(SvStorageStreamRef &rContents,
     }
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("ImageURL"));
-//  OUString *pStr = (OUString *)aTmp.getValue();
+//	OUString *pStr = (OUString *)aTmp.getValue();
     /*Magically fetch that image and turn it into something that
      *we can store in ms controls, wmf,png,jpg are almost certainly
      *the options we have for export...*/

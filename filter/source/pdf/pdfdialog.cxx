@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,8 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
 
-#include "pdfdialog.hxx"
-#include "impdialog.hxx"
+#include "pdfdialog.hxx" 
+#include "impdialog.hxx" 
 #include <vcl/svapp.hxx>
 #include <vcl/dialog.hxx>
 #include <svl/solar.hrc>
@@ -58,7 +58,7 @@ OUString PDFDialog_getImplementationName ()
 
 // -----------------------------------------------------------------------------
 
-Sequence< sal_Int8 > SAL_CALL PDFDialog_getImplementationId()
+Sequence< sal_Int8 > SAL_CALL PDFDialog_getImplementationId() 
     throw(RuntimeException)
 {
     static ::cppu::OImplementationId aId;
@@ -67,7 +67,7 @@ Sequence< sal_Int8 > SAL_CALL PDFDialog_getImplementationId()
 
 // -----------------------------------------------------------------------------
 
-Sequence< OUString > SAL_CALL PDFDialog_getSupportedServiceNames()
+Sequence< OUString > SAL_CALL PDFDialog_getSupportedServiceNames() 
     throw (RuntimeException)
 {
     Sequence < OUString > aRet(1);
@@ -78,7 +78,7 @@ Sequence< OUString > SAL_CALL PDFDialog_getSupportedServiceNames()
 
 // -----------------------------------------------------------------------------
 
-Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
+Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr) 
     throw( Exception )
 {
     return (cppu::OWeakObject*) new PDFDialog( rSMgr );
@@ -105,7 +105,7 @@ PDFDialog::~PDFDialog()
 
 // -----------------------------------------------------------------------------
 
-Sequence< sal_Int8 > SAL_CALL PDFDialog::getImplementationId()
+Sequence< sal_Int8 > SAL_CALL PDFDialog::getImplementationId() 
     throw(RuntimeException)
 {
     return PDFDialog_getImplementationId();
@@ -113,7 +113,7 @@ Sequence< sal_Int8 > SAL_CALL PDFDialog::getImplementationId()
 
 // -----------------------------------------------------------------------------
 
-OUString SAL_CALL PDFDialog::getImplementationName()
+OUString SAL_CALL PDFDialog::getImplementationName() 
     throw (RuntimeException)
 {
     return PDFDialog_getImplementationName();
@@ -129,7 +129,7 @@ Sequence< OUString > SAL_CALL PDFDialog::getSupportedServiceNames()
 
 // -----------------------------------------------------------------------------
 
-Dialog* PDFDialog::createDialog( Window* pParent )
+Dialog*	PDFDialog::createDialog( Window* pParent )
 {
     Dialog* pRet = NULL;
 
@@ -153,7 +153,7 @@ void PDFDialog::executedDialog( sal_Int16 nExecutionResult )
 
 // -----------------------------------------------------------------------------
 
-Reference< XPropertySetInfo > SAL_CALL PDFDialog::getPropertySetInfo()
+Reference< XPropertySetInfo > SAL_CALL PDFDialog::getPropertySetInfo() 
     throw(RuntimeException)
 {
     Reference< XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -183,7 +183,7 @@ Sequence< PropertyValue > SAL_CALL PDFDialog::getPropertyValues()
 
     for( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if( maMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) )
+        if( maMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) ) 
             break;
     }
 
@@ -192,20 +192,20 @@ Sequence< PropertyValue > SAL_CALL PDFDialog::getPropertyValues()
 
     maMediaDescriptor[ i ].Name = String( RTL_CONSTASCII_USTRINGPARAM( "FilterData" ) );
     maMediaDescriptor[ i ].Value <<= maFilterData;
-
+    
     return maMediaDescriptor;
 }
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL PDFDialog::setPropertyValues( const Sequence< PropertyValue >& rProps )
+void SAL_CALL PDFDialog::setPropertyValues( const Sequence< PropertyValue >& rProps ) 
     throw ( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException )
 {
     maMediaDescriptor = rProps;
 
     for( sal_Int32 i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if( maMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) )
+        if( maMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) ) 
         {
             maMediaDescriptor[ i ].Value >>= maFilterData;
             break;
@@ -215,7 +215,7 @@ void SAL_CALL PDFDialog::setPropertyValues( const Sequence< PropertyValue >& rPr
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL PDFDialog::setSourceDocument( const Reference< XComponent >& xDoc )
+void SAL_CALL PDFDialog::setSourceDocument( const Reference< XComponent >& xDoc ) 
     throw(IllegalArgumentException, RuntimeException)
 {
     mxSrcDoc = xDoc;

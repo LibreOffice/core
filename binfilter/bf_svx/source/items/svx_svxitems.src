@@ -1,0 +1,501 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define NO_LOCALIZE_EXPORT
+ // include ------------------------------------------------------------------
+#include "svxitems.hrc"
+ // pragma -------------------------------------------------------------------
+
+ // Value-Strings ------------------------------------------------------------
+String RID_SVXITEMS_TRUE
+{
+    Text [ de ] = "Wahr" ;
+    Text [ en-US ] = "True" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Verdadeiro";
+    Text[ ru ] = "ИСТИНА";
+    Text[ el ] = "Αληθής";
+    Text[ nl ] = "Waar";
+    Text[ fr ] = "Vrai";
+    Text[ es ] = "Verdadero";
+    Text[ fi ] = "Tosi";
+    Text[ ca ] = "Cert";
+    Text[ it ] = "Vero";
+    Text[ sk ] = "Pravda";
+    Text[ da ] = "Sand";
+    Text[ sv ] = "Sant";
+    Text[ pl ] = "Prawda";
+    Text[ pt-BR ] = "Verdadeiro";
+    Text[ th ] = "จริง";
+    Text[ ja ] = "真(TRUE)";
+    Text[ ko ] = "TRUE";
+    Text[ zh-CN ] = "真";
+    Text[ zh-TW ] = "真";
+    Text[ tr ] = "Doğru";
+    Text[ hi-IN ] = "सत्य";
+    Text[ ar ] = "حقيقي";
+    Text[ he ] = "‮אמת‬";
+};
+String RID_SVXITEMS_FALSE
+{
+    Text [ de ] = "Falsch" ;
+    Text [ en-US ] = "False" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Falso";
+    Text[ ru ] = "ЛОЖЬ";
+    Text[ el ] = "Λάθος";
+    Text[ nl ] = "Fout";
+    Text[ fr ] = "Faux";
+    Text[ es ] = "Falso";
+    Text[ fi ] = "Epätosi";
+    Text[ ca ] = "Fals";
+    Text[ it ] = "Falso";
+    Text[ sk ] = "Nepravda";
+    Text[ da ] = "Falsk";
+    Text[ sv ] = "Falsk";
+    Text[ pl ] = "FAŁSZ";
+    Text[ pt-BR ] = "Falso";
+    Text[ th ] = "เท็จ";
+    Text[ ja ] = "偽(FALSE)";
+    Text[ ko ] = "FALSE";
+    Text[ zh-CN ] = "错误";
+    Text[ zh-TW ] = "錯誤";
+    Text[ tr ] = "Yanlış";
+    Text[ hi-IN ] = "असत्य";
+    Text[ ar ] = "خطأ";
+    Text[ he ] = "‮שקר‬";
+};
+ // Extras -------------------------------------------------------------------
+ // SvxSearchItem ------------------------------------------------------------
+ // Kommando
+
+ // Vorlagen
+
+ // Zellen-Typ
+
+ // Applikation
+
+ // enum SvxBreak ------------------------------------------------------------
+
+ // enum SvxShadowLocation ---------------------------------------------------
+
+ // enum BrushStyle ----------------------------------------------------------
+
+ // enum ColorName -----------------------------------------------------------
+
+ // enum FontWeight -------------------------------------------------------
+
+ // enum FontUnderline ----------------------------------------------------
+ // enum FontStrikeout ----------------------------------------------------
+ // enum CASEMAP ----------------------------------------------------------
+ // enum ESCAPEMENT -------------------------------------------------------
+ // enum SvxAdjust -----------------------------------------------------------
+ // DB-Server-Connect --------------------------------------------------------
+ // enum SvxTabAdjust --------------------------------------------------------
+ // Typ-Namen der SlotIds ----------------------------------------------------
+ // GetValueText von BoolItems
+
+String RID_SVXITEMS_PAGE_USAGE_LEFT
+{
+    Text [ de ] = "Links" ;
+    Text [ en-US ] = "Left" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Esquerda";
+    Text[ ru ] = "Слева";
+    Text[ el ] = "Αριστερά";
+    Text[ nl ] = "Links";
+    Text[ fr ] = "Gauche";
+    Text[ es ] = "Izquierda";
+    Text[ fi ] = "Vasen";
+    Text[ ca ] = "Esquerra";
+    Text[ it ] = "Sinistra";
+    Text[ sk ] = "Vľavo";
+    Text[ da ] = "Venstre";
+    Text[ sv ] = "Vänster";
+    Text[ pl ] = "Z lewej";
+    Text[ pt-BR ] = "Esquerda";
+    Text[ th ] = "ซ้าย";
+    Text[ ja ] = "左";
+    Text[ ko ] = "왼쪽";
+    Text[ zh-CN ] = "向左";
+    Text[ zh-TW ] = "向左";
+    Text[ tr ] = "Sol";
+    Text[ hi-IN ] = "बायाँ";
+    Text[ ar ] = "يسار";
+    Text[ he ] = "‮שמאל‬";
+};
+String RID_SVXITEMS_PAGE_USAGE_RIGHT
+{
+    Text [ de ] = "Rechts" ;
+    Text [ en-US ] = "Right" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Direita";
+    Text[ ru ] = "Справа";
+    Text[ el ] = "Δεξιά";
+    Text[ nl ] = "Rechts";
+    Text[ fr ] = "Droite";
+    Text[ es ] = "Derecha";
+    Text[ fi ] = "Oikea";
+    Text[ ca ] = "Dreta";
+    Text[ it ] = "Destra";
+    Text[ sk ] = "Vpravo";
+    Text[ da ] = "Højre";
+    Text[ sv ] = "Höger";
+    Text[ pl ] = "Z prawej";
+    Text[ pt-BR ] = "Direita";
+    Text[ th ] = "ขวา";
+    Text[ ja ] = "右";
+    Text[ ko ] = "오른쪽";
+    Text[ zh-CN ] = "向右";
+    Text[ zh-TW ] = "向右";
+    Text[ tr ] = "Sağ";
+    Text[ hi-IN ] = "दाहिना";
+    Text[ ar ] = "يمين";
+    Text[ he ] = "‮ימין‬";
+};
+String RID_SVXITEMS_PAGE_USAGE_ALL
+{
+    Text [ de ] = "Alle" ;
+    Text [ en-US ] = "All" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Tudo";
+    Text[ ru ] = "Все";
+    Text[ el ] = "Όλα";
+    Text[ nl ] = "Alle";
+    Text[ fr ] = "Toutes les pages";
+    Text[ es ] = "Todo";
+    Text[ fi ] = "Kaikki";
+    Text[ ca ] = "Tot";
+    Text[ it ] = "Tutto";
+    Text[ sk ] = "Všetko";
+    Text[ da ] = "Alle";
+    Text[ sv ] = "Alla";
+    Text[ pl ] = "Wszystko";
+    Text[ pt-BR ] = "Tudo";
+    Text[ th ] = "ทั้งหมด";
+    Text[ ja ] = "すべて";
+    Text[ ko ] = "모두";
+    Text[ zh-CN ] = "全部";
+    Text[ zh-TW ] = "全部";
+    Text[ tr ] = "Tümü";
+    Text[ hi-IN ] = "सब";
+    Text[ ar ] = "الكل";
+    Text[ he ] = "‮הכל‬";
+};
+String RID_SVXITEMS_PAGE_USAGE_MIRROR
+{
+    Text [ de ] = "Gespiegelt" ;
+    Text [ en-US ] = "Mirrored" ;
+    Text [ x-comment ] = " ";
+    Text[ pt ] = "Invertido";
+    Text[ ru ] = "Отраженные";
+    Text[ el ] = "Με κατοπτρισμό";
+    Text[ nl ] = "Gespiegeld";
+    Text[ fr ] = "Pages en vis-à-vis";
+    Text[ es ] = "Reflejado";
+    Text[ fi ] = "Peilattu";
+    Text[ ca ] = "Replicat";
+    Text[ it ] = "Rispecchiato";
+    Text[ sk ] = "Zrkadlené";
+    Text[ da ] = "Spejlvendt";
+    Text[ sv ] = "Spegelvänt";
+    Text[ pl ] = "Odbicie lustrzane";
+    Text[ pt-BR ] = "Refletido";
+    Text[ th ] = "ส่อง";
+    Text[ ja ] = "左右対称";
+    Text[ ko ] = "대칭";
+    Text[ zh-CN ] = "翻转的";
+    Text[ zh-TW ] = "翻轉的";
+    Text[ tr ] = "Yansıma";
+    Text[ hi-IN ] = "दर्पण किया हुआ";
+    Text[ ar ] = "منعكس";
+    Text[ he ] = "‮משוכפל‬";
+};
+
+
+
+
+String RID_SVXITEMS_TWOLINES_OFF
+{
+    Text [ de ] = "Doppelzeilig aus";
+    Text [ en-US ] = "Double-lined off";
+    Text[ pt ] = "Desactivar linhas duplas";
+    Text[ ru ] = "Выкл. двухстрочный";
+    Text[ el ] = "Δίγραμμη γραφή απενεργοποιημένη";
+    Text[ nl ] = "Tweeregelig uit";
+    Text[ fr ] = "'Deux lignes en une' désactivé";
+    Text[ es ] = "Desactivar líneas dobles";
+    Text[ fi ] = "Kaksoisviiva poissa käytöstä";
+    Text[ ca ] = "Desactiva línies dobles";
+    Text[ it ] = "Disattiva 'A due righe'";
+    Text[ sk ] = "Dvojité riadky vypnuté";
+    Text[ da ] = "Dobbelt fra";
+    Text[ sv ] = "Dubbla rader av";
+    Text[ pl ] = "Podwójne wiersze wyłączone";
+    Text[ pt-BR ] = "Linhas duplas desativadas";
+    Text[ th ] = "ขีดเส้นปิดคู่";
+    Text[ ja ] = "2行使い オフ";
+    Text[ ko ] = "두줄 해제";
+    Text[ zh-CN ] = "不使用双行";
+    Text[ zh-TW ] = "不使用雙行";
+    Text[ tr ] = "Çift Çizgili Kapalı";
+    Text[ hi-IN ] = "द्विगुणित रेखा बंद";
+    Text[ ar ] = "Two lines off";
+    Text[ he ] = "‮ריווח כפול בין שורות מכובה‬";
+};
+String RID_SVXITEMS_TWOLINES
+{
+    Text [ de ] = "Doppelzeilig";
+    Text [ en-US ] = "Double-lined";
+    Text[ pt ] = "Linhas duplas";
+    Text[ ru ] = "Двухстрочный";
+    Text[ el ] = "Δίγραμμη γραφή";
+    Text[ nl ] = "Tweeregelig";
+    Text[ fr ] = "Deux lignes en une";
+    Text[ es ] = "Líneas dobles";
+    Text[ fi ] = "Kaksoisviiva";
+    Text[ ca ] = "Dues línies";
+    Text[ it ] = "A due righe";
+    Text[ sk ] = "Dvojité riadky";
+    Text[ da ] = "Dobbelt";
+    Text[ sv ] = "Dubbla rader";
+    Text[ pl ] = "Podwójne wiersze";
+    Text[ pt-BR ] = "Linhas duplas";
+    Text[ th ] = "ขีดเส้นคู่";
+    Text[ ja ] = "2行使い";
+    Text[ ko ] = "두줄";
+    Text[ zh-CN ] = "双行";
+    Text[ zh-TW ] = "雙行";
+    Text[ tr ] = "Çift Çizgili";
+    Text[ hi-IN ] = "द्विगुणित रेखा";
+    Text[ ar ] = "سطرين";
+    Text[ he ] = "‮ריווח כפול בין שורות מופעל‬";
+};
+
+
+
+String RID_SVXITEMS_CHARROTATE_OFF
+{
+    Text [ de ] = "keine gedrehten Zeichen";
+    Text [ en-US ] = "No rotated characters";
+    Text[ pt ] = "Sem rotação de caracteres";
+    Text[ ru ] = "Без перевернутых символов";
+    Text[ el ] = "Χωρίς περιστροφή χαρακτήρων";
+    Text[ nl ] = "geen gedraaide tekens";
+    Text[ fr ] = "Sans rotation des caractères";
+    Text[ es ] = "Sin rotación de caracteres";
+    Text[ fi ] = "Ei kierrettyjä merkkejä";
+    Text[ ca ] = "Sense caràcters canviats";
+    Text[ it ] = "Senza rotazione carattere";
+    Text[ sk ] = "Bez otočených znakov";
+    Text[ da ] = "ingen roterede tegn";
+    Text[ sv ] = "Inga roterade tecken";
+    Text[ pl ] = "bez obróconych znaków";
+    Text[ pt-BR ] = "Caracteres sem rotação";
+    Text[ th ] = "ตัวอักขระที่ไม่หมุน";
+    Text[ ja ] = "文字を回転しない";
+    Text[ ko ] = "회전된 문자 아님";
+    Text[ zh-CN ] = "字符不旋转";
+    Text[ zh-TW ] = "字元不旋轉";
+    Text[ tr ] = "Döndürülmüş karakterler yok";
+    Text[ hi-IN ] = "घुमाया हुआ अक्षरें नहीं";
+    Text[ ar ] = "بدون استدارة أحرف";
+    Text[ he ] = "‮ללא תוים מסובבים‬";
+};
+String RID_SVXITEMS_CHARROTATE
+{
+    Text [ de ] = "Zeichen um $(ARG1)° gedreht";
+    Text [ en-US ] = "Character rotated by $(ARG1)�";
+    Text[ pt ] = "Rotação de caracteres: $(ARG1)°";
+    Text[ ru ] = "Повернуть символы на $(ARG1)°";
+    Text[ el ] = "Περιστροφή χαρακτήρων από $(ARG1)°";
+    Text[ nl ] = "teken $(ARG1)° gedraaid";
+    Text[ fr ] = "Rotation des caractères : $(ARG1)°";
+    Text[ es ] = "Carácter rodado en $(ARG1)°";
+    Text[ fi ] = "Merkkiä kierretty $(ARG1)Â°";
+    Text[ ca ] = "Caràcter rodat en $(ARG1)°";
+    Text[ it ] = "Carattere rotato di $(ARG1)°";
+    Text[ sk ] = "Znak otočený o $(ARG1)°";
+    Text[ da ] = "Tegn roteret med $(ARG1)°";
+    Text[ sv ] = "Tecken roterat med $(ARG1)°";
+    Text[ pl ] = "Znaki obrócone o $(ARG1)°";
+    Text[ pt-BR ] = "Caracter girado em $(ARG1)?";
+    Text[ th ] = "ตัวอักขระหมุนโดย $(ARG1)ฐ";
+    Text[ ja ] = "文字を $(ARG1)ー 回転";
+    Text[ ko ] = "$(ARG1)?회전된 문자";
+    Text[ zh-CN ] = "字符旋转 $(ARG1)";
+    Text[ zh-TW ] = "字元旋轉 $(ARG1)°";
+    Text[ tr ] = "Karakter $(ARG1)Â° çevrildi";
+    Text[ hi-IN ] = "अक्षर को $(ARG1)Â° से घुमाया";
+    Text[ ar ] = "استدارة الأحرف بمقدار $(ARG1)°";
+    Text[ he ] = "‮תו מסובב ב $(ARG1)°‬";
+};
+String RID_SVXITEMS_CHARROTATE_FITLINE
+{
+    Text [ de ] = " an Zeile anpassen";
+    Text [ en-US ] = "Fit to line";
+    Text[ pt ] = "Ajustar à linha";
+    Text[ ru ] = "Согласовать со строкой";
+    Text[ el ] = "Προσαρμογή στη γραμμή";
+    Text[ nl ] = "aanpassen aan regel";
+    Text[ fr ] = " Adapter à la ligne";
+    Text[ es ] = "Ajustar a la línea";
+    Text[ fi ] = "Sovita riville";
+    Text[ ca ] = "ajustar a fila";
+    Text[ it ] = "Adatta alla riga";
+    Text[ sk ] = "Prispôsobiť riadku";
+    Text[ da ] = " tilpas til linje";
+    Text[ sv ] = " Anpassa till rad";
+    Text[ pl ] = "Dopasuj do wiersza";
+    Text[ pt-BR ] = " Ajustar à linha";
+    Text[ th ] = "จัดพอดีบรรทัด";
+    Text[ ja ] = "行に合わせる";
+    Text[ ko ] = "줄에 맞춤";
+    Text[ zh-CN ] = "和行对齐";
+    Text[ zh-TW ] = "和行對齊";
+    Text[ tr ] = "Satıra uydur";
+    Text[ hi-IN ] = "रेखा केलिए योग्य";
+    Text[ ar ] = "ملاءمة للسطر";
+    Text[ he ] = "‮התאמה לשורה‬";
+};
+
+String RID_SVXITEMS_RELIEF_NONE
+{
+    Text [ de ] = "Kein Relief" ;
+    Text [ en-US ] = "No relief";
+    Text[ pt ] = "Sem relevo";
+    Text[ ru ] = "Без рельефа";
+    Text[ el ] = "Χωρίς ανάγλυφο";
+    Text[ nl ] = "Geen reliëf";
+    Text[ fr ] = "Sans relief";
+    Text[ es ] = "Sin relieve";
+    Text[ fi ] = "Ei korkokuvaa";
+    Text[ ca ] = "Sense relleu";
+    Text[ it ] = "Senza rilievo";
+    Text[ sk ] = "Bez reliéfu";
+    Text[ da ] = "Intet relief";
+    Text[ sv ] = "Ingen relief";
+    Text[ pl ] = "Bez reliefu";
+    Text[ pt-BR ] = "Sem relevo";
+    Text[ th ] = "ไม่นูน";
+    Text[ ja ] = "浮き出しなし";
+    Text[ ko ] = "양각 없음";
+    Text[ zh-CN ] = "无浮雕效果";
+    Text[ zh-TW ] = "無浮雕效果";
+    Text[ tr ] = "Rölyef yok";
+    Text[ hi-IN ] = "सहायता नहीं";
+    Text[ ar ] = "بدون نقش";
+    Text[ he ] = "‮ללא הבלטה‬";
+};
+String RID_SVXITEMS_RELIEF_ENGRAVED
+{
+    Text [ de ] = "Gravur";
+    Text [ en-US ] = "Engraved";
+    Text[ pt ] = "Gravado";
+    Text[ ru ] = "Гравировка";
+    Text[ el ] = "Χαραγμένο";
+    Text[ nl ] = "Gravure";
+    Text[ fr ] = "Empreinte";
+    Text[ es ] = "Grabado";
+    Text[ fi ] = "Kaiverrettu";
+    Text[ ca ] = "Gravat";
+    Text[ it ] = "Incisione";
+    Text[ sk ] = "Rytina";
+    Text[ da ] = "Indgraveret";
+    Text[ sv ] = "Gravyr";
+    Text[ pl ] = "Grawerowane";
+    Text[ pt-BR ] = "Entalhado";
+    Text[ th ] = "รอยจารึก";
+    Text[ ja ] = "浮き彫り";
+    Text[ ko ] = "오목 효과";
+    Text[ zh-CN ] = "雕刻";
+    Text[ zh-TW ] = "雕刻";
+    Text[ tr ] = "Kazınmış";
+    Text[ hi-IN ] = "खोदा हुआ";
+    Text[ ar ] = "حفر";
+    Text[ he ] = "‮חרוט‬";
+};
+
+
+String RID_SVXITEMS_PARASNAPTOGRID_ON
+{
+    Text [ de ] = "Absatz wird am Textraster gefangen (wenn aktiviert)";
+    Text [ en-US ] = "Paragraph snaps to text grid (if active)";
+    Text[ pt ] = "paragraph snap to grid";
+    Text[ ru ] = "Параграф привязан к сетке текста (если активно)";
+    Text[ el ] = "Προσκόλληση παραγράφου στο πλέγμα κειμένου (αν είναι ενεργοποιημένο)";
+    Text[ nl ] = "Alinea wordt aan tekstraster gevangen (indien geactiveerd)";
+    Text[ fr ] = "Capture du paragraphe à la grille du texte (si activée)";
+    Text[ es ] = "Utilizar la cuadrícula en el párrafo (si ésta está activada) ";
+    Text[ fi ] = "Kappaleen kohdistus tekstiruudukkoon (jos käytössä)";
+    Text[ ca ] = "Paragraph snaps to text grid (if active)";
+    Text[ it ] = "Cattura il paragrafo alla griglia di testo (se attivata)";
+    Text[ sk ] = "Odstavec zachytávať na textový mriežku (ak aktívna)";
+    Text[ da ] = "Afstanden måles ved tekstgitteret (ved aktivering)";
+    Text[ sv ] = "Stycke fästs mot textraster (om det är aktiverat)";
+    Text[ pl ] = "Akapity są przyciągane do siatki tekstu (jeśli aktywna)";
+    Text[ pt-BR ] = "O parágrafo se encaixa na grade do texto (se ativada)";
+    Text[ th ] = "Paragraph snaps to text grid (if active)";
+    Text[ ja ] = "段落を文字罫線で位置合わせ(オンのとき)";
+    Text[ ko ] = "단락을 텍스트 그리드로 맞춤(활성시)";
+    Text[ zh-CN ] = "段落和稿纸格线对齐(如使用稿纸)";
+    Text[ zh-TW ] = "段落和稿紙格線對齊 (如使用稿紙)";
+    Text[ tr ] = "Paragraph snaps to text grid (if active)";
+    Text[ hi-IN ] = "Paragraph snaps to text grid (if active)";
+    Text[ ar ] = "paragraph snap to grid";
+    Text[ he ] = "‮פסקה מתמקמת על קודקוד רשת (במידה והרשת מופעלת)‬";
+};
+
+String RID_SVXITEMS_PARASNAPTOGRID_OFF
+{
+    Text [ de ] = "Absatz wird nicht am Textraster gefangen";
+    Text [ en-US ] = "Paragraph does not snap to text grid";
+    Text[ pt ] = "paragraph does not snap to grid";
+    Text[ ru ] = "Параграф не привязан к сетке текста";
+    Text[ el ] = "Χωρίς προσκόλληση παραγράφου στο πλέγμα κειμένου";
+    Text[ nl ] = "Alinea wordt niet aan tekstraster gevangen";
+    Text[ fr ] = "Pas de capture du paragraphe à la grille du texte";
+    Text[ es ] = "No utilizar la cuadrícula en el párrafo";
+    Text[ fi ] = "Kappale ei kohdistu tekstiruudukkoon";
+    Text[ ca ] = "Paragraph does not snap to text grid";
+    Text[ it ] = "Non cattura il paragrafo alla griglia di testo";
+    Text[ sk ] = "Odstavec nezachytávať na textový mriežku";
+    Text[ da ] = "Afstanden måles ikke ved tekstgitteret";
+    Text[ sv ] = "Stycke fästs inte mot textraster";
+    Text[ pl ] = "Akapit nie jest przyciągany do siatki tekstu";
+    Text[ pt-BR ] = "O parágrafo não se encaixa na grade do texto";
+    Text[ th ] = "Paragraph does not snap to text grid";
+    Text[ ja ] = "段落を文字罫線で位置合わせしない";
+    Text[ ko ] = "단락을 텍스트 그리드로 맞추지 않음";
+    Text[ zh-CN ] = "段落不和稿纸格线对齐";
+    Text[ zh-TW ] = "段落不和稿紙格線對齊";
+    Text[ tr ] = "Paragraph does not snap to text grid";
+    Text[ hi-IN ] = "Paragraph does not snap to text grid";
+    Text[ ar ] = "paragraph does not snap to grid";
+    Text[ he ] = "‮מיקום פסקה חופשי (אף אם הרשת מופעלת)‬";
+};
+
+ // ********************************************************************** EOF
