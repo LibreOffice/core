@@ -12,13 +12,13 @@ br	bridges\source\cpp_uno\gcc3_aix_powerpc	nmake	-	u	br_gcc3ap br_cppuno_shared 
 br	bridges\source\cpp_uno\gcc3_linux_powerpc64	nmake	-	u	br_gcc3lp_64 br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\gcc3_linux_mips		nmake	-	u	br_gcc3lmips br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\gcc3_linux_m68k		nmake	-	u	br_gcc3lm68k br_cppuno_shared br_unotypes br_inc NULL
-br	bridges\source\cpp_uno\gcc3_linux_s390		nmake	-	u	br_gcc3l3 br_unotypes br_inc NULL
-br	bridges\source\cpp_uno\gcc3_linux_s390x		nmake	-	u	br_gcc3l3_64 br_unotypes br_inc NULL
+br	bridges\source\cpp_uno\gcc3_linux_s390		nmake	-	u	br_gcc3l3 br_unotypes br_cppuno_shared br_inc NULL
+br	bridges\source\cpp_uno\gcc3_linux_s390x		nmake	-	u	br_gcc3l3_64 br_unotypes br_cppuno_shared br_inc NULL
 br	bridges\source\cpp_uno\gcc3_linux_sparc		nmake	-	u	br_gcc3ls br_unotypes br_cppuno_shared br_inc NULL
-br	bridges\source\cpp_uno\gcc3_linux_arm		nmake	-	u	br_gcc3lr br_unotypes NULL
-br	bridges\source\cpp_uno\gcc3_linux_ia64		nmake	-	u	br_gcc3la br_unotypes NULL
-br	bridges\source\cpp_uno\gcc3_linux_hppa		nmake	-	u	br_gcc3lh br_unotypes NULL
-br	bridges\source\cpp_uno\gcc3_linux_alpha		nmake	-	u	br_gcc3ll br_unotypes NULL
+br	bridges\source\cpp_uno\gcc3_linux_arm		nmake	-	u	br_gcc3lr br_unotypes br_cppuno_shared br_inc NULL
+br	bridges\source\cpp_uno\gcc3_linux_ia64		nmake	-	u	br_gcc3la br_unotypes br_cppuno_shared br_inc NULL
+br	bridges\source\cpp_uno\gcc3_linux_hppa		nmake	-	u	br_gcc3lh br_unotypes br_cppuno_shared br_inc NULL
+br	bridges\source\cpp_uno\gcc3_linux_alpha		nmake	-	u	br_gcc3ll br_unotypes br_cppuno_shared br_inc NULL
 br	bridges\source\cpp_uno\gcc3_macosx_intel			nmake	-	u	br_gcc3macoxi br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\gcc3_macosx_powerpc			nmake	-	u	br_gcc3macoxp br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\gcc3_ios_arm		nmake	-	u	br_gcc3iosr br_cppuno_shared br_unotypes br_inc NULL
