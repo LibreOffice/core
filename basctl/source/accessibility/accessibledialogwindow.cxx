@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,13 +60,13 @@ DBG_NAME( AccessibleDialogWindow )
 
 
 // -----------------------------------------------------------------------------
-//  class ChildDescriptor
+//	class ChildDescriptor
 // -----------------------------------------------------------------------------
 
 AccessibleDialogWindow::ChildDescriptor::ChildDescriptor( DlgEdObj* _pDlgEdObj )
     :pDlgEdObj( _pDlgEdObj )
     ,rxAccessible( 0 )
-{
+{ 
 }
 
 // -----------------------------------------------------------------------------
@@ -116,7 +116,7 @@ bool AccessibleDialogWindow::ChildDescriptor::operator<( const ChildDescriptor& 
 }
 
 // -----------------------------------------------------------------------------
-//  class AccessibleDialogWindow
+//	class AccessibleDialogWindow
 // -----------------------------------------------------------------------------
 
 AccessibleDialogWindow::AccessibleDialogWindow( DialogWindow* pDialogWindow )
@@ -338,7 +338,7 @@ void AccessibleDialogWindow::RemoveChild( const ChildDescriptor& rDesc )
 void AccessibleDialogWindow::UpdateChild( const ChildDescriptor& rDesc )
 {
     if ( IsChildVisible( rDesc ) )
-    {
+    {			
         // if the object is not in the child list, insert child
         InsertChild( rDesc );
     }
@@ -443,13 +443,13 @@ void AccessibleDialogWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindo
         case VCLEVENT_WINDOW_SHOW:
         {
             aNewValue <<= AccessibleStateType::SHOWING;
-            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
+            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );							
         }
         break;
         case VCLEVENT_WINDOW_HIDE:
         {
             aOldValue <<= AccessibleStateType::SHOWING;
-            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
+            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );				
         }
         break;
         case VCLEVENT_WINDOW_RESIZE:
@@ -518,7 +518,7 @@ void AccessibleDialogWindow::FillAccessibleStateSet( utl::AccessibleStateSetHelp
 }
 
 // -----------------------------------------------------------------------------
-// OCommonAccessibleComponent
+// OCommonAccessibleComponent 
 // -----------------------------------------------------------------------------
 
 awt::Rectangle AccessibleDialogWindow::implGetBounds() throw (RuntimeException)
@@ -551,7 +551,7 @@ void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     if ( IsChildVisible( aDesc ) )
                         InsertChild( aDesc );
                 }
-            }
+            }	
             break;
             case HINT_OBJREMOVED:
             {
@@ -778,7 +778,7 @@ sal_Int16 AccessibleDialogWindow::getAccessibleRole(  ) throw (RuntimeException)
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString AccessibleDialogWindow::getAccessibleDescription(   ) throw (RuntimeException)
+::rtl::OUString AccessibleDialogWindow::getAccessibleDescription(	) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -856,8 +856,8 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleAtPoint( const awt
     {
         Reference< XAccessible > xAcc = getAccessibleChild( i );
         if ( xAcc.is() )
-        {
-            Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );
+        {			
+            Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );				
             if ( xComp.is() )
             {
                 Rectangle aRect = VCLRectangle( xComp->getBounds() );
@@ -1007,7 +1007,7 @@ void AccessibleDialogWindow::selectAccessibleChild( sal_Int32 nChildIndex ) thro
 // -----------------------------------------------------------------------------
 
 sal_Bool AccessibleDialogWindow::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
-{
+{	
     OExternalLockGuard aGuard( this );
 
     if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )
@@ -1065,7 +1065,7 @@ sal_Int32 AccessibleDialogWindow::getSelectedAccessibleChildCount(  ) throw (Run
     sal_Int32 nRet = 0;
 
     for ( sal_Int32 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
-    {
+    {		
         if ( isAccessibleChildSelected( i ) )
             ++nRet;
     }
@@ -1085,7 +1085,7 @@ Reference< XAccessible > AccessibleDialogWindow::getSelectedAccessibleChild( sal
     Reference< XAccessible > xChild;
 
     for ( sal_Int32 i = 0, j = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
-    {
+    {		
         if ( isAccessibleChildSelected( i ) && ( j++ == nSelectedChildIndex ) )
         {
             xChild = getAccessibleChild( i );

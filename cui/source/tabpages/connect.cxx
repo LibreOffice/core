@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,11 +95,11 @@ SvxConnectionDialog::~SvxConnectionDialog()
 \************************************************************************/
 
 SvxConnectionPage::SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttrs ) :
-                SfxTabPage      ( pWindow, CUI_RES( RID_SVXPAGE_CONNECTION ),
+                SfxTabPage		( pWindow, CUI_RES( RID_SVXPAGE_CONNECTION ),
                                   rInAttrs ),
 
-        aFtType                 ( this, CUI_RES( FT_TYPE ) ),
-        aLbType                 ( this, CUI_RES( LB_TYPE ) ),
+        aFtType      			( this, CUI_RES( FT_TYPE ) ),
+        aLbType					( this, CUI_RES( LB_TYPE ) ),
 
         aFlDelta                ( this, CUI_RES( FL_DELTA ) ),
         aFtLine1                ( this, CUI_RES( FT_LINE_1 ) ),
@@ -110,14 +110,14 @@ SvxConnectionPage::SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttr
         aMtrFldLine3            ( this, CUI_RES( MTR_FLD_LINE_3 ) ),
 
         aFlDistance             ( this, CUI_RES( FL_DISTANCE ) ),
-        aFtHorz1                ( this, CUI_RES( FT_HORZ_1 ) ),
-        aMtrFldHorz1            ( this, CUI_RES( MTR_FLD_HORZ_1 ) ),
+        aFtHorz1    			( this, CUI_RES( FT_HORZ_1 ) ),
+        aMtrFldHorz1    		( this, CUI_RES( MTR_FLD_HORZ_1 ) ),
         aFtVert1                ( this, CUI_RES( FT_VERT_1 ) ),
         aMtrFldVert1            ( this, CUI_RES( MTR_FLD_VERT_1 ) ),
         aFtHorz2                ( this, CUI_RES( FT_HORZ_2 ) ),
         aMtrFldHorz2            ( this, CUI_RES( MTR_FLD_HORZ_2 ) ),
         aFtVert2                ( this, CUI_RES( FT_VERT_2 ) ),
-        aMtrFldVert2            ( this, CUI_RES( MTR_FLD_VERT_2 ) ),
+        aMtrFldVert2    		( this, CUI_RES( MTR_FLD_VERT_2 ) ),
 
         aCtlPreview             ( this, CUI_RES( CTL_PREVIEW ), rInAttrs ),
         rOutAttrs               ( rInAttrs ),
@@ -331,8 +331,8 @@ void __EXPORT SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
 
 BOOL SvxConnectionPage::FillItemSet( SfxItemSet& rAttrs)
 {
-    BOOL     bModified = FALSE;
-    INT32    nValue;
+    BOOL	 bModified = FALSE;
+    INT32	 nValue;
 
     if( aMtrFldHorz1.GetText() != aMtrFldHorz1.GetSavedValue() )
     {
@@ -429,7 +429,7 @@ SfxTabPage* SvxConnectionPage::Create( Window* pWindow,
 |*
 \************************************************************************/
 
-USHORT* SvxConnectionPage::GetRanges()
+USHORT*	SvxConnectionPage::GetRanges()
 {
     return( pRanges );
 }
@@ -559,7 +559,7 @@ void SvxConnectionPage::PageCreated (SfxAllItemSet aSet)
     SFX_ITEMSET_ARG(&aSet,pOfaPtrItem,OfaPtrItem,SID_OBJECT_LIST,sal_False);
     if (pOfaPtrItem)
         SetView( static_cast<SdrView *>(pOfaPtrItem->GetValue()) );
-
+    
     Construct();
 }
 

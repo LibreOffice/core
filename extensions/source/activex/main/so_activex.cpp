@@ -3,7 +3,7 @@
 
 
 // Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL,
+//      To build a separate proxy/stub DLL, 
 //      run nmake -f so_activexps.mk in the project directory.
 
 #include "stdio.h"
@@ -30,14 +30,14 @@ END_OBJECT_MAP()
 #define X32_LIB_NAME "so_activex.dll"
 
 // 06.11.2009 tkr: to provide windows xp as build systems for mingw we need to define KEY_WOW64_64KEY
-// in mingw 3.13 KEY_WOW64_64KEY isn't available < Win2003 systems.
+// in mingw 3.13 KEY_WOW64_64KEY isn't available < Win2003 systems. 
 // Also defined in setup_native\source\win32\customactions\reg64\reg64.cxx,source\win32\customactions\shellextensions\shellextensions.cxx and
 // extensions\source\activex\main\so_activex.cpp
 #ifndef KEY_WOW64_64KEY
-    #define KEY_WOW64_64KEY (0x0100)
+    #define KEY_WOW64_64KEY	(0x0100)
 #endif
 #ifndef KEY_WOW64_32KEY
-    #define KEY_WOW64_32KEY (0x0200)
+    #define KEY_WOW64_32KEY	(0x0200)
 #endif
 
 const REGSAM n64KeyAccess = KEY_ALL_ACCESS | KEY_WOW64_64KEY;
@@ -53,7 +53,7 @@ const BOOL bX64 = FALSE;
 
 // 10.11.2009 tkr: MinGW doesn't know anything about RegDeleteKeyExA if WINVER < 0x0502.
 extern "C" {
-WINADVAPI LONG WINAPI RegDeleteKeyExA(HKEY,LPCSTR,REGSAM,DWORD);
+WINADVAPI LONG WINAPI RegDeleteKeyExA(HKEY,LPCSTR,REGSAM,DWORD); 
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -102,14 +102,14 @@ const char* aFileExt[] = { ".vor",
 const char* aMimeType[] = {
                           "application/vnd.stardivision.writer",
 
-                          "application/vnd.stardivision.chart",
+                          "application/vnd.stardivision.chart", 
                           "application/vnd.stardivision.draw",
                           "application/vnd.stardivision.impress",
                           "application/vnd.stardivision.impress-packed",
                           "application/vnd.stardivision.calc",
                           "application/vnd.stardivision.writer",
                           "application/vnd.stardivision.math",
-
+    
                           MIMETYPE_VND_SUN_XML_WRITER_TEMPLATE_ASCII,
                           MIMETYPE_VND_SUN_XML_CALC_TEMPLATE_ASCII,
                           MIMETYPE_VND_SUN_XML_IMPRESS_TEMPLATE_ASCII,
@@ -164,27 +164,27 @@ const char* aLocalPrefix = "Software\\Classes\\";
 BOOL createKey( HKEY hkey,
                 const char* aKeyToCreate,
         REGSAM nKeyAccess,
-                const char* aValue = NULL,
-                const char* aChildName = NULL,
+                const char* aValue = NULL, 
+                const char* aChildName = NULL, 
                 const char* aChildValue = NULL )
 {
     HKEY hkey1;
-
-    return ( ERROR_SUCCESS == RegCreateKeyExA( hkey, aKeyToCreate, 0, NULL, REG_OPTION_NON_VOLATILE, nKeyAccess, NULL, &hkey1 , NULL )
-           && ( !aValue || ERROR_SUCCESS == RegSetValueExA( hkey1,
-                                                           "",
-                                                           0,
-                                                           REG_SZ,
-                                                           (const BYTE*)aValue,
+    
+    return ( ERROR_SUCCESS == RegCreateKeyExA( hkey, aKeyToCreate, 0, NULL, REG_OPTION_NON_VOLATILE, nKeyAccess, NULL, &hkey1 , NULL ) 
+           && ( !aValue || ERROR_SUCCESS == RegSetValueExA( hkey1, 
+                                                           "", 
+                                                           0, 
+                                                           REG_SZ, 
+                                                           (const BYTE*)aValue, 
                                                            strlen( aValue ) ) )
-           && ( !aChildName || ERROR_SUCCESS == RegSetValueExA( hkey1,
-                                                               aChildName,
-                                                               0,
-                                                               REG_SZ,
-                                                               (const BYTE*)aChildValue,
+           && ( !aChildName || ERROR_SUCCESS == RegSetValueExA( hkey1, 
+                                                               aChildName, 
+                                                               0, 
+                                                               REG_SZ, 
+                                                               (const BYTE*)aChildValue, 
                                                                strlen( aChildValue ) ) )
            && ERROR_SUCCESS == RegCloseKey( hkey1 ) );
-
+    
 }
 
 STDAPI DllUnregisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit );
@@ -204,7 +204,7 @@ STDAPI DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAc
     char pActiveXPath[1124];
     char pActiveXPath101[1124];
 
-
+    
     // In case SO7 is installed for this user he can have local registry entries that will prevent him from
     // using SO8 ActiveX control. The fix is just to clean up the local entries related to ActiveX control.
     // Unfortunately it can be done only for the user who installs the office.
@@ -222,7 +222,7 @@ STDAPI DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAc
 
         {
             wsprintfA( aSubKey, "%sCLSID\\%s", aPrefix, aClassID );
-            aResult =
+            aResult = 
                 ( ERROR_SUCCESS == RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, nKeyAccess, NULL, &hkey , NULL )
                     && ERROR_SUCCESS == RegSetValueExA( hkey, "", 0, REG_SZ, (const BYTE*)"SOActiveX Class", 17 )
                     && createKey( hkey, "Control", nKeyAccess )
@@ -291,22 +291,22 @@ STDAPI DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAc
         {
             wsprintfA( aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMimeType[ind] );
             if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, nKeyAccess, NULL, &hkey, NULL )
-//              || ERROR_SUCCESS != RegSetValueExA(hkey, "Extension", 0, REG_SZ,
+//              || ERROR_SUCCESS != RegSetValueExA(hkey, "Extension", 0, REG_SZ, 
 //                 (const BYTE *)aFileExt[ind], strlen( aFileExt[ind] ) )
               || ERROR_SUCCESS != RegSetValueExA(hkey, "CLSID", 0, REG_SZ,
                  (const BYTE *)aClassID, strlen(aClassID)) )
                     aResult = FALSE;
-
-            if( hkey )
+    
+            if( hkey )    
                 RegCloseKey(hkey),hkey= NULL;
 
 /*
             wsprintfA( aSubKey, "%s%s", aPrefix, aFileExt[ind] );
-            if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, nKeyAccess, NULL, &hkey, NULL )
+            if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, nKeyAccess, NULL, &hkey, NULL ) 
               || ERROR_SUCCESS != RegSetValueExA(hkey, "Content Type", 0, REG_SZ,
                  (const BYTE *)aMimeType[ind], strlen( aMimeType[ind] ) ) )
                     aResult = FALSE;
-            if( hkey )
+            if( hkey )    
                 RegCloseKey(hkey),hkey= NULL;
 */
         }
@@ -320,7 +320,7 @@ STDAPI DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAc
                wsprintfA( aSubKey, "EnableFullPage\\%s", aFileExt[ind] );
                if ( ERROR_SUCCESS != RegCreateKeyExA( hkey, aSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, nKeyAccess, NULL, &hkey1 , NULL ) )
                    aResult = FALSE;
-
+    
             if ( hkey1 )
                    RegCloseKey(hkey1),hkey1= NULL;
          }
@@ -375,7 +375,7 @@ STDAPI DllUnregisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKey
     BOOL        fErr = FALSE;
     char aSubKey[513];
     const char*    aPrefix = aLocalPrefix; // bForAllUsers ? "" : aLocalPrefix;
-
+    
     for( int ind = 0; ind < SUPPORTED_EXT_NUM; ind++ )
     {
         if( nForModes[ind] & nMode )
@@ -388,7 +388,7 @@ STDAPI DllUnregisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKey
             {
                 if ( ERROR_SUCCESS != RegDeleteValue( hkey, "CLSID" ) )
                     fErr = TRUE;
-
+    
                 if ( ERROR_SUCCESS != RegQueryInfoKey(  hkey, NULL, NULL, NULL,
                                                     &nSubKeys, NULL, NULL,
                                                     &nValues, NULL, NULL, NULL, NULL ) )
@@ -396,14 +396,14 @@ STDAPI DllUnregisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKey
                     RegCloseKey( hkey ), hkey = NULL;
                     fErr = TRUE;
                 }
-                else
+                else 
                 {
                     RegCloseKey( hkey ), hkey = NULL;
                     if ( !nSubKeys && !nValues )
                         DeleteKeyTree( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, nKeyAccess );
                 }
             }
-
+    
                wsprintfA( aSubKey, "%s%s", aPrefix, aFileExt[ind] );
                if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, nKeyAccess, NULL, &hkey, NULL ) )
                 fErr = TRUE;
@@ -416,7 +416,7 @@ STDAPI DllUnregisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKey
                     RegCloseKey( hkey ), hkey = NULL;
                     fErr = TRUE;
                 }
-                else
+                else 
                 {
                     RegCloseKey( hkey ), hkey = NULL;
                     if ( !nSubKeys && !nValues )
@@ -472,12 +472,12 @@ STDAPI DllUnregisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit )
 
 #define SUPPORTED_MSEXT_NUM 7
 const char* aMSFileExt[] = { ".dot", ".doc", ".xlt", ".xls", ".pot", ".ppt", ".pps" };
-const char* aMSMimeType[] = { "application/msword",
-                          "application/msword",
-                          "application/msexcell",
-                          "application/msexcell",
-                          "application/mspowerpoint",
-                          "application/mspowerpoint",
+const char* aMSMimeType[] = { "application/msword", 
+                          "application/msword", 
+                          "application/msexcell", 
+                          "application/msexcell", 
+                          "application/mspowerpoint", 
+                          "application/mspowerpoint", 
                           "application/mspowerpoint" };
 const int nForMSModes[] = { 1, 1, 2, 2, 4, 4, 4 };
 
@@ -504,22 +504,22 @@ STDAPI DllRegisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAcces
         {
                wsprintfA( aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMSMimeType[ind] );
                if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, nKeyAccess, NULL, &hkey, NULL )
-               || ERROR_SUCCESS != RegSetValueExA(hkey, "Extension", 0, REG_SZ,
+               || ERROR_SUCCESS != RegSetValueExA(hkey, "Extension", 0, REG_SZ, 
                    (const BYTE *)aMSFileExt[ind], strlen( aMSFileExt[ind] ) )
                || ERROR_SUCCESS != RegSetValueExA(hkey, "CLSID", 0, REG_SZ,
                    (const BYTE *)aClassID, strlen(aClassID)) )
                        aResult = FALSE;
-
-               if( hkey )
+    
+               if( hkey )    
                    RegCloseKey(hkey),hkey= NULL;
-
+    
                wsprintfA( aSubKey, "%s%s", aPrefix, aMSFileExt[ind] );
-               if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, nKeyAccess, NULL, &hkey, NULL )
+               if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, nKeyAccess, NULL, &hkey, NULL ) 
                || ERROR_SUCCESS != RegSetValueExA(hkey, "Content Type", 0, REG_SZ,
                    (const BYTE *)aMSMimeType[ind], strlen( aMSMimeType[ind] ) ) )
                        aResult = FALSE;
-
-               if( hkey )
+    
+               if( hkey )    
                    RegCloseKey(hkey),hkey= NULL;
         }
     }
@@ -572,13 +572,13 @@ STDAPI DllUnregisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAcc
     BOOL        fErr = FALSE;
     char aSubKey[513];
     const char*    aPrefix = aLocalPrefix; // bForAllUsers ? "" : aLocalPrefix;
-
+    
       for( int ind = 0; ind < SUPPORTED_MSEXT_NUM; ind++ )
        {
         if( nForMSModes[ind] & nMode )
         {
             DWORD nSubKeys = 0, nValues = 0;
-
+        
                wsprintfA( aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMSMimeType[ind] );
                if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, nKeyAccess, NULL, &hkey, NULL ) )
                 fErr = TRUE;
@@ -597,7 +597,7 @@ STDAPI DllUnregisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAcc
                     RegCloseKey( hkey ), hkey = NULL;
                     fErr = TRUE;
                 }
-                else
+                else 
                 {
                     RegCloseKey( hkey ), hkey = NULL;
                     if ( !nSubKeys && !nValues )
@@ -620,7 +620,7 @@ STDAPI DllUnregisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAcc
                     RegCloseKey( hkey ), hkey = NULL;
                     fErr = TRUE;
                 }
-                else
+                else 
                 {
                     RegCloseKey( hkey ), hkey = NULL;
                     if ( !nSubKeys && !nValues )

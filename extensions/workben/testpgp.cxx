@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -737,7 +737,7 @@ int SAL_CALL main (int argc, char **argv)
                 printf ("Error: no PGPEncoder interface.\n");
                 exit (4);
             }
-
+            
             DataSource_Impl *source = new DataSource_Impl (fd);
             source->setBuffer (buffer);
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 #include <cuires.hrc>
 #include <svx/dialogs.hrc> // for RID_SVXPAGE_GRFCROP
 
-#define CM_1_TO_TWIP        567
+#define CM_1_TO_TWIP 		567
 
 
 inline long lcl_GetValue( MetricField& rMetric, FieldUnit eUnit )
@@ -57,7 +57,7 @@ inline long lcl_GetValue( MetricField& rMetric, FieldUnit eUnit )
  --------------------------------------------------------------------*/
 
 SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
-    : SfxTabPage( pParent,  CUI_RES( RID_SVXPAGE_GRFCROP ), rSet ),
+    : SfxTabPage( pParent, 	CUI_RES( RID_SVXPAGE_GRFCROP ), rSet ),
     aCropFL(        this, CUI_RES( FL_CROP    )),
     aZoomConstRB(   this, CUI_RES( RB_ZOOMCONST)),
     aSizeConstRB(   this, CUI_RES( RB_SIZECONST)),
@@ -71,16 +71,16 @@ SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
     aBottomMF(      this, CUI_RES( MF_BOTTOM  )),
     aZoomFL(        this, CUI_RES( FL_ZOOM    )),
     aWidthZoomFT(   this, CUI_RES( FT_WIDTHZOOM )),
-    aWidthZoomMF(   this, CUI_RES( MF_WIDTHZOOM )),
-    aHeightZoomFT(  this, CUI_RES( FT_HEIGHTZOOM)),
-    aHeightZoomMF(  this, CUI_RES( MF_HEIGHTZOOM)),
+    aWidthZoomMF( 	this, CUI_RES( MF_WIDTHZOOM )),
+    aHeightZoomFT( 	this, CUI_RES( FT_HEIGHTZOOM)),
+    aHeightZoomMF( 	this, CUI_RES( MF_HEIGHTZOOM)),
     aSizeFL(        this, CUI_RES( FL_SIZE    )),
     aWidthFT(       this, CUI_RES( FT_WIDTH   )),
     aWidthMF(       this, CUI_RES( MF_WIDTH   )),
     aHeightFT(      this, CUI_RES( FT_HEIGHT  )),
     aHeightMF(      this, CUI_RES( MF_HEIGHT  )),
     aOrigSizeFT(    this, CUI_RES(FT_ORIG_SIZE)),
-    aOrigSizePB(    this, CUI_RES( PB_ORGSIZE )),
+    aOrigSizePB( 	this, CUI_RES( PB_ORGSIZE )),
     aExampleWN(     this, CUI_RES( WN_BSP     )),
     pLastCropField(0),
     bInitialized(FALSE),
@@ -180,10 +180,10 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
 
         SvxGrfCrop* pCrop =  (SvxGrfCrop*)pItem;
 
-        aExampleWN.SetLeft(     pCrop->GetLeft());
-        aExampleWN.SetRight(    pCrop->GetRight());
-        aExampleWN.SetTop(      pCrop->GetTop());
-        aExampleWN.SetBottom(   pCrop->GetBottom());
+        aExampleWN.SetLeft(		pCrop->GetLeft());
+        aExampleWN.SetRight(	pCrop->GetRight());
+        aExampleWN.SetTop(		pCrop->GetTop());
+        aExampleWN.SetBottom(	pCrop->GetBottom());
 
         aLeftMF.SetValue( aLeftMF.Normalize( pCrop->GetLeft()), eUnit );
         aRightMF.SetValue( aRightMF.Normalize( pCrop->GetRight()), eUnit );
@@ -291,7 +291,7 @@ BOOL SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
         }
     }
     if( aLeftMF.IsModified() || aRightMF.IsModified() ||
-        aTopMF.IsModified()  || aBottomMF.IsModified() )
+        aTopMF.IsModified()  ||	aBottomMF.IsModified() )
     {
         USHORT nW = rPool.GetWhich( SID_ATTR_GRAF_CROP );
         FieldUnit eUnit = MapToFieldUnit( rSet.GetPool()->GetMetric( nW ));
@@ -493,16 +493,16 @@ IMPL_LINK( SvxGrfCropPage, CropHdl, const MetricField *, pField )
         {
             if(pField == &aLeftMF)
             {
-//              nLeft = aPageSize.Width() -
-//                  ((nRight + aOrigSize.Width()) * nWidthZoom) / 100;
+//				nLeft = aPageSize.Width() -
+//					((nRight + aOrigSize.Width()) * nWidthZoom) / 100;
                 nLeft = aOrigSize.Width() -
                             ( aPageSize.Width() * 100 / nWidthZoom + nRight );
                 aLeftMF.SetValue( aLeftMF.Normalize( nLeft ), eUnit );
             }
             else
             {
-//              nRight = aPageSize.Width() -
-//                  ((nLeft - aOrigSize.Width()) * nWidthZoom) / 100;
+//				nRight = aPageSize.Width() -
+//					((nLeft - aOrigSize.Width()) * nWidthZoom) / 100;
                 nRight = aOrigSize.Width() -
                             ( aPageSize.Width() * 100 / nWidthZoom + nLeft );
                 aRightMF.SetValue( aRightMF.Normalize( nRight ), eUnit );
@@ -526,16 +526,16 @@ IMPL_LINK( SvxGrfCropPage, CropHdl, const MetricField *, pField )
         {
             if(pField == &aTopMF)
             {
-//              nTop = aPageSize.Height() -
-//                  ((aOrigSize.Height() - nBottom) * nHeightZoom)/ 100;
+//				nTop = aPageSize.Height() -
+//					((aOrigSize.Height() - nBottom) * nHeightZoom)/ 100;
                 nTop = aOrigSize.Height() -
                             ( aPageSize.Height() * 100 / nHeightZoom + nBottom);
                 aTopMF.SetValue( aWidthMF.Normalize( nTop ), eUnit );
             }
             else
             {
-//              nBottom = aPageSize.Height() -
-//                  ((aOrigSize.Height() - nTop)*nHeightZoom) / 100;
+//				nBottom = aPageSize.Height() -
+//					((aOrigSize.Height() - nTop)*nHeightZoom) / 100;
                 nBottom = aOrigSize.Height() -
                             ( aPageSize.Height() * 100 / nHeightZoom + nTop);
                 aBottomMF.SetValue( aWidthMF.Normalize( nBottom ), eUnit );
@@ -629,7 +629,7 @@ void SvxGrfCropPage::CalcMinMaxBorder()
     aRightMF.SetMax( aRightMF.Normalize(nMin), eUnit );
 
     // Zoom nicht unter 2%
-/*  nMin = (aOrigSize.Width() * 102) /100;
+/*	nMin = (aOrigSize.Width() * 102) /100;
     aLeftMF.SetMax(aPageSize.Width() - nR - nMin);
     aRightMF.SetMax(aPageSize.Width() - nL - nMin);
 */
@@ -643,12 +643,12 @@ void SvxGrfCropPage::CalcMinMaxBorder()
     aTopMF.SetMax( aTopMF.Normalize(nMin), eUnit );
 
     // Zoom nicht unter 2%
-/*  nMin = (aOrigSize.Height() * 102) /100;
+/*	nMin = (aOrigSize.Height() * 102) /100;
     aTopMF.SetMax(aPageSize.Height() - nLow - nMin);
     aBottomMF.SetMax(aPageSize.Height() - nUp - nMin);*/
 }
 /*--------------------------------------------------------------------
-    Beschreibung:   Spinsize auf 1/20 der Originalgroesse setzen,
+    Beschreibung: 	Spinsize auf 1/20 der Originalgroesse setzen,
                     FixedText mit der Originalgroesse fuellen
  --------------------------------------------------------------------*/
 
@@ -710,7 +710,7 @@ void SvxGrfCropPage::GraphicHasChanged( BOOL bFound )
         sTemp += aFld.GetText();
         aOrigSizeFT.SetText(sTemp);
     }
-    aLeftFT         .Enable(bFound);
+    aLeftFT			.Enable(bFound);
     aLeftMF         .Enable(bFound);
     aRightFT        .Enable(bFound);
     aRightMF        .Enable(bFound);
@@ -723,7 +723,7 @@ void SvxGrfCropPage::GraphicHasChanged( BOOL bFound )
     aWidthFT        .Enable(bFound);
     aWidthMF        .Enable(bFound);
     aHeightFT       .Enable(bFound);
-    aHeightMF       .Enable(bFound);
+    aHeightMF		.Enable(bFound);
     aWidthZoomFT    .Enable(bFound);
     aWidthZoomMF    .Enable(bFound);
     aHeightZoomFT   .Enable(bFound);
@@ -801,10 +801,10 @@ void SvxGrfCropPage::SvxCropExample::Paint( const Rectangle& )
     aSz = PixelToLogic( aSz );
     SetFillColor( Color( COL_TRANSPARENT ) );
     SetRasterOp( ROP_INVERT );
-    aRect.Left()    += aTopLeft.Y();
-    aRect.Top()     += aTopLeft.X();
-    aRect.Right()   -= aBottomRight.Y();
-    aRect.Bottom()  -= aBottomRight.X();
+    aRect.Left() 	+= aTopLeft.Y();
+    aRect.Top() 	+= aTopLeft.X();
+    aRect.Right() 	-= aBottomRight.Y();
+    aRect.Bottom() 	-= aBottomRight.X();
     DrawRect( aRect );
 }
 

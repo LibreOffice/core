@@ -55,7 +55,7 @@ public class OfficeConnection
     {
         return maServiceManager;
     }
-
+    
 
 
 
@@ -69,16 +69,16 @@ public class OfficeConnection
 
 
 
-
-    /** Connect to a already running StarOffice application that has
-        been started with a command line argument like
+   
+    /** Connect to a already running StarOffice application that has 
+        been started with a command line argument like 
         "-accept=pipe,name=<username>;urp;"
     */
     private boolean Connect ()
     {
         mbInitialized = true;
         //  Set up connection string.
-        String sConnectString = "uno:pipe,name=" + msPipeName
+        String sConnectString = "uno:pipe,name=" + msPipeName 
                 + ";urp;StarOffice.ServiceManager";
 
         // connect to a running office and get the ServiceManager
@@ -87,14 +87,14 @@ public class OfficeConnection
             //  Create a URL Resolver.
             XMultiServiceFactory aLocalServiceManager =
                 Bootstrap.createSimpleServiceManager();
-            XUnoUrlResolver aURLResolver =
+            XUnoUrlResolver aURLResolver = 
                 (XUnoUrlResolver) UnoRuntime.queryInterface (
                     XUnoUrlResolver.class,
                     aLocalServiceManager.createInstance (
                         "com.sun.star.bridge.UnoUrlResolver")
                     );
-
-            maServiceManager =
+            
+            maServiceManager = 
                 (XMultiServiceFactory) UnoRuntime.queryInterface (
                     XMultiServiceFactory.class,
                     aURLResolver.resolve (sConnectString)
@@ -105,7 +105,7 @@ public class OfficeConnection
         {
             if (maOut != null)
             {
-                maOut.println ("Could not connect with "
+                maOut.println ("Could not connect with " 
                     + sConnectString + " : " + e);
                 maOut.println ("Please start OpenOffice/StarOffice with "
                     + "\"-accept=pipe,name=" + msPipeName + ";urp;\"");
@@ -149,19 +149,19 @@ public class OfficeConnection
         maTimer = new Timer (true);
         maTimer.schedule (this, 0, snDelay);
     }
-
+    
 
     private static OfficeConnection saInstance = null;
     private static String ssDefaultPipeName = System.getenv( "USER" );
 
     private XMultiServiceFactory maServiceManager;
     String msPipeName;
-
+    
     /** A value of true just indicates that it has been tried to establish a connection,
         not that that has been successfull.
     */
     private boolean mbInitialized = false;
-
+    
     /// Stream used to print messages.
     private PrintStream maOut;
     private Timer maTimer;

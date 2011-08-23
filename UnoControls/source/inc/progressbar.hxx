@@ -30,19 +30,19 @@
 #define _UNOCONTROLS_PROGRESSBAR_CTRL_HXX
 
 //____________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //____________________________________________________________________________________________________________
 
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 //____________________________________________________________________________________________________________
-//  includes of my own project
+//	includes of my own project
 //____________________________________________________________________________________________________________
 #include "basecontrol.hxx"
 
 //____________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //____________________________________________________________________________________________________________
 
 namespace unocontrols{
@@ -52,40 +52,40 @@ namespace unocontrols{
 #define CSS_AWT     ::com::sun::star::awt
 
 //____________________________________________________________________________________________________________
-//  defines
+//	defines
 //____________________________________________________________________________________________________________
 
-#define SERVICENAME_PROGRESSBAR             "com.sun.star.awt.XProgressBar"
-#define IMPLEMENTATIONNAME_PROGRESSBAR      "stardiv.UnoControls.ProgressBar"
+#define	SERVICENAME_PROGRESSBAR				"com.sun.star.awt.XProgressBar"
+#define	IMPLEMENTATIONNAME_PROGRESSBAR		"stardiv.UnoControls.ProgressBar"
 #define PROGRESSBAR_FREESPACE               4
 #define PROGRESSBAR_DEFAULT_HORIZONTAL      sal_True
 #define PROGRESSBAR_DEFAULT_BLOCKDIMENSION  Size(1,1)
-#define PROGRESSBAR_DEFAULT_BACKGROUNDCOLOR TRGB_COLORDATA( 0x00, 0xC0, 0xC0, 0xC0 )    // lightgray
-#define PROGRESSBAR_DEFAULT_FOREGROUNDCOLOR TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x80 )    // blue
+#define	PROGRESSBAR_DEFAULT_BACKGROUNDCOLOR TRGB_COLORDATA( 0x00, 0xC0, 0xC0, 0xC0 )	// lightgray
+#define	PROGRESSBAR_DEFAULT_FOREGROUNDCOLOR TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x80 )	// blue
 #define PROGRESSBAR_DEFAULT_MINRANGE        INT_MIN
 #define PROGRESSBAR_DEFAULT_MAXRANGE        INT_MAX
 #define PROGRESSBAR_DEFAULT_BLOCKVALUE      1
 #define PROGRESSBAR_DEFAULT_VALUE           PROGRESSBAR_DEFAULT_MINRANGE
-#define PROGRESSBAR_LINECOLOR_BRIGHT        TRGB_COLORDATA( 0x00, 0xFF, 0xFF, 0xFF )    // white
-#define PROGRESSBAR_LINECOLOR_SHADOW        TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x00 )    // black
+#define	PROGRESSBAR_LINECOLOR_BRIGHT        TRGB_COLORDATA( 0x00, 0xFF, 0xFF, 0xFF )	// white
+#define PROGRESSBAR_LINECOLOR_SHADOW        TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x00 )	// black
 
 //____________________________________________________________________________________________________________
-//  classes
+//	classes
 //____________________________________________________________________________________________________________
 
-class ProgressBar   : public CSS_AWT::XControlModel
+class ProgressBar	: public CSS_AWT::XControlModel
                     , public CSS_AWT::XProgressBar
                     , public BaseControl
 {
 
 //____________________________________________________________________________________________________________
-//  public methods
+//	public methods
 //____________________________________________________________________________________________________________
 
 public:
 
     //________________________________________________________________________________________________________
-    //  construct/destruct
+    //	construct/destruct
     //________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -116,10 +116,10 @@ public:
         @onerror
     */
 
-    virtual ~ProgressBar();
+    virtual	~ProgressBar();
 
     //__________________________________________________________________________________________________________
-    //  XInterface
+    //	XInterface
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -139,39 +139,39 @@ public:
         throw( CSS_UNO::RuntimeException );
 
     /**_______________________________________________________________________________________________________
-        @short      increment refcount
-        @descr      -
+        @short		increment refcount
+        @descr		-
 
-        @seealso    XInterface
-        @seealso    release()
+        @seealso	XInterface
+        @seealso	release()
 
-        @param      -
+        @param		-
 
-        @return     -
+        @return		-
 
-        @onerror    A RuntimeException is thrown.
+        @onerror	A RuntimeException is thrown.
     */
 
     virtual void SAL_CALL acquire() throw();
 
     /**_______________________________________________________________________________________________________
-        @short      decrement refcount
-        @descr      -
+        @short		decrement refcount
+        @descr		-
 
-        @seealso    XInterface
-        @seealso    acquire()
+        @seealso	XInterface
+        @seealso	acquire()
 
-        @param      -
+        @param		-
 
-        @return     -
+        @return		-
 
-        @onerror    A RuntimeException is thrown.
+        @onerror	A RuntimeException is thrown.
     */
 
     virtual void SAL_CALL release() throw();
 
     //__________________________________________________________________________________________________________
-    //  XTypeProvider
+    //	XTypeProvider
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -191,7 +191,7 @@ public:
         throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
-    //  XAggregation
+    //	XAggregation
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -211,7 +211,7 @@ public:
         throw( CSS_UNO::RuntimeException );
 
     //________________________________________________________________________________________________________
-    //  XProgressBar
+    //	XProgressBar
     //________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -275,8 +275,8 @@ public:
     */
 
     virtual void SAL_CALL setRange(
-        sal_Int32   nMin    ,
-        sal_Int32   nMax
+        sal_Int32	nMin	,
+        sal_Int32	nMax
     ) throw( CSS_UNO::RuntimeException );
 
     /**_________________________________________________________________________________________________________
@@ -295,7 +295,7 @@ public:
     virtual sal_Int32 SAL_CALL getValue() throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
-    //  XWindow
+    //	XWindow
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -312,15 +312,15 @@ public:
     */
 
     virtual void SAL_CALL setPosSize(
-        sal_Int32   nX      ,
-        sal_Int32   nY      ,
-        sal_Int32   nWidth  ,
-        sal_Int32   nHeight ,
-        sal_Int16   nFlags
+        sal_Int32	nX		,
+        sal_Int32	nY		,
+        sal_Int32	nWidth	,
+        sal_Int32	nHeight	,
+        sal_Int16	nFlags
     ) throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
-    //  XControl
+    //	XControl
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -357,7 +357,7 @@ public:
         throw( CSS_UNO::RuntimeException );
 
     //__________________________________________________________________________________________________________
-    //  BaseControl
+    //	BaseControl
     //__________________________________________________________________________________________________________
 
     /**_________________________________________________________________________________________________________
@@ -391,7 +391,7 @@ public:
     static const ::rtl::OUString impl_getStaticImplementationName();
 
 //____________________________________________________________________________________________________________
-//  protected methods
+//	protected methods
 //____________________________________________________________________________________________________________
 
 protected:
@@ -412,7 +412,7 @@ protected:
     virtual void impl_paint(
         sal_Int32 nX ,
         sal_Int32 nY ,
-        const CSS_UNO::Reference< CSS_AWT::XGraphics >& xGraphics
+        const CSS_UNO::Reference< CSS_AWT::XGraphics >&	xGraphics
     );
 
     /**_________________________________________________________________________________________________________
@@ -431,29 +431,29 @@ protected:
     void impl_recalcRange();
 
 //____________________________________________________________________________________________________________
-//  private variables
+//	private variables
 //____________________________________________________________________________________________________________
 
 private:
 
-    sal_Bool        m_bHorizontal       ;   // orientation for steps            [true=horizontal/false=vertikal]
-    CSS_AWT::Size   m_aBlockSize        ;   // width and height of a block      [>=0,0]
-    sal_Int32       m_nForegroundColor  ;   //                                  (alpha,r,g,b)
-    sal_Int32       m_nBackgroundColor  ;   //                                  (alpha,r,g,b)
-    sal_Int32       m_nMinRange         ;   // lowest value  =   0%             [long, <_nMaxRange]
-    sal_Int32       m_nMaxRange         ;   // highest value = 100%             [long, >_nMinRange]
+    sal_Bool        m_bHorizontal	 	;	// orientation for steps			[true=horizontal/false=vertikal]
+    CSS_AWT::Size   m_aBlockSize	 	;	// width and height of a block		[>=0,0]
+    sal_Int32       m_nForegroundColor	;	//									(alpha,r,g,b)
+    sal_Int32       m_nBackgroundColor	;	//									(alpha,r,g,b)
+    sal_Int32       m_nMinRange			;	// lowest value  =   0%				[long, <_nMaxRange]
+    sal_Int32       m_nMaxRange			;	// highest value = 100%				[long, >_nMinRange]
     double          m_nBlockValue       ;   // value for one block              [long, >0]
-    sal_Int32       m_nValue            ;   // value for progress               [long]
+    sal_Int32       m_nValue			;	// value for progress				[long]
 
-};  // class ProgressBar
+};	// class ProgressBar
 
 // The namespace aliases are only used in the header
 #undef CSS_UNO
 #undef CSS_LANG
 #undef CSS_AWT
 
-}   // namespace unocontrols
+}	// namespace unocontrols
 
-#endif  // #ifndef _UNOCONTROLS_PROGRESSBAR_CTRL_HXX
+#endif	// #ifndef _UNOCONTROLS_PROGRESSBAR_CTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -41,28 +41,28 @@
 
 class BitmapTransporter : public OWeakObject, AWT::XBitmap
 {
-    SvMemoryStream                      m_aStream;
+    SvMemoryStream						m_aStream;
     osl::Mutex                          m_aProtector;
 
 public:
 
                                         BitmapTransporter();
-    virtual                             ~BitmapTransporter();
+    virtual								~BitmapTransporter();
 
 
     // XInterface
-    virtual ANY SAL_CALL                queryInterface( const Type & rType ) throw( RuntimeException );
-    virtual void SAL_CALL               acquire() throw() { OWeakObject::acquire(); }
-    virtual void SAL_CALL               release() throw() { OWeakObject::release(); }
+    virtual ANY SAL_CALL				queryInterface( const Type & rType ) throw( RuntimeException );
+    virtual void SAL_CALL				acquire() throw() { OWeakObject::acquire(); }
+    virtual void SAL_CALL				release() throw() { OWeakObject::release(); }
 
-    virtual AWT::Size SAL_CALL          getSize() throw();
-    virtual SEQ( sal_Int8 ) SAL_CALL    getDIB() throw();
-    virtual SEQ( sal_Int8 ) SAL_CALL    getMaskDIB() throw() { return SEQ( sal_Int8 )(); }
+    virtual AWT::Size SAL_CALL			getSize() throw();
+    virtual SEQ( sal_Int8 ) SAL_CALL	getDIB() throw();
+    virtual SEQ( sal_Int8 ) SAL_CALL	getMaskDIB() throw() { return SEQ( sal_Int8 )(); }
 
     // Misc
-    void                                lock() { m_aProtector.acquire(); }
-    void                                unlock() { m_aProtector.release(); }
-    SvMemoryStream&                     getStream() { return m_aStream; }
+    void								lock() { m_aProtector.acquire(); }
+    void								unlock() { m_aProtector.release(); }
+    SvMemoryStream&						getStream() { return m_aStream; }
 };
 
 // --------
@@ -72,46 +72,46 @@ public:
 class Sane
 {
 private:
-    static int              nRefCount;
+    static int				nRefCount;
     static oslModule        pSaneLib;
 
-    static SANE_Status      (*p_init)( SANE_Int*,
+    static SANE_Status		(*p_init)( SANE_Int*,
                                        SANE_Auth_Callback );
-    static void             (*p_exit)();
-    static SANE_Status      (*p_get_devices)( const SANE_Device***,
+    static void				(*p_exit)();
+    static SANE_Status		(*p_get_devices)( const SANE_Device***,
                                               SANE_Bool );
-    static SANE_Status      (*p_open)( SANE_String_Const, SANE_Handle );
-    static void             (*p_close)( SANE_Handle );
+    static SANE_Status		(*p_open)( SANE_String_Const, SANE_Handle );
+    static void				(*p_close)( SANE_Handle );
     static const SANE_Option_Descriptor* (*p_get_option_descriptor)(
         SANE_Handle, SANE_Int );
-    static SANE_Status      (*p_control_option)( SANE_Handle, SANE_Int,
+    static SANE_Status		(*p_control_option)( SANE_Handle, SANE_Int,
                                                  SANE_Action, void*,
                                                  SANE_Int* );
-    static SANE_Status      (*p_get_parameters)( SANE_Handle,
+    static SANE_Status		(*p_get_parameters)( SANE_Handle,
                                                  SANE_Parameters* );
-    static SANE_Status      (*p_start)( SANE_Handle );
-    static SANE_Status      (*p_read)( SANE_Handle, SANE_Byte*, SANE_Int,
+    static SANE_Status		(*p_start)( SANE_Handle );
+    static SANE_Status		(*p_read)( SANE_Handle, SANE_Byte*, SANE_Int,
                                        SANE_Int* );
-    static void             (*p_cancel)( SANE_Handle );
-    static SANE_Status      (*p_set_io_mode)( SANE_Handle, SANE_Bool );
-    static SANE_Status      (*p_get_select_fd)( SANE_Handle, SANE_Int* );
+    static void				(*p_cancel)( SANE_Handle );
+    static SANE_Status		(*p_set_io_mode)( SANE_Handle, SANE_Bool );
+    static SANE_Status		(*p_get_select_fd)( SANE_Handle, SANE_Int* );
     static SANE_String_Const (*p_strstatus)( SANE_Status );
 
-    static SANE_Int             nVersion;
-    static SANE_Device**        ppDevices;
-    static int                  nDevices;
+    static SANE_Int				nVersion;
+    static SANE_Device**		ppDevices;
+    static int					nDevices;
 
-    const SANE_Option_Descriptor**  mppOptions;
-    int                             mnOptions;
-    int                             mnDevice;
-    SANE_Handle                     maHandle;
+    const SANE_Option_Descriptor**	mppOptions;
+    int								mnOptions;
+    int								mnDevice;
+    SANE_Handle						maHandle;
 
-    Link                        maReloadOptionsLink;
+    Link						maReloadOptionsLink;
 
     inline oslGenericFunction
                     LoadSymbol( const char* );
-    void            Init();
-    void            DeInit();
+    void			Init();
+    void			DeInit();
 
     SANE_Status ControlOption( int, SANE_Action, void* );
 
@@ -121,64 +121,64 @@ public:
     Sane();
     ~Sane();
 
-    static BOOL         IsSane()
+    static BOOL			IsSane()
         { return pSaneLib ? TRUE : FALSE; }
-    BOOL            IsOpen()
+    BOOL			IsOpen()
         { return maHandle ? TRUE : FALSE; }
-    static int              CountDevices()
+    static int				CountDevices()
         { return nDevices; }
-    static String           GetName( int n )
+    static String			GetName( int n )
         { return String( ppDevices[n]->name ? ppDevices[n]->name : "", osl_getThreadTextEncoding() ); }
-    static String           GetVendor( int n )
+    static String			GetVendor( int n )
         { return String( ppDevices[n]->vendor ? ppDevices[n]->vendor : "", osl_getThreadTextEncoding() ); }
-    static String           GetModel( int n )
+    static String			GetModel( int n )
         { return String( ppDevices[n]->model ? ppDevices[n]->model : "", osl_getThreadTextEncoding() ); }
-    static String           GetType( int n )
+    static String			GetType( int n )
         { return String( ppDevices[n]->type ? ppDevices[n]->type : "", osl_getThreadTextEncoding() ); }
 
-    String          GetOptionName( int n )
+    String			GetOptionName( int n )
         { return String( mppOptions[n]->name ? (char*)mppOptions[n]->name : "", osl_getThreadTextEncoding() ); }
-    String          GetOptionTitle( int n )
+    String			GetOptionTitle( int n )
         { return String( mppOptions[n]->title ? (char*)mppOptions[n]->title : "", osl_getThreadTextEncoding() ); }
-    SANE_Value_Type GetOptionType( int n )
+    SANE_Value_Type	GetOptionType( int n )
         { return mppOptions[n]->type; }
-    SANE_Unit       GetOptionUnit( int n )
+    SANE_Unit		GetOptionUnit( int n )
         { return mppOptions[n]->unit; }
-    String          GetOptionUnitName( int n );
-    SANE_Int        GetOptionCap( int n )
+    String			GetOptionUnitName( int n );
+    SANE_Int		GetOptionCap( int n )
         { return mppOptions[n]->cap; }
     SANE_Constraint_Type GetOptionConstraintType( int n )
         { return mppOptions[n]->constraint_type; }
-    const char**    GetStringConstraint( int n )
+    const char**	GetStringConstraint( int n )
         { return (const char**)mppOptions[n]->constraint.string_list; }
-    int             GetRange( int, double*& );
+    int				GetRange( int, double*& );
 
-    inline int      GetOptionElements( int n );
-    int             GetOptionByName( const char* );
-    BOOL            GetOptionValue( int, BOOL& );
-    BOOL            GetOptionValue( int, ByteString& );
-    BOOL            GetOptionValue( int, double&, int nElement = 0 );
-    BOOL            GetOptionValue( int, double* );
+    inline int		GetOptionElements( int n );
+    int				GetOptionByName( const char* );
+    BOOL			GetOptionValue( int, BOOL& );
+    BOOL			GetOptionValue( int, ByteString& );
+    BOOL			GetOptionValue( int, double&, int nElement = 0 );
+    BOOL			GetOptionValue( int, double* );
 
-    BOOL            SetOptionValue( int, BOOL );
-    BOOL            SetOptionValue( int, const String& );
-    BOOL            SetOptionValue( int, double, int nElement = 0 );
-    BOOL            SetOptionValue( int, double* );
+    BOOL			SetOptionValue( int, BOOL );
+    BOOL			SetOptionValue( int, const String& );
+    BOOL			SetOptionValue( int, double, int nElement = 0 );
+    BOOL			SetOptionValue( int, double* );
 
-    BOOL            ActivateButtonOption( int );
+    BOOL			ActivateButtonOption( int );
 
-    int             CountOptions() { return mnOptions; }
-    int             GetDeviceNumber() { return mnDevice; }
+    int				CountOptions() { return mnOptions; }
+    int				GetDeviceNumber() { return mnDevice; }
 
-    BOOL            Open( const char* );
-    BOOL            Open( int );
-    void            Close();
-    void            ReloadDevices();
-    void            ReloadOptions();
+    BOOL			Open( const char* );
+    BOOL			Open( int );
+    void			Close();
+    void			ReloadDevices();
+    void			ReloadOptions();
 
-    BOOL            Start( BitmapTransporter& );
+    BOOL			Start( BitmapTransporter& );
 
-    inline Link     SetReloadOptionsHdl( const Link& rLink );
+    inline Link		SetReloadOptionsHdl( const Link& rLink );
 };
 
 inline int Sane::GetOptionElements( int n )
@@ -191,7 +191,7 @@ inline int Sane::GetOptionElements( int n )
     return 1;
 }
 
-inline Link Sane::SetReloadOptionsHdl( const Link& rLink )
+inline Link	Sane::SetReloadOptionsHdl( const Link& rLink )
 {
     Link aRet = maReloadOptionsLink;
     maReloadOptionsLink = rLink;

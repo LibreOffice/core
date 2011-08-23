@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,19 +37,19 @@ class ElementCollector : public ElementMark
 /****** elementcollector.hxx/CLASS ElementCollector ***************************
  *
  *   NAME
- *  ElementCollector -- Class to manipulate an element collector
+ *	ElementCollector -- Class to manipulate an element collector
  *
  *   FUNCTION
- *  This class is derived from the ElementMark class. Beyond the function
- *  of the ElementMark class, this class also maintains the priority, and
- *  manages the notify process
+ *	This class is derived from the ElementMark class. Beyond the function
+ *	of the ElementMark class, this class also maintains the priority, and
+ *	manages the notify process
  *
  *   HISTORY
- *  05.01.2004 -    implemented
+ *	05.01.2004 -	implemented
  *
  *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
+ *	Michael Mi
+ *	Email: michael.mi@sun.com
  ******************************************************************************/
 {
 private:
@@ -61,23 +61,23 @@ private:
      *                    internal modification happens.
      */
     com::sun::star::xml::crypto::sax::ElementMarkPriority m_nPriority;
-
+    
     /*
      * the modify flag, representing whether which elementcollector will
      * modify its data.
      */
     bool m_bToModify;
-
+    
     /* the notify enable flag, see notifyListener method */
     bool m_bAbleToNotify;
-
+    
     /* whether the listener has been notified */
     bool m_bNotified;
-
+    
     /* the listener to be notified */
     com::sun::star::uno::Reference<
         com::sun::star::xml::crypto::sax::XReferenceResolvedListener > m_xReferenceResolvedListener;
-
+    
 public:
     ElementCollector(
         sal_Int32 nSecurityId,
@@ -88,7 +88,7 @@ public:
             com::sun::star::xml::crypto::sax::XReferenceResolvedListener >&
             xReferenceResolvedListener);
     virtual ~ElementCollector() {};
-
+    
     //bool isInternalNotificationSuppressed() const;
     com::sun::star::xml::crypto::sax::ElementMarkPriority getPriority() const;
     bool getModify() const;

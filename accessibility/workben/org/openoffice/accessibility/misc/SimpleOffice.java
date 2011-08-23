@@ -54,7 +54,7 @@ public class SimpleOffice
     {
         if (saInstance == null)
             saInstance = new SimpleOffice ();
-
+    
         return saInstance;
     }
 
@@ -62,7 +62,7 @@ public class SimpleOffice
     {
         saInstance = null;
     }
-
+    
 
     public XModel LoadDocument (String URL)
     {
@@ -70,7 +70,7 @@ public class SimpleOffice
         try
         {
             //  Load the document from the specified URL.
-            XComponentLoader xLoader =
+            XComponentLoader xLoader = 
                 (XComponentLoader)UnoRuntime.queryInterface(
                     XComponentLoader.class, mxDesktop);
 
@@ -105,7 +105,7 @@ public class SimpleOffice
         XModel xModel = null;
         try
         {
-            XTasksSupplier xTasksSupplier =
+            XTasksSupplier xTasksSupplier = 
                 (XTasksSupplier) UnoRuntime.queryInterface(
                     XTasksSupplier.class, mxDesktop);
             XEnumerationAccess xEA = xTasksSupplier.getTasks();
@@ -149,7 +149,7 @@ public class SimpleOffice
         try
         {
             //  Get the factory of the connected office.
-            XMultiServiceFactory xMSF =
+            XMultiServiceFactory xMSF = 
                     OfficeConnection.Instance().GetServiceManager ();
             if (xMSF == null)
             {
@@ -158,7 +158,7 @@ public class SimpleOffice
             }
             else
                 MessageArea.println ("Connected successfully.");
-
+            
             //  Create a new desktop.
             mxDesktop = (XDesktop) UnoRuntime.queryInterface(
                 XDesktop.class,
@@ -185,7 +185,7 @@ public class SimpleOffice
             try
             {
                 //  Get the factory of the connected office.
-                XMultiServiceFactory xMSF =
+                XMultiServiceFactory xMSF = 
                         OfficeConnection.Instance().GetServiceManager ();
                 if (xMSF != null)
                 {
@@ -261,7 +261,7 @@ public class SimpleOffice
 
 
 
-    /** @descr Return the current window associated with the given
+    /** @descr Return the current window associated with the given 
                 model.
     */
     public XWindow GetCurrentWindow ()
@@ -277,8 +277,8 @@ public class SimpleOffice
     public XWindow GetCurrentWindow (XModel xModel)
     {
         XWindow xWindow = null;
-        try
-        {
+        try 
+        {        
             if (xModel == null)
                 MessageArea.println ("invalid model (==null)");
             XController xController = xModel.getCurrentController();
@@ -295,7 +295,7 @@ public class SimpleOffice
         {
             MessageArea.println ("caught exception while getting current window" + e);
         }
-
+        
         return xWindow;
     }
 
@@ -306,7 +306,7 @@ public class SimpleOffice
     {
         return GetCurrentDrawPage (
             (XDrawView) UnoRuntime.queryInterface(
-                XDrawView.class,
+                XDrawView.class, 
                 GetCurrentView()));
     }
 
@@ -316,8 +316,8 @@ public class SimpleOffice
     public XDrawPage GetCurrentDrawPage (XDrawView xView)
     {
         XDrawPage xPage = null;
-        try
-        {
+        try 
+        {        
             if (xView == null)
                 MessageArea.println ("can't get current draw page from null view");
             else
@@ -327,7 +327,7 @@ public class SimpleOffice
         {
             MessageArea.println ("caught exception while getting current draw page : " + e);
         }
-
+        
         return xPage;
     }
 
@@ -347,8 +347,8 @@ public class SimpleOffice
             MessageArea.println ("can't get desktop to retrieve current view");
 
         XDrawView xView = null;
-        try
-        {
+        try 
+        {        
             XComponent xComponent = xDesktop.getCurrentComponent();
             if (xComponent == null)
                 MessageArea.println ("can't get component to retrieve current view");
@@ -360,7 +360,7 @@ public class SimpleOffice
             XController xController = xFrame.getController();
             if (xController == null)
                 MessageArea.println ("can't get controller to retrieve current view");
-
+            
             xView = (XDrawView) UnoRuntime.queryInterface(
                 XDrawView.class, xController);
             if (xView == null)
@@ -370,7 +370,7 @@ public class SimpleOffice
         {
             MessageArea.println ("caught exception while getting current view : " + e);
         }
-
+        
         return xView;
     }
 

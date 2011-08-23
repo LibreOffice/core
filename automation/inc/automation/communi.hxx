@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ class MultiCommunicationManager : public CommunicationManager
 public:
     MultiCommunicationManager( BOOL bUseMultiChannel = FALSE );
     virtual ~MultiCommunicationManager();
-    virtual BOOL StopCommunication();       // Hält alle CommunicationLinks an
+    virtual BOOL StopCommunication();		// Hält alle CommunicationLinks an
     virtual BOOL IsLinkValid( CommunicationLink* pCL );
     virtual USHORT GetCommunicationLinkCount();
     virtual CommunicationLinkRef GetCommunicationLink( USHORT nNr );
@@ -58,9 +58,9 @@ protected:
     virtual void CallConnectionOpened( CommunicationLink* pCL );
     virtual void CallConnectionClosed( CommunicationLink* pCL );
     CommunicationLinkList *ActiveLinks;
-    CommunicationLinkList *InactiveLinks;       /// Hier sind die CommunicationLinks drin, die sich noch nicht selbst abgemeldet haben.
+    CommunicationLinkList *InactiveLinks;		/// Hier sind die CommunicationLinks drin, die sich noch nicht selbst abgemeldet haben.
                                                 /// allerdings schon ein StopCommunication gekriegt haben, bzw ein ConnectionTerminated
-    virtual void DestroyingLink( CommunicationLink *pCL );  // Link trägt sich im Destruktor aus
+    virtual void DestroyingLink( CommunicationLink *pCL );	// Link trägt sich im Destruktor aus
 
     BOOL bGracefullShutdown;
 };
@@ -150,7 +150,7 @@ private:
     ULONG nPortToListen;
     USHORT nMaxConnections;
     ULONG nAddConnectionEventId;
-    osl::Mutex aMAddConnection; // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
+    osl::Mutex aMAddConnection;	// Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
     void CallInfoMsg( InfoString aMsg ){ pMyServer->CallInfoMsg( aMsg ); }
     CM_InfoType GetInfoType(){ return pMyServer->GetInfoType(); }
 

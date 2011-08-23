@@ -28,10 +28,10 @@ namespace FORMS_MODULE_NAMESPACE
     //- registration helper
     //--------------------------------------------------------------------------
 
-    Sequence< ::rtl::OUString >*                OFormsModule::s_pImplementationNames = NULL;
-    Sequence< Sequence< ::rtl::OUString > >*    OFormsModule::s_pSupportedServices = NULL;
-    Sequence< sal_Int64 >*                      OFormsModule::s_pCreationFunctionPointers = NULL;
-    Sequence< sal_Int64 >*                      OFormsModule::s_pFactoryFunctionPointers = NULL;
+    Sequence< ::rtl::OUString >*				OFormsModule::s_pImplementationNames = NULL;
+    Sequence< Sequence< ::rtl::OUString > >*	OFormsModule::s_pSupportedServices = NULL;
+    Sequence< sal_Int64 >*						OFormsModule::s_pCreationFunctionPointers = NULL;
+    Sequence< sal_Int64 >*						OFormsModule::s_pFactoryFunctionPointers = NULL;
 
     //--------------------------------------------------------------------------
     void OFormsModule::registerComponent(
@@ -52,9 +52,9 @@ namespace FORMS_MODULE_NAMESPACE
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
             "OFormsModule::registerComponent : inconsistent state (the pointers (2)) !");
 
-        OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
-                    &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
-                    &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
+        OSL_ENSURE(	(s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
+                    &&	(s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
+                    &&	(s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
             "OFormsModule::registerComponent : inconsistent state !");
 
         sal_Int32 nOldLen = s_pImplementationNames->getLength();
@@ -79,9 +79,9 @@ namespace FORMS_MODULE_NAMESPACE
         }
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
             "OFormsModule::revokeComponent : inconsistent state (the pointers) !");
-        OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
-                    &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
-                    &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
+        OSL_ENSURE(	(s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
+                    &&	(s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
+                    &&	(s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
             "OFormsModule::revokeComponent : inconsistent state !");
 
         sal_Int32 nLen = s_pImplementationNames->getLength();
@@ -121,9 +121,9 @@ namespace FORMS_MODULE_NAMESPACE
         }
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
             "OFormsModule::writeComponentInfos : inconsistent state (the pointers) !");
-        OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
-                    &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
-                    &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
+        OSL_ENSURE(	(s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
+                    &&	(s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
+                    &&	(s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
             "OFormsModule::writeComponentInfos : inconsistent state !");
 
         sal_Int32 nLen = s_pImplementationNames->getLength();
@@ -170,9 +170,9 @@ namespace FORMS_MODULE_NAMESPACE
         }
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
             "OFormsModule::getComponentFactory : inconsistent state (the pointers) !");
-        OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
-                    &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
-                    &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
+        OSL_ENSURE(	(s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
+                    &&	(s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
+                    &&	(s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
             "OFormsModule::getComponentFactory : inconsistent state !");
 
 

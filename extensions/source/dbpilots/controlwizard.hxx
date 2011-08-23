@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ namespace dbp
     //=====================================================================
     struct OControlWizardSettings
     {
-        String      sControlLabel;
+        String		sControlLabel;
     };
 
     //=====================================================================
@@ -66,20 +66,20 @@ namespace dbp
     class OControlWizardPage : public OControlWizardPage_Base
     {
     protected:
-        FixedLine*      m_pFormSettingsSeparator;
-        FixedText*      m_pFormDatasourceLabel;
-        FixedText*      m_pFormDatasource;
-        FixedText*      m_pFormContentTypeLabel;
-        FixedText*      m_pFormContentType;
-        FixedText*      m_pFormTableLabel;
-        FixedText*      m_pFormTable;
+        FixedLine*		m_pFormSettingsSeparator;
+        FixedText*		m_pFormDatasourceLabel;
+        FixedText*		m_pFormDatasource;
+        FixedText*		m_pFormContentTypeLabel;
+        FixedText*		m_pFormContentType;
+        FixedText*		m_pFormTableLabel;
+        FixedText*		m_pFormTable;
 
     protected:
-        OControlWizard*                 getDialog();
-        const OControlWizard*           getDialog() const;
-        const OControlWizardContext&    getContext();
-        sal_Bool                        updateContext();
-        void                            setFormConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn, sal_Bool _bAutoDispose = sal_True );
+        OControlWizard*					getDialog();
+        const OControlWizard*			getDialog() const;
+        const OControlWizardContext&	getContext();
+        sal_Bool						updateContext();
+        void							setFormConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn, sal_Bool _bAutoDispose = sal_True );
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                                         getFormConnection() const;
 
@@ -103,7 +103,7 @@ namespace dbp
 
     protected:
         // OWizardPage overridables
-        virtual void        initializePage();
+        virtual void		initializePage();
     };
 
     struct OAccessRegulator;
@@ -114,7 +114,7 @@ namespace dbp
     class OControlWizard : public OControlWizard_Base
     {
     private:
-        OControlWizardContext   m_aContext;
+        OControlWizardContext	m_aContext;
 
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
@@ -130,15 +130,15 @@ namespace dbp
         ~OControlWizard();
 
         // make the some base class methods public
-        sal_Bool    travelNext() { return OControlWizard_Base::travelNext(); }
+        sal_Bool	travelNext() { return OControlWizard_Base::travelNext(); }
 
     public:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
             getServiceFactory() const { return m_xORB; }
 
-        const OControlWizardContext&    getContext() const { return m_aContext; }
-        sal_Bool                        updateContext(const OAccessRegulator&);
-        void                            setFormConnection(const OAccessRegulator&, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn, sal_Bool _bAutoDispose = sal_True );
+        const OControlWizardContext&	getContext() const { return m_aContext; }
+        sal_Bool						updateContext(const OAccessRegulator&);
+        void							setFormConnection(const OAccessRegulator&, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn, sal_Bool _bAutoDispose = sal_True );
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                                         getFormConnection(const OAccessRegulator&) const;
 
@@ -162,7 +162,7 @@ namespace dbp
         virtual sal_Bool approveControl(sal_Int16 _nClassId) = 0;
 
         // ModalDialog overridables
-        virtual short   Execute();
+        virtual short	Execute();
 
     private:
         sal_Bool initContext();
@@ -177,7 +177,7 @@ namespace dbp
     };
 
 //.........................................................................
-}   // namespace dbp
+}	// namespace dbp
 //.........................................................................
 
 #endif // _EXTENSIONS_DBP_CONTROLWIZARD_HXX

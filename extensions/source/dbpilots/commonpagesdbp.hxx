@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,13 +45,13 @@ namespace dbp
     class OTableSelectionPage : public OControlWizardPage
     {
     protected:
-        FixedLine       m_aData;
-        FixedText       m_aExplanation;
-        FixedText       m_aDatasourceLabel;
-        ListBox         m_aDatasource;
-        PushButton      m_aSearchDatabase;
-        FixedText       m_aTableLabel;
-        ListBox         m_aTable;
+        FixedLine		m_aData;
+        FixedText		m_aExplanation;
+        FixedText		m_aDatasourceLabel;
+        ListBox			m_aDatasource;
+        PushButton		m_aSearchDatabase;
+        FixedText		m_aTableLabel;
+        ListBox			m_aTable;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                         m_xDSContext;
@@ -64,8 +64,8 @@ namespace dbp
         void ActivatePage();
 
         // OWizardPage overridables
-        virtual void        initializePage();
-        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual void		initializePage();
+        virtual sal_Bool	commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 
     protected:
         DECL_LINK( OnListboxSelection, ListBox* );
@@ -73,7 +73,7 @@ namespace dbp
         DECL_LINK( OnSearchClicked, PushButton* );
 
         void implCollectDatasource();
-        void implFillTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&
+        void implFillTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& 
                         _rxConn = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >());
 
         // OControlWizardPage overridables
@@ -86,9 +86,9 @@ namespace dbp
     class OMaybeListSelectionPage : public OControlWizardPage
     {
     protected:
-        RadioButton*    m_pYes;
-        RadioButton*    m_pNo;
-        ListBox*        m_pList;
+        RadioButton*	m_pYes;
+        RadioButton*	m_pNo;
+        ListBox*		m_pList;
 
     public:
         OMaybeListSelectionPage( OControlWizard* _pParent, const ResId& _rId );
@@ -100,7 +100,7 @@ namespace dbp
         void ActivatePage();
 
         // own helper
-        void    announceControls(
+        void	announceControls(
             RadioButton& _rYesButton,
             RadioButton& _rNoButton,
             ListBox& _rSelection);
@@ -117,12 +117,12 @@ namespace dbp
     class ODBFieldPage : public OMaybeListSelectionPage
     {
     protected:
-        FixedLine       m_aFrame;
-        FixedText       m_aDescription;
-        FixedText       m_aQuestion;
-        RadioButton     m_aStoreYes;
-        RadioButton     m_aStoreNo;
-        ListBox         m_aStoreWhere;
+        FixedLine		m_aFrame;
+        FixedText		m_aDescription;
+        FixedText		m_aQuestion;
+        RadioButton		m_aStoreYes;
+        RadioButton		m_aStoreNo;
+        ListBox			m_aStoreWhere;
 
     public:
         ODBFieldPage( OControlWizard* _pParent );
@@ -139,7 +139,7 @@ namespace dbp
     };
 
 //.........................................................................
-}   // namespace dbp
+}	// namespace dbp
 //.........................................................................
 
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,73 +41,73 @@ shell BasicIDEShell
     // ========================================================
     SID_BASICIDE_HIDECURPAGE
     [
-        ExecMethod  = ExecuteCurrent;
+        ExecMethod	= ExecuteCurrent;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_DELETECURRENT
     [
-        ExecMethod  = ExecuteCurrent;
+        ExecMethod	= ExecuteCurrent;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_RENAMECURRENT
     [
-        ExecMethod  = ExecuteCurrent;
+        ExecMethod	= ExecuteCurrent;
         StateMethod = GetState;
     ]
 
     SID_CUT
     [
-        ExecMethod  = ExecuteCurrent;
+        ExecMethod	= ExecuteCurrent;
         StateMethod = GetState;
     ]
 
     SID_COPY
     [
-        ExecMethod  = ExecuteCurrent;
+        ExecMethod	= ExecuteCurrent;
         StateMethod = GetState;
     ]
 
     SID_PASTE
     [
-        ExecMethod  = ExecuteCurrent;
+        ExecMethod	= ExecuteCurrent;
         StateMethod = GetState;
     ]
 
     SID_UNDO
     [
-        ExecMethod  = ExecuteCurrent;
+        ExecMethod	= ExecuteCurrent;
         StateMethod = GetState;
     ]
 
     SID_REDO
     [
-        ExecMethod  = ExecuteCurrent;
+        ExecMethod	= ExecuteCurrent;
         StateMethod = GetState;
     ]
 
     SID_DELETE
     [
-        ExecMethod  = ExecuteCurrent;
+        ExecMethod	= ExecuteCurrent;
         StateMethod = GetState;
     ]
 
     SID_BACKSPACE
     [
-        ExecMethod  = ExecuteCurrent;
+        ExecMethod	= ExecuteCurrent;
         StateMethod = GetState;
     ]
 
     SID_SEARCH_OPTIONS
     [
-        ExecMethod  = ExecuteCurrent;
+        ExecMethod	= ExecuteCurrent;
         StateMethod = GetState;
     ]
 
     SID_SEARCH_ITEM
     [
-        ExecMethod  = ExecuteCurrent;
+        ExecMethod	= ExecuteCurrent;
         StateMethod = GetState;
     ]
 
@@ -169,7 +169,7 @@ shell BasicIDEShell
 
     SID_BASICIDE_SHOWSBX
     [
-        ExecMethod  = ExecuteGlobal;
+        ExecMethod	= ExecuteGlobal;
         StateMethod = GetState;
     ]
 
@@ -206,97 +206,97 @@ shell BasicIDEShell
     // Ab hier normal...
     SID_BASICIDE_CHOOSEMACRO
     [
-        ExecMethod  = ExecuteGlobal;
+        ExecMethod	= ExecuteGlobal;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_MODULEDLG
     [
-        ExecMethod  = ExecuteGlobal;
+        ExecMethod	= ExecuteGlobal;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_OBJCAT
     [
-        ExecMethod  = ExecuteGlobal;
+        ExecMethod	= ExecuteGlobal;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_CREATEMACRO
     [
-        ExecMethod  = ExecuteGlobal;
+        ExecMethod	= ExecuteGlobal;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_EDITMACRO
     [
-        ExecMethod  = ExecuteGlobal;
+        ExecMethod	= ExecuteGlobal;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_NAMECHANGEDONTAB
     [
-        ExecMethod  = ExecuteGlobal;
+        ExecMethod	= ExecuteGlobal;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_STOREMODULESOURCE
     [
-        ExecMethod  = ExecuteGlobal;
+        ExecMethod	= ExecuteGlobal;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_STOREALLMODULESOURCES
     [
-        ExecMethod  = ExecuteGlobal;
+        ExecMethod	= ExecuteGlobal;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_UPDATEMODULESOURCE
     [
-        ExecMethod  = ExecuteGlobal;
+        ExecMethod	= ExecuteGlobal;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_UPDATEALLMODULESOURCES
     [
-        ExecMethod  = ExecuteGlobal;
+        ExecMethod	= ExecuteGlobal;
         StateMethod = GetState;
     ]
 
     SID_BASICSTOP
     [
-        ExecMethod  = ExecuteGlobal;
+        ExecMethod	= ExecuteGlobal;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_NEWMODULE
     [
-        ExecMethod  = ExecuteGlobal;
+        ExecMethod	= ExecuteGlobal;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_NEWJAVAMODULE
     [
-        ExecMethod  = ExecuteGlobal;
+        ExecMethod	= ExecuteGlobal;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_NEWDIALOG
     [
-        ExecMethod  = ExecuteGlobal;
+        ExecMethod	= ExecuteGlobal;
         StateMethod = GetState;
     ]
 
     SID_SHOW_PROPERTYBROWSER
     [
-        ExecMethod  = ExecuteGlobal;
+        ExecMethod	= ExecuteGlobal;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_SHOWWINDOW
     [
-        ExecMethod  = ExecuteGlobal;
+        ExecMethod	= ExecuteGlobal;
     ]
 
     SID_BASICIDE_MANAGE_LANG
@@ -316,85 +316,85 @@ shell BasicIDEShell
     // ========================================================
     SID_BASICRUN
     [
-        ExecMethod  = ExecuteBasic;
+        ExecMethod	= ExecuteBasic;
         StateMethod = GetState;
     ]
 
     SID_BASICCOMPILE
     [
-        ExecMethod  = ExecuteBasic;
+        ExecMethod	= ExecuteBasic;
         StateMethod = GetState;
     ]
 
     SID_BASICLOAD
     [
-        ExecMethod  = ExecuteBasic;
+        ExecMethod	= ExecuteBasic;
         StateMethod = GetState;
     ]
 
     SID_BASICSAVEAS
     [
-        ExecMethod  = ExecuteBasic;
+        ExecMethod	= ExecuteBasic;
         StateMethod = GetState;
     ]
-
+    
     SID_BASICIDE_MATCHGROUP
     [
-        ExecMethod  = ExecuteBasic;
+        ExecMethod	= ExecuteBasic;
         StateMethod = GetState;
     ]
 
     SID_BASICSTEPINTO
     [
-        ExecMethod  = ExecuteBasic;
+        ExecMethod	= ExecuteBasic;
         StateMethod = GetState;
     ]
 
     SID_BASICSTEPOVER
     [
-        ExecMethod  = ExecuteBasic;
+        ExecMethod	= ExecuteBasic;
         StateMethod = GetState;
     ]
 
     SID_BASICSTEPOUT
     [
-        ExecMethod  = ExecuteBasic;
+        ExecMethod	= ExecuteBasic;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_TOGGLEBRKPNT
     [
-        ExecMethod  = ExecuteBasic;
+        ExecMethod	= ExecuteBasic;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_MANAGEBRKPNTS
     [
-        ExecMethod  = ExecuteBasic;
+        ExecMethod	= ExecuteBasic;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_TOGGLEBRKPNTENABLED
     [
-        ExecMethod  = ExecuteBasic;
+        ExecMethod	= ExecuteBasic;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_ADDWATCH
     [
-        ExecMethod  = ExecuteBasic;
+        ExecMethod	= ExecuteBasic;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_REMOVEWATCH
     [
-        ExecMethod  = ExecuteBasic;
+        ExecMethod	= ExecuteBasic;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_BRKPNTSCHANGED
     [
-        ExecMethod  = ExecuteBasic;
+        ExecMethod	= ExecuteBasic;
         StateMethod = GetState;
     ]
 
@@ -403,26 +403,26 @@ shell BasicIDEShell
     // ========================================================
     SID_CHOOSE_CONTROLS
     [
-        ExecMethod      = ExecuteDialog;
-        StateMethod     = GetState;
+        ExecMethod		= ExecuteDialog;
+        StateMethod 	= GetState;
     ]
 
     SID_EXPORT_DIALOG
     [
-        ExecMethod      = ExecuteDialog;
-        StateMethod     = GetState;
+        ExecMethod		= ExecuteDialog;
+        StateMethod 	= GetState;
     ]
-
+    
     SID_IMPORT_DIALOG
     [
-        ExecMethod      = ExecuteDialog;
-        StateMethod     = GetState;
+        ExecMethod		= ExecuteDialog;
+        StateMethod 	= GetState;
     ]
-
+    
     SID_DIALOG_TESTMODE
     [
-        ExecMethod      = ExecuteDialog;
-        StateMethod     = GetState;
+        ExecMethod		= ExecuteDialog;
+        StateMethod 	= GetState;
     ]
 
     SID_BASICIDE_STAT_POS

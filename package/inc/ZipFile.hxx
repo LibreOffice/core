@@ -63,9 +63,9 @@ class ZipFile
 protected:
     ::osl::Mutex    m_aMutex;
 
-    ::rtl::OUString sComment;       /* zip file comment */
-    EntryHash       aEntries;
-    ByteGrabber     aGrabber;
+    ::rtl::OUString	sComment; 	  	/* zip file comment */
+    EntryHash		aEntries;
+    ByteGrabber 	aGrabber;
     Inflater        aInflater;
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
@@ -183,13 +183,13 @@ public:
 
     ZipEnumeration * SAL_CALL entries(  );
 protected:
-    sal_Bool        readLOC ( ZipEntry &rEntry)
+    sal_Bool		readLOC ( ZipEntry &rEntry)
         throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
-    sal_Int32       readCEN()
+    sal_Int32		readCEN()
         throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
-    sal_Int32       findEND()
+    sal_Int32		findEND()
         throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
-    sal_Int32       recover()
+    sal_Int32 		recover()
         throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
 
 };

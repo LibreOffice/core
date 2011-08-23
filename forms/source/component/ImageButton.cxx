@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ OImageButtonModel::~OImageButtonModel()
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-StringSequence  OImageButtonModel::getSupportedServiceNames() throw()
+StringSequence	OImageButtonModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OClickableImageBaseModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -115,7 +115,7 @@ void OImageButtonModel::describeFixedProperties( Sequence< Property >& _rProps )
 //------------------------------------------------------------------------------
 ::rtl::OUString OImageButtonModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    return FRM_COMPONENT_IMAGEBUTTON;   // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_IMAGEBUTTON;	// old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
@@ -192,7 +192,7 @@ Sequence<Type> OImageButtonControl::_getTypes()
 }
 
 //------------------------------------------------------------------------------
-StringSequence  OImageButtonControl::getSupportedServiceNames() throw()
+StringSequence	OImageButtonControl::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OClickableImageBaseControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -269,7 +269,7 @@ void SAL_CALL OImageButtonControl::mouseExited(const awt::MouseEvent& /*e*/) thr
 
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

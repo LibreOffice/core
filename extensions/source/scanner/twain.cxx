@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 
 #if defined( WNT ) || defined (WIN)
 #include <tools/svwin.h>
-#endif
+#endif  
 #ifdef OS2
 #include <svpm.h>
 #endif // OS2
@@ -49,19 +49,19 @@
 // - Defines -
 // -----------
 
-#define PFUNC                       (*pDSM)
-#define FIXTODOUBLE( nFix )         ((double)nFix.Whole+(double)nFix.Frac/65536.)
-#define FIXTOLONG( nFix )           ((long)floor(FIXTODOUBLE(nFix)+0.5))
+#define PFUNC						(*pDSM)
+#define FIXTODOUBLE( nFix ) 		((double)nFix.Whole+(double)nFix.Frac/65536.)
+#define FIXTOLONG( nFix )			((long)floor(FIXTODOUBLE(nFix)+0.5))
 
 #if defined WIN
-#define TWAIN_LIBNAME               "TWAIN.DLL"
-#define TWAIN_FUNCNAME              "DSM_Entry"
+#define TWAIN_LIBNAME				"TWAIN.DLL"
+#define TWAIN_FUNCNAME				"DSM_Entry"
 #elif defined WNT
-#define TWAIN_LIBNAME               "TWAIN_32.DLL"
-#define TWAIN_FUNCNAME              "DSM_Entry"
+#define TWAIN_LIBNAME				"TWAIN_32.DLL"
+#define TWAIN_FUNCNAME				"DSM_Entry"
 #elif defined OS2
-#define TWAIN_LIBNAME               "twain"
-#define TWAIN_FUNCNAME              "DSM_ENTRY"
+#define TWAIN_LIBNAME				"twain"
+#define TWAIN_FUNCNAME				"DSM_ENTRY"
 #endif
 
 // -----------
@@ -101,7 +101,7 @@ static ImpTwain* pImpTwainInstance = NULL;
     {
         MSG* pMsg = (MSG*) lParam;
 
-        if( ( nCode < 0 ) ||
+        if( ( nCode < 0 ) || 
             ( pImpTwainInstance->hTwainWnd != pMsg->hwnd ) ||
             !pImpTwainInstance->ImplHandleMsg( (void*) lParam ) )
         {
@@ -111,7 +111,7 @@ static ImpTwain* pImpTwainInstance = NULL;
         {
             pMsg->message = WM_USER;
             pMsg->lParam = 0;
-
+            
             return 0;
         }
     }
@@ -124,11 +124,11 @@ static ImpTwain* pImpTwainInstance = NULL;
 
 ImpTwain::ImpTwain( const Link& rNotifyLink ) :
             aNotifyLink ( rNotifyLink ),
-            pDSM        ( NULL ),
-            pMod        ( NULL ),
-            hTwainWnd   ( 0 ),
-            hTwainHook  ( 0 ),
-            nCurState   ( 1 )
+            pDSM		( NULL ),
+            pMod		( NULL ),
+            hTwainWnd	( 0 ),
+            hTwainHook	( 0 ),
+            nCurState	( 1 )
 {
     pImpTwainInstance = this;
 
@@ -139,7 +139,7 @@ ImpTwain::ImpTwain( const Link& rNotifyLink ) :
     aAppIdent.Version.Country = TWCY_USA;
     aAppIdent.ProtocolMajor = TWON_PROTOCOLMAJOR;
     aAppIdent.ProtocolMinor = TWON_PROTOCOLMINOR;
-    aAppIdent.SupportedGroups = DG_IMAGE | DG_CONTROL;
+    aAppIdent.SupportedGroups =	DG_IMAGE | DG_CONTROL;
     strcpy( aAppIdent.Version.Info, "6.0" );
     strcpy( aAppIdent.Manufacturer, "Sun Microsystems");
     strcpy( aAppIdent.ProductFamily,"Office");
@@ -153,8 +153,8 @@ ImpTwain::ImpTwain( const Link& rNotifyLink ) :
 
 #else
 
-    HWND        hParentWnd = HWND_DESKTOP;
-    WNDCLASS    aWc = { 0, &TwainWndProc, 0, sizeof( WNDCLASS ), GetModuleHandle( NULL ),
+    HWND		hParentWnd = HWND_DESKTOP;
+    WNDCLASS	aWc = { 0, &TwainWndProc, 0, sizeof( WNDCLASS ), GetModuleHandle( NULL ), 
                         NULL, NULL, NULL, NULL, "TwainClass" };
 
     RegisterClass( &aWc );
@@ -275,11 +275,11 @@ void ImpTwain::ImplOpenSource()
 #ifdef OS2
 
             // negotiate capabilities
-
+            
 #else
 
-            TW_CAPABILITY   aCap = { CAP_XFERCOUNT, TWON_ONEVALUE, GlobalAlloc( GHND, sizeof( TW_ONEVALUE ) ) };
-            TW_ONEVALUE*    pVal = (TW_ONEVALUE*) GlobalLock( aCap.hContainer );
+            TW_CAPABILITY	aCap = { CAP_XFERCOUNT, TWON_ONEVALUE, GlobalAlloc( GHND, sizeof( TW_ONEVALUE ) ) };
+            TW_ONEVALUE*	pVal = (TW_ONEVALUE*) GlobalLock( aCap.hContainer );
 
             pVal->ItemType = TWTY_INT16, pVal->Item = 1;
             GlobalUnlock( aCap.hContainer );
@@ -318,9 +318,9 @@ BOOL ImpTwain::ImplEnableSource()
 
 BOOL ImpTwain::ImplHandleMsg( void* pMsg )
 {
-    TW_UINT16   nRet;
-    PTWAINMSG   pMess = (PTWAINMSG) pMsg;
-    TW_EVENT    aEvt = { pMess, MSG_NULL };
+    TW_UINT16	nRet;
+    PTWAINMSG	pMess = (PTWAINMSG) pMsg;
+    TW_EVENT	aEvt = { pMess, MSG_NULL };
 
     nRet = PFUNC( &aAppIdent, &aSrcIdent, DG_CONTROL, DAT_EVENT, MSG_PROCESSEVENT, &aEvt );
 
@@ -344,7 +344,7 @@ BOOL ImpTwain::ImplHandleMsg( void* pMsg )
                 ImplFallback( nEvent );
             }
             break;
-
+            
             case MSG_CLOSEDSREQ:
                 ImplFallback( TWAIN_EVENT_QUIT );
             break;
@@ -365,12 +365,12 @@ void ImpTwain::ImplXfer()
 {
     if( nCurState == 6 )
     {
-        TW_IMAGEINFO    aInfo;
-        TW_UINT32       hDIB = 0;
-        long            nWidth = aInfo.ImageWidth;
-        long            nHeight = aInfo.ImageLength;
-        long            nXRes = FIXTOLONG( aInfo.XResolution );
-        long            nYRes = FIXTOLONG( aInfo.YResolution );
+        TW_IMAGEINFO	aInfo;
+        TW_UINT32		hDIB = 0;
+        long			nWidth = aInfo.ImageWidth;
+        long			nHeight = aInfo.ImageLength;
+        long			nXRes = FIXTOLONG( aInfo.XResolution );
+        long			nYRes = FIXTOLONG( aInfo.YResolution );
 
         if( PFUNC( &aAppIdent, &aSrcIdent, DG_IMAGE, DAT_IMAGEINFO, MSG_GET, &aInfo ) == TWRC_SUCCESS )
         {
@@ -396,7 +396,7 @@ void ImpTwain::ImplXfer()
 
 #else // OS2
                 const ULONG nSize = GlobalSize( (HGLOBAL) hDIB );
-                char*       pBuf = (char*) GlobalLock( (HGLOBAL) hDIB );
+                char*		pBuf = (char*) GlobalLock( (HGLOBAL) hDIB );
 
                 if( pBuf )
                 {
@@ -438,8 +438,8 @@ void ImpTwain::ImplFallback( ULONG nEvent )
 
 IMPL_LINK( ImpTwain, ImplFallbackHdl, void*, pData )
 {
-    const ULONG nEvent = (ULONG) pData;
-    BOOL        bFallback = TRUE;
+    const ULONG	nEvent = (ULONG) pData;
+    BOOL		bFallback = TRUE;
 
     switch( nCurState )
     {
@@ -461,7 +461,7 @@ IMPL_LINK( ImpTwain, ImplFallbackHdl, void*, pData )
         case( 5 ):
         {
             TW_USERINTERFACE aUI = { TRUE, TRUE, hTwainWnd };
-
+        
             PFUNC( &aAppIdent, &aSrcIdent, DG_CONTROL, DAT_USERINTERFACE, MSG_DISABLEDS, &aUI );
             nCurState = 4;
         }

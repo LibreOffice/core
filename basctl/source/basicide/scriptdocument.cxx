@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,7 +87,7 @@
 
 #include <rtl/uri.hxx>
 #include <rtl/bootstrap.hxx>
-
+ 
 #include <osl/process.h>
 #include <osl/file.hxx>
 
@@ -262,7 +262,7 @@ namespace basctl
                         getDocumentRef() const { return m_xDocument; }
 
         /// returns a library container belonging to the document
-        Reference< XLibraryContainer >
+        Reference< XLibraryContainer > 
                     getLibraryContainer( LibraryContainerType _eType ) const;
 
         /// determines whether a given library is part of the shared installation
@@ -460,7 +460,7 @@ namespace basctl
             if ( xVBACompat.is() )
                 bResult = xVBACompat->getVBACompatibilityMode();
         }
-        return bResult;
+        return bResult; 
     }
 
     //--------------------------------------------------------------------
@@ -653,7 +653,7 @@ namespace basctl
         try
         {
             Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, TRUE ), UNO_QUERY_THROW );
-
+            
             // get element
             Any aElement( xLib->getByName( _rOldName ) );
 
@@ -1018,7 +1018,7 @@ namespace basctl
                 ::rtl::OUString aSearchURL3( RTL_CONSTASCII_USTRINGPARAM( "share/extensions" ) );
                 if( aCanonicalFileURL.indexOf( aSearchURL1 ) != -1 ||
                     aCanonicalFileURL.indexOf( aSearchURL2 ) != -1 ||
-                    aCanonicalFileURL.indexOf( aSearchURL3 ) != -1 )
+                    aCanonicalFileURL.indexOf( aSearchURL3 ) != -1 ) 
                         bIsShared = true;
             }
         }
@@ -1128,7 +1128,7 @@ namespace basctl
     ScriptDocument::~ScriptDocument()
     {
     }
-
+    
     //--------------------------------------------------------------------
     const ScriptDocument& ScriptDocument::getApplicationScriptDocument()
     {
@@ -1253,7 +1253,7 @@ namespace basctl
 
         return aScriptDocs;
     }
-
+    
     //--------------------------------------------------------------------
     bool ScriptDocument::operator==( const ScriptDocument& _rhs ) const
     {
@@ -1283,7 +1283,7 @@ namespace basctl
     {
         return m_pImpl->getLibraryContainer( _eType );
     }
-
+    
     //--------------------------------------------------------------------
     Reference< XNameContainer > ScriptDocument::getLibrary( LibraryContainerType _eType, const ::rtl::OUString& _rLibName, bool _bLoadLibrary ) const
         SAL_THROW((NoSuchElementException))

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -192,13 +192,13 @@ namespace dbp
         ModuleRes aModuleRes(RID_PAGE_FORM_DATASOURCE_STATUS);
         OLocalResourceAccess aLocalControls(aModuleRes, RSC_TABPAGE);
 
-        m_pFormSettingsSeparator    = new FixedLine(this,  ModuleRes(FL_FORMSETINGS));
-        m_pFormDatasourceLabel      = new FixedText(this,  ModuleRes(FT_FORMDATASOURCELABEL));
-        m_pFormDatasource           = new FixedText(this,  ModuleRes(FT_FORMDATASOURCE));
-        m_pFormContentTypeLabel     = new FixedText(this,  ModuleRes(FT_FORMCONTENTTYPELABEL));
-        m_pFormContentType          = new FixedText(this,  ModuleRes(FT_FORMCONTENTTYPE));
-        m_pFormTableLabel           = new FixedText(this,  ModuleRes(FT_FORMTABLELABEL));
-        m_pFormTable                = new FixedText(this,  ModuleRes(FT_FORMTABLE));
+        m_pFormSettingsSeparator	= new FixedLine(this,  ModuleRes(FL_FORMSETINGS));
+        m_pFormDatasourceLabel		= new FixedText(this,  ModuleRes(FT_FORMDATASOURCELABEL));
+        m_pFormDatasource			= new FixedText(this,  ModuleRes(FT_FORMDATASOURCE));
+        m_pFormContentTypeLabel		= new FixedText(this,  ModuleRes(FT_FORMCONTENTTYPELABEL));
+        m_pFormContentType			= new FixedText(this,  ModuleRes(FT_FORMCONTENTTYPE));
+        m_pFormTableLabel			= new FixedText(this,  ModuleRes(FT_FORMTABLELABEL));
+        m_pFormTable				= new FixedText(this,  ModuleRes(FT_FORMTABLE));
 
         const OControlWizardContext& rContext = getContext();
         if ( rContext.bEmbedded )
@@ -347,7 +347,7 @@ namespace dbp
             for (sal_Int32 i=0; i<nObjects; ++i)
             {
                 if (xPageObjects->getByIndex(i) >>= xControlShape)
-                {   // it _is_ a control shape
+                {	// it _is_ a control shape
                     xControlModel = xControlShape->getControl();
                     DBG_ASSERT(xControlModel.is(), "OControlWizard::implDetermineShape: control shape without model!");
                     if (xModelCompare.get() == xControlModel.get())
@@ -398,7 +398,7 @@ namespace dbp
 
                 Reference< XDrawPageSupplier > xPageSupp(xModel, UNO_QUERY);
                 if (xPageSupp.is())
-                {   // it's a document with only one page -> Writer
+                {	// it's a document with only one page -> Writer
                     xPage = xPageSupp->getDrawPage();
                 }
                 else
@@ -410,7 +410,7 @@ namespace dbp
                     // maybe it's a spredsheet
                     Reference< XSpreadsheetView > xView(xController, UNO_QUERY);
                     if (xView.is())
-                    {   // okay, it is one
+                    {	// okay, it is one
                         Reference< XSpreadsheet > xSheet = xView->getActiveSheet();
                         xPageSupp = Reference< XDrawPageSupplier >(xSheet, UNO_QUERY);
                         DBG_ASSERT(xPageSupp.is(), "OControlWizard::implDeterminePage: a spreadsheet which is no page supplier!");
@@ -418,7 +418,7 @@ namespace dbp
                             xPage = xPageSupp->getDrawPage();
                     }
                     else
-                    {   // can be a draw/impress doc only
+                    {	// can be a draw/impress doc only
                         Reference< XDrawView > xDrawView(xController, UNO_QUERY);
                         DBG_ASSERT(xDrawView.is(), "OControlWizard::implDeterminePage: no alternatives left ... can't determine the page!");
                         if (xDrawView.is())
@@ -427,7 +427,7 @@ namespace dbp
                 }
             }
             else
-            {
+            {	
                 DBG_ASSERT(xPage.is(), "OControlWizard::implDeterminePage: can't determine the page (no model)!");
             }
             m_aContext.xDrawPage = xPage;
@@ -462,7 +462,7 @@ namespace dbp
 
     //---------------------------------------------------------------------
     Reference< XConnection > OControlWizard::getFormConnection(const OAccessRegulator&) const
-    {
+    {		
         return getFormConnection();
     }
     //---------------------------------------------------------------------
@@ -472,7 +472,7 @@ namespace dbp
         try
         {
             if ( !::dbtools::isEmbeddedInDatabase(m_aContext.xForm,xConn) )
-                m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection")) >>= xConn;
+                m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection")) >>= xConn;			
         }
         catch(const Exception&)
         {
@@ -632,9 +632,9 @@ namespace dbp
             if (xColumns.is())
             {
                 m_aContext.aFieldNames = xColumns->getElementNames();
-                static const ::rtl::OUString s_sFieldTypeProperty   = ::rtl::OUString::createFromAscii("Type");
+                static const ::rtl::OUString s_sFieldTypeProperty	= ::rtl::OUString::createFromAscii("Type");
                 const ::rtl::OUString* pBegin = m_aContext.aFieldNames.getConstArray();
-                const ::rtl::OUString* pEnd   = pBegin + m_aContext.aFieldNames.getLength();
+                const ::rtl::OUString* pEnd	  = pBegin + m_aContext.aFieldNames.getLength();
                 for(;pBegin != pEnd;++pBegin)
                 {
                     sal_Int32 nFieldType = DataType::OTHER;
@@ -663,7 +663,7 @@ namespace dbp
         ::comphelper::disposeComponent(xStatement);
 
         if (aSQLException.hasValue())
-        {   // an SQLException (or derivee) was thrown ...
+        {	// an SQLException (or derivee) was thrown ...
 
             // prepend an extra SQLContext explaining what we were doing
             SQLContext aContext;
@@ -745,35 +745,35 @@ namespace dbp
         // lemme see ...
         return (0 == getContext().aFieldNames.getLength());
             // if we got fields, the data source is valid ...
-//      try
-//      {
-//          // first, we need a valid data source name
-//          ::rtl::OUString sDataSourceName;
-//          m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("DataSourceName")) >>= sDataSourceName;
-//          if (m_aContext.xDatasourceContext.is() && m_aContext.xDatasourceContext->hasByName(sDataSourceName))
-//          {   // at least the data source name is valid ...
-//              // then, a CommandType "table" would be nice ...
-//              sal_Int32 nCommandType = CommandType::COMMAND;
-//              m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("CommandType")) >>= nCommandType;
-//              if (CommandType::TABLE == nCommandType)
-//              {   // okay ....
-//                  // now the table itself should be valid
-//                  ::rtl::OUString sTableName;
-//                  m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("Command")) >>= sTableName;
-//                  if (m_aContext.xObjectContainer.is() && m_aContext.xObjectContainer->hasByName(sTableName))
-//                      return sal_False;
-//              }
-//          }
-//      }
-//      catch(Exception&)
-//      {
-//          DBG_ERROR("OControlWizard::needDatasourceSelection: caught an exception while checking the form settings!");
-//      }
-//      return sal_True;
+//		try
+//		{
+//			// first, we need a valid data source name
+//			::rtl::OUString sDataSourceName;
+//			m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("DataSourceName")) >>= sDataSourceName;
+//			if (m_aContext.xDatasourceContext.is() && m_aContext.xDatasourceContext->hasByName(sDataSourceName))
+//			{	// at least the data source name is valid ...
+//				// then, a CommandType "table" would be nice ...
+//				sal_Int32 nCommandType = CommandType::COMMAND;
+//				m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("CommandType")) >>= nCommandType;
+//				if (CommandType::TABLE == nCommandType)
+//				{	// okay ....
+//					// now the table itself should be valid
+//					::rtl::OUString sTableName;
+//					m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("Command")) >>= sTableName;
+//					if (m_aContext.xObjectContainer.is() && m_aContext.xObjectContainer->hasByName(sTableName))
+//						return sal_False;
+//				}
+//			}
+//		}
+//		catch(Exception&)
+//		{
+//			DBG_ERROR("OControlWizard::needDatasourceSelection: caught an exception while checking the form settings!");
+//		}
+//		return sal_True;
     }
 
 //.........................................................................
-}   // namespace dbp
+}	// namespace dbp
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

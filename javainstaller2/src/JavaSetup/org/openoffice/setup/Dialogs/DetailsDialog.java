@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ public class DetailsDialog extends JDialog implements ActionListener {
     private JButton okButton;
     private String helpFileName;
     private String helpFileString;
-
+    
     public DetailsDialog(SetupFrame setupFrame) {
 
         super(setupFrame.getDialog());
@@ -61,14 +61,14 @@ public class DetailsDialog extends JDialog implements ActionListener {
 
         String dialogTitle = ResourceManager.getString("String_InstallationCompleted_Button");
         String dialogText = setupFrame.getCurrentPanel().getDialogText();
-
+                
         setTitle(dialogTitle);
         this.getContentPane().setLayout(new java.awt.BorderLayout());
-
+        
         JPanel toppanel = new JPanel();
         toppanel.setLayout(new java.awt.BorderLayout());
         toppanel.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
-
+        
         JPanel buttonpanel = new JPanel();
         buttonpanel.setLayout(new java.awt.FlowLayout());
         buttonpanel.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
@@ -101,39 +101,39 @@ public class DetailsDialog extends JDialog implements ActionListener {
         okButton.addActionListener(this);
 
         JSeparator separator = new JSeparator();
-
+        
         // toppanel.add(label1, BorderLayout.NORTH);
-        // toppanel.add(label2, BorderLayout.CENTER);
-        buttonpanel.add(okButton);
+        // toppanel.add(label2, BorderLayout.CENTER);  
+        buttonpanel.add(okButton);  
 
         this.getContentPane().add(toppanel, BorderLayout.NORTH);
         this.getContentPane().add(editorScrollPane, BorderLayout.CENTER);
         this.getContentPane().add(buttonpanel, BorderLayout.SOUTH);
-
+        
         // JScrollBar ScrollBar = editorScrollPane.getVerticalScrollBar();
         // if ( ScrollBar.isShowing() ) {
         //     editorPane.setFocusable(false);
         // } else {
-        //     editorPane.setFocusable(true);
+        //     editorPane.setFocusable(true);            
         // }
-
-        // Setting tab-order and focus on okButton
+        
+        // Setting tab-order and focus on okButton 
         DialogFocusTraversalPolicy policy = new DialogFocusTraversalPolicy(new JComponent[] {okButton, editorScrollPane});
         this.setFocusTraversalPolicy(policy);  // set policy
         this.setFocusCycleRoot(true); // enable policy
     }
-
+ 
      private JEditorPane createEditorPane(String dialogText) {
         JEditorPane editorPane = new JEditorPane();
         editorPane.setEditable(false);
         editorPane.setContentType("text/html");
-        editorPane.setText(dialogText);
+        editorPane.setText(dialogText);        
         return editorPane;
-    }
-
+    }     
+     
     public void actionPerformed (java.awt.event.ActionEvent evt) {
         setVisible(false);
-        dispose();
+        dispose(); 
     }
 
 }

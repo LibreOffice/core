@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.uno.XComponentContext;
 
 /**
- * This abstract class reprecents a connection to the office
+ * This abstract class reprecents a connection to the office 
  * application.
 
     @deprecated
@@ -52,14 +52,14 @@ public interface OfficeConnection
     /**
      * Sets an AWT container catory.
      *
-     * @param containerFactory This is a application provided AWT container
-     *  factory.
+     * @param containerFactory This is a application provided AWT container 
+     *	factory.
      */
     void setContainerFactory(ContainerFactory containerFactory);
 
     /**
      * Retrives the UNO component context.
-     * Establishes a connection if necessary and initialises the
+     * Establishes a connection if necessary and initialises the  
      * UNO service manager if it has not already been initialised.
      *
      * @return The office UNO component context.
@@ -68,9 +68,9 @@ public interface OfficeConnection
 
     /**
      * Creates an office window.
-     * The window is either a sub-class of java.awt.Canvas (local) or
-     * java.awt.Container (RVP).
-     *
+     * The window is either a sub-class of java.awt.Canvas (local) or 
+     * java.awt.Container (RVP). 
+     * 
      * This method does not add add the office window to its container.
      *
      * @param container This is an AWT container.

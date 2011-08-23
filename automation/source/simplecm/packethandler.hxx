@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,9 +28,9 @@
 
 /*************************************************************************
  *
- *    ATTENTION
- *    This file is intended to work inside and outside the StarOffice environment.
- *    Only adaption of file commtypes.hxx should be necessary. Else it is a bug!
+ *	  ATTENTION
+ *	  This file is intended to work inside and outside the StarOffice environment.
+ *	  Only adaption of file commtypes.hxx should be necessary. Else it is a bug!
  *
  ************************************************************************/
 
@@ -62,7 +62,7 @@ public:
     comm_UINT16 GetReceiveProtocol() { return nReceiveProtocol; }
     comm_UINT16 GetReceiveHeaderType() { return nReceiveHeaderType; }
 
-    comm_BOOL ReceiveData( void* &pData, comm_UINT32 &nLen );               /// Recieve DataPacket from Socket
+    comm_BOOL ReceiveData( void* &pData, comm_UINT32 &nLen );				/// Recieve DataPacket from Socket
     virtual comm_BOOL SendHandshake( HandshakeType aHandshakeType, const void* pData = NULL, comm_UINT32 nLen = 0 );
     virtual comm_BOOL TransferData( const void* pData, comm_UINT32 nLen, CMProtocol nProtocol = CM_PROTOCOL_OLDSTYLE );
 };

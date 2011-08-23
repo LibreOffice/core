@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,16 +96,16 @@ namespace frm
 //= html tools
 //========================================================================
 
-const sal_uInt16 SUCCESSFUL_REPRESENT_TEXT          = 0x0001;
-const sal_uInt16 SUCCESSFUL_REPRESENT_FILE          = 0x0002;
+const sal_uInt16 SUCCESSFUL_REPRESENT_TEXT			= 0x0001;
+const sal_uInt16 SUCCESSFUL_REPRESENT_FILE			= 0x0002;
 
 //------------------------------------------------------------------------------
 class HtmlSuccessfulObj
 {
 public:
-    ::rtl::OUString     aName;
-    ::rtl::OUString     aValue;
-    sal_uInt16          nRepresentation;
+    ::rtl::OUString		aName;
+    ::rtl::OUString		aValue;
+    sal_uInt16			nRepresentation;
 
     HtmlSuccessfulObj( const ::rtl::OUString& _rName, const ::rtl::OUString& _rValue,
         sal_uInt16 _nRepresent = SUCCESSFUL_REPRESENT_TEXT )
@@ -147,7 +147,7 @@ typedef ::cppu::ImplHelper4 <   ::com::sun::star::lang::XServiceInfo
                             ,   ::com::sun::star::sdbc::XWarningsSupplier
                             >   ODatabaseForm_BASE2;
 
-typedef ::cppu::ImplHelper7<    ::com::sun::star::sdbc::XCloseable,
+typedef ::cppu::ImplHelper7<	::com::sun::star::sdbc::XCloseable,
                                 ::com::sun::star::sdbc::XRowSet,
                                 ::com::sun::star::sdb::XCompletedExecution,
                                 ::com::sun::star::sdb::XRowSetApproveBroadcaster,
@@ -156,7 +156,7 @@ typedef ::cppu::ImplHelper7<    ::com::sun::star::sdbc::XCloseable,
                                 ::com::sun::star::sdbc::XParameters > ODatabaseForm_BASE3;
 
 
-class ODatabaseForm :public OFormComponents
+class ODatabaseForm	:public OFormComponents
                     ,public OPropertySetAggregationHelper
                     ,public OPropertyChangeListener
                     ,public ODatabaseForm_BASE1
@@ -166,65 +166,65 @@ class ODatabaseForm :public OFormComponents
 {
     friend class OFormSubmitResetThread;
 
-    OImplementationIdsRef               m_aHoldIdHelper;
+    OImplementationIdsRef				m_aHoldIdHelper;
 
         // listener administration
-    ::cppu::OInterfaceContainerHelper   m_aLoadListeners;
-    ::cppu::OInterfaceContainerHelper   m_aRowSetApproveListeners;
-    ::cppu::OInterfaceContainerHelper   m_aRowSetListeners;
-    ::cppu::OInterfaceContainerHelper   m_aSubmitListeners;
-    ::cppu::OInterfaceContainerHelper   m_aErrorListeners;
+    ::cppu::OInterfaceContainerHelper	m_aLoadListeners;
+    ::cppu::OInterfaceContainerHelper	m_aRowSetApproveListeners;
+    ::cppu::OInterfaceContainerHelper	m_aRowSetListeners;
+    ::cppu::OInterfaceContainerHelper	m_aSubmitListeners;
+    ::cppu::OInterfaceContainerHelper	m_aErrorListeners;
     ResetListeners                      m_aResetListeners;
-    ::osl::Mutex                        m_aResetSafety;
-    ::com::sun::star::uno::Any          m_aCycle;
-    ::com::sun::star::uno::Any          m_aIgnoreResult; // set when we are a subform and our master form positioned on a new row
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >                      m_aMasterFields;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >                      m_aDetailFields;
+    ::osl::Mutex						m_aResetSafety;
+    ::com::sun::star::uno::Any			m_aCycle;
+    ::com::sun::star::uno::Any			m_aIgnoreResult; // set when we are a subform and our master form positioned on a new row
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >						m_aMasterFields;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >						m_aDetailFields;
 
     // the object doin' most of the work - an SDB-rowset
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>      m_xAggregate;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation> 		m_xAggregate;
     // same object, interface as member because of performance reasons
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>          m_xAggregateAsRowSet;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet> 			m_xAggregateAsRowSet;
 
     PropertyBagHelper           m_aPropertyBagHelper;
     ::dbtools::WarningsContainer    m_aWarnings;
-    OPropertyChangeMultiplexer* m_pAggregatePropertyMultiplexer;
+    OPropertyChangeMultiplexer*	m_pAggregatePropertyMultiplexer;
     // Verwaltung der ControlGruppen
-    OGroupManager*              m_pGroupManager;
+    OGroupManager*				m_pGroupManager;
     ::dbtools::ParameterManager m_aParameterManager;
     ::dbtools::FilterManager    m_aFilterManager;
-    Timer*                      m_pLoadTimer;
+    Timer*						m_pLoadTimer;
 
-    OFormSubmitResetThread*     m_pThread;
-    ::rtl::OUString             m_sCurrentErrorContext;
+    OFormSubmitResetThread*		m_pThread;
+    ::rtl::OUString				m_sCurrentErrorContext;
                 // will be used as additional context information
                 // when an exception is catched and forwarded to the listeners
 
-    INT32                       m_nResetsPending;
-//  <overwritten_properties>
-    sal_Int32                   m_nPrivileges;
+    INT32						m_nResetsPending;
+//	<overwritten_properties>
+    sal_Int32					m_nPrivileges;
     sal_Bool                    m_bInsertOnly;
-//  </overwritten_properties>
+//	</overwritten_properties>
 
-//  <properties>
+//	<properties>
     ::com::sun::star::uno::Any  m_aControlBorderColorFocus;
     ::com::sun::star::uno::Any  m_aControlBorderColorMouse;
     ::com::sun::star::uno::Any  m_aControlBorderColorInvalid;
     ::com::sun::star::uno::Any  m_aDynamicControlBorder;
-    ::rtl::OUString             m_sName;
-    ::rtl::OUString             m_aTargetURL;
-    ::rtl::OUString             m_aTargetFrame;
-    ::com::sun::star::form::FormSubmitMethod    m_eSubmitMethod;
-    ::com::sun::star::form::FormSubmitEncoding  m_eSubmitEncoding;
-    ::com::sun::star::form::NavigationBarMode   m_eNavigation;
-    sal_Bool                    m_bAllowInsert : 1;
-    sal_Bool                    m_bAllowUpdate : 1;
-    sal_Bool                    m_bAllowDelete : 1;
-//  </properties>
-    sal_Bool                    m_bLoaded : 1;
-    sal_Bool                    m_bSubForm : 1;
-    sal_Bool                    m_bForwardingConnection : 1;    // sal_True if we're setting the ActiveConnection on the aggregate
-    sal_Bool                    m_bSharingConnection : 1;       // sal_True if the connection we're using is shared with out parent
+    ::rtl::OUString				m_sName;
+    ::rtl::OUString				m_aTargetURL;
+    ::rtl::OUString				m_aTargetFrame;
+    ::com::sun::star::form::FormSubmitMethod	m_eSubmitMethod;
+    ::com::sun::star::form::FormSubmitEncoding	m_eSubmitEncoding;
+    ::com::sun::star::form::NavigationBarMode	m_eNavigation;
+    sal_Bool					m_bAllowInsert : 1;
+    sal_Bool					m_bAllowUpdate : 1;
+    sal_Bool					m_bAllowDelete : 1;
+//	</properties>
+    sal_Bool					m_bLoaded : 1;
+    sal_Bool					m_bSubForm : 1;
+    sal_Bool					m_bForwardingConnection : 1;	// sal_True if we're setting the ActiveConnection on the aggregate
+    sal_Bool					m_bSharingConnection : 1;		// sal_True if the connection we're using is shared with out parent
 
 public:
     ODatabaseForm(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
@@ -249,7 +249,7 @@ public:
     virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue, sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::lang::IllegalArgumentException);
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception );
 
-    ::com::sun::star::uno::Any  SAL_CALL getFastPropertyValue( sal_Int32 nHandle )
+    ::com::sun::star::uno::Any	SAL_CALL getFastPropertyValue( sal_Int32 nHandle )
        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     void fire( sal_Int32 * pnHandles, const ::com::sun::star::uno::Any * pNewValues, const ::com::sun::star::uno::Any * pOldValues, sal_Int32 nCount, sal_Bool bVetoable );
 
@@ -263,8 +263,8 @@ public:
                             getPropertiesInterface();
 
     // com::sun::star::beans::XPropertyState
-    virtual ::com::sun::star::beans::PropertyState getPropertyStateByHandle(sal_Int32 nHandle);
-    virtual void setPropertyToDefaultByHandle(sal_Int32 nHandle);
+    virtual	::com::sun::star::beans::PropertyState getPropertyStateByHandle(sal_Int32 nHandle);
+    virtual	void setPropertyToDefaultByHandle(sal_Int32 nHandle);
     virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle(sal_Int32 nHandle) const;
 
     // com::sun::star::sdbc::XSQLErrorBroadcaster
@@ -386,15 +386,15 @@ public:
 
     // com::sun::star::lang::XServiceInfo
     virtual sal_Bool SAL_CALL supportsService(const ::rtl::OUString& ServiceName)  throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getImplementationName()  throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString	SAL_CALL getImplementationName()  throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()  throw(::com::sun::star::uno::RuntimeException);
 
     // com::sun::star::lang::XServiceInfo - static version
-    static  ::rtl::OUString SAL_CALL getImplementationName_Static();
-    static  ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_Static();
-    static  ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getCurrentServiceNames_Static();
-    static  ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getCompatibleServiceNames_Static();
-    static  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Create( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory );
+    static	::rtl::OUString	SAL_CALL getImplementationName_Static();
+    static	::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_Static();
+    static	::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getCurrentServiceNames_Static();
+    static	::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getCompatibleServiceNames_Static();
+    static	::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Create( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory );
 
     // com::sun::star::io::XPersistObject
     virtual ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
@@ -465,39 +465,39 @@ protected:
 private:
     sal_Bool executeRowSet(::osl::ResettableMutexGuard& _rClearForNotifies, sal_Bool bMoveToFirst = sal_True,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >());
-    bool    fillParameters(::osl::ResettableMutexGuard& _rClearForNotifies,
+    bool	fillParameters(::osl::ResettableMutexGuard& _rClearForNotifies,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >());
-    void    updateParameterInfo();
-    bool    hasValidParent() const;
+    void	updateParameterInfo();
+    bool	hasValidParent() const;
 
     // impl methods
-    void    load_impl(sal_Bool bCausedByParentForm, sal_Bool bMoveToFirst = sal_True,
+    void	load_impl(sal_Bool bCausedByParentForm, sal_Bool bMoveToFirst = sal_True,
         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >())
         throw(::com::sun::star::uno::RuntimeException);
-    void    reload_impl(sal_Bool bMoveToFirst,
+    void	reload_impl(sal_Bool bMoveToFirst,
         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >())
         throw(::com::sun::star::uno::RuntimeException);
-    void    submit_impl(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& Control, const ::com::sun::star::awt::MouseEvent& MouseEvt, bool _bAproveByListeners);
-    void    reset_impl(bool _bAproveByListeners);
+    void	submit_impl(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& Control, const ::com::sun::star::awt::MouseEvent& MouseEvt, bool _bAproveByListeners);
+    void	reset_impl(bool _bAproveByListeners);
 
-    sal_Bool    implEnsureConnection();
+    sal_Bool	implEnsureConnection();
 
     // connection sharing
 
     /// checks if we can re-use (aka share) the connection of the given parent
-    sal_Bool    canShareConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxParentProps );
+    sal_Bool	canShareConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxParentProps );
 
     /// starts sharing the connection with the parent
-    void        doShareConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxParentProps );
+    void		doShareConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxParentProps );
 
     /// stops sharing the connection with the parent
-    void        stopSharingConnection( );
+    void		stopSharingConnection( );
 
     /// called when the connection which we share with our parent is beeing disposed
-    void        disposingSharedConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn );
+    void		disposingSharedConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn );
 
     /// checks if we currently share our connection with our parent
-    sal_Bool    isSharingConnection( ) const { return m_bSharingConnection; }
+    sal_Bool	isSharingConnection( ) const { return m_bSharingConnection; }
 
     /** calls our row set approval listeners
 
@@ -518,20 +518,20 @@ private:
     );
 
     /// invalidate all our parameter-related stuff
-    void        invlidateParameters();
+    void		invlidateParameters();
 
-    void        saveInsertOnlyState( );
-    void        restoreInsertOnlyState( );
+    void		saveInsertOnlyState( );
+    void		restoreInsertOnlyState( );
 
     // error handling
-    void    onError(const ::com::sun::star::sdb::SQLErrorEvent& _rEvent);
-    void    onError(const ::com::sun::star::sdbc::SQLException&, const ::rtl::OUString& _rContextDescription);
+    void	onError(const ::com::sun::star::sdb::SQLErrorEvent& _rEvent);
+    void	onError(const ::com::sun::star::sdbc::SQLException&, const ::rtl::OUString& _rContextDescription);
 
     // html tools
     ::rtl::OUString         GetDataEncoded(bool _bURLEncoded,const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
-    ::rtl::OUString         GetDataURLEncoded(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
-    ::rtl::OUString         GetDataTextEncoded(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
-    ::com::sun::star::uno::Sequence<sal_Int8>   GetDataMultiPartEncoded(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt,
+    ::rtl::OUString			GetDataURLEncoded(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
+    ::rtl::OUString			GetDataTextEncoded(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
+    ::com::sun::star::uno::Sequence<sal_Int8>	GetDataMultiPartEncoded(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt,
                                              ::rtl::OUString& rContentType);
 
     void AppendComponent(HtmlSuccessfulObjList& rList, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xComponentSet, const ::rtl::OUString& rNamePrefix,
@@ -560,7 +560,7 @@ inline void ODatabaseForm::submitNBC(const ::com::sun::star::uno::Reference< ::c
 }
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 
 #endif // _FRM_DATABASEFORM_HXX_

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,14 +66,14 @@ class DynamicAccessibilityNode extends AccessibilityNode {
             // FIXME: error message
         } catch (com.sun.star.uno.RuntimeException e) {
             // FIXME: error message
-        }
+        }            
     }
-
+    
     // Clears the child list. Called by AccessibilityModel.treeCollapsed().
     protected void clear() {
         removeAllChildren();
     }
-
+    
     /* This is called whenever the node is painted, no matter if collapsed
      * or expanded. Making this a "life" value seems to be appropriate.
      */

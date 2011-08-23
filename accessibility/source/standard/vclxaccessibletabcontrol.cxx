@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,9 +47,9 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-//  ----------------------------------------------------
-//  class VCLXAccessibleTabControl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXAccessibleTabControl
+//	----------------------------------------------------
 
 VCLXAccessibleTabControl::VCLXAccessibleTabControl( VCLXWindow* pVCLXWindow )
     :VCLXAccessibleComponent( pVCLXWindow )
@@ -262,7 +262,7 @@ void VCLXAccessibleTabControl::ProcessWindowEvent( const VclWindowEvent& rVclWin
                     if ( xComponent.is() )
                         xComponent->dispose();
                 }
-                m_aAccessibleChildren.clear();
+                m_aAccessibleChildren.clear();		
             }
 
             VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
@@ -345,7 +345,7 @@ void VCLXAccessibleTabControl::disposing()
             if ( xComponent.is() )
                 xComponent->dispose();
         }
-        m_aAccessibleChildren.clear();
+        m_aAccessibleChildren.clear();		
     }
 }
 
@@ -375,7 +375,7 @@ sal_Int32 VCLXAccessibleTabControl::getAccessibleChildCount() throw (RuntimeExce
 {
     OExternalLockGuard aGuard( this );
 
-    return m_aAccessibleChildren.size();
+    return m_aAccessibleChildren.size(); 
 }
 
 // -----------------------------------------------------------------------------
@@ -440,7 +440,7 @@ void VCLXAccessibleTabControl::selectAccessibleChild( sal_Int32 nChildIndex ) th
 // -----------------------------------------------------------------------------
 
 sal_Bool VCLXAccessibleTabControl::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
-{
+{	
     OExternalLockGuard aGuard( this );
 
     if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )
@@ -490,7 +490,7 @@ Reference< XAccessible > VCLXAccessibleTabControl::getSelectedAccessibleChild( s
     Reference< XAccessible > xChild;
 
     for ( sal_Int32 i = 0, j = 0, nCount = getAccessibleChildCount(); i < nCount; i++ )
-    {
+    {		
         if ( isAccessibleChildSelected( i ) && ( j++ == nSelectedChildIndex ) )
         {
             xChild = getAccessibleChild( i );

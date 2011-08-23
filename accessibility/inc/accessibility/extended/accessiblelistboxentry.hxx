@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,8 +84,8 @@ namespace accessibility
 
     private:
         /** The treelistbox control */
-        SvTreeListBox*                      m_pListBox;
-        ::std::deque< sal_Int32 >           m_aEntryPath;
+        SvTreeListBox*						m_pListBox;
+        ::std::deque< sal_Int32 >			m_aEntryPath;
 
     protected:
         /// client id in the AccessibleEventNotifier queue
@@ -95,40 +95,40 @@ namespace accessibility
                                             m_aParent;
 
     private:
-        Rectangle               GetBoundingBox_Impl() const;
-        Rectangle               GetBoundingBoxOnScreen_Impl() const;
-        sal_Bool                IsAlive_Impl() const;
-        sal_Bool                IsShowing_Impl() const;
+        Rectangle				GetBoundingBox_Impl() const;
+        Rectangle				GetBoundingBoxOnScreen_Impl() const;
+        sal_Bool				IsAlive_Impl() const;
+        sal_Bool				IsShowing_Impl() const;
 
-        Rectangle               GetBoundingBox() throw ( ::com::sun::star::lang::DisposedException );
-        Rectangle               GetBoundingBoxOnScreen() throw ( ::com::sun::star::lang::DisposedException );
-        void                    EnsureIsAlive() const throw ( ::com::sun::star::lang::DisposedException );
+        Rectangle				GetBoundingBox() throw ( ::com::sun::star::lang::DisposedException );
+        Rectangle				GetBoundingBoxOnScreen() throw ( ::com::sun::star::lang::DisposedException );
+        void 					EnsureIsAlive() const throw ( ::com::sun::star::lang::DisposedException );
 
     protected:
         virtual ~AccessibleListBoxEntry();
 
         /** this function is called upon disposing the component
         */
-        virtual void SAL_CALL                   disposing();
+        virtual void SAL_CALL					disposing();
 
         // ListBoxAccessible/XComponent
         virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException );
 
         // OCommonAccessibleText
-        virtual ::rtl::OUString                 implGetText();
-        virtual ::com::sun::star::lang::Locale  implGetLocale();
-        virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
+        virtual ::rtl::OUString					implGetText();
+        virtual ::com::sun::star::lang::Locale	implGetLocale();
+        virtual void							implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
 
     public:
         /** Ctor()
-            @param  _rListBox
+            @param	_rListBox
                 the view control
-            @param  _pEntry
+            @param	_pEntry
                 the entry
-            @param  _xParent
+            @param	_xParent
                 is our parent accessible object
         */
-        AccessibleListBoxEntry( SvTreeListBox& _rListBox, SvLBoxEntry* _pEntry,
+        AccessibleListBoxEntry(	SvTreeListBox& _rListBox, SvLBoxEntry* _pEntry,
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::accessibility::XAccessible >& _xParent );
 

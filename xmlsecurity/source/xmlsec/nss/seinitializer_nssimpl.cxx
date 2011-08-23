@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -113,7 +113,7 @@ struct InitNSSInitialize
             if (bNSSInit)
                 atexit(nsscrypto_finalize );
              return & bInitialized;
-
+            
         }
 };
 
@@ -130,11 +130,11 @@ void deleteRootsModule()
     SECMODModuleList *list = SECMOD_GetDefaultModuleList();
     SECMODListLock *lock = SECMOD_GetDefaultModuleListLock();
     SECMOD_GetReadLock(lock);
-
+    
     while (!RootsModule && list)
     {
         SECMODModule *module = list->module;
-
+ 
         for (int i=0; i < module->slotCount; i++)
         {
             PK11SlotInfo *slot = module->slots[i];
@@ -154,7 +154,7 @@ void deleteRootsModule()
         list = list->next;
     }
     SECMOD_ReleaseReadLock(lock);
-
+ 
     if (RootsModule)
     {
         PRInt32 modType;
@@ -208,7 +208,7 @@ bool nsscrypto_initialize( const char* token, bool & out_nss_init )
         {
             xmlsec_trace("Initializing NSS with profile failed.");
             char * error = NULL;
-
+            
             PR_GetErrorText(error);
             if (error)
                 xmlsec_trace("%s",error);
@@ -229,20 +229,20 @@ bool nsscrypto_initialize( const char* token, bool & out_nss_init )
         }
     }
     out_nss_init = true;
-
+    
 #if defined SYSTEM_MOZILLA
     if (!SECMOD_HasRootCerts())
     {
 #endif
         deleteRootsModule();
-
+        
 #if defined SYSTEM_MOZILLA
         OUString rootModule(RTL_CONSTASCII_USTRINGPARAM("libnssckbi"SAL_DLLEXTENSION));
 #else
         OUString rootModule(RTL_CONSTASCII_USTRINGPARAM("${OOO_BASE_DIR}/program/libnssckbi"SAL_DLLEXTENSION));
 #endif
         ::rtl::Bootstrap::expandMacros(rootModule);
-
+        
         OUString rootModulePath;
         if (::osl::File::E_None == ::osl::File::getSystemPathFromFileURL(rootModule, rootModulePath))
         {
@@ -253,18 +253,18 @@ bool nsscrypto_initialize( const char* token, bool & out_nss_init )
             pkcs11moduleSpec.append("\" library=\"");
             pkcs11moduleSpec.append(ospath.getStr());
             pkcs11moduleSpec.append("\"");
-
+ 
             SECMODModule * RootsModule =
                 SECMOD_LoadUserModule(
-                    const_cast<char*>(pkcs11moduleSpec.makeStringAndClear().getStr()),
-                    0, // no parent
+                    const_cast<char*>(pkcs11moduleSpec.makeStringAndClear().getStr()), 
+                    0, // no parent 
                     PR_FALSE); // do not recurse
-
+                
             if (RootsModule)
             {
-
+                
                 bool found = RootsModule->loaded;
-
+                    
                 SECMOD_DestroyModule(RootsModule);
                 RootsModule = 0;
                 if (found)
@@ -305,7 +305,7 @@ extern "C" void nsscrypto_finalize()
 
     if (RootsModule)
     {
-
+        
         if (SECSuccess == SECMOD_UnloadUserModule(RootsModule))
         {
             xmlsec_trace("Unloaded module \""ROOT_CERTS"\".");
@@ -332,7 +332,7 @@ bool getMozillaCurrentProfile(
 {
     /*
      * first, try to get the profile from "MOZILLA_CERTIFICATE_FOLDER"
-     */
+     */ 
     char * env = getenv("MOZILLA_CERTIFICATE_FOLDER");
     if (env)
     {
@@ -348,21 +348,21 @@ bool getMozillaCurrentProfile(
             mozilla::MozillaProductType_Firefox,
             mozilla::MozillaProductType_Default };
         int nProduct = 4;
-
+        
         uno::Reference<uno::XInterface> xInstance = rxMSF->createInstance(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap")) );
         OSL_ENSURE( xInstance.is(), "failed to create instance" );
-
-        uno::Reference<mozilla::XMozillaBootstrap> xMozillaBootstrap
+        
+        uno::Reference<mozilla::XMozillaBootstrap> xMozillaBootstrap 
             =  uno::Reference<mozilla::XMozillaBootstrap>(xInstance,uno::UNO_QUERY);
         OSL_ENSURE( xMozillaBootstrap.is(), "failed to create instance" );
-
+        
         if (xMozillaBootstrap.is())
         {
             for (int i=0; i<nProduct; i++)
             {
                 ::rtl::OUString profile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
-
+                
                 if (profile != NULL && profile.getLength()>0)
                 {
                     profilePath = xMozillaBootstrap->getProfilePath(productTypes[i],profile);
@@ -371,7 +371,7 @@ bool getMozillaCurrentProfile(
                 }
             }
         }
-
+        
         RTL_LOGFILE_PRODUCT_TRACE( "XMLSEC: No Mozilla Profile found!" );
         return false;
     }
@@ -385,12 +385,12 @@ SEInitializer_NssImpl::SEInitializer_NssImpl(
 {
 }
 
-SEInitializer_NssImpl::~SEInitializer_NssImpl()
+SEInitializer_NssImpl::~SEInitializer_NssImpl() 
 {
 }
 
 /* XSEInitializer */
-cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
+cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL 
     SEInitializer_NssImpl::createSecurityContext(
     const rtl::OUString& sCertDB )
     throw (cssu::RuntimeException)
@@ -398,7 +398,7 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     CERTCertDBHandle    *pCertHandle = NULL ;
 
     rtl::OString sCertDir;
-    if( sCertDB.getLength() )
+    if( sCertDB.getLength() ) 
     {
         sCertDir = rtl::OString(sCertDB, sCertDB.getLength(), RTL_TEXTENCODING_ASCII_US);
     }
@@ -407,7 +407,7 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
         static rtl::OString* pDefaultCertDir = NULL;
         if ( !pDefaultCertDir )
         {
-            pDefaultCertDir = new rtl::OString;
+            pDefaultCertDir = new rtl::OString; 
             rtl::OUString ouCertDir;
 
 
@@ -416,7 +416,7 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
                 *pDefaultCertDir = rtl::OString(ouCertDir, ouCertDir.getLength(), RTL_TEXTENCODING_ASCII_US);
         }
         sCertDir = *pDefaultCertDir;
-
+        
     }
 
     if( ! *initNSS( sCertDir.getStr() ) )
@@ -426,24 +426,24 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
 
     pCertHandle = CERT_GetDefaultCertDB() ;
 
-    try
+    try 
     {
         /* Build XML Security Context */
-        const rtl::OUString sSecyrutyContext ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_CONTEXT ) );
+        const rtl::OUString sSecyrutyContext ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_CONTEXT ) );   
         cssu::Reference< cssxc::XXMLSecurityContext > xSecCtx( mxMSF->createInstance ( sSecyrutyContext ), cssu::UNO_QUERY );
-        if( !xSecCtx.is() )
+        if( !xSecCtx.is() ) 
             return NULL;
 
-        const rtl::OUString sSecyrutyEnvironment ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_ENVIRONMENT ) );
+        const rtl::OUString sSecyrutyEnvironment ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_ENVIRONMENT ) );   
         cssu::Reference< cssxc::XSecurityEnvironment > xSecEnv( mxMSF->createInstance ( sSecyrutyEnvironment ), cssu::UNO_QUERY );
         cssu::Reference< cssl::XUnoTunnel > xEnvTunnel( xSecEnv , cssu::UNO_QUERY ) ;
-        if( !xEnvTunnel.is() )
+        if( !xEnvTunnel.is() ) 
             return NULL;
         SecurityEnvironment_NssImpl* pSecEnv = reinterpret_cast<SecurityEnvironment_NssImpl*>(
             sal::static_int_cast<sal_uIntPtr>(
                 xEnvTunnel->getSomething(SecurityEnvironment_NssImpl::getUnoTunnelId() ))) ;
         pSecEnv->setCertDb(pCertHandle);
-
+    
         sal_Int32 n = xSecCtx->addSecurityEnvironment(xSecEnv);
         //originally the SecurityEnvironment with the internal slot was set as default
         xSecCtx->setDefaultSecurityEnvironmentIndex( n );
@@ -476,13 +476,13 @@ rtl::OUString SEInitializer_NssImpl_getImplementationName ()
     return rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
 }
 
-sal_Bool SAL_CALL SEInitializer_NssImpl_supportsService( const rtl::OUString& ServiceName )
+sal_Bool SAL_CALL SEInitializer_NssImpl_supportsService( const rtl::OUString& ServiceName ) 
     throw (cssu::RuntimeException)
 {
     return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ));
 }
 
-cssu::Sequence< rtl::OUString > SAL_CALL SEInitializer_NssImpl_getSupportedServiceNames(  )
+cssu::Sequence< rtl::OUString > SAL_CALL SEInitializer_NssImpl_getSupportedServiceNames(  ) 
     throw (cssu::RuntimeException)
 {
     cssu::Sequence < rtl::OUString > aRet(1);
@@ -499,17 +499,17 @@ cssu::Reference< cssu::XInterface > SAL_CALL SEInitializer_NssImpl_createInstanc
 }
 
 /* XServiceInfo */
-rtl::OUString SAL_CALL SEInitializer_NssImpl::getImplementationName(  )
+rtl::OUString SAL_CALL SEInitializer_NssImpl::getImplementationName(  ) 
     throw (cssu::RuntimeException)
 {
     return SEInitializer_NssImpl_getImplementationName();
 }
-sal_Bool SAL_CALL SEInitializer_NssImpl::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL SEInitializer_NssImpl::supportsService( const rtl::OUString& rServiceName ) 
     throw (cssu::RuntimeException)
 {
     return SEInitializer_NssImpl_supportsService( rServiceName );
 }
-cssu::Sequence< rtl::OUString > SAL_CALL SEInitializer_NssImpl::getSupportedServiceNames(  )
+cssu::Sequence< rtl::OUString > SAL_CALL SEInitializer_NssImpl::getSupportedServiceNames(  ) 
     throw (cssu::RuntimeException)
 {
     return SEInitializer_NssImpl_getSupportedServiceNames();

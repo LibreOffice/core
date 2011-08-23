@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,66 +46,66 @@ private:
     enum DragDirection { TopLeft, Top, TopRight, Right, BottomRight, Bottom,
                          BottomLeft, Left };
 
-    Sane&           mrSane;
-    Bitmap          maPreviewBitmap;
-    Rectangle       maPreviewRect;
-    Point           maTopLeft, maBottomRight;
-    Point           maMinTopLeft, maMaxBottomRight;
-    BOOL            mbDragEnable;
-    BOOL            mbIsDragging;
-    int             mnDragMode;
-    BOOL            mbDragDrawn;
-    DragDirection   meDragDirection;
+    Sane&			mrSane;
+    Bitmap			maPreviewBitmap;
+    Rectangle		maPreviewRect;
+    Point			maTopLeft, maBottomRight;
+    Point			maMinTopLeft, maMaxBottomRight;
+    BOOL			mbDragEnable;
+    BOOL			mbIsDragging;
+    int				mnDragMode;
+    BOOL			mbDragDrawn;
+    DragDirection	meDragDirection;
 
-    MapMode         maMapMode;
+    MapMode			maMapMode;
 
-    Link            maOldLink;
+    Link			maOldLink;
+    
+    OKButton		maOKButton;
+    CancelButton	maCancelButton;
+    PushButton		maDeviceInfoButton;
+    PushButton		maPreviewButton;
+    PushButton		maButtonOption;
 
-    OKButton        maOKButton;
-    CancelButton    maCancelButton;
-    PushButton      maDeviceInfoButton;
-    PushButton      maPreviewButton;
-    PushButton      maButtonOption;
+    FixedText		maOptionsTxt;
+    FixedText		maOptionTitle;
+    FixedText		maOptionDescTxt;
+    FixedText		maVectorTxt;
 
-    FixedText       maOptionsTxt;
-    FixedText       maOptionTitle;
-    FixedText       maOptionDescTxt;
-    FixedText       maVectorTxt;
+    FixedText		maScanLeftTxt;
+    MetricField		maLeftField;
+    FixedText		maScanTopTxt;
+    MetricField		maTopField;
+    FixedText		maRightTxt;
+    MetricField		maRightField;
+    FixedText		maBottomTxt;
+    MetricField		maBottomField;
 
-    FixedText       maScanLeftTxt;
-    MetricField     maLeftField;
-    FixedText       maScanTopTxt;
-    MetricField     maTopField;
-    FixedText       maRightTxt;
-    MetricField     maRightField;
-    FixedText       maBottomTxt;
-    MetricField     maBottomField;
+    FixedText		maDeviceBoxTxt;
+    ListBox			maDeviceBox;
+    FixedText		maReslTxt;
+    NumericBox		maReslBox;
+    FixedText		maAdvancedTxt;
+    CheckBox		maAdvancedBox;
 
-    FixedText       maDeviceBoxTxt;
-    ListBox         maDeviceBox;
-    FixedText       maReslTxt;
-    NumericBox      maReslBox;
-    FixedText       maAdvancedTxt;
-    CheckBox        maAdvancedBox;
+    NumericField	maVectorBox;
+    ListBox			maQuantumRangeBox;
+    ListBox			maStringRangeBox;
 
-    NumericField    maVectorBox;
-    ListBox         maQuantumRangeBox;
-    ListBox         maStringRangeBox;
+    FixedLine		maPreviewBox;
+    FixedLine		maAreaBox;
 
-    FixedLine       maPreviewBox;
-    FixedLine       maAreaBox;
+    CheckBox		maBoolCheckBox;
 
-    CheckBox        maBoolCheckBox;
+    Edit			maStringEdit;
+    Edit			maNumericEdit;
 
-    Edit            maStringEdit;
-    Edit            maNumericEdit;
+    SvTreeListBox	maOptionBox;
 
-    SvTreeListBox   maOptionBox;
-
-    int             mnCurrentOption;
-    int             mnCurrentElement;
-    double*         mpRange;
-    double          mfMin, mfMax;
+    int				mnCurrentOption;
+    int				mnCurrentElement;
+    double*			mpRange;
+    double			mfMin, mfMax;
 
     DECL_LINK( ClickBtnHdl, Button* );
     DECL_LINK( SelectHdl, ListBox* );
@@ -135,7 +135,7 @@ private:
 
     // helper
     BOOL SetAdjustedNumericalValue( const char* pOption, double fValue, int nElement = 0 );
-
+    
     virtual void Paint( const Rectangle& );
     virtual void MouseMove( const MouseEvent& rMEvt );
     virtual void MouseButtonDown( const MouseEvent& rMEvt );

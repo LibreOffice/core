@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,82 +78,82 @@ class TestToolObj: public SbxObject
     friend class TTBasic;
     friend class Controls;
 public:
-    TestToolObj( String aName, String aFilePath );      // Alle Dateien in FilePath, Kein IPC
-    TestToolObj( String aName, MyBasic* pBas ); // Pfade aus INI, IPC benutzen
+    TestToolObj( String aName, String aFilePath );		// Alle Dateien in FilePath, Kein IPC
+    TestToolObj( String aName, MyBasic* pBas );	// Pfade aus INI, IPC benutzen
     ~TestToolObj();
-    void LoadIniFile();             // Laden der IniEinstellungen, die durch den ConfigDialog geändert werden können
+    void LoadIniFile();				// Laden der IniEinstellungen, die durch den ConfigDialog geändert werden können
     void DebugFindNoErrors( BOOL bDebugFindNoErrors );
 
 private:
-    BOOL bWasPrecompilerError;  // True wenn beim letzten Precompile ein Fehler auftrat
+    BOOL bWasPrecompilerError;	// True wenn beim letzten Precompile ein Fehler auftrat
     BOOL CError( ULONG, const String&, xub_StrLen, xub_StrLen, xub_StrLen );
     void CalcPosition( String const &aSource, xub_StrLen nPos, xub_StrLen &l, xub_StrLen &c );
     xub_StrLen ImplSearch( const String &aSource, const xub_StrLen nStart, const xub_StrLen nEnd, const String &aSearch, const xub_StrLen nSearchStart = 0 );
     xub_StrLen PreCompilePart( String &aSource, xub_StrLen nStart, xub_StrLen nEnd, String aFinalErrorLabel, USHORT &nLabelCount );
     void PreCompileDispatchParts( String &aSource, String aStart, String aEnd, String aFinalLable );
 public:
-    String GetRevision(String const &aSourceIn);    // find Revision in the sourcecode
-    String PreCompile(String const &aSourceIn); // try catch; testcase endcase ..
-    BOOL WasPrecompilerError(); // True wenn beim letzten Precompile ein Fehler auftrat
-    void            SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
+    String GetRevision(String const &aSourceIn);	// find Revision in the sourcecode
+    String PreCompile(String const &aSourceIn);	// try catch; testcase endcase ..
+    BOOL WasPrecompilerError();	// True wenn beim letzten Precompile ein Fehler auftrat
+    void			SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
     virtual SbxVariable* Find( const String&, SbxClassType );
-//  String aKeyPlusClasses;     // Pfad für keycodes & classes & res_type (Aus Configdatei)
+//	String aKeyPlusClasses;		// Pfad für keycodes & classes & res_type (Aus Configdatei)
     DECL_LINK( ReturnResultsLink, CommunicationLink* );
-    BOOL            ReturnResults( SvStream *pIn ); // Rücklieferung des Antwortstreams über IPC oder TCP/IP oder direkt
+    BOOL			ReturnResults( SvStream *pIn );	// Rücklieferung des Antwortstreams über IPC oder TCP/IP oder direkt
 
-    void            SetLogHdl( const Link& rLink ) { aLogHdl = rLink; }
-    const Link&     GetLogHdl() const { return aLogHdl; }
+    void			SetLogHdl( const Link& rLink ) { aLogHdl = rLink; }
+    const Link&		GetLogHdl() const { return aLogHdl; }
 
-    void            SetWinInfoHdl( const Link& rLink ) { aWinInfoHdl = rLink; }
-    const Link&     GetWinInfoHdl() const { return aWinInfoHdl; }
+    void			SetWinInfoHdl( const Link& rLink ) { aWinInfoHdl = rLink; }
+    const Link&		GetWinInfoHdl() const { return aWinInfoHdl; }
 
-    void            SetModuleWinExistsHdl( const Link& rLink ) { aModuleWinExistsHdl = rLink; }
-    const Link&     GetModuleWinExistsHdl() const { return aModuleWinExistsHdl; }
+    void			SetModuleWinExistsHdl( const Link& rLink ) { aModuleWinExistsHdl = rLink; }
+    const Link&		GetModuleWinExistsHdl() const { return aModuleWinExistsHdl; }
 
-    void            SetCErrorHdl( const Link& rLink ) { aCErrorHdl = rLink; }
-    const Link&     GetCErrorHdl() const { return aCErrorHdl; }
+    void			SetCErrorHdl( const Link& rLink ) { aCErrorHdl = rLink; }
+    const Link&		GetCErrorHdl() const { return aCErrorHdl; }
 
-    void            SetWriteStringHdl( const Link& rLink ) { aWriteStringHdl = rLink; }
-    const Link&     GetWriteStringHdl() const { return aWriteStringHdl; }
+    void			SetWriteStringHdl( const Link& rLink ) { aWriteStringHdl = rLink; }
+    const Link&		GetWriteStringHdl() const { return aWriteStringHdl; }
 
     SfxBroadcaster& GetTTBroadcaster();
 
 private:
-    ImplTestToolObj *pImpl;     // Alles was von der Implementation abhängt
+    ImplTestToolObj *pImpl;		// Alles was von der Implementation abhängt
     static const CErrors* GetFehlerListe() { return pFehlerListe; }
     BOOL bUseIPC;
-    Link aLogHdl;               // Zum Logen der Fehlermeldungen im Testtool
-    Link aWinInfoHdl;           // Anzeigen der Windows/Controls der zu testenden App
-    Link aModuleWinExistsHdl;   // Prüft ob das Modul schon im Editor geladen ist
-    Link aCErrorHdl;            // Melden von Compilererror
+    Link aLogHdl;				// Zum Logen der Fehlermeldungen im Testtool
+    Link aWinInfoHdl;			// Anzeigen der Windows/Controls der zu testenden App
+    Link aModuleWinExistsHdl;	// Prüft ob das Modul schon im Editor geladen ist
+    Link aCErrorHdl;			// Melden von Compilererror
     Link aWriteStringHdl;       // Schreiben von text (e.g. MakroRecorder)
-    BOOL bReturnOK;             // Bricht WaitForAnswer ab
-    CRevNames *pShortNames;     // Aktuell verwendete Controls, zur gewinnung des Namens aus Fehlermeldung
-    ULONG nSequence;            // Sequence um Antwort und Anfrage zu syncronisieren
-    SmartId aNextReturnId;  // Id des Returnwertes i.e. UId
-    void ReplaceNumbers(String &aText); // Zahlen im String mit speziellem Format in Namen umwandeln
+    BOOL bReturnOK;				// Bricht WaitForAnswer ab
+    CRevNames *pShortNames;		// Aktuell verwendete Controls, zur gewinnung des Namens aus Fehlermeldung
+    ULONG nSequence;			// Sequence um Antwort und Anfrage zu syncronisieren
+    SmartId aNextReturnId;	// Id des Returnwertes i.e. UId
+    void ReplaceNumbers(String &aText);	// Zahlen im String mit speziellem Format in Namen umwandeln
 
     String aLastRecordedKontext;//  Keeps the last kontext recorded by the Macro Recorder
 
 #define FLAT TRUE
-    String ProgPath;            // Dateiname der zu Testenden APP; Gesetzt über Start
-    String aLogFileName;        // Momentaner Logfilename (Wie Programmdatei aber mit .res)
-    BOOL IsBlock;               // Innerhalb Begin/EndBlock
-    BOOL SingleCommandBlock;    // Implizit um jedes kommando ein Begin/EndBlock
+    String ProgPath;			// Dateiname der zu Testenden APP; Gesetzt über Start
+    String aLogFileName;		// Momentaner Logfilename (Wie Programmdatei aber mit .res)
+    BOOL IsBlock;				// Innerhalb Begin/EndBlock
+    BOOL SingleCommandBlock;	// Implizit um jedes kommando ein Begin/EndBlock
     CmdStream *In;
 
-    void AddName(String &aBisher, String &aNeu );   // Name eventuell mit / anhängen
-    void AddToListByNr( CNames *&pControls, ControlItemUId *&pNewItem );    //
+    void AddName(String &aBisher, String &aNeu );	// Name eventuell mit / anhängen
+    void AddToListByNr( CNames *&pControls, ControlItemUId *&pNewItem );	//
     CNames *m_pControls;
-    CNames *m_pNameKontext;     // Zeigt auf den aktuellen Namenskontext, der über 'Kontext' gesetzt wurde
+    CNames *m_pNameKontext;		// Zeigt auf den aktuellen Namenskontext, der über 'Kontext' gesetzt wurde
     CNames *m_pSIds;
-    CNames *m_pReverseSlots;        // Slots mit Kurznamen nach Nummer
-    CNames *m_pReverseControls; // Controls mit Kurznamen nach Nummer
+    CNames *m_pReverseSlots;		// Slots mit Kurznamen nach Nummer
+    CNames *m_pReverseControls;	// Controls mit Kurznamen nach Nummer
     CNames *m_pReverseControlsSon;// Controls mit Kurznamen nach Nummer nach Fenstern (Son)
-    CNames *m_pReverseUIds;     // Langnamen nach Nummer
+    CNames *m_pReverseUIds;		// Langnamen nach Nummer
 
 
-    USHORT nMyVar;              // Wievielte Var aus Pool ist dran
+    USHORT nMyVar;				// Wievielte Var aus Pool ist dran
 
     void InitTestToolObj();
     CommunicationManagerClientViaSocketTT *pCommunicationManager;
@@ -189,7 +189,7 @@ private:
     static ControlDefLoad const arR_Cmds[];
     static CNames *pRCommands;
 
-    static CErrors *pFehlerListe;       // Hier werden die Fehler des Testtools gespeichert
+    static CErrors *pFehlerListe;		// Hier werden die Fehler des Testtools gespeichert
 
 };
 

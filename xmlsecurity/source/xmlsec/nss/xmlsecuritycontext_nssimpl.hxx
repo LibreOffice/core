@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,20 +71,20 @@ class XMLSecurityContext_NssImpl : public ::cppu::WeakImplHelper3<
         virtual sal_Int32 SAL_CALL addSecurityEnvironment(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >& aSecurityEnvironment
             ) throw (::com::sun::star::security::SecurityInfrastructureException, ::com::sun::star::uno::RuntimeException);
-
+        
         virtual ::sal_Int32 SAL_CALL getSecurityEnvironmentNumber(  )
             throw (::com::sun::star::uno::RuntimeException);
-
+            
         virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL
             getSecurityEnvironmentByIndex( ::sal_Int32 index )
             throw (::com::sun::star::uno::RuntimeException);
-
+             
         virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL
-            getSecurityEnvironment(  )
+            ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL 
+            getSecurityEnvironment(  ) 
             throw (::com::sun::star::uno::RuntimeException);
-
+        
         virtual ::sal_Int32 SAL_CALL getDefaultSecurityEnvironmentIndex(  )
             throw (::com::sun::star::uno::RuntimeException);
 
@@ -114,13 +114,13 @@ class XMLSecurityContext_NssImpl : public ::cppu::WeakImplHelper3<
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL impl_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) throw( ::com::sun::star::uno::RuntimeException ) ;
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > impl_createFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) ;
-
+                                         
         /*
          * Because of the issue of multi-securityenvironment, so the keyManager method is not useful any longer.
          *
-
+                                            
         //Methods from XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
+        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) 
         throw (com::sun::star::uno::RuntimeException);
 
         static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
@@ -128,10 +128,10 @@ class XMLSecurityContext_NssImpl : public ::cppu::WeakImplHelper3<
 
         //Native mehtods
         virtual xmlSecKeysMngrPtr keysManager() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
+        
         */
 } ;
 
-#endif  // _XMLSIGNATURECONTEXT_NSSIMPL_HXX_
+#endif	// _XMLSIGNATURECONTEXT_NSSIMPL_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -136,7 +136,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------------
-    Dialog* OControlFontDialog::createDialog(Window* _pParent)
+    Dialog*	OControlFontDialog::createDialog(Window* _pParent)
     {
         ControlCharacterDialog::createItemSet(m_pFontItems, m_pItemPool, m_pItemPoolDefaults);
 
@@ -171,7 +171,7 @@ namespace pcr
     }
 
 //........................................................................
-}   // namespace pcr
+}	// namespace pcr
 //........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,28 +69,28 @@
 
 static USHORT pStdRanges[] =
 {
-    SID_ATTR_PARA_LINESPACE,        // 10033
+    SID_ATTR_PARA_LINESPACE,		// 10033
     SID_ATTR_PARA_LINESPACE,
-    SID_ATTR_LRSPACE,               // 10048 -
-    SID_ATTR_ULSPACE,               // 10049
-    SID_ATTR_PARA_REGISTER,         // 10413
+    SID_ATTR_LRSPACE,				// 10048 -
+    SID_ATTR_ULSPACE,				// 10049
+    SID_ATTR_PARA_REGISTER,			// 10413
     SID_ATTR_PARA_REGISTER,
     0
 };
 
 static USHORT pAlignRanges[] =
 {
-    SID_ATTR_PARA_ADJUST,           // 10027
+    SID_ATTR_PARA_ADJUST,			// 10027
     SID_ATTR_PARA_ADJUST,
     0
 };
 
 static USHORT pExtRanges[] =
 {
-    SID_ATTR_PARA_PAGEBREAK,        // 10037 -
-    SID_ATTR_PARA_WIDOWS,           // 10041
-    SID_ATTR_PARA_MODEL,            // 10065 -
-    SID_ATTR_PARA_KEEP,             // 10066
+    SID_ATTR_PARA_PAGEBREAK,		// 10037 -
+    SID_ATTR_PARA_WIDOWS,			// 10041
+    SID_ATTR_PARA_MODEL,			// 10065 -
+    SID_ATTR_PARA_KEEP,				// 10066
     0
 };
 
@@ -110,7 +110,7 @@ enum LineSpaceList
     LLINESPACE_PROP = 3,
     LLINESPACE_MIN  = 4,
     LLINESPACE_DURCH= 5,
-    LLINESPACE_FIX  = 6,
+    LLINESPACE_FIX 	= 6,
     LLINESPACE_END
 };
 
@@ -182,7 +182,7 @@ USHORT GetHtmlMode_Impl(const SfxItemSet& rSet)
 IMPL_LINK( SvxStdParagraphTabPage, ELRLoseFocusHdl, Edit *, EMPTYARG )
 {
 //! if ( aLeftIndent.IsRelativeMode() )
-//!     return 0; //!!!
+//! 	return 0; //!!!
 
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -334,7 +334,7 @@ BOOL SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
     if ( aLeftIndent.IsValueModified() ||
          aFLineIndent.IsValueModified() ||
          aRightIndent.IsValueModified()
-         ||  aAutoCB.GetSavedValue() != aAutoCB.IsChecked() )
+         ||	 aAutoCB.GetSavedValue() != aAutoCB.IsChecked() )
     {
         nWhich = GetWhich( SID_ATTR_LRSPACE );
         SfxMapUnit eUnit = pPool->GetMetric( nWhich );
@@ -665,7 +665,7 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage( Window* pParent,
     aLeftIndent             ( this, CUI_RES( ED_LEFTINDENT ) ),
     aRightLabel             ( this, CUI_RES( FT_RIGHTINDENT ) ),
     aRightIndent            ( this, CUI_RES( ED_RIGHTINDENT ) ),
-
+    
     aFLineLabel             ( this, CUI_RES( FT_FLINEINDENT ) ),
     aFLineIndent            ( this, CUI_RES( ED_FLINEINDENT ) ),
     aAutoCB                 ( this, CUI_RES( CB_AUTO ) ),
@@ -988,14 +988,14 @@ void SvxStdParagraphTabPage::EnableAutoFirstLine()
 }
 
 
-void    SvxStdParagraphTabPage::EnableAbsLineDist(long nMinTwip)
+void	SvxStdParagraphTabPage::EnableAbsLineDist(long nMinTwip)
 {
     aLineDist.InsertEntry(sAbsDist);
     nMinFixDist = nMinTwip;
 }
 
 
-void    SvxStdParagraphTabPage::PageCreated(SfxAllItemSet aSet)
+void	SvxStdParagraphTabPage::PageCreated(SfxAllItemSet aSet)
 {
 
 /* different bit represent call to different method of SvxStdParagraphTabPage
@@ -1006,9 +1006,9 @@ void    SvxStdParagraphTabPage::PageCreated(SfxAllItemSet aSet)
 
 
             */
-    SFX_ITEMSET_ARG (&aSet,pPageWidthItem,SfxUInt16Item,SID_SVXSTDPARAGRAPHTABPAGE_PAGEWIDTH,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pFlagSetItem,SfxUInt32Item,SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,sal_False);
-    SFX_ITEMSET_ARG (&aSet,pLineDistItem,SfxUInt32Item,SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST,sal_False);
+    SFX_ITEMSET_ARG	(&aSet,pPageWidthItem,SfxUInt16Item,SID_SVXSTDPARAGRAPHTABPAGE_PAGEWIDTH,sal_False);
+    SFX_ITEMSET_ARG	(&aSet,pFlagSetItem,SfxUInt32Item,SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,sal_False);
+    SFX_ITEMSET_ARG	(&aSet,pLineDistItem,SfxUInt32Item,SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST,sal_False);
 
     if (pPageWidthItem)
         SetPageWidth(pPageWidthItem->GetValue());
@@ -1029,17 +1029,17 @@ void    SvxStdParagraphTabPage::PageCreated(SfxAllItemSet aSet)
         EnableAbsLineDist(pLineDistItem->GetValue());
 
     if (pFlagSetItem)
-        if  (( 0x0008 & pFlagSetItem->GetValue()) == 0x0008 )
+        if	(( 0x0008 & pFlagSetItem->GetValue()) == 0x0008 )
                 EnableNegativeMode();
 
 }
 
 
-#define LASTLINEPOS_DEFAULT     0
-#define LASTLINEPOS_LEFT        1
+#define LASTLINEPOS_DEFAULT		0
+#define LASTLINEPOS_LEFT		1
 
-#define LASTLINECOUNT_OLD       3
-#define LASTLINECOUNT_NEW       4
+#define LASTLINECOUNT_OLD		3
+#define LASTLINECOUNT_NEW		4
 
 // class SvxParaAlignTabPage ------------------------------------------------
 
@@ -1047,22 +1047,22 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSe
     : SfxTabPage(pParent, CUI_RES( RID_SVXPAGE_ALIGN_PARAGRAPH ),rSet),
     aAlignFrm           ( this, CUI_RES( FL_ALIGN ) ),
     aLeft               ( this, CUI_RES( BTN_LEFTALIGN ) ),
-    aRight              ( this, CUI_RES( BTN_RIGHTALIGN ) ),
-    aCenter             ( this, CUI_RES( BTN_CENTERALIGN ) ),
-    aJustify            ( this, CUI_RES( BTN_JUSTIFYALIGN ) ),
+    aRight				( this, CUI_RES( BTN_RIGHTALIGN ) ),
+    aCenter				( this, CUI_RES( BTN_CENTERALIGN ) ),
+    aJustify			( this, CUI_RES( BTN_JUSTIFYALIGN ) ),
     aLastLineFT         ( this, CUI_RES( FT_LASTLINE ) ),
-    aLastLineLB         ( this, CUI_RES( LB_LASTLINE ) ),
-    aExpandCB           ( this, CUI_RES( CB_EXPAND ) ),
-    aSnapToGridCB       ( this, CUI_RES( CB_SNAP ) ),
-    aExampleWin         ( this, CUI_RES( WN_EXAMPLE ) ),
+    aLastLineLB			( this, CUI_RES( LB_LASTLINE ) ),
+    aExpandCB			( this, CUI_RES( CB_EXPAND ) ),
+    aSnapToGridCB		( this, CUI_RES( CB_SNAP ) ),
+    aExampleWin			( this, CUI_RES( WN_EXAMPLE ) ),
 
-    aVertAlignFL        ( this, CUI_RES( FL_VERTALIGN ) ),
-    aVertAlignFT        ( this, CUI_RES( FT_VERTALIGN ) ),
-    aVertAlignLB        ( this, CUI_RES( LB_VERTALIGN ) ),
+    aVertAlignFL		( this, CUI_RES( FL_VERTALIGN ) ),
+    aVertAlignFT		( this, CUI_RES( FT_VERTALIGN ) ),
+    aVertAlignLB		( this, CUI_RES( LB_VERTALIGN ) ),
 
-    aPropertiesFL       ( this, CUI_RES( FL_PROPERTIES    )),
-    aTextDirectionFT    ( this, CUI_RES( FT_TEXTDIRECTION )),
-    aTextDirectionLB    ( this, CUI_RES( LB_TEXTDIRECTION ))
+    aPropertiesFL		( this, CUI_RES( FL_PROPERTIES    )),
+    aTextDirectionFT	( this, CUI_RES( FT_TEXTDIRECTION )),
+    aTextDirectionLB	( this, CUI_RES( LB_TEXTDIRECTION ))
 {
     SvtLanguageOptions aLangOptions;
     USHORT nLastLinePos = LASTLINEPOS_DEFAULT;
@@ -1122,12 +1122,12 @@ int SvxParaAlignTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SvxParaAlignTabPage::Create( Window* pParent, const SfxItemSet& rSet )
+SfxTabPage*	SvxParaAlignTabPage::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new SvxParaAlignTabPage(pParent, rSet);
 }
 
-USHORT* SvxParaAlignTabPage::GetRanges()
+USHORT*	SvxParaAlignTabPage::GetRanges()
 {
     return pAlignRanges;
 
@@ -1344,9 +1344,9 @@ IMPL_LINK( SvxParaAlignTabPage, TextDirectionHdl_Impl, ListBox*, EMPTYARG )
     switch ( eDir )
     {
         // check the default alignment for this text direction
-        case FRMDIR_HORI_LEFT_TOP :     aLeft.Check( TRUE ); break;
-        case FRMDIR_HORI_RIGHT_TOP :    aRight.Check( TRUE ); break;
-        case FRMDIR_ENVIRONMENT :       /* do nothing */ break;
+        case FRMDIR_HORI_LEFT_TOP :		aLeft.Check( TRUE ); break;
+        case FRMDIR_HORI_RIGHT_TOP :	aRight.Check( TRUE ); break;
+        case FRMDIR_ENVIRONMENT :		/* do nothing */ break;
         default:
         {
             DBG_ERRORFILE( "SvxParaAlignTabPage::TextDirectionHdl_Impl(): other directions not supported" );
@@ -1356,7 +1356,7 @@ IMPL_LINK( SvxParaAlignTabPage, TextDirectionHdl_Impl, ListBox*, EMPTYARG )
     return 0;
 }
 
-void    SvxParaAlignTabPage::UpdateExample_Impl( BOOL bAll )
+void	SvxParaAlignTabPage::UpdateExample_Impl( BOOL bAll )
 {
     if ( aLeft.IsChecked() )
         aExampleWin.SetAdjust( SVX_ADJUST_LEFT );
@@ -1394,7 +1394,7 @@ void SvxParaAlignTabPage::EnableJustifyExt()
 
 void SvxParaAlignTabPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pBoolItem,SfxBoolItem,SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,sal_False);
+    SFX_ITEMSET_ARG	(&aSet,pBoolItem,SfxBoolItem,SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,sal_False);
     if (pBoolItem)
         if(pBoolItem->GetValue())
             EnableJustifyExt();
@@ -1415,9 +1415,9 @@ BOOL SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
     const TriState eHyphenState = aHyphenBox.GetState();
     const SfxPoolItem* pOld = GetOldItem( rOutSet, SID_ATTR_PARA_HYPHENZONE );
 
-    if ( eHyphenState != aHyphenBox.GetSavedValue()     ||
-         aExtHyphenBeforeBox.IsValueModified()          ||
-         aExtHyphenAfterBox.IsValueModified()           ||
+    if ( eHyphenState != aHyphenBox.GetSavedValue() 	||
+         aExtHyphenBeforeBox.IsValueModified() 	   		||
+         aExtHyphenAfterBox.IsValueModified()			||
          aMaxHyphenEdit.IsValueModified() )
     {
         SvxHyphenZoneItem aHyphen(
@@ -1496,7 +1496,7 @@ BOOL SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
         SfxItemState eModelState = GetItemSet().GetItemState(SID_ATTR_PARA_MODEL, FALSE);
 
         if ( (eModelState == SFX_ITEM_SET && STATE_CHECK == aPageBreakBox.GetState()) ||
-             eState != aPageBreakBox.GetSavedValue()                ||
+             eState != aPageBreakBox.GetSavedValue()				||
              aBreakTypeLB.GetSelectEntryPos() != aBreakTypeLB.GetSavedValue()   ||
              aBreakPositionLB.GetSelectEntryPos() != aBreakPositionLB.GetSavedValue() )
         {
@@ -1534,7 +1534,7 @@ BOOL SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
             }
             pOld = GetOldItem( rOutSet, SID_ATTR_PARA_PAGEBREAK );
 
-            if ( eState != aPageBreakBox.GetSavedValue()                ||
+            if ( eState != aPageBreakBox.GetSavedValue()				||
                     !pOld || !( *(const SvxFmtBreakItem*)pOld == aBreak ) )
             {
                 bModified = TRUE;
@@ -1711,7 +1711,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
             aPagenumEdit.Enable(FALSE);
             aPagenumText.Enable(FALSE);
         }
-//!!!   ApplyCollClickHdl_Impl( &aApplyCollBtn );
+//!!!	ApplyCollClickHdl_Impl( &aApplyCollBtn );
 
         if ( !bIsPageModel )
         {
@@ -1923,13 +1923,13 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
 
     SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_EXT_PARAGRAPH ), rAttr ),
 
-    aHyphenBox          ( this, CUI_RES( BTN_HYPHEN ) ),
-    aBeforeText         ( this, CUI_RES( FT_HYPHENBEFORE ) ),
+    aHyphenBox    		( this, CUI_RES( BTN_HYPHEN ) ),
+    aBeforeText			( this, CUI_RES( FT_HYPHENBEFORE ) ),
     aExtHyphenBeforeBox ( this, CUI_RES( ED_HYPHENBEFORE ) ),
-    aAfterText          ( this, CUI_RES( FT_HYPHENAFTER ) ),
+    aAfterText			( this, CUI_RES( FT_HYPHENAFTER ) ),
     aExtHyphenAfterBox  ( this, CUI_RES( ED_HYPHENAFTER ) ),
     aMaxHyphenLabel     ( this, CUI_RES( FT_MAXHYPH ) ),
-    aMaxHyphenEdit      ( this, CUI_RES( ED_MAXHYPH ) ),
+    aMaxHyphenEdit		( this, CUI_RES( ED_MAXHYPH ) ),
     aExtFL              ( this, CUI_RES( FL_HYPHEN ) ),
     aBreaksFL           ( this, CUI_RES( FL_BREAKS ) ),
     aPageBreakBox       ( this, CUI_RES( BTN_PAGEBREAK ) ),
@@ -1943,11 +1943,11 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
 //    aAfterBox           ( this, CUI_RES( BTN_PAGEBREAKAFTER ) ),
     aApplyCollBtn       ( this, CUI_RES( BTN_PAGECOLL ) ),
     aApplyCollBox       ( this, CUI_RES( LB_PAGECOLL ) ),
-    aPagenumText        ( this, CUI_RES( FT_PAGENUM ) ),
-    aPagenumEdit        ( this, CUI_RES( ED_PAGENUM ) ),
+    aPagenumText		( this, CUI_RES( FT_PAGENUM ) ),
+    aPagenumEdit		( this, CUI_RES( ED_PAGENUM ) ),
     aExtendFL           ( this, CUI_RES( FL_OPTIONS ) ),
     aKeepTogetherBox    ( this, CUI_RES( BTN_KEEPTOGETHER ) ),
-    aKeepParaBox        ( this, CUI_RES( CB_KEEPTOGETHER ) ),
+    aKeepParaBox		( this, CUI_RES( CB_KEEPTOGETHER ) ),
     aOrphanBox          ( this, CUI_RES( BTN_ORPHANS ) ),
     aOrphanRowNo        ( this, CUI_RES( ED_ORPHANS ) ),
     aOrphanRowLabel     ( this, CUI_RES( FT_ORPHANS ) ),
@@ -1963,12 +1963,12 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
 
-    aHyphenBox.SetClickHdl(         LINK( this, SvxExtParagraphTabPage, HyphenClickHdl_Impl ) );
-    aPageBreakBox.SetClickHdl(      LINK( this, SvxExtParagraphTabPage, PageBreakHdl_Impl ) );
-    aKeepTogetherBox.SetClickHdl(   LINK( this, SvxExtParagraphTabPage, KeepTogetherHdl_Impl ) );
-    aWidowBox.SetClickHdl(          LINK( this, SvxExtParagraphTabPage, WidowHdl_Impl ) );
-    aOrphanBox.SetClickHdl(         LINK( this, SvxExtParagraphTabPage, OrphanHdl_Impl ) );
-    aApplyCollBtn.SetClickHdl(      LINK( this, SvxExtParagraphTabPage, ApplyCollClickHdl_Impl ) );
+    aHyphenBox.SetClickHdl( 		LINK( this, SvxExtParagraphTabPage, HyphenClickHdl_Impl ) );
+    aPageBreakBox.SetClickHdl( 		LINK( this, SvxExtParagraphTabPage, PageBreakHdl_Impl ) );
+    aKeepTogetherBox.SetClickHdl( 	LINK( this, SvxExtParagraphTabPage, KeepTogetherHdl_Impl ) );
+    aWidowBox.SetClickHdl( 			LINK( this, SvxExtParagraphTabPage, WidowHdl_Impl ) );
+    aOrphanBox.SetClickHdl( 		LINK( this, SvxExtParagraphTabPage, OrphanHdl_Impl ) );
+    aApplyCollBtn.SetClickHdl( 		LINK( this, SvxExtParagraphTabPage, ApplyCollClickHdl_Impl ) );
     aBreakTypeLB.SetSelectHdl(      LINK( this, SvxExtParagraphTabPage, PageBreakTypeHdl_Impl ) );
     aBreakPositionLB.SetSelectHdl(  LINK( this, SvxExtParagraphTabPage, PageBreakPosHdl_Impl ) );
 
@@ -1995,13 +1995,13 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
     if ( nHtmlMode & HTMLMODE_ON )
     {
         bHtmlMode = TRUE;
-        aHyphenBox           .Enable(FALSE);
-        aBeforeText          .Enable(FALSE);
+        aHyphenBox    		 .Enable(FALSE);
+        aBeforeText			 .Enable(FALSE);
         aExtHyphenBeforeBox  .Enable(FALSE);
-        aAfterText           .Enable(FALSE);
+        aAfterText			 .Enable(FALSE);
         aExtHyphenAfterBox   .Enable(FALSE);
         aMaxHyphenLabel      .Enable(FALSE);
-        aMaxHyphenEdit       .Enable(FALSE);
+        aMaxHyphenEdit		 .Enable(FALSE);
         aExtFL               .Enable(FALSE);
         aPagenumText         .Enable(FALSE);
         aPagenumEdit         .Enable(FALSE);
@@ -2221,7 +2221,7 @@ void SvxExtParagraphTabPage::PageCreated(SfxAllItemSet aSet)
 {
 
 
-    SFX_ITEMSET_ARG (&aSet,pDisablePageBreakItem,SfxBoolItem,SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK,sal_False);
+    SFX_ITEMSET_ARG	(&aSet,pDisablePageBreakItem,SfxBoolItem,SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK,sal_False);
 
     if (pDisablePageBreakItem)
         if ( pDisablePageBreakItem->GetValue())
@@ -2235,7 +2235,7 @@ SvxAsianTabPage::SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet ) :
     aOptionsFL(         this, CUI_RES(FL_AS_OPTIONS       )),
     aForbiddenRulesCB(  this, CUI_RES(CB_AS_FORBIDDEN     )),
     aHangingPunctCB(    this, CUI_RES(CB_AS_HANG_PUNC     )),
-    aScriptSpaceCB(     this, CUI_RES(CB_AS_SCRIPT_SPACE    ))//,
+    aScriptSpaceCB(     this, CUI_RES(CB_AS_SCRIPT_SPACE	))//,
 
 {
     FreeResource();
@@ -2251,12 +2251,12 @@ SvxAsianTabPage::~SvxAsianTabPage()
 {
 }
 
-SfxTabPage* SvxAsianTabPage::Create(    Window* pParent, const SfxItemSet& rSet )
+SfxTabPage*	SvxAsianTabPage::Create(	Window* pParent, const SfxItemSet& rSet )
 {
     return new SvxAsianTabPage(pParent, rSet);
 }
 
-USHORT*     SvxAsianTabPage::GetRanges()
+USHORT*		SvxAsianTabPage::GetRanges()
 {
     static USHORT pRanges[] =
     {
@@ -2266,7 +2266,7 @@ USHORT*     SvxAsianTabPage::GetRanges()
     return pRanges;
 }
 
-BOOL        SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
+BOOL		SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
 {
     BOOL bRet = FALSE;
     SfxItemPool* pPool = rSet.GetPool();
@@ -2320,17 +2320,17 @@ void lcl_SetBox(const SfxItemSet& rSet, USHORT nSlotId, TriStateBox& rBox)
 void SvxAsianTabPage::Reset( const SfxItemSet& rSet )
 {
     lcl_SetBox(rSet, SID_ATTR_PARA_FORBIDDEN_RULES, aForbiddenRulesCB );
-//  lcl_SetBox(rSet, , aAllowWordBreakCB );
+//	lcl_SetBox(rSet, , aAllowWordBreakCB );
     lcl_SetBox(rSet, SID_ATTR_PARA_HANGPUNCTUATION, aHangingPunctCB );
 
 
     //character distance not yet available
-//  lcl_SetBox(rSet, , aPuntuationCB    );
+//	lcl_SetBox(rSet, , aPuntuationCB    );
     lcl_SetBox(rSet, SID_ATTR_PARA_SCRIPTSPACE, aScriptSpaceCB );
-//  lcl_SetBox(rSet, , aAdjustNumbersCB );
-//  aAllowWordBreakCB   .Enable(FALSE);
-//  aPuntuationCB       .Enable(FALSE);
-//  aAdjustNumbersCB    .Enable(FALSE);
+//	lcl_SetBox(rSet, , aAdjustNumbersCB );
+//	aAllowWordBreakCB	.Enable(FALSE);
+//	aPuntuationCB		.Enable(FALSE);
+//	aAdjustNumbersCB	.Enable(FALSE);
 }
 /* -----------------------------19.12.00 12:59--------------------------------
 

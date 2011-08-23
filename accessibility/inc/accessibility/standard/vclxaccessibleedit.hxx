@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,11 +36,11 @@
 #include <cppuhelper/implbase2.hxx>
 
 
-//  ----------------------------------------------------
-//  class VCLXAccessibleEdit
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXAccessibleEdit
+//	----------------------------------------------------
 
-typedef ::cppu::ImplHelper2<
+typedef ::cppu::ImplHelper2< 
     ::com::sun::star::accessibility::XAccessibleAction,
     ::com::sun::star::accessibility::XAccessibleEditableText > VCLXAccessibleEdit_BASE;
 
@@ -50,18 +50,18 @@ class VCLXAccessibleEdit : public VCLXAccessibleTextComponent,
     friend class VCLXAccessibleBox;
 
 private:
-    sal_Int32   m_nSelectionStart;
-    sal_Int32   m_nCaretPosition;
+    sal_Int32	m_nSelectionStart;
+    sal_Int32	m_nCaretPosition;
 
 protected:
     virtual ~VCLXAccessibleEdit();
 
-    virtual void                ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-    virtual void                FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+    virtual void				ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual void				FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
     // OCommonAccessibleText
-    virtual ::rtl::OUString     implGetText();
-    virtual void                implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
+    virtual ::rtl::OUString		implGetText();
+    virtual void				implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
 
 public:
     VCLXAccessibleEdit( VCLXWindow* pVCLXindow );

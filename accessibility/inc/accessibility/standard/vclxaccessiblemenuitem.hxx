@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,32 +38,32 @@
 #include <comphelper/accessibletexthelper.hxx>
 
 
-//  ----------------------------------------------------
-//  class VCLXAccessibleMenuItem
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXAccessibleMenuItem
+//	----------------------------------------------------
 
 typedef ::cppu::ImplHelper3<
     ::com::sun::star::accessibility::XAccessibleText,
     ::com::sun::star::accessibility::XAccessibleAction,
     ::com::sun::star::accessibility::XAccessibleValue > VCLXAccessibleMenuItem_BASE;
 
-class VCLXAccessibleMenuItem :  public OAccessibleMenuItemComponent,
+class VCLXAccessibleMenuItem :	public OAccessibleMenuItemComponent,
                                 public ::comphelper::OCommonAccessibleText,
                                 public VCLXAccessibleMenuItem_BASE
 {
 protected:
     virtual sal_Bool        IsFocused();
     virtual sal_Bool        IsSelected();
-    virtual sal_Bool        IsChecked();
+    virtual sal_Bool		IsChecked();
 
-    virtual sal_Bool        IsHighlighted();
+    virtual sal_Bool		IsHighlighted();
 
     virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
     // OCommonAccessibleText
-    virtual ::rtl::OUString                     implGetText();
-    virtual ::com::sun::star::lang::Locale      implGetLocale();
-    virtual void                                implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
+    virtual ::rtl::OUString						implGetText();
+    virtual ::com::sun::star::lang::Locale		implGetLocale();
+    virtual void								implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
 
 public:
     VCLXAccessibleMenuItem( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu = 0 );

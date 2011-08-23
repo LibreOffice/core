@@ -27,13 +27,13 @@
  ************************************************************************/
 
 //____________________________________________________________________________________________________________
-//  my own include
+//	my own include
 //____________________________________________________________________________________________________________
 
 #include "basecontrol.hxx"
 
 //____________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //____________________________________________________________________________________________________________
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XDisplayBitmap.hpp>
@@ -43,52 +43,52 @@
 #include <cppuhelper/typeprovider.hxx>
 
 //____________________________________________________________________________________________________________
-//  includes of my own project
+//	includes of my own project
 //____________________________________________________________________________________________________________
 
 //____________________________________________________________________________________________________________
-//  namespaces
+//	namespaces
 //____________________________________________________________________________________________________________
 
-using namespace ::cppu                  ;
-using namespace ::osl                   ;
-using namespace ::rtl                   ;
-using namespace ::com::sun::star::uno   ;
-using namespace ::com::sun::star::lang  ;
-using namespace ::com::sun::star::awt   ;
+using namespace	::cppu					;
+using namespace	::osl					;
+using namespace	::rtl					;
+using namespace	::com::sun::star::uno	;
+using namespace	::com::sun::star::lang	;
+using namespace	::com::sun::star::awt	;
 
 namespace unocontrols{
 
 //____________________________________________________________________________________________________________
-//  defines
+//	defines
 //____________________________________________________________________________________________________________
 
-#define DEFAULT_PMULTIPLEXER                NULL
-#define DEFAULT_X                           0
-#define DEFAULT_Y                           0
-#define DEFAULT_WIDTH                       100
-#define DEFAULT_HEIGHT                      100
-#define DEFAULT_VISIBLE                     sal_False
-#define DEFAULT_INDESIGNMODE                sal_False
-#define DEFAULT_ENABLE                      sal_True
-#define SERVICE_VCLTOOLKIT                  "com.sun.star.awt.Toolkit"
+#define	DEFAULT_PMULTIPLEXER				NULL
+#define	DEFAULT_X							0
+#define	DEFAULT_Y							0
+#define	DEFAULT_WIDTH						100
+#define	DEFAULT_HEIGHT						100
+#define	DEFAULT_VISIBLE						sal_False
+#define	DEFAULT_INDESIGNMODE				sal_False
+#define	DEFAULT_ENABLE						sal_True
+#define	SERVICE_VCLTOOLKIT					"com.sun.star.awt.Toolkit"
 
 //____________________________________________________________________________________________________________
-//  construct/destruct
+//	construct/destruct
 //____________________________________________________________________________________________________________
 
 BaseControl::BaseControl( const Reference< XMultiServiceFactory >& xFactory )
-    : IMPL_MutexContainer       (                       )
-    , OComponentHelper          ( m_aMutex              )
-    , m_xFactory    ( xFactory              )
-    , m_pMultiplexer            ( DEFAULT_PMULTIPLEXER  )
-    , m_nX                      ( DEFAULT_X             )
-    , m_nY                      ( DEFAULT_Y             )
-    , m_nWidth                  ( DEFAULT_WIDTH         )
-    , m_nHeight                 ( DEFAULT_HEIGHT        )
-    , m_bVisible                ( DEFAULT_VISIBLE       )
-    , m_bInDesignMode           ( DEFAULT_INDESIGNMODE  )
-    , m_bEnable                 ( DEFAULT_ENABLE        )
+    : IMPL_MutexContainer		(						)
+    , OComponentHelper			( m_aMutex				)
+    , m_xFactory	( xFactory				)
+    , m_pMultiplexer			( DEFAULT_PMULTIPLEXER	)
+    , m_nX						( DEFAULT_X				)
+    , m_nY						( DEFAULT_Y				)
+    , m_nWidth					( DEFAULT_WIDTH			)
+    , m_nHeight					( DEFAULT_HEIGHT		)
+    , m_bVisible				( DEFAULT_VISIBLE		)
+    , m_bInDesignMode			( DEFAULT_INDESIGNMODE	)
+    , m_bEnable					( DEFAULT_ENABLE		)
 {
 }
 
@@ -97,7 +97,7 @@ BaseControl::~BaseControl()
 }
 
 //____________________________________________________________________________________________________________
-//  XInterface
+//	XInterface
 //____________________________________________________________________________________________________________
 
 Any SAL_CALL BaseControl::queryInterface( const Type& rType ) throw( RuntimeException )
@@ -119,33 +119,33 @@ Any SAL_CALL BaseControl::queryInterface( const Type& rType ) throw( RuntimeExce
 }
 
 //____________________________________________________________________________________________________________
-//  XInterface
+//	XInterface
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::acquire() throw()
 {
     // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //	Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     // Forward to baseclass
     OComponentHelper::acquire();
 }
 
 //____________________________________________________________________________________________________________
-//  XInterface
+//	XInterface
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::release() throw()
 {
     // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //	Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     // Forward to baseclass
     OComponentHelper::release();
 }
 
 //____________________________________________________________________________________________________________
-//  XTypeProvider
+//	XTypeProvider
 //____________________________________________________________________________________________________________
 
 Sequence< Type > SAL_CALL BaseControl::getTypes() throw( RuntimeException )
@@ -164,12 +164,12 @@ Sequence< Type > SAL_CALL BaseControl::getTypes() throw( RuntimeException )
         if ( pTypeCollection == NULL )
         {
             // Create a static typecollection ...
-            static OTypeCollection aTypeCollection( ::getCppuType(( const Reference< XPaintListener >*)NULL ) ,
+            static OTypeCollection aTypeCollection( ::getCppuType(( const Reference< XPaintListener	>*)NULL ) ,
                                                     ::getCppuType(( const Reference< XWindowListener>*)NULL ) ,
-                                                    ::getCppuType(( const Reference< XView          >*)NULL ) ,
-                                                    ::getCppuType(( const Reference< XWindow        >*)NULL ) ,
-                                                    ::getCppuType(( const Reference< XServiceInfo   >*)NULL ) ,
-                                                    ::getCppuType(( const Reference< XControl       >*)NULL ) ,
+                                                    ::getCppuType(( const Reference< XView			>*)NULL ) ,
+                                                    ::getCppuType(( const Reference< XWindow		>*)NULL ) ,
+                                                    ::getCppuType(( const Reference< XServiceInfo	>*)NULL ) ,
+                                                    ::getCppuType(( const Reference< XControl		>*)NULL ) ,
                                                     OComponentHelper::getTypes()
                                                   );
 
@@ -182,7 +182,7 @@ Sequence< Type > SAL_CALL BaseControl::getTypes() throw( RuntimeException )
 }
 
 //____________________________________________________________________________________________________________
-//  XTypeProvider
+//	XTypeProvider
 //____________________________________________________________________________________________________________
 
 Sequence< sal_Int8 > SAL_CALL BaseControl::getImplementationId() throw( RuntimeException )
@@ -214,7 +214,7 @@ Sequence< sal_Int8 > SAL_CALL BaseControl::getImplementationId() throw( RuntimeE
 }
 
 //____________________________________________________________________________________________________________
-//  XAggregation
+//	XAggregation
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::setDelegator( const Reference< XInterface >& xDel ) throw( RuntimeException )
@@ -225,20 +225,20 @@ void SAL_CALL BaseControl::setDelegator( const Reference< XInterface >& xDel ) t
 }
 
 //____________________________________________________________________________________________________________
-//  XAggregation
+//	XAggregation
 //____________________________________________________________________________________________________________
 
 Any SAL_CALL BaseControl::queryAggregation( const Type& aType ) throw( RuntimeException )
 {
     // Ask for my own supported interfaces ...
     // Attention: XTypeProvider and XInterface are supported by OComponentHelper!
-    Any aReturn ( ::cppu::queryInterface(   aType                                   ,
-                                               static_cast< XPaintListener*> ( this )   ,
-                                               static_cast< XWindowListener*> ( this )  ,
-                                               static_cast< XView*          > ( this )  ,
-                                               static_cast< XWindow*        > ( this )  ,
-                                               static_cast< XServiceInfo*   > ( this )  ,
-                                               static_cast< XControl*       > ( this )
+    Any aReturn	( ::cppu::queryInterface(	aType									,
+                                               static_cast< XPaintListener*> ( this )	,
+                                               static_cast< XWindowListener*> ( this )	,
+                                               static_cast< XView*			> ( this )	,
+                                               static_cast< XWindow*		> ( this )	,
+                                               static_cast< XServiceInfo*	> ( this )	,
+                                               static_cast< XControl*		> ( this )
                                         )
                 );
 
@@ -256,7 +256,7 @@ Any SAL_CALL BaseControl::queryAggregation( const Type& aType ) throw( RuntimeEx
 }
 
 //____________________________________________________________________________________________________________
-//  XServiceInfo
+//	XServiceInfo
 //____________________________________________________________________________________________________________
 
 OUString SAL_CALL BaseControl::getImplementationName() throw( RuntimeException )
@@ -265,13 +265,13 @@ OUString SAL_CALL BaseControl::getImplementationName() throw( RuntimeException )
 }
 
 //____________________________________________________________________________________________________________
-//  XServiceInfo
+//	XServiceInfo
 //____________________________________________________________________________________________________________
 
 sal_Bool SAL_CALL BaseControl::supportsService( const OUString& sServiceName ) throw( RuntimeException )
 {
-    Sequence< OUString >    seqServiceNames =   getSupportedServiceNames();
-    const OUString*         pArray          =   seqServiceNames.getConstArray();
+    Sequence< OUString >	seqServiceNames	=	getSupportedServiceNames();
+    const OUString*			pArray			=	seqServiceNames.getConstArray();
     for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
     {
         if ( pArray[nCounter] == sServiceName )
@@ -283,7 +283,7 @@ sal_Bool SAL_CALL BaseControl::supportsService( const OUString& sServiceName ) t
 }
 
 //____________________________________________________________________________________________________________
-//  XServiceInfo
+//	XServiceInfo
 //____________________________________________________________________________________________________________
 
 Sequence< OUString > SAL_CALL BaseControl::getSupportedServiceNames() throw( RuntimeException )
@@ -292,7 +292,7 @@ Sequence< OUString > SAL_CALL BaseControl::getSupportedServiceNames() throw( Run
 }
 
 //____________________________________________________________________________________________________________
-//  XComponent
+//	XComponent
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::dispose() throw( RuntimeException )
@@ -321,7 +321,7 @@ void SAL_CALL BaseControl::dispose() throw( RuntimeException )
 }
 
 //____________________________________________________________________________________________________________
-//  XComponent
+//	XComponent
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::addEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException )
@@ -332,7 +332,7 @@ void SAL_CALL BaseControl::addEventListener( const Reference< XEventListener >& 
 }
 
 //____________________________________________________________________________________________________________
-//  XComponent
+//	XComponent
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::removeEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException )
@@ -343,11 +343,11 @@ void SAL_CALL BaseControl::removeEventListener( const Reference< XEventListener 
 }
 
 //____________________________________________________________________________________________________________
-//  XControl
+//	XControl
 //____________________________________________________________________________________________________________
 
-void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToolkit    ,
-                                        const   Reference< XWindowPeer >&   xParentPeer ) throw( RuntimeException )
+void SAL_CALL BaseControl::createPeer(	const	Reference< XToolkit >&		xToolkit	,
+                                        const	Reference< XWindowPeer >&	xParentPeer	) throw( RuntimeException )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -370,8 +370,8 @@ void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToo
             // but first create wellknown toolkit, if it not exist
             xLocalToolkit = Reference< XToolkit > ( m_xFactory->createInstance( OUString::createFromAscii( SERVICE_VCLTOOLKIT ) ), UNO_QUERY );
         }
-        m_xPeer         = xLocalToolkit->createWindow( *pDescriptor );
-        m_xPeerWindow   = Reference< XWindow >( m_xPeer, UNO_QUERY );
+        m_xPeer			= xLocalToolkit->createWindow( *pDescriptor );
+        m_xPeerWindow	= Reference< XWindow >( m_xPeer, UNO_QUERY );
 
         // don't forget to release the memory!
         delete pDescriptor ;
@@ -399,15 +399,15 @@ void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToo
             }
 
             // PosSize_POSSIZE defined in <stardiv/uno/awt/window.hxx>
-            m_xPeerWindow->setPosSize(  m_nX, m_nY, m_nWidth, m_nHeight, PosSize::POSSIZE   );
-            m_xPeerWindow->setEnable(   m_bEnable                                           );
-            m_xPeerWindow->setVisible(  m_bVisible && !m_bInDesignMode                      );
+            m_xPeerWindow->setPosSize(	m_nX, m_nY, m_nWidth, m_nHeight, PosSize::POSSIZE	);
+            m_xPeerWindow->setEnable(	m_bEnable 											);
+            m_xPeerWindow->setVisible(	m_bVisible && !m_bInDesignMode						);
         }
     }
 }
 
 //____________________________________________________________________________________________________________
-//  XControl
+//	XControl
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::setContext( const Reference< XInterface >& xContext ) throw( RuntimeException )
@@ -418,7 +418,7 @@ void SAL_CALL BaseControl::setContext( const Reference< XInterface >& xContext )
 }
 
 //____________________________________________________________________________________________________________
-//  XControl
+//	XControl
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::setDesignMode( sal_Bool bOn ) throw( RuntimeException )
@@ -429,7 +429,7 @@ void SAL_CALL BaseControl::setDesignMode( sal_Bool bOn ) throw( RuntimeException
 }
 
 //____________________________________________________________________________________________________________
-//  XControl
+//	XControl
 //____________________________________________________________________________________________________________
 
 Reference< XInterface > SAL_CALL BaseControl::getContext() throw( RuntimeException )
@@ -440,7 +440,7 @@ Reference< XInterface > SAL_CALL BaseControl::getContext() throw( RuntimeExcepti
 }
 
 //____________________________________________________________________________________________________________
-//  XControl
+//	XControl
 //____________________________________________________________________________________________________________
 
 Reference< XWindowPeer > SAL_CALL BaseControl::getPeer() throw( RuntimeException )
@@ -451,7 +451,7 @@ Reference< XWindowPeer > SAL_CALL BaseControl::getPeer() throw( RuntimeException
 }
 
 //____________________________________________________________________________________________________________
-//  XControl
+//	XControl
 //____________________________________________________________________________________________________________
 
 Reference< XView > SAL_CALL BaseControl::getView() throw( RuntimeException )
@@ -462,7 +462,7 @@ Reference< XView > SAL_CALL BaseControl::getView() throw( RuntimeException )
 }
 
 //____________________________________________________________________________________________________________
-//  XControl
+//	XControl
 //____________________________________________________________________________________________________________
 
 sal_Bool SAL_CALL BaseControl::isDesignMode() throw( RuntimeException )
@@ -473,7 +473,7 @@ sal_Bool SAL_CALL BaseControl::isDesignMode() throw( RuntimeException )
 }
 
 //____________________________________________________________________________________________________________
-//  XControl
+//	XControl
 //____________________________________________________________________________________________________________
 
 sal_Bool SAL_CALL BaseControl::isTransparent() throw( RuntimeException )
@@ -482,14 +482,14 @@ sal_Bool SAL_CALL BaseControl::isTransparent() throw( RuntimeException )
 }
 
 //____________________________________________________________________________________________________________
-//  XWindow
+//	XWindow
 //____________________________________________________________________________________________________________
 
-void SAL_CALL BaseControl::setPosSize(  sal_Int32   nX      ,
-                                        sal_Int32   nY      ,
-                                        sal_Int32   nWidth  ,
-                                        sal_Int32   nHeight ,
-                                        sal_Int16   nFlags  ) throw( RuntimeException )
+void SAL_CALL BaseControl::setPosSize(	sal_Int32	nX		,
+                                        sal_Int32	nY		,
+                                        sal_Int32	nWidth	,
+                                        sal_Int32	nHeight	,
+                                        sal_Int16	nFlags	) throw( RuntimeException )
 {
     // - change size and position of window and save the values
     // - "nFlags" declared in <stardiv/uno/awt/window.hxx> ("#define PosSize_X .....")
@@ -526,7 +526,7 @@ void SAL_CALL BaseControl::setPosSize(  sal_Int32   nX      ,
 }
 
 //____________________________________________________________________________________________________________
-//  XWindow
+//	XWindow
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::setVisible( sal_Bool bVisible ) throw( RuntimeException )
@@ -545,7 +545,7 @@ void SAL_CALL BaseControl::setVisible( sal_Bool bVisible ) throw( RuntimeExcepti
 }
 
 //____________________________________________________________________________________________________________
-//  XWindow
+//	XWindow
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::setEnable( sal_Bool bEnable ) throw( RuntimeException )
@@ -564,7 +564,7 @@ void SAL_CALL BaseControl::setEnable( sal_Bool bEnable ) throw( RuntimeException
 }
 
 //____________________________________________________________________________________________________________
-//  XWindow
+//	XWindow
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::setFocus() throw( RuntimeException )
@@ -579,7 +579,7 @@ void SAL_CALL BaseControl::setFocus() throw( RuntimeException )
 }
 
 //____________________________________________________________________________________________________________
-//  XWindow
+//	XWindow
 //____________________________________________________________________________________________________________
 
 Rectangle SAL_CALL BaseControl::getPosSize() throw( RuntimeException )
@@ -590,7 +590,7 @@ Rectangle SAL_CALL BaseControl::getPosSize() throw( RuntimeException )
 }
 
 //____________________________________________________________________________________________________________
-//  XWindow
+//	XWindow
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::addWindowListener( const Reference< XWindowListener >& xListener ) throw( RuntimeException )
@@ -599,7 +599,7 @@ void SAL_CALL BaseControl::addWindowListener( const Reference< XWindowListener >
 }
 
 //____________________________________________________________________________________________________________
-//  XWindow
+//	XWindow
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::addFocusListener( const Reference< XFocusListener >& xListener ) throw( RuntimeException )
@@ -608,7 +608,7 @@ void SAL_CALL BaseControl::addFocusListener( const Reference< XFocusListener >& 
 }
 
 //____________________________________________________________________________________________________________
-//  XWindow
+//	XWindow
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::addKeyListener( const Reference< XKeyListener >& xListener ) throw( RuntimeException )
@@ -617,7 +617,7 @@ void SAL_CALL BaseControl::addKeyListener( const Reference< XKeyListener >& xLis
 }
 
 //____________________________________________________________________________________________________________
-//  XWindow
+//	XWindow
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::addMouseListener( const Reference< XMouseListener >& xListener ) throw( RuntimeException )
@@ -626,7 +626,7 @@ void SAL_CALL BaseControl::addMouseListener( const Reference< XMouseListener >& 
 }
 
 //____________________________________________________________________________________________________________
-//  XWindow
+//	XWindow
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::addMouseMotionListener( const Reference< XMouseMotionListener >& xListener ) throw( RuntimeException )
@@ -635,7 +635,7 @@ void SAL_CALL BaseControl::addMouseMotionListener( const Reference< XMouseMotion
 }
 
 //____________________________________________________________________________________________________________
-//  XWindow
+//	XWindow
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::addPaintListener( const Reference< XPaintListener >& xListener ) throw( RuntimeException )
@@ -644,7 +644,7 @@ void SAL_CALL BaseControl::addPaintListener( const Reference< XPaintListener >& 
 }
 
 //____________________________________________________________________________________________________________
-//  XWindow
+//	XWindow
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::removeWindowListener( const Reference< XWindowListener >& xListener ) throw( RuntimeException )
@@ -653,7 +653,7 @@ void SAL_CALL BaseControl::removeWindowListener( const Reference< XWindowListene
 }
 
 //____________________________________________________________________________________________________________
-//  XWindow
+//	XWindow
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::removeFocusListener( const Reference< XFocusListener >& xListener ) throw( RuntimeException )
@@ -662,7 +662,7 @@ void SAL_CALL BaseControl::removeFocusListener( const Reference< XFocusListener 
 }
 
 //____________________________________________________________________________________________________________
-//  XWindow
+//	XWindow
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::removeKeyListener( const Reference< XKeyListener >& xListener ) throw( RuntimeException )
@@ -671,7 +671,7 @@ void SAL_CALL BaseControl::removeKeyListener( const Reference< XKeyListener >& x
 }
 
 //____________________________________________________________________________________________________________
-//  XWindow
+//	XWindow
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::removeMouseListener( const Reference< XMouseListener >& xListener ) throw( RuntimeException )
@@ -680,7 +680,7 @@ void SAL_CALL BaseControl::removeMouseListener( const Reference< XMouseListener 
 }
 
 //____________________________________________________________________________________________________________
-//  XWindow
+//	XWindow
 //____________________________________________________________________________________________________________
 
 void  SAL_CALL BaseControl::removeMouseMotionListener( const Reference< XMouseMotionListener >& xListener ) throw( RuntimeException )
@@ -689,7 +689,7 @@ void  SAL_CALL BaseControl::removeMouseMotionListener( const Reference< XMouseMo
 }
 
 //____________________________________________________________________________________________________________
-//  XWindow
+//	XWindow
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::removePaintListener( const Reference< XPaintListener >& xListener ) throw( RuntimeException )
@@ -698,11 +698,11 @@ void SAL_CALL BaseControl::removePaintListener( const Reference< XPaintListener 
 }
 
 //____________________________________________________________________________________________________________
-//  XView
+//	XView
 //____________________________________________________________________________________________________________
 
-void SAL_CALL BaseControl::draw(    sal_Int32   nX  ,
-                                    sal_Int32   nY  ) throw( RuntimeException )
+void SAL_CALL BaseControl::draw(	sal_Int32	nX	,
+                                    sal_Int32	nY	) throw( RuntimeException )
 {
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
@@ -714,7 +714,7 @@ void SAL_CALL BaseControl::draw(    sal_Int32   nX  ,
 }
 
 //____________________________________________________________________________________________________________
-//  XView
+//	XView
 //____________________________________________________________________________________________________________
 
 sal_Bool SAL_CALL BaseControl::setGraphics( const Reference< XGraphics >& xDevice ) throw( RuntimeException )
@@ -728,25 +728,25 @@ sal_Bool SAL_CALL BaseControl::setGraphics( const Reference< XGraphics >& xDevic
         // Ready for multithreading
         MutexGuard aGuard( m_aMutex );
 
-        m_xGraphicsView = xDevice   ;
-        bReturn         = sal_True  ;
+        m_xGraphicsView	= xDevice	;
+        bReturn			= sal_True	;
     }
 
     return bReturn ;
 }
 
 //____________________________________________________________________________________________________________
-//  XView
+//	XView
 //____________________________________________________________________________________________________________
 
-void SAL_CALL BaseControl::setZoom( float   /*fZoomX*/  ,
-                                    float   /*fZoomY*/  ) throw( RuntimeException )
+void SAL_CALL BaseControl::setZoom(	float	/*fZoomX*/	,
+                                    float	/*fZoomY*/	) throw( RuntimeException )
 {
     // Not implemented yet
 }
 
 //____________________________________________________________________________________________________________
-//  XView
+//	XView
 //____________________________________________________________________________________________________________
 
 Reference< XGraphics > SAL_CALL BaseControl::getGraphics() throw( RuntimeException )
@@ -757,7 +757,7 @@ Reference< XGraphics > SAL_CALL BaseControl::getGraphics() throw( RuntimeExcepti
 }
 
 //____________________________________________________________________________________________________________
-//  XView
+//	XView
 //____________________________________________________________________________________________________________
 
 Size SAL_CALL BaseControl::getSize() throw( RuntimeException )
@@ -768,7 +768,7 @@ Size SAL_CALL BaseControl::getSize() throw( RuntimeException )
 }
 
 //____________________________________________________________________________________________________________
-//  XEventListener
+//	XEventListener
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::disposing( const EventObject& /*aSource*/ ) throw( RuntimeException )
@@ -792,7 +792,7 @@ void SAL_CALL BaseControl::disposing( const EventObject& /*aSource*/ ) throw( Ru
 }
 
 //____________________________________________________________________________________________________________
-//  XPaintListener
+//	XPaintListener
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::windowPaint( const PaintEvent& /*aEvent*/ ) throw( RuntimeException )
@@ -807,7 +807,7 @@ void SAL_CALL BaseControl::windowPaint( const PaintEvent& /*aEvent*/ ) throw( Ru
 }
 
 //____________________________________________________________________________________________________________
-//  XWindowListener
+//	XWindowListener
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::windowResized( const WindowEvent& aEvent ) throw( RuntimeException )
@@ -815,8 +815,8 @@ void SAL_CALL BaseControl::windowResized( const WindowEvent& aEvent ) throw( Run
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
 
-    m_nWidth    =   aEvent.Width    ;
-    m_nHeight   =   aEvent.Height   ;
+    m_nWidth	=	aEvent.Width	;
+    m_nHeight	=	aEvent.Height	;
     WindowEvent aMappedEvent = aEvent;
     aMappedEvent.X = 0;
     aMappedEvent.Y = 0;
@@ -824,7 +824,7 @@ void SAL_CALL BaseControl::windowResized( const WindowEvent& aEvent ) throw( Run
 }
 
 //____________________________________________________________________________________________________________
-//  XWindowListener
+//	XWindowListener
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::windowMoved( const WindowEvent& aEvent ) throw( RuntimeException )
@@ -832,8 +832,8 @@ void SAL_CALL BaseControl::windowMoved( const WindowEvent& aEvent ) throw( Runti
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
 
-    m_nWidth    =   aEvent.Width    ;
-    m_nHeight   =   aEvent.Height   ;
+    m_nWidth	=	aEvent.Width	;
+    m_nHeight	=	aEvent.Height	;
     WindowEvent aMappedEvent = aEvent;
     aMappedEvent.X = 0;
     aMappedEvent.Y = 0;
@@ -841,7 +841,7 @@ void SAL_CALL BaseControl::windowMoved( const WindowEvent& aEvent ) throw( Runti
 }
 
 //____________________________________________________________________________________________________________
-//  XWindowListener
+//	XWindowListener
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::windowShown( const EventObject& /*aEvent*/ ) throw( RuntimeException )
@@ -849,7 +849,7 @@ void SAL_CALL BaseControl::windowShown( const EventObject& /*aEvent*/ ) throw( R
 }
 
 //____________________________________________________________________________________________________________
-//  XWindowListener
+//	XWindowListener
 //____________________________________________________________________________________________________________
 
 void SAL_CALL BaseControl::windowHidden( const EventObject& /*aEvent*/ ) throw( RuntimeException )
@@ -857,8 +857,8 @@ void SAL_CALL BaseControl::windowHidden( const EventObject& /*aEvent*/ ) throw( 
 }
 
 //____________________________________________________________________________________________________________
-//  impl but public method to register service in DLL
-//  (In this BASE-implementation not implemented! Overwrite it in derived classes.)
+//	impl but public method to register service in DLL
+//	(In this BASE-implementation not implemented! Overwrite it in derived classes.)
 //____________________________________________________________________________________________________________
 
 const Sequence< OUString > BaseControl::impl_getStaticSupportedServiceNames()
@@ -867,8 +867,8 @@ const Sequence< OUString > BaseControl::impl_getStaticSupportedServiceNames()
 }
 
 //____________________________________________________________________________________________________________
-//  impl but public method to register service in DLL
-//  (In this BASE-implementation not implemented! Overwrite it in derived classes.)
+//	impl but public method to register service in DLL
+//	(In this BASE-implementation not implemented! Overwrite it in derived classes.)
 //____________________________________________________________________________________________________________
 
 const OUString BaseControl::impl_getStaticImplementationName()
@@ -877,7 +877,7 @@ const OUString BaseControl::impl_getStaticImplementationName()
 }
 
 //____________________________________________________________________________________________________________
-//  protected method
+//	protected method
 //____________________________________________________________________________________________________________
 
 const Reference< XMultiServiceFactory > BaseControl::impl_getMultiServiceFactory()
@@ -886,7 +886,7 @@ const Reference< XMultiServiceFactory > BaseControl::impl_getMultiServiceFactory
 }
 
 //____________________________________________________________________________________________________________
-//  protected method
+//	protected method
 //____________________________________________________________________________________________________________
 
 const Reference< XWindow > BaseControl::impl_getPeerWindow()
@@ -895,7 +895,7 @@ const Reference< XWindow > BaseControl::impl_getPeerWindow()
 }
 
 //____________________________________________________________________________________________________________
-//  protected method
+//	protected method
 //____________________________________________________________________________________________________________
 
 const Reference< XGraphics > BaseControl::impl_getGraphicsPeer()
@@ -904,7 +904,7 @@ const Reference< XGraphics > BaseControl::impl_getGraphicsPeer()
 }
 
 //____________________________________________________________________________________________________________
-//  protected method
+//	protected method
 //____________________________________________________________________________________________________________
 
 const sal_Int32& BaseControl::impl_getWidth()
@@ -913,7 +913,7 @@ const sal_Int32& BaseControl::impl_getWidth()
 }
 
 //____________________________________________________________________________________________________________
-//  protected method
+//	protected method
 //____________________________________________________________________________________________________________
 
 const sal_Int32& BaseControl::impl_getHeight()
@@ -922,7 +922,7 @@ const sal_Int32& BaseControl::impl_getHeight()
 }
 
 //____________________________________________________________________________________________________________
-//  protected method
+//	protected method
 //____________________________________________________________________________________________________________
 
 WindowDescriptor* BaseControl::impl_getWindowDescriptor( const Reference< XWindowPeer >& xParentPeer )
@@ -933,23 +933,23 @@ WindowDescriptor* BaseControl::impl_getWindowDescriptor( const Reference< XWindo
 
     WindowDescriptor* pDescriptor = new WindowDescriptor ;
 
-    pDescriptor->Type               = WindowClass_SIMPLE                    ;
-    pDescriptor->WindowServiceName  = OUString::createFromAscii( "window" ) ;
-    pDescriptor->ParentIndex        = -1                                    ;
-    pDescriptor->Parent             = xParentPeer                           ;
-    pDescriptor->Bounds             = getPosSize ()                         ;
-    pDescriptor->WindowAttributes   = 0                                     ;
+    pDescriptor->Type				= WindowClass_SIMPLE					;
+    pDescriptor->WindowServiceName	= OUString::createFromAscii( "window" )	;
+    pDescriptor->ParentIndex		= -1									;
+    pDescriptor->Parent				= xParentPeer							;
+    pDescriptor->Bounds				= getPosSize ()							;
+    pDescriptor->WindowAttributes	= 0										;
 
     return pDescriptor ;
 }
 
 //____________________________________________________________________________________________________________
-//  protected method
+//	protected method
 //____________________________________________________________________________________________________________
 
-void BaseControl::impl_paint(           sal_Int32               /*nX*/          ,
-                                        sal_Int32               /*nY*/          ,
-                                const   Reference< XGraphics >& /*xGraphics*/   )
+void BaseControl::impl_paint(			sal_Int32				/*nX*/			,
+                                        sal_Int32				/*nY*/			,
+                                const	Reference< XGraphics >&	/*xGraphics*/	)
 {
     // - one paint method for peer AND view !!!
     //   (see also => "windowPaint()" and "draw()")
@@ -957,7 +957,7 @@ void BaseControl::impl_paint(           sal_Int32               /*nX*/          
 }
 
 //____________________________________________________________________________________________________________
-//  protected method
+//	protected method
 //____________________________________________________________________________________________________________
 
 void BaseControl::impl_recalcLayout( const WindowEvent& /*aEvent*/ )
@@ -967,7 +967,7 @@ void BaseControl::impl_recalcLayout( const WindowEvent& /*aEvent*/ )
 }
 
 //____________________________________________________________________________________________________________
-//  protected method
+//	protected method
 //____________________________________________________________________________________________________________
 
 Reference< XInterface > BaseControl::impl_getDelegator()
@@ -976,7 +976,7 @@ Reference< XInterface > BaseControl::impl_getDelegator()
 }
 
 //____________________________________________________________________________________________________________
-//  private method
+//	private method
 //____________________________________________________________________________________________________________
 
 void BaseControl::impl_releasePeer()
@@ -991,8 +991,8 @@ void BaseControl::impl_releasePeer()
         }
 
         m_xPeer->dispose();
-        m_xPeerWindow   = Reference< XWindow >();
-        m_xPeer         = Reference< XWindowPeer >();
+        m_xPeerWindow	= Reference< XWindow >();
+        m_xPeer			= Reference< XWindowPeer >();
 
         if ( m_pMultiplexer != NULL )
         {
@@ -1003,7 +1003,7 @@ void BaseControl::impl_releasePeer()
 }
 
 //____________________________________________________________________________________________________________
-//  private method
+//	private method
 //____________________________________________________________________________________________________________
 
 OMRCListenerMultiplexerHelper* BaseControl::impl_getMultiplexer()

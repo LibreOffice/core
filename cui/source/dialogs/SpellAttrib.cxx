@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ TextAttrib*     SpellErrorAttrib::Clone() const
   -----------------------------------------------------------------------*/
 int SpellErrorAttrib::operator==( const TextAttrib& rAttr ) const
 {
-    return Which() == rAttr.Which() &&
+    return Which() == rAttr.Which() && 
             m_aSpellErrorDescription == static_cast<const SpellErrorAttrib&>(rAttr).m_aSpellErrorDescription;
 }
 /*-- 10.09.2003 14:27:43---------------------------------------------------
@@ -123,13 +123,13 @@ TextAttrib* SpellLanguageAttrib::Clone() const
   -----------------------------------------------------------------------*/
 int SpellLanguageAttrib::operator==( const TextAttrib& rAttr ) const
 {
-    return Which() == rAttr.Which() &&
+    return Which() == rAttr.Which() && 
             m_eLanguage == static_cast<const SpellLanguageAttrib&>(rAttr).m_eLanguage;
 }
 /*-- 31.10.2003 16:07:45---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SpellBackgroundAttrib::SpellBackgroundAttrib(const Color& rCol) :
+SpellBackgroundAttrib::SpellBackgroundAttrib(const Color& rCol) : 
     TextAttrib(TEXTATTR_SPELL_BACKGROUND),
     m_aBackgroundColor(rCol)
 {
@@ -167,7 +167,7 @@ TextAttrib* SpellBackgroundAttrib::Clone() const
   -----------------------------------------------------------------------*/
 int  SpellBackgroundAttrib::operator==( const TextAttrib& rAttr ) const
 {
-    return Which() == rAttr.Which() &&
+    return Which() == rAttr.Which() && 
             m_aBackgroundColor == static_cast<const SpellBackgroundAttrib&>(rAttr).m_aBackgroundColor;
 }
 

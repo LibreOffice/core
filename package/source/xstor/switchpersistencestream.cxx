@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -132,7 +132,7 @@ void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io:
     }
 
     xNewSeekable->seek( nPos );
-
+    
     CloseAll_Impl();
 
     m_pStreamData = new SPStreamData_Impl( m_xFactory, sal_False,
@@ -184,7 +184,7 @@ void SwitchablePersistenceStream::CopyAndSwitchPersistenceTo( const uno::Referen
 
     if ( !xTargetStream.is() )
     {
-        xTargetStream = uno::Reference < io::XStream >(
+        xTargetStream = uno::Reference < io::XStream >( 
             m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
             uno::UNO_QUERY_THROW );
 

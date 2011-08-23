@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,11 +42,11 @@ using namespace std;
 
 namespace ole_adapter
 {
-Reference< XInterface> SAL_CALL ConverterProvider_CreateInstance(   const Reference<XMultiServiceFactory> & xSMgr)
+Reference< XInterface> SAL_CALL ConverterProvider_CreateInstance(	const Reference<XMultiServiceFactory> & xSMgr)
                             throw( Exception);
-Reference< XInterface> SAL_CALL ConverterProvider_CreateInstance2(  const Reference<XMultiServiceFactory> & xSMgr)
+Reference< XInterface> SAL_CALL ConverterProvider_CreateInstance2(	const Reference<XMultiServiceFactory> & xSMgr)
                             throw( Exception);
-Reference< XInterface> SAL_CALL ConverterProvider_CreateInstanceVar1(   const Reference<XMultiServiceFactory> & xSMgr)
+Reference< XInterface> SAL_CALL ConverterProvider_CreateInstanceVar1(	const Reference<XMultiServiceFactory> & xSMgr)
                             throw( Exception);
 Reference<XInterface> SAL_CALL OleClient_CreateInstance( const Reference<XMultiServiceFactory> & xSMgr)
                             throw( Exception);
@@ -56,10 +56,10 @@ Reference<XInterface> SAL_CALL OleServer_CreateInstance( const Reference<XMultiS
 
     class declaration IClassFactoryWrapper
 
-    Specify abstract helper methods on class factories, which provide
+    Specify abstract helper methods on class factories, which provide 
     UNO objects. These methods are used by objects of class OleServer_Impl,
     to handle the OLE registration of different class factories.
-
+    
 *****************************************************************************/
 
 class IClassFactoryWrapper : public IClassFactory
@@ -74,14 +74,14 @@ public:
 
     class declaration ProviderOleWrapper_Impl
 
-    Provides an UNO service provider as OLE class factory. Handle the
-    OLE registration by overloading the abstract methods from
+    Provides an UNO service provider as OLE class factory. Handle the 
+    OLE registration by overloading the abstract methods from 
     IClassFactoryWrapper.
 
     Acts as a COM class factory. When IClassFactory::CreateInstance is being called
     then it creates an service by help of the XSingleServiceFactory member and maps
     maps it to a COM object.
-
+    
 *****************************************************************************/
 
 class ProviderOleWrapper_Impl : public IClassFactoryWrapper
@@ -94,7 +94,7 @@ public:
 
     sal_Bool registerClass();
     sal_Bool deregisterClass();
-
+    
     /* IUnknown methods */
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj);
     STDMETHOD_(ULONG, AddRef)();
@@ -108,9 +108,9 @@ protected:
 
     oslInterlockedCount m_refCount;
     Reference<XSingleServiceFactory> m_xSingleServiceFactory;
-    GUID                m_guid;
-    DWORD               m_factoryHandle;
-    Reference<XBridgeSupplier2> m_bridgeSupplier;
+    GUID				m_guid;
+    DWORD 				m_factoryHandle;
+    Reference<XBridgeSupplier2>	m_bridgeSupplier;
     Reference<XMultiServiceFactory> m_smgr;
 };
 
@@ -118,10 +118,10 @@ protected:
 
     class declaration OneInstanceOleWrapper_Impl
 
-    Provides an single UNO object as OLE object. Handle the
-    OLE registration by overloading the abstract methods from
+    Provides an single UNO object as OLE object. Handle the 
+    OLE registration by overloading the abstract methods from 
     IClassFactoryWrapper.
-
+    
       Acts as a COM class factory. When IClassFactory::CreateInstance is being called
     then it maps the XInstance member it to a COM object.
 
@@ -136,7 +136,7 @@ public:
 
     sal_Bool registerClass();
     sal_Bool deregisterClass();
-
+    
     /* IUnknown methods */
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj);
     STDMETHOD_(ULONG, AddRef)();
@@ -149,10 +149,10 @@ public:
 protected:
 
     oslInterlockedCount m_refCount;
-    Reference<XInterface>       m_xInst;
-    GUID                m_guid;
-    DWORD               m_factoryHandle;
-    Reference<XBridgeSupplier2> m_bridgeSupplier;
+    Reference<XInterface> 		m_xInst;
+    GUID				m_guid;
+    DWORD 				m_factoryHandle;
+    Reference<XBridgeSupplier2>	m_bridgeSupplier;
     Reference<XMultiServiceFactory> m_smgr;
     unsigned long       m_nApplRegHandle;
     sal_Bool            m_bAsApplication;
@@ -163,17 +163,17 @@ protected:
     class declaration OleConverter_Impl2
 
     Implementation of the UNO service com.sun.star.bridge.OleBridgeSupplier2.
-
+    
 *****************************************************************************/
 
-// This class realizes the service com.sun.star.bridge.OleBridgeSupplier2 and
+// This class realizes the service com.sun.star.bridge.OleBridgeSupplier2 and 
 // com.sun.star.bridge.OleBridgeSupplierVar1. The class implements XBridgeSupplier2
 // instead of XBridgeSuppplier as done by class OleConverter_Impl. The XBridgeSupplier2
 // interface does not need a Maschine Id in its createBridge function anymore,
 // If an UNO interface is to be converted then the member m_nUnoWrapperClass determines
-// what wrapper class is to be used. There are currently InterfaceOleWrapper_Impl and
-// UnoObjectWrapperRemoteOpt. The first is used for the OleBridgeSupplier2 and the
-// latter for OleBridgeSupplierVar1.
+// what wrapper class is to be used. There are currently InterfaceOleWrapper_Impl and 
+// UnoObjectWrapperRemoteOpt. The first is used for the OleBridgeSupplier2 and the 
+// latter for OleBridgeSupplierVar1. 
 // The m_nComWrapperClass specifies the class which is used as wrapper for COM interfaces.
 // Currently there is only one class available ( IUnknownWrapper_Impl).
 class OleConverter_Impl2 : public WeakImplHelper2<XBridgeSupplier2, XInitialization>,
@@ -182,14 +182,14 @@ class OleConverter_Impl2 : public WeakImplHelper2<XBridgeSupplier2, XInitializat
 public:
     OleConverter_Impl2( const Reference<XMultiServiceFactory>& smgr);
     OleConverter_Impl2( const  Reference<XMultiServiceFactory>& smgr, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass );
-    virtual ~OleConverter_Impl2();
+    virtual	~OleConverter_Impl2();
 
     // XBridgeSupplier2 ---------------------------------------------------
 
-    virtual Any SAL_CALL createBridge(const Any& modelDepObject,
-                                const Sequence<sal_Int8>& ProcessId,
-                                sal_Int16 sourceModelType,
-                                sal_Int16 destModelType)
+    virtual Any SAL_CALL createBridge(const Any& modelDepObject, 
+                                const Sequence<sal_Int8>& ProcessId, 
+                                sal_Int16 sourceModelType, 
+                                sal_Int16 destModelType) 
             throw (IllegalArgumentException, RuntimeException);
 
     // XInitialization
@@ -208,7 +208,7 @@ protected:
     class declaration OleClient_Impl
 
     Implementation of the UNO service com.sun.star.bridge.OleObjectFactory.
-
+    
 *****************************************************************************/
 
 
@@ -222,8 +222,8 @@ public:
     // XMultiServiceFactory
     virtual Reference<XInterface> SAL_CALL createInstance(const OUString& ServiceSpecifier) throw( Exception, RuntimeException);
     virtual Reference<XInterface> SAL_CALL createInstanceWithArguments(const OUString& ServiceSpecifier, const Sequence< Any >& Arguments) throw (Exception, RuntimeException);
-    Sequence< OUString >    SAL_CALL getAvailableServiceNames() throw (RuntimeException);
-
+    Sequence< OUString >	SAL_CALL getAvailableServiceNames() throw (RuntimeException);
+    
     // Abstract struct UnoConversionUtilities
     virtual Reference< XInterface > createUnoWrapperInstance();
     virtual Reference< XInterface > createComWrapperInstance();
@@ -231,7 +231,7 @@ public:
 
     OUString getImplementationName();
 protected:
-    Reference<XBridgeSupplier2> m_bridgeSupplier;
+    Reference<XBridgeSupplier2>	m_bridgeSupplier;
 };
 
 /*****************************************************************************
@@ -239,10 +239,10 @@ protected:
     class declaration OleServer_Impl
 
     Implementation of the UNO service com.sun.star.bridge.OleApplicationRegistration.
-    Register the calling application as OLE automation server for
-    standard OLE object. The objects will be registered while instanciating
-    this implementation and deregistrated, if this implementation is destroyed.
-
+    Register the calling application as OLE automation server for 
+    standard OLE object. The objects will be registered while instanciating 
+    this implementation and deregistrated, if this implementation is destroyed. 
+    
 *****************************************************************************/
 
 class OleServer_Impl : public OWeakObject, XTypeProvider
@@ -266,7 +266,7 @@ protected:
     sal_Bool provideInstance(const Reference<XInterface>& xInst, GUID* guid, sal_Bool bAsApplication );
 
     list< IClassFactoryWrapper* > m_wrapperList;
-    Reference< XBridgeSupplier2 >   m_bridgeSupplier;
+    Reference< XBridgeSupplier2 >	m_bridgeSupplier;
 
     Reference<XMultiServiceFactory> m_smgr;
 };

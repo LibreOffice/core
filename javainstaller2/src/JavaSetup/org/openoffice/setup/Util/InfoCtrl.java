@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 public class InfoCtrl {
-
+    
     private InfoCtrl() {
     }
 
@@ -45,7 +45,7 @@ public class InfoCtrl {
         else if ( position.equals("end")) {
             htmlInfoText = htmlInfoText + "</FONT></BODY></HTML>";
         }
-
+        
         return htmlInfoText;
     }
 
@@ -58,12 +58,12 @@ public class InfoCtrl {
         htmlInfoText = htmlInfoText + oneline + "<br>";
 
         return htmlInfoText;
-    }
-
+    }    
+    
     static public String setReadyToInstallInfoText(PackageDescription packageData, String htmlInfoText) {
         // setHtmlInfoText(packageData, 0);
         InstallData data = InstallData.getInstance();
-        if ( data.isInstallationMode() ) {
+        if ( data.isInstallationMode() ) {            
             htmlInfoText = setReadyToInstallInfoText(packageData, "", htmlInfoText);
         } else {
             htmlInfoText = setReadyToUninstallInfoText(packageData, "", htmlInfoText);
@@ -101,10 +101,10 @@ public class InfoCtrl {
                 htmlInfoText = setReadyToInstallInfoText(child, indent, htmlInfoText);
             }
         }
-
+        
         return htmlInfoText;
     }
-
+    
     // private void setReadyToUninstallInfoText(PackageDescription packageData, Integer indent, String htmlInfoText) {
     static private String setReadyToUninstallInfoText(PackageDescription packageData, String indent, String htmlInfoText) {
         // String spacer = "<spacer type=horizontal size=" + indent.toString() + ">";
@@ -153,7 +153,7 @@ public class InfoCtrl {
         }
 
         htmlInfoText = htmlInfoText + separatorline + "<br>";
-
+        
         htmlInfoText = LogManager.publishLogfileContent(htmlInfoText, separatorline);
         htmlInfoText = LogManager.publishCommandsLogfileContent(htmlInfoText);
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ namespace pcr
         ,m_pInfoService  ( new OPropertyInfoService )
     {
         DBG_CTOR( PropertyHandler, NULL );
-
+        
         m_xTypeConverter = Reference< XTypeConverter >(
             m_aContext.createComponent( "com.sun.star.script.Converter" ),
             UNO_QUERY_THROW
@@ -116,7 +116,7 @@ namespace pcr
         while ( readdListener->hasMoreElements() )
             addPropertyChangeListener( static_cast< XPropertyChangeListener* >( readdListener->next() ) );
     }
-
+    
     //--------------------------------------------------------------------
     void PropertyHandler::onNewComponent()
     {
@@ -251,7 +251,7 @@ namespace pcr
         DBG_ERROR( "PropertyHandler::onInteractivePropertySelection: not implemented!" );
         return InteractiveSelectionResult_Cancelled;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL PropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
     {
@@ -266,14 +266,14 @@ namespace pcr
             throw NullPointerException();
         m_aPropertyListeners.addListener( _rxListener );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL PropertyHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_aPropertyListeners.removeListener( _rxListener );
     }
-
+    
     //--------------------------------------------------------------------
     sal_Bool SAL_CALL PropertyHandler::suspend( sal_Bool /*_bSuspend*/ ) throw (RuntimeException)
     {
@@ -458,7 +458,7 @@ namespace pcr
         StlSyntaxSequence< ::rtl::OUString > aAllServices( getSupportedServiceNames() );
         return ::std::find( aAllServices.begin(), aAllServices.end(), ServiceName ) != aAllServices.end();
     }
-
+    
 //........................................................................
 }   // namespace pcr
 //........................................................................

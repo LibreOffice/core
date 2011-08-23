@@ -12,7 +12,7 @@
 #include "libxslt/xslt.h"
 #endif
 
-
+                                                                                
 #include "securityenvironment_mscryptimpl.hxx"
 #include "xmlelementwrapper_xmlsecimpl.hxx"
 
@@ -56,12 +56,12 @@ using namespace ::com::sun::star::xml::crypto ;
 
 int SAL_CALL main( int argc, char **argv )
 {
-    CERTCertDBHandle*   certHandle = NULL ;
-    PK11SlotInfo*       slot = NULL ;
-    xmlDocPtr           doc = NULL ;
-    xmlNodePtr          tplNode ;
-    xmlNodePtr          tarNode ;
-    FILE*               dstFile = NULL ;
+    CERTCertDBHandle*	certHandle = NULL ;
+    PK11SlotInfo*		slot = NULL ;
+    xmlDocPtr			doc = NULL ;
+    xmlNodePtr			tplNode ;
+    xmlNodePtr			tarNode ;
+    FILE*				dstFile = NULL ;
 
 
     if( argc != 5 ) {
@@ -76,7 +76,7 @@ int SAL_CALL main( int argc, char **argv )
     xmlSubstituteEntitiesDefault(1);
 
     #ifndef XMLSEC_NO_XSLT
-    xmlIndentTreeOutput = 1;
+    xmlIndentTreeOutput = 1; 
     #endif // XMLSEC_NO_XSLT
 
 
@@ -238,7 +238,7 @@ done:
 
     /* Shutdown libxslt/libxml */
     #ifndef XMLSEC_NO_XSLT
-    xsltCleanupGlobals();
+    xsltCleanupGlobals();            
     #endif /* XMLSEC_NO_XSLT */
     xmlCleanupParser();
 

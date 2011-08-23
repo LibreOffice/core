@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ ScannerManager::~ScannerManager()
 
 ANY SAL_CALL ScannerManager::queryInterface( const Type& rType ) throw( RuntimeException )
 {
-    const ANY aRet( cppu::queryInterface( rType,
+    const ANY aRet( cppu::queryInterface( rType, 
                                           static_cast< XScannerManager* >( this ),
                                           static_cast< AWT::XBitmap* >( this ) ) );
 
@@ -83,7 +83,7 @@ void SAL_CALL ScannerManager::release() throw()
 
 SEQ( sal_Int8 ) SAL_CALL ScannerManager::getMaskDIB() throw()
 {
-    return SEQ( sal_Int8 )();
+    return SEQ( sal_Int8 )(); 
 }
 
 // -----------------------------------------------------------------------------
@@ -98,9 +98,9 @@ OUString ScannerManager::getImplementationName_Static() throw()
 SEQ( OUString ) ScannerManager::getSupportedServiceNames_Static() throw ()
 {
     SEQ( OUString ) aSNS( 1 );
-
-    aSNS.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.scanner.ScannerManager" ) );
-
+    
+    aSNS.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.scanner.ScannerManager" ) ); 
+    
     return aSNS;
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ namespace frm
 // oder aussen einen Context uebergeben bekommen
 //==================================================================
 typedef ::cppu::OComponentHelper FormsCollectionComponentBase;
-typedef ::cppu::ImplHelper2<    ::com::sun::star::container::XChild
+typedef ::cppu::ImplHelper2<	::com::sun::star::container::XChild
                                 ,::com::sun::star::lang::XServiceInfo > OFormsCollection_BASE;
 
     // else MSVC kills itself on some statements
@@ -55,9 +55,9 @@ class OFormsCollection
         ,public OInterfaceContainer
         ,public OFormsCollection_BASE
 {
-    ::osl::Mutex                m_aMutex;
-    OImplementationIdsRef       m_aHoldIdHelper;
-    ::comphelper::InterfaceRef  m_xParent;          // Parent
+    ::osl::Mutex				m_aMutex;
+    OImplementationIdsRef		m_aHoldIdHelper;
+    ::comphelper::InterfaceRef 	m_xParent;			// Parent
 
 public:
     OFormsCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
@@ -96,7 +96,7 @@ public:
 };
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

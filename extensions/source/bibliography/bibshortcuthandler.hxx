@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,16 +40,16 @@
 class BibShortCutHandler
 {
 private:
-    Window*                 pBaseClass;     // in cases, where BibShortCutHandler also has to be a window
+    Window*					pBaseClass;		// in cases, where BibShortCutHandler also has to be a window
 
 protected:
-    inline                  BibShortCutHandler( Window* pBaseClass );
+    inline					BibShortCutHandler( Window* pBaseClass );
 
 public:
-    virtual                 ~BibShortCutHandler();
-    virtual BOOL            HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
+    virtual					~BibShortCutHandler();
+    virtual BOOL			HandleShortCutKey( const KeyEvent& rKeyEvent );	// returns true, if key was handled
 
-    inline Window*          GetWindow( void );
+    inline Window*			GetWindow( void );
 };
 
 inline BibShortCutHandler::BibShortCutHandler( Window* _pBaseClass ) : pBaseClass( _pBaseClass )
@@ -66,7 +66,7 @@ class BibWindow : public Window, public BibShortCutHandler
 {
 public:
                             BibWindow( Window* pParent,WinBits nStyle = WB_3DLOOK);
-    virtual                 ~BibWindow();
+    virtual					~BibWindow();
 };
 
 
@@ -74,7 +74,7 @@ class BibSplitWindow : public SplitWindow, public BibShortCutHandler
 {
 public:
                             BibSplitWindow( Window* pParent,WinBits nStyle = WB_3DLOOK);
-    virtual                 ~BibSplitWindow();
+    virtual					~BibSplitWindow();
 };
 
 
@@ -82,7 +82,7 @@ class BibTabPage : public TabPage, public BibShortCutHandler
 {
 public:
                             BibTabPage( Window* pParent, const ResId& rResId );
-    virtual                 ~BibTabPage();
+    virtual					~BibTabPage();
 };
 
 #endif

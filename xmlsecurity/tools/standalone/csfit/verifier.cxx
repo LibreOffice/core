@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,17 +80,17 @@ using namespace ::com::sun::star::xml::crypto ;
 
 int SAL_CALL main( int argc, char **argv )
 {
-    CERTCertDBHandle*   certHandle = NULL ;
-    PK11SlotInfo*       slot = NULL ;
-    xmlDocPtr           doc = NULL ;
-    xmlNodePtr          tplNode ;
-    xmlNodePtr          tarNode ;
-    xmlAttrPtr          idAttr ;
-    xmlChar*            idValue ;
-    xmlAttrPtr          uriAttr ;
-    xmlChar*            uriValue ;
-    OUString*           uri = NULL ;
-    Reference< XUriBinding >    xUriBinding ;
+    CERTCertDBHandle*	certHandle = NULL ;
+    PK11SlotInfo*		slot = NULL ;
+    xmlDocPtr			doc = NULL ;
+    xmlNodePtr			tplNode ;
+    xmlNodePtr			tarNode ;
+    xmlAttrPtr			idAttr ;
+    xmlChar*			idValue ;
+    xmlAttrPtr			uriAttr ;
+    xmlChar*			uriValue ;
+    OUString*			uri = NULL ;
+    Reference< XUriBinding >	xUriBinding ;
 
     if( argc != 4 ) {
         fprintf( stderr, "Usage: %s < CertDir > <file_url> <rdb file>\n" , argv[0] ) ;
@@ -104,7 +104,7 @@ int SAL_CALL main( int argc, char **argv )
     xmlSubstituteEntitiesDefault(1);
 
     #ifndef XMLSEC_NO_XSLT
-    xmlIndentTreeOutput = 1;
+    xmlIndentTreeOutput = 1; 
     #endif // XMLSEC_NO_XSLT
 
 
@@ -138,7 +138,7 @@ int SAL_CALL main( int argc, char **argv )
     if( tarNode == NULL ) {
         tarNode = xmlSecFindNode( xmlDocGetRootElement( doc ), ( xmlChar* )"document", NULL ) ;
     }
-
+                                        
     //Find the "id" attrbute in the element
     if( tarNode != NULL ) {
         if( ( idAttr = xmlHasProp( tarNode, ( xmlChar* )"id" ) ) != NULL ) {
@@ -149,7 +149,7 @@ int SAL_CALL main( int argc, char **argv )
             idAttr = NULL ;
         }
     }
-
+                                        
     //Add ID to DOM
     if( idAttr != NULL ) {
         idValue = xmlNodeListGetString( tarNode->doc, idAttr->children, 1 ) ;
@@ -157,7 +157,7 @@ int SAL_CALL main( int argc, char **argv )
             fprintf( stderr , "### the ID value is NULL!\n" ) ;
             goto done ;
         }
-
+                                        
         if( xmlAddID( NULL, doc, idValue, idAttr ) == NULL ) {
             fprintf( stderr , "### Can not add the ID value!\n" ) ;
             goto done ;
@@ -188,7 +188,7 @@ int SAL_CALL main( int argc, char **argv )
 
     if( strchr( ( const char* )uriValue, '/' ) != NULL && strchr( ( const char* )uriValue, '#' ) == NULL ) {
         fprintf( stdout , "### Find a stream URI [%s]\n", uriValue ) ;
-    //  uri = new ::rtl::OUString( ( const sal_Unicode* )uriValue ) ;
+    //	uri = new ::rtl::OUString( ( const sal_Unicode* )uriValue ) ;
         uri = new ::rtl::OUString( ( const sal_Char* )uriValue, xmlStrlen( uriValue ), RTL_TEXTENCODING_ASCII_US ) ;
     }
 
@@ -332,7 +332,7 @@ done :
 
     /* Shutdown libxslt/libxml */
     #ifndef XMLSEC_NO_XSLT
-    xsltCleanupGlobals();
+    xsltCleanupGlobals();	    
     #endif /* XMLSEC_NO_XSLT */
     xmlCleanupParser();
 

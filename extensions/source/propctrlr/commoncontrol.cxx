@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,31 +73,31 @@ namespace pcr
     {
         return m_nControlType;
     }
-
+    
     //--------------------------------------------------------------------
     Reference< XPropertyControlContext > SAL_CALL ControlHelper::getControlContext() throw (RuntimeException)
     {
         return m_xContext;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL ControlHelper::setControlContext( const Reference< XPropertyControlContext >& _controlcontext ) throw (RuntimeException)
     {
         m_xContext = _controlcontext;
     }
-
+    
     //--------------------------------------------------------------------
     Reference< XWindow > SAL_CALL ControlHelper::getControlWindow() throw (RuntimeException)
     {
         return VCLUnoHelper::GetInterface( m_pControlWindow );
     }
-
+    
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL ControlHelper::isModified(  ) throw (RuntimeException)
     {
         return m_bModified;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL ControlHelper::notifyModifiedValue(  ) throw (RuntimeException)
     {

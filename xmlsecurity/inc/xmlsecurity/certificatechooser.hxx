@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,23 +60,23 @@ private:
     cssu::Sequence< cssu::Reference< dcss::security::XCertificate > > maCerts;
     SignatureInformations maCertsToIgnore;
 
-    FixedText           maHintFT;
+    FixedText			maHintFT;
     SvxSimpleTable      maCertLB;   // PB 2006/02/02 #i48648 now SvHeaderTabListBox
 
-    PushButton          maViewBtn;
+    PushButton			maViewBtn;
 
-    FixedLine           maBottomSepFL;
-    OKButton            maOKBtn;
+    FixedLine			maBottomSepFL;
+    OKButton			maOKBtn;
     CancelButton        maCancelBtn;
-    HelpButton          maHelpBtn;
+    HelpButton			maHelpBtn;
 
-    BOOL                mbInitialized;
+    BOOL				mbInitialized;
 
-    USHORT              GetSelectedEntryPos( void ) const;
-//  DECL_LINK(          Initialize, void* );
-    DECL_LINK(          ViewButtonHdl, Button* );
-    DECL_LINK(          CertificateHighlightHdl, void* );
-    DECL_LINK(          CertificateSelectHdl, void* );
+    USHORT				GetSelectedEntryPos( void ) const;
+//	DECL_LINK(			Initialize, void* );
+    DECL_LINK(			ViewButtonHdl, Button* );
+    DECL_LINK(			CertificateHighlightHdl, void* );
+    DECL_LINK(			CertificateSelectHdl, void* );
 
     void ImplShowCertificateDetails();
     void ImplInitialize();

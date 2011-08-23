@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -126,7 +126,7 @@ public class ObjectViewContainer
                 Class aViewClass = (Class)maViewTemplates.elementAt (i);
                 Method aCreateMethod = aViewClass.getDeclaredMethod (
                     "Create", new Class[] {
-                        ObjectViewContainer.class,
+                        ObjectViewContainer.class, 
                         XAccessibleContext.class});
                 if (aCreateMethod != null)
                 {
@@ -137,13 +137,13 @@ public class ObjectViewContainer
                 }
             }
             catch (NoSuchMethodException e)
-            {System.err.println ("Caught exception while creating view "
+            {System.err.println ("Caught exception while creating view " 
                 + i + " : " + e);}
             catch (IllegalAccessException e)
-            {System.err.println ("Caught exception while creating view "
+            {System.err.println ("Caught exception while creating view " 
                 + i + " : " + e);}
             catch (InvocationTargetException e)
-            {System.err.println ("Caught exception while creating view "
+            {System.err.println ("Caught exception while creating view " 
                 + i + " : " + e);}
         }
 
@@ -227,7 +227,7 @@ public class ObjectViewContainer
     /** Update the layout manager by setting the vertical weight of the
         bottom entry to 1 and so make it strech to over the available
         space.
-
+        
     */
     private void UpdateLayoutManager ()
     {
@@ -250,10 +250,10 @@ public class ObjectViewContainer
     */
     public void notifyEvent (final AccessibleEventObject aEvent)
     {
-        SwingUtilities.invokeLater(
-            new Runnable()
+        SwingUtilities.invokeLater( 
+            new Runnable() 
             {
-                public void run()
+                public void run() 
                 {
                     DispatchEvent (aEvent);
                 }
@@ -282,14 +282,14 @@ public class ObjectViewContainer
     public void disposing (EventObject aEvent)
     {
         mxContext = null;
-       SwingUtilities.invokeLater(
+       SwingUtilities.invokeLater( 
             new Runnable()
             {
                 public void run()
                 {
                     SetObject (null);
                 }
-            }
+            } 
             );
     }
 

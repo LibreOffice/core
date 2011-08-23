@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ import javax.swing.border.EmptyBorder;
 import org.openoffice.setup.ResourceManager;
 
 public class DatabaseDialog extends JDialog {
-
+    
     public DatabaseDialog(SetupFrame setupFrame) {
 
         // super(setupFrame.getDialog());
@@ -48,12 +48,12 @@ public class DatabaseDialog extends JDialog {
 
         setTitle(text1);
         this.getContentPane().setLayout(new java.awt.BorderLayout());
-
+        
         JPanel toppanel = new JPanel();
         toppanel.setLayout(new java.awt.BorderLayout());
         toppanel.setBorder(new EmptyBorder(new Insets(50, 50, 50, 50)));
 
-        PanelLabel label1 = new PanelLabel(text2);
+        PanelLabel label1 = new PanelLabel(text2);        
         toppanel.add(label1, BorderLayout.NORTH);
 
         Container contentPane = this.getContentPane();

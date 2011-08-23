@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,15 +69,15 @@ bool lcl_ParseText( String aText, USHORT& rLineNr )
 
 BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList ) :
         ModalDialog( pParent, IDEResId( RID_BASICIDE_BREAKPOINTDLG ) ),
-        aComboBox(      this, IDEResId( RID_CB_BRKPOINTS ) ),
-        aOKButton(      this, IDEResId( RID_PB_OK ) ),
-        aCancelButton(  this, IDEResId( RID_PB_CANCEL ) ),
-        aNewButton(     this, IDEResId( RID_PB_NEW ) ),
-        aDelButton(     this, IDEResId( RID_PB_DEL ) ),
-        aCheckBox(      this, IDEResId( RID_CHKB_ACTIVE ) ),
-        aBrkText(       this, IDEResId( RID_FT_BRKPOINTS ) ),
-        aPassText(      this, IDEResId( RID_FT_PASS ) ),
-        aNumericField(  this, IDEResId( RID_FLD_PASS ) ),
+        aComboBox( 		this, IDEResId( RID_CB_BRKPOINTS ) ),
+        aOKButton( 		this, IDEResId( RID_PB_OK ) ),
+        aCancelButton(	this, IDEResId( RID_PB_CANCEL ) ),
+        aNewButton(		this, IDEResId( RID_PB_NEW ) ),
+        aDelButton( 	this, IDEResId( RID_PB_DEL ) ),
+        aCheckBox( 		this, IDEResId( RID_CHKB_ACTIVE ) ),
+        aBrkText( 		this, IDEResId( RID_FT_BRKPOINTS ) ),
+        aPassText( 		this, IDEResId( RID_FT_PASS ) ),
+        aNumericField( 	this, IDEResId( RID_FLD_PASS ) ),
         m_rOriginalBreakPointList(rBrkPntList),
         m_aModifiedBreakPointList(rBrkPntList)
 {
@@ -98,7 +98,7 @@ BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList
     aOKButton.SetClickHdl( LINK( this, BreakPointDialog, ButtonHdl ) );
     aNewButton.SetClickHdl( LINK( this, BreakPointDialog, ButtonHdl ) );
     aDelButton.SetClickHdl( LINK( this, BreakPointDialog, ButtonHdl ) );
-//  aShowButton.SetClickHdl( LINK( this, BreakPointDialog, ButtonHdl ) );
+//	aShowButton.SetClickHdl( LINK( this, BreakPointDialog, ButtonHdl ) );
 
     aCheckBox.SetClickHdl( LINK( this, BreakPointDialog, CheckBoxHdl ) );
     aComboBox.SetSelectHdl( LINK( this, BreakPointDialog, ComboBoxHighlightHdl ) );
@@ -249,10 +249,10 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
         }
         CheckButtons();
     }
-//  else if ( pButton == &aShowButton )
-//  {
-//      ;
-//  }
+//	else if ( pButton == &aShowButton )
+//	{
+//		;
+//	}
 
     return 0;
 }

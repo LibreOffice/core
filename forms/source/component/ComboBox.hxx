@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,20 +63,20 @@ class OComboBoxModel
             ,public OErrorBroadcaster
 {
     CachedRowSet                            m_aListRowSet;          // the row set to fill the list
-    ::com::sun::star::uno::Any              m_aBoundColumn;         // obsolet
-    ::rtl::OUString                         m_aListSource;          //
-    ::rtl::OUString                         m_aDefaultText;         // DefaultText
+    ::com::sun::star::uno::Any				m_aBoundColumn; 		// obsolet
+    ::rtl::OUString 						m_aListSource;			//
+    ::rtl::OUString 						m_aDefaultText; 		// DefaultText
     ::com::sun::star::uno::Any              m_aLastKnownValue;
 
-    StringSequence                          m_aDesignModeStringItems;
+    StringSequence							m_aDesignModeStringItems;
         // upon loading, in some cases we reset fill our string item list ourself. We don't want
         // to lose the user's items then, so we remember them here.
 
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter> m_xFormatter;
 
-    ::com::sun::star::form::ListSourceType  m_eListSourceType;      // type der list source
-    sal_Bool                                m_bEmptyIsNull;         // LeerString wird als NULL interpretiert
+    ::com::sun::star::form::ListSourceType	m_eListSourceType;		// type der list source
+    sal_Bool								m_bEmptyIsNull; 		// LeerString wird als NULL interpretiert
 
     ::std::auto_ptr< ::dbtools::FormattedColumnValue >
                                             m_pValueFormatter;
@@ -84,7 +84,7 @@ class OComboBoxModel
 
 
 protected:
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>	_getTypes();
 
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OComboBoxModel );
@@ -111,7 +111,7 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
 
     // XPersistObject
-    virtual ::rtl::OUString SAL_CALL    getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL	getServiceName() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
         write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
@@ -137,8 +137,8 @@ protected:
                             translateDbColumnToControlValue( );
     virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
 
-    virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
-    virtual void            onDisconnectedDbColumn();
+    virtual void		    onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
+    virtual void		    onDisconnectedDbColumn();
 
     virtual ::com::sun::star::uno::Any
                             getDefaultForReset() const;

@@ -15,9 +15,9 @@ ENDHELP
   exit;
   }
 
-$infile     = $ARGV[0];
-$library    = $ARGV[1];
-$outfile    = $ARGV[2];
+$infile		= $ARGV[0];
+$library	= $ARGV[1];
+$outfile	= $ARGV[2];
 $infile     =~ tr/[A-Z]/[a-z]/;
 
 # read script header

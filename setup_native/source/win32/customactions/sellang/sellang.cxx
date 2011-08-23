@@ -28,28 +28,23 @@
  *
  ************************************************************************/
 
+/* Currently the "all" installer has a bit over 100 UI languages, and
+ * I doubt it will grow a lot over that.
+ */
+#define MAX_LANGUAGES 200
+
 #define WIN32_LEAN_AND_MEAN
 #define _WIN32_WINNT 0x0500
 #undef WINVER
 #define WINVER 0x0500
 
-#pragma warning(push, 1) /* disable warnings within system headers as
-                          * warnings are now treated as errors...
-                          */
 #include <windows.h>
 #include <msiquery.h>
 #include <malloc.h>
 
-#ifdef UNICODE
-#define _UNICODE
-#define _tstring    wstring
-#else
-#define _tstring    string
-#endif
-#include <tchar.h>
-#include <string>
 #include <stdio.h>
-#pragma warning(pop)
+#include <stdlib.h>
+#include <string.h>
 
 #include <sal/macros.h>
 #include <systools/win32/uwinapi.h>
@@ -59,10 +54,10 @@
 static const char *
 langid_to_string( LANGID langid, int *have_default_lang )
 {
-    /* Map from LANGID to string. The languages below are in the same
-     * seemingly random order as in
-     * setup_native/source/win32/msi-encodinglist.txt.
-     * Only the language part is returned in the string.
+    /* Map from LANGID to string. The languages below are now in
+     * alphabetical order of codes as in
+     * setup_native/source/win32/msi-encodinglist.txt. Only the
+     * language part is returned in the string.
      */
     switch (PRIMARYLANGID (langid)) {
     case LANG_ENGLISH:
@@ -70,112 +65,110 @@ langid_to_string( LANGID langid, int *have_default_lang )
             langid == MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT))
             *have_default_lang = 1;
         return "en";
-#define CASE(primary, name) \
+#define CASE(name, primary) \
         case LANG_##primary: return #name
-    CASE(PORTUGUESE, pt);
-    CASE(RUSSIAN, ru);
-    CASE(GREEK, el);
-    CASE(DUTCH, nl);
-    CASE(FRENCH, fr);
-    CASE(SPANISH, es);
-    CASE(FINNISH, fi);
-    CASE(HUNGARIAN, hu);
-    CASE(CATALAN, ca);
-    CASE(ITALIAN, it);
-    CASE(CZECH, cs);
-    CASE(SLOVAK, sk);
-    CASE(DANISH, da);
-    CASE(SWEDISH, sv);
-    CASE(POLISH, pl);
-    CASE(GERMAN, de);
-    CASE(THAI, th);
-    CASE(ESTONIAN, et);
-    CASE(JAPANESE, ja);
-    CASE(KOREAN, ko);
-    // CASE(KHMER, km);
-    // CASE(WELSH, cy);
-    CASE(CHINESE, zh);
-    CASE(TURKISH, tr);
-    CASE(HINDI, hi);
-    CASE(PUNJABI, pa);
-    CASE(TAMIL, ta);
-    CASE(ARABIC, ar);
-    CASE(HEBREW, he);
-    CASE(AFRIKAANS, af);
-    CASE(ALBANIAN, sq);
-    CASE(ARMENIAN, hy);
-    CASE(BASQUE, eu);
-    CASE(BELARUSIAN, be);
-    CASE(BENGALI, bn);
-    CASE(BULGARIAN, bg);
-    CASE(ICELANDIC, is);
-    CASE(INDONESIAN, id);
-    // CASE(LAO, lo);
-    CASE(LATVIAN, lv);
-    CASE(LITHUANIAN, lt);
-    // CASE(MALTESE, mt);
-    // CASE(ROMANSH, rm);
-    CASE(ROMANIAN, ro);
-    // CASE(KINYARWANDA, rw);
-    CASE(SANSKRIT, sa);
-    // CASE(SETSWANA, tn);
-    CASE(FARSI, fa);
-    CASE(FAEROESE, fo);
-    CASE(SLOVENIAN, sl);
-    // CASE(SORBIAN, sb);
-    // CASE(SUTU, st);
-    CASE(SWAHILI, sw);
-    CASE(TATAR, tt);
-    // CASE(TSONGA, ts);
-    CASE(UKRAINIAN, uk);
-    CASE(URDU, ur);
-    CASE(VIETNAMESE, vi);
-    // CASE(XHOSA, xh);
-    // CASE(YIDDISH, yi);
-    // CASE(ZULU, zu);
-    CASE(GUJARATI, gu);
-    // CASE(BRETON, br);
-    CASE(NEPALI, ne);
-    // CASE(NDEBELE, nr);
-    // CASE(SWAZI, ss);
-    // CASE(VENDA, ve);
-    // CASE(IRISH, ga);
-    CASE(MACEDONIAN, mk);
-    CASE(TELUGU, te);
-    CASE(MALAYALAM, ml);
-    CASE(MARATHI, mr);
-    CASE(ORIYA, or);
-    // CASE(KURDISH, ku);
-    // CASE(TAGALOG, tg);
-    // CASE(TIGRINYA, ti);
-    CASE(GALICIAN, gl);
-    CASE(KANNADA, kn);
-    CASE(MALAY, ms);
-    // CASE(TAJIK, tg);
-    CASE(GEORGIAN, ka);
-    // CASE(ESPERANTO, eo);
+    CASE(af, AFRIKAANS);
+    CASE(ar, ARABIC);
+    CASE(as, ASSAMESE);
+    CASE(be, BELARUSIAN);
+    CASE(bg, BULGARIAN);
+    CASE(bn, BENGALI);
+    CASE(br, BRETON);
+    CASE(ca, CATALAN);
+    CASE(cs, CZECH);
+    CASE(cy, WELSH);
+    CASE(da, DANISH);
+    CASE(de, GERMAN);
+    CASE(el, GREEK);
+    CASE(es, SPANISH);
+    CASE(et, ESTONIAN);
+    CASE(eu, BASQUE);
+    CASE(fa, FARSI);
+    CASE(fi, FINNISH);
+    CASE(fo, FAEROESE);
+    CASE(fr, FRENCH);
+    CASE(ga, IRISH);
+    CASE(gl, GALICIAN);
+    CASE(gu, GUJARATI);
+    CASE(he, HEBREW);
+    CASE(hi, HINDI);
+    CASE(hu, HUNGARIAN);
+    CASE(hy, ARMENIAN);
+    CASE(id, INDONESIAN);
+    CASE(is, ICELANDIC);
+    CASE(it, ITALIAN);
+    CASE(ja, JAPANESE);
+    CASE(ka, GEORGIAN);
+    CASE(km, KHMER);
+    CASE(kn, KANNADA);
+    CASE(ko, KOREAN);
+    CASE(ks, KASHMIRI);
+    CASE(lo, LAO);
+    CASE(lt, LITHUANIAN);
+    CASE(lv, LATVIAN);
+    CASE(mk, MACEDONIAN);
+    CASE(ml, MALAYALAM);
+    CASE(mn, MONGOLIAN);
+    CASE(mr, MARATHI);
+    CASE(ms, MALAY);
+    CASE(mt, MALTESE);
+    CASE(ne, NEPALI);
+    CASE(nl, DUTCH);
+    CASE(ns, SOTHO);
+    CASE(or, ORIYA);
+    CASE(pa, PUNJABI);
+    CASE(pl, POLISH);
+    CASE(pt, PORTUGUESE);
+    CASE(rm, ROMANSH);
+    CASE(ro, ROMANIAN);
+    CASE(ru, RUSSIAN);
+    CASE(rw, KINYARWANDA);
+    CASE(sa, SANSKRIT);
+    CASE(sb, UPPER_SORBIAN);
+    CASE(sd, SINDHI);
+    CASE(sk, SLOVAK);
+    CASE(sl, SLOVENIAN);
+    CASE(sq, ALBANIAN);
+    CASE(sv, SWEDISH);
+    CASE(sw, SWAHILI);
+    CASE(ta, TAMIL);
+    CASE(te, TELUGU);
+    CASE(tg, TAJIK);
+    CASE(th, THAI);
+    CASE(ti, TIGRIGNA);
+    CASE(tn, TSWANA);
+    CASE(tr, TURKISH);
+    CASE(tt, TATAR);
+    CASE(uk, UKRAINIAN);
+    CASE(ur, URDU);
+    CASE(uz, UZBEK);
+    CASE(vi, VIETNAMESE);
+    CASE(xh, XHOSA);
+    CASE(zh, CHINESE);
+    CASE(zu, ZULU);
 #undef CASE
     /* Special cases */
     default:
         switch (langid) {
         case MAKELANGID(LANG_SERBIAN, 0x05): return "bs";
-#define CASE(primary, sub, name) \
+#define CASE(name, primary, sub) \
         case MAKELANGID(LANG_##primary, SUBLANG_##sub): return #name
 
-        CASE(NORWEGIAN, NORWEGIAN_BOKMAL, nb);
-        CASE(NORWEGIAN, NORWEGIAN_NYNORSK, nn);
-        CASE(SERBIAN, DEFAULT, hr);
-        CASE(SERBIAN, SERBIAN_LATIN, sh);
-        CASE(SERBIAN, SERBIAN_CYRILLIC, sr);
-        // CASE(SOTHO, DEFAULT, ns);
-        // CASE(SOTHO, SOTHO_SOUTHERN, st);
+        CASE(hr, SERBIAN, DEFAULT);
+        CASE(nb, NORWEGIAN, NORWEGIAN_BOKMAL);
+        CASE(nn, NORWEGIAN, NORWEGIAN_NYNORSK);
+        CASE(sh, SERBIAN, SERBIAN_LATIN);
+        CASE(sr, SERBIAN, SERBIAN_CYRILLIC);
 #undef CASE
         default: return "";
         }
     }
 }
 
-static const char *ui_langs[100];
+/* Here we collect the UI languages present on the system;
+ * MAX_LANGUAGES is certainly enough for that
+ */
+static const char *ui_langs[MAX_LANGUAGES];
 static int num_ui_langs = 0;
 
 BOOL CALLBACK
@@ -209,10 +202,7 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
     MSIHANDLE database, view, record;
     DWORD length;
     int nlangs = 0;
-    /* Keeping this code simple and stupid... won't bother with any
-     * dynamic arrays or whatnot. 100 is more than enough for this purpose.
-     */
-    char langs[100][6];
+    char langs[MAX_LANGUAGES][6];
 
     database = MsiGetActiveDatabase(handle);
 
@@ -235,7 +225,8 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
     MessageBoxA(NULL, "MsiViewExecute success!", "SelectLanguage", MB_OK);
 #endif
 
-    while (MsiViewFetch(view, &record) == ERROR_SUCCESS) {
+    while (nlangs < MAX_LANGUAGES &&
+           MsiViewFetch(view, &record) == ERROR_SUCCESS) {
         length = sizeof(feature);
         if (MsiRecordGetStringA(record, 1, feature, &length) != ERROR_SUCCESS) {
             MsiCloseHandle(record);

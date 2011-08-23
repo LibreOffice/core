@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 #include <basidesh.hrc>
 #include <bastypes.hxx>
 #include <bastype2.hxx>
-#include <baside2.hxx>  // Leider brauche ich teilweise pModulWindow...
+#include <baside2.hxx>	// Leider brauche ich teilweise pModulWindow...
 #include <baside3.hxx>
 #include <baside2.hrc>
 #include <svtools/textview.hxx>
@@ -76,7 +76,7 @@ IDEBaseWindow::IDEBaseWindow( Window* pParent, const ScriptDocument& rDocument, 
     DBG_CTOR( IDEBaseWindow, 0 );
     pShellHScrollBar = 0;
     pShellVScrollBar = 0;
-    nStatus = 0;
+    nStatus	= 0;
 }
 
 
@@ -99,7 +99,7 @@ void IDEBaseWindow::Init()
         pShellVScrollBar->SetScrollHdl( LINK( this, IDEBaseWindow, ScrollHdl ) );
     if ( pShellHScrollBar )
         pShellHScrollBar->SetScrollHdl( LINK( this, IDEBaseWindow, ScrollHdl ) );
-    DoInit();   // virtuell...
+    DoInit();	// virtuell...
 }
 
 
@@ -115,7 +115,7 @@ void IDEBaseWindow::GrabScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll )
     DBG_CHKTHIS( IDEBaseWindow, 0 );
     pShellHScrollBar = pHScroll;
     pShellVScrollBar = pVScroll;
-//  Init(); // macht kein Sinn, fuehrt zu flackern, fuehr zu Fehlern...
+//	Init();	// macht kein Sinn, fuehrt zu flackern, fuehr zu Fehlern...
 }
 
 
@@ -321,7 +321,7 @@ void BreakPointList::SetBreakPointsInBasic( SbModule* pModule )
     }
 }
 
-BreakPoint* BreakPointList::FindBreakPoint( ULONG nLine )
+BreakPoint*	BreakPointList::FindBreakPoint( ULONG nLine )
 {
     BreakPoint* pBrk = First();
     while ( pBrk )
@@ -392,7 +392,7 @@ USHORT __EXPORT IDEBaseWindow::GetSearchOptions()
 
 
 BasicDockingWindow::BasicDockingWindow( Window* pParent ) :
-    DockingWindow( pParent, WB_BORDER | WB_3DLOOK | WB_DOCKABLE | WB_MOVEABLE |
+    DockingWindow( pParent,	WB_BORDER | WB_3DLOOK | WB_DOCKABLE | WB_MOVEABLE |
                             WB_SIZEABLE | WB_ROLLABLE |
                             WB_DOCKABLE | WB_CLIPCHILDREN )
 {
@@ -409,12 +409,12 @@ BOOL __EXPORT BasicDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
     {
         rRect.SetSize( aTmpRec.GetSize() );
     }
-    else    // Alte Groesse einstellen
+    else	// Alte Groesse einstellen
     {
         if ( !aFloatingPosAndSize.IsEmpty() )
             rRect.SetSize( aFloatingPosAndSize.GetSize() );
     }
-    return !bDock;  // bFloat
+    return !bDock;	// bFloat
 }
 
 
@@ -506,8 +506,8 @@ IMPL_LINK_INLINE_END( ExtendedEdit, EditAccHdl, Accelerator *, pAcc )
 
 struct TabBarDDInfo
 {
-    ULONG   npTabBar;
-    USHORT  nPage;
+    ULONG 	npTabBar;
+    USHORT 	nPage;
 
     TabBarDDInfo() { npTabBar = 0; nPage = 0; }
     TabBarDDInfo( ULONG _npTabBar, USHORT _nPage ) { npTabBar = _npTabBar; nPage = _nPage; }
@@ -545,7 +545,7 @@ void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
     if ( ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) && !IsInEditMode() )
     {
         Point aPos( rCEvt.IsMouseEvent() ? rCEvt.GetMousePosPixel() : Point(1,1) );
-        if ( rCEvt.IsMouseEvent() )     // Richtige Tab selektieren
+        if ( rCEvt.IsMouseEvent() ) 	// Richtige Tab selektieren
         {
             Point aP = PixelToLogic( aPos );
             MouseEvent aMouseEvent( aP, 1, MOUSE_SIMPLECLICK, MOUSE_LEFT );
@@ -583,7 +583,7 @@ void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
                 aPopup.RemoveDisabledEntries();
             }
              if ( aDocument.isInVBAMode() )
-            {
+            {	
                 // disable to delete or remove object modules in IDE
                 BasicManager* pBasMgr = aDocument.getBasicManager();
                 if ( pBasMgr )
@@ -706,7 +706,7 @@ void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, BO
         nStartPos = searchEOL( rStr, nStartPos );
         if( nStartPos == -1 )
             break;
-        nStartPos++;    // nicht das \n.
+        nStartPos++;	// nicht das \n.
         nLine++;
     }
 

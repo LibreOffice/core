@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,10 +52,10 @@ using namespace com::sun::star::scanner;
 // - Defines -
 // -----------
 
-#define REF( _def_Obj )                     Reference< _def_Obj >
-#define SEQ( _def_Obj )                     Sequence< _def_Obj >
-#define ANY                                 Any
-#define AWT                                 com::sun::star::awt
+#define REF( _def_Obj )						Reference< _def_Obj >
+#define SEQ( _def_Obj )						Sequence< _def_Obj > 
+#define ANY									Any 
+#define	AWT									com::sun::star::awt
 
 // ------------------
 // - ScannerManager -
@@ -66,42 +66,42 @@ class ScannerManager : public OWeakObject, XScannerManager, AWT::XBitmap
 protected:
 
     osl::Mutex                              maProtector;
-    void*                                   mpData;
+    void*									mpData;
 
-    void                                    AcquireData();
-    void                                    ReleaseData();
+    void									AcquireData();
+    void									ReleaseData();
 
 public:
 
                                             ScannerManager();
-    virtual                                 ~ScannerManager();
-
-    // XInterface
-    virtual ANY SAL_CALL                    queryInterface( const Type & rType ) throw( RuntimeException );
-    virtual void SAL_CALL                   acquire() throw();
-    virtual void SAL_CALL                   release() throw();
+    virtual									~ScannerManager();
+                                            
+    // XInterface										
+    virtual ANY SAL_CALL					queryInterface( const Type & rType ) throw( RuntimeException );
+    virtual void SAL_CALL					acquire() throw();
+    virtual void SAL_CALL					release() throw();
 
     // XScannerManager
-    virtual SEQ( ScannerContext ) SAL_CALL  getAvailableScanners() throw();
-    virtual BOOL SAL_CALL                   configureScanner( ScannerContext& scanner_context ) throw( ScannerException );
-    virtual void SAL_CALL                   startScan( const ScannerContext& scanner_context, const REF( com::sun::star::lang::XEventListener )& rxListener ) throw( ScannerException );
-    virtual ScanError SAL_CALL              getError( const ScannerContext& scanner_context ) throw( ScannerException );
-    virtual REF( AWT::XBitmap ) SAL_CALL    getBitmap( const ScannerContext& scanner_context ) throw( ScannerException );
+    virtual SEQ( ScannerContext ) SAL_CALL	getAvailableScanners() throw();
+    virtual BOOL SAL_CALL					configureScanner( ScannerContext& scanner_context ) throw( ScannerException );
+    virtual void SAL_CALL					startScan( const ScannerContext& scanner_context, const REF( com::sun::star::lang::XEventListener )& rxListener ) throw( ScannerException );
+    virtual ScanError SAL_CALL				getError( const ScannerContext& scanner_context ) throw( ScannerException );
+    virtual REF( AWT::XBitmap ) SAL_CALL	getBitmap( const ScannerContext& scanner_context ) throw( ScannerException );
 
     // XBitmap
-    virtual AWT::Size SAL_CALL              getSize() throw();
-    virtual SEQ( sal_Int8 ) SAL_CALL        getDIB() throw();
-    virtual SEQ( sal_Int8 ) SAL_CALL        getMaskDIB() throw();
+    virtual AWT::Size SAL_CALL				getSize() throw();
+    virtual SEQ( sal_Int8 ) SAL_CALL		getDIB() throw();
+    virtual SEQ( sal_Int8 ) SAL_CALL		getMaskDIB() throw();
 
     // Misc
-    static OUString                         getImplementationName_Static() throw();
-    static Sequence< OUString >             getSupportedServiceNames_Static() throw();
+    static OUString 						getImplementationName_Static() throw();
+    static Sequence< OUString > 			getSupportedServiceNames_Static() throw();
 
-    void                                    Lock() { maProtector.acquire(); }
-    void                                    Unlock() { maProtector.release(); }
+    void									Lock() { maProtector.acquire(); }
+    void									Unlock() { maProtector.release(); }
 
-    void*                                   GetData() const { return mpData; }
-    void                                    SetData( void* pData ) { ReleaseData(); mpData = pData; }
+    void*									GetData() const { return mpData; }
+    void									SetData( void* pData ) { ReleaseData(); mpData = pData; }
 };
 
 // -----------------------------------------------------------------------------

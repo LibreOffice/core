@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace frm
     using namespace ::com::sun::star::form::binding;
 
     //====================================================================
-    //=
+    //= 
     //====================================================================
     //--------------------------------------------------------------------
     OReferenceValueComponent::OReferenceValueComponent( const Reference< XMultiServiceFactory>& _rxFactory, const ::rtl::OUString& _rUnoControlModelTypeName, const ::rtl::OUString& _rDefault, sal_Bool _bSupportNoCheckRefValue )
@@ -59,7 +59,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    OReferenceValueComponent::OReferenceValueComponent( const OReferenceValueComponent* _pOriginal, const   Reference< XMultiServiceFactory>& _rxFactory )
+    OReferenceValueComponent::OReferenceValueComponent( const OReferenceValueComponent* _pOriginal, const	Reference< XMultiServiceFactory>& _rxFactory )
         :OBoundControlModel( _pOriginal, _rxFactory )
     {
         m_sReferenceValue           = _pOriginal->m_sReferenceValue;
@@ -99,7 +99,7 @@ namespace frm
             OBoundControlModel::getFastPropertyValue( _rValue, _nHandle );
         }
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL OReferenceValueComponent::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception)
     {
@@ -128,7 +128,7 @@ namespace frm
             OBoundControlModel::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
         }
     }
-
+    
     //--------------------------------------------------------------------
     sal_Bool SAL_CALL OReferenceValueComponent::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) throw (IllegalArgumentException)
     {
@@ -154,7 +154,7 @@ namespace frm
         }
         return bModified;
     }
-
+    
     //------------------------------------------------------------------------------
     Any OReferenceValueComponent::getDefaultForReset() const
     {

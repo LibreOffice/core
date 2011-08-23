@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,9 +28,9 @@
 
 /*************************************************************************
  *
- *    ATTENTION
- *    This file is intended to work inside and outside the StarOffice environment.
- *    Only adaption of file commtypes.hxx should be necessary. Else it is a bug!
+ *	  ATTENTION
+ *	  This file is intended to work inside and outside the StarOffice environment.
+ *	  Only adaption of file commtypes.hxx should be necessary. Else it is a bug!
  *
  ************************************************************************/
 
@@ -46,19 +46,19 @@ public:
     ICommStream(){}
     virtual ~ICommStream(){}
 
-    virtual ICommStream&    operator>>( comm_USHORT& rUShort )=0;
-    virtual ICommStream&    operator>>( comm_ULONG& rULong )=0;
-    virtual ICommStream&    operator>>( comm_BOOL& rChar )=0;
+    virtual ICommStream&	operator>>( comm_USHORT& rUShort )=0;
+    virtual ICommStream&	operator>>( comm_ULONG& rULong )=0;
+    virtual ICommStream&	operator>>( comm_BOOL& rChar )=0;
 
-    virtual ICommStream&    operator<<( comm_USHORT nUShort )=0;
-    virtual ICommStream&    operator<<( comm_ULONG nULong )=0;
-    virtual ICommStream&    operator<<( comm_BOOL nChar )=0;
+    virtual ICommStream&	operator<<( comm_USHORT nUShort )=0;
+    virtual ICommStream&	operator<<( comm_ULONG nULong )=0;
+    virtual ICommStream&	operator<<( comm_BOOL nChar )=0;
 
-    virtual comm_ULONG          Read( void* pData, comm_ULONG nSize )=0;
-    virtual comm_ULONG          Write( const void* pData, comm_ULONG nSize )=0;
+    virtual comm_ULONG			Read( void* pData, comm_ULONG nSize )=0;
+    virtual comm_ULONG			Write( const void* pData, comm_ULONG nSize )=0;
 
-    virtual comm_BOOL       IsEof() const=0;
-    virtual comm_ULONG      SeekRel( long nPos )=0;
+    virtual comm_BOOL		IsEof() const=0;
+    virtual comm_ULONG		SeekRel( long nPos )=0;
 
 };
 

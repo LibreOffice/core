@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,41 +54,41 @@ ElementCollector::ElementCollector(
 /****** ElementCollector/ElementCollector *************************************
  *
  *   NAME
- *  ElementCollector -- constructor method
+ *	ElementCollector -- constructor method
  *
  *   SYNOPSIS
- *  ElementCollector(nSecurityId, nBufferId, nPriority, bToModify
- *                   xReferenceResolvedListener);
+ *	ElementCollector(nSecurityId, nBufferId, nPriority, bToModify 
+ *	                 xReferenceResolvedListener);
  *
  *   FUNCTION
- *  construct an ElementCollector object.
+ *	construct an ElementCollector object.
  *
  *   INPUTS
- *  nSecurityId -   represents which security entity the buffer node is
- *          related with. Either a signature or an encryption is
- *          a security entity.
- *  nBufferId - the id of the element bufferred in the document
- *          wrapper component. The document wrapper component
- *          uses this id to search the particular bufferred
- *          element.
- *  nPriority - the priority value. ElementCollector with lower
- *          priority value can't notify until all ElementCollectors
- *          with higher priority value have notified.
- *  bToModify - A flag representing whether this ElementCollector
- *          notification will cause the modification of its working
- *                  element.
- *  xReferenceResolvedListener
- *            - the listener that this ElementCollector notifies to.
+ *	nSecurityId - 	represents which security entity the buffer node is
+ *			related with. Either a signature or an encryption is
+ *			a security entity.
+ *	nBufferId -	the id of the element bufferred in the document
+ *			wrapper component. The document wrapper component 
+ *			uses this id to search the particular bufferred
+ *			element.
+ *	nPriority -	the priority value. ElementCollector with lower
+ *			priority value can't notify until all ElementCollectors
+ *			with higher priority value have notified.
+ *	bToModify -	A flag representing whether this ElementCollector
+ *			notification will cause the modification of its working
+ *	                element.
+ *	xReferenceResolvedListener
+ *	          -	the listener that this ElementCollector notifies to.
  *
  *   RESULT
- *  empty
+ *	empty
  *
  *   HISTORY
- *  05.01.2004 -    implemented
+ *	05.01.2004 -	implemented
  *
  *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
+ *	Michael Mi
+ *	Email: michael.mi@sun.com
  ******************************************************************************/
 {
     m_type = cssxc::sax::ElementMarkType_ELEMENTCOLLECTOR;
@@ -115,26 +115,26 @@ void ElementCollector::notifyListener()
 /****** ElementCollector/notifyListener ***************************************
  *
  *   NAME
- *  notifyListener -- enable the ability to notify the listener
+ *	notifyListener -- enable the ability to notify the listener
  *
  *   SYNOPSIS
- *  notifyListener();
+ *	notifyListener();
  *
  *   FUNCTION
- *  enable the ability to notify the listener and try to notify then.
+ *	enable the ability to notify the listener and try to notify then.
  *
  *   INPUTS
- *  empty
+ *	empty
  *
  *   RESULT
- *  empty
+ *	empty
  *
  *   HISTORY
- *  05.01.2004 -    implemented
+ *	05.01.2004 -	implemented
  *
  *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
+ *	Michael Mi
+ *	Email: michael.mi@sun.com
  ******************************************************************************/
 {
     m_bAbleToNotify = true;
@@ -151,27 +151,27 @@ void ElementCollector::setReferenceResolvedListener(
 /****** ElementCollector/setReferenceResolvedListener *************************
  *
  *   NAME
- *  setReferenceResolvedListener -- configures a listener for the buffer
- *  node in this object
+ *	setReferenceResolvedListener -- configures a listener for the buffer
+ *	node in this object
  *
  *   SYNOPSIS
- *  setReferenceResolvedListener(xReferenceResolvedListener);
+ *	setReferenceResolvedListener(xReferenceResolvedListener);
  *
  *   FUNCTION
- *  configures a new listener and try to notify then.
+ *	configures a new listener and try to notify then.
  *
  *   INPUTS
- *  xReferenceResolvedListener - the new listener
+ *	xReferenceResolvedListener - the new listener
  *
  *   RESULT
- *  empty
+ *	empty
  *
  *   HISTORY
- *  05.01.2004 -    implemented
+ *	05.01.2004 -	implemented
  *
  *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
+ *	Michael Mi
+ *	Email: michael.mi@sun.com
  ******************************************************************************/
 {
     m_xReferenceResolvedListener = xReferenceResolvedListener;
@@ -182,26 +182,26 @@ void ElementCollector::setSecurityId(sal_Int32 nSecurityId)
 /****** ElementCollector/setSecurityId ****************************************
  *
  *   NAME
- *  setSecurityId -- configures the security Id of the buffer node
+ *	setSecurityId -- configures the security Id of the buffer node
  *
  *   SYNOPSIS
- *  setSecurityId(nSecurityId);
+ *	setSecurityId(nSecurityId);
  *
  *   FUNCTION
- *  configures the security Id and try to notify then
+ *	configures the security Id and try to notify then
  *
  *   INPUTS
- *  nSecurityId - the security Id
+ *	nSecurityId - the security Id
  *
  *   RESULT
- *  empty
+ *	empty
  *
  *   HISTORY
- *  05.01.2004 -    implemented
+ *	05.01.2004 -	implemented
  *
  *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
+ *	Michael Mi
+ *	Email: michael.mi@sun.com
  ******************************************************************************/
 {
     m_nSecurityId = nSecurityId;
@@ -212,30 +212,30 @@ void ElementCollector::doNotify()
 /****** ElementCollector/doNotify *********************************************
  *
  *   NAME
- *  doNotify -- tries to notify the listener
+ *	doNotify -- tries to notify the listener
  *
  *   SYNOPSIS
- *  doNotify();
+ *	doNotify();
  *
  *   FUNCTION
- *  notifies the listener when all below conditions are satisfied:
- *  the listener has not been notified;
- *  the notify right is granted;
- *  the listener has already been configured;
- *  the security id has already been configure
+ *	notifies the listener when all below conditions are satisfied:
+ *	the listener has not been notified;
+ *	the notify right is granted;
+ *	the listener has already been configured;
+ *	the security id has already been configure
  *
  *   INPUTS
- *  empty
+ *	empty
  *
  *   RESULT
- *  empty
+ *	empty
  *
  *   HISTORY
- *  05.01.2004 -    implemented
+ *	05.01.2004 -	implemented
  *
  *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
+ *	Michael Mi
+ *	Email: michael.mi@sun.com
  ******************************************************************************/
 {
     if (!m_bNotified &&
@@ -254,44 +254,44 @@ ElementCollector* ElementCollector::clone(
 /****** ElementCollector/clone ************************************************
  *
  *   NAME
- *  clone -- duplicates this ElementCollector object
+ *	clone -- duplicates this ElementCollector object
  *
  *   SYNOPSIS
- *  cloned = clone(nBufferId, nPriority);
+ *	cloned = clone(nBufferId, nPriority);
  *
  *   FUNCTION
- *  duplicates this ElementCollector object with new buffer Id, priority.
+ *	duplicates this ElementCollector object with new buffer Id, priority.
  *
  *   INPUTS
- *  nBufferId - the buffer node's Id
- *  nPriority - the priority
+ *	nBufferId -	the buffer node's Id
+ *	nPriority -	the priority
  *
  *   RESULT
- *  clone -     a new ElementCollector
+ *	clone - 	a new ElementCollector
  *
  *   HISTORY
- *  05.01.2004 -    implemented
+ *	05.01.2004 -	implemented
  *
  *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
+ *	Michael Mi
+ *	Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    ElementCollector* pClonedOne
-        = new ElementCollector(m_nSecurityId,
+    ElementCollector* pClonedOne 
+        = new ElementCollector(m_nSecurityId, 
                        nBufferId, nPriority, m_bToModify,
                        m_xReferenceResolvedListener);
-
+    
     if (m_bAbleToNotify)
     {
         pClonedOne->notifyListener();
     }
-
+    
     if (m_pBufferNode != NULL)
     {
         m_pBufferNode->addElementCollector(pClonedOne);
     }
-
+    
     return pClonedOne;
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ namespace frm
 // ***************************************************************************************************
 // ***************************************************************************************************
 
-typedef ::osl::Thread   OComponentEventThread_TBASE;
+typedef ::osl::Thread	OComponentEventThread_TBASE;
 class OComponentEventThread
             :public OComponentEventThread_TBASE
             ,public ::com::sun::star::lang::XEventListener
@@ -58,16 +58,16 @@ class OComponentEventThread
 {
     DECLARE_STL_VECTOR(::com::sun::star::lang::EventObject*, ThreadEvents);
     DECLARE_STL_VECTOR(::com::sun::star::uno::Reference< ::com::sun::star::uno::XAdapter> , ThreadObjects);
-    DECLARE_STL_VECTOR(sal_Bool,    ThreadBools);
+    DECLARE_STL_VECTOR(sal_Bool,	ThreadBools);
 
     ::osl::Mutex                    m_aMutex;
-    ::osl::Condition                m_aCond;            // Queue gefuellt?
-    ThreadEvents                    m_aEvents;          // Event-Queue
-    ThreadObjects                   m_aControls;        // Control fuer Submit
-    ThreadBools                     m_aFlags;           // Flags fuer Submit/Reset
+    ::osl::Condition 				m_aCond;			// Queue gefuellt?
+    ThreadEvents 					m_aEvents;			// Event-Queue
+    ThreadObjects	 				m_aControls;		// Control fuer Submit
+    ThreadBools						m_aFlags;			// Flags fuer Submit/Reset
 
-    ::cppu::OComponentHelper*                   m_pCompImpl;    // Implementierung des Controls
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>   m_xComp;        // ::com::sun::star::lang::XComponent des Controls
+    ::cppu::OComponentHelper*					m_pCompImpl;	// Implementierung des Controls
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>	m_xComp;		// ::com::sun::star::lang::XComponent des Controls
 
 protected:
 
@@ -113,14 +113,14 @@ public:
     void SAL_CALL operator delete( void * p ) throw() { osl::Thread::operator delete(p); }
 
 private:
-    void    implStarted( );
-    void    implTerminated( );
+    void	implStarted( );
+    void	implTerminated( );
 
     void    impl_clearEventQueue();
 };
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 
 #endif // _FRM_EVENT_THREAD_HXX_

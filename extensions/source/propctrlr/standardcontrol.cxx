@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -697,7 +697,7 @@ namespace pcr
             pColorTable = XColorTable::GetStdColorTable();
         }
 
-
+        
         DBG_ASSERT(pColorTable, "OColorControl::OColorControl: no color table!");
 
         if (pColorTable)
@@ -729,7 +729,7 @@ namespace pcr
 
                 getTypedControlWindow()->SelectEntry( aRgbCol );
                 if ( !getTypedControlWindow()->IsEntrySelected( aRgbCol ) )
-                {   // the given color is not part of the list -> insert a new entry with the hex code of the color
+                {	// the given color is not part of the list -> insert a new entry with the hex code of the color
                     String aStr = String::CreateFromAscii("0x");
                     aStr += MakeHexStr(nColor,8);
                     getTypedControlWindow()->InsertEntry( aRgbCol, aStr );
@@ -889,7 +889,7 @@ namespace pcr
         ::rtl::OUString* pIter = aRet.getArray();
         for (USHORT i = 0; i < nCount ; ++i,++pIter)
             *pIter = getTypedControlWindow()->GetEntry(i);
-
+        
         return aRet;
     }
 
@@ -959,7 +959,7 @@ namespace pcr
         ::rtl::OUString* pIter = aRet.getArray();
         for (USHORT i = 0; i < nCount ; ++i,++pIter)
             *pIter = getTypedControlWindow()->GetEntry(i);
-
+        
         return aRet;
     }
 
@@ -978,17 +978,17 @@ namespace pcr
     class OMultilineFloatingEdit : public FloatingWindow
     {
     private:
-        MultiLineEdit   m_aImplEdit;
+        MultiLineEdit	m_aImplEdit;
 
     protected:
-        virtual void    Resize();
+        virtual void	Resize();
 
     public:
                         OMultilineFloatingEdit(Window* _pParen);
         MultiLineEdit*  getEdit() { return &m_aImplEdit; }
 
     protected:
-        virtual long    PreNotify(NotifyEvent& _rNEvt);
+        virtual long	PreNotify(NotifyEvent& _rNEvt);
     };
 
     //------------------------------------------------------------------
@@ -1016,11 +1016,11 @@ namespace pcr
             const KeyCode& aKeyCode = _rNEvt.GetKeyEvent()->GetKeyCode();
             sal_uInt16 nKey = aKeyCode.GetCode();
 
-            if  (   (   (KEY_RETURN == nKey)
+            if	(	(	(KEY_RETURN == nKey)
                     && !aKeyCode.IsShift()
                     )
-                ||  (   (KEY_UP == nKey)
-                    &&  aKeyCode.IsMod2()
+                ||	(	(KEY_UP == nKey)
+                    &&	aKeyCode.IsMod2()
                     )
                 )
             {
@@ -1159,7 +1159,7 @@ namespace pcr
                 ShowDropDown( sal_True );
                 m_pFloatingEdit->getEdit()->GrabFocus();
                 m_pFloatingEdit->getEdit()->SetSelection( aSel );
-                Window* pFocusWin = Application::GetFocusWindow();
+                Window*	pFocusWin = Application::GetFocusWindow();
                 pFocusWin->KeyInput( *rNEvt.GetKeyEvent() );
             }
         }
@@ -1217,7 +1217,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    #define STD_HEIGHT  100
+    #define STD_HEIGHT	100
     sal_Bool DropDownEditControl::ShowDropDown( sal_Bool bShow )
     {
         if (bShow)

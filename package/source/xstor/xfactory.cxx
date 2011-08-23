@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,15 +92,15 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
             uno::RuntimeException )
 {
     // TODO: reimplement TempStream service to support XStream interface
-    uno::Reference < io::XStream > xTempStream(
+    uno::Reference < io::XStream > xTempStream( 
                         m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
                         uno::UNO_QUERY );
 
     if ( !xTempStream.is() )
         throw uno::RuntimeException(); // TODO:
 
-    return uno::Reference< uno::XInterface >(
-                static_cast< OWeakObject* >( new OStorage(  xTempStream,
+    return uno::Reference< uno::XInterface >( 
+                static_cast< OWeakObject* >( new OStorage(	xTempStream,
                                                             embed::ElementModes::READWRITE,
                                                             uno::Sequence< beans::PropertyValue >(),
                                                             m_xFactory,
@@ -164,8 +164,8 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
             throw lang::IllegalArgumentException(); // TODO:
         }
 
-        uno::Reference < ::com::sun::star::ucb::XSimpleFileAccess > xTempAccess(
-                m_xFactory->createInstance (
+        uno::Reference < ::com::sun::star::ucb::XSimpleFileAccess > xTempAccess( 
+                m_xFactory->createInstance ( 
                         ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
                 uno::UNO_QUERY );
 
@@ -186,9 +186,9 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     // retrieve mediadescriptor and set storage properties
     uno::Sequence< beans::PropertyValue > aDescr;
     uno::Sequence< beans::PropertyValue > aPropsToSet;
-
+    
     sal_Int32 nStorageType = embed::StorageFormats::PACKAGE;
-
+    
     if ( nArgNum >= 3 )
     {
         if( aArguments[2] >>= aDescr )
@@ -268,7 +268,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
         if ( !CheckPackageSignature_Impl( xInputStream, xSeekable ) )
             throw io::IOException(); // TODO: this is not a package file
 
-        return uno::Reference< uno::XInterface >(
+        return uno::Reference< uno::XInterface >( 
                     static_cast< OWeakObject* >( new OStorage( xInputStream, nStorageMode, aPropsToSet, m_xFactory, nStorageType ) ),
                     uno::UNO_QUERY );
     }
@@ -288,7 +288,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
         if ( !CheckPackageSignature_Impl( xStream->getInputStream(), xSeekable ) )
             throw io::IOException(); // TODO: this is not a package file
 
-        return uno::Reference< uno::XInterface >(
+        return uno::Reference< uno::XInterface >( 
                     static_cast< OWeakObject* >( new OStorage( xStream, nStorageMode, aPropsToSet, m_xFactory, nStorageType ) ),
                     uno::UNO_QUERY );
     }

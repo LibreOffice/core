@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include "addresssettings.hxx"
 
-namespace com { namespace sun { namespace star {
+namespace com { namespace sun { namespace star { 
     namespace lang {
         class XMultiServiceFactory;
     }
@@ -77,7 +77,7 @@ namespace abp
             <p>The column names as used by the SDBC driver for address books is stored in the configuration,
             and this function creates a mapping which uses this configuration information.</p>
         */
-        void defaultMapping(
+        void defaultMapping( 
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             MapString2String& /* [out] */ _rFieldAssignment
         ) SAL_THROW ( ( ) );
@@ -91,7 +91,7 @@ namespace abp
         ) SAL_THROW ( ( ) );
 
     //.....................................................................
-    }   // namespace fieldmapping
+    }	// namespace fieldmapping
     //.....................................................................
 
     //.....................................................................
@@ -116,11 +116,11 @@ namespace abp
         ) SAL_THROW ( ( ) );
 
     //.....................................................................
-    }   // namespace addressconfig
+    }	// namespace addressconfig
     //.....................................................................
 
 //.........................................................................
-}   // namespace abp
+}	// namespace abp
 //.........................................................................
 
 #endif // EXTENSIONS_ABP_FIELDMAPPINGIMPL_HXX

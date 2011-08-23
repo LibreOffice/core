@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ static bool GetMsiProp(MSIHANDLE handle, LPCTSTR name, /*out*/std::wstring& valu
         MsiGetProperty(handle, name, buff, &sz);
         value = buff;
         return true;
-    }
+    }            
     return false;
 }
 
@@ -90,7 +90,7 @@ static bool GetMsiProp(MSIHANDLE handle, LPCTSTR name, /*out*/std::wstring& valu
 UINT ShowReleaseNotes( TCHAR* pFileName, TCHAR* pFilePath )
 {
     TCHAR sFullPath[ MAX_PATH ];
-
+    
     if ( FAILED( StringCchCopy( sFullPath, MAX_PATH, pFilePath ) ) )
     {
         OutputDebugStringFormat( TEXT("DEBUG: ShowReleaseNotes: Could not copy path [%s]"), pFilePath );
@@ -104,7 +104,7 @@ UINT ShowReleaseNotes( TCHAR* pFileName, TCHAR* pFilePath )
     }
 
     HANDLE hFile = CreateFile( sFullPath, 0, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-
+    
     if ( IsValidHandle(hFile) )
     {
         CloseHandle( hFile );

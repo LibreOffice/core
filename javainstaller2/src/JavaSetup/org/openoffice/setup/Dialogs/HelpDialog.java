@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,22 +53,22 @@ public class HelpDialog extends JDialog implements ActionListener {
     private JScrollPane editorScrollPane;
     private String helpFileName;
     private String helpFileString;
-
+    
     public HelpDialog(SetupFrame setupFrame) {
 
         super(setupFrame.getDialog());
 
         InstallData data = InstallData.getInstance();
-
+        
         helpFileString = setupFrame.getCurrentPanel().getHelpFileName();
         helpFileName = ResourceManager.getFileName(helpFileString);
         // String dialogName = setupFrame.getCurrentPanel().getName();
-
-        String helpTitle = ResourceManager.getString("String_Help");
+        
+        String helpTitle = ResourceManager.getString("String_Help");    
         setTitle(helpTitle);
         // setLayout(new java.awt.BorderLayout());
         this.getContentPane().setLayout(new java.awt.BorderLayout());
-
+        
         JPanel toppanel = new JPanel();
         toppanel.setLayout(new java.awt.BorderLayout());
         toppanel.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
@@ -89,11 +89,11 @@ public class HelpDialog extends JDialog implements ActionListener {
         // String helpTitle1 = null;
         // InstallData data = InstallData.getInstance();
         // if ( data.isInstallationMode() ) {
-        //     helpTitle1 = ResourceManager.getString("String_Help_Title_1");
+        //     helpTitle1 = ResourceManager.getString("String_Help_Title_1");    
         // } else {
         //     helpTitle1 = ResourceManager.getString("String_Help_Title_1_Uninstallation");
         // }
-
+            
         // PanelLabel label1 = new PanelLabel(helpTitle1, true);
         // String helpTitle2 = ResourceManager.getString("String_Help_Title_2");
         // PanelLabel label2 = new PanelLabel(helpTitle2);
@@ -105,21 +105,21 @@ public class HelpDialog extends JDialog implements ActionListener {
         if ( data.useRtl() ) { okButton.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         JSeparator separator = new JSeparator();
-
+        
         // toppanel.add(label1, BorderLayout.NORTH);
-        // toppanel.add(label2, BorderLayout.CENTER);
-        buttonpanel.add(okButton);
+        // toppanel.add(label2, BorderLayout.CENTER);  
+        buttonpanel.add(okButton);  
 
         this.getContentPane().add(toppanel, BorderLayout.NORTH);
         this.getContentPane().add(editorScrollPane, BorderLayout.CENTER);
         this.getContentPane().add(buttonpanel, BorderLayout.SOUTH);
 
-        // Setting tab-order and focus on okButton
+        // Setting tab-order and focus on okButton 
         DialogFocusTraversalPolicy policy = new DialogFocusTraversalPolicy(new JComponent[] {okButton, editorScrollPane});
         this.setFocusTraversalPolicy(policy);  // set policy
         this.setFocusCycleRoot(true); // enable policy
     }
-
+ 
      private JEditorPane createEditorPane() {
         JEditorPane editorPane = new JEditorPane();
         editorPane.setEditable(false);
@@ -145,10 +145,10 @@ public class HelpDialog extends JDialog implements ActionListener {
         else {
             System.err.println("Did not find html directory");
         }
-
+        
         return editorPane;
     }
-
+    
 //    public void setTabForScrollPane() {
 //        JScrollBar ScrollBar = editorScrollPane.getVerticalScrollBar();
 //        editorPane.setFocusable(true);
@@ -157,10 +157,10 @@ public class HelpDialog extends JDialog implements ActionListener {
 //            editorPane.setFocusable(false);
 //        }
 //    }
-
+    
     public void actionPerformed (java.awt.event.ActionEvent evt) {
         setVisible(false);
-        dispose();
+        dispose(); 
     }
 
 }
