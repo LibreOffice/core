@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,19 +32,19 @@ import lib.MultiMethodTest;
 
 
 public class _XTemplateContainer extends MultiMethodTest {
-
+    
     public XTemplateContainer oObj;
-
+    
     public void _getElementTemplateName() {
         String tName = (String) tEnv.getObjRelation("TemplateName");
         String oTName = oObj.getElementTemplateName();
-        log.println("TemplateName: "+oTName);
+        log.println("TemplateName: "+oTName);   
         boolean res = oTName.equals(tName);
         if (!res) {
             log.println("Expected: "+tName);
             log.println("Gained: "+oTName);
         }
-        tRes.tested("getElementTemplateName()", res);
+        tRes.tested("getElementTemplateName()", res); 
     }
-
+    
 }

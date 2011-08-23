@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ import java.util.Vector;
  * fill the TestParameters.<br>
  * Will then call the appropriate Testbase to run the tests.
  */
-public class RunnerService implements XJob, XServiceInfo,
+public class RunnerService implements XJob, XServiceInfo, 
                                             XTypeProvider, XPropertyAccess {
 
     static public final String __serviceName = "org.openoffice.Runner";
@@ -81,7 +81,7 @@ public class RunnerService implements XJob, XServiceInfo,
         TestParameters param = new TestParameters();
         DynamicClassLoader dcl = new DynamicClassLoader();
 
-
+        
         // take the standard log writer
         String standardLogWriter = param.LogWriter;
         String standardOutProducer = param.OutProducer;
@@ -109,9 +109,9 @@ public class RunnerService implements XJob, XServiceInfo,
 
         //parse the commandline arguments
         cli.getCommandLineParameter(param,arguments);
-
-        // now compare the standard log writer with the parameters:
-        // if we have a new one, use the new, else use the internal
+        
+        // now compare the standard log writer with the parameters: 
+        // if we have a new one, use the new, else use the internal 
         // log writer
         if (((String)param.get("LogWriter")).equals(standardLogWriter))
             param.put("LogWriter", "stats.InternalLogWriter");
@@ -119,7 +119,7 @@ public class RunnerService implements XJob, XServiceInfo,
             param.put("OutProducer", "stats.InternalLogWriter");
         LogWriter log = (LogWriter) dcl.getInstance(
                                             (String)param.get("LogWriter"));
-
+        
         param.put("ServiceFactory", xMSF);
 
         param.ServiceFactory = xMSF; //(XMultiServiceFactory)
@@ -132,7 +132,7 @@ public class RunnerService implements XJob, XServiceInfo,
         boolean worked = toExecute.executeTest(param);
         if (!worked)
             log.println("Test did not execute correctly.");
-
+        
         String returnString = "";
         if (log instanceof InternalLogWriter)
             returnString = ((InternalLogWriter)log).getLog();
@@ -223,7 +223,7 @@ public class RunnerService implements XJob, XServiceInfo,
         Vector v = new Vector(600);
         try {
             // open connection to  Jar
-            java.net.JarURLConnection con =
+            java.net.JarURLConnection con = 
                                 (java.net.JarURLConnection)url.openConnection();
             // get Jar file from connection
             java.util.jar.JarFile f = con.getJarFile();
@@ -236,7 +236,7 @@ public class RunnerService implements XJob, XServiceInfo,
 
                     String module = null;
                     String object = null;
-
+                    
                     int startIndex = entry.indexOf("objdsc/") + 7;
                     int endIndex = entry.lastIndexOf('/');
 /*                    int endIndex = entry.indexOf('.');
@@ -244,7 +244,7 @@ public class RunnerService implements XJob, XServiceInfo,
                     startIndex = 0;
                     endIndex = module.lastIndexOf('/'); */
                     module = entry.substring(startIndex, endIndex);
-
+                    
                     // special cases
                     if (entry.indexOf("/file/") != -1 || entry.indexOf("/xmloff/") != -1) {
                         endIndex = entry.indexOf(".csv");
@@ -273,15 +273,15 @@ public class RunnerService implements XJob, XServiceInfo,
                         object = object.substring(startIndex+1);
                     }
                     v.add(module+"."+object);
-                }
+                } 
             }
         }
         catch(java.io.IOException e) {
            e.printStackTrace();
-        }
+        } 
 
         int size = v.size();
-
+        
         String[] sTestCases = new String[size];
         v.toArray(sTestCases);
         java.util.Arrays.sort(sTestCases);
@@ -335,14 +335,14 @@ public class RunnerService implements XJob, XServiceInfo,
     /**
      * empty: not needed here.
      */
-    public void setPropertyValues(PropertyValue[] propertyValue)
-                        throws com.sun.star.beans.UnknownPropertyException,
-                               com.sun.star.beans.PropertyVetoException,
-                               com.sun.star.lang.IllegalArgumentException,
+    public void setPropertyValues(PropertyValue[] propertyValue) 
+                        throws com.sun.star.beans.UnknownPropertyException, 
+                               com.sun.star.beans.PropertyVetoException, 
+                               com.sun.star.lang.IllegalArgumentException, 
                                com.sun.star.lang.WrappedTargetException {
       // empty implementation
     }
-
+    
 }
 
 

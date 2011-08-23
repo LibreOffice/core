@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,13 +98,13 @@ public class ODatabaseSource extends TestCase {
     protected void initialize ( TestParameters Param, PrintWriter log) {
         uniqueSuffix = uniqueSuffixStat++ ;
     }
-
+    
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing not longer needed docs... ");
         DesktopTools.closeDoc(xDBDoc);
     }
-
-
+    
+    
 
     /**
     * Creating a Testenvironment for the interfaces to be tested.
@@ -133,7 +133,7 @@ public class ODatabaseSource extends TestCase {
         try{
             oInterface = xMSF.createInstance( "com.sun.star.sdb.DatabaseContext" );
 
-            if (oInterface == null)
+            if (oInterface == null) 
                 throw new StatusException("Could not get service 'com.sun.star.sdb.DatabaseContext'", new Exception());
 
         }catch( Exception e ) {
@@ -153,8 +153,8 @@ public class ODatabaseSource extends TestCase {
         try{
             XInterface oDatabaseDoc = (XInterface) xMSF.createInstance
                                     ("com.sun.star.sdb.OfficeDatabaseDocument") ;
-
-            if (oDatabaseDoc == null)
+            
+            if (oDatabaseDoc == null) 
                 throw new StatusException("Could not get service 'com.sun.star.sdb.OfficeDatabaseDocument'", new Exception());
 
             xDBDoc = (XOfficeDatabaseDocument) UnoRuntime.queryInterface(
@@ -169,12 +169,12 @@ public class ODatabaseSource extends TestCase {
 
         oObj = (XInterface) xDBDoc.getDataSource();
         log.println("ImplementationName: " + utils.getImplName(oObj));
-
+        
         // Creating new DBase data source in the TEMP directory
 
         XPropertySet xSrcProp = (XPropertySet)
             UnoRuntime.queryInterface(XPropertySet.class, oObj);
-
+        
         try{
             xSrcProp.setPropertyValue("URL", tmpDatabaseUrl) ;
         } catch ( UnknownPropertyException e){
@@ -198,7 +198,7 @@ public class ODatabaseSource extends TestCase {
 
         // registering source in DatabaseContext
         XStorable store = (XStorable) UnoRuntime.queryInterface(XStorable.class, xDBDoc);
-        String aFile = utils.getOfficeTemp ((XMultiServiceFactory) Param.getMSF ())+"DataSource.odb";
+        String aFile = utils.getOfficeTemp ((XMultiServiceFactory) Param.getMSF ())+"DataSource.odb";     
         try{
             store.storeAsURL(aFile,new PropertyValue[]{});
         } catch (IOException e){
@@ -210,16 +210,16 @@ public class ODatabaseSource extends TestCase {
             e.printStackTrace ();
             throw new StatusException("Could not save ", e) ;
         }
-
+        
 
         try{
-            xDBContextNameServ.registerObject(databaseName, oObj) ;
+            xDBContextNameServ.registerObject(databaseName, oObj) ;            
         } catch (Exception e){
             log.println("Could not register data source" );
             e.printStackTrace ();
             throw new StatusException("Could not register ", e) ;
         }
-
+        
         log.println( "    creating a new environment for object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
 

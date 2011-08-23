@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,7 +107,7 @@ public class ODatasourceBrowser extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, 
                                                         DesktopTools.createDesktop(
                                                                 (XMultiServiceFactory)Param.getMSF()));
         System.setProperty("hideMe", "false");
@@ -182,7 +182,7 @@ public class ODatasourceBrowser extends TestCase {
      * @see com.sun.star.frame.XController
      * @see com.sun.star.frame.XDispatchProvider
      */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, 
                                                                  PrintWriter log) {
         log.println("creating a test environment");
 
@@ -214,7 +214,7 @@ public class ODatasourceBrowser extends TestCase {
 
         shortWait();
 
-        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class, 
                                                             xTextDoc);
 
         XController secondController = aModel1.getCurrentController();
@@ -273,15 +273,15 @@ public class ODatasourceBrowser extends TestCase {
 
         shortWait();
 
-        XControlShape aShape = FormTools.createControlShape(xTextDoc, 3000,
-                                                            4500, 15000, 10000,
+        XControlShape aShape = FormTools.createControlShape(xTextDoc, 3000, 
+                                                            4500, 15000, 10000, 
                                                             "CommandButton");
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
 
         XControlModel shapeModel = aShape.getControl();
 
         XControlAccess xCtrlAccess = (XControlAccess) UnoRuntime.queryInterface(
-                                             XControlAccess.class,
+                                             XControlAccess.class, 
                                              secondController);
         XControl xCtrl = null;
 
@@ -292,7 +292,7 @@ public class ODatasourceBrowser extends TestCase {
             e.printStackTrace(log);
         }
 
-        XWindow docWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow docWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
                                                                 xCtrl);
         log.println("creating a new environment for ODatasourceBrowser object");
 
@@ -312,7 +312,7 @@ public class ODatasourceBrowser extends TestCase {
 
 
         // Addig relation for XDispatchProvider
-        tEnv.addObjRelation("XDispatchProvider.URL",
+        tEnv.addObjRelation("XDispatchProvider.URL", 
                             ".uno:DataSourceBrowser/FormLetter");
 
         return tEnv;

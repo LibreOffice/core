@@ -3,7 +3,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -27,8 +27,8 @@
 #
 #*************************************************************************
 #
-#   short description :
-#     This Perl sciprt translates *.res files of qatesttool into human
+#   short description : 
+#     This Perl sciprt translates *.res files of qatesttool into human 
 #     readable format
 #*************************************************************************
 
@@ -49,7 +49,7 @@ sub usage {
      --with-color            outputs colored translated messages using ANSI color sequence code
 
   Description:
-    This Perl sciprt translates *.res files produced by qatesttool
+    This Perl sciprt translates *.res files produced by qatesttool 
     into human readable text file format.
 
   Examples:
@@ -92,7 +92,7 @@ $BaseDir = undef;
 
 sub substitution {
     my ($file, $lineno, $line) = @_;
-    my ($id, $arg1, $arg2, $arg3) =
+    my ($id, $arg1, $arg2, $arg3) = 
     ($line =~ m/\%ResId=([0-9]+)\%
      (?:\%Arg1=(.+?)\%)?
      (?:\%Arg2=(.+?)\%)?
@@ -205,7 +205,7 @@ sub load_app_srs {
         $x = $1;
         $fallback = $text if ($x eq "en-US");
         $text = $2 if ($x eq $lang);
-    }
+    }	    
     }
     close FH;
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ import lib.TestParameters;
 
 public class InetTools {
     /**
-     * Helper method: sets the HTTP-Proxy to values from
+     * Helper method: sets the HTTP-Proxy to values from 
      * <code>lib.TestParameters</code>
      */
     public static boolean setHTTPProxy(TestParameters param){
@@ -55,11 +55,11 @@ public class InetTools {
                                        "com.sun.star.configuration.ConfigurationProvider");
 
             XMultiServiceFactory oProviderMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(
-                                                        XMultiServiceFactory.class,
+                                                        XMultiServiceFactory.class, 
                                                         oProvider);
 
             Object oInet = oProviderMSF.createInstanceWithArguments(
-                                   "com.sun.star.configuration.ConfigurationUpdateAccess",
+                                   "com.sun.star.configuration.ConfigurationUpdateAccess", 
                                    ProvArgs);
 
             XPropertySet oInetProps = (XPropertySet) UnoRuntime.queryInterface(

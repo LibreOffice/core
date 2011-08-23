@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,15 +72,15 @@ public class _RotationDescriptor extends MultiPropertyTest {
      * Tests the property with custom tester
      */
     public void _ShearAngle() {
-
+        
         Object noShear = tEnv.getObjRelation("NoShear");
-
+        
         if (noShear != null) {
             log.println("This shape type doesn't support shear, see #85556#");
             tRes.tested("ShearAngle",Status.skipped(true));
             return;
         }
-
+        
         try {
             oObj.setPropertyValue("RotateAngle",new Short((short) 0));
         } catch (Exception e) {
@@ -92,7 +92,7 @@ public class _RotationDescriptor extends MultiPropertyTest {
     /**
      * Tests the property with custom tester
      */
-    public void _RotateAngle() {
+    public void _RotateAngle() {        
         log.println("Testing with custom Property tester") ;
         testProperty("RotateAngle", drawMeasureTester) ;
     }

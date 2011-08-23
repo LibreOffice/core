@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,8 +68,8 @@ public class AccessibleEditableTextPara extends TestCase {
         TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
-
-
+        
+        
         XModel aModel = (XModel)
             UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
 
@@ -86,15 +86,15 @@ public class AccessibleEditableTextPara extends TestCase {
             XAccessibleEditableText et = (XAccessibleEditableText) UnoRuntime.queryInterface(XAccessibleEditableText.class, oObj);
             et.setText("AccessibleEditablePara");
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-
+            
         }
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
-
+        
         final XAccessibleEditableText edText = (XAccessibleEditableText)
-            UnoRuntime.queryInterface(XAccessibleEditableText.class,oObj) ;
-
+            UnoRuntime.queryInterface(XAccessibleEditableText.class,oObj) ;        
+        
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
                 public void fireEvent() {
@@ -102,7 +102,7 @@ public class AccessibleEditableTextPara extends TestCase {
                     int l = new String("AccessibleEditablePara").length();
                     edText.deleteText(0, l);
                     edText.setText("Event");
-                    edText.setText("AccessibleEditablePara");
+                    edText.setText("AccessibleEditablePara");                    
                     }catch(com.sun.star.lang.IndexOutOfBoundsException e) {}
                 }
             });
@@ -146,7 +146,7 @@ public class AccessibleEditableTextPara extends TestCase {
             throw new StatusException( "Couldn't create document ", e );
         }
     }
-
+    
     /**
     * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
     * reset</code> call.
@@ -158,5 +158,5 @@ public class AccessibleEditableTextPara extends TestCase {
             log.println("While waiting :" + e) ;
         }
     }
-
+    
 }

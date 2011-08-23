@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,16 +76,16 @@ public class _XChartData extends MultiMethodTest {
         dataArray.setData(data);
 
         if (!dataChanged[0]) {
-            log.println("ChartDataChangeEventListener1 " +
+            log.println("ChartDataChangeEventListener1 " + 
                         "isn't called after changing data");
         }
 
         if (!dataChanged[1]) {
-            log.println("ChartDataChangeEventListener2 " +
+            log.println("ChartDataChangeEventListener2 " + 
                         "isn't called after changing data");
         }
 
-        tRes.tested("addChartDataChangeEventListener()",
+        tRes.tested("addChartDataChangeEventListener()", 
                     dataChanged[0] && dataChanged[1]);
     }
 
@@ -115,11 +115,11 @@ public class _XChartData extends MultiMethodTest {
         oObj.removeChartDataChangeEventListener(listener2);
 
         if (dataChanged[0]) {
-            log.println("ChartDataChangeEventListener1 is " +
+            log.println("ChartDataChangeEventListener1 is " + 
                         "called after removing listener");
         }
 
-        tRes.tested("removeChartDataChangeEventListener()",
+        tRes.tested("removeChartDataChangeEventListener()", 
                     ((!dataChanged[0]) && (dataChanged[1])));
     }
 

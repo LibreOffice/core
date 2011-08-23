@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -145,10 +145,10 @@ public class XMLExporter extends TestCase {
             XNamed xSheetNamed = (XNamed)
                 UnoRuntime.queryInterface(XNamed.class, xSheet);
             xSheetNamed.setName(SHEET_NAME);
-
+            
             log.println("fill sheet with contnet...");
             util.CalcTools.fillCalcSheetWithContent(xSheet, 3, 3, 50, 50);
-
+            
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create component.", e) ;

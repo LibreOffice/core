@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,13 +59,13 @@ import util.utils;
  * @see com.sun.star.inspection.XObjectInspectorModel
  */
 public class ObjectInspectorModel extends TestCase {
-
+    
     /**
      * module variable which holds the Desktop
      * @see com.sun.star.frame.Desktop
      */
     protected static Object StarDesktop = null;
-
+    
     /**
      * assign to the module variable <CODE>StarDesktop</CODE> the desktop
      * @param Param the test parameters
@@ -81,7 +81,7 @@ public class ObjectInspectorModel extends TestCase {
             throw new StatusException("Could not get a Desktop: null", null);
         }
     }
-
+    
     /**
      * Creating a Testenvironment for the interfaces to be tested.
      * Creates an instance of the service
@@ -95,21 +95,21 @@ public class ObjectInspectorModel extends TestCase {
      * @see helper.PropertyHandlerImpl
      */
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
-
+        
         this.cleanup(tParam, log);
-
+        
         XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
-
+        
         XPropertySet xMSFProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xMSF);
         XComponentContext xDefaultContext = null;
         try{
             // Get the default context from the office server.
             Object oDefaultContext = xMSFProp.getPropertyValue("DefaultContext");
-
+            
             // Query for the interface XComponentContext.
             xDefaultContext = (XComponentContext) UnoRuntime.queryInterface(
                     XComponentContext.class, oDefaultContext);
-
+            
         } catch (UnknownPropertyException e){
             throw new StatusException("could not get DefaultContext from xMSF", e);
         } catch (WrappedTargetException e){
@@ -117,35 +117,35 @@ public class ObjectInspectorModel extends TestCase {
         } catch (Exception e){
             throw new StatusException("could not get DefaultContext from xMSF", e);
         }
-
+        
         try {
-
+            
             Object[] oHandlerFactories = new Object[1];
             oHandlerFactories[0] = new PropertyHandlerFactroy();
-
+            
             int minHelpTextLines = 200;
             int maxHelpTextLines = 400;
-
+            
             XObjectInspectorModel oInspectorModel = com.sun.star.inspection.ObjectInspectorModel.
                     createWithHandlerFactoriesAndHelpSection(xDefaultContext, oHandlerFactories,
                                                              minHelpTextLines, maxHelpTextLines);
-
+            
             log.println("ImplementationName '" + utils.getImplName(oInspectorModel) + "'");
-
+            
             TestEnvironment tEnv = new TestEnvironment(oInspectorModel);
-
+            
             // com.sun.star.inspection.XObjectInspectorModel
             tEnv.addObjRelation("minHelpTextLines", new Integer(minHelpTextLines));
             tEnv.addObjRelation("maxHelpTextLines", new Integer(maxHelpTextLines));
-
+            
             return tEnv;
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Unexpected exception", e);
         }
-
+        
     }
-
+    
     /**
      * Closes the ObjectOnspector using <CODE>XCloseable</CODE>
      * @see com.sun.star.util.XCloseable
@@ -154,13 +154,13 @@ public class ObjectInspectorModel extends TestCase {
      */
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("    Closing dialog if one exists ... ");
-
+        
         XFrame existentInspector = null;
-
+        
         XFrame xFrame = (XFrame) UnoRuntime.queryInterface(XFrame.class, StarDesktop);
-
+        
         existentInspector = xFrame.findFrame( "ObjectInspector", 255 );
-
+        
         if ( existentInspector != null ){
             XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
                     XCloseable.class, existentInspector);

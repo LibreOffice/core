@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,61 +40,61 @@ public class _XSheetLinkable extends MultiMethodTest {
     String linkSheetName = null;
     String linkUrl = null;
     String linkUrl2 = null;
-
+    
     public void before() {
         // get a document for linking.
         linkUrl = (String)tEnv.getObjRelation("XSheetLinkable.LinkSheet");
         linkUrl = utils.getFullTestURL(linkUrl);
-
+        
         // get a second sheet for changing the link url: if it's not set,
         // this part of the test is omitted.
         linkUrl2 = (String)tEnv.getObjRelation("XSheetLinkable.LinkSheet2");
         if (linkUrl2 != null)
             linkUrl = utils.getFullTestURL(linkUrl);
-
+        
         // set a name for the sheet.
         linkSheetName = "Sheet1";
     }
-
-    public void _getLinkMode() {
+    
+    public void _getLinkMode() { 
         requiredMethod("link()");
         slm = oObj.getLinkMode();
-        tRes.tested("getLinkMode()", slm == SheetLinkMode.VALUE);
+        tRes.tested("getLinkMode()", slm == SheetLinkMode.VALUE); 
     }
-
-    public void _getLinkSheetName() {
+    
+    public void _getLinkSheetName() { 
         requiredMethod("link()");
         String lSheetName = oObj.getLinkSheetName();
-        tRes.tested("getLinkSheetName()", linkSheetName.equals(lSheetName));
+        tRes.tested("getLinkSheetName()", linkSheetName.equals(lSheetName)); 
     }
-
-    public void _getLinkUrl() {
+    
+    public void _getLinkUrl() { 
         requiredMethod("link()");
         String lUrl = oObj.getLinkUrl();
         System.out.println("URL: " + lUrl);
-        tRes.tested("getLinkUrl()", lUrl.equals(linkUrl));
+        tRes.tested("getLinkUrl()", lUrl.equals(linkUrl)); 
     }
-
-    public void _link() {
+    
+    public void _link() { 
         oObj.link(linkUrl, linkSheetName, "", "", SheetLinkMode.VALUE);
-        tRes.tested("link()", true);
+        tRes.tested("link()", true); 
     }
-
+    
     public void _setLinkMode() {
         requiredMethod("getLinkMode()");
         oObj.setLinkMode(SheetLinkMode.NONE);
         slm = oObj.getLinkMode();
-        tRes.tested("setLinkMode()", slm == SheetLinkMode.NONE);
+        tRes.tested("setLinkMode()", slm == SheetLinkMode.NONE); 
     }
-
-    public void _setLinkSheetName() {
+    
+    public void _setLinkSheetName() { 
         requiredMethod("getLinkSheetName()");
         oObj.setLinkSheetName("Sheet2");
         linkSheetName = oObj.getLinkSheetName();
-        tRes.tested("setLinkSheetName()", linkSheetName.equals("Sheet2"));
+        tRes.tested("setLinkSheetName()", linkSheetName.equals("Sheet2")); 
     }
-
-    public void _setLinkUrl() {
+    
+    public void _setLinkUrl() { 
         requiredMethod("getLinkUrl()");
         boolean result = false;
         if (linkUrl2 == null) {
@@ -107,6 +107,6 @@ public class _XSheetLinkable extends MultiMethodTest {
             linkUrl = oObj.getLinkUrl();
             result = linkUrl.equals(linkUrl2);
         }
-        tRes.tested("setLinkUrl()", result);
+        tRes.tested("setLinkUrl()", result); 
     }
 }

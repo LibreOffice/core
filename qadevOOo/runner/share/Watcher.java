@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,12 +28,12 @@
 package share;
 
 public interface Watcher {
-
+    
     /**
      * pings the watcher to check for changes
      */
-    public void ping();
-
+    public void ping();          
+    
     /**
      * returns the amount of pings
      */

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ import util.AccessibilityTools;
  * This class supports some functions to handle easily accessible objects
  */
 public class UITools {
-
+    
     private static final AccessibilityTools mAT = new AccessibilityTools();
     private final XAccessible mXRoot;
     private final XMultiServiceFactory mMSF;
@@ -87,7 +87,7 @@ public class UITools {
         return mAT.getAccessibleObject(xWindow);
     }
 
-
+    
     private static String getString(XInterface xInt)
     {
         XAccessibleText oText = (XAccessibleText)
@@ -97,12 +97,12 @@ public class UITools {
 
     private static void setString(XInterface xInt, String cText)
     {
-        XAccessibleEditableText oText = (XAccessibleEditableText)
+        XAccessibleEditableText oText = (XAccessibleEditableText) 
                  UnoRuntime.queryInterface(XAccessibleEditableText.class, xInt);
-
+        
         oText.setText(cText);
     }
-
+     
     private static Object getValue(XInterface xInt)
     {
          XAccessibleValue oValue = (XAccessibleValue)
@@ -118,7 +118,7 @@ public class UITools {
     /**
      * get the root element of the accessible tree
      * @return the root element
-     */
+     */    
     public XAccessible getRoot()
     {
         return mXRoot;
@@ -130,14 +130,14 @@ public class UITools {
      * @param stringToSet is the string to set
      * @throws java.lang.Exception if something fail
      */
-    public void setTextEditFiledText(String textfiledName, String stringToSet)
+    public void setTextEditFiledText(String textfiledName, String stringToSet) 
                         throws java.lang.Exception
     {
-        XInterface oTextField = mAT.getAccessibleObjectForRole(mXRoot,
+        XInterface oTextField = mAT.getAccessibleObjectForRole(mXRoot, 
                                             AccessibleRole.TEXT, textfiledName);
         setString(oTextField, stringToSet);
     }
-
+    
     /**
      * returns the button by the given name
      * @param buttonName is name name of the button to get
@@ -158,13 +158,13 @@ public class UITools {
 
      public void clickButton(String buttonName) throws java.lang.Exception
      {
-
+         
         XAccessibleContext oButton =mAT.getAccessibleObjectForRole
                                 (mXRoot, AccessibleRole.PUSH_BUTTON, buttonName);
         if (oButton == null){
             throw new Exception("Could not get button '" + buttonName + "'");
         }
-        XAccessibleAction oAction = (XAccessibleAction)
+        XAccessibleAction oAction = (XAccessibleAction) 
                     UnoRuntime.queryInterface(XAccessibleAction.class, oButton);
 
         // "click" the button
@@ -176,7 +176,7 @@ public class UITools {
         }
      }
 
-
+     
 
     /**
      * Helper method: gets button via accessibility and 'click' it
@@ -192,15 +192,15 @@ public class UITools {
 
         if (oButton != null){
             boolean isChecked = oButton.getAccessibleStateSet().contains(com.sun.star.accessibility.AccessibleStateType.CHECKED);
-            if((isChecked && !toBePressed) || (!isChecked && toBePressed)){
-                XAccessibleAction oAction = (XAccessibleAction)
+            if((isChecked && !toBePressed) || (!isChecked && toBePressed)){ 
+                XAccessibleAction oAction = (XAccessibleAction) 
                             UnoRuntime.queryInterface(XAccessibleAction.class, oButton);
                 try{
-                    // "click" the button
+                    // "click" the button                    
                     oAction.doAccessibleAction(0);
                     return true;
                 } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                  System.out.println("Could not do accessible action with '"
+                  System.out.println("Could not do accessible action with '" 
                         + buttonName + "'" + e.toString());
                   return false;
                 }
@@ -209,7 +209,7 @@ public class UITools {
                 return true;
         } else{
             System.out.println("Could not get button '" + buttonName + "'");
-            return false;
+            return false;            
         }
      }
 
@@ -218,7 +218,7 @@ public class UITools {
      *  @param buttonName   The name of the button in the Accessibility tree
      *
      *  @return true if the button could be set to deactivated
-     */
+     */     
     public boolean deactivateToggleButton(String buttonName){
         return clickToggleButton(buttonName, false);
     }
@@ -228,27 +228,27 @@ public class UITools {
      *  @param buttonName   The name of the button in the Accessibility tree
      *
      *  @return true if the button could be set to activated
-     */
+     */         
     public boolean activateToggleButton(String buttonName){
         return clickToggleButton(buttonName, true);
     }
-
+    
      /**
       * returns the value of named radio button
       * @param buttonName the name of the button to get the value of
       * @throws java.lang.Exception if something fail
       * @return Integer
       */
-     public Integer getRadioButtonValue(String buttonName)
-            throws java.lang.Exception
+     public Integer getRadioButtonValue(String buttonName) 
+            throws java.lang.Exception 
      {
         try {
-            XInterface xRB =mAT.getAccessibleObjectForRole(mXRoot,
+            XInterface xRB =mAT.getAccessibleObjectForRole(mXRoot, 
                                        AccessibleRole.RADIO_BUTTON, buttonName);
 
             return (Integer) getValue(xRB);
         } catch (Exception e) {
-          throw new Exception("Could not get value from RadioButton '"
+          throw new Exception("Could not get value from RadioButton '" 
                                           + buttonName + "' : " + e.toString());
         }
      }
@@ -258,27 +258,27 @@ public class UITools {
       * @param GraphicName the name of the graphic
       * @return XInterface
       * @throws java.lang.Exception if something fail
-      */
+      */     
      public XInterface getGraphic(String GraphicName) throws java.lang.Exception
      {
         return mAT.getAccessibleObjectForRole(mXRoot, AccessibleRole.GRAPHIC,
                                              GraphicName);
      }
 
-
+     
      /**
       * set a named radio button the a given value
       * @param buttonName the name of the button to set
       * @param iValue the value to set
       * @throws java.lang.Exception if something fail
-      */
-     public void setRadioButtonValue(String buttonName, int iValue)
-            throws java.lang.Exception
-     {
+      */     
+     public void setRadioButtonValue(String buttonName, int iValue) 
+            throws java.lang.Exception 
+     {  
         try {
             XInterface xRB =mAT.getAccessibleObjectForRole(mXRoot, AccessibleRole.RADIO_BUTTON, buttonName);
             if(xRB == null)
-                System.out.println("AccessibleObjectForRole couldn't be found for " + buttonName);
+                System.out.println("AccessibleObjectForRole couldn't be found for " + buttonName);            
             XAccessibleValue oValue = (XAccessibleValue)
                          UnoRuntime.queryInterface(XAccessibleValue.class, xRB);
             if(oValue == null)
@@ -286,13 +286,13 @@ public class UITools {
             oValue.setCurrentValue(new Integer(iValue));
         } catch (Exception e) {
           e.printStackTrace();
-
-          throw new Exception("Could not set value to RadioButton '"
+          
+          throw new Exception("Could not set value to RadioButton '" 
                                           + buttonName + "' : " + e.toString());
         }
-
+            
      }
-
+     
      /**
       * select an item in nanmed listbox
       * @param ListBoxName the name of the listbox
@@ -304,31 +304,31 @@ public class UITools {
      {
         try {
             XAccessibleContext xListBox = null;
-
-            xListBox =mAT.getAccessibleObjectForRole(mXRoot,
+            
+            xListBox =mAT.getAccessibleObjectForRole(mXRoot, 
                                          AccessibleRole.COMBO_BOX, ListBoxName);
             if (xListBox == null){
-                xListBox =mAT.getAccessibleObjectForRole(mXRoot,
+                xListBox =mAT.getAccessibleObjectForRole(mXRoot, 
                                              AccessibleRole.PANEL, ListBoxName);
             }
-            XAccessible xListBoxAccess = (XAccessible)
+            XAccessible xListBoxAccess = (XAccessible) 
                          UnoRuntime.queryInterface(XAccessible.class, xListBox);
-
+            
             // if a List is not pulled to be open all entries are not visiblle, therefore the
-            // boolean argument
+            // boolean argument 
             XAccessibleContext xList =mAT.getAccessibleObjectForRole(
                                           xListBoxAccess, AccessibleRole.LIST, true);
             XAccessibleSelection xListSelect = (XAccessibleSelection)
                    UnoRuntime.queryInterface(XAccessibleSelection.class, xList);
-
+            
             xListSelect.selectAccessibleChild(nChildIndex);
 
         } catch (Exception e) {
-          throw new Exception("Could not select item '" +nChildIndex+
+          throw new Exception("Could not select item '" +nChildIndex+ 
                         "' in listbox '" + ListBoxName + "' : " + e.toString());
         }
      }
-
+     
      /**
       * This method returns all entries as XInterface of a list box
       * @param ListBoxName the name of the listbox
@@ -343,47 +343,47 @@ public class UITools {
          try {
             XAccessibleContext xListBox = null;
             XAccessibleContext xList = null;
-
-            xListBox =mAT.getAccessibleObjectForRole(mXRoot,
+            
+            xListBox =mAT.getAccessibleObjectForRole(mXRoot, 
                                          AccessibleRole.COMBO_BOX, ListBoxName);
             if (xListBox == null){
-                xListBox =mAT.getAccessibleObjectForRole(mXRoot,
+                xListBox =mAT.getAccessibleObjectForRole(mXRoot, 
                                              AccessibleRole.PANEL, ListBoxName);
             }
 
             if (xListBox == null){
                 // get the list of TreeListBox
-                xList =mAT.getAccessibleObjectForRole(mXRoot,
+                xList =mAT.getAccessibleObjectForRole(mXRoot, 
                                               AccessibleRole.TREE, ListBoxName);
-
+                
             // all other list boxes have a children of kind of LIST
             } else {
-
-                XAccessible xListBoxAccess = (XAccessible)
+                
+                XAccessible xListBoxAccess = (XAccessible) 
                              UnoRuntime.queryInterface(XAccessible.class, xListBox);
                 // if a List is not pulled to be open all entries are not visiblle, therefore the
-                // boolean argument
+                // boolean argument 
                 xList =mAT.getAccessibleObjectForRole(
                                               xListBoxAccess, AccessibleRole.LIST, true);
             }
-
+            
             for (int i=0;i<xList.getAccessibleChildCount();i++) {
                 try {
                     XAccessible xChild = xList.getAccessibleChild(i);
-                    XAccessibleContext xChildCont =
+                    XAccessibleContext xChildCont = 
                                                   xChild.getAccessibleContext();
-                    XInterface xChildInterface = (XInterface)
+                    XInterface xChildInterface = (XInterface) 
                         UnoRuntime.queryInterface(XInterface.class, xChildCont);
                     Items.add(xChildInterface);
-
+                    
                 } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                      throw new Exception("Could not get child form list of '"
+                      throw new Exception("Could not get child form list of '" 
                                          + ListBoxName + "' : " + e.toString());
                 }
             }
-
+         
          } catch (Exception e) {
-            throw new Exception("Could not get list of items from '"
+            throw new Exception("Could not get list of items from '" 
                                          + ListBoxName + "' : " + e.toString());
         }
         Object[]ret = new XInterface[Items.size()];
@@ -392,7 +392,7 @@ public class UITools {
         }
         return ret;
      }
-
+     
      /**
       * Helper method: returns the entry manes of a List-Box
       * @param ListBoxName the name of the listbox
@@ -407,47 +407,47 @@ public class UITools {
          try {
             XAccessibleContext xListBox = null;
             XAccessibleContext xList = null;
-
-            xListBox =mAT.getAccessibleObjectForRole(mXRoot,
+            
+            xListBox =mAT.getAccessibleObjectForRole(mXRoot, 
                                          AccessibleRole.COMBO_BOX, ListBoxName);
             if (xListBox == null){
-                xListBox =mAT.getAccessibleObjectForRole(mXRoot,
+                xListBox =mAT.getAccessibleObjectForRole(mXRoot, 
                                              AccessibleRole.PANEL, ListBoxName);
             }
 
             if (xListBox == null){
                 // get the list of TreeListBox
-                xList =mAT.getAccessibleObjectForRole(mXRoot,
+                xList =mAT.getAccessibleObjectForRole(mXRoot, 
                                               AccessibleRole.TREE, ListBoxName);
-
+                
             // all other list boxes have a children of kind of LIST
             } else {
-
-                XAccessible xListBoxAccess = (XAccessible)
+                
+                XAccessible xListBoxAccess = (XAccessible) 
                              UnoRuntime.queryInterface(XAccessible.class, xListBox);
                 // if a List is not pulled to be open all entries are not visiblle, therefore the
-                // boolean argument
+                // boolean argument 
                 xList =mAT.getAccessibleObjectForRole(
                                               xListBoxAccess, AccessibleRole.LIST, true);
             }
-
+            
             for (int i=0;i<xList.getAccessibleChildCount();i++) {
                 try {
                     XAccessible xChild = xList.getAccessibleChild(i);
-                    XAccessibleContext xChildCont =
+                    XAccessibleContext xChildCont = 
                                                   xChild.getAccessibleContext();
-                    XInterface xChildInterface = (XInterface)
+                    XInterface xChildInterface = (XInterface) 
                         UnoRuntime.queryInterface(XInterface.class, xChildCont);
                     Items.add(getString(xChildInterface));
-
+                    
                 } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                      throw new Exception("Could not get child form list of '"
+                      throw new Exception("Could not get child form list of '" 
                                          + ListBoxName + "' : " + e.toString());
                 }
             }
-
+         
          } catch (Exception e) {
-            throw new Exception("Could not get list of items from '"
+            throw new Exception("Could not get list of items from '" 
                                          + ListBoxName + "' : " + e.toString());
         }
         String[]ret = new String[Items.size()];
@@ -465,14 +465,14 @@ public class UITools {
          try{
             XInterface xNumericField =mAT.getAccessibleObjectForRole(
                                   mXRoot, AccessibleRole.TEXT, NumericFieldName);
-            //util.dbg.printInterfaces(xNumericField);
-            XAccessibleEditableText oValue = (XAccessibleEditableText)
+            //util.dbg.printInterfaces(xNumericField); 
+            XAccessibleEditableText oValue = (XAccessibleEditableText) 
                                          UnoRuntime.queryInterface(
                                          XAccessibleEditableText.class, xNumericField);
 
             setString(xNumericField, cValue);
          } catch (Exception e) {
-          throw new Exception("Could not set value '" + cValue +
+          throw new Exception("Could not set value '" + cValue + 
             "' into NumericField '" + NumericFieldName + "' : " + e.toString());
         }
      }
@@ -490,13 +490,13 @@ public class UITools {
             XInterface xNumericField =mAT.getAccessibleObjectForRole(
                                   mXRoot, AccessibleRole.TEXT, NumericFieldName);
             return (String) getString(xNumericField);
-
+            
          } catch (Exception e) {
-          throw new Exception("Could get value from NumericField '"
+          throw new Exception("Could get value from NumericField '" 
                                     + NumericFieldName + "' : " + e.toString());
         }
      }
-
+     
      private String removeCharactersFromCurrencyString(String stringVal)
         throws java.lang.Exception
      {
@@ -522,22 +522,22 @@ public class UITools {
                 }
             }
             String currencyVal = stringVal.substring(beginIndex, endIndex);
-
-            currencyVal = currencyVal.substring(0, currencyVal.length()-3) +
+            
+            currencyVal = currencyVal.substring(0, currencyVal.length()-3) + 
                           "#" + currencyVal.substring(currencyVal.length()-2);
-
+            
             currencyVal = utils.replaceAll13(currencyVal, ",", "");
             currencyVal = utils.replaceAll13(currencyVal, "\\.", "");
             currencyVal = utils.replaceAll13(currencyVal, "#", ".");
-
+            
             return currencyVal;
          } catch (Exception e) {
-          throw new Exception("Could get remove characters from currency string '"
+          throw new Exception("Could get remove characters from currency string '" 
                                     + stringVal + "' : " + e.toString());
         }
-
+             
      }
-
+     
      /**
       * returns the numeric value of a numeric filed. This is needed ie. for
       * fileds include the moneytary unit.
@@ -553,15 +553,15 @@ public class UITools {
             String sValue = getNumericFieldValue(NumericFieldName);
             String sAmount = removeCharactersFromCurrencyString(sValue);
             retValue = retValue.valueOf(sAmount);
-
+            
             return retValue;
-
+            
          } catch (Exception e) {
-          throw new Exception("Could get numeric value from NumericField '"
+          throw new Exception("Could get numeric value from NumericField '" 
                                     + NumericFieldName + "' : " + e.toString());
         }
      }
-
+         
 
       /**
        * returns the content of a TextBox
@@ -574,33 +574,33 @@ public class UITools {
      {
         String TextFieldText = null;
         try{
-            XAccessibleContext xTextField =mAT.getAccessibleObjectForRole(mXRoot,
+            XAccessibleContext xTextField =mAT.getAccessibleObjectForRole(mXRoot, 
                                      AccessibleRole.SCROLL_PANE, TextFieldName);
-            XAccessible xTextFieldAccess = (XAccessible)
+            XAccessible xTextFieldAccess = (XAccessible) 
                        UnoRuntime.queryInterface(XAccessible.class, xTextField);
             XAccessibleContext xFrame =mAT.getAccessibleObjectForRole(
                                    xTextFieldAccess, AccessibleRole.TEXT_FRAME);
             for (int i=0;i<xFrame.getAccessibleChildCount();i++) {
                 try {
                     XAccessible xChild = xFrame.getAccessibleChild(i);
-                    XAccessibleContext xChildCont =
+                    XAccessibleContext xChildCont = 
                                                   xChild.getAccessibleContext();
-                    XInterface xChildInterface = (XInterface)
+                    XInterface xChildInterface = (XInterface) 
                         UnoRuntime.queryInterface(XInterface.class, xChildCont);
                     TextFieldText += (getString(xChildInterface));
-
+                    
                 } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                    throw new Exception("Could not get child fom TextFrame of '"
+                    throw new Exception("Could not get child fom TextFrame of '" 
                                        + TextFieldName + "' : " + e.toString());
                 }
             }
             return TextFieldText;
          } catch (Exception e) {
-            throw new Exception("Could not get content fom Textbox '"
+            throw new Exception("Could not get content fom Textbox '" 
                                        + TextFieldName + "' : " + e.toString());
         }
      }
-
+     
      /**
       * set a value to a named check box
       * @param CheckBoxName the name of the check box
@@ -616,18 +616,18 @@ public class UITools {
             throws java.lang.Exception
      {
          try {
-            XInterface xCheckBox =mAT.getAccessibleObjectForRole(mXRoot,
+            XInterface xCheckBox =mAT.getAccessibleObjectForRole(mXRoot, 
                                      AccessibleRole.CHECK_BOX, CheckBoxName);
-            XAccessibleValue xCheckBoxValue = (XAccessibleValue)
+            XAccessibleValue xCheckBoxValue = (XAccessibleValue) 
                    UnoRuntime.queryInterface(XAccessibleValue.class, xCheckBox);
             xCheckBoxValue.setCurrentValue(Value);
-
+            
          } catch (Exception e) {
-            throw new Exception("Could not set value to CheckBox '"
+            throw new Exception("Could not set value to CheckBox '" 
                                        + CheckBoxName + "' : " + e.toString());
         }
      }
-
+    
      /**
       * returns the value of the named check box
       * @param CheckBoxName the name of the check box
@@ -638,18 +638,18 @@ public class UITools {
             throws java.lang.Exception
      {
          try {
-            XInterface xCheckBox =mAT.getAccessibleObjectForRole(mXRoot,
+            XInterface xCheckBox =mAT.getAccessibleObjectForRole(mXRoot, 
                                      AccessibleRole.CHECK_BOX, CheckBoxName);
-            XAccessibleValue xCheckBoxValue = (XAccessibleValue)
+            XAccessibleValue xCheckBoxValue = (XAccessibleValue) 
                    UnoRuntime.queryInterface(XAccessibleValue.class, xCheckBox);
-
+            
             return (Integer) xCheckBoxValue.getCurrentValue();
          } catch (Exception e) {
-            throw new Exception("Could not set value to CheckBox '"
+            throw new Exception("Could not set value to CheckBox '" 
                                        + CheckBoxName + "' : " + e.toString());
         }
      }
-
+    
       /**
        * returns the message of a Basic-MessageBox
        * @return the message of a Basic-MessageBox
@@ -660,14 +660,14 @@ public class UITools {
      {
         String cMessage = null;
         try{
-            XAccessibleContext xMessage =mAT.getAccessibleObjectForRole(mXRoot,
+            XAccessibleContext xMessage =mAT.getAccessibleObjectForRole(mXRoot, 
                                      AccessibleRole.LABEL);
-
-            XInterface xMessageInterface = (XInterface)
+            
+            XInterface xMessageInterface = (XInterface) 
                 UnoRuntime.queryInterface(XInterface.class, xMessage);
             cMessage += (getString(xMessageInterface));
 
-
+            
             return cMessage;
          } catch (Exception e) {
             throw new Exception("Could not get message from Basic-MessageBox: " + e.toString());
@@ -678,7 +678,7 @@ public class UITools {
      * fetch the window which is equal to the given <CODE>WindowName</CODE>
      * @return the named window
      * @throws java.lang.Exception if something fail
-     */
+     */    
     public XWindow getTopWindow(String WindowName, boolean debug) throws java.lang.Exception
     {
         XInterface xToolKit = null;
@@ -689,18 +689,18 @@ public class UITools {
         }
         XExtendedToolkit tk = (XExtendedToolkit)
             UnoRuntime.queryInterface(XExtendedToolkit.class, xToolKit);
-
+        
         int count = tk.getTopWindowCount();
-
+        
         XTopWindow retWindow = null;
-
+        
         if (debug) System.out.println("getTopWindow ->");
-
+        
         for (int i=0; i < count ; i++){
             XTopWindow xTopWindow = tk.getTopWindow(i);
             XAccessible xAcc = mAT.getAccessibleObject(xTopWindow);
             String accName = xAcc.getAccessibleContext().getAccessibleName();
-
+            
             if (debug){
                 System.out.println("AccessibleName: " + accName);
             }
@@ -711,30 +711,30 @@ public class UITools {
             }
         }
 
-
+        
         if (debug) {
             if (retWindow == null) System.out.println("could not found window with name '" + WindowName + "'");
             System.out.println("<- getTopWindow ");
         }
         return (XWindow) UnoRuntime.queryInterface(XWindow.class, retWindow);
     }
-
+    
     public void clickMiddleOfAccessibleObject(short role, String name){
-
+        
         XAccessibleContext xAcc =mAT.getAccessibleObjectForRole(mXRoot, role, name);
         XAccessibleComponent aComp = (XAccessibleComponent) UnoRuntime.queryInterface(
                                              XAccessibleComponent.class, xAcc);
-
-        System.out.println(xAcc.getAccessibleRole() + "," +
-                    xAcc.getAccessibleName() + "(" +
-                    xAcc.getAccessibleDescription() + "):" +
+        
+        System.out.println(xAcc.getAccessibleRole() + "," + 
+                    xAcc.getAccessibleName() + "(" + 
+                    xAcc.getAccessibleDescription() + "):" + 
                     utils.getImplName(xAcc));
-
+                                             
         if (aComp != null) {
             Point location = aComp.getLocationOnScreen();
-            String bounds = "(" + aComp.getBounds().X + "," +
-                            aComp.getBounds().Y + ")" + " (" +
-                            aComp.getBounds().Width + "," +
+            String bounds = "(" + aComp.getBounds().X + "," + 
+                            aComp.getBounds().Y + ")" + " (" + 
+                            aComp.getBounds().Width + "," + 
                             aComp.getBounds().Height + ")";
             System.out.println("The boundary Rectangle is " + bounds);
                 try {
@@ -748,25 +748,25 @@ public class UITools {
                 } catch (java.awt.AWTException e) {
                     System.out.println("couldn't press mouse button");
                 }
-
+            
         }
     }
-
+    
     public void doubleClickMiddleOfAccessibleObject(short role, String name) {
         XAccessibleContext xAcc =mAT.getAccessibleObjectForRole(mXRoot, role, name);
         XAccessibleComponent aComp = (XAccessibleComponent) UnoRuntime.queryInterface(
                                              XAccessibleComponent.class, xAcc);
-
-        System.out.println(xAcc.getAccessibleRole() + "," +
-                    xAcc.getAccessibleName() + "(" +
-                    xAcc.getAccessibleDescription() + "):" +
+        
+        System.out.println(xAcc.getAccessibleRole() + "," + 
+                    xAcc.getAccessibleName() + "(" + 
+                    xAcc.getAccessibleDescription() + "):" + 
                     utils.getImplName(xAcc));
-
+                                             
         if (aComp != null) {
             Point location = aComp.getLocationOnScreen();
-            String bounds = "(" + aComp.getBounds().X + "," +
-                            aComp.getBounds().Y + ")" + " (" +
-                            aComp.getBounds().Width + "," +
+            String bounds = "(" + aComp.getBounds().X + "," + 
+                            aComp.getBounds().Y + ")" + " (" + 
+                            aComp.getBounds().Width + "," + 
                             aComp.getBounds().Height + ")";
             System.out.println("The boundary Rectangle is " + bounds);
                 try {
@@ -783,10 +783,10 @@ public class UITools {
                 } catch (java.awt.AWTException e) {
                     System.out.println("couldn't press mouse button");
                 }
-
+            
         }
     }
-
+    
     /**
      * <B>DEPRECATED</B>
      * Since <CODE>AccessibilityTools</CODE> handle parameter <CODE>debugIsActive</CODE>
@@ -794,21 +794,21 @@ public class UITools {
      * @deprecated Since <CODE>AccessibilityTools</CODE> handle parameter <CODE>debugIsActive</CODE>
      * this function does not work anymore.
      * @param log logWriter
-     */
+     */    
     public void printAccessibleTree(PrintWriter log)
     {
         mAT.printAccessibleTree(log, mXRoot);
     }
-
-
+    
+    
     /**
      * Prints the accessible tree to the <CODE>logWriter</CODE> only if <CODE>debugIsActive</CODE>
      * is set to <CODE>true</CODE>
      * @param log logWriter
      * @param debugIsActive prints only if this parameter is set to TRUE
-     */
+     */    
     public void printAccessibleTree(PrintWriter log, boolean debugIsActive) {
         mAT.printAccessibleTree(log, mXRoot, debugIsActive);
     }
-
+    
 }

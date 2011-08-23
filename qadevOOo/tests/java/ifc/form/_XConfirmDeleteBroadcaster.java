@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,9 +51,9 @@ import lib.MultiMethodTest;
 public class _XConfirmDeleteBroadcaster extends MultiMethodTest {
     public XConfirmDeleteBroadcaster oObj = null;
     protected boolean confirmed = false;
-    protected XConfirmDeleteListener mxConfirmDeleteListener =
+    protected XConfirmDeleteListener mxConfirmDeleteListener = 
                                                 new ConfirmDeleteImpl();
-
+    
     private class ConfirmDeleteImpl implements XConfirmDeleteListener {
         public boolean confirmDelete(RowChangeEvent rowChangeEvent) {
             confirmed = true;
@@ -62,12 +62,12 @@ public class _XConfirmDeleteBroadcaster extends MultiMethodTest {
         public void disposing(EventObject eventObject) {
         }
     }
-
+    
     protected void addConfirmDeleteListener() {
         oObj.addConfirmDeleteListener(mxConfirmDeleteListener);
         tRes.tested("addConfirmDeleteListener()", true);
     }
-
+    
     protected void removeConfirmDeleteListener() {
         oObj.removeConfirmDeleteListener(mxConfirmDeleteListener);
         tRes.tested("removeConfirmDeleteListener()", true);

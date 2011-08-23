@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@ public class TriState
     int m_nValue;
 
     /**
-       Allocates a <code>TriState</code> object representing the
-       <code>value</code> argument.
-
+       Allocates a <code>TriState</code> object representing the 
+       <code>value</code> argument. 
+       
        @param   value   the value of the <code>TriState</code>.
     */
     public TriState(int value)
@@ -55,22 +55,22 @@ public class TriState
             return m_nValue;
         }
     /**
-       Returns <code>true</code> if and only if the argument is not
-       <code>null</code> and is a <code>TriState</code> object that
-       contains the same <code>int</code> value as this object.
-
+       Returns <code>true</code> if and only if the argument is not 
+       <code>null</code> and is a <code>TriState</code> object that 
+       contains the same <code>int</code> value as this object. 
+       
        @param   obj   the object to compare with.
        @return  <code>true</code> if the objects are the same;
                 <code>false</code> otherwise.
     */
-
-    public boolean equals(Object obj)
+    
+    public boolean equals(Object obj) 
         {
             if ((obj != null) &&
                 (obj instanceof TriState))
             {
                 return m_nValue == ((TriState)obj).intValue();
-            }
+            } 
             return false;
         }
 }

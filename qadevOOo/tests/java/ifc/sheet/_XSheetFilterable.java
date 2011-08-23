@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,11 +92,11 @@ public class _XSheetFilterable extends MultiMethodTest {
             oObj.filter(desc);
 
             XColumnRowRange oColumnRowRange = (XColumnRowRange) UnoRuntime.queryInterface(
-                                                      XColumnRowRange.class,
+                                                      XColumnRowRange.class, 
                                                       oSheet);
             XTableRows oRows = (XTableRows) oColumnRowRange.getRows();
             XPropertySet rowProp = (XPropertySet) UnoRuntime.queryInterface(
-                                           XPropertySet.class,
+                                           XPropertySet.class, 
                                            oRows.getByIndex(0));
             boolean locRes = ((Boolean) rowProp.getPropertyValue("IsVisible")).booleanValue();
 
@@ -121,11 +121,11 @@ public class _XSheetFilterable extends MultiMethodTest {
             log.println("couldn't fill cells " + e.getLocalizedMessage());
             res = false;
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("problems geting Property 'isVisible' " +
+            log.println("problems geting Property 'isVisible' " + 
                         e.getLocalizedMessage());
             res = false;
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("problems geting Property 'isVisible' " +
+            log.println("problems geting Property 'isVisible' " + 
                         e.getLocalizedMessage());
             res = false;
         }

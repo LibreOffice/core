@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,19 +31,19 @@ package helper;
 import com.sun.star.lang.XSingleComponentFactory;
 
 public class PropertyHandlerFactroy implements XSingleComponentFactory{
-
+    
     /** Creates a new instance of PropertyHandlerFactroy */
     public PropertyHandlerFactroy() {
     }
-
+    
     public Object createInstanceWithArgumentsAndContext(Object[] obj, com.sun.star.uno.XComponentContext xComponentContext)
             throws com.sun.star.uno.Exception {
         return new PropertyHandlerImpl();
     }
-
+    
     public Object createInstanceWithContext(com.sun.star.uno.XComponentContext xComponentContext)
             throws com.sun.star.uno.Exception {
         return new PropertyHandlerImpl();
     }
-
+    
 }

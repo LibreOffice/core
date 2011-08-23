@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,14 +69,14 @@ public class TestParameters extends Hashtable {
      */
 
     public String AppExecutionCommand="";
-
+    
     /**
      * If this parameter is <CODE>true</CODE> the <CODE>OfficeProvider</CODE> tries
-     * to get the URL to the binary of the office and to fill the
+     * to get the URL to the binary of the office and to fill the 
      * <CODE>AppExecutionCommand</CODE> with usefull content if needet
      */
     public boolean AutoRestart = false;
-
+    
     /**
      * Shoert wait time for the Office: default is 500 milliseconds
      */
@@ -311,7 +311,7 @@ public class TestParameters extends Hashtable {
         }
         return (XComponentContext)context;
     }
-
+    
     /**
      * Convert the system dependent operating system name to a name according
      * to OOo rules.

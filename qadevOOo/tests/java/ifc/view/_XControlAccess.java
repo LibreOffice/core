@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -88,7 +88,7 @@ public class _XControlAccess extends MultiMethodTest {
                 UnoRuntime.queryInterface(XDrawPagesSupplier.class, oDoc);
                 oDP = (XDrawPage) UnoRuntime.queryInterface(XDrawPage.class, oDPS.getDrawPages().getByIndex(0));
             } else {
-
+                
 
             XDrawPageSupplier oDPS = (XDrawPageSupplier)
                 UnoRuntime.queryInterface(XDrawPageSupplier.class, oDoc);

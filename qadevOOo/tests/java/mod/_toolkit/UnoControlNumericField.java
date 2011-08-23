@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ public class UnoControlNumericField extends TestCase {
         }
     }
 
-    protected TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param, 
                                                     PrintWriter log) {
         XInterface oObj = null;
         XWindowPeer the_win = null;
@@ -95,18 +95,18 @@ public class UnoControlNumericField extends TestCase {
         XControl aControl = null;
 
         //Insert a ControlShape and get the ControlModel
-        XControlShape aShape = FormTools.createUnoControlShape(xTextDoc, 3000,
-                                                               4500, 15000,
-                                                               10000,
-                                                               "NumericField",
+        XControlShape aShape = FormTools.createUnoControlShape(xTextDoc, 3000, 
+                                                               4500, 15000, 
+                                                               10000, 
+                                                               "NumericField", 
                                                                "UnoControlNumericField");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
 
         XControlModel the_Model = aShape.getControl();
 
-        XControlShape aShape2 = FormTools.createControlShape(xTextDoc, 3000,
-                                                             4500, 5000, 10000,
+        XControlShape aShape2 = FormTools.createControlShape(xTextDoc, 3000, 
+                                                             4500, 5000, 10000, 
                                                              "TextField");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape2);
@@ -115,7 +115,7 @@ public class UnoControlNumericField extends TestCase {
 
         //Try to query XControlAccess
         XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
-                                            XControlAccess.class,
+                                            XControlAccess.class, 
                                             xTextDoc.getCurrentController());
 
         //get the NumericFieldControl for the needed Object relations
@@ -148,22 +148,22 @@ public class UnoControlNumericField extends TestCase {
         tEnv.addObjRelation("TOOLKIT", the_kit);
         tEnv.addObjRelation("MODEL", the_Model);
 
-        XWindow forObjRel = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow forObjRel = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
                                                                 aControl);
 
         tEnv.addObjRelation("XWindow.AnotherWindow", forObjRel);
         tEnv.addObjRelation("XWindow.ControlShape", aShape);
 
         // Adding relation for XTextListener
-        ifc.awt._XTextListener.TestTextListener listener =
+        ifc.awt._XTextListener.TestTextListener listener = 
                 new ifc.awt._XTextListener.TestTextListener();
         XTextComponent textComp = (XTextComponent) UnoRuntime.queryInterface(
                                           XTextComponent.class, oObj);
         textComp.addTextListener(listener);
         tEnv.addObjRelation("TestTextListener", listener);
-
+        
         tEnv.addObjRelation("XTextComponent.onlyNumbers", "");
-
+        
         log.println("ImplementationName: " + utils.getImplName(oObj));
 
         return tEnv;

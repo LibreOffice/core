@@ -41,15 +41,15 @@ Dim sImplementationNameString as String
 sImplementationNameString = cUnoSmoketestTestExtension + &quot;$_TestExtension&quot;
 
     On Local Error GoTo EXTERROR
-
+    
     nCurrentAction = cLogfileFailed
     FileChannel% = OpenLogDat (GetLogFileName(FilterType))
-
+    
     sCurrentMessage = cMessageExtensionService
     nCurrentAction = cEXTService
 
-    &apos;Create an implementation of com.sun.star.ucb.XCommandEnvironment which is needed for
-    &apos;adding the extension. The implementation is in
+    &apos;Create an implementation of com.sun.star.ucb.XCommandEnvironment which is needed for 
+    &apos;adding the extension. The implementation is in 
     &apos;javaunohelper/com/sun/star/comp/juhtest/SmoketestCommandEnvironment.java and the code is in juh.jar
     cmdEnv = createUnoService(cUnoSmoketestCommandEnvironment)
 
@@ -68,14 +68,14 @@ sImplementationNameString = cUnoSmoketestTestExtension + &quot;$_TestExtension&q
 
     sCurrentMessage = cMessageExtensionInstall
     nCurrentAction = cEXTInstall
-
+    
     &apos;Add the extension. We must provide a file URL here.
     &apos;By passing &quot;user&quot; we determine that the actions we perform on
     &apos;XExtensionManager only affect the user installation. To modify the share installation one would pass &quot;share&quot;.
 
     Dim props() as Object
     ext_mgr.addExtension(sExtensionURL + cExtensionFileName, props, &quot;user&quot;, obj_null, cmdEnv)
-
+    
     &apos;Check if the extension has been added by creating a service which is contained in the extension.
     oTestExtension = createUnoService(cUnoSmoketestTestExtension)
     bResult = (oTestExtension.getImplementationName = sImplementationNameString)
@@ -89,7 +89,7 @@ sImplementationNameString = cUnoSmoketestTestExtension + &quot;$_TestExtension&q
 
     sCurrentMessage = cMessageExtensionUninstall
     nCurrentAction = cEXTUninstall
-
+    
     &apos;Remove the package
     ext_mgr.removeExtension(&quot;org.openoffice.legacy.&quot; + cExtensionFileName, cExtensionFileName, &quot;user&quot;,obj_null, cmdEnv)
 
@@ -100,13 +100,13 @@ sImplementationNameString = cUnoSmoketestTestExtension + &quot;$_TestExtension&q
     LogState (IsNull (oTestExtension), &quot;Extension &quot;+ cMessageExtensionUninstall, FileChannel)
     LogState (IsNull (oTestExtension), &quot;Extension &quot;+ cMessageExtensionUninstall, MainFileChannel)
     SetStatus (FilterType, cEXTUninstall, IsNull (oTestExtension))
-
+    
     Print #FileChannel, &quot;---&quot;
     Close #FileChannel%
     Exit Sub &apos; Without error
 
     EXTERROR:
-    If  (nCurrentAction = cLogfileFailed) then
+    If 	(nCurrentAction = cLogfileFailed) then
         SetStatus (FilterType, cEXTService, False)
         Exit Sub
     else
@@ -114,7 +114,7 @@ sImplementationNameString = cUnoSmoketestTestExtension + &quot;$_TestExtension&q
         LogState (False, &quot;Extension &quot;+ sCurrentMessage, MainFileChannel)
         SetStatus (FilterType, nCurrentAction, False)
         Close #FileChannel%
-    End If
+    End If	
     Exit Sub &apos; With error
 
 End Sub

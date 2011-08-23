@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,11 +55,11 @@ public class _XInitialization extends MultiMethodTest {
     */
     public void _initialize() {
         boolean result = true ;
-
+        
         try {
             XInitialization xInit = (XInitialization) tEnv.getObjRelation("XInitialization.xIni");
             if (xInit == null) xInit = oObj;
-
+            
             log.println("calling method with valid arguments...");
             Object[] args = (Object[]) tEnv.getObjRelation("XInitialization.args");
             if (args==null) {
@@ -68,7 +68,7 @@ public class _XInitialization extends MultiMethodTest {
             } else {
                 xInit.initialize(args);
             }
-
+            
             // try to call the method with invalid parameters
             Object[] ExArgs = (Object[]) tEnv.getObjRelation("XInitialization.ExceptionArgs");
             if (ExArgs !=null) {
@@ -83,7 +83,7 @@ public class _XInitialization extends MultiMethodTest {
                     log.println("Expected Exception 'com.sun.star.uno.RuntimeException' occured -> OK") ;
                     result = true ;
                 } catch (Exception e) {
-                    log.println("Un-Expected Exception occured -> FALSE") ;
+                    log.println("Un-Expected Exception occured -> FALSE") ;                    
                     log.println(e.toString());
                     e.printStackTrace();
                 }

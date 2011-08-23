@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ public class ComplexDescGetter extends DescGetter
     public DescEntry[] getDescriptionFor(String entry, String DescPath,
             boolean debug)
     {
-        // read scenario file
+        // read scenario file                                                            
         if (entry.startsWith("-sce"))
         {
             DescEntry[] entries = getScenario(entry.substring(5), null, debug);
@@ -156,7 +156,7 @@ public class ComplexDescGetter extends DescGetter
      * @param testObjectName the name of the object
      * @param className the class name of the class to load
      * @param testMethodNames list of all methods to test
-     * @param log
+     * @param log 
      * @return filled description entry
      */
     public DescEntry createTestDesc(String testObjectName, String className, String[] testMethodNames, LogWriter log)

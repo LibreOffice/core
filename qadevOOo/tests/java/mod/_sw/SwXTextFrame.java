@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ public class SwXTextFrame extends TestCase {
     /**
      *    creating a Testenvironment for the interfaces to be tested
      */
-    public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    public synchronized TestEnvironment createTestEnvironment(TestParameters Param, 
                                                               PrintWriter log) {
         XInterface oObj = null;
         XTextFrame oFrame1 = null;
@@ -109,7 +109,7 @@ public class SwXTextFrame extends TestCase {
 
             // AnchorTypes: 0 = paragraph, 1 = as char, 2 = page,
             // 3 = frame/paragraph 4= at char
-            oPropSet.setPropertyValue("AnchorType",
+            oPropSet.setPropertyValue("AnchorType", 
                                       TextContentAnchorType.AS_CHARACTER);
             oText = xTextDoc.getText();
             oCursor = oText.createTextCursor();
@@ -126,10 +126,10 @@ public class SwXTextFrame extends TestCase {
             oText.insertTextContent(oCursor, the_content, true);
 
             XText oFrameText = oFrame1.getText();
-            oFrameText.insertString(oFrameText.getStart(), "The FrameText",
+            oFrameText.insertString(oFrameText.getStart(), "The FrameText", 
                                     true);
 
-            instance = SOF.createInstance(xTextDoc,
+            instance = SOF.createInstance(xTextDoc, 
                                           "com.sun.star.text.TextFrame");
         } catch (Exception Ex) {
             Ex.printStackTrace(log);
@@ -142,12 +142,12 @@ public class SwXTextFrame extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        tEnv.addObjRelation("CONTENT",
+        tEnv.addObjRelation("CONTENT", 
                             (XTextContent) UnoRuntime.queryInterface(
                                     XTextContent.class, instance));
         tEnv.addObjRelation("RANGE", xTextDoc.getText().createTextCursor());
 
-        log.println("adding ObjRelation for XShape " +
+        log.println("adding ObjRelation for XShape " + 
                     "(get/setPosition won't work there)");
         tEnv.addObjRelation("NoPos", "SwXTextFrame");
         tEnv.addObjRelation("NoSetSize", "SwXTextFrame");

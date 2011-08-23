@@ -1,7 +1,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,8 +56,8 @@ public class _XJob extends MultiMethodTest {
     public static XJob oObj = null;
 
     /**
-     * Tries to query the tested component for object relation
-     * <code>XJobArgs</code> [<code>Object[]</code>] which contains
+     * Tries to query the tested component for object relation 
+     * <code>XJobArgs</code> [<code>Object[]</code>] which contains 
      * <code>executeArgs</code> [<code>NamedValue[]</code>]
      * @throw StatusException If relations are not found
      */
@@ -68,7 +68,7 @@ public class _XJob extends MultiMethodTest {
                 ("'XJobArgs' relation not found ")) ;
     }
 
-
+        
 
     /**
      * Gets the number of Job calls before and after triggering event.

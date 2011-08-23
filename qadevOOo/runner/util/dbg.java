@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ public class dbg {
      * @param extendedInfo Should extended information be printed?
      * @see com.sun.star.uno.XInterface
      */
-    public static void printInterfaces(XInterface xTarget,
+    public static void printInterfaces(XInterface xTarget, 
                                                     boolean extendedInfo){
         Type[] types = getInterfaceTypes(xTarget);
         if( null != types ) {
@@ -92,13 +92,13 @@ public class dbg {
             types = xTypeProvider.getTypes();
         return types;
     }
-
+    
     /**
-     * Returns true if a specified target implements the interface with the
+     * Returns true if a specified target implements the interface with the 
      * given name. Note that the comparison is not case sensitive.
      * @param xTarget The implementation which should be analysed.
-     * @param ifcName The name of the interface that is tested. The name can
-     * be full qualified, such as 'com.sun.star.io.XInputStream', or only
+     * @param ifcName The name of the interface that is tested. The name can 
+     * be full qualified, such as 'com.sun.star.io.XInputStream', or only 
      * consist of the interface name, such as 'XText'.
      * @return True, if xTarget implements the interface named ifcType
      * @see com.sun.star.uno.XInterface
@@ -116,7 +116,7 @@ public class dbg {
         }
         return false;
     }
-
+    
     /**
      * Prints information about an interface type.
      *
@@ -128,7 +128,7 @@ public class dbg {
             Class zClass = aType.getZClass();
             Method[] methods = zClass.getDeclaredMethods();
             for (int i=0; i<methods.length; i++) {
-                System.out.println("\t" + methods[i].getReturnType().getName()
+                System.out.println("\t" + methods[i].getReturnType().getName() 
                     + " " + methods[i].getName() + "()");
             }
         }
@@ -152,8 +152,8 @@ public class dbg {
     /**
      * Print all information about the property <code>name</code> from
      * the property set <code>PS</code> to standard out.
-     * @param PS The property set which should contain a property called
-     *           <code>name</code>.
+     * @param PS The property set which should contain a property called 
+     * 			 <code>name</code>.
      * @param name The name of the property.
      * @see com.sun.star.beans.XPropertySet
      */
@@ -164,13 +164,13 @@ public class dbg {
     /**
      * Print all information about the property <code>name</code> from
      * the property set <code>PS</code> to a print writer.
-     * @param PS The property set which should contain a property called
-     *           <code>name</code>.
+     * @param PS The property set which should contain a property called 
+     * 			 <code>name</code>.
      * @param name The name of the property.
      * @param out The print writer which is used as output.
      * @see com.sun.star.beans.XPropertySet
      */
-    public static void printPropertyInfo(XPropertySet PS, String name,
+    public static void printPropertyInfo(XPropertySet PS, String name, 
                                                         PrintWriter out) {
         try {
             XPropertySetInfo PSI = PS.getPropertySetInfo();
@@ -179,7 +179,7 @@ public class dbg {
             out.println("Property name is " + prop.Name);
             out.println("Property handle is " + prop.Handle);
             out.println("Property type is " + prop.Type.getTypeName());
-            out.println("Property current value is " +
+            out.println("Property current value is " + 
                                                     PS.getPropertyValue(name));
             out.println("Attributes :");
             short attr = prop.Attributes;
@@ -219,13 +219,13 @@ public class dbg {
      * @param ps The property which should displayed
      * @see com.sun.star.beans.PropertyValue
      */
-
+    
     public static void printProperyValueSequenzePairs(PropertyValue[] ps){
         for( int i = 0; i < ps.length; i++){
             printProperyValuePairs(ps[i], new PrintWriter(System.out));
         }
     }
-
+    
     /**
      * Print the names and the values of a sequenze of <code>PropertyValue</code>
      * to a print writer.
@@ -238,7 +238,7 @@ public class dbg {
             printProperyValuePairs(ps[i], out);
         }
     }
-
+    
     /**
      * Print the name and the value of a <code>PropertyValue</code> to to standard out.
      * @param ps The property which should displayed
@@ -255,7 +255,7 @@ public class dbg {
      * @see com.sun.star.beans.PropertyValue
      */
     public static void printProperyValuePairs(PropertyValue ps, PrintWriter out){
-
+        
         if (ps.Value instanceof String[] ){
             String[] values = (String[]) ps.Value;
             String oneValue = "value is an empty String[]";
@@ -271,19 +271,19 @@ public class dbg {
             out.println("   Name: '" + ps.Name + "' contains String[]:");
             out.println(oneValue);
             out.println("--------");
-
+            
         } else if (ps.Value instanceof PropertyValue){
             out.println("--------");
             out.println("   Name: '" + ps.Name + "' contains PropertyValue:");
             printProperyValuePairs((PropertyValue)ps.Value, out);
             out.println("--------");
-
+            
         } else if (ps.Value instanceof PropertyValue[]){
             out.println("--------");
             out.println("   Name: '" + ps.Name + "' contains PropertyValue[]:");
             printProperyValueSequenzePairs((PropertyValue[])ps.Value, out);
             out.println("--------");
-
+            
         } else {
             out.println("Name: '" + ps.Name + "' Value: '" + ps.Value.toString() + "'");
         }
@@ -302,7 +302,7 @@ public class dbg {
     }
 
     /**
-     * Print the supported services of a UNO object.
+     * Print the supported services of a UNO object.  
      * @param aObject A UNO object.
      */
     public static void getSuppServices (Object aObject) {

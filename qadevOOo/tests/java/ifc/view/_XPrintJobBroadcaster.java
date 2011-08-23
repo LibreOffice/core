@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ import lib.StatusException;
 public class _XPrintJobBroadcaster extends MultiMethodTest {
     public XPrintJobBroadcaster oObj = null;
     MyPrintJobListener listenerImpl = null;
-
+    
     /**
      * Get an object implementation of the _XPrintJobListener interface from the
      * test environment.
@@ -54,7 +54,7 @@ public class _XPrintJobBroadcaster extends MultiMethodTest {
             throw new StatusException(Status.failed(" No test possible. The XPrintJobListener interface has to be implemented."));
         }
     }
-
+    
     /**
      * add the listener, see if it's called.
      */
@@ -64,7 +64,7 @@ public class _XPrintJobBroadcaster extends MultiMethodTest {
         util.utils.shortWait(1000);
         tRes.tested("addPrintJobListener()", listenerImpl.actionTriggered());
     }
-
+    
     /**
      * remove the listener, see if it's still caleed.
      */
@@ -73,7 +73,7 @@ public class _XPrintJobBroadcaster extends MultiMethodTest {
         oObj.removePrintJobListener(listenerImpl);
 
             util.utils.shortWait(5000);
-
+            
         listenerImpl.reset();
         listenerImpl.fireEvent();
         tRes.tested("removePrintJobListener()", !listenerImpl.actionTriggered());
@@ -89,7 +89,7 @@ public class _XPrintJobBroadcaster extends MultiMethodTest {
         XPrintable xPrintable = null;
         PropertyValue[]printProps = null;
         String printFileName = null;
-
+        
         /**
          * Constructor
          * @param An object that can be cast to an XPrintable.
@@ -114,7 +114,7 @@ public class _XPrintJobBroadcaster extends MultiMethodTest {
         public boolean actionTriggered() {
             return eventCalled;
         }
-
+        
         /**
          * Fire the event that calls the printJobEvent
          */
@@ -125,7 +125,7 @@ public class _XPrintJobBroadcaster extends MultiMethodTest {
             catch(com.sun.star.lang.IllegalArgumentException e) {
             }
         }
-
+        
         public void reset() {
             File f = new File(printFileName);
             if (f.exists())
@@ -146,5 +146,5 @@ public class _XPrintJobBroadcaster extends MultiMethodTest {
         public void disposing(com.sun.star.lang.EventObject eventObject) {
         }
     }
-
+    
 }

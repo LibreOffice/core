@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,15 +43,15 @@ import com.sun.star.sheet.XCellFormatRangesSupplier;
  */
 
 public class _XCellFormatRangesSupplier extends MultiMethodTest {
-
+    
     public XCellFormatRangesSupplier oObj = null;
-
+    
     /**
      * call the method getCellFormatRanges and returns OK result if
      * the gained XIndexAccess isn't null and the method checkIndexAccess
      * returns true.
      */
-
+    
     public void _getCellFormatRanges() {
         boolean res = true;
         XIndexAccess xIA = oObj.getCellFormatRanges();
@@ -63,12 +63,12 @@ public class _XCellFormatRangesSupplier extends MultiMethodTest {
         }
         tRes.tested("getCellFormatRanges()",res);
     }
-
+    
     /**
      * calls the method getCount at the IndexAccess, returns true is it is >0
      * and getByIndex() doesn't throw an exception for Indexes between 0 and count
      */
-
+    
     protected boolean checkIndexAccess(XIndexAccess xIA) {
         boolean res = true;
         int count = xIA.getCount();
@@ -88,5 +88,5 @@ public class _XCellFormatRangesSupplier extends MultiMethodTest {
         }
         return res;
     }
-
+    
 }

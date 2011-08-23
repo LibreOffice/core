@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -217,7 +217,7 @@ public class _XTextCursor extends MultiMethodTest {
      * and in the second <code>false</code>
      */
     public void _isCollapsed(){
-        boolean bCol = false;
+        boolean bCol = false;        
 
         oObj.gotoStart(false);
         bCol = oObj.isCollapsed();

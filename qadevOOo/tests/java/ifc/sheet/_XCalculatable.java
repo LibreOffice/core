@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ public class _XCalculatable extends MultiMethodTest {
     public XCalculatable oObj = null;
     private boolean bIsAutomaticCalculationEnabled = false;
     private XCell[] xCells = null;
-
+    
     /**
      * Get object relation: four cells with values and formulas.
      * @see mod._sc.ScModelObj
@@ -50,7 +50,7 @@ public class _XCalculatable extends MultiMethodTest {
             throw new StatusException(Status.failed("Couldn't find correct object relation 'XCalculatable.Cells'"));
 
     }
-
+    
     /**
      * Restore begin setting
      */
@@ -58,8 +58,8 @@ public class _XCalculatable extends MultiMethodTest {
         // reset to begin value
         oObj.enableAutomaticCalculation(bIsAutomaticCalculationEnabled);
     }
-
-
+    
+    
     public void _calculate() {
         requiredMethod("isAutomaticCalculationEnabled()");
         boolean result = true;
@@ -73,7 +73,7 @@ public class _XCalculatable extends MultiMethodTest {
         result &= ergValue1 != ergValue2;
         tRes.tested("calculate()", result);
     }
-
+    
     public void _calculateAll() {
         requiredMethod("isAutomaticCalculationEnabled()");
         boolean result = true;
@@ -88,18 +88,18 @@ public class _XCalculatable extends MultiMethodTest {
         oObj.calculateAll();
         tRes.tested("calculateAll()", result);
     }
-
+    
     public void _enableAutomaticCalculation() {
         bIsAutomaticCalculationEnabled = oObj.isAutomaticCalculationEnabled();
         oObj.enableAutomaticCalculation(!bIsAutomaticCalculationEnabled);
         tRes.tested("enableAutomaticCalculation()", true);
     }
-
+    
     public void _isAutomaticCalculationEnabled() {
         requiredMethod("enableAutomaticCalculation()");
         boolean result = oObj.isAutomaticCalculationEnabled();
         oObj.enableAutomaticCalculation(false);
         tRes.tested("isAutomaticCalculationEnabled()", result != bIsAutomaticCalculationEnabled);
     }
-
+    
 }

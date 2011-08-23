@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ public class _UnoControlButtonModel extends MultiPropertyTest {
         log.println("Testing with custom Property tester") ;
         testProperty("BackgroundColor", ColorTester) ;
     }
-
+    
     /**
     * This property can be void, so if old value is <code> null </code>
     * new value must be specified.
@@ -87,7 +87,7 @@ public class _UnoControlButtonModel extends MultiPropertyTest {
     public void _TextLineColor() {
         log.println("Testing with custom Property tester") ;
         testProperty("TextLineColor", ColorTester) ;
-    }
+    }    
 
     /**
     * This property can be void, so if old value is <code> null </code>
