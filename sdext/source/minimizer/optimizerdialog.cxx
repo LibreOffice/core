@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ void OptimizerDialog::InitDialog()
         TKGet( TK_Title ),
         TKGet( TK_Width ) };
 
-    Any pValues[] = {
+    Any	pValues[] = {
         Any( sal_True ),
         Any( sal_Int32( DIALOG_HEIGHT ) ),
         Any( sal_True ),
@@ -79,13 +79,13 @@ void OptimizerDialog::InitDialog()
         Any( sal_Int32( 52 ) ),
         Any( getString( STR_SUN_OPTIMIZATION_WIZARD2 ) ),
         Any( sal_Int32( OD_DIALOG_WIDTH ) ) };
-
+    
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-    Sequence< rtl::OUString >   aNames( pNames, nCount );
-    Sequence< Any >             aValues( pValues, nCount );
+    Sequence< rtl::OUString >	aNames( pNames, nCount );
+    Sequence< Any >				aValues( pValues, nCount );
 
-    mxDialogModelMultiPropertySet->setPropertyValues( aNames, aValues );
+    mxDialogModelMultiPropertySet->setPropertyValues( aNames, aValues ); 
 }
 
 // -----------------------------------------------------------------------------
@@ -102,7 +102,7 @@ void OptimizerDialog::InitRoadmap()
             TKGet( TK_TabIndex ),
             TKGet( TK_Width ) };
 
-        Any pValues[] = {
+        Any	pValues[] = {
             Any( sal_Int32( DIALOG_HEIGHT - 26 ) ),
             Any( sal_Int32( 0 ) ),
             Any( sal_Int32( 0 ) ),
@@ -112,11 +112,11 @@ void OptimizerDialog::InitRoadmap()
 
         sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
-        Sequence< rtl::OUString >   aNames( pNames, nCount );
-        Sequence< Any >             aValues( pValues, nCount );
+        Sequence< rtl::OUString >	aNames( pNames, nCount );
+        Sequence< Any >				aValues( pValues, nCount );
 
         mxRoadmapControlModel = insertControlModel( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlRoadmapModel" ) ),
-                                                              TKGet( TK_rdmNavi ), aNames, aValues  );
+                                                              TKGet( TK_rdmNavi ), aNames, aValues	);
 
         Reference< XPropertySet > xPropertySet( mxRoadmapControlModel, UNO_QUERY_THROW );
         xPropertySet->setPropertyValue( TKGet( TK_Name ), Any( TKGet( TK_rdmNavi ) ) );
@@ -168,13 +168,13 @@ void OptimizerDialog::InsertRoadmapItem( const sal_Int32 nIndex, const sal_Bool 
 
 void OptimizerDialog::UpdateConfiguration()
 {
-    sal_Int16   nInt16 = 0;
-    OUString    aString;
-    Any         aAny;
+    sal_Int16	nInt16 = 0;
+    OUString	aString;
+    Any			aAny;
 
     Sequence< sal_Int16 > aSelectedItems;
     Sequence< OUString > aStringItemList;
-
+        
     // page0
     aAny = getControlProperty( TKGet( TK_ListBox0Pg0 ), TKGet( TK_SelectedItems ) );
     if ( aAny >>= aSelectedItems )
@@ -266,7 +266,7 @@ sal_Bool OptimizerDialog::execute()
     Reference< XItemEventBroadcaster > maRoadmapBroadcaster( mxRoadmapControl, UNO_QUERY_THROW );
     maRoadmapBroadcaster->addItemListener( mxItemListener );
     UnoDialog::execute();
-    UpdateConfiguration();          // taking actual control settings for the configuration
+    UpdateConfiguration();			// taking actual control settings for the configuration
     maRoadmapBroadcaster->removeItemListener( mxItemListener );
     return mbStatus;
 }
@@ -282,14 +282,14 @@ void OptimizerDialog::SwitchPage( sal_Int16 nNewStep )
             disableControl( TKGet( TK_btnNavBack ) );
         else if ( nOldStep == 0 )
             enableControl( TKGet( TK_btnNavBack ) );
-
+        
         if ( nNewStep == MAX_STEP )
             disableControl( TKGet( TK_btnNavNext ) );
         else if ( nOldStep == MAX_STEP )
             enableControl( TKGet( TK_btnNavNext ) );
 
         setControlProperty( TKGet( TK_rdmNavi ), TKGet( TK_CurrentItemID ), Any( nNewStep ) );
-
+        
         DeactivatePage( nOldStep );
         UpdateControlStates( nNewStep );
 
@@ -547,7 +547,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                     Reference< XLayoutManager > xLayoutManager;
                     if ( xPropSet->getPropertyValue( OUString::createFromAscii( "LayoutManager" ) ) >>= xLayoutManager )
                     {
-                        xLayoutManager->setVisible( sal_False );
+                        xLayoutManager->setVisible( sal_False );                    
                         xLayoutManager->hideElement( OUString::createFromAscii( "private:resource/menubar/menubar" ) );
                         xLayoutManager->destroyElement( OUString::createFromAscii( "private:resource/statusbar/statusbar" ) );
                     }
@@ -559,8 +559,8 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
             }
         }
         break;
-        case TK_btnNavBack :    mrOptimizerDialog.SwitchPage( mrOptimizerDialog.mnCurrentStep - 1 ); break;
-        case TK_btnNavNext :    mrOptimizerDialog.SwitchPage( mrOptimizerDialog.mnCurrentStep + 1 ); break;
+        case TK_btnNavBack :	mrOptimizerDialog.SwitchPage( mrOptimizerDialog.mnCurrentStep - 1 ); break;
+        case TK_btnNavNext :	mrOptimizerDialog.SwitchPage( mrOptimizerDialog.mnCurrentStep + 1 ); break;	
         case TK_btnNavFinish :
         {
             mrOptimizerDialog.UpdateConfiguration();
@@ -574,9 +574,9 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
             mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavCancel ), TKGet( TK_Enabled ), Any( sal_False ) );
             mrOptimizerDialog.setControlProperty( TKGet( TK_FixedText0Pg4 ), TKGet( TK_Enabled ), Any( sal_True ) );
 
-            // check if we have to open the FileDialog
-            sal_Bool    bSuccessfullyExecuted = sal_True;
-            sal_Int16   nInt16 = 0;
+            // check if we have to open the FileDialog 
+            sal_Bool	bSuccessfullyExecuted = sal_True;
+            sal_Int16	nInt16 = 0;
             mrOptimizerDialog.getControlProperty( TKGet( TK_RadioButton1Pg4 ), TKGet( TK_State ) ) >>= nInt16;
             if ( nInt16 )
             {
@@ -629,7 +629,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 }
             }
             if ( bSuccessfullyExecuted )
-            {   // now check if we have to store a session template
+            {	// now check if we have to store a session template
                 nInt16 = 0;
                 OUString aSettingsName;
                 mrOptimizerDialog.getControlProperty( TKGet( TK_CheckBox1Pg4 ), TKGet( TK_State ) ) >>= nInt16;
@@ -682,8 +682,8 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
             }
         }
         break;
-        case TK_btnNavCancel :  mrOptimizerDialog.endExecute( sal_False ); break;
-        case TK_Button0Pg0 :    // delete configuration
+        case TK_btnNavCancel :	mrOptimizerDialog.endExecute( sal_False ); break;
+        case TK_Button0Pg0 :	// delete configuration
         {
             OUString aSelectedItem( mrOptimizerDialog.GetSelectedString( TK_ListBox0Pg0 ) );
             if ( aSelectedItem.getLength() )
@@ -781,7 +781,7 @@ void SpinListenerFormattedField0Pg1::up( const SpinEvent& /* rEvent */ )
         fDouble += 9;
         if ( fDouble > 100 )
             fDouble = 100;
-        mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( fDouble ) );
+        mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( fDouble ) );	
         mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)fDouble ) );
     }
 }
@@ -795,20 +795,20 @@ void SpinListenerFormattedField0Pg1::down( const SpinEvent& /* rEvent */ )
         fDouble -= 9;
         if ( fDouble < 0 )
             fDouble = 0;
-        mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( fDouble ) );
+        mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( fDouble ) );	
         mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)fDouble ) );
     }
 }
 void SpinListenerFormattedField0Pg1::first( const SpinEvent& /* rEvent */ )
     throw ( com::sun::star::uno::RuntimeException )
 {
-    mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( static_cast< double >( 0 ) ) );
+    mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( static_cast< double >( 0 ) ) );	
     mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)0 ) );
 }
 void SpinListenerFormattedField0Pg1::last( const SpinEvent& /* rEvent */ )
     throw ( com::sun::star::uno::RuntimeException )
 {
-    mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( static_cast< double >( 100 ) ) );
+    mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( static_cast< double >( 100 ) ) );	
     mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)100 ) );
 }
 void SpinListenerFormattedField0Pg1::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ uno::Sequence< sal_Int32 > VPolarCoordinateSystem::getCoordinateSystemResolution
             aResolution[1]/=2;//radius
         }
     }
-
+    
     return aResolution;
 }
 
@@ -89,7 +89,7 @@ void VPolarCoordinateSystem::createVAxisList(
 //     bool bSwapXAndY = this->getPropertySwapXAndYAxis();
 
     sal_Int32 nDimensionIndex = 0;
-
+    
     //create angle axis (dimension index 0)
     for( nDimensionIndex = 0; nDimensionIndex < nDimensionCount; nDimensionIndex++ )
     {
@@ -147,7 +147,7 @@ void VPolarCoordinateSystem::initVAxisInList()
                 pVPolarAxis->setIncrements( this->getExplicitIncrements( nDimensionIndex, nAxisIndex ) );
             if(2==nDimensionCount)
                 pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
-            pVAxis->setScales( this->getExplicitScales( nDimensionIndex, nAxisIndex ), bSwapXAndY );
+            pVAxis->setScales( this->getExplicitScales( nDimensionIndex, nAxisIndex ), bSwapXAndY );            
         }
     }
 }
@@ -175,7 +175,7 @@ void VPolarCoordinateSystem::updateScalesAndIncrementsOnAxes()
                 pVPolarAxis->setIncrements( this->getExplicitIncrements( nDimensionIndex, nAxisIndex ) );
             if(2==nDimensionCount)
                 pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
-            pVAxis->setScales( this->getExplicitScales( nDimensionIndex, nAxisIndex ), bSwapXAndY );
+            pVAxis->setScales( this->getExplicitScales( nDimensionIndex, nAxisIndex ), bSwapXAndY );            
         }
     }
 }

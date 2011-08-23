@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 package convwatch;
 
 // -----------------------------------------------------------------------------
-// Helper stuff to
+// Helper stuff to 
 // abstract class Name
 // {
 //     abstract public String getName();
@@ -41,7 +41,7 @@ package convwatch;
 // {
 //     public String getName() {return "-test";}
 // }
-//
+// 
 // public class Basename /* extends *//* implements */ {
 //     String fs;
 //     Basename()
@@ -54,8 +54,8 @@ package convwatch;
 //             String sJPEGName = _sOutputPath + fs + sBaseNameNoSuffix + "-" + _sGS_PageOutput + _aPostNameAdd.getName() + ".jpg";
 //             return sJPEGName;
 //         }
-//
+//     
 //     public static void main( String[] argv ) {
-//
+//         
 //         }
 // }

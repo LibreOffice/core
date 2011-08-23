@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,14 +64,14 @@ writerfilter::Reference<Properties>::Pointer_t
 WW8sprmPChgTabsPapx::get_tbdAdd(sal_uInt32 pos)
 {
     //wntmsci compiler cannot handle 'too many inlines' ;-)
-    writerfilter::Reference<Properties>::Pointer_t pRet( new WW8TBD(this,
-                    0x4 + get_dxaDel_count() * 2 + 1 + get_dxaAdd_count() * 2
+    writerfilter::Reference<Properties>::Pointer_t pRet( new WW8TBD(this, 
+                    0x4 + get_dxaDel_count() * 2 + 1 + get_dxaAdd_count() * 2 
                     + pos, 1));
     return pRet;
-
+    
 /*    return writerfilter::Reference<Properties>::Pointer_t
-        (new WW8TBD(this,
-                    0x4 + get_dxaDel_count() * 2 + 1 + get_dxaAdd_count() * 2
+        (new WW8TBD(this, 
+                    0x4 + get_dxaDel_count() * 2 + 1 + get_dxaAdd_count() * 2 
                     + pos, 1));*/
 }
 }}

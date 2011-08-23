@@ -27,12 +27,12 @@ EXTERN_C WINBASEAPI DWORD SetVersion( DWORD dwVersion );
 #define MAKE_VER_WIN32_WINDOWS( major, minor, build ) \
     MAKE_VER_WIN32( major, minor, build, TRUE )
 
-#define VER_WIN32_WINDOWS_95    MAKE_VER_WIN32_WINDOWS( 4, 0, 0 )
-#define VER_WIN32_WINDOWS_98    MAKE_VER_WIN32_WINDOWS( 4, 10, 0 )
-#define VER_WIN32_WINDOWS_ME    MAKE_VER_WIN32_WINDOWS( 4, 90, 0 )
-#define VER_WIN32_NT_NT4        MAKE_VER_WIN32_NT( 4, 0, 0 )
-#define VER_WIN32_NT_2000       MAKE_VER_WIN32_NT( 5, 0, 0 )
-#define VER_WIN32_NT_XP         MAKE_VER_WIN32_NT( 5, 1, 0 )
+#define VER_WIN32_WINDOWS_95	MAKE_VER_WIN32_WINDOWS( 4, 0, 0 )
+#define VER_WIN32_WINDOWS_98	MAKE_VER_WIN32_WINDOWS( 4, 10, 0 )
+#define VER_WIN32_WINDOWS_ME	MAKE_VER_WIN32_WINDOWS( 4, 90, 0 )
+#define VER_WIN32_NT_NT4		MAKE_VER_WIN32_NT( 4, 0, 0 )
+#define VER_WIN32_NT_2000		MAKE_VER_WIN32_NT( 5, 0, 0 )
+#define VER_WIN32_NT_XP			MAKE_VER_WIN32_NT( 5, 1, 0 )
 
 
 EXTERN_C WINBASEAPI LPSTR WINAPI lstrchrA( LPCSTR lpString, CHAR c );
@@ -41,22 +41,22 @@ EXTERN_C WINBASEAPI LPSTR WINAPI lstrrchrA( LPCSTR lpString, CHAR c );
 EXTERN_C WINBASEAPI LPWSTR WINAPI lstrrchrW( LPCWSTR lpString, WCHAR c );
 
 #ifdef UNICODE
-#define lstrrchr    lstrrchrW
-#define lstrchr     lstrchrW
+#define lstrrchr	lstrrchrW
+#define lstrchr		lstrchrW
 #else
-#define lstrrchr    lstrrchrA
-#define lstrchr     lstrchrA
+#define lstrrchr	lstrrchrA
+#define lstrchr		lstrchrA
 #endif
 
-#define IsValidHandle(Handle)   ((DWORD)(Handle) + 1 > 1)
+#define IsValidHandle(Handle)	((DWORD)(Handle) + 1 > 1)
 
 #ifdef __cplusplus
 
 #define _AUTO_WSTR2STR( lpStrA, lpStrW ) \
-LPSTR   lpStrA; \
+LPSTR	lpStrA; \
 if ( lpStrW ) \
 { \
-    int cNeeded = WideCharToMultiByte( CP_ACP, 0, lpStrW, -1, NULL, 0, NULL, NULL ); \
+    int	cNeeded = WideCharToMultiByte( CP_ACP, 0, lpStrW, -1, NULL, 0, NULL, NULL ); \
     lpStrA = (LPSTR)_alloca( cNeeded * sizeof(CHAR) ); \
     WideCharToMultiByte( CP_ACP, 0, lpStrW, -1, lpStrA, cNeeded, NULL, NULL ); \
 } \
@@ -68,9 +68,9 @@ else \
     _AUTO_WSTR2STR( lpStr##A, lpStr##W )
 
 #define AUTO_STR( lpStr, cchBuffer ) \
-LPSTR   lpStr##A = lpStr##W ? (LPSTR)_alloca( (cchBuffer) * sizeof(CHAR) ) : NULL;
+LPSTR	lpStr##A = lpStr##W ? (LPSTR)_alloca( (cchBuffer) * sizeof(CHAR) ) : NULL;
 
-#endif  // __cplusplus
+#endif	// __cplusplus
 
 #define STRBUF2WSTR( lpStr, cchSrcBuffer, cchDestBuffer ) \
     MultiByteToWideChar( CP_ACP, 0, lpStr##A, cchSrcBuffer, lpStr##W, cchDestBuffer )
@@ -95,11 +95,11 @@ static rettype calltype func##_##Failure params; \
 static _declspec ( naked ) func##_Thunk() \
 { \
     ResolveThunk_##resolve( &module##_##func##_Ptr, #module ".dll", #func, (FARPROC)func##_##resolve, (FARPROC)func##_##Failure ); \
-    _asm    jmp [module##_##func##_Ptr] \
+    _asm	jmp	[module##_##func##_Ptr] \
 } \
 EXTERN_C _declspec( naked ) rettype calltype func params \
 { \
-    _asm    jmp [module##_##func##_Ptr] \
+    _asm	jmp	[module##_##func##_Ptr] \
 } \
 EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr = (FARPROC)func##_Thunk; \
 static rettype calltype func##_##Failure params \
@@ -124,11 +124,11 @@ EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr; \
 static _declspec ( naked ) func##_Thunk() \
 { \
     ResolveThunk_##resolve( &module##_##func##_Ptr, #module ".dll", #func ); \
-    _asm    jmp [module##_##func##_Ptr] \
+    _asm	jmp	[module##_##func##_Ptr] \
 } \
 EXTERN_C _declspec( naked ) rettype calltype func params \
 { \
-    _asm    jmp [module##_##func##_Ptr] \
+    _asm	jmp	[module##_##func##_Ptr] \
 } \
 EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr = (FARPROC)func##_Thunk;
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

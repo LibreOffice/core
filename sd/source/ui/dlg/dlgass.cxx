@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -161,16 +161,16 @@ public:
     /** closes the current preview docshell */
     void CloseDocShell();
 
-    /** Extract form the history list of recently used files the impress
+    /**	Extract form the history list of recently used files the impress
         files and insert them into a listbox.
     */
-    void    ScanDocmenu         (void);
-    /** Flag that is set to TRUE after the recently used files have been
+    void	ScanDocmenu			(void);
+    /**	Flag that is set to TRUE after the recently used files have been
         scanned.
     */
     BOOL mbRecentDocumentsReady;
 
-    /** When the list of templates has not been scanned already this is done
+    /**	When the list of templates has not been scanned already this is done
         when this method is called.  That includes requesting the whole list
         of templates from UCB and extracting from that list the impress
         templates and layouts and storing them for later use in
@@ -179,7 +179,7 @@ public:
     */
     void ProvideTemplates (void);
 
-    /** This method transfers the template folders from the template scanner
+    /**	This method transfers the template folders from the template scanner
         to the internal structures of this class.  On termination it sets
         the flag <member>mbTemplatesReady</member> to <TRUE/> to indicate
         that the templates are available.
@@ -190,7 +190,7 @@ public:
     */
     void TemplateScanDone (std::vector<TemplateDir*>& rTemplateFolders);
 
-    /** Flag that is set to TRUE after the impress templates have been
+    /**	Flag that is set to TRUE after the impress templates have been
         scanned.
     */
     BOOL mbTemplatesReady;
@@ -216,16 +216,16 @@ public:
     String GetDocFileName();
     String GetLayoutFileName();
 
-    /// List of URLs of recently used impress files.
+    ///	List of URLs of recently used impress files.
     std::vector<String*> maOpenFilesList;
 
-    /// List of folders containing data about impress templates.
+    ///	List of folders containing data about impress templates.
     std::vector<TemplateDir*> maPresentList;
 
-    /// Currently selected template folder.
+    ///	Currently selected template folder.
     TemplateDir* mpTemplateRegion;
 
-    /// Currently selected layout folder.
+    ///	Currently selected layout folder.
     TemplateDir* mpLayoutRegion;
 
     // preview
@@ -288,73 +288,73 @@ public:
     DECL_LINK( OpenButtonHdl, Button * );
 
     // Common
-    Assistent           maAssistentFunc;
-    CheckBox            maPreviewFlag;
-    CheckBox            maStartWithFlag;
-    HelpButton          maHelpButton;
-    CancelButton        maCancelButton;
-    PushButton          maLastPageButton;
-    NextButton          maNextPageButton;
-    OKButton            maFinishButton;
-    SdDocPreviewWin     maPreview;
+    Assistent			maAssistentFunc;
+    CheckBox			maPreviewFlag;
+    CheckBox			maStartWithFlag;
+    HelpButton			maHelpButton;
+    CancelButton		maCancelButton;
+    PushButton			maLastPageButton;
+    NextButton	        maNextPageButton;
+    OKButton			maFinishButton;
+    SdDocPreviewWin		maPreview;
 
-    String              maCreateStr;
-    String              maOpenStr;
+    String				maCreateStr;
+    String				maOpenStr;
 
     // Seite 1
-    FixedBitmap*        mpPage1FB;
-    FixedLine*          mpPage1ArtFL;
-    RadioButton*        mpPage1EmptyRB;
-    RadioButton*        mpPage1TemplateRB;
-    ListBox*            mpPage1RegionLB;
-    ListBox*            mpPage1TemplateLB;
-    RadioButton*        mpPage1OpenRB;
-    ListBox*            mpPage1OpenLB;
+    FixedBitmap*		mpPage1FB;
+    FixedLine*			mpPage1ArtFL;
+    RadioButton*		mpPage1EmptyRB;
+    RadioButton*		mpPage1TemplateRB;
+    ListBox*			mpPage1RegionLB;
+    ListBox*			mpPage1TemplateLB;
+    RadioButton*		mpPage1OpenRB;
+    ListBox*			mpPage1OpenLB;
     PushButton*         mpPage1OpenPB;
 
     // Seite 2
-    FixedBitmap*        mpPage2FB;
-    FixedLine*          mpPage2LayoutFL;
-    ListBox*            mpPage2RegionLB;
-    ListBox*            mpPage2LayoutLB;
-    FixedLine*          mpPage2OutTypesFL;
-    RadioButton*        mpPage2Medium1RB;
-    RadioButton*        mpPage2Medium2RB;
-    RadioButton*        mpPage2Medium3RB;
-    RadioButton*        mpPage2Medium4RB;
-    RadioButton*        mpPage2Medium5RB;
+    FixedBitmap*		mpPage2FB;
+    FixedLine*			mpPage2LayoutFL;
+    ListBox*			mpPage2RegionLB;
+    ListBox*			mpPage2LayoutLB;
+    FixedLine*			mpPage2OutTypesFL;
+    RadioButton*		mpPage2Medium1RB;
+    RadioButton*		mpPage2Medium2RB;
+    RadioButton*		mpPage2Medium3RB;
+    RadioButton*		mpPage2Medium4RB;
+    RadioButton*		mpPage2Medium5RB;
 
     // Seite 3
-    FixedBitmap*        mpPage3FB;
-    FixedLine*          mpPage3EffectFL;
-    FixedText*          mpPage3EffectFT;
-    FadeEffectLB*       mpPage3EffectLB;
-    FixedText*          mpPage3SpeedFT;
-    ListBox*            mpPage3SpeedLB;
-    FixedLine*          mpPage3PresTypeFL;
-    RadioButton*        mpPage3PresTypeLiveRB;
-    RadioButton*        mpPage3PresTypeKioskRB;
-    FixedText*          mpPage3PresTimeFT;
-    TimeField*          mpPage3PresTimeTMF;
-    FixedText*          mpPage3BreakFT;
-    TimeField*          mpPage3BreakTMF;
-    CheckBox*           mpPage3LogoCB;
+    FixedBitmap*		mpPage3FB;
+    FixedLine*			mpPage3EffectFL;
+    FixedText*			mpPage3EffectFT;
+    FadeEffectLB*		mpPage3EffectLB;
+    FixedText*			mpPage3SpeedFT;
+    ListBox*			mpPage3SpeedLB;
+    FixedLine*			mpPage3PresTypeFL;
+    RadioButton*		mpPage3PresTypeLiveRB;
+    RadioButton*		mpPage3PresTypeKioskRB;
+    FixedText*			mpPage3PresTimeFT;
+    TimeField*			mpPage3PresTimeTMF;
+    FixedText*			mpPage3BreakFT;
+    TimeField*			mpPage3BreakTMF;
+    CheckBox*			mpPage3LogoCB;
 
     // Seite 4
-    FixedBitmap*        mpPage4FB;
-    FixedLine*          mpPage4PersonalFL;
-    FixedText*          mpPage4AskNameFT;
-    Edit*               mpPage4AskNameEDT;
-    FixedText*          mpPage4AskTopicFT;
-    Edit*               mpPage4AskTopicEDT;
-    FixedText*          mpPage4AskInfoFT;
-    MultiLineEdit*      mpPage4AskInfoEDT;
+    FixedBitmap*		mpPage4FB;
+    FixedLine*			mpPage4PersonalFL;
+    FixedText*			mpPage4AskNameFT;
+    Edit*				mpPage4AskNameEDT;
+    FixedText*			mpPage4AskTopicFT;
+    Edit*				mpPage4AskTopicEDT;
+    FixedText*			mpPage4AskInfoFT;
+    MultiLineEdit*		mpPage4AskInfoEDT;
 
     // Seite 5
-    FixedBitmap*        mpPage5FB;
-    FixedText*          mpPage5PageListFT;
-    SdPageListControl*  mpPage5PageListCT;
-    CheckBox*           mpPage5SummaryCB;
+    FixedBitmap*		mpPage5FB;
+    FixedText*			mpPage5PageListFT;
+    SdPageListControl*	mpPage5PageListCT;
+    CheckBox*			mpPage5SummaryCB;
 
 };
 
@@ -463,7 +463,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     mpPage1OpenLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectFileHdl));
     mpPage1OpenLB->SetDoubleClickHdl(rFinishLink);
     mpPage1OpenPB->SetClickHdl(LINK(this,AssistentDlgImpl,OpenButtonHdl));
-    //  mpPage1OpenLB->InsertEntry(String(SdResId(STR_WIZARD_POSITION)));
+    //	mpPage1OpenLB->InsertEntry(String(SdResId(STR_WIZARD_POSITION)));
 
     // Seite 2
     maAssistentFunc.InsertControl(2, &maPreview );
@@ -529,7 +529,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
         mpPage3LogoCB = new CheckBox( pWindow, SdResId( CB_PAGE3_LOGO) ));
 
     mpPage3EffectLB->Fill();
-//  mpPage3EffectLB->SelectEffect( presentation::FadeEffect_NONE );
+//	mpPage3EffectLB->SelectEffect( presentation::FadeEffect_NONE );
     mpPage3EffectLB->SetSelectHdl( LINK(this,AssistentDlgImpl,SelectEffectHdl ));
     mpPage3EffectLB->SetDropDownLineCount( 12 );
 
@@ -640,11 +640,11 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
         TemplateDir*   pStandardTemplateDir = 0;
         TemplateEntry* pStandardTemplateEntry = 0;
 
-        std::vector<TemplateDir*>::iterator I;
+        std::vector<TemplateDir*>::iterator	I;
         for (I=maPresentList.begin(); I!=maPresentList.end(); I++)
         {
             TemplateDir* pDir = *I;
-            std::vector<TemplateEntry*>::iterator   J;
+            std::vector<TemplateEntry*>::iterator	J;
             for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); J++)
             {
                 TemplateEntry* pEntry = *J;
@@ -679,9 +679,9 @@ AssistentDlgImpl::~AssistentDlgImpl()
 
     DeletePassords();
 
-    //  Delete the template file infos.
-    std::vector<TemplateDir*>::iterator I;
-    std::vector<TemplateEntry*>::iterator   J;
+    //	Delete the template file infos.
+    std::vector<TemplateDir*>::iterator	I;
+    std::vector<TemplateEntry*>::iterator	J;
     for (I=maPresentList.begin(); I!=maPresentList.end(); I++)
     {
         for (J=(*I)->maEntries.begin(); J!=(*I)->maEntries.end(); J++)
@@ -744,8 +744,8 @@ AssistentDlgImpl::~AssistentDlgImpl()
     delete mpPage5PageListCT;
     delete mpPage5SummaryCB;
 
-    //  Delete the file history list.
-    std::vector<String*>::iterator  I2;
+    //	Delete the file history list.
+    std::vector<String*>::iterator	I2;
     for (I2=maOpenFilesList.begin(); I2!=maOpenFilesList.end(); I2++)
         delete *I2;
 }
@@ -779,7 +779,7 @@ void AssistentDlgImpl::EndDialog( long )
 
 
 
-void    AssistentDlgImpl::ScanDocmenu   (void)
+void	AssistentDlgImpl::ScanDocmenu	(void)
 {
     if( mbRecentDocumentsReady )
         return;
@@ -798,12 +798,12 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
     sal_uInt32 nCount = aHistory.getLength();
     for (sal_uInt32 nItem=0; nItem<nCount; ++nItem)
     {
-        //  Get the current history item's properties.
+        //	Get the current history item's properties.
         uno::Sequence<beans::PropertyValue> aPropertySet = aHistory[nItem];
-        rtl::OUString   sURL;
-        rtl::OUString   sFilter;
-        rtl::OUString   sTitle;
-        rtl::OUString   sPassword;
+        rtl::OUString	sURL;
+        rtl::OUString	sFilter;
+        rtl::OUString	sTitle;
+        rtl::OUString	sPassword;
         sal_uInt32 nPropertyCount = aPropertySet.getLength();
         for (sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty)
             if (aPropertySet[nProperty].Name == HISTORY_PROPERTYNAME_URL)
@@ -815,8 +815,8 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
             else if (aPropertySet[nProperty].Name == HISTORY_PROPERTYNAME_PASSWORD)
                 aPropertySet[nProperty].Value >>= sPassword;
 
-        //  If the entry is an impress file then insert it into the
-        //  history list and the list box.
+        //	If the entry is an impress file then insert it into the
+        //	history list and the list box.
         uno::Sequence< beans::PropertyValue > lProps;
         if (xFilterFactory->hasByName(sFilter))
         {
@@ -885,17 +885,17 @@ void AssistentDlgImpl::ProvideTemplates (void)
 void AssistentDlgImpl::TemplateScanDone (
     std::vector<TemplateDir*>& rTemplateFolder)
 {
-    //  This method is called from a thread.  Therefore we get the solar mutex.
+    //	This method is called from a thread.  Therefore we get the solar mutex.
     SolarMutexGuard aGuard;
 
     // Copy the contents of the given template folders to a local list.
     maPresentList.swap (rTemplateFolder);
 
-    //  Fill in the list box on the first page.
+    //	Fill in the list box on the first page.
     int nFirstEntry = 0;
     mpPage1RegionLB->Clear();
-    std::vector<TemplateDir*>::iterator I;
-    int i;
+    std::vector<TemplateDir*>::iterator	I;
+    int	i;
     for (i=0,I=maPresentList.begin(); I!=maPresentList.end(); I++,i++)
     {
         TemplateDir* pDir = *I;
@@ -918,7 +918,7 @@ void AssistentDlgImpl::TemplateScanDone (
     mpPage1RegionLB->Update();
     SelectTemplateRegion (mpPage1RegionLB->GetSelectEntry());
 
-    //  Fill in the list box on the second page.
+    //	Fill in the list box on the second page.
     nFirstEntry = 0;
     mpPage2RegionLB->Clear();
     for (i=0,I=maPresentList.begin(); I!=maPresentList.end(); I++,i++)
@@ -943,7 +943,7 @@ void AssistentDlgImpl::TemplateScanDone (
     mpPage2RegionLB->Update();
     SelectLayoutRegion (mpPage2RegionLB->GetSelectEntry());
 
-    //  Make the changes visible.
+    //	Make the changes visible.
     mbTemplatesReady = TRUE;
     if (mpWindow)
         UpdatePage();
@@ -1041,8 +1041,8 @@ String AssistentDlgImpl::GetLayoutFileName()
 
 SfxObjectShellLock AssistentDlgImpl::GetDocument()
 {
-//  mbPreview = FALSE;      // Document nicht anzeigen
-    UpdatePreview(FALSE);   // aber komplett laden
+//	mbPreview = FALSE;		// Document nicht anzeigen
+    UpdatePreview(FALSE);	// aber komplett laden
     UpdatePageList();
 
     SfxObjectShell* pShell = xDocShell;
@@ -1083,7 +1083,7 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
             {
                 // diese Seite loeschen
                 pDoc->DeletePage( (nPgRelNum << 1) + 2 ); // Notizseite loeschen
-                pDoc->DeletePage( (nPgRelNum << 1) + 1 );   // Seite loeschen
+                pDoc->DeletePage( (nPgRelNum << 1) + 1 );	// Seite loeschen
             }
 
             nPgAbsNum++;
@@ -1377,14 +1377,14 @@ IMPL_LINK( AssistentDlgImpl, UpdateUserDataHdl, Edit*, EMPTYARG )
 void AssistentDlgImpl::SelectTemplateRegion( const String& rRegion )
 {
     mpPage1TemplateLB->Clear();
-    std::vector<TemplateDir*>::iterator I;
+    std::vector<TemplateDir*>::iterator	I;
     for (I=maPresentList.begin(); I!=maPresentList.end(); I++)
     {
         TemplateDir * pDir = *I;
         mpTemplateRegion = *I;
         if (pDir->msRegion.Equals( rRegion ) )
         {
-            std::vector<TemplateEntry*>::iterator   J;
+            std::vector<TemplateEntry*>::iterator	J;
             for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); J++)
                 mpPage1TemplateLB->InsertEntry ((*J)->msTitle);
             mpPage1TemplateLB->Update();
@@ -1402,7 +1402,7 @@ void AssistentDlgImpl::SelectLayoutRegion( const String& rRegion )
 {
     mpPage2LayoutLB->Clear();
     mpPage2LayoutLB->InsertEntry(String(SdResId(STR_WIZARD_ORIGINAL)));
-    std::vector<TemplateDir*>::iterator I;
+    std::vector<TemplateDir*>::iterator	I;
     for (I=maPresentList.begin(); I!=maPresentList.end(); I++)
     {
         TemplateDir * pDir = *I;
@@ -1410,7 +1410,7 @@ void AssistentDlgImpl::SelectLayoutRegion( const String& rRegion )
 
         if (pDir->msRegion.Equals (rRegion))
         {
-            std::vector<TemplateEntry*>::iterator   J;
+            std::vector<TemplateEntry*>::iterator	J;
             for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); J++)
                 mpPage2LayoutLB->InsertEntry ((*J)->msTitle);
             mpPage2LayoutLB->Update();
@@ -1738,8 +1738,8 @@ void AssistentDlgImpl::DeletePassords()
 
 BOOL AssistentDlgImpl::IsOwnFormat( const String& rPath )
 {
-    INetURLObject   aURL( rPath );
-    String          aExt( aURL.GetFileExtension() );
+    INetURLObject	aURL( rPath );
+    String			aExt( aURL.GetFileExtension() );
 
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 

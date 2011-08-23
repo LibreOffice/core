@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,14 +43,14 @@ using ::com::sun::star::beans::PropertyValue;
 TYPEINIT1( XMLIndexSpanEntryContext, XMLIndexSimpleEntryContext);
 
 XMLIndexSpanEntryContext::XMLIndexSpanEntryContext(
-    SvXMLImport& rImport,
+    SvXMLImport& rImport, 
     XMLIndexTemplateContext& rTemplate,
     sal_uInt16 nPrfx,
     const OUString& rLocalName ) :
-        XMLIndexSimpleEntryContext(rImport, rTemplate.sTokenText,
+        XMLIndexSimpleEntryContext(rImport, rTemplate.sTokenText, 
                                    rTemplate, nPrfx, rLocalName)
 {
-    nValues++;  // one more for the text string
+    nValues++;	// one more for the text string
 }
 
 XMLIndexSpanEntryContext::~XMLIndexSpanEntryContext()
@@ -65,7 +65,7 @@ void XMLIndexSpanEntryContext::Characters(const OUString& sString)
 void XMLIndexSpanEntryContext::FillPropertyValues(
     Sequence<PropertyValue> & rValues)
 {
-    // call superclass for token type, stylename,
+    // call superclass for token type, stylename, 
     XMLIndexSimpleEntryContext::FillPropertyValues(rValues);
 
     // content

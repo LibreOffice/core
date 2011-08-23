@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ public:
 
     APPHELPER_XSERVICEINFO_DECL()
     /// establish methods for factory instatiation
-//  APPHELPER_SERVICE_FACTORY_HELPER( ChartTypeTemplate )
+// 	APPHELPER_SERVICE_FACTORY_HELPER( ChartTypeTemplate )
 
 protected:
     // ____ XChartTypeTemplate ____

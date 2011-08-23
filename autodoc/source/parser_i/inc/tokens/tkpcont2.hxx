@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ class CharacterSource;
 class TkpNullContext;
 class TkpNullContex2;
 
-/** @task
+/**	@task
     Specifies a context within which tokens are interpreted in a special
     way. For example in parsing C++ there could be a context for code,
     one for comments and a third one for preprocessor statements, because
@@ -47,7 +47,7 @@ class TkpContext
 {
   public:
     // LIFECYCLE
-    virtual                 ~TkpContext() {}
+    virtual					~TkpContext() {}
 
     // OPERATIONS
     /** @descr
@@ -67,13 +67,13 @@ class TkpContext
         passes the parsed token to the internally known receiver and
         returns true. The token is cut from io_rText.
     **/
-    virtual void        ReadCharChain(
-                            CharacterSource &   io_rText ) = 0;
+    virtual void		ReadCharChain(
+                            CharacterSource &	io_rText ) = 0;
     /** Has to pass the parsed token to a known receiver.
         @return true, if a token was passed.
                 false, if no token was parsed complete by this context.
     */
-    virtual bool        PassNewToken() = 0;
+    virtual bool		PassNewToken() = 0;
     virtual TkpContext &
                         FollowUpContext() = 0;
 
@@ -89,10 +89,10 @@ class StateMachineContext
     virtual ~StateMachineContext() {}
 
     /// Is used by StmBoundsStatu2 only.
-    virtual void        PerformStatusFunction(
-                            uintt               i_nStatusSignal,
-                            UINT16              i_nTokenId,
-                            CharacterSource &   io_rText ) = 0;
+    virtual	void		PerformStatusFunction(
+                            uintt				i_nStatusSignal,
+                            UINT16				i_nTokenId,
+                            CharacterSource &	io_rText ) = 0;
 };
 
 class TkpNullContex2 : public TkpContext
@@ -100,9 +100,9 @@ class TkpNullContex2 : public TkpContext
   public:
                         ~TkpNullContex2();
 
-    virtual void        ReadCharChain(
-                            CharacterSource &   io_rText );
-    virtual bool        PassNewToken();
+    virtual void		ReadCharChain(
+                            CharacterSource &	io_rText );
+    virtual bool		PassNewToken();
     virtual TkpContext &
                         FollowUpContext();
 };
@@ -110,11 +110,11 @@ class TkpNullContex2 : public TkpContext
 class TkpDocuContext : public TkpContext
 {
   public:
-    virtual void        SetParentContext(
-                            TkpContext &        io_rParentContext,
-                            const char *        i_sMultiLineEndToken ) = 0;
-    virtual void        SetMode_IsMultiLine(
-                            bool                i_bTrue ) = 0;
+    virtual void	  	SetParentContext(
+                            TkpContext &		io_rParentContext,
+                            const char *		i_sMultiLineEndToken ) = 0;
+    virtual void	   	SetMode_IsMultiLine(
+                            bool				i_bTrue ) = 0;
 };
 
 

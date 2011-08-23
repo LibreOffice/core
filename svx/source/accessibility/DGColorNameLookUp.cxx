@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -101,7 +101,7 @@ DGColorNameLookUp::DGColorNameLookUp (void)
             ::comphelper::getProcessServiceFactory()->createInstance(
                 OUString::createFromAscii("com.sun.star.drawing.ColorTable")),
             uno::UNO_QUERY);
-
+    
         // Get list of color names in order to iterate over the color table.
         xNA = uno::Reference<container::XNameAccess>(xColorTable, uno::UNO_QUERY);
         if (xNA.is())

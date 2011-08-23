@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
 
 /*************************************************************************
 |*
-|*  Ctor
+|*	Ctor
 |*
 \************************************************************************/
 
@@ -63,9 +63,9 @@ SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
       aBtnOk          ( this, SdResId( BTN_OK ) ),
       aBtnCancel      ( this, SdResId( BTN_CANCEL ) ),
       aBtnHelp        ( this, SdResId( BTN_HELP ) ),
-      pMedium       ( pSfxMedium ),
-      mpDoc         ( pInDoc ),
-      rName         ( rFileName )
+      pMedium 		( pSfxMedium ),
+      mpDoc			( pInDoc ),
+      rName			( rFileName )
 {
     FreeResource();
 
@@ -82,7 +82,7 @@ SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
 
 /*************************************************************************
 |*
-|*  Dtor
+|*	Dtor
 |*
 \************************************************************************/
 
@@ -92,8 +92,8 @@ SdInsertPagesObjsDlg::~SdInsertPagesObjsDlg()
 
 /*************************************************************************
 |*
-|*  Fuellt die TreeLB in Abhaengigkeit des Mediums. Ist kein Medium
-|*  vorhanden, handelt es sich um ein Text- und kein Drawdokument
+|*	Fuellt die TreeLB in Abhaengigkeit des Mediums. Ist kein Medium
+|*	vorhanden, handelt es sich um ein Text- und kein Drawdokument
 |*
 \************************************************************************/
 
@@ -123,9 +123,9 @@ void SdInsertPagesObjsDlg::Reset()
 
 /*************************************************************************
 |*
-|*  Liefert die Liste zurueck
-|*  nType == 0 -> Seiten
-|*  nType == 1 -> Objekte
+|*	Liefert die Liste zurueck
+|*	nType == 0 -> Seiten
+|*	nType == 1 -> Objekte
 |*
 \************************************************************************/
 
@@ -150,7 +150,7 @@ List* SdInsertPagesObjsDlg::GetList( USHORT nType )
 
 /*************************************************************************
 |*
-|*  Ist Verknuepfung gechecked
+|*	Ist Verknuepfung gechecked
 |*
 \************************************************************************/
 
@@ -161,7 +161,7 @@ BOOL SdInsertPagesObjsDlg::IsLink()
 
 /*************************************************************************
 |*
-|*  Ist Verknuepfung gechecked
+|*	Ist Verknuepfung gechecked
 |*
 \************************************************************************/
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,15 +51,15 @@ public:
     std::vector< sal_Int32 >& getTableGrid() { return mvTableGrid; };
     std::vector< TableRow >& getTableRows() { return mvTableRows; };
 
-    rtl::OUString&                      getStyleId(){ return maStyleId; };
-    boost::shared_ptr< TableStyle >&    getTableStyle(){ return mpTableStyle; };
-    sal_Bool&                           isRtl(){ return mbRtl; };
-    sal_Bool&                           isFirstRow(){ return mbFirstRow; };
-    sal_Bool&                           isFirstCol(){ return mbFirstCol; };
-    sal_Bool&                           isLastRow(){ return mbLastRow; };
-    sal_Bool&                           isLastCol(){ return mbLastCol; };
-    sal_Bool&                           isBandRow(){ return mbBandRow; };
-    sal_Bool&                           isBandCol(){ return mbBandCol; };
+    rtl::OUString&						getStyleId(){ return maStyleId; };
+    boost::shared_ptr< TableStyle >&	getTableStyle(){ return mpTableStyle; };
+    sal_Bool&							isRtl(){ return mbRtl; };
+    sal_Bool&							isFirstRow(){ return mbFirstRow; };
+    sal_Bool&							isFirstCol(){ return mbFirstCol; };
+    sal_Bool&							isLastRow(){ return mbLastRow; };
+    sal_Bool&							isLastCol(){ return mbLastCol; };
+    sal_Bool&							isBandRow(){ return mbBandRow; };
+    sal_Bool&							isBandCol(){ return mbBandCol; };
 
     void apply( const TablePropertiesPtr& );
     void pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
@@ -67,20 +67,20 @@ public:
 
 private:
 
-    const TableStyle&                   getUsedTableStyle( const ::oox::core::XmlFilterBase& rFilterBase );
+    const TableStyle&					getUsedTableStyle( const ::oox::core::XmlFilterBase& rFilterBase );
 
-    rtl::OUString                       maStyleId;              // either StyleId is available
-    boost::shared_ptr< TableStyle >     mpTableStyle;           // or the complete TableStyle
-    std::vector< sal_Int32 >            mvTableGrid;
-    std::vector< TableRow >             mvTableRows;
+    rtl::OUString						maStyleId;				// either StyleId is available
+    boost::shared_ptr< TableStyle >		mpTableStyle;			// or the complete TableStyle
+    std::vector< sal_Int32 >			mvTableGrid;
+    std::vector< TableRow >				mvTableRows;
 
-    sal_Bool                            mbRtl;
-    sal_Bool                            mbFirstRow;
-    sal_Bool                            mbFirstCol;
-    sal_Bool                            mbLastRow;
-    sal_Bool                            mbLastCol;
-    sal_Bool                            mbBandRow;
-    sal_Bool                            mbBandCol;
+    sal_Bool							mbRtl;
+    sal_Bool							mbFirstRow;
+    sal_Bool							mbFirstCol;
+    sal_Bool							mbLastRow;
+    sal_Bool							mbLastCol;
+    sal_Bool							mbBandRow;
+    sal_Bool							mbBandCol;
 };
 
 } } }

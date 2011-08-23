@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,11 +39,11 @@ module com {  module sun {  module star {  module sheet {
 
 /** information about a cell within the column or row header area of a DataPilot table.
 
-    This struct contains information about a particular cell located within the
+    This struct contains information about a particular cell located within the 
     column or row header area of a DataPilot table.  This is the type that is
-    contained in <member>DataPilotTablePositionData::PositionData</member> when
+    contained in <member>DataPilotTablePositionData::PositionData</member> when 
     the value of <member>DataPilotTablePositionData::PositionType</member> is
-    either <const>DataPilotTablePositionType::ROW_HEADER</const> or
+    either <const>DataPilotTablePositionType::ROW_HEADER</const> or 
     <const>DataPilotTablePositionType::COLUMN_HEADER</const>.
 
     @see com::sun::star::sheet::DataPilotTablePositionData

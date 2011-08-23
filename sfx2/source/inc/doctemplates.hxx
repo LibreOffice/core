@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,18 +49,18 @@
 //--------------------------------------------------------------------------------------------------------
 
 #define UNOLOCALE                   ::com::sun::star::lang::Locale
-#define REFERENCE                   ::com::sun::star::uno::Reference
-#define RUNTIMEEXCEPTION            ::com::sun::star::uno::RuntimeException
-#define PROPERTYVALUE               ::com::sun::star::beans::PropertyValue
-#define XCONTENT                    ::com::sun::star::ucb::XContent
-#define XDOCUMENTTEMPLATES          ::com::sun::star::frame::XDocumentTemplates
-#define XINTERFACE                  ::com::sun::star::uno::XInterface
-#define XLOCALIZABLE                ::com::sun::star::lang::XLocalizable
-#define XMODEL                      ::com::sun::star::frame::XModel
-#define XMULTISERVICEFACTORY        ::com::sun::star::lang::XMultiServiceFactory
-#define XNAMEACCESS                 ::com::sun::star::container::XNameAccess
-#define XSERVICEINFO                ::com::sun::star::lang::XServiceInfo
-#define XSTORABLE                   ::com::sun::star::frame::XStorable
+#define REFERENCE					::com::sun::star::uno::Reference
+#define RUNTIMEEXCEPTION			::com::sun::star::uno::RuntimeException
+#define PROPERTYVALUE				::com::sun::star::beans::PropertyValue
+#define XCONTENT					::com::sun::star::ucb::XContent
+#define XDOCUMENTTEMPLATES			::com::sun::star::frame::XDocumentTemplates
+#define XINTERFACE					::com::sun::star::uno::XInterface
+#define XLOCALIZABLE				::com::sun::star::lang::XLocalizable
+#define XMODEL						::com::sun::star::frame::XModel
+#define XMULTISERVICEFACTORY		::com::sun::star::lang::XMultiServiceFactory
+#define XNAMEACCESS					::com::sun::star::container::XNameAccess
+#define XSERVICEINFO				::com::sun::star::lang::XServiceInfo
+#define XSTORABLE					::com::sun::star::frame::XStorable
 
 //--------------------------------------------------------------------------------------------------------
 
@@ -68,7 +68,7 @@ class SfxDocTplService_Impl;
 
 class SfxDocTplService: public ::cppu::WeakImplHelper3< XLOCALIZABLE, XDOCUMENTTEMPLATES, XSERVICEINFO >
 {
-    SfxDocTplService_Impl       *pImp;
+    SfxDocTplService_Impl		*pImp;
 
 public:
                                     SFX_DECL_XSERVICEINFO
@@ -81,23 +81,23 @@ public:
     UNOLOCALE SAL_CALL              getLocale() throw( RUNTIMEEXCEPTION );
 
     // --- XDocumentTemplates ---
-    REFERENCE< XCONTENT > SAL_CALL  getContent() throw( RUNTIMEEXCEPTION );
-    sal_Bool SAL_CALL               storeTemplate( const ::rtl::OUString& GroupName,
+    REFERENCE< XCONTENT > SAL_CALL	getContent() throw( RUNTIMEEXCEPTION );
+    sal_Bool SAL_CALL				storeTemplate( const ::rtl::OUString& GroupName,
                                                    const ::rtl::OUString& TemplateName,
                                                    const REFERENCE< XSTORABLE >& Storable ) throw( RUNTIMEEXCEPTION );
-    sal_Bool SAL_CALL               addTemplate( const ::rtl::OUString& GroupName,
+    sal_Bool SAL_CALL				addTemplate( const ::rtl::OUString& GroupName,
                                                  const ::rtl::OUString& TemplateName,
                                                  const ::rtl::OUString& SourceURL ) throw( RUNTIMEEXCEPTION );
-    sal_Bool SAL_CALL               removeTemplate( const ::rtl::OUString& GroupName,
+    sal_Bool SAL_CALL				removeTemplate( const ::rtl::OUString& GroupName,
                                                     const ::rtl::OUString& TemplateName ) throw( RUNTIMEEXCEPTION );
-    sal_Bool SAL_CALL               renameTemplate( const ::rtl::OUString& GroupName,
+    sal_Bool SAL_CALL				renameTemplate( const ::rtl::OUString& GroupName,
                                                     const ::rtl::OUString& OldTemplateName,
                                                     const ::rtl::OUString& NewTemplateName ) throw( RUNTIMEEXCEPTION );
-    sal_Bool SAL_CALL               addGroup( const ::rtl::OUString& GroupName ) throw( RUNTIMEEXCEPTION );
-    sal_Bool SAL_CALL               removeGroup( const ::rtl::OUString& GroupName ) throw( RUNTIMEEXCEPTION );
-    sal_Bool SAL_CALL               renameGroup( const ::rtl::OUString& OldGroupName,
+    sal_Bool SAL_CALL				addGroup( const ::rtl::OUString& GroupName ) throw( RUNTIMEEXCEPTION );
+    sal_Bool SAL_CALL				removeGroup( const ::rtl::OUString& GroupName ) throw( RUNTIMEEXCEPTION );
+    sal_Bool SAL_CALL				renameGroup( const ::rtl::OUString& OldGroupName,
                                                  const ::rtl::OUString& NewGroupName ) throw( RUNTIMEEXCEPTION );
-    void SAL_CALL                   update() throw( RUNTIMEEXCEPTION );
+    void SAL_CALL					update() throw( RUNTIMEEXCEPTION );
 };
 
 #endif

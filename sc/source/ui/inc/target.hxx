@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,15 +36,15 @@ class ScTabViewShell;
 class ScTabViewTarget : public SfxRepeatTarget
 {
 private:
-    ScTabViewShell* pViewShell;
+    ScTabViewShell*	pViewShell;
 
 public:
                     TYPEINFO();
 
                     ScTabViewTarget( ScTabViewShell* pShell ) : pViewShell( pShell ) {}
-    virtual         ~ScTabViewTarget();
+    virtual 		~ScTabViewTarget();
 
-    ScTabViewShell* GetViewShell() const { return pViewShell; }
+    ScTabViewShell*	GetViewShell() const { return pViewShell; }
 };
 
 

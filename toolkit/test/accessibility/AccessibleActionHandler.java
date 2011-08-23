@@ -4,12 +4,12 @@ import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleAction;
 import com.sun.star.lang.IndexOutOfBoundsException;
 
-class AccessibleActionHandler
+class AccessibleActionHandler 
     extends NodeHandler
 {
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
-        XAccessibleAction xEComponent =
+        XAccessibleAction xEComponent = 
             (XAccessibleAction) UnoRuntime.queryInterface (
                 XAccessibleAction.class, xContext);
         if (xEComponent != null)
@@ -35,7 +35,7 @@ class AccessibleActionHandler
     }
 
     public AccessibleTreeNode createChild (
-        AccessibleTreeNode aParent,
+        AccessibleTreeNode aParent, 
         int nIndex)
     {
         AccessibleTreeNode aChild = null;
@@ -54,7 +54,7 @@ class AccessibleActionHandler
                     try
                     {
                         aChild = new AccessibleActionNode (
-                            "Action " + nIndex + " : "
+                            "Action " + nIndex + " : " 
                             + xAction.getAccessibleActionDescription (nIndex),
                             aParent,
                             nIndex);

@@ -96,8 +96,8 @@ class ODatabaseSource   :public ModelDependentComponent // must be first
 
 private:
     using ODatabaseSource_Base::rBHelper;
-    OBookmarkContainer                      m_aBookmarks;
-    ::cppu::OInterfaceContainerHelper       m_aFlushListeners;
+    OBookmarkContainer				        m_aBookmarks;
+    ::cppu::OInterfaceContainerHelper		m_aFlushListeners;
 
 private:
     virtual ~ODatabaseSource();
@@ -231,7 +231,7 @@ protected:
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 };
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 
 #endif // _DBA_COREDATAACCESS_DATALINK_HXX_
 

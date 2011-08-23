@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -422,7 +422,7 @@ SbxVariable* SbxArray::FindUserData( UINT32 nData )
             {
                 p = pVar;
                 p->ResetFlag( SBX_EXTFOUND );
-                break;  // JSM 1995-10-06
+                break;	// JSM 1995-10-06
             }
             // Did we have an array/object with extended search?
             else if( pVar->IsSet( SBX_EXTSEARCH ) )
@@ -788,7 +788,7 @@ UINT32 SbxDimArray::Offset32( SbxArray* pPar )
         SetError( SbxERR_BOUNDS ); return 0;
     }
     UINT32 nPos = 0;
-    USHORT nOff = 1;    // Non element 0!
+    USHORT nOff = 1;	// Non element 0!
     for( SbxDim* p = pFirst; p && !IsError(); p = p->pNext )
     {
         INT32 nIdx = pPar->Get( nOff++ )->GetLong();

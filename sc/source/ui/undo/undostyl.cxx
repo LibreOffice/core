@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ TYPEINIT1(ScUndoApplyPageStyle, ScSimpleUndo);
 
 // -----------------------------------------------------------------------
 //
-//      modify style (cell or page style)
+//		modify style (cell or page style)
 //
 
 ScStyleSaveData::ScStyleSaveData() :
@@ -99,7 +99,7 @@ void ScStyleSaveData::InitFromStyle( const SfxStyleSheetBase* pSource )
         pItems = new SfxItemSet( ((SfxStyleSheetBase*)pSource)->GetItemSet() );
     }
     else
-        *this = ScStyleSaveData();      // empty
+        *this = ScStyleSaveData();		// empty
 }
 
 // -----------------------------------------------------------------------
@@ -127,7 +127,7 @@ String ScUndoModifyStyle::GetComment() const
 
 void lcl_DocStyleChanged( ScDocument* pDoc, SfxStyleSheetBase* pStyle, BOOL bRemoved )
 {
-    //! move to document or docshell
+    //!	move to document or docshell
 
     VirtualDevice aVDev;
     Point aLogic = aVDev.LogicToPixel( Point(1000,1000), MAP_TWIP );
@@ -148,8 +148,8 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const String& rName,
     ScDocument* pDoc = pDocSh->GetDocument();
     ScStyleSheetPool* pStlPool = pDoc->GetStyleSheetPool();
     String aNewName = rData.GetName();
-    BOOL bDelete = ( aNewName.Len() == 0 );         // no new name -> delete style
-    BOOL bNew = ( rName.Len() == 0 && !bDelete );   // creating new style
+    BOOL bDelete = ( aNewName.Len() == 0 );			// no new name -> delete style
+    BOOL bNew = ( rName.Len() == 0 && !bDelete );	// creating new style
 
     SfxStyleSheetBase* pStyle = NULL;
     if ( rName.Len() )
@@ -178,7 +178,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const String& rName,
         if ( bDelete )
         {
             if ( eStyleFamily == SFX_STYLE_FAMILY_PARA )
-                lcl_DocStyleChanged( pDoc, pStyle, TRUE );      // TRUE: remove usage of style
+                lcl_DocStyleChanged( pDoc, pStyle, TRUE );		// TRUE: remove usage of style
             else
                 pDoc->RemovePageStyleInUse( rName );
 
@@ -201,7 +201,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const String& rName,
 
             if ( eStyleFamily == SFX_STYLE_FAMILY_PARA )
             {
-                lcl_DocStyleChanged( pDoc, pStyle, FALSE );     // cell styles: row heights
+                lcl_DocStyleChanged( pDoc, pStyle, FALSE );		// cell styles: row heights
             }
             else
             {
@@ -220,8 +220,8 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const String& rName,
 
     pDocSh->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
 
-    //! undo/redo document modifications for deleted styles
-    //! undo/redo modifications of number formatter
+    //!	undo/redo document modifications for deleted styles
+    //!	undo/redo modifications of number formatter
 }
 
 void ScUndoModifyStyle::Undo()
@@ -244,12 +244,12 @@ void ScUndoModifyStyle::Repeat(SfxRepeatTarget& /* rTarget */)
 
 BOOL ScUndoModifyStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
-    return FALSE;       // no repeat possible
+    return FALSE;		// no repeat possible
 }
 
 // -----------------------------------------------------------------------
 //
-//      apply page style
+//		apply page style
 //
 ScUndoApplyPageStyle::ApplyStyleEntry::ApplyStyleEntry( SCTAB nTab, const String& rOldStyle ) :
     mnTab( nTab ),
@@ -301,7 +301,7 @@ void ScUndoApplyPageStyle::Redo()
 
 void ScUndoApplyPageStyle::Repeat(SfxRepeatTarget& /* rTarget */)
 {
-    //! set same page style to current tab
+    //!	set same page style to current tab
 }
 
 BOOL ScUndoApplyPageStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const

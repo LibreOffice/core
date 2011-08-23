@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -166,14 +166,14 @@ public class ScAccessiblePageHeader extends TestCase {
         at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
-
+        
         XStyleFamiliesSupplier StyleFam = (XStyleFamiliesSupplier)
             UnoRuntime.queryInterface(
                 XStyleFamiliesSupplier.class,
                 xSpreadsheetDoc );
         XNameAccess StyleFamNames = StyleFam.getStyleFamilies();
         XStyle StdStyle = null;
-
+        
         try{
             XNameAccess PageStyles = (XNameAccess) AnyConverter.toObject(
                             new Type(XNameAccess.class),
@@ -212,9 +212,9 @@ public class ScAccessiblePageHeader extends TestCase {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get HeaderContent", e);
         }
-
+        
         final XHeaderFooterContent RPHC2 = RPHC;
-
+        
         final XText center = RPHC2.getCenterText();
         final XText left = RPHC2.getLeftText();
         final XText right = RPHC2.getRightText();
@@ -233,7 +233,7 @@ public class ScAccessiblePageHeader extends TestCase {
                     } catch (com.sun.star.lang.WrappedTargetException e) {}
                 }
             });
-
+        
 
         return tEnv;
 

@@ -1,7 +1,7 @@
-/*************************************************************************
+/************************************************************************* 
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,7 +78,7 @@ public class ScriptProviderForBeanShell
             }
             catch ( com.sun.star.uno.RuntimeException re )
             {
-                throw new ScriptFrameworkErrorException( "Failed to create script object: " + re.getMessage(),
+                throw new ScriptFrameworkErrorException( "Failed to create script object: " + re.getMessage(), 
                     null, scriptData.getLanguageName(), language, ScriptFrameworkErrorType.UNKNOWN );
             }
         }
@@ -167,7 +167,7 @@ class ScriptImpl implements XScript
     private XMultiComponentFactory m_xMultiComponentFactory;
     private XModel m_xModel;
     private XScriptInvocationContext m_xInvocContext;
-
+    
     ScriptImpl( XComponentContext ctx, ScriptMetaData metaData, XModel xModel,
             XScriptInvocationContext xContext ) throws com.sun.star.uno.RuntimeException
     {
@@ -217,9 +217,9 @@ class ScriptImpl implements XScript
          *                                   this exception type.
          */
 
-        public Object invoke( /*IN*/Object[] aParams,
-                            /*OUT*/short[][] aOutParamIndex,
-                            /*OUT*/Object[][] aOutParam )
+        public Object invoke( /*IN*/Object[] aParams, 
+                            /*OUT*/short[][] aOutParamIndex, 
+                            /*OUT*/Object[][] aOutParam ) 
             throws ScriptFrameworkErrorException,
                 InvocationTargetException
         {
@@ -237,7 +237,7 @@ class ScriptImpl implements XScript
             catch ( java.net.MalformedURLException mfu )
             {
                 // Framework error
-                throw new ScriptFrameworkErrorException(
+                throw new ScriptFrameworkErrorException( 
                     mfu.getMessage(), null,
                     metaData.getLanguageName(), metaData.getLanguage(),
                     ScriptFrameworkErrorType.MALFORMED_URL );
@@ -245,7 +245,7 @@ class ScriptImpl implements XScript
             catch ( NoSuitableClassLoaderException nsc )
             {
                 // Framework error
-                throw new ScriptFrameworkErrorException(
+                throw new ScriptFrameworkErrorException( 
                     nsc.getMessage(), null,
                     metaData.getLanguageName(), metaData.getLanguage(),
                     ScriptFrameworkErrorType.UNKNOWN );
@@ -270,7 +270,7 @@ class ScriptImpl implements XScript
             }
             catch (bsh.EvalError e) {
                 // Framework error setting up context
-                throw new ScriptFrameworkErrorException(
+                throw new ScriptFrameworkErrorException( 
                     e.getMessage(), null,
                     metaData.getLanguageName(), metaData.getLanguage(),
                     ScriptFrameworkErrorType.UNKNOWN );
@@ -295,12 +295,12 @@ class ScriptImpl implements XScript
                     return result;
                 }
 
-                metaData.loadSource();
+                metaData.loadSource();  
                 source = metaData.getSource();
 
                 if ( source == null || source.length() == 0 )
                 {
-                    throw new ScriptFrameworkErrorException(
+                    throw new ScriptFrameworkErrorException( 
                         "Failed to read script", null,
                         metaData.getLanguageName(), metaData.getLanguage(),
                         ScriptFrameworkErrorType.NO_SUCH_SCRIPT );
@@ -313,21 +313,21 @@ class ScriptImpl implements XScript
                 }
                 return result;
             }
-            catch ( bsh.ParseException pe )
+            catch ( bsh.ParseException pe ) 
             {
-                throw new InvocationTargetException( "Beanshell failed to parse " + metaData.getLanguageName(), null, processBshException( pe, metaData.getLanguageName() ) );
+                throw new InvocationTargetException( "Beanshell failed to parse " + metaData.getLanguageName(), null, processBshException( pe, metaData.getLanguageName() ) ); 
             }
-            catch ( bsh.TargetError te )
+            catch ( bsh.TargetError te ) 
             {
-                throw new InvocationTargetException( "Beanshell uncaught exception for " + metaData.getLanguageName(), null, processBshException( te, metaData.getLanguageName() ) );
+                throw new InvocationTargetException( "Beanshell uncaught exception for " + metaData.getLanguageName(), null, processBshException( te, metaData.getLanguageName() ) ); 
             }
-            catch ( bsh.EvalError ex )
+            catch ( bsh.EvalError ex ) 
             {
-                throw new InvocationTargetException( "Beanshell error for " + metaData.getLanguageName(), null, processBshException( ex, metaData.getLanguageName() ) );
+                throw new InvocationTargetException( "Beanshell error for " + metaData.getLanguageName(), null, processBshException( ex, metaData.getLanguageName() ) ); 
             }
-            catch ( Exception e )
+            catch ( Exception e ) 
             {
-                throw new ScriptFrameworkErrorException(
+                throw new ScriptFrameworkErrorException( 
                     "Failed to read script", null,
                     metaData.getLanguageName(), metaData.getLanguage(),
                     ScriptFrameworkErrorType.UNKNOWN );
@@ -338,16 +338,16 @@ class ScriptImpl implements XScript
             ScriptEditorForBeanShell editor = null;
             try
             {
-                URL sourceUrl = metaData.getSourceURL();
+                URL sourceUrl = metaData.getSourceURL(); 
                 editor = ScriptEditorForBeanShell.getEditor( sourceUrl );
                 if ( editor == null )
                 {
                     editor = ScriptEditorForBeanShell.getEditor();
-                    editor.edit(
+                    editor.edit( 
                         ScriptContext.createContext(m_xModel, m_xInvocContext,
                             m_xContext, m_xMultiComponentFactory), metaData );
                     editor = ScriptEditorForBeanShell.getEditor( sourceUrl );
-                }
+                } 
                 if ( editor != null )
                 {
                     editor.indicateErrorLine( lineNum );
@@ -356,30 +356,30 @@ class ScriptImpl implements XScript
             catch( Exception ignore )
             {
             }
-        }
+        } 
 
         private ScriptErrorRaisedException processBshException( bsh.EvalError e, String script  )
         {
-            LogUtils.DEBUG("Beanshell error RAW message " + e.getMessage());
-            String message = e.getMessage();
+            LogUtils.DEBUG("Beanshell error RAW message " + e.getMessage()); 
+            String message = e.getMessage();  
             int usefullInfoIndex = message.lastIndexOf("\' :" );
             int lineNum = e.getErrorLineNumber();
 
-            raiseEditor( lineNum );
+            raiseEditor( lineNum ); 
 
             //String stackTrace = te.getScriptStackTrace();  // never seems to have any info??
             if ( usefullInfoIndex > -1 )
             {
                 message = message.substring( usefullInfoIndex + 2 );
-            }
+            } 
             if ( e instanceof bsh.TargetError )
-            {
-                LogUtils.DEBUG("got instance of  TargetError");
+            { 
+                LogUtils.DEBUG("got instance of  TargetError"); 
                 if ( usefullInfoIndex == -1 )
                 {
                     message =  ( ( bsh.TargetError)e ).getTarget().getMessage();
                 }
-                String wrappedException = "";
+                String wrappedException = ""; 
                 String full = e.toString();
                 int index = full.indexOf( "Target exception:" );
                 if ( index > -1 )
@@ -389,10 +389,10 @@ class ScriptImpl implements XScript
                     StringTokenizer tokenizer = new StringTokenizer( full.substring( index ),":" );
                     if ( tokenizer.countTokens() > 2 )
                     {
-                        LogUtils.DEBUG("First token = " + (String)tokenizer.nextElement());
-                        wrappedException = (String)tokenizer.nextElement();
-                        LogUtils.DEBUG("wrapped exception = = " + wrappedException );
-                    }
+                        LogUtils.DEBUG("First token = " + (String)tokenizer.nextElement()); 
+                        wrappedException = (String)tokenizer.nextElement(); 
+                        LogUtils.DEBUG("wrapped exception = = " + wrappedException ); 
+                    } 
                 }
                 ScriptExceptionRaisedException se = new ScriptExceptionRaisedException( message);
                 se.lineNum = lineNum;

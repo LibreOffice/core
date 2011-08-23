@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 #ifndef __com_sun_star_drawing_EnhancedCustomShapeGeometry_idl__
 #define __com_sun_star_drawing_EnhancedCustomShapeGeometry_idl__
 
-#ifndef __com_sun_star_awt_Rectangle_idl__
+#ifndef __com_sun_star_awt_Rectangle_idl__ 
 #include <com/sun/star/awt/Rectangle.idl>
 #endif
 #ifndef __com_sun_star_beans_PropertyValue_idl__
@@ -36,20 +36,20 @@
 #ifndef __com_sun_star_beans_PropertyValues_idl__
 #include <com/sun/star/beans/PropertyValues.idl>
 #endif
-#ifndef __com_sun_star_drawing_EnhancedCustomShapeHandle_idl__
+#ifndef __com_sun_star_drawing_EnhancedCustomShapeHandle_idl__ 
 #include <com/sun/star/drawing/EnhancedCustomShapeHandle.idl>
 #endif
-#ifndef __com_sun_star_drawing_EnhancedCustomShapeAdjustmentValue_idl__
+#ifndef __com_sun_star_drawing_EnhancedCustomShapeAdjustmentValue_idl__ 
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.idl>
 #endif
 
 //=============================================================================
 
-module com { module sun { module star { module drawing {
+module com { module sun { module star { module drawing { 
 
 //=============================================================================
 /**
-  This service may be represented by a ::com::sun::star::beans::PropertyValue [].
+  This service may be represented by a ::com::sun::star::beans::PropertyValue []. 
 */
 
 service EnhancedCustomShapeGeometry
@@ -113,7 +113,7 @@ service EnhancedCustomShapeGeometry
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 #endif
 

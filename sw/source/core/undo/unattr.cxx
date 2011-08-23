@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 #include <ftnidx.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>			// fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
@@ -378,8 +378,8 @@ void SwUndoFmtAttr::Repeat( SwUndoIter& rUndoIter)
         }
         break;
 
-//  case RES_CHRFMT:
-//  case RES_FRMFMT:
+//	case RES_CHRFMT:
+//	case RES_FRMFMT:
 
     case RES_FLYFRMFMT:
         {
@@ -444,12 +444,12 @@ void SwUndoFmtAttr::SaveFlyAnchor( bool bSvDrwPt )
             // store old value as attribute, to keep SwUndoFmtAttr small
             m_pOldSet->Put( SwFmtFrmSize( ATT_VAR_SIZE, aPt.X(), aPt.Y() ) );
         }
-/*      else
+/*		else
         {
             pOldSet->Put( pFmt->GetVertOrient() );
             pOldSet->Put( pFmt->GetHoriOrient() );
         }
-*/  }
+*/	}
 
     const SwFmtAnchor& rAnchor =
         static_cast<const SwFmtAnchor&>( m_pOldSet->Get( RES_ANCHOR, FALSE ) );
@@ -535,7 +535,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
             // den akt. wieder zwischenspeichern
             aDrawOldPt = pFrmFmt->FindSdrObject()->GetRelativePos();
 //JP 08.10.97: ist laut AMA/MA nicht mehr noetig
-//          pCont->DisconnectFromLayout();
+//			pCont->DisconnectFromLayout();
         }
         else
         {
@@ -595,7 +595,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
         // Darum verhinder hier, das durch setzen des Ankers das
         // Contact-Object seine Position aendert.
 //JP 08.10.97: ist laut AMA/MA nicht mehr noetig
-//          pCont->ConnectToLayout();
+//			pCont->ConnectToLayout();
         SdrObject* pObj = pCont->GetMaster();
 
         if( pCont->GetAnchorFrm() && !pObj->IsInserted() )

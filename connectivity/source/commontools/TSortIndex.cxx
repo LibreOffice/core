@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
     {
     }
     // return false if compared values are equal otherwise true
-    inline bool operator()(const OSortIndex::TIntValuePairVector::value_type& lhs,const OSortIndex::TIntValuePairVector::value_type& rhs)   const
+    inline bool operator()(const OSortIndex::TIntValuePairVector::value_type& lhs,const OSortIndex::TIntValuePairVector::value_type& rhs)	const
     {
         const ::std::vector<OKeyType>& aKeyType = pIndex->getKeyType();
         ::std::vector<OKeyType>::const_iterator aIter = aKeyType.begin();
@@ -100,7 +100,7 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
     return pKeySet;
 }
 // -----------------------------------------------------------------------------
-OSortIndex::OSortIndex( const ::std::vector<OKeyType>& _aKeyType,
+OSortIndex::OSortIndex(	const ::std::vector<OKeyType>& _aKeyType,
                         const ::std::vector<TAscendingOrder>& _aAscending)
     :m_aKeyType(_aKeyType)
     ,m_aAscending(_aAscending)

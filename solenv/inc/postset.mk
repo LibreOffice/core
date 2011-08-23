@@ -72,7 +72,6 @@ id \
 is \
 it \
 ja \
-kid \
 ky \
 ka \
 kk \

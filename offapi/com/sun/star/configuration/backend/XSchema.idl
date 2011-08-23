@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,46 +29,46 @@
 
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
+#endif 
 
 #ifndef __com_sun_star_configuration_backend_XSchemaHandler_idl__
 #include <com/sun/star/configuration/backend/XSchemaHandler.idl>
-#endif
+#endif 
 
 #ifndef __com_sun_star_lang_NullPointerException_idl__
 #include <com/sun/star/lang/NullPointerException.idl>
-#endif
+#endif 
 
 #ifndef __com_sun_star_lang_WrappedTargetException_idl__
 #include <com/sun/star/lang/WrappedTargetException.idl>
-#endif
+#endif 
 
 #ifndef __com_sun_star_configuration_backend_MalformedDataException_idl__
 #include <com/sun/star/configuration/backend/MalformedDataException.idl>
 #endif
 
-//=============================================================================
+//============================================================================= 
 
 module com { module sun { module star { module configuration { module backend {
 
-//=============================================================================
+//============================================================================= 
 
-/**
+/** 
   Handles access to the elements of a component schema,
   i.e its templates and its component definition.
 
     @since OOo 1.1.2
 */
-published interface XSchema : ::com::sun::star::uno::XInterface
+published interface XSchema : ::com::sun::star::uno::XInterface 
 {
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
-    /**
-      Describes the full schema (templates + component) to a
+    /** 
+      Describes the full schema (templates + component) to a 
       <type>XSchemaHandler</type>.
 
-      @param aHandler
-            schema handler that will receive calls
+      @param aHandler   
+            schema handler that will receive calls 
             describing the contents of the templates
             and the component definition
 
@@ -77,7 +77,7 @@ published interface XSchema : ::com::sun::star::uno::XInterface
       @throws com::sun::star::lang::WrappedTargetException
               if an error occurs in the access to or processing of the data or
               if a subsequent call to any of the <type>XSchema</type>methods is made.
-              The elements of a component schema are only parsed once,a repeat call
+              The elements of a component schema are only parsed once,a repeat call 
               leads to exception.
       @throws com::sun::star::configuration::backend::MalformedDataException
               if the data read from the layer is rejected as invalid by the
@@ -88,13 +88,13 @@ published interface XSchema : ::com::sun::star::uno::XInterface
                 com::sun::star::lang::WrappedTargetException,
                 MalformedDataException) ;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
     /**
       Describes only the component definition to a <type>XSchemaHandler</type>.
 
-      @param aHandler
-            schema handler that will receive calls
+      @param aHandler   
+            schema handler that will receive calls 
             describing the contents of the component
             definition
 
@@ -103,7 +103,7 @@ published interface XSchema : ::com::sun::star::uno::XInterface
       @throws com::sun::star::lang::WrappedTargetException
               if an error occurs in the access to or processing of the data or
               if a subsequent call to any of the <type>XSchema</type>methods is made.
-              The elements of a component schema are only parsed once,a repeat call
+              The elements of a component schema are only parsed once,a repeat call 
               leads to exception.
       @throws com::sun::star::configuration::backend::MalformedDataException
               if the data read from the layer is rejected as invalid by the
@@ -114,13 +114,13 @@ published interface XSchema : ::com::sun::star::uno::XInterface
                 com::sun::star::lang::WrappedTargetException,
                 MalformedDataException) ;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 
-    /**
+    /** 
       Describes the component templates to a <type>XSchemaHandler</type>.
 
-      @param aHandler
-            schema handler that will receive calls
+      @param aHandler   
+            schema handler that will receive calls 
             describing the contents of the templates
 
       @throws com::sun::star::lang::NullPointerException
@@ -128,7 +128,7 @@ published interface XSchema : ::com::sun::star::uno::XInterface
       @throws com::sun::star::lang::WrappedTargetException
               if an error occurs in the access to or processing of the data or
               if a subsequent call to any of the <type>XSchema</type>methods is made.
-              The elements of a component schema are only parsed once,a repeat call
+              The elements of a component schema are only parsed once,a repeat call 
               leads to exception.
       @throws com::sun::star::configuration::backend::MalformedDataException
               if the data read from the layer is rejected as invalid by the
@@ -139,10 +139,10 @@ published interface XSchema : ::com::sun::star::uno::XInterface
                 com::sun::star::lang::WrappedTargetException,
                 MalformedDataException) ;
 
-    //-------------------------------------------------------------------------
+    //------------------------------------------------------------------------- 
 } ;
 
-//=============================================================================
+//============================================================================= 
 
 } ; } ; } ; } ; } ;
-#endif
+#endif 

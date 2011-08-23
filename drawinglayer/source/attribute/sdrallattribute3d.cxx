@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,12 +38,12 @@ namespace drawinglayer
     namespace attribute
     {
         SdrLineFillShadowAttribute3D::SdrLineFillShadowAttribute3D(
-            const SdrLineAttribute& rLine,
-            const SdrFillAttribute& rFill,
-            const SdrLineStartEndAttribute& rLineStartEnd,
-            const SdrShadowAttribute& rShadow,
+            const SdrLineAttribute& rLine, 
+            const SdrFillAttribute& rFill, 
+            const SdrLineStartEndAttribute& rLineStartEnd, 
+            const SdrShadowAttribute& rShadow, 
             const FillGradientAttribute& rFillFloatTransGradient)
-        :   maLine(rLine),
+        :	maLine(rLine),
             maFill(rFill),
             maLineStartEnd(rLineStartEnd),
             maShadow(rShadow),
@@ -52,7 +52,7 @@ namespace drawinglayer
         }
 
         SdrLineFillShadowAttribute3D::SdrLineFillShadowAttribute3D()
-        :   maLine(),
+        :	maLine(),
             maFill(),
             maLineStartEnd(),
             maShadow(),

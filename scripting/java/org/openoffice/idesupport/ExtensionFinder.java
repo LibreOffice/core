@@ -24,7 +24,7 @@ public class ExtensionFinder implements MethodFinder {
         if (basedir == null || basedir.exists() == false ||
             basedir.isDirectory() == false)
             return empty;
-
+      
         parcelName = basedir.getName();
         if (parcelName.equals(ParcelZipper.CONTENTS_DIRNAME))
             parcelName = basedir.getParentFile().getName();

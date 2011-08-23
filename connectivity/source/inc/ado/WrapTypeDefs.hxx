@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,13 +41,13 @@ namespace connectivity
         class WpADOView;
         class WpADOUser;
 
-        typedef WpOLEAppendCollection<ADOTables,    _ADOTable,  WpADOTable>     WpADOTables;
-        typedef WpOLEAppendCollection<ADOKeys,      ADOKey,     WpADOKey>       WpADOKeys;
-        typedef WpOLEAppendCollection<ADOIndexes,   _ADOIndex,  WpADOIndex>     WpADOIndexes;
-        typedef WpOLEAppendCollection<ADOColumns,   _ADOColumn, WpADOColumn>    WpADOColumns;
-        typedef WpOLEAppendCollection<ADOGroups,    ADOGroup,   WpADOGroup>     WpADOGroups;
-        typedef WpOLEAppendCollection<ADOViews,     ADOView,    WpADOView>      WpADOViews;
-        typedef WpOLEAppendCollection<ADOUsers,     _ADOUser,   WpADOUser>      WpADOUsers;
+        typedef WpOLEAppendCollection<ADOTables,	_ADOTable,	WpADOTable>		WpADOTables;
+        typedef WpOLEAppendCollection<ADOKeys,		ADOKey,		WpADOKey>		WpADOKeys;
+        typedef WpOLEAppendCollection<ADOIndexes,	_ADOIndex,	WpADOIndex>		WpADOIndexes;
+        typedef WpOLEAppendCollection<ADOColumns,	_ADOColumn, WpADOColumn>	WpADOColumns;
+        typedef WpOLEAppendCollection<ADOGroups,	ADOGroup,	WpADOGroup>		WpADOGroups;
+        typedef WpOLEAppendCollection<ADOViews,		ADOView,	WpADOView>		WpADOViews;
+        typedef WpOLEAppendCollection<ADOUsers,		_ADOUser,	WpADOUser>		WpADOUsers;
     }
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,15 +53,15 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-/** is an abstract service for a component which offers a more complex user
+/** is an abstract service for a component which offers a more complex user 
     interface to users within a toolbar.
 
     <p>
-    A generic toolbar function is represented as a button which has a state
-    (enabled,disabled and selected, not selected). A toolbar controller can
-    be added to a toolbar and provide information or functions within a more
-    sophisticated user interface.<br/> A typical example for toolbar controller
-    is the font chooser within the toolbar. It provides all available fonts in
+    A generic toolbar function is represented as a button which has a state 
+    (enabled,disabled and selected, not selected). A toolbar controller can 
+    be added to a toolbar and provide information or functions within a more 
+    sophisticated user interface.<br/> A typical example for toolbar controller 
+    is the font chooser within the toolbar. It provides all available fonts in 
     a dropdown box and shows the current chosen font.
     <p>
 
@@ -73,12 +73,12 @@
 service ToolbarController
 {
     //-------------------------------------------------------------------------
-    /** with this interface a component can receive events if a feature has
+    /** with this interface a component can receive events if a feature has 
         changed.
 
         <p>
-        The toolbar controller implementation should register itself as a
-        listener when its <member scope="com::sun::star::util">XUpdatable</member>
+        The toolbar controller implementation should register itself as a 
+        listener when its <member scope="com::sun::star::util">XUpdatable</member> 
         interface has been called.
         </p>
      */
@@ -86,53 +86,53 @@ service ToolbarController
 
     /** used to initialize a component with required arguments.
 
-        A toolbar controller needs at least three additional arguments
+        A toolbar controller needs at least three additional arguments 
         provided as <type scope="com::sun::star::beans">PropertyValue</type>:
         <ul>
-            <li><b>Frame</b><br>a <type scope="com::sun::star::frame">XFrame</type>
+            <li><b>Frame</b><br>a <type scope="com::sun::star::frame">XFrame</type> 
                    instance to which the toolbar controller belongs.</li>
-            <li><b>CommandURL</b><br>a string which specifies the command a
+            <li><b>CommandURL</b><br>a string which specifies the command a 
                    toolbar controller is bound.</li>
-            <li><b>ServiceManager</b><br>a
+            <li><b>ServiceManager</b><br>a 
                    <type scope="com::sun::star::lang">XMultiServiceFactory</type>
                    instance which can be used to create additional UNO services.</li>
         </ul>
     */
     interface com::sun::star::lang::XInitialization;
 
-    /** used to notify an implementation that it needs to add its listener or remove
+    /** used to notify an implementation that it needs to add its listener or remove 
         and add them again.
 
         <p>
-        A toolbar controller instance is ready for use after this call has been made
-        the first time. The toolbar implementation guarentees that the controller's
+        A toolbar controller instance is ready for use after this call has been made 
+        the first time. The toolbar implementation guarentees that the controller's 
         item window has been added to the toolbar and its reference is held by it.
         </p>
     */
     interface com::sun::star::util::XUpdatable;
 
     //-------------------------------------------------------------------------
-    /** used to notify changed features and requests for additional user interface
+    /** used to notify changed features and requests for additional user interface 
         items.
 
         <p>
         Mostly used by a toolbar implementation to forward information to and request
-        services from a toolbar controller component. This interface must be useable
-        after <member scope="com::sun::star::lang">XInitialitation::initialize</member>
-        has been called.  The behavior of the interface is undefined if the controller
+        services from a toolbar controller component. This interface must be useable 
+        after <member scope="com::sun::star::lang">XInitialitation::initialize</member> 
+        has been called.  The behavior of the interface is undefined if the controller 
         component hasn't been initialized.
         </p>
      */
     interface com::sun::star::frame::XToolbarController;
 
     //-------------------------------------------------------------------------
-    /** used to notify and retrieve information that are specific for sub-toolbar
+    /** used to notify and retrieve information that are specific for sub-toolbar 
         controllers.
 
         <p>
         Used by implementations that want to provide the toolbar button/sub-
-        toolbar function feature. A controller supporting this interface exchanges
-        the function of its own toolbar button, that opened the sub-toolbar, with
+        toolbar function feature. A controller supporting this interface exchanges 
+        the function of its own toolbar button, that opened the sub-toolbar, with 
         the one that has been selected on the sub-toolbar.
         </p>
      */

@@ -56,7 +56,7 @@
 /**
  * @file
   * The file declares the LwpDrawObjcts and associated class like LwpDrawGroup, LwpDrawRectange
- *  and so on.
+ *	and so on.
  */
 
 #ifndef _LWPDRAWOBJ_HXX
@@ -99,46 +99,46 @@ protected:
 
 protected:
     /**
-     * @descr   read out the record of a draw object.
+     * @descr	read out the record of a draw object.
      */
     virtual void Read() = 0;
 
     /**
-     * @descr   register styles of a draw object according to the saved records data.
-     * @return  the style name which has been registered.
+     * @descr	register styles of a draw object according to the saved records data.
+     * @return	the style name which has been registered.
      */
     virtual rtl::OUString RegisterStyle() = 0;
 
     /**
-     * @descr   create XF-draw object and assign the style name to it.
-     * @param   style name.
-     * @return  pointer of the created XF-draw object.
+     * @descr	create XF-draw object and assign the style name to it.
+     * @param	style name.
+     * @return	pointer of the created XF-draw object.
      */
     virtual XFFrame* CreateDrawObj(const rtl::OUString& rStyleName) = 0;
 
     /**
-     * @descr   create XF-draw object and assign the style name to it.
-     * @param   style name.
-     * @return  pointer of the created XF-draw object.
+     * @descr	create XF-draw object and assign the style name to it.
+     * @param	style name.
+     * @return	pointer of the created XF-draw object.
      */
     virtual XFFrame* CreateStandardDrawObj(const rtl::OUString& rStyleName) = 0;
 
 public:
     /**
-     * @descr   create a completed XF-draw object(read data, register styles and create XF-draw object)
-     * @return  pointer of the created competed XF-draw object.
+     * @descr	create a completed XF-draw object(read data, register styles and create XF-draw object)
+     * @return	pointer of the created competed XF-draw object.
      */
     XFFrame* CreateXFDrawObject();
 
     /**
-     * @param   type of the object.
-     * @descr   set the type to the draw object.
+     * @param	type of the object.
+     * @descr	set the type to the draw object.
      */
     inline void SetObjectType(DrawObjectType eType) { m_eType = eType; }
 
     /**
-     * @descr   get the type of the draw object.
-     * @return  the type of the object.
+     * @descr	get the type of the draw object.
+     * @return	the type of the object.
      */
     inline  DrawObjectType GetObjectType() const { return m_eType; }
 };

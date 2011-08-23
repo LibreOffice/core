@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ CpAndFc XNoteHelper<T>::getCpAndFc(sal_uInt32 nPos)
     // There are getCount() + 1 entries in mpOffsets => greater
     if (nPos > getCount())
         throw ExceptionNotFound("getCpAndFc");
-
+    
     Cp aCp(mCpAndFcOffset.getCp() + mpCps->getU32(nPos * 4));
     Fc aFc(mpPieceTable->cp2fc(aCp));
     CpAndFc aCpAndFc(aCp, aFc, meType);
@@ -63,7 +63,7 @@ CpAndFc XNoteHelper<T>::getRefCpAndFc(sal_uInt32 nPos)
     // There are getCount() entries in mpRefs => greater or equal
     if (nPos >= getCount())
         throw ExceptionNotFound("");
-
+    
     Cp aCp(mpRefs->getFc(nPos));
     Fc aFc(mpPieceTable->cp2fc(aCp));
     CpAndFc aCpAndFc(aCp, aFc, meType);
@@ -72,13 +72,13 @@ CpAndFc XNoteHelper<T>::getRefCpAndFc(sal_uInt32 nPos)
 }
 
 template <class T>
-writerfilter::Reference<Stream>::Pointer_t
+writerfilter::Reference<Stream>::Pointer_t 
 XNoteHelper<T>::get(sal_uInt32 nPos)
 {
     // There are getCount() entries => greater or equal
     if (nPos >= getCount())
         throw ExceptionNotFound("get");
-
+    
     writerfilter::Reference<Stream>::Pointer_t pResult;
 
     CpAndFc aCpAndFcStart(getCpAndFc(nPos));
@@ -99,7 +99,7 @@ sal_uInt32 XNoteHelper<T>::getIndexOfCpAndFc(const CpAndFc & rCpAndFc)
    sal_uInt32 n = nResult;
    while (n > 0)
    {
-       --n;
+       --n;       
 
        Cp aCp(mpRefs->getFc(n));
        Fc aFc(mpPieceTable->cp2fc(aCp));
@@ -116,9 +116,9 @@ sal_uInt32 XNoteHelper<T>::getIndexOfCpAndFc(const CpAndFc & rCpAndFc)
 }
 
 template <class T>
-writerfilter::Reference<Stream>::Pointer_t
+writerfilter::Reference<Stream>::Pointer_t 
 XNoteHelper<T>::get(const CpAndFc & rCpAndFc)
-{
+{    
     writerfilter::Reference<Stream>::Pointer_t pResult;
 
     sal_uInt32 n = getIndexOfCpAndFc(rCpAndFc);
@@ -157,9 +157,9 @@ void XNoteHelper<T>::init()
 {
     for (sal_uInt32 n = 0; n < getCount(); ++n)
     {
-        CpAndFc aCpAndFc(getCpAndFc(n));
+        CpAndFc aCpAndFc(getCpAndFc(n));                
         mpDocument->insertCpAndFc(aCpAndFc);
-
+        
         CpAndFc aCpAndFcRef(getRefCpAndFc(n));
         mpDocument->insertCpAndFc(aCpAndFcRef);
     }

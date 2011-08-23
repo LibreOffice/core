@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
+* 
 * Copyright 2009 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -322,12 +322,12 @@ namespace dbaccess
     void SAL_CALL SettingsDocumentHandler::startDocument(  ) throw (SAXException, RuntimeException)
     {
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::endDocument(  ) throw (SAXException, RuntimeException)
     {
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::startElement( const ::rtl::OUString& i_Name, const Reference< XAttributeList >& i_Attribs ) throw (SAXException, RuntimeException)
     {
@@ -359,7 +359,7 @@ namespace dbaccess
 
         m_aStates.push( pNewState );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::endElement( const ::rtl::OUString& i_Name ) throw (SAXException, RuntimeException)
     {
@@ -370,7 +370,7 @@ namespace dbaccess
         pCurrentState->endElement();
         m_aStates.pop();
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::characters( const ::rtl::OUString& i_Chars ) throw (SAXException, RuntimeException)
     {
@@ -379,14 +379,14 @@ namespace dbaccess
         ::rtl::Reference< SettingsImport > pCurrentState( m_aStates.top() );
         pCurrentState->characters( i_Chars );
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::ignorableWhitespace( const ::rtl::OUString& aWhitespaces ) throw (SAXException, RuntimeException)
     {
         // ignore them - that's why they're called "ignorable"
         (void)aWhitespaces;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::processingInstruction( const ::rtl::OUString& i_Target, const ::rtl::OUString& i_Data ) throw (SAXException, RuntimeException)
     {
@@ -394,7 +394,7 @@ namespace dbaccess
         (void)i_Target;
         (void)i_Data;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::setDocumentLocator( const Reference< XLocator >& i_Locator ) throw (SAXException, RuntimeException)
     {

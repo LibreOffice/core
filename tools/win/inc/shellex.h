@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,54 +32,54 @@
 #include <shlobj.h>
 #endif
 
-#ifdef  __cplusplus
+#ifdef	__cplusplus
 extern "C" {
-#define WINSHELLCALL    inline
+#define WINSHELLCALL	inline
 #else
-#define WINSHELLCALL    static
+#define WINSHELLCALL	static
 #endif
 
-#define SHChangeNotifyRegister_PROC_STR         MAKEINTRESOURCE(2)
-#define SHChangeNotifyDeregister_PROC_STR       MAKEINTRESOURCE(4)
+#define	SHChangeNotifyRegister_PROC_STR			MAKEINTRESOURCE(2)
+#define	SHChangeNotifyDeregister_PROC_STR		MAKEINTRESOURCE(4)
 
-#define SHCNF_ACCEPT_INTERRUPTS         0x0001
-#define SHCNF_ACCEPT_NON_INTERRUPTS     0x0002
-#define SHCNF_NO_PROXY                  0x8000
+#define	SHCNF_ACCEPT_INTERRUPTS			0x0001
+#define	SHCNF_ACCEPT_NON_INTERRUPTS		0x0002
+#define	SHCNF_NO_PROXY					0x8000
 
-#define SHCNF_ACCEPT_ALL                (SHCNF_ACCEPT_INTERRUPTS | SHCNF_ACCEPT_NON_INTERRUPTS)
+#define SHCNF_ACCEPT_ALL				(SHCNF_ACCEPT_INTERRUPTS | SHCNF_ACCEPT_NON_INTERRUPTS)
 
 typedef struct tagNOTIFYREGISTER {
-    LPCITEMIDLIST   pidlPath;
-    BOOL            bWatchSubtree;
+    LPCITEMIDLIST	pidlPath;
+    BOOL			bWatchSubtree;
 } NOTIFYREGISTER;
 
 typedef NOTIFYREGISTER *LPNOTIFYREGISTER;
 typedef NOTIFYREGISTER const *LPCNOTIFYREGISTER;
 
 typedef HANDLE (WINAPI *SHChangeNotifyRegister_PROC)(
-    HWND    hWnd,
-    DWORD   dwFlags,
-    LONG    wEventMask,
-    UINT    uMsg,
-    ULONG   cItems,
-    LPCNOTIFYREGISTER   lpItems);
+    HWND	hWnd,
+    DWORD	dwFlags,
+    LONG	wEventMask,
+    UINT	uMsg,
+    ULONG	cItems,
+    LPCNOTIFYREGISTER	lpItems);
 
 
 WINSHELLCALL HANDLE WINAPI SHChangeNotifyRegister(
-    HWND    hWnd,
-    DWORD   dwFlags,
-    LONG    wEventMask,
-    UINT    uMsg,
-    ULONG   cItems,
-    LPCNOTIFYREGISTER   lpItems)
+    HWND	hWnd,
+    DWORD	dwFlags,
+    LONG	wEventMask,
+    UINT	uMsg,
+    ULONG	cItems,
+    LPCNOTIFYREGISTER	lpItems)
 
 {
-    HMODULE hModule = GetModuleHandle( "SHELL32" );
-    HANDLE  hNotify = NULL;
+    HMODULE	hModule = GetModuleHandle( "SHELL32" );
+    HANDLE	hNotify = NULL;
 
     if ( hModule )
     {
-        SHChangeNotifyRegister_PROC lpfnSHChangeNotifyRegister = (SHChangeNotifyRegister_PROC)GetProcAddress( hModule, SHChangeNotifyRegister_PROC_STR );
+        SHChangeNotifyRegister_PROC	lpfnSHChangeNotifyRegister = (SHChangeNotifyRegister_PROC)GetProcAddress( hModule, SHChangeNotifyRegister_PROC_STR );
         if ( lpfnSHChangeNotifyRegister )
             hNotify = lpfnSHChangeNotifyRegister( hWnd, dwFlags, wEventMask, uMsg, cItems, lpItems );
     }
@@ -90,16 +90,16 @@ WINSHELLCALL HANDLE WINAPI SHChangeNotifyRegister(
 
 
 typedef BOOL (WINAPI *SHChangeNotifyDeregister_PROC)(
-    HANDLE  hNotify);
+    HANDLE	hNotify);
 
 WINSHELLCALL BOOL WINAPI SHChangeNotifyDeregister( HANDLE hNotify )
 {
-    HMODULE hModule = GetModuleHandle( "SHELL32" );
-    BOOL    fSuccess = FALSE;
+    HMODULE	hModule = GetModuleHandle( "SHELL32" );
+    BOOL	fSuccess = FALSE;
 
     if ( hModule )
     {
-        SHChangeNotifyDeregister_PROC   lpfnSHChangeNotifyDeregister = (SHChangeNotifyDeregister_PROC)GetProcAddress( hModule, SHChangeNotifyDeregister_PROC_STR );
+        SHChangeNotifyDeregister_PROC	lpfnSHChangeNotifyDeregister = (SHChangeNotifyDeregister_PROC)GetProcAddress( hModule, SHChangeNotifyDeregister_PROC_STR );
         if ( lpfnSHChangeNotifyDeregister )
             fSuccess = lpfnSHChangeNotifyDeregister( hNotify );
     }
@@ -108,7 +108,7 @@ WINSHELLCALL BOOL WINAPI SHChangeNotifyDeregister( HANDLE hNotify )
 }
 
 
-#ifdef  __cplusplus
+#ifdef	__cplusplus
 }
 #endif
 

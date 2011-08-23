@@ -51,7 +51,7 @@ $failed = ( $exit_value || $signal_num || $dumped_core );
 print "$failed = ( $exit_value || $signal_num || $dumped_core )\n";
 
 if ( !$failed && open(UNAME, "uname -a|") ) {
-   $theResult = <UNAME>;
+   $theResult = <UNAME>; 
    close(UNAME);
    if (  $theResult =~ /^CYGWIN/  ) {
       # windows under cygwin
@@ -62,7 +62,7 @@ if ( !$failed && open(UNAME, "uname -a|") ) {
       uri_escape($testDocDir);
       # hacky windows url construction
       $testDocDir="file:///$testDocDir";
-
+      
       chomp($testDocDir);
       #print "*** doc dir is $testDocDir\n";
       $testLogDir = `cygpath -m  "$testLogDir"`;

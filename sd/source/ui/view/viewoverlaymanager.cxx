@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -410,8 +410,8 @@ BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
         aRet = *(getButtonImage((nHighlight == 0) ? 4 : 0, bLarge));
         aRet.Expand( aSize.Width(), aSize.Height(), NULL, TRUE );
 
-        aRet.CopyPixel( Rectangle( Point( aSize.Width(), 0              ), aSize ), aRectSrc, getButtonImage((nHighlight == 1) ? 5 : 1, bLarge) );
-        aRet.CopyPixel( Rectangle( Point( 0,             aSize.Height() ), aSize ), aRectSrc, getButtonImage((nHighlight == 2) ? 6 : 2, bLarge) );
+        aRet.CopyPixel( Rectangle( Point( aSize.Width(), 0				), aSize ), aRectSrc, getButtonImage((nHighlight == 1) ? 5 : 1, bLarge) );
+        aRet.CopyPixel( Rectangle( Point( 0,			 aSize.Height() ), aSize ), aRectSrc, getButtonImage((nHighlight == 2) ? 6 : 2, bLarge) );
         aRet.CopyPixel( Rectangle( Point( aSize.Width(), aSize.Height() ), aSize ), aRectSrc, getButtonImage((nHighlight == 3) ? 7 : 3, bLarge) );
     }
 
@@ -435,7 +435,7 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
         long nShapeSizePix = std::min(aShapeSizePix.Width(),aShapeSizePix.Height());
         if( 50 > nShapeSizePix )
             return;
-
+        
         bool bLarge = nShapeSizePix > 250;
 
         Size aButtonSize( pDev->PixelToLogic( getButtonImage(0, bLarge )->GetSizePixel()) );
@@ -453,7 +453,7 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
         ImageButtonHdl* pHdl = new ImageButtonHdl( xThis, aPoint );
         pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
         pHdl->SetPageView( mrView.GetSdrPageView() );
-
+    
         pHdl->SetPos( aPos );
 
         rHandlerList.AddHdl( pHdl );
@@ -494,7 +494,7 @@ ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )
         | tools::EventMultiplexerEvent::EID_BEGIN_TEXT_EDIT
         | tools::EventMultiplexerEvent::EID_END_TEXT_EDIT );
 
-    StartListening( *mrBase.GetDocShell() );
+    StartListening( *mrBase.GetDocShell() );    
 }
 
 // --------------------------------------------------------------------
@@ -548,22 +548,22 @@ IMPL_LINK(ViewOverlayManager,UpdateTagsHdl, void *, EMPTYARG)
     mnUpdateTagsEvent  = 0;
     bool bChanges = DisposeTags();
     bChanges |= CreateTags();
-
+        
     if( bChanges && mrBase.GetDrawView() )
-        static_cast< ::sd::View* >( mrBase.GetDrawView() )->updateHandles();
+        static_cast< ::sd::View* >( mrBase.GetDrawView() )->updateHandles();        
     return 0;
 }
 
 bool ViewOverlayManager::CreateTags()
 {
     bool bChanges = false;
-
+    
     SdPage* pPage = mrBase.GetMainViewShell()->getCurrentPage();
-
-    if( pPage && !pPage->IsMasterPage() && (pPage->GetPageKind() == PK_STANDARD) )
+    
+    if( pPage && !pPage->IsMasterPage() && (pPage->GetPageKind() == PK_STANDARD) )    
     {
         const std::list< SdrObject* >& rShapes = pPage->GetPresentationShapeList().getList();
-
+        
         for( std::list< SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); iter++ )
         {
             if( (*iter)->IsEmptyPresObj() && ((*iter)->GetObjIdentifier() == OBJ_OUTLINETEXT) && (mrBase.GetDrawView()->GetTextEditObject() != (*iter)) )
@@ -574,7 +574,7 @@ bool ViewOverlayManager::CreateTags()
             }
         }
     }
-
+    
     return bChanges;
 }
 
@@ -586,7 +586,7 @@ bool ViewOverlayManager::DisposeTags()
     {
         ViewTagVector vec;
         vec.swap( maTagVector );
-
+        
         ViewTagVector::iterator iter = vec.begin();
         do
         {
@@ -595,7 +595,7 @@ bool ViewOverlayManager::DisposeTags()
         while( iter != vec.end() );
         return true;
     }
-
+    
     return false;
 }
 

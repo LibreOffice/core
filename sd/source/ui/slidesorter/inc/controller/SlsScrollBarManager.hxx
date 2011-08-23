@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ namespace sd { namespace slidesorter { namespace controller {
 
 /** Manage the horizontal and vertical scroll bars.  Listen for events, set
     their sizes, place them in the window, determine their visibilities.
-
+    
     <p>Handle auto scrolling, i.e. the scrolling of the window when the
     mouse comes near the window border while dragging a selection.</p>
 
@@ -93,7 +93,7 @@ public:
         into a cache for later reuse.
     */
     void Disconnect (void);
-
+    
     /** Set up the scroll bar, i.e. thumb size and position.  Call this
         method when the content of the browser window changed, i.e. pages
         were inserted or deleted, the layout or the zoom factor has
@@ -170,7 +170,7 @@ private:
         objects of this class.  It is given to the constructor.
     */
     ::boost::shared_ptr<ScrollBar> mpHorizontalScrollBar;
-
+    
     /** The vertical scroll bar.  Note that is used but not owned by
         objects of this class.  It is given to the constructor.
     */

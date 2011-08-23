@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,12 +54,12 @@ using rtl::OUString;
 
 class ScXMLChangeInfoContext : public SvXMLImportContext
 {
-    ScMyActionInfo                      aInfo;
+    ScMyActionInfo						aInfo;
     ::rtl::OUStringBuffer               sAuthorBuffer;
     ::rtl::OUStringBuffer               sDateTimeBuffer;
     ::rtl::OUStringBuffer               sCommentBuffer;
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
-    sal_uInt32                          nParagraphCount;
+    ScXMLChangeTrackingImportHelper*	pChangeTrackingImportHelper;
+    sal_uInt32							nParagraphCount;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -83,7 +83,7 @@ public:
 
 class ScXMLBigRangeContext : public SvXMLImportContext
 {
-    ScBigRange&         rBigRange;
+    ScBigRange&			rBigRange;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -107,22 +107,22 @@ public:
 
 class ScXMLCellContentDeletionContext : public SvXMLImportContext
 {
-    rtl::OUString                       sFormulaAddress;
-    rtl::OUString                       sFormula;
+    rtl::OUString						sFormulaAddress;
+    rtl::OUString						sFormula;
     rtl::OUString                       sFormulaNmsp;
     rtl::OUString                       sInputString;
-    ScBigRange                          aBigRange;
-    double                              fValue;
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
-    ScBaseCell*                         pCell;
-    sal_uInt32                          nID;
-    sal_Int32                           nMatrixCols;
-    sal_Int32                           nMatrixRows;
+    ScBigRange							aBigRange;
+    double								fValue;
+    ScXMLChangeTrackingImportHelper*	pChangeTrackingImportHelper;
+    ScBaseCell*							pCell;
+    sal_uInt32							nID;
+    sal_Int32							nMatrixCols;
+    sal_Int32							nMatrixRows;
     formula::FormulaGrammar::Grammar                  eGrammar;
-    sal_uInt16                          nType;
-    sal_uInt8                           nMatrixFlag;
-    sal_Bool                            bBigRange;
-    sal_Bool                            bContainsCell;
+    sal_uInt16							nType;
+    sal_uInt8							nMatrixFlag;
+    sal_Bool							bBigRange;
+    sal_Bool							bContainsCell;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -146,7 +146,7 @@ public:
 
 class ScXMLDependenceContext : public SvXMLImportContext
 {
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
+    ScXMLChangeTrackingImportHelper*	pChangeTrackingImportHelper;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -170,7 +170,7 @@ public:
 
 class ScXMLDependingsContext : public SvXMLImportContext
 {
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
+    ScXMLChangeTrackingImportHelper*	pChangeTrackingImportHelper;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -194,7 +194,7 @@ public:
 
 class ScXMLChangeDeletionContext : public SvXMLImportContext
 {
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
+    ScXMLChangeTrackingImportHelper*	pChangeTrackingImportHelper;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -218,7 +218,7 @@ public:
 
 class ScXMLDeletionsContext : public SvXMLImportContext
 {
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
+    ScXMLChangeTrackingImportHelper*	pChangeTrackingImportHelper;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -245,11 +245,11 @@ class ScXMLChangeCellContext;
 class ScXMLChangeTextPContext : public SvXMLImportContext
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList> xAttrList;
-    rtl::OUString               sLName;
-    rtl::OUStringBuffer         sText;
-    ScXMLChangeCellContext*     pChangeCellContext;
-    SvXMLImportContext*         pTextPContext;
-    USHORT                      nPrefix;
+    rtl::OUString				sLName;
+    rtl::OUStringBuffer			sText;
+    ScXMLChangeCellContext*		pChangeCellContext;
+    SvXMLImportContext*			pTextPContext;
+    USHORT						nPrefix;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -278,19 +278,19 @@ public:
 
 class ScXMLChangeCellContext : public SvXMLImportContext
 {
-    rtl::OUString           sText;
+    rtl::OUString			sText;
     rtl::OUString&          rInputString;
-    ScBaseCell*&            rOldCell;
-    ScEditEngineTextObj*    pEditTextObj;
-    double&                 rDateTimeValue;
-    double                  fValue;
-    sal_uInt16&             rType;
+    ScBaseCell*&			rOldCell;
+    ScEditEngineTextObj*	pEditTextObj;
+    double&					rDateTimeValue;
+    double					fValue;
+    sal_uInt16&				rType;
 //    sal_Bool                bIsMatrix;
 //    sal_Bool                bIsCoveredMatrix;
-    sal_Bool                bEmpty;
-    sal_Bool                bFirstParagraph;
-    sal_Bool                bString;
-    sal_Bool                bFormula;
+    sal_Bool				bEmpty;
+    sal_Bool				bFirstParagraph;
+    sal_Bool				bString;
+    sal_Bool				bFormula;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -322,19 +322,19 @@ public:
 
 class ScXMLPreviousContext : public SvXMLImportContext
 {
-    rtl::OUString                       sFormulaAddress;
-    rtl::OUString                       sFormula;
+    rtl::OUString						sFormulaAddress;
+    rtl::OUString						sFormula;
     rtl::OUString                       sFormulaNmsp;
     rtl::OUString                       sInputString;
-    double                              fValue;
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
-    ScBaseCell*                         pOldCell;
-    sal_uInt32                          nID;
-    sal_Int32                           nMatrixCols;
-    sal_Int32                           nMatrixRows;
+    double								fValue;
+    ScXMLChangeTrackingImportHelper*	pChangeTrackingImportHelper;
+    ScBaseCell*							pOldCell;
+    sal_uInt32							nID;
+    sal_Int32							nMatrixCols;
+    sal_Int32							nMatrixRows;
     formula::FormulaGrammar::Grammar    eGrammar;
-    sal_uInt16                          nType;
-    sal_uInt8                           nMatrixFlag;
+    sal_uInt16							nType;
+    sal_uInt8							nMatrixFlag;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -358,8 +358,8 @@ public:
 
 class ScXMLContentChangeContext : public SvXMLImportContext
 {
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
-    ScBigRange                          aBigRange;
+    ScXMLChangeTrackingImportHelper*	pChangeTrackingImportHelper;
+    ScBigRange							aBigRange;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -382,7 +382,7 @@ public:
 
 class ScXMLInsertionContext : public SvXMLImportContext
 {
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
+    ScXMLChangeTrackingImportHelper*	pChangeTrackingImportHelper;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -405,7 +405,7 @@ public:
 
 class ScXMLInsertionCutOffContext : public SvXMLImportContext
 {
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
+    ScXMLChangeTrackingImportHelper*	pChangeTrackingImportHelper;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -428,7 +428,7 @@ public:
 
 class ScXMLMovementCutOffContext : public SvXMLImportContext
 {
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
+    ScXMLChangeTrackingImportHelper*	pChangeTrackingImportHelper;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -451,7 +451,7 @@ public:
 
 class ScXMLCutOffsContext : public SvXMLImportContext
 {
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
+    ScXMLChangeTrackingImportHelper*	pChangeTrackingImportHelper;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -474,7 +474,7 @@ public:
 
 class ScXMLDeletionContext : public SvXMLImportContext
 {
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
+    ScXMLChangeTrackingImportHelper*	pChangeTrackingImportHelper;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -497,9 +497,9 @@ public:
 
 class ScXMLMovementContext : public SvXMLImportContext
 {
-    ScBigRange                          aSourceRange;
-    ScBigRange                          aTargetRange;
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
+    ScBigRange							aSourceRange;
+    ScBigRange							aTargetRange;
+    ScXMLChangeTrackingImportHelper*	pChangeTrackingImportHelper;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -522,7 +522,7 @@ public:
 
 class ScXMLRejectionContext : public SvXMLImportContext
 {
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
+    ScXMLChangeTrackingImportHelper*	pChangeTrackingImportHelper;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

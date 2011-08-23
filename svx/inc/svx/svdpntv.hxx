@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ class B2dIAOManager;
 class SdrItemBrowser;
 #endif
 
-namespace sdr { namespace contact {
+namespace sdr {	namespace contact {
     class ViewObjectContactRedirector;
 }}
 
@@ -88,10 +88,10 @@ enum SdrAnimationMode
 //************************************************************
 
 typedef unsigned char TRISTATE;
-#define FUZZY                   (2)
-#define SDR_ANYFORMAT           (0xFFFFFFFF)
-#define SDR_ANYITEM             (0xFFFF)
-#define SDRVIEWWIN_NOTFOUND     (0xFFFF)
+#define FUZZY					(2)
+#define SDR_ANYFORMAT			(0xFFFFFFFF)
+#define SDR_ANYITEM				(0xFFFF)
+#define SDRVIEWWIN_NOTFOUND		(0xFFFF)
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,90 +128,90 @@ typedef ::std::vector< SdrPaintWindow* > SdrPaintWindowVector;
 
 class SVX_DLLPUBLIC SdrPaintView : public SfxListener, public SfxRepeatTarget, public SfxBroadcaster, public ::utl::ConfigurationListener
 {
-    friend class                SdrPageView;
-    friend class                FrameAnimator;
-    friend class                SdrGrafObj;
+    friend class				SdrPageView;
+    friend class				FrameAnimator;
+    friend class				SdrGrafObj;
 
 protected:
     // #114409#-2 Migrate Encirclement
-    class ImplEncirclementOverlay*              mpEncirclementOverlay;
+    class ImplEncirclementOverlay*				mpEncirclementOverlay;
 
-    SdrModel*                   pMod;
+    SdrModel*					pMod;
 #ifdef DBG_UTIL
-    SdrItemBrowser*             pItemBrowser;
+    SdrItemBrowser*				pItemBrowser;
 #endif
-    const OutputDevice*         pActualOutDev; // Nur zum vergleichen
-    OutputDevice*               pDragWin;
-    SfxStyleSheet*              pDefaultStyleSheet;
+    const OutputDevice*			pActualOutDev; // Nur zum vergleichen
+    OutputDevice*				pDragWin;
+    SfxStyleSheet*				pDefaultStyleSheet;
 
-    String                      aAktLayer;     // Aktueller Zeichenlayer
-    String                      aMeasureLayer; // Aktueller Layer fuer Bemassung
+    String						aAktLayer;     // Aktueller Zeichenlayer
+    String						aMeasureLayer; // Aktueller Layer fuer Bemassung
 
-//  Container                   aPagV;         // Liste von SdrPageViews
-    SdrPageView*                mpPageView;
+//	Container					aPagV;         // Liste von SdrPageViews
+    SdrPageView*				mpPageView;
 
     // All windows this view is displayed on
-    SdrPaintWindowVector        maPaintWindows;
+    SdrPaintWindowVector		maPaintWindows;
 
-    MapMode                     aActualMapMode;
-    Size                        aGridBig; // muss dann mal raus
-    Size                        aGridFin; // muss dann mal raus
-    SdrDragStat                 aDragStat;
-    Rectangle                   aMaxWorkArea;
-    SfxItemSet                  aDefaultAttr;
-    Timer                       aComeBackTimer;
+    MapMode						aActualMapMode;
+    Size						aGridBig; // muss dann mal raus
+    Size						aGridFin; // muss dann mal raus
+    SdrDragStat					aDragStat;
+    Rectangle					aMaxWorkArea;
+    SfxItemSet					aDefaultAttr;
+    Timer						aComeBackTimer;
+    
+    SdrAnimationMode			eAnimationMode;
 
-    SdrAnimationMode            eAnimationMode;
-
-    USHORT                      nHitTolPix;
-    USHORT                      nMinMovPix;
-    USHORT                      nHitTolLog;
-    USHORT                      nMinMovLog;
-    ULONG                       nMasterCacheMode;
+    USHORT						nHitTolPix;
+    USHORT						nMinMovPix;
+    USHORT						nHitTolLog;
+    USHORT						nMinMovLog;
+    ULONG						nMasterCacheMode;	
     ULONG                       nGraphicManagerDrawMode;
 
     // hold an incarnation of Drawinglayer configuration options
-    SvtOptionsDrawinglayer      maDrawinglayerOpt;
+    SvtOptionsDrawinglayer		maDrawinglayerOpt;
 
-    unsigned                    bPageVisible : 1;
+    unsigned					bPageVisible : 1;
     unsigned                    bPageBorderVisible : 1;
-    unsigned                    bBordVisible : 1;
-    unsigned                    bGridVisible : 1;
-    unsigned                    bGridFront : 1;
-    unsigned                    bHlplVisible : 1;
-    unsigned                    bHlplFront : 1;
-    unsigned                    bGlueVisible : 1;    // Persistent. Klebepunkte anzeigen
-    unsigned                    bGlueVisible2 : 1;   // Klebepunkte auch bei GluePointEdit anzeigen
-    unsigned                    bGlueVisible3 : 1;   // Klebepunkte auch bei EdgeTool anzeigen
-    unsigned                    bGlueVisible4 : 1;   // Klebepunkte anzeigen, wenn 1 Edge markiert
-    unsigned                    bRestoreColors : 1;   // Pens und Brushes werden zurueckgesetzt.
-    unsigned                    bSomeObjChgdFlag : 1;
-    unsigned                    bSwapAsynchron : 1;
-    unsigned                    bPrintPreview : 1;
+    unsigned					bBordVisible : 1;
+    unsigned					bGridVisible : 1;
+    unsigned					bGridFront : 1;
+    unsigned					bHlplVisible : 1;
+    unsigned					bHlplFront : 1;
+    unsigned					bGlueVisible : 1;    // Persistent. Klebepunkte anzeigen
+    unsigned					bGlueVisible2 : 1;   // Klebepunkte auch bei GluePointEdit anzeigen
+    unsigned					bGlueVisible3 : 1;   // Klebepunkte auch bei EdgeTool anzeigen
+    unsigned					bGlueVisible4 : 1;   // Klebepunkte anzeigen, wenn 1 Edge markiert
+    unsigned					bRestoreColors : 1;   // Pens und Brushes werden zurueckgesetzt.
+    unsigned					bSomeObjChgdFlag : 1;
+    unsigned					bSwapAsynchron : 1;
+    unsigned					bPrintPreview : 1;
 
     // BOOL fuer die Verwaltung des anzuzeigenden Status
     // Gruppe Betreten/Verlassen. Default ist TRUE, wird aber
     // beispielsweise beim Chart auf FALSE gesetzt, da dort
     // die Ghosted-Effekte zur Darstellug unerwuenscht sind.
-    unsigned                    bVisualizeEnteredGroup : 1;
-    unsigned                    bAnimationPause : 1;
+    unsigned					bVisualizeEnteredGroup : 1;
+    unsigned					bAnimationPause : 1;
 
     // #114898#
     // Flag which decides if buffered output for this view is allowed. When
     // set, PreRendering for PageView rendering will be used. Default is sal_False
-    unsigned                    mbBufferedOutputAllowed : 1;
+    unsigned					mbBufferedOutputAllowed : 1;
 
     // #114898#
     // Flag which decides if buffered overlay for this view is allowed. When
-    // set, the output will be buffered in an overlay vdev. When not, overlay is
+    // set, the output will be buffered in an overlay vdev. When not, overlay is 
     // directly painted to OutDev. Default is sal_False.
-    unsigned                    mbBufferedOverlayAllowed : 1;
+    unsigned					mbBufferedOverlayAllowed : 1;
 
     // allow page painting at all?
-    unsigned                    mbPagePaintingAllowed : 1;
+    unsigned					mbPagePaintingAllowed : 1;
 
     // is this a preview renderer?
-    unsigned                    mbPreviewRenderer : 1;
+    unsigned					mbPreviewRenderer : 1;
 
     // flags for calc and sw for suppressing OLE, CHART or DRAW objects
     unsigned                    mbHideOle : 1;
@@ -235,7 +235,7 @@ public:
 
 protected:
     svtools::ColorConfig            maColorConfig;
-    Color                           maGridColor;
+    Color							maGridColor;
 
     // interface to SdrPaintWindow
 protected:
@@ -293,8 +293,8 @@ public:
     TYPEINFO();
 
     virtual void ClearPageView();
-//  virtual void ClearAll();
-//  virtual void Clear(); // PageViews loeschen, Markierungen weg, ...
+//	virtual void ClearAll();
+//	virtual void Clear(); // PageViews loeschen, Markierungen weg, ...
     SdrModel* GetModel() const { return pMod; }
 
     virtual BOOL IsAction() const;
@@ -342,20 +342,20 @@ public:
     virtual void HideSdrPage();
 
     // Iterieren ueber alle angemeldeten PageViews
-//  USHORT GetPageViewCount() const { return USHORT(aPagV.Count()); }
-//  SdrPageView* GetPageViewByIndex(USHORT nPvNum) const { return ((SdrPageView*)aPagV.GetObject(nPvNum)); }
+//	USHORT GetPageViewCount() const { return USHORT(aPagV.Count()); }
+//	SdrPageView* GetPageViewByIndex(USHORT nPvNum) const { return ((SdrPageView*)aPagV.GetObject(nPvNum)); }
     SdrPageView* GetSdrPageView() const { return mpPageView; }
 
     // Pageview einer bestimmten Seite ermitteln
-//  SdrPageView* GetPageViewByPage(const SdrPage* pPage) const;
-//  sal_uInt16 GetIndexByPageView(const SdrPageView* pPV) const;
+//	SdrPageView* GetPageViewByPage(const SdrPage* pPage) const;
+//	sal_uInt16 GetIndexByPageView(const SdrPageView* pPV) const;
 
     // Test, ob eine Seite getroffen
-//  SdrPageView* HitPage(const Point& rPnt) const;
+//	SdrPageView* HitPage(const Point& rPnt) const;
 
     // Die Seite, die dem Punkt am naechsten ist. Liefert nur NULL,
     // wenn absolut keine Seite angemeldet ist.
-//  SdrPageView* GetPageViewByPosition(const Point& rPnt) const;
+//	SdrPageView* GetPageViewByPosition(const Point& rPnt) const;
 
     // Eine SdrView kann auf mehreren Fenstern gleichzeitig abgebiltet sein:
     virtual void AddWindowToPaintView(OutputDevice* pNewWin);
@@ -565,11 +565,11 @@ public:
 
     // #103911# Set document color for svx at SdrPageViews
     void SetApplicationDocumentColor(Color aDocumentColor);
-
+    
     // #i38135#
     // Sets the timer for Object animations and restarts.
     void SetAnimationTimer(sal_uInt32 nTime);
-
+    
     // access to Drawinglayer configuration options
     const SvtOptionsDrawinglayer& getOptionsDrawinglayer() const { return maDrawinglayerOpt; }
 };

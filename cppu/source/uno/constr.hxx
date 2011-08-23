@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,11 +64,11 @@ inline void _defaultConstructStruct(
     {
         defaultConstructStruct( pMem, pTypeDescr->pBaseTypeDescription );
     }
-
+    
     typelib_TypeDescriptionReference ** ppTypeRefs = (pTypeDescr)->ppTypeRefs;
     sal_Int32 * pMemberOffsets = pTypeDescr->pMemberOffsets;
     sal_Int32 nDescr = pTypeDescr->nMembers;
-
+    
     while (nDescr--)
     {
         ::uno_type_constructData( (char *)pMem + pMemberOffsets[nDescr], ppTypeRefs[nDescr] );
@@ -107,8 +107,8 @@ inline void _defaultConstructArray(
         {
             rtl_uString** ppElement = (rtl_uString **)pMem + i;
             *ppElement = 0;
-            rtl_uString_new( ppElement);
-        }
+            rtl_uString_new( ppElement);			
+        }		
         break;
     case typelib_TypeClass_TYPE:
         for (i=0; i < nTotalElements; i++)
@@ -145,7 +145,7 @@ inline void _defaultConstructArray(
     case typelib_TypeClass_SEQUENCE:
         for (i=0; i < nTotalElements; i++)
         {
-            uno_Sequence** ppElement = (uno_Sequence **)pMem + i;
+            uno_Sequence** ppElement = (uno_Sequence **)pMem + i; 
             *ppElement = createEmptySequence();
         }
         break;
@@ -162,7 +162,7 @@ inline void _defaultConstructData(
     typelib_TypeDescriptionReference * pType,
     typelib_TypeDescription * pTypeDescr )
     SAL_THROW( () )
-{
+{	
     switch (pType->eTypeClass)
     {
     case typelib_TypeClass_CHAR:

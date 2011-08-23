@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,13 +27,13 @@
 
 package helper;
 
-public class StringHelper
+public class StringHelper 
 {
 
     public static String doubleQuote(String _sStr)
         {
             return "\"" + _sStr + "\"";
-        }
+        } 
 
     public static String singleQuote(String _sStr)
         {
@@ -60,7 +60,7 @@ public class StringHelper
             }
             return sNewPath;
         }
-
+    
     public static String removeQuoteIfExists(String _sPath)
         {
             String sNewPath = _sPath;
@@ -80,7 +80,7 @@ public class StringHelper
             }
             return sNewPath;
         }
-
+    
     public static String doubleQuoteIfNeed(String _sStr)
         {
             if (_sStr.startsWith("\"") && _sStr.endsWith("\""))
@@ -97,17 +97,17 @@ public class StringHelper
             {
                 return singleQuote(_sStr);
             }
-
+            
             return doubleQuote(_sStr);
         }
-
+    
     /**
      * Convert a value to a string with a given length, if the len is greater the len of the value string representation
      * fill it's front with '0'
      * So ("5", 4) will result in a string "0005"
      * @param _nValue
      * @param _nLen
-     * @return
+     * @return 
      */
     public static String createValueString(int _nValue, int _nLen)
         {

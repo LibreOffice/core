@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -199,7 +199,7 @@ namespace utl
             sal_Bool                IsModified() const;
 
             /** writes the changed values into the sub tree. Always called in the Dtor of the derived class.  */
-            virtual void            Commit()=0;
+            virtual void            Commit()=0; 
 
             sal_Bool                IsInValueChange() const;
 
@@ -207,7 +207,7 @@ namespace utl
 
             /** checks if the configuration manager used by this item is valid.
             */
-            sal_Bool                IsValidConfigMgr() const;
+            sal_Bool				IsValidConfigMgr() const;
     };
 }//namespace utl
 #endif //_UTL_CONFIGITEM_HXX_

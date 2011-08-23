@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,15 +85,15 @@ namespace DOM
             throw (RuntimeException);
 
         /**
-        Returns a NodeList of all descendant Elements with a given tag name,
-        in the order in which they are
+        Returns a NodeList of all descendant Elements with a given tag name, 
+        in the order in which they are 
         encountered in a preorder traversal of this Element tree.
         */
         virtual Reference< XNodeList > SAL_CALL getElementsByTagName(const OUString& name)
             throw (RuntimeException);
 
         /**
-        Returns a NodeList of all the descendant Elements with a given local
+        Returns a NodeList of all the descendant Elements with a given local 
         name and namespace URI in the order in which they are encountered in
         a preorder traversal of this Element tree.
         */
@@ -158,7 +158,7 @@ namespace DOM
             throw (RuntimeException, DOMException);
 
         /**
-        Adds a new attribute.
+        Adds a new attribute. 
         */
         virtual void SAL_CALL setAttributeNS(
                 const OUString& namespaceURI, const OUString& qualifiedName, const OUString& value)

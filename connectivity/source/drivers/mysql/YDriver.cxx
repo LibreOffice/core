@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ namespace connectivity
     //= ODriverDelegator
     //====================================================================
     //--------------------------------------------------------------------
-    ODriverDelegator::ODriverDelegator(const Reference< XMultiServiceFactory >& _rxFactory)
+    ODriverDelegator::ODriverDelegator(const Reference< XMultiServiceFactory >& _rxFactory) 
         : ODriverDelegator_BASE(m_aMutex)
         ,m_xFactory(_rxFactory)
         ,m_eDriverType(D_ODBC)
@@ -91,7 +91,7 @@ namespace connectivity
     void ODriverDelegator::disposing()
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-
+        
 
         for (TWeakPairVector::iterator i = m_aConnections.begin(); m_aConnections.end() != i; ++i)
         {
@@ -104,7 +104,7 @@ namespace connectivity
         ODriverDelegator_BASE::disposing();
     }
 
-    namespace
+    namespace 
     {
         sal_Bool isOdbcUrl(const ::rtl::OUString& _sUrl)
         {
@@ -212,7 +212,7 @@ namespace connectivity
                                 ,makeAny(sal_True)
                                 ,PropertyState_DIRECT_VALUE) );
             PropertyValue* pProps = aProps.empty() ? 0 : &aProps[0];
-            return Sequence< PropertyValue >(pProps, aProps.size());
+            return Sequence< PropertyValue >(pProps, aProps.size()); 
         }
     }
     //--------------------------------------------------------------------
@@ -233,7 +233,7 @@ namespace connectivity
                 m_xNativeDriver = lcl_loadDriver(m_xFactory,sCuttedUrl);
             xDriver = m_xNativeDriver;
         }
-        else
+        else 
         {
             ::comphelper::NamedValueCollection aSettings( info );
             ::rtl::OUString sDriverClass(RTL_CONSTASCII_USTRINGPARAM("com.mysql.jdbc.Driver"));
@@ -304,7 +304,7 @@ namespace connectivity
                             pMetaConnection->setURL(url);
                     }
                     m_aConnections.push_back(TWeakPair(WeakReferenceHelper(xConnection),TWeakConnectionPair(WeakReferenceHelper(),pMetaConnection)));
-                }
+                }				
             }
         }
         return xConnection;
@@ -334,7 +334,7 @@ namespace connectivity
         aBoolean[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
         aBoolean[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1"));
 
-
+        
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet of the database."))
@@ -361,7 +361,7 @@ namespace connectivity
                     );
         }
 
-        return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
+        return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size()); 
     }
 
     //--------------------------------------------------------------------
@@ -375,7 +375,7 @@ namespace connectivity
     {
         return 0;
     }
-
+    
     //--------------------------------------------------------------------
     Reference< XTablesSupplier > SAL_CALL ODriverDelegator::getDataDefinitionByConnection( const Reference< XConnection >& connection ) throw (SQLException, RuntimeException)
     {
@@ -425,7 +425,7 @@ namespace connectivity
         }
         return xTab;
     }
-
+    
     //--------------------------------------------------------------------
     Reference< XTablesSupplier > SAL_CALL ODriverDelegator::getDataDefinitionByURL( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
     {
@@ -438,7 +438,7 @@ namespace connectivity
 
         return getDataDefinitionByConnection(connect(url,info));
     }
-
+    
     // XServiceInfo
     // --------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -478,7 +478,7 @@ namespace connectivity
     }
     //------------------------------------------------------------------
 //........................................................................
-}   // namespace connectivity
+}	// namespace connectivity
 //........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

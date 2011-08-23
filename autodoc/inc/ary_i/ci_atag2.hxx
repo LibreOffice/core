@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,22 +50,22 @@ class DocumentationDisplay;
 class AtTag2
 {
   public:
-    virtual             ~AtTag2() {}
+    virtual				~AtTag2() {}
 
-    virtual void        DisplayAt(
+    virtual void		DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const = 0;
 
-    const char *        Title() const           { return sTitle; }
-    const DocuTex2 &    Text() const            { return aText; }
-    DocuTex2 &          Access_Text()           { return aText; }
+    const char *		Title() const           { return sTitle; }
+    const DocuTex2 &   	Text() const			{ return aText; }
+    DocuTex2 &   	    Access_Text()           { return aText; }
 
   protected:
                         AtTag2(
-                            const char *        i_sTitle)
-                                                :   sTitle(i_sTitle) {}
-    String              sTitle;
-    DocuTex2            aText;
+                            const char *		i_sTitle)
+                                                :	sTitle(i_sTitle) {}
+    String 				sTitle;
+    DocuTex2			aText;
 };
 
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,11 +67,11 @@ using namespace ::cppu;
 using namespace ::osl;
 using ::rtl::OUString;
 using namespace ::accessibility;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star;
+using namespace	::com::sun::star::uno;
+using namespace	::com::sun::star::drawing;
+using namespace	::com::sun::star::lang;
+using namespace	::com::sun::star::accessibility;
 
 using rtl::OUString;
 
@@ -79,10 +79,10 @@ using rtl::OUString;
 
 /** initialize this component and set default values */
 SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
-    const Reference< XAccessible >& rxParent,
-    GraphCtrl&                              rRepr,
-    const OUString*                         pName,
-    const OUString*                         pDesc ) :
+    const Reference< XAccessible >&	rxParent,
+    GraphCtrl&								rRepr,
+    const OUString*							pName,
+    const OUString*							pDesc ) :
 
     SvxGraphCtrlAccessibleContext_Base( m_aMutex ),
     mxParent( rxParent ),
@@ -214,7 +214,7 @@ sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::containsPoint( const awt::Point
 
 Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleAtPoint( const awt::Point& rPoint ) throw( RuntimeException )
 {
-    ::osl::MutexGuard   aGuard( m_aMutex );
+    ::osl::MutexGuard	aGuard( m_aMutex );
 
     Reference< XAccessible > xAccessible;
 
@@ -224,7 +224,7 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleAt
         mpControl->PixelToLogic( aPnt );
 
         SdrObject* pObj = 0;
-
+        
         if(mpView && mpView->GetSdrPageView())
         {
             pObj = SdrObjListPrimitiveHit(*mpPage, aPnt, 1, *mpView->GetSdrPageView(), 0, false);
@@ -246,8 +246,8 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleAt
 awt::Rectangle SAL_CALL SvxGraphCtrlAccessibleContext::getBounds() throw( RuntimeException )
 {
     // no guard -> done in GetBoundingBox()
-    Rectangle           aCoreBounds( GetBoundingBox() );
-    awt::Rectangle      aBounds;
+    Rectangle			aCoreBounds( GetBoundingBox() );
+    awt::Rectangle		aBounds;
     aBounds.X = aCoreBounds.getX();
     aBounds.Y = aCoreBounds.getY();
     aBounds.Width = aCoreBounds.getWidth();
@@ -260,7 +260,7 @@ awt::Rectangle SAL_CALL SvxGraphCtrlAccessibleContext::getBounds() throw( Runtim
 awt::Point SAL_CALL SvxGraphCtrlAccessibleContext::getLocation() throw( RuntimeException )
 {
     // no guard -> done in GetBoundingBox()
-    Rectangle   aRect( GetBoundingBox() );
+    Rectangle	aRect( GetBoundingBox() );
     return awt::Point( aRect.getX(), aRect.getY() );
 }
 
@@ -269,7 +269,7 @@ awt::Point SAL_CALL SvxGraphCtrlAccessibleContext::getLocation() throw( RuntimeE
 awt::Point SAL_CALL SvxGraphCtrlAccessibleContext::getLocationOnScreen() throw( RuntimeException )
 {
     // no guard -> done in GetBoundingBoxOnScreen()
-    Rectangle   aRect( GetBoundingBoxOnScreen() );
+    Rectangle	aRect( GetBoundingBoxOnScreen() );
     return awt::Point( aRect.getX(), aRect.getY() );
 }
 
@@ -278,7 +278,7 @@ awt::Point SAL_CALL SvxGraphCtrlAccessibleContext::getLocationOnScreen() throw( 
 awt::Size SAL_CALL SvxGraphCtrlAccessibleContext::getSize() throw( RuntimeException )
 {
     // no guard -> done in GetBoundingBox()
-    Rectangle   aRect( GetBoundingBox() );
+    Rectangle	aRect( GetBoundingBox() );
     return awt::Size( aRect.getWidth(), aRect.getHeight() );
 }
 
@@ -358,12 +358,12 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessiblePa
 sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleIndexInParent( void ) throw( RuntimeException )
 {
     ::SolarMutexGuard aGuard;
-    //  Use a simple but slow solution for now.  Optimize later.
+    //	Use a simple but slow solution for now.  Optimize later.
 
-    //  Iterate over all the parent's children and search for this object.
+    //	Iterate over all the parent's children and search for this object.
     if( mxParent.is() )
     {
-        Reference< XAccessibleContext > xParentContext( mxParent->getAccessibleContext() );
+        Reference< XAccessibleContext >	xParentContext( mxParent->getAccessibleContext() );
         if( xParentContext.is() )
         {
             sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
@@ -372,7 +372,7 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleIndexInParent( vo
                 Reference< XAccessible > xChild( xParentContext->getAccessibleChild( i ) );
                 if( xChild.is() )
                 {
-                    Reference< XAccessibleContext > xChildContext = xChild->getAccessibleContext();
+                    Reference< XAccessibleContext >	xChildContext = xChild->getAccessibleContext();
                     if( xChildContext == ( XAccessibleContext* ) this )
                         return i;
                 }
@@ -380,8 +380,8 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleIndexInParent( vo
         }
    }
 
-   //   Return -1 to indicate that this object's parent does not know about the
-   //   object.
+   //	Return -1 to indicate that this object's parent does not know about the
+   //	object.
    return -1;
 }
 
@@ -410,7 +410,7 @@ OUString SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleName( void ) throw
 
 //-----------------------------------------------------------------------------
 
-/** Return empty reference to indicate that the relation set is not
+/**	Return empty reference to indicate that the relation set is not
     supported.
 */
 Reference< XAccessibleRelationSet > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleRelationSet( void ) throw( RuntimeException )
@@ -453,12 +453,12 @@ lang::Locale SAL_CALL SvxGraphCtrlAccessibleContext::getLocale( void ) throw( Il
 
     if( mxParent.is() )
     {
-        Reference< XAccessibleContext > xParentContext( mxParent->getAccessibleContext() );
+        Reference< XAccessibleContext >	xParentContext( mxParent->getAccessibleContext() );
         if( xParentContext.is() )
             return xParentContext->getLocale();
     }
 
-    //  No parent.  Therefore throw exception to indicate this cluelessness.
+    //	No parent.  Therefore throw exception to indicate this cluelessness.
     throw IllegalAccessibleComponentStateException();
 }
 
@@ -507,7 +507,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::addFocusListener( const Reference< 
 
     if( xListener.is() )
     {
-        Reference< ::com::sun::star::awt::XWindow > xWindow( VCLUnoHelper::GetInterface( mpControl ) );
+        Reference< ::com::sun::star::awt::XWindow >	xWindow( VCLUnoHelper::GetInterface( mpControl ) );
         if( xWindow.is() )
             xWindow->addFocusListener( xListener );
     }
@@ -522,7 +522,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::removeFocusListener( const Referenc
 
     if( xListener.is() )
     {
-        Reference< ::com::sun::star::awt::XWindow > xWindow = VCLUnoHelper::GetInterface( mpControl );
+        Reference< ::com::sun::star::awt::XWindow >	xWindow = VCLUnoHelper::GetInterface( mpControl );
         if( xWindow.is() )
             xWindow->removeFocusListener( xListener );
     }
@@ -585,8 +585,8 @@ sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::supportsService( const OUString
     ::SolarMutexGuard aGuard;
     //  Iterate over all supported service names and return true if on of them
     //  matches the given name.
-    Sequence< OUString >    aSupportedServices( getSupportedServiceNames() );
-    int                     nLenght = aSupportedServices.getLength();
+    Sequence< OUString >	aSupportedServices( getSupportedServiceNames() );
+    int						nLenght = aSupportedServices.getLength();
 
     for( int i = 0 ; i < nLenght ; ++i )
     {
@@ -817,7 +817,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::disposing()
 
     mbDisposed = sal_True;
 
-    mpControl = NULL;       // object dies with representation
+    mpControl = NULL;		// object dies with representation
     mpView = NULL;
     mpPage = NULL;
 
@@ -894,13 +894,13 @@ Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBox( void ) throw( RuntimeEx
 Sequence< sal_Int8 > SvxGraphCtrlAccessibleContext::getUniqueId( void )
 {
     // no guard because it's private -> has to guarded when using it!
-    static OImplementationId*   pId = 0;
+    static OImplementationId*	pId = 0;
     if( !pId )
     {
         ::SolarMutexGuard aGuard;
         if( !pId)
         {
-            static OImplementationId    aId;
+            static OImplementationId	aId;
             pId = &aId;
         }
     }

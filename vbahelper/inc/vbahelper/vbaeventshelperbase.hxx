@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 #ifndef VBAHELPER_VBAEVENTSHELPERBASE_HXX
 #define VBAHELPER_VBAEVENTSHELPERBASE_HXX
 
@@ -61,7 +61,7 @@ public:
 
 protected:
     // ------------------------------------------------------------------------
-
+    
     enum EventHandlerType { EVENTHANDLER_GLOBAL, EVENTHANDLER_DOCUMENT };
     struct EventHandlerInfo
     {
@@ -105,7 +105,7 @@ protected:
         inline EventQueueEntry( sal_Int32 nEventId, const css::uno::Sequence< css::uno::Any >& rArgs ) : mnEventId( nEventId ), maArgs( rArgs ) {}
     };
     typedef ::std::deque< EventQueueEntry > EventQueue;
-
+    
     /** Derived classes return whether event processing is enabled. Throws if
         the instance is in an invalid state. */
     virtual bool implEventsEnabled() throw (css::uno::RuntimeException) = 0;

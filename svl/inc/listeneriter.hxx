@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ class SVL_DLLPUBLIC SvtListenerIter
     // at the same time.
     static SvtListenerIter *pListenerIters;
     SvtListenerIter *pNxtIter;
-    TypeId aSrchId;             // fuer First/Next - suche diesen Type
+    TypeId aSrchId;				// fuer First/Next - suche diesen Type
 
     SVL_DLLPRIVATE static void RemoveListener( SvtListenerBase& rDel,
                                                SvtListenerBase* pNext );
@@ -57,19 +57,19 @@ public:
     SvtListenerIter( SvtBroadcaster& );
     ~SvtListenerIter();
 
-    const SvtBroadcaster& GetBroadcaster() const    { return rRoot; }
-          SvtBroadcaster& GetBroadcaster()          { return rRoot; }
+    const SvtBroadcaster& GetBroadcaster() const	{ return rRoot; }
+          SvtBroadcaster& GetBroadcaster() 			{ return rRoot; }
 
-    SvtListener* GoNext();          // to the next
-    SvtListener* GoPrev();          // to the previous
+    SvtListener* GoNext();			// to the next
+    SvtListener* GoPrev();			// to the previous
 
-    SvtListener* GoStart();         // to the start of the list
-    SvtListener* GoEnd();           // to the end of the list
+    SvtListener* GoStart(); 		// to the start of the list
+    SvtListener* GoEnd();			// to the end of the list
 
-    SvtListener* GoRoot();          // to the root
-    SvtListener* GetCurr() const;   // returns the current
+    SvtListener* GoRoot(); 			// to the root
+    SvtListener* GetCurr() const;	// returns the current
 
-    int IsChanged() const       { return pDelNext != pAkt; }
+    int IsChanged() const 		{ return pDelNext != pAkt; }
 
     SvtListener* First( TypeId nType );
     SvtListener* Next();

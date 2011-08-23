@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,6 +27,6 @@
 
 #include "../inc/helpid.hrc"         // HID_XXX
 
-hidspecial HID_BACKINGWINDOW    { HelpID = HID_BACKINGWINDOW; };
+hidspecial HID_BACKINGWINDOW	{ HelpID = HID_BACKINGWINDOW; };
 hidspecial HID_LICENSEDIALOG    { HelpID = HID_LICENSEDIALOG; };
 hidspecial HID_STATUSBAR        { HelpID = HID_STATUSBAR; };

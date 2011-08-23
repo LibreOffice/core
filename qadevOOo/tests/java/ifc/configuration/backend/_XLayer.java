@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,14 +32,14 @@ import lib.MultiMethodTest;
 import util.XLayerHandlerImpl;
 
 public class _XLayer extends MultiMethodTest {
-
-    public XLayer oObj;
-
+    
+    public XLayer oObj;    
+    
     public void _readData() {
         boolean res = false;
-
+        
         log.println("Checking for Exception in case of nul argument");
-
+        
         try {
             oObj.readData(null);
         } catch (com.sun.star.lang.NullPointerException e) {
@@ -49,8 +49,8 @@ public class _XLayer extends MultiMethodTest {
             log.println("Unexpected Exception ("+e+") -- FAILED");
         } catch (com.sun.star.configuration.backend.MalformedDataException e) {
             log.println("Unexpected Exception ("+e+") -- FAILED");
-        }
-
+        }        
+        
         log.println("checking read data with own XLayerHandler implementation");
         try {
             XLayerHandlerImpl xLayerHandler = new XLayerHandlerImpl();
@@ -63,7 +63,7 @@ public class _XLayer extends MultiMethodTest {
                 res &= false;
             } else {
                 log.println("startLayer was called -- OK");
-                res &= true;
+                res &= true;                
             }
             int el = implCalled.indexOf("endLayer");
             if (el < 0) {
@@ -71,8 +71,8 @@ public class _XLayer extends MultiMethodTest {
                 res &= false;
             } else {
                 log.println("endLayer was called -- OK");
-                res &= true;
-            }
+                res &= true;                
+            }            
         } catch (com.sun.star.lang.NullPointerException e) {
             log.println("Unexpected Exception ("+e+") -- FAILED");
             res &= false;
@@ -83,8 +83,8 @@ public class _XLayer extends MultiMethodTest {
             log.println("Unexpected Exception ("+e+") -- FAILED");
             res &= false;
         }
-
+        
         tRes.tested("readData()",res);
     }
-
+    
 }

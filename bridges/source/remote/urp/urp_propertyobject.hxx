@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace bridges_urp {
 struct urp_BridgeImpl;
 const sal_Char g_NameOfUrpProtocolPropertiesObject[] = "UrpProtocolProperties";
 
-// helper functions
+// helper functions 
 void assignFromStringToStruct( const ::rtl::OUString & sProps , struct Properties *pProps );
 
 class PropertyObject : public remote_Interface
@@ -49,17 +49,17 @@ class PropertyObject : public remote_Interface
 private:
     ::osl::Mutex m_mutex;
     oslCondition m_commitChangeCondition;
-    oslInterlockedCount m_nRefCount;
+    oslInterlockedCount	m_nRefCount;
     urp_BridgeImpl *m_pBridgeImpl;
     struct Properties *m_pLocalSetting;
     struct Properties m_propsToBeApplied;
-
+    
     uno_Environment *m_pEnvRemote;
     sal_Int32 m_nRandomNumberOfRequest;
     sal_Bool  m_bRequestChangeHasBeenCalled;
     sal_Bool  m_bServerWaitingForCommit;
     sal_Bool  m_bApplyProperties;
-
+    
 public:
     PropertyObject(
         struct Properties *pLocalSetting , uno_Environment *pEnvRemote, urp_BridgeImpl *pImpl );
@@ -83,7 +83,7 @@ public:
                                 void * pArgs[],
                                 uno_Any ** ppException );
 
-public: // local
+public: // local 
     sal_Int32 SAL_CALL localRequestChange(  );
     void SAL_CALL localCommitChange( const ::rtl::OUString &properties, sal_Bool *pbExceptionThrown );
     void SAL_CALL localGetPropertiesFromRemote( struct Properties * );
@@ -92,9 +92,9 @@ public: // local
     inline sal_Bool SAL_CALL changesHaveBeenCommited()
         { return m_bApplyProperties; }
     Properties SAL_CALL getCommitedChanges();
-
+        
     void SAL_CALL waitUntilChangesAreCommitted();
-
+    
 protected:
     // these methods are called by thisDispatch
     void SAL_CALL     implGetProperties( uno_Sequence **ppReturnValue );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,16 +41,16 @@ class Dialog;
 
 // class SvtFolderPicker ---------------------------------------------------
 
-typedef ::cppu::ImplHelper3 <   ::com::sun::star::ui::dialogs::XFolderPicker
+typedef ::cppu::ImplHelper3	<	::com::sun::star::ui::dialogs::XFolderPicker
                             ,   ::com::sun::star::ui::dialogs::XAsynchronousExecutableDialog
-                            ,   ::com::sun::star::lang::XServiceInfo
-                            >   SvtFolderPicker_Base;
+                            ,	::com::sun::star::lang::XServiceInfo
+                            >	SvtFolderPicker_Base;
 
-class SvtFolderPicker   :public SvtFolderPicker_Base
+class SvtFolderPicker	:public SvtFolderPicker_Base
                         ,public ::svt::OCommonPicker
 {
 private:
-    ::rtl::OUString         m_aDescription;
+    ::rtl::OUString			m_aDescription;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XDialogClosedListener >
                             m_xListener;
@@ -76,9 +76,9 @@ public:
     // XFolderPicker functions
     //------------------------------------------------------------------------------------
 
-    virtual void SAL_CALL           setDisplayDirectory( const ::rtl::OUString& aDirectory ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL    getDisplayDirectory() throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL    getDirectory() throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL			setDisplayDirectory( const ::rtl::OUString& aDirectory ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+    virtual ::rtl::OUString SAL_CALL	getDisplayDirectory() throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::rtl::OUString SAL_CALL	getDirectory() throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL           setDescription( const ::rtl::OUString& aDescription ) throw ( ::com::sun::star::uno::RuntimeException );
 
     //------------------------------------------------------------------------------------
@@ -98,8 +98,8 @@ public:
     //------------------------------------------------------------------------------------
 
     /* XServiceInfo */
-    virtual ::rtl::OUString SAL_CALL    getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL       supportsService( const ::rtl::OUString& sServiceName ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::rtl::OUString SAL_CALL	getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL		supportsService( const ::rtl::OUString& sServiceName ) throw( ::com::sun::star::uno::RuntimeException );
     virtual com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
                                     getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
@@ -116,8 +116,8 @@ protected:
     //------------------------------------------------------------------------------------
     // OCommonPicker overridables
     //------------------------------------------------------------------------------------
-    virtual SvtFileDialog*  implCreateDialog( Window* _pParent );
-    virtual sal_Int16       implExecutePicker( );
+    virtual SvtFileDialog*	implCreateDialog( Window* _pParent );
+    virtual	sal_Int16		implExecutePicker( );
 };
 
 #endif // INCLUDED_SVT_FOLDERPICKER_HXX

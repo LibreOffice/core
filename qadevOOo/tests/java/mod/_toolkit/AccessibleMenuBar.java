@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ public class AccessibleMenuBar extends TestCase {
      * Finds accessible component with role <code>MENUBAR</code>
      * walking through the accessible component tree of a document.
      */
-    protected TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param, 
                                                     PrintWriter log) {
         shortWait();
 
@@ -101,10 +101,10 @@ public class AccessibleMenuBar extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         final XAccessibleComponent acomp = (XAccessibleComponent) UnoRuntime.queryInterface(
-                                                   XAccessibleComponent.class,
+                                                   XAccessibleComponent.class, 
                                                    oObj);
 
-        tEnv.addObjRelation("EventProducer",
+        tEnv.addObjRelation("EventProducer", 
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 System.out.println("Grabbing focus ... ");
@@ -112,10 +112,10 @@ public class AccessibleMenuBar extends TestCase {
             }
         });
 
-        tEnv.addObjRelation("XAccessibleSelection.OneAlwaysSelected",
+        tEnv.addObjRelation("XAccessibleSelection.OneAlwaysSelected", 
                             new Boolean(false));
 
-        tEnv.addObjRelation("XAccessibleSelection.multiSelection",
+        tEnv.addObjRelation("XAccessibleSelection.multiSelection", 
                             new Boolean(false));
 
         return tEnv;

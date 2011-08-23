@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -579,7 +579,7 @@ void FillModel::pushToPropMap( PropertyMap& rPropMap,
                 }
             }
             // run-through to XML_solid in case of missing bitmap path intended!
-
+            
             case XML_solid:
             default:
             {

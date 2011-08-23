@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,14 +52,14 @@ module com { module sun { module star { module ucb {
                        </td></tr>
     <tr><td>D3</td><td>A folder content F has a set of children H(F) that is a
                        set of content identifiers. For example, an "open"
-                       command will usualy return a subset of the contents
+                       command will usualy return a	subset of the contents
                        denoted by H(F).</td></tr>
     </table>
 
     <p>
     The events that can happen to contents (and that are of interest in this
     context) are listed next.  Note that 'event' here does not mean an
-    ContentEvent, but rather some event that occurs either because some content
+    ContentEvent, but rather some event that occurs either because some	content
     processes a command, or because a content gets informed about a relevant
     change in the underlying system it represents.
     </p>
@@ -73,15 +73,15 @@ module com { module sun { module star { module ucb {
                        its identity.</td></tr>
     <tr><td>E2</td><td>The state of a content C changes from Alive to Deleted,
                        denoted as E2(C). For example, this event may occur when
-                       content C processes a "delete"   command, or when a content
-                       representing an IMAP message gets informed   by the IMAP
+                       content C processes a "delete"	command, or when a content
+                       representing an IMAP message gets informed	by the IMAP
                        server that the message has been deleted.</td></tr>
     <tr><td>E3</td><td>The set of children of a folder content F is enlarged by
                        some identifier A (that was not previously in that set,
                        i.e., !(A in H1(F)) && (A in H2(F))), denoted as E3(F, A).
                        For example, this event may occur when a new content
                        created at folder F processes its "insert" command, or
-                       when a folder representing   an IMAP mailbox gets informed
+                       when a folder representing	an IMAP mailbox gets informed
                        by the IMAP server that a new message has arrived at that
                        mailbox.</td></tr>
     </table>

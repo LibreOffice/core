@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ public class Menu extends AbstractButton
     }
 
     protected synchronized void add(XAccessible unoAccessible) {
-        // The AccessBridge for Windows expects an instance of AccessibleContext
+        // The AccessBridge for Windows expects an instance of AccessibleContext 
         // as parameters
         java.awt.Component c = getComponent(unoAccessible);
 
@@ -85,7 +85,7 @@ public class Menu extends AbstractButton
     }
 
     protected synchronized void remove(XAccessible unoAccessible) {
-        // The AccessBridge for Windows expects an instance of AccessibleContext
+        // The AccessBridge for Windows expects an instance of AccessibleContext 
         // as parameters
         java.awt.Component c = getComponent(unoAccessible);
 
@@ -265,7 +265,7 @@ public class Menu extends AbstractButton
         public void addAccessibleSelection(int i) {
             try {
                 javax.accessibility.Accessible a = getAccessibleChild(i);
-
+            
                 // selecting menu items invokes the click action in Java 1.5
                 if( a instanceof MenuItem )
                     a.getAccessibleContext().getAccessibleAction().doAccessibleAction(0);

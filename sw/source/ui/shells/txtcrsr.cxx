@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -116,22 +116,22 @@ void SwTextShell::ExecMove(SfxRequest &rReq)
     switch ( nSlot )
     {
         case FN_START_OF_LINE_SEL:
-        case FN_START_OF_LINE:      bRet = rSh.LeftMargin ( FN_START_OF_LINE_SEL == nSlot, FALSE );
+        case FN_START_OF_LINE:		bRet = rSh.LeftMargin ( FN_START_OF_LINE_SEL == nSlot, FALSE );
         break;
 
         case FN_END_OF_LINE_SEL:
-        case FN_END_OF_LINE:        bRet = rSh.RightMargin( FN_END_OF_LINE_SEL == nSlot, FALSE );
+        case FN_END_OF_LINE:		bRet = rSh.RightMargin( FN_END_OF_LINE_SEL == nSlot, FALSE );
         break;
 
         case FN_START_OF_DOCUMENT_SEL:
-        case FN_START_OF_DOCUMENT:  bRet = rSh.SttDoc      ( FN_START_OF_DOCUMENT_SEL == nSlot);
+        case FN_START_OF_DOCUMENT:	bRet = rSh.SttDoc	   ( FN_START_OF_DOCUMENT_SEL == nSlot);
         break;
 
         case FN_END_OF_DOCUMENT_SEL:
-        case FN_END_OF_DOCUMENT:    bRet = rSh.EndDoc( FN_END_OF_DOCUMENT_SEL == nSlot );
+        case FN_END_OF_DOCUMENT:	bRet = rSh.EndDoc( FN_END_OF_DOCUMENT_SEL == nSlot );
         break;
 
-        case FN_SELECT_WORD:            bRet = rSh.SelNearestWrd(); break;
+        case FN_SELECT_WORD:			bRet = rSh.SelNearestWrd();	break;
 
         case SID_SELECTALL:             bRet = 0 != rSh.SelAll();   break;
         default: OSL_ENSURE(false, "wrong dispatcher"); return;
@@ -158,7 +158,7 @@ void SwTextShell::ExecMovePage(SfxRequest &rReq)
         case FN_START_OF_NEXT_PAGE: rSh.SttNxtPg( FN_START_OF_NEXT_PAGE_SEL == nSlot ); break;
 
         case FN_END_OF_NEXT_PAGE_SEL:
-        case FN_END_OF_NEXT_PAGE:   rSh.EndNxtPg( FN_END_OF_NEXT_PAGE_SEL == nSlot ); break;
+        case FN_END_OF_NEXT_PAGE:	rSh.EndNxtPg( FN_END_OF_NEXT_PAGE_SEL == nSlot ); break;
 
         case FN_START_OF_PREV_PAGE_SEL:
         case FN_START_OF_PREV_PAGE: rSh.SttPrvPg( FN_START_OF_PREV_PAGE_SEL == nSlot ); break;
@@ -167,10 +167,10 @@ void SwTextShell::ExecMovePage(SfxRequest &rReq)
         case FN_END_OF_PREV_PAGE:   rSh.EndPrvPg( FN_END_OF_PREV_PAGE_SEL == nSlot ); break;
 
         case FN_START_OF_PAGE_SEL:
-        case FN_START_OF_PAGE:      rSh.SttPg   ( FN_START_OF_PAGE_SEL == nSlot ); break;
+        case FN_START_OF_PAGE:      rSh.SttPg	( FN_START_OF_PAGE_SEL == nSlot ); break;
 
         case FN_END_OF_PAGE_SEL:
-        case FN_END_OF_PAGE:        rSh.EndPg   ( FN_END_OF_PAGE_SEL == nSlot ); break;
+        case FN_END_OF_PAGE:        rSh.EndPg	( FN_END_OF_PAGE_SEL == nSlot ); break;
         default: OSL_ENSURE(false, "wrong dispatcher"); return;
     }
     rReq.Done();
@@ -182,12 +182,12 @@ void SwTextShell::ExecMoveCol(SfxRequest &rReq)
     SwWrtShell &rSh = GetShell();
     switch ( rReq.GetSlot() )
     {
-        case FN_START_OF_COLUMN:      rSh.StartOfColumn    ( FALSE ); break;
-        case FN_END_OF_COLUMN:        rSh.EndOfColumn      ( FALSE ); break;
+        case FN_START_OF_COLUMN:	  rSh.StartOfColumn	   ( FALSE ); break;
+        case FN_END_OF_COLUMN:		  rSh.EndOfColumn	   ( FALSE ); break;
         case FN_START_OF_NEXT_COLUMN: rSh.StartOfNextColumn( FALSE ) ; break;
-        case FN_END_OF_NEXT_COLUMN:   rSh.EndOfNextColumn  ( FALSE ); break;
+        case FN_END_OF_NEXT_COLUMN:	  rSh.EndOfNextColumn  ( FALSE ); break;
         case FN_START_OF_PREV_COLUMN: rSh.StartOfPrevColumn( FALSE ); break;
-        case FN_END_OF_PREV_COLUMN:   rSh.EndOfPrevColumn  ( FALSE ); break;
+        case FN_END_OF_PREV_COLUMN:	  rSh.EndOfPrevColumn  ( FALSE ); break;
         default: OSL_ENSURE(false, "wrong dispatcher"); return;
     }
     rReq.Done();
@@ -203,7 +203,7 @@ void SwTextShell::ExecMoveLingu(SfxRequest &rReq)
     switch ( nSlot )
     {
         case FN_NEXT_WORD_SEL:
-        case FN_NEXT_WORD:      bRet = rSh.NxtWrd( FN_NEXT_WORD_SEL == nSlot );
+        case FN_NEXT_WORD:		bRet = rSh.NxtWrd( FN_NEXT_WORD_SEL == nSlot );
         break;
 
         case FN_START_OF_PARA_SEL:

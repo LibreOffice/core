@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,14 +42,14 @@ import java.util.Hashtable;
 public class WeakBase implements XWeak, XTypeProvider
 {
     private final boolean DEBUG= false;
-
+    
     // Contains all WeakAdapter which have been created in this class
     // They have to be notified when this object dies
     private WeakAdapter m_adapter;
-
+    
     protected static Map _mapImplementationIds= new Hashtable();
     protected static Map _mapTypes= new Hashtable();
-
+    
     /** Method of XWeak. The returned XAdapter implementation can be used to keap
      * a weak reference to this object.
      * @return a com.sun.star.uno.XAdapter implementation.
@@ -60,7 +60,7 @@ public class WeakBase implements XWeak, XTypeProvider
             m_adapter= new WeakAdapter(this);
         return m_adapter;
     }
-
+    
     /** Override of Object.finalize. When there are no references to this object anymore
      * then the garbage collector calls this method. Thereby causing the adapter object
      * to be notified. The adapter, in turn, notifies all listeners (com.sun.star.uno.XReference)
@@ -71,7 +71,7 @@ public class WeakBase implements XWeak, XTypeProvider
             m_adapter.referentDying();
         super.finalize();
     }
-
+    
     /** Method of XTypeProvider. It returns an array of Type objects which represent
      * all implemented UNO interfaces of this object.
      * @return Type objects of all implemented interfaces.
@@ -95,7 +95,7 @@ public class WeakBase implements XWeak, XTypeProvider
                 // get the superclass the currentClass inherits from
                 currentClass= currentClass.getSuperclass();
             } while (currentClass != null);
-
+            
             Type types[]= new Type[vec.size()];
             for( int i= 0; i < types.length; i++)
                 types[i]= (Type) vec.elementAt(i);
@@ -104,11 +104,11 @@ public class WeakBase implements XWeak, XTypeProvider
         }
         return arTypes;
     }
-
+    
     /** Method of XTypeProvider. It provides an identifier that represents the set of UNO
      * interfaces implemented by this class. All instances of this class
      * which run in the same Java Virtual Machine return the same array. (This only works as long
-     * the ClassLoader preserves the class even if no instance exist.)
+     * the ClassLoader preserves the class even if no instance exist.) 
      *@return identifier as array of bytes
      */
     public byte[] getImplementationId()

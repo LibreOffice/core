@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,10 +49,10 @@
 module com { module sun { module star { module datatransfer { module clipboard {
 
  published interface XClipboard;
-
+                
 //=============================================================================
 /** This interface is used to retrieve, add, or remove clipboard instances.
-
+ 
     @see com::sun::star::datatransfer::clipboard::XClipboard
 */
 
@@ -60,12 +60,12 @@ published interface XClipboardManager: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** Get a clipboard instance by name.
-
-        @returns
+        
+        @returns 
         The clipboard object with the specified name.
 
-        @param aName
-        The name of clipboard to return. To retrieve the default (system)
+        @param aName 
+        The name of clipboard to return. To retrieve the default (system) 
         clipboard, pass an empty string.
 
         @throws com::sun::star::container::NoSuchElementException
@@ -78,7 +78,7 @@ published interface XClipboardManager: com::sun::star::uno::XInterface
     /** Add a clipboard instance to the manager's list.
 
         @param xClipboard
-        The clipboard to add.
+        The clipboard to add. 
 
         @throws com::sun::star::IllegalArgumentException
         if xClipboard is not a valid clipboard.
@@ -93,7 +93,7 @@ published interface XClipboardManager: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** Removes the clipboard with the specified name from the list.
 
-        @param aName
+        @param aName 
         The name of the clipboard to remove.
     */
     void removeClipboard( [in] string aName );
@@ -101,7 +101,7 @@ published interface XClipboardManager: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** Get a list of a managed clipboards.
 
-        @returns
+        @returns 
         A sequence of the names of all available clipboards.
      */
     sequence < string > listClipboardNames();

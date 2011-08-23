@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,11 +44,11 @@ namespace stoc_sec
 //==================================================================================================
 class Permission : public ::salhelper::SimpleReferenceObject
 {
-public:
+public:    
     ::rtl::Reference< Permission > m_next;
     // mode
     enum t_type { ALL, RUNTIME, SOCKET, FILE } m_type;
-
+    
     inline Permission(
         t_type type,
         ::rtl::Reference< Permission > const & next = ::rtl::Reference< Permission >() )
@@ -56,7 +56,7 @@ public:
         : m_next( next )
         , m_type( type )
         {}
-
+    
     virtual bool implies( Permission const & perm ) const SAL_THROW( () ) = 0;
     virtual ::rtl::OUString toString() const SAL_THROW( () ) = 0;
 };
@@ -69,7 +69,7 @@ public:
         SAL_THROW( () )
         : Permission( ALL, next )
         {}
-
+    
     virtual bool implies( Permission const & ) const SAL_THROW( () );
     virtual ::rtl::OUString toString() const SAL_THROW( () );
 };
@@ -93,7 +93,7 @@ public:
         SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 #ifdef __DIAGNOSE
     ::com::sun::star::uno::Sequence< ::rtl::OUString > toStrings() const SAL_THROW( () );
-#endif
+#endif    
     void checkPermission( ::com::sun::star::uno::Any const & perm ) const
         SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 };

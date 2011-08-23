@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,7 +27,7 @@
 #ifndef __com_sun_star_document_Settings_idl__
 #define __com_sun_star_document_Settings_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
+#ifndef __com_sun_star_beans_XPropertySet_idl__ 
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 #ifndef __com_sun_star_i18n_XForbiddenCharacters_idl__

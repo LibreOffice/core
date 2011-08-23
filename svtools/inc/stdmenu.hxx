@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -152,59 +152,59 @@ FontList; FontNameMenu; FontStyleMenu; FontSizeBox
 class SVT_DLLPUBLIC FontNameMenu : public PopupMenu
 {
 private:
-    XubString       maCurName;
-    Link            maSelectHdl;
-    Link            maHighlightHdl;
+    XubString		maCurName;
+    Link			maSelectHdl;
+    Link			maHighlightHdl;
 
 public:
                     FontNameMenu();
-    virtual         ~FontNameMenu();
+    virtual 		~FontNameMenu();
 
-    virtual void    Select();
-    virtual void    Highlight();
+    virtual void	Select();
+    virtual void	Highlight();
 
-    void            Fill( const FontList* pList );
+    void			Fill( const FontList* pList );
 
-    void            SetCurName( const XubString& rName );
+    void			SetCurName( const XubString& rName );
     const XubString& GetCurName() const { return maCurName; }
 
-    void            SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
-    const Link&     GetSelectHdl() const { return maSelectHdl; }
-    void            SetHighlightHdl( const Link& rLink ) { maHighlightHdl = rLink; }
-    const Link&     GetHighlightHdl() const { return maHighlightHdl; }
+    void			SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
+    const Link& 	GetSelectHdl() const { return maSelectHdl; }
+    void			SetHighlightHdl( const Link& rLink ) { maHighlightHdl = rLink; }
+    const Link& 	GetHighlightHdl() const { return maHighlightHdl; }
 };
 
 // -----------------
 // - FontStyleMenu -
 // -----------------
 
-#define FONTSTYLEMENU_FIRSTID       62000
-#define FONTSTYLEMENU_LASTID        62999
+#define FONTSTYLEMENU_FIRSTID		62000
+#define FONTSTYLEMENU_LASTID		62999
 
 class SVT_DLLPUBLIC FontStyleMenu : public PopupMenu
 {
 private:
-    XubString       maCurStyle;
-    Link            maSelectHdl;
-    Link            maHighlightHdl;
+    XubString		maCurStyle;
+    Link			maSelectHdl;
+    Link			maHighlightHdl;
 
-    SVT_DLLPRIVATE BOOL         ImplIsAlreadyInserted( const XubString& rStyleName, USHORT nCount );
+    SVT_DLLPRIVATE BOOL			ImplIsAlreadyInserted( const XubString& rStyleName, USHORT nCount );
 
 public:
                     FontStyleMenu();
-    virtual         ~FontStyleMenu();
+    virtual 		~FontStyleMenu();
 
-    virtual void    Select();
-    virtual void    Highlight();
+    virtual void	Select();
+    virtual void	Highlight();
 
-    void            Fill( const XubString& rName, const FontList* pList );
-    void            SetCurStyle( const XubString& rStyle );
+    void			Fill( const XubString& rName, const FontList* pList );
+    void			SetCurStyle( const XubString& rStyle );
     const XubString& GetCurStyle() const { return maCurStyle; }
 
-    void            SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
-    const Link&     GetSelectHdl() const { return maSelectHdl; }
-    void            SetHighlightHdl( const Link& rLink ) { maHighlightHdl = rLink; }
-    const Link&     GetHighlightHdl() const { return maHighlightHdl; }
+    void			SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
+    const Link& 	GetSelectHdl() const { return maSelectHdl; }
+    void			SetHighlightHdl( const Link& rLink ) { maHighlightHdl = rLink; }
+    const Link& 	GetHighlightHdl() const { return maHighlightHdl; }
 };
 
 // ----------------
@@ -214,29 +214,29 @@ public:
 class SVT_DLLPUBLIC FontSizeMenu : public PopupMenu
 {
 private:
-    long*           mpHeightAry;
-    long            mnCurHeight;
-    Link            maSelectHdl;
-    Link            maHighlightHdl;
+    long*			mpHeightAry;
+    long			mnCurHeight;
+    Link			maSelectHdl;
+    Link			maHighlightHdl;
 
 public:
                     FontSizeMenu();
                     ~FontSizeMenu();
 
-    virtual void    Select();
-    virtual void    Highlight();
+    virtual void	Select();
+    virtual void	Highlight();
 
-    void            Fill( const FontInfo& rInfo, const FontList* pList );
+    void			Fill( const FontInfo& rInfo, const FontList* pList );
 
-    void            SetCurHeight( long nHeight );
-    long            GetCurHeight() const { return mnCurHeight; }
+    void			SetCurHeight( long nHeight );
+    long			GetCurHeight() const { return mnCurHeight; }
 
-    void            SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
-    const Link&     GetSelectHdl() const { return maSelectHdl; }
-    void            SetHighlightHdl( const Link& rLink ) { maHighlightHdl = rLink; }
-    const Link&     GetHighlightHdl() const { return maHighlightHdl; }
+    void			SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
+    const Link& 	GetSelectHdl() const { return maSelectHdl; }
+    void			SetHighlightHdl( const Link& rLink ) { maHighlightHdl = rLink; }
+    const Link& 	GetHighlightHdl() const { return maHighlightHdl; }
 };
 
-#endif  // _STDMENU_HXX
+#endif	// _STDMENU_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -139,7 +139,7 @@ Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(Runt
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OPreparedStatement::queryInterface" );
     Any aRet = OStatement_BASE2::queryInterface(rType);
-    return aRet.hasValue() ? aRet : ::cppu::queryInterface( rType,
+    return aRet.hasValue() ? aRet : ::cppu::queryInterface(	rType,
                                         static_cast< XPreparedStatement*>(this),
                                         static_cast< XParameters*>(this),
                                         static_cast< XResultSetMetaDataSupplier*>(this));
@@ -368,7 +368,7 @@ void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }
-    //  setObject (parameterIndex, x, sqlType, 0);
+    //	setObject (parameterIndex, x, sqlType, 0);
 }
 // -------------------------------------------------------------------------
 
@@ -502,11 +502,11 @@ UINT32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Refere
         // Typ, Precision, Scale ... der angegebenen Column verwenden,
         // denn dieser Column wird der Wert zugewiesen bzw. mit dieser
         // Column wird der Wert verglichen.
-        _xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))         >>= eType;
-        _xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))    >>= nPrecision;
-        _xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))        >>= nScale;
-        _xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))   >>= nNullable;
-        _xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))         >>= sParameterName;
+        _xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))			>>= eType;
+        _xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))	>>= nPrecision;
+        _xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))		>>= nScale;
+        _xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))	>>= nNullable;
+        _xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))			>>= sParameterName;
     }
 
     Reference<XPropertySet> xParaColumn = new connectivity::parse::OParseColumn(sParameterName
@@ -540,8 +540,8 @@ void OPreparedStatement::describeColumn(OSQLParseNode* _pParameter,OSQLParseNode
             AddParameter(_pParameter,xProp);
         }
     }
-    //  else
-        //  AddParameter(_pParameter,xProp);
+    //	else
+        //	AddParameter(_pParameter,xProp);
 }
 // -------------------------------------------------------------------------
 void OPreparedStatement::describeParameter()
@@ -551,7 +551,7 @@ void OPreparedStatement::describeParameter()
     scanParameter(m_pParseTree,aParseNodes);
     if ( !aParseNodes.empty() )
     {
-        //  m_xParamColumns = new OSQLColumns();
+        //	m_xParamColumns = new OSQLColumns();
         const OSQLTables& xTabs = m_aSQLIterator.getTables();
         if( !xTabs.empty() )
         {
@@ -585,12 +585,12 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
         {
             UINT32 nParameter = (*m_aAssignValues).getParameterIndex(j);
             if (nParameter == SQL_NO_PARAMETER)
-                continue;   // dieser AssignValue ist kein Parameter
+                continue;	// dieser AssignValue ist kein Parameter
 
             ++nParaCount; // ab hier ist der Parameter gueltig
             // Parameter ersetzen. Wenn Parameter nicht verfuegbar,
-            //  Value auf NULL setzen.
-            //  (*m_aAssignValues)[j] = (*m_aParameterRow)[(UINT16)nParameter];
+            //	Value auf NULL setzen.
+            //	(*m_aAssignValues)[j] = (*m_aParameterRow)[(UINT16)nParameter];
         }
 
         if (m_aParameterRow.is() &&  (m_xParamColumns->get().size()+1) != m_aParameterRow->get().size() )

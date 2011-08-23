@@ -54,7 +54,7 @@
 #include <workctrl.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <swundo.hxx>                   // fuer Undo-Ids
+#include <swundo.hxx>               	// fuer Undo-Ids
 #include <uitool.hxx>
 #include <cmdid.h>
 #include <docsh.hxx>
@@ -72,12 +72,12 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::i18n;
 
-#define SRCH_ATTR_OFF   0
+#define SRCH_ATTR_OFF	0
 #define SRCH_ATTR_ON    1
 #define SRCH_ATTR_SET   2
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Search Parameter
+    Beschreibung:	Search Parameter
  --------------------------------------------------------------------*/
 
 struct SwSearchOptions
@@ -243,7 +243,7 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
                     // 1) Selektion ersetzen (nicht. wenn nur Attribute ersetzt
                     //    werden sollen)
 //JP 27.04.95: warum ?
-//      was ist, wenn man das gefundene nur attributieren will??
+// 		was ist, wenn man das gefundene nur attributieren will??
 
                     USHORT nCmd = SVX_SEARCHCMD_FIND;
                     if( pSrchItem->GetReplaceString().Len() ||
@@ -307,7 +307,7 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
                     bExtra = FALSE;
                     ULONG nFound;
 
-                    {   //Scope for SwWait-Object
+                    {	//Scope for SwWait-Object
                         SwWait aWait( *GetDocShell(), TRUE );
                         pWrtShell->StartAllAction();
                         nFound = FUNC_Search( aOpts );
@@ -352,44 +352,44 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
         {
             static const USHORT aNormalAttr[] =
             {
-/* 0 */         RES_CHRATR_CASEMAP,     RES_CHRATR_CASEMAP,
-/* 2 */         RES_CHRATR_COLOR,       RES_CHRATR_POSTURE,
-/* 4 */         RES_CHRATR_SHADOWED,    RES_CHRATR_WORDLINEMODE,
-/* 6 */         RES_CHRATR_BLINK,       RES_CHRATR_BLINK,
-/* 8 */         RES_CHRATR_BACKGROUND,  RES_CHRATR_BACKGROUND,
-/*10 */         RES_CHRATR_ROTATE,      RES_CHRATR_ROTATE,
-/*12 */         RES_CHRATR_SCALEW,      RES_CHRATR_RELIEF,
+/* 0 */			RES_CHRATR_CASEMAP,		RES_CHRATR_CASEMAP,
+/* 2 */			RES_CHRATR_COLOR, 		RES_CHRATR_POSTURE,
+/* 4 */			RES_CHRATR_SHADOWED, 	RES_CHRATR_WORDLINEMODE,
+/* 6 */			RES_CHRATR_BLINK,		RES_CHRATR_BLINK,
+/* 8 */			RES_CHRATR_BACKGROUND,	RES_CHRATR_BACKGROUND,
+/*10 */			RES_CHRATR_ROTATE,		RES_CHRATR_ROTATE,
+/*12 */			RES_CHRATR_SCALEW,		RES_CHRATR_RELIEF,
 // insert position for CJK/CTL attributes!
-/*14 */         RES_PARATR_LINESPACING, RES_PARATR_HYPHENZONE,
-/*16 */         RES_PARATR_REGISTER,    RES_PARATR_REGISTER,
-/*18 */         RES_PARATR_VERTALIGN,   RES_PARATR_VERTALIGN,
-/*20 */         RES_LR_SPACE,           RES_UL_SPACE,
-/*22 */         SID_ATTR_PARA_MODEL,    SID_ATTR_PARA_KEEP,
-/*24 */         0
+/*14 */			RES_PARATR_LINESPACING, RES_PARATR_HYPHENZONE,
+/*16 */			RES_PARATR_REGISTER, 	RES_PARATR_REGISTER,
+/*18 */			RES_PARATR_VERTALIGN, 	RES_PARATR_VERTALIGN,
+/*20 */			RES_LR_SPACE, 			RES_UL_SPACE,
+/*22 */			SID_ATTR_PARA_MODEL, 	SID_ATTR_PARA_KEEP,
+/*24 */ 		0
             };
 
             static const USHORT aCJKAttr[] =
             {
-                RES_CHRATR_CJK_FONT,    RES_CHRATR_CJK_WEIGHT,
+                RES_CHRATR_CJK_FONT,	RES_CHRATR_CJK_WEIGHT,
                 RES_CHRATR_EMPHASIS_MARK, RES_CHRATR_TWO_LINES,
                 RES_PARATR_SCRIPTSPACE, RES_PARATR_FORBIDDEN_RULES
             };
             static const USHORT aCTLAttr[] =
             {
-                RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_WEIGHT
+                RES_CHRATR_CTL_FONT,	RES_CHRATR_CTL_WEIGHT
             };
 
             SvUShorts aArr( 0, 16 );
-            aArr.Insert(    aNormalAttr,
+            aArr.Insert(	aNormalAttr,
                             SAL_N_ELEMENTS( aNormalAttr ),
                             0 );
             if( SW_MOD()->GetCTLOptions().IsCTLFontEnabled() )
-                aArr.Insert(    aCTLAttr,
+                aArr.Insert(	aCTLAttr,
                                 SAL_N_ELEMENTS( aCTLAttr ),
                                 14 );
             SvtCJKOptions aCJKOpt;
             if( aCJKOpt.IsAnyEnabled() )
-                aArr.Insert(    aCJKAttr,
+                aArr.Insert( 	aCJKAttr,
                                 SAL_N_ELEMENTS( aCJKAttr ),
                                 14 );
 
@@ -668,8 +668,8 @@ ULONG SwView::FUNC_Search( const SwSearchOptions& rOptions )
         /*  -- Seitenumbruch mit Seitenvorlage */
         ::SfxToSwPageDescAttr( *pWrtShell, *pReplSet );
 
-        if( !pReplSet->Count() )        // schade, die Attribute
-            DELETEZ( pReplSet );        // kennen wir nicht
+        if( !pReplSet->Count() )		// schade, die Attribute
+            DELETEZ( pReplSet );		// kennen wir nicht
     }
 
     //
@@ -771,16 +771,16 @@ void SwView::StateSearch(SfxItemSet &rSet)
             }
             break;
 
-/*          case SID_SEARCH_REPLACESET:
+/*			case SID_SEARCH_REPLACESET:
             case SID_SEARCH_SEARCHSET:
             {
                 static USHORT __READONLY_DATA aSearchAttrRange[] =
                 {
-                        RES_CHRATR_CASEMAP,     RES_CHRATR_POSTURE,
-                        RES_CHRATR_SHADOWED,    RES_CHRATR_WORDLINEMODE,
+                        RES_CHRATR_CASEMAP,		RES_CHRATR_POSTURE,
+                        RES_CHRATR_SHADOWED, 	RES_CHRATR_WORDLINEMODE,
                         RES_PARATR_LINESPACING, RES_PARATR_HYPHENZONE,
-                        RES_LR_SPACE,           RES_UL_SPACE,
-                        SID_ATTR_PARA_MODEL,    SID_ATTR_PARA_KEEP,
+                        RES_LR_SPACE, 			RES_UL_SPACE,
+                        SID_ATTR_PARA_MODEL, 	SID_ATTR_PARA_KEEP,
                         0
                 };
 

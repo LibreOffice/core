@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define SC_PARAWIN_HXX
 
 #include "funcutl.hxx"
-#include "global.hxx"       // ScAddress
+#include "global.hxx"		// ScAddress
 #include <svtools/stdctrl.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/group.hxx>
@@ -50,53 +50,53 @@
 class ScFuncDesc;
 
 //============================================================================
-#define NOT_FOUND 0xffff
+#define	NOT_FOUND 0xffff
 //============================================================================
 
 class ScParaWin : public TabPage
 {
 private:
 
-        Link            aScrollLink;
-        Link            aFxLink;
-        Link            aArgModifiedLink;
+        Link			aScrollLink;
+        Link			aFxLink;
+        Link			aArgModifiedLink;
 
         ::std::vector<USHORT>   aVisibleArgMapping;
-        const ScFuncDesc*   pFuncDesc;
-        ScAnyRefDlg*    pMyParent;
-        USHORT          nArgs;      // unsuppressed arguments
-        Font            aFntBold;
-        Font            aFntLight;
+        const ScFuncDesc*	pFuncDesc;
+        ScAnyRefDlg*	pMyParent;
+        USHORT			nArgs;      // unsuppressed arguments
+        Font			aFntBold;
+        Font			aFntLight;
 
-        FixedInfo       aFtEditDesc;
-        FixedText       aFtArgName;
-        FixedInfo       aFtArgDesc;
+        FixedInfo		aFtEditDesc;
+        FixedText		aFtArgName;
+        FixedInfo		aFtArgDesc;
 
-        ImageButton     aBtnFx1;
-        FixedText       aFtArg1;
-        ArgEdit         aEdArg1;
-        formula::RefButton      aRefBtn1;
-        ImageButton     aBtnFx2;
-        FixedText       aFtArg2;
-        ArgEdit         aEdArg2;
-        formula::RefButton      aRefBtn2;
-        ImageButton     aBtnFx3;
-        FixedText       aFtArg3;
-        ArgEdit         aEdArg3;
-        formula::RefButton      aRefBtn3;
-        ImageButton     aBtnFx4;
-        FixedText       aFtArg4;
-        ArgEdit         aEdArg4;
-        formula::RefButton      aRefBtn4;
-        ScrollBar       aSlider;
-        BOOL            bRefMode;
+        ImageButton		aBtnFx1;
+        FixedText		aFtArg1;
+        ArgEdit			aEdArg1;
+        formula::RefButton		aRefBtn1;
+        ImageButton		aBtnFx2;
+        FixedText		aFtArg2;
+        ArgEdit			aEdArg2;
+        formula::RefButton		aRefBtn2;
+        ImageButton		aBtnFx3;
+        FixedText		aFtArg3;
+        ArgEdit			aEdArg3;
+        formula::RefButton		aRefBtn3;
+        ImageButton		aBtnFx4;
+        FixedText		aFtArg4;
+        ArgEdit			aEdArg4;
+        formula::RefButton		aRefBtn4;
+        ScrollBar		aSlider;
+        BOOL			bRefMode;
 
-        USHORT          nEdFocus;
-        USHORT          nActiveLine;
+        USHORT			nEdFocus;
+        USHORT			nActiveLine;
 
-        ArgInput        aArgInput[4];
-        String          aDefaultString;
-        SvStrings       aParaArray;
+        ArgInput		aArgInput[4];
+        String			aDefaultString;
+        SvStrings		aParaArray;
         DECL_LINK( ScrollHdl, ScrollBar* );
         DECL_LINK( ModifyHdl, ArgInput* );
         DECL_LINK( GetEdFocusHdl, ArgInput* );
@@ -105,52 +105,52 @@ private:
 
 protected:
 
-        virtual void    SliderMoved();
-        virtual void    ArgumentModified();
-        virtual void    FxClick();
+        virtual void	SliderMoved();
+        virtual void	ArgumentModified();
+        virtual void	FxClick();
 
-        void            InitArgInput( USHORT nPos, FixedText& rFtArg, ImageButton& rBtnFx,
+        void			InitArgInput( USHORT nPos, FixedText& rFtArg, ImageButton& rBtnFx,
                                         ArgEdit& rEdArg, formula::RefButton& rRefBtn);
 
-        void            DelParaArray();
-        void            SetArgumentDesc(const String& aText);
-        void            SetArgumentText(const String& aText);
+        void			DelParaArray();
+        void			SetArgumentDesc(const String& aText);
+        void			SetArgumentText(const String& aText);
 
 
-        void            SetArgName      (USHORT no,const String &aArg);
-        void            SetArgNameFont  (USHORT no,const Font&);
-        void            SetArgVal       (USHORT no,const String &aArg);
+        void			SetArgName		(USHORT no,const String &aArg);
+        void			SetArgNameFont	(USHORT no,const Font&);
+        void			SetArgVal		(USHORT no,const String &aArg);
 
-        void            HideParaLine(USHORT no);
-        void            ShowParaLine(USHORT no);
-        void            UpdateArgDesc( USHORT nArg );
-        void            UpdateArgInput( USHORT nOffset, USHORT i );
+        void			HideParaLine(USHORT no);
+        void			ShowParaLine(USHORT no);
+        void			UpdateArgDesc( USHORT nArg );
+        void			UpdateArgInput( USHORT nOffset, USHORT i );
 
 public:
                         ScParaWin(ScAnyRefDlg* pParent,Point aPos);
                         ~ScParaWin();
 
-        void            SetFunctionDesc(const ScFuncDesc* pFDesc);
-        void            SetArgumentOffset(USHORT nOffset);
-        void            SetEditDesc(const String& aText);
-        void            UpdateParas();
-        void            ClearAll();
+        void			SetFunctionDesc(const ScFuncDesc* pFDesc);
+        void			SetArgumentOffset(USHORT nOffset);
+        void	    	SetEditDesc(const String& aText);
+        void			UpdateParas();
+        void			ClearAll();
 
-        BOOL            IsRefMode() {return bRefMode;}
-        void            SetRefMode(BOOL bFlag) {bRefMode=bFlag;}
+        BOOL			IsRefMode() {return bRefMode;}
+        void			SetRefMode(BOOL bFlag) {bRefMode=bFlag;}
 
-        USHORT          GetActiveLine();
-        void            SetActiveLine(USHORT no);
-        formula::RefEdit*       GetActiveEdit();
-        String          GetActiveArgName();
+        USHORT	    	GetActiveLine();
+        void			SetActiveLine(USHORT no);
+        formula::RefEdit*		GetActiveEdit();
+        String			GetActiveArgName();
 
-        String          GetArgument(USHORT no);
-        void            SetArgument(USHORT no, const String& aString);
-        void            SetArgumentFonts(const Font&aBoldFont,const Font&aLightFont);
+        String			GetArgument(USHORT no);
+        void			SetArgument(USHORT no, const String& aString);
+        void			SetArgumentFonts(const Font&aBoldFont,const Font&aLightFont);
 
-        void            SetEdFocus(USHORT nEditLine); //Sichtbare Editzeilen
-        USHORT          GetSliderPos();
-        void            SetSliderPos(USHORT nSliderPos);
+        void			SetEdFocus(USHORT nEditLine); //Sichtbare Editzeilen
+        USHORT			GetSliderPos();
+        void			SetSliderPos(USHORT nSliderPos);
 
         void            SetScrollHdl( const Link& rLink ) { aScrollLink = rLink; }
         const Link&     GetScrollHdl() const { return aScrollLink; }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ namespace unnamed_svl_inettype {
 struct MediaTypeEntry
 {
     sal_Char const * m_pTypeName;
-    INetContentType m_eTypeID;
+    INetContentType	m_eTypeID;
     sal_Char const * m_pExtension;
 };
 
@@ -76,7 +76,7 @@ struct TypeNameMapEntry: public UniString
 //============================================================================
 struct ExtensionMapEntry: public UniString
 {
-    INetContentType m_eTypeID;
+    INetContentType	m_eTypeID;
 
     ExtensionMapEntry(const UniString & rExt):
         UniString(rExt), m_eTypeID(CONTENT_TYPE_UNKNOWN) {}
@@ -341,7 +341,7 @@ MediaTypeEntry const aStaticTypeNameMap[CONTENT_TYPE_LAST + 1]
 /** A mapping from type IDs to presentation resource IDs.  Sorted by type ID.
  */
 USHORT const aStaticResourceIDMap[CONTENT_TYPE_LAST + 1]
-    = { STR_SVT_MIMETYPE_APP_OCTSTREAM, // CONTENT_TYPE_UNKNOWN
+    = {	STR_SVT_MIMETYPE_APP_OCTSTREAM, // CONTENT_TYPE_UNKNOWN
         STR_SVT_MIMETYPE_APP_OCTSTREAM, // CONTENT_TYPE_APP_OCTSTREAM
         STR_SVT_MIMETYPE_APP_PDF, // CONTENT_TYPE_APP_PDF
         STR_SVT_MIMETYPE_APP_RTF, // CONTENT_TYPE_APP_RTF

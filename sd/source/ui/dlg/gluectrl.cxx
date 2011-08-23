@@ -2,7 +2,7 @@
 #/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,13 +58,13 @@ static UINT16 aEscDirArray[] =
     SDRESC_RIGHT,
     SDRESC_TOP,
     SDRESC_BOTTOM,
-//  SDRESC_LO,
-//  SDRESC_LU,
-//  SDRESC_RO,
-//  SDRESC_RU,
-//  SDRESC_HORZ,
-//  SDRESC_VERT,
-//  SDRESC_ALL
+//	SDRESC_LO,
+//	SDRESC_LU,
+//	SDRESC_RO,
+//	SDRESC_RU,
+//	SDRESC_HORZ,
+//	SDRESC_VERT,
+//	SDRESC_ALL
 };
 
 
@@ -92,7 +92,7 @@ GlueEscDirLB::GlueEscDirLB( Window* pParent, const Reference< XFrame >& rFrame )
 
 /*************************************************************************
 |*
-|*  Dtor
+|*	Dtor
 |*
 \************************************************************************/
 
@@ -158,7 +158,7 @@ void GlueEscDirLB::Fill()
 |*
 \************************************************************************/
 
-SdTbxCtlGlueEscDir::SdTbxCtlGlueEscDir(
+SdTbxCtlGlueEscDir::SdTbxCtlGlueEscDir( 
     USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
         SfxToolBoxControl( nSlotId, nId, rTbx )
 {

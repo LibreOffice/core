@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,16 +87,16 @@ LocaleDataWrapper& vcl::I18nHelper::ImplGetLocaleDataWrapper() const
     return *mpLocaleDataWrapper;
 }
 
-const ::com::sun::star::lang::Locale& vcl::I18nHelper::getLocale() const
+const ::com::sun::star::lang::Locale& vcl::I18nHelper::getLocale() const 
 {
-    return maLocale;
+    return maLocale; 
 }
 
 inline bool is_formatting_mark( sal_Unicode c )
 {
-    if( (c >= 0x200B) && (c <= 0x200F) )    // BiDi and zero-width-markers
+    if( (c >= 0x200B) && (c <= 0x200F) )	// BiDi and zero-width-markers
         return true;
-    if( (c >= 0x2028) && (c <= 0x202E) )    // BiDi and paragraph-markers
+    if( (c >= 0x2028) && (c <= 0x202E) )	// BiDi and paragraph-markers
         return true;
     return false;
 }
@@ -105,7 +105,7 @@ inline bool is_formatting_mark( sal_Unicode c )
    the transliteration. The real solution would have been an additional TransliterationModule
    to ignore these marks during transliteration; however changin the code in i18npool that actually
    implements this could produce unwanted side effects.
-
+   
    Of course this copying around is not really good, but looking at i18npool, one more time
    will not hurt.
 */
@@ -136,7 +136,7 @@ sal_Int32 vcl::I18nHelper::CompareString( const String& rStr1, const String& rSt
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper = NULL;
     }
 
-
+    
     String aStr1( filterFormattingChars(rStr1) );
     String aStr2( filterFormattingChars(rStr2) );
     return ImplGetTransliterationWrapper().compareString( aStr1, aStr2 );

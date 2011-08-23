@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@ package com.sun.star.sdbcx.comp.hsqldb;
 
 public class NativeStorageAccess {
     static { NativeLibraries.load(); }
-
+    
     public static final int READ            = 1;
     public static final int SEEKABLE        = 2;
     public static final int SEEKABLEREAD    = 3;
@@ -52,29 +52,29 @@ public class NativeStorageAccess {
         try {
             int mode = NativeStorageAccess.SEEKABLEREAD;
             if ( _mode.equals("rw") )
-                mode = NativeStorageAccess.READWRITE | NativeStorageAccess.SEEKABLE;
+                mode = NativeStorageAccess.READWRITE | NativeStorageAccess.SEEKABLE; 
 
             openStream(name, (String)key, mode);
-        } catch(Exception e){
+        } catch(Exception e){            
             throw new java.io.IOException();
         }
     }
     public native void openStream(String name,String key, int mode);
     public native void close(String name,String key) throws java.io.IOException;
-
+    
     public native long getFilePointer(String name,String key) throws java.io.IOException;
-
+    
     public native long length(String name,String key) throws java.io.IOException;
-
+    
     public native int read(String name,String key) throws java.io.IOException;
-
+    
     public native int read(String name,String key,byte[] b, int off, int len) throws java.io.IOException;
-
+    
     public native int readInt(String name,String key) throws java.io.IOException;
-
+    
     public native void seek(String name,String key,long position) throws java.io.IOException;
-
+    
     public native void write(String name,String key,byte[] b, int offset, int length) throws java.io.IOException;
-
+    
     public native void writeInt(String name,String key,int v) throws java.io.IOException;
 }

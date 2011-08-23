@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,7 +57,7 @@ fullwidthToHalfwidth::fullwidthToHalfwidth()
  * The output is a reference of OUString. You MUST delete this object when you do not need to use it any more
  * The output string contains a transliterated string only, not whole string.
  */
-OUString SAL_CALL
+OUString SAL_CALL 
 fullwidthToHalfwidth::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
   throw(RuntimeException)
 {
@@ -71,7 +71,7 @@ fullwidthToHalfwidth::transliterate( const OUString& inStr, sal_Int32 startPos, 
     return tmp;
 }
 
-sal_Unicode SAL_CALL
+sal_Unicode SAL_CALL 
 fullwidthToHalfwidth::transliterateChar2Char( sal_Unicode inChar)
   throw(RuntimeException, MultipleCharsOutputException)
 {
@@ -92,7 +92,7 @@ fullwidthKatakanaToHalfwidthKatakana::fullwidthKatakanaToHalfwidthKatakana()
 /**
  * Transliterate fullwidth katakana to halfwidth katakana.
  */
-OUString SAL_CALL
+OUString SAL_CALL 
 fullwidthKatakanaToHalfwidthKatakana::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
   throw(RuntimeException)
 {
@@ -106,7 +106,7 @@ fullwidthKatakanaToHalfwidthKatakana::transliterate( const OUString& inStr, sal_
     return tmp;
 }
 
-sal_Unicode SAL_CALL
+sal_Unicode SAL_CALL 
 fullwidthKatakanaToHalfwidthKatakana::transliterateChar2Char( sal_Unicode inChar )
   throw(RuntimeException, MultipleCharsOutputException)
 {
@@ -127,7 +127,7 @@ fullwidthToHalfwidthLikeASC::fullwidthToHalfwidthLikeASC()
 /**
  * Transliterate fullwidth to halfwidth like Excel's ASC function.
  */
-OUString SAL_CALL
+OUString SAL_CALL 
 fullwidthToHalfwidthLikeASC::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
   throw(RuntimeException)
 {
@@ -142,7 +142,7 @@ fullwidthToHalfwidthLikeASC::transliterate( const OUString& inStr, sal_Int32 sta
     return tmp;
 }
 
-sal_Unicode SAL_CALL
+sal_Unicode SAL_CALL 
 fullwidthToHalfwidthLikeASC::transliterateChar2Char( sal_Unicode inChar )
   throw(RuntimeException, MultipleCharsOutputException)
 {

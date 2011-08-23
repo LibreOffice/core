@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,13 +48,13 @@ namespace chart
 class SchAxisLabelTabPage : public SfxTabPage
 {
 private:
-    CheckBox            aCbShowDescription;
+    CheckBox			aCbShowDescription;
 
-    FixedLine           aFlOrder;
-    RadioButton         aRbSideBySide;
-    RadioButton         aRbUpDown;
-    RadioButton         aRbDownUp;
-    RadioButton         aRbAuto;
+    FixedLine			aFlOrder;
+    RadioButton			aRbSideBySide;
+    RadioButton			aRbUpDown;
+    RadioButton			aRbDownUp;
+    RadioButton			aRbAuto;
 
     FixedLine           aFlSeparator;
     FixedLine           aFlTextFlow;
@@ -84,7 +84,7 @@ public:
     SchAxisLabelTabPage( Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SchAxisLabelTabPage();
 
-    void    Construct();
+    void	Construct();
 
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rInAttrs );
     virtual BOOL FillItemSet( SfxItemSet& rOutAttrs );

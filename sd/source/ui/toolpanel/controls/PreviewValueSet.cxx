@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,13 +45,13 @@ PreviewValueSet::PreviewValueSet (TreeNode* pParent)
       mnMaxColumnCount(-1)
 {
     SetStyle (
-        GetStyle()
+        GetStyle() 
         & ~(WB_ITEMBORDER)// | WB_MENUSTYLEVALUESET)
         //        | WB_FLATVALUESET);
         );
 
     SetColCount(2);
-    //  SetLineCount(1);
+    //	SetLineCount(1);
     SetExtraSpacing (2);
 }
 
@@ -130,7 +130,7 @@ void PreviewValueSet::Command (const CommandEvent& rEvent)
             maContextMenuCallback.Call(&aNonConstEventCopy);
         }
         break;
-
+            
         default:
             ValueSet::Command(rEvent);
             break;
@@ -217,7 +217,7 @@ sal_Int32 PreviewValueSet::GetPreferredWidth (sal_Int32 nHeight)
     {
         int nColumnCount = (GetItemCount()+nRowCount-1) / nRowCount;
         if (nColumnCount > 0)
-            nPreferredWidth = (maPreviewSize.Width() + 2*mnBorderWidth)
+            nPreferredWidth = (maPreviewSize.Width() + 2*mnBorderWidth) 
                 * nColumnCount;
     }
 
@@ -231,7 +231,7 @@ sal_Int32 PreviewValueSet::GetPreferredHeight (sal_Int32 nWidth)
 {
     int nRowCount (CalculateRowCount(CalculateColumnCount(nWidth)));
     int nItemHeight (maPreviewSize.Height());
-
+    
     return nRowCount * (nItemHeight + 2*mnBorderHeight);
 }
 

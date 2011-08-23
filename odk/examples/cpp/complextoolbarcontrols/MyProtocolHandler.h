@@ -49,7 +49,7 @@ public:
 
     // XDispatchProvider
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
-            SAL_CALL queryDispatch( const ::com::sun::star::util::URL& aURL,
+            SAL_CALL queryDispatch(	const ::com::sun::star::util::URL& aURL,
                 const ::rtl::OUString& sTargetFrameName, sal_Int32 nSearchFlags )
                 throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > >
@@ -115,10 +115,10 @@ public:
         const ::com::sun::star::util::URL& aURL ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl,
         const ::com::sun::star::util::URL& aURL ) throw (::com::sun::star::uno::RuntimeException);
-
+    
     // XControlNotificationListener
-    virtual void SAL_CALL controlEvent( const ::com::sun::star::frame::ControlEvent& Event )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL controlEvent( const ::com::sun::star::frame::ControlEvent& Event ) 
+        throw (::com::sun::star::uno::RuntimeException); 
 };
 
 class WriterDispatch : public BaseDispatch

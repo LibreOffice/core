@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,7 +103,7 @@ namespace dbmm
     protected:
         FixedText               m_aExplanation;
         FixedText               m_aSaveAsLabel;
-        ::svt::OFileURLControl  m_aSaveAsLocation;
+        ::svt::OFileURLControl	m_aSaveAsLocation;
         PushButton              m_aBrowseSaveAsLocation;
         FixedText               m_aStartMigration;
         ::svx::DatabaseLocationInputController

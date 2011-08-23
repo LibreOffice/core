@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ TYPEINIT1(XMLIndexIllustrationSourceContext, XMLIndexTableSourceContext);
 
 
 XMLIndexIllustrationSourceContext::XMLIndexIllustrationSourceContext(
-    SvXMLImport& rImport,
+    SvXMLImport& rImport, 
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet) :
@@ -68,7 +68,7 @@ XMLIndexIllustrationSourceContext::~XMLIndexIllustrationSourceContext()
 {
 }
 
-SvXMLImportContext* XMLIndexIllustrationSourceContext::CreateChildContext(
+SvXMLImportContext* XMLIndexIllustrationSourceContext::CreateChildContext( 
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
@@ -76,16 +76,16 @@ SvXMLImportContext* XMLIndexIllustrationSourceContext::CreateChildContext(
     if ( ( XML_NAMESPACE_TEXT == nPrefix ) &&
          ( IsXMLToken( rLocalName, XML_ILLUSTRATION_INDEX_ENTRY_TEMPLATE ) ) )
     {
-        return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
+        return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet, 
                                            nPrefix, rLocalName,
                                            aLevelNameTableMap,
                                            XML_TOKEN_INVALID, // no outline-level attr
                                            aLevelStylePropNameTableMap,
                                            aAllowedTokenTypesTable);
     }
-    else
+    else 
     {
-        return XMLIndexSourceBaseContext::CreateChildContext(nPrefix,
+        return XMLIndexSourceBaseContext::CreateChildContext(nPrefix, 
                                                              rLocalName,
                                                              xAttrList);
     }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,7 +94,7 @@ public class AccessibleTreeListBoxEntry extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, 
                                                         DesktopTools.createDesktop(
         (XMultiServiceFactory) Param.getMSF()));
     }
@@ -143,7 +143,7 @@ public class AccessibleTreeListBoxEntry extends TestCase {
      * @see com.sun.star.accessibility.XAccessibleSelection
      * @see com.sun.star.accessibility.XAccessibleText
      */
-    protected TestEnvironment createTestEnvironment(TestParameters tParam,
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, 
                                                     PrintWriter log) {
         log.println("creating a test environment");
 
@@ -165,13 +165,13 @@ public class AccessibleTreeListBoxEntry extends TestCase {
 
         shortWait();
 
-        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class, 
                                                             xTextDoc);
 
         XController secondController = aModel1.getCurrentController();
 
         XDispatchProvider aProv = (XDispatchProvider) UnoRuntime.queryInterface(
-                                          XDispatchProvider.class,
+                                          XDispatchProvider.class, 
                                           secondController);
 
         XDispatch getting = null;
@@ -200,7 +200,7 @@ public class AccessibleTreeListBoxEntry extends TestCase {
         XInterface oObj = null;
 
         XInitialization xInit = (XInitialization) UnoRuntime.queryInterface(
-                                        XInitialization.class,
+                                        XInitialization.class, 
                                         the_frame2.getController());
 
         PropertyValue[] params = new PropertyValue[3];
@@ -218,12 +218,12 @@ public class AccessibleTreeListBoxEntry extends TestCase {
         param3.Name = "Command";
         param3.Value = "select * from biblio";
         params[2] = param3;
-
+        
         XController xCont = the_frame2.getController();
-
+        
         XSelectionSupplier xSelect = (XSelectionSupplier) UnoRuntime.queryInterface(
             XSelectionSupplier.class, xCont);
-
+        
         try {
             xSelect.select(params);
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
@@ -232,35 +232,35 @@ public class AccessibleTreeListBoxEntry extends TestCase {
 
         shortWait();
 
-        AccessibilityTools at = new AccessibilityTools();
+        AccessibilityTools at = new AccessibilityTools();                
 
         XWindow xWindow = secondController.getFrame().getContainerWindow();
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
-
+        
         at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.LABEL,
+        
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.LABEL, 
                                              "Bibliography");
-
+        
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        tEnv.addObjRelation("EditOnly",
+        tEnv.addObjRelation("EditOnly", 
                             "This method isn't supported in this component");
-
+        
         //adding ObjectRelation for XAccessibleText
         tEnv.addObjRelation("LimitedBounds", "true");
 
 
-        tEnv.addObjRelation("EventProducer",
+        tEnv.addObjRelation("EventProducer", 
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
             }
         });
 
-        tEnv.addObjRelation("XAccessibleSelection.multiSelection",
+        tEnv.addObjRelation("XAccessibleSelection.multiSelection", 
                             new Boolean(false));
 
         tEnv.addObjRelation("XAccessibleText.Text", "Bibliography");

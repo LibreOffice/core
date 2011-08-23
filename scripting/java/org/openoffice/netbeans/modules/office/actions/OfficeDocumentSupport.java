@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ public class OfficeDocumentSupport implements OfficeDocumentCookie, OpenCookie, 
 
     public void mount() {
         File file = FileUtil.toFile(dataObj.getPrimaryFile());
-
+        
         try {
             ZipMounter.getZipMounter().mountZipFile(file);
             isMounted = true;
@@ -86,14 +86,14 @@ public class OfficeDocumentSupport implements OfficeDocumentCookie, OpenCookie, 
             ErrorManager.getDefault().notify(pve);
         }
     }
-
+    
     public void open () {
         File file = FileUtil.toFile(dataObj.getPrimaryFile());
-
+        
         OfficeSettings settings = OfficeSettings.getDefault();
         File soffice = new File(settings.getOfficeDirectory().getPath(
             File.separator + "soffice"));
-
+        
         try {
             Process p = Runtime.getRuntime ().exec (new String[] {
                 soffice.getAbsolutePath(), file.getAbsolutePath ()
@@ -102,39 +102,39 @@ public class OfficeDocumentSupport implements OfficeDocumentCookie, OpenCookie, 
             ErrorManager.getDefault().notify(ioe);
         }
     }
-
+    
     public Enumeration getParcels() {
         return document.getParcels();
     }
-
+    
     public void removeParcel(String name) {
         document.removeParcel(name);
         dataObj.getPrimaryFile().refresh(true);
     }
-
+    
     public void addChangeListener(ChangeListener cl) {
         if (listeners == null)
             listeners = new HashSet();
-
+        
         listeners.add(cl);
     }
-
+    
     public void removeChangeListener(ChangeListener cl) {
         if (listeners == null)
             return;
-
+        
         listeners.remove(cl);
     }
-
+    
     public void fileChanged(FileEvent fe) {
         if (listeners != null) {
             Iterator iter = listeners.iterator();
-
+         
             while (iter.hasNext())
                 ((ChangeListener)iter.next()).stateChanged(new ChangeEvent(this));
         }
     }
-
+    
     public void fileAttributeChanged(FileAttributeEvent fe) {}
     public void fileDataCreated(FileEvent fe) {}
     public void fileDeleted(FileEvent fe) {}

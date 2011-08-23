@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,21 +51,21 @@ public:
 
     ImpSvNumberformatScan( SvNumberFormatter* pFormatter );
     ~ImpSvNumberformatScan();
-    void ChangeIntl();                          // tauscht Keywords aus
+    void ChangeIntl();							// tauscht Keywords aus
 
     void ChangeNullDate(USHORT nDay, USHORT nMonth, USHORT nYear);
                                                 // tauscht Referenzdatum aus
     void ChangeStandardPrec(sal_uInt16 nPrec);  // tauscht Standardprecision aus
 
-    xub_StrLen ScanFormat( String& rString, String& rComment ); // Aufruf der Scan-Analyse
+    xub_StrLen ScanFormat( String& rString, String& rComment );	// Aufruf der Scan-Analyse
 
     void CopyInfo(ImpSvNumberformatInfo* pInfo,
-                     USHORT nAnz);              // Kopiert die FormatInfo
-    USHORT GetAnzResStrings() const             { return nAnzResStrings; }
+                     USHORT nAnz);				// Kopiert die FormatInfo
+    USHORT GetAnzResStrings() const				{ return nAnzResStrings; }
 
-    const CharClass& GetChrCls() const          { return *pFormatter->GetCharClass(); }
-    const LocaleDataWrapper& GetLoc() const     { return *pFormatter->GetLocaleData(); }
-    CalendarWrapper& GetCal() const             { return *pFormatter->GetCalendar(); }
+    const CharClass& GetChrCls() const			{ return *pFormatter->GetCharClass(); }
+    const LocaleDataWrapper& GetLoc() const		{ return *pFormatter->GetLocaleData(); }
+    CalendarWrapper& GetCal() const				{ return *pFormatter->GetCalendar(); }
 
     const String* GetKeywords() const
         {
@@ -85,9 +85,9 @@ public:
     const String& GetColorString() const    { return GetKeywords()[NF_KEY_COLOR]; }
     const String& GetRedString() const      { return GetKeywords()[NF_KEY_RED]; }
     const String& GetBooleanString() const  { return GetKeywords()[NF_KEY_BOOLEAN]; }
-    const String& GetErrorString() const    { return sErrStr; }
+    const String& GetErrorString() const  	{ return sErrStr; }
 
-    Date* GetNullDate() const                   { return pNullDate; }
+    Date* GetNullDate() const					{ return pNullDate; }
     const String& GetStandardName() const
         {
             if ( bKeywordsNeedInit )
@@ -95,8 +95,8 @@ public:
             return sNameStandardFormat;
         }
     sal_uInt16 GetStandardPrec() const          { return nStandardPrec; }
-    const Color& GetRedColor() const            { return StandardColor[4]; }
-    Color* GetColor(String& sStr);          // Setzt Hauptfarben oder
+    const Color& GetRedColor() const			{ return StandardColor[4]; }
+    Color* GetColor(String& sStr);			// Setzt Hauptfarben oder
                                                 // definierte Farben
 
     // the compatibility currency symbol for old automatic currency formats
@@ -153,39 +153,39 @@ public:
                                                 // (fuer zformat.cxx)
 
 
-private:                            // ---- privater Teil
-    NfKeywordTable sKeyword;                    // Schluesselworte der Syntax
+private:							// ---- privater Teil
+    NfKeywordTable sKeyword; 					// Schluesselworte der Syntax
     Color StandardColor[NF_MAX_DEFAULT_COLORS];
                                                 // Array der Standardfarben
-    Date* pNullDate;                            // 30Dec1899
-    String sNameStandardFormat;             // "Standard"
+    Date* pNullDate;							// 30Dec1899
+    String sNameStandardFormat;				// "Standard"
     sal_uInt16 nStandardPrec;                   // default Precision for Standardformat
-    SvNumberFormatter* pFormatter;              // Pointer auf die Formatliste
+    SvNumberFormatter* pFormatter;				// Pointer auf die Formatliste
 
     String sStrArray[NF_MAX_FORMAT_SYMBOLS];    // Array der Symbole
     short nTypeArray[NF_MAX_FORMAT_SYMBOLS];    // Array der Infos
                                                 // externe Infos:
-    USHORT nAnzResStrings;                      // Anzahl der Ergebnissymbole
+    USHORT nAnzResStrings;						// Anzahl der Ergebnissymbole
 #if !(defined SOLARIS && defined X86)
-    short eScannedType;                         // Typ gemaess Scan
+    short eScannedType;							// Typ gemaess Scan
 #else
-    int eScannedType;                           // wg. Optimierung
+    int eScannedType;							// wg. Optimierung
 #endif
-    BOOL bThousand;                             // Mit Tausenderpunkt
-    USHORT nThousand;                           // Zaehlt ....-Folgen
-    USHORT nCntPre;                             // Zaehlt Vorkommastellen
-    USHORT nCntPost;                            // Zaehlt Nachkommastellen
-    USHORT nCntExp;                             // Zaehlt Exp.Stellen, AM/PM
+    BOOL bThousand;								// Mit Tausenderpunkt
+    USHORT nThousand;							// Zaehlt ....-Folgen
+    USHORT nCntPre;								// Zaehlt Vorkommastellen
+    USHORT nCntPost;							// Zaehlt Nachkommastellen
+    USHORT nCntExp;								// Zaehlt Exp.Stellen, AM/PM
                                                 // interne Infos:
-    USHORT nAnzStrings;                         // Anzahl der Symbole
-    USHORT nRepPos;                             // Position eines '*'
-    USHORT nExpPos;                             // interne Position des E
-    USHORT nBlankPos;                           // interne Position des Blank
-    short nDecPos;                              // interne Pos. des ,
-    BOOL bExp;                                  // wird bei Lesen des E gesetzt
-    BOOL bFrac;                                 // wird bei Lesen des / gesetzt
-    BOOL bBlank;                                // wird bei ' '(Fraction) ges.
-    BOOL bDecSep;                               // Wird beim ersten , gesetzt
+    USHORT nAnzStrings;							// Anzahl der Symbole
+    USHORT nRepPos;								// Position eines '*'
+    USHORT nExpPos;								// interne Position des E
+    USHORT nBlankPos;							// interne Position des Blank
+    short nDecPos;								// interne Pos. des ,
+    BOOL bExp;									// wird bei Lesen des E gesetzt
+    BOOL bFrac;									// wird bei Lesen des / gesetzt
+    BOOL bBlank;								// wird bei ' '(Fraction) ges.
+    BOOL bDecSep;								// Wird beim ersten , gesetzt
     mutable BOOL bKeywordsNeedInit;             // Locale dependent keywords need to be initialized
     mutable BOOL bCompatCurNeedInit;            // Locale dependent compatibility currency need to be initialized
     String sCurSymbol;                          // Currency symbol for compatibility format codes
@@ -193,21 +193,21 @@ private:                            // ---- privater Teil
     String sCurAbbrev;                          // Currency abbreviation
     String sErrStr;                             // String fuer Fehlerausgaben
 
-    BOOL bConvertMode;                          // Wird im Convert-Mode gesetzt
+    BOOL bConvertMode;							// Wird im Convert-Mode gesetzt
                                                 // Land/Sprache, in die der
-    LanguageType eNewLnge;                      // gescannte String konvertiert
+    LanguageType eNewLnge;						// gescannte String konvertiert
                                                 // wird (fuer Excel Filter)
                                                 // Land/Sprache, aus der der
-    LanguageType eTmpLnge;                      // gescannte String konvertiert
+    LanguageType eTmpLnge;						// gescannte String konvertiert
                                                 // wird (fuer Excel Filter)
-    BOOL bConvertSystemToSystem;                // Whether the conversion is
+    BOOL bConvertSystemToSystem;				// Whether the conversion is
                                                 // from one system locale to
                                                 // another system locale (in
                                                 // this case the automatic
                                                 // currency symbol is converted
                                                 // too).
 
-    xub_StrLen nCurrPos;                        // Position des Waehrungssymbols
+    xub_StrLen nCurrPos;						// Position des Waehrungssymbols
 
     BYTE nNatNumModifier;                       // Thai T speciality
 
@@ -215,28 +215,28 @@ private:                            // ---- privater Teil
     void InitSpecialKeyword( NfKeywordIndex eIdx ) const;
     void InitCompatCur() const;
 
-#ifdef _ZFORSCAN_CXX                // ----- private Methoden -----
+#ifdef _ZFORSCAN_CXX				// ----- private Methoden -----
     void SetDependentKeywords();
                                                 // Setzt die Sprachabh. Keyw.
     void SkipStrings(USHORT& i,xub_StrLen& nPos);// Ueberspringt StringSymbole
-    USHORT PreviousKeyword(USHORT i);           // Gibt Index des vorangeh.
+    USHORT PreviousKeyword(USHORT i);			// Gibt Index des vorangeh.
                                                 // Schluesselworts oder 0
-    USHORT NextKeyword(USHORT i);               // Gibt Index des naechsten
+    USHORT NextKeyword(USHORT i);				// Gibt Index des naechsten
                                                 // Schluesselworts oder 0
-    sal_Unicode PreviousChar(USHORT i);             // Gibt letzten Buchstaben
+    sal_Unicode PreviousChar(USHORT i);				// Gibt letzten Buchstaben
                                                 // vor der Position,
                                                 // skipt EMPTY, STRING, STAR, BLANK
-    sal_Unicode NextChar(USHORT i);                 // Gibt ersten Buchst. danach
-    short PreviousType( USHORT i );             // Gibt Typ vor Position,
+    sal_Unicode NextChar(USHORT i);					// Gibt ersten Buchst. danach
+    short PreviousType( USHORT i );				// Gibt Typ vor Position,
                                                 // skipt EMPTY
-    BOOL IsLastBlankBeforeFrac(USHORT i);       // True <=> es kommt kein ' '
+    BOOL IsLastBlankBeforeFrac(USHORT i);		// True <=> es kommt kein ' '
                                                 // mehr bis zum '/'
-    void Reset();                               // Reset aller Variablen
+    void Reset();								// Reset aller Variablen
                                                 // vor Analysestart
-    short GetKeyWord( const String& sSymbol,    // determine keyword at nPos
+    short GetKeyWord( const String& sSymbol,	// determine keyword at nPos
         xub_StrLen nPos );                      // return 0 <=> not found
 
-    inline BOOL IsAmbiguousE( short nKey )      // whether nKey is ambiguous E of NF_KEY_E/NF_KEY_EC
+    inline BOOL IsAmbiguousE( short nKey )		// whether nKey is ambiguous E of NF_KEY_E/NF_KEY_EC
         {
             return (nKey == NF_KEY_EC || nKey == NF_KEY_E) &&
                 (GetKeywords()[NF_KEY_EC] == GetKeywords()[NF_KEY_E]);
@@ -249,8 +249,8 @@ private:                            // ---- privater Teil
                         xub_StrLen& nPos,
                       String& sSymbol);       // Naechstes Symbol
     xub_StrLen Symbol_Division(const String& rString);// lexikalische Voranalyse
-    xub_StrLen ScanType(const String& rString); // Analyse des Formattyps
-    xub_StrLen FinalScan( String& rString, String& rComment );  // Endanalyse mit Vorgabe
+    xub_StrLen ScanType(const String& rString);	// Analyse des Formattyps
+    xub_StrLen FinalScan( String& rString, String& rComment );	// Endanalyse mit Vorgabe
                                                 // des Typs
     // -1:= error, return nPos in FinalScan; 0:= no calendar, 1:= calendar found
     int FinalScanGetCalendar( xub_StrLen& nPos, USHORT& i, USHORT& nAnzResStrings );
@@ -273,6 +273,6 @@ private:                            // ---- privater Teil
 
 
 
-#endif  // _ZFORSCAN_HXX
+#endif	// _ZFORSCAN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /***************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ class SimpleGuesser{
 public:
     /**inits the object with conf file "./conf.txt"*/
     SimpleGuesser();
-
+    
     /** Compares the current Simpleguesser with an other
      * @param SimpleGuesser& sg the other guesser to compare
      */
@@ -55,51 +55,51 @@ public:
      * destroy the object
      */
     ~SimpleGuesser();
-
+    
     /**
      * Analyze a text and return the most probable languages of the text
      * @param char* text is the text to analyze
      * @return the list of guess
      */
     vector<Guess> GuessLanguage(char* text);
-
+    
     /**
      * Analyze a text and return the most probable language of the text
      * @param char* text is the text to analyze
      * @return the guess (containing language)
      */
     Guess GuessPrimaryLanguage(char* text);
-
+    
     /**
      * List all available languages (possibly to be in guesses)
      * @return the list of languages
      */
     vector<Guess> GetAvailableLanguages();
-
+    
     /**
      * List all languages (possibly in guesses or not)
      * @return the list of languages
      */
     vector<Guess> GetAllManagedLanguages();
-
+    
     /**
      * List all Unavailable languages (disable for any reason)
      * @return the list of languages
      */
     vector<Guess> GetUnavailableLanguages();
-
+    
     /**
      * Mark a language enabled
      * @param string lang the language to enable (build like language-COUNTRY-encoding)
      */
     void EnableLanguage(string lang);
-
+    
     /**
      * Mark a language disabled
      * @param string lang the language to disable (build like language-COUNTRY-encoding)
      */
     void DisableLanguage(string lang);
-
+    
     /**
      * Load a new DB of fingerprints
      * @param const char* thePathOfConfFile self explaining
@@ -108,13 +108,13 @@ public:
     void SetDBPath(const char* thePathOfConfFile, const char* prefix);
 
 protected:
-
+    
     //Where typical fingerprints (n-gram tables) are stored
     void* h;
-
+    
     //Is used to select languages into the fingerprints DB, the mask is used to indicate if we want enabled disabled or both
     vector<Guess> GetManagedLanguages(const char mask);
-
+    
     //Like getManagedLanguages, this function enable or disable a language and it depends of the mask
     void XableLanguage(string lang, char mask);
 };

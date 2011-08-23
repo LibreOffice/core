@@ -372,7 +372,7 @@ PHONYDESC=.PHONY
 $(DESCRIPTION) $(PHONYDESC) : $$(@:f)
     @-$(MKDIRHIER) $(@:d)
     @echo LAST_WITH_LANG=$(WITH_LANG) > $(ZIP1DIR)_lang_track.mk
-    $(TYPE) description.tmp | sed s/UPDATED_PLATFORM/$(PLATFORMID)/ > $@
+    $(TYPE) description.xml | sed s/UPDATED_PLATFORM/$(PLATFORMID)/ > $@
 
 
 .ENDIF # "$(ENABLE_PRESENTER_SCREEN)" != "NO"

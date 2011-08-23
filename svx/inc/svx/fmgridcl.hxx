@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +44,10 @@ class SVX_DLLPUBLIC FmGridHeader
             ,public DropTargetHelper
 {
 protected:
-    FmGridHeaderData*       m_pImpl;
+    FmGridHeaderData*		m_pImpl;
 
     // trigger context menu execution
-    void    triggerColumnContextMenu( const ::Point& _rPreferredPos );
+    void	triggerColumnContextMenu( const ::Point& _rPreferredPos );
 
 public:
     FmGridHeader( BrowseBox* pParent, WinBits nWinBits = WB_STDHEADERBAR | WB_DRAG );
@@ -56,7 +56,7 @@ public:
 public:
     struct AccessControl { friend class FmGridControl; private: AccessControl() { } };
 
-    inline  void    triggerColumnContextMenu( const ::Point& _rPreferredPos, const AccessControl& )
+    inline	void	triggerColumnContextMenu( const ::Point& _rPreferredPos, const AccessControl& )
     {
         triggerColumnContextMenu( _rPreferredPos );
     }
@@ -66,29 +66,29 @@ protected:
     virtual void RequestHelp( const HelpEvent& rHEvt );
     virtual void Select();
 
-    /** the value returned by GetItemPos is meaningless for the grid model if there are hidden columns,
+    /**	the value returned by GetItemPos is meaningless for the grid model if there are hidden columns,
         so use GetModelColumnPos instead
     */
     sal_uInt16 GetModelColumnPos(sal_uInt16 nId) const;
 
-    /** This is called before executing a context menu for a column. rMenu contains the initial entries
+    /**	This is called before executing a context menu for a column. rMenu contains the initial entries
         handled by this base class' method (which always has to be called).
         Derived classes may alter the menu in any way and handle any additional entries in
         PostExecuteColumnContextMenu.
         All disabled entries will be removed before executing the menu, so be careful with separators
         near entries you probably wish to disable ...
     */
-    virtual void    PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu);
-    /** After executing the context menu for a column this method is called.
+    virtual void	PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu);
+    /**	After executing the context menu for a column this method is called.
     */
-    virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult);
+    virtual	void	PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult);
 
     // DropTargetHelper
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual sal_Int8	AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8	ExecuteDrop( const ExecuteDropEvent& rEvt );
 
     /** selects the column at the selection supplier.
-        @param  nColumnId
+        @param	nColumnId
             The column id.
     */
     void notifyColumnSelect(sal_uInt16 nColumnId);
@@ -106,11 +106,11 @@ class SVX_DLLPUBLIC FmGridControl : public DbGridControl
     friend class FmGridHeader;
     friend class FmXGridPeer;
 
-    FmXGridPeer*        m_pPeer;
-    sal_Int32           m_nCurrentSelectedColumn;   // this is the column model (not the view) posisition ...
-    sal_uInt16          m_nMarkedColumnId;
-    sal_Bool            m_bSelecting;
-    sal_Bool            m_bInColumnMove : 1;
+    FmXGridPeer*		m_pPeer;
+    sal_Int32			m_nCurrentSelectedColumn;	// this is the column model (not the view) posisition ...
+    sal_uInt16			m_nMarkedColumnId;
+    sal_Bool			m_bSelecting;
+    sal_Bool			m_bInColumnMove	: 1;
 
 public:
     FmGridControl(
@@ -140,25 +140,25 @@ public:
     void markColumn(sal_uInt16 nId);
     sal_Bool isColumnMarked(sal_uInt16 nId) const;
 
-    sal_Int32   GetSelectedColumn() const;
+    sal_Int32	GetSelectedColumn() const;
 
-    /** return the name of the specified object.
-        @param  eObjType
+    /** return the name of the specified object. 
+        @param	eObjType
             The type to ask for
-        @param  _nPosition
+        @param	_nPosition
             The position of a tablecell (index position), header bar  colum/row cell
-        @return
-            The name of the specified object.
+        @return  
+            The name of the specified object. 
     */
     virtual ::rtl::OUString GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
 
-    /** return the description of the specified object.
-        @param  eObjType
+    /** return the description of the specified object. 
+        @param	eObjType
             The type to ask for
-        @param  _nPosition
+        @param	_nPosition
             The position of a tablecell (index position), header bar  colum/row cell
-        @return
-            The description of the specified object.
+        @return  
+            The description of the specified object. 
     */
     virtual ::rtl::OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
 
@@ -176,7 +176,7 @@ protected:
     virtual void HideColumn(sal_uInt16 nId);
     virtual void ShowColumn(sal_uInt16 nId);
 
-    sal_Bool    IsInColumnMove() const {return m_bInColumnMove;}
+    sal_Bool	IsInColumnMove() const {return m_bInColumnMove;}
 
     virtual void BeginCursorAction();
     virtual void EndCursorAction();
@@ -203,9 +203,9 @@ protected:
     sal_Bool selectBookmarks(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& _rBookmarks);
 
     /** returns if a column is selected
-        @param  nColumnId
+        @param	nColumnId
             The column id.
-        @param  _pColumn
+        @param	_pColumn
             The column to compare with.
         @return
             <TRUE/> if the column is selected, otherwise <FALSE/>

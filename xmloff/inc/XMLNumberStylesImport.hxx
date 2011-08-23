@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,24 +45,24 @@ private:
 
     SdXMLImport& mrImport;
 
-    sal_Bool    mbTimeStyle;
-    sal_Bool    mbAutomatic;
-    sal_uInt8   mnElements[16];
-    sal_Int16   mnIndex;
+    sal_Bool	mbTimeStyle;
+    sal_Bool	mbAutomatic;
+    sal_uInt8	mnElements[16];
+    sal_Int16	mnIndex;
 
-    sal_Int32   mnKey;
+    sal_Int32	mnKey;
 
     bool compareStyle( const SdXMLFixedDataStyle* pStyle, sal_Int16& nIndex ) const;
 
 protected:
-    void add( rtl::OUString& rNumberStyle, sal_Bool bLong, sal_Bool bTextual, sal_Bool  bDecimal02, rtl::OUString& rText );
+    void add( rtl::OUString& rNumberStyle, sal_Bool bLong, sal_Bool bTextual, sal_Bool	bDecimal02, rtl::OUString& rText );
 
 public:
     TYPEINFO();
 
-    SdXMLNumberFormatImportContext( SdXMLImport& rImport,
+    SdXMLNumberFormatImportContext( SdXMLImport& rImport, 
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const rtl::OUString& rLocalName, 
         SvXMLNumImpData* pNewData, sal_uInt16 nNewType,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         SvXMLStylesContext& rStyles);
@@ -76,6 +76,6 @@ public:
     sal_Int32 GetDrawKey() const { return mnKey; }
 };
 
-#endif  //  _XMLOFF_NUMBERSTYLESIMPORT_HXX
+#endif	//  _XMLOFF_NUMBERSTYLESIMPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

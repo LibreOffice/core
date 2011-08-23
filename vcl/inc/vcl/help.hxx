@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,20 +41,20 @@ class Window;
 // - Help-Types -
 // --------------
 
-#define QUICKHELP_LEFT      ((USHORT)0x0001)
-#define QUICKHELP_CENTER    ((USHORT)0x0002)
-#define QUICKHELP_RIGHT     ((USHORT)0x0004)
-#define QUICKHELP_TOP       ((USHORT)0x0008)
-#define QUICKHELP_VCENTER   ((USHORT)0x0010)
-#define QUICKHELP_BOTTOM    ((USHORT)0x0020)
+#define QUICKHELP_LEFT		((USHORT)0x0001)
+#define QUICKHELP_CENTER	((USHORT)0x0002)
+#define QUICKHELP_RIGHT 	((USHORT)0x0004)
+#define QUICKHELP_TOP		((USHORT)0x0008)
+#define QUICKHELP_VCENTER	((USHORT)0x0010)
+#define QUICKHELP_BOTTOM	((USHORT)0x0020)
 #define QUICKHELP_NOAUTOPOS (QUICKHELP_LEFT | QUICKHELP_CENTER | QUICKHELP_RIGHT | QUICKHELP_TOP | QUICKHELP_VCENTER | QUICKHELP_BOTTOM)
-#define QUICKHELP_CTRLTEXT  ((USHORT)0x0040)
+#define QUICKHELP_CTRLTEXT	((USHORT)0x0040)
 #define QUICKHELP_NOEVADEPOINTER ((USHORT)0x4000)
-#define QUICKHELP_BIDI_RTL  ((USHORT)0x8000)
+#define QUICKHELP_BIDI_RTL	((USHORT)0x8000)
 
 // By changes you must also change: rsc/vclrsc.hxx
-#define OOO_HELP_INDEX          ((ULONG)0xFFFFFFFF)
-#define OOO_HELP_HELPONHELP     ((ULONG)0xFFFFFFFE)
+#define OOO_HELP_INDEX			((ULONG)0xFFFFFFFF)
+#define OOO_HELP_HELPONHELP 	((ULONG)0xFFFFFFFE)
 
 // --------
 // - Help -
@@ -63,64 +63,64 @@ class Window;
 class VCL_DLLPUBLIC Help
 {
 private:
-    String              maHelpFile;
+    String				maHelpFile;
 
 public:
                         Help();
-    virtual             ~Help();
+    virtual				~Help();
 
-    void                SetHelpFile( const String& rFileName ) { maHelpFile = rFileName; }
-    const String&       GetHelpFile() const { return maHelpFile; }
+    void				SetHelpFile( const String& rFileName ) { maHelpFile = rFileName; }
+    const String&		GetHelpFile() const { return maHelpFile; }
 
-    virtual BOOL        Start( ULONG nHelpId, const Window* pWindow  );
-    virtual BOOL        Start( const XubString& rKeyWord, const Window* pWindow );
-    virtual void        OpenHelpAgent( ULONG nHelpId );
-    virtual XubString   GetHelpText( ULONG nHelpId, const Window* pWindow );
+    virtual BOOL		Start( ULONG nHelpId, const Window* pWindow  );
+    virtual BOOL		Start( const XubString& rKeyWord, const Window* pWindow );
+    virtual void		OpenHelpAgent( ULONG nHelpId );
+    virtual XubString	GetHelpText( ULONG nHelpId, const Window* pWindow );
     virtual XubString   GetHelpText( const String& aHelpURL, const Window* pWindow );
 
-    static void         EnableContextHelp();
-    static void         DisableContextHelp();
-    static BOOL         IsContextHelpEnabled();
-    static BOOL         StartContextHelp();
+    static void 		EnableContextHelp();
+    static void 		DisableContextHelp();
+    static BOOL 		IsContextHelpEnabled();
+    static BOOL 		StartContextHelp();
 
-    static void         EnableExtHelp();
-    static void         DisableExtHelp();
-    static BOOL         IsExtHelpEnabled();
-    static BOOL         StartExtHelp();
-    static BOOL         EndExtHelp();
-    static BOOL         IsExtHelpActive();
+    static void 		EnableExtHelp();
+    static void 		DisableExtHelp();
+    static BOOL 		IsExtHelpEnabled();
+    static BOOL 		StartExtHelp();
+    static BOOL 		EndExtHelp();
+    static BOOL 		IsExtHelpActive();
 
-    static void         EnableBalloonHelp();
-    static void         DisableBalloonHelp();
-    static BOOL         IsBalloonHelpEnabled();
-    static BOOL         ShowBalloon( Window* pParent,
+    static void 		EnableBalloonHelp();
+    static void 		DisableBalloonHelp();
+    static BOOL 		IsBalloonHelpEnabled();
+    static BOOL 		ShowBalloon( Window* pParent,
                                      const Point& rScreenPos,
                                      const XubString& rHelpText );
-    static BOOL         ShowBalloon( Window* pParent,
+    static BOOL 		ShowBalloon( Window* pParent,
                                      const Point& rScreenPos,
                                      const Rectangle&,
                                      const XubString& rHelpText );
 
-    static void         EnableQuickHelp();
-    static void         DisableQuickHelp();
-    static BOOL         IsQuickHelpEnabled();
-    static BOOL         ShowQuickHelp( Window* pParent,
+    static void 		EnableQuickHelp();
+    static void 		DisableQuickHelp();
+    static BOOL 		IsQuickHelpEnabled();
+    static BOOL 		ShowQuickHelp( Window* pParent,
                                        const Rectangle& rScreenRect,
                                        const XubString& rHelpText,
                                        const XubString& rLongHelpText,
                                        USHORT nStyle = 0 );
-    static BOOL         ShowQuickHelp( Window* pParent,
+    static BOOL 		ShowQuickHelp( Window* pParent,
                                        const Rectangle& rScreenRect,
                                        const XubString& rHelpText,
                                        USHORT nStyle = 0 )
                             { return Help::ShowQuickHelp( pParent, rScreenRect, rHelpText, XubString(), nStyle ); }
 
-    static ULONG        ShowTip( Window* pParent,
+    static ULONG		ShowTip( Window* pParent,
                                  const Rectangle& rScreenRect,
                                  const XubString& rText, USHORT nStyle = 0 );
-    static void         HideTip( ULONG nId );
+    static void 		HideTip( ULONG nId );
 };
 
-#endif  // _SV_HELP_HXX
+#endif	// _SV_HELP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

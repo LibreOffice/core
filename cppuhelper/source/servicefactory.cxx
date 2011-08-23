@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -309,7 +309,7 @@ static void add_access_control_entries(
             context_values.push_back( entry );
         }
     }
-
+    
     // - ac prop: mode
     // { "off", "on", "dynamic-only", "single-user", "single-default-user" }
     entry.bLateInitService = false;
@@ -338,7 +338,7 @@ Reference< lang::XMultiComponentFactory > bootstrapInitialSF(
                 Reference< lang::XMultiServiceFactory >(),
                 Reference< registry::XRegistryKey >() ) ),
         UNO_QUERY );
-
+    
     // add initial bootstrap services
     static char const * ar[] = {
         "bootstrap.uno" SAL_DLLEXTENSION,
@@ -411,7 +411,7 @@ Reference< XComponentContext > bootstrapInitialContext(
             if (xKey.is())
             {
                 entry.bLateInitService = true;
-
+                
                 Sequence< Reference< registry::XRegistryKey > > keys(
                     xKey->openKeys() );
                 Reference< registry::XRegistryKey > const * pKeys =
@@ -612,7 +612,7 @@ static Reference< lang::XMultiComponentFactory > createImplServiceFactory(
     Reference< XComponentContext > xContext(
         bootstrapInitialContext(
             xSF, xRegistry, xRegistry, rBootstrapPath, bootstrap ) );
-
+    
     // initialize sf
     Reference< lang::XInitialization > xInit( xSF, UNO_QUERY );
     OSL_ASSERT( xInit.is() );
@@ -646,7 +646,7 @@ Reference< XComponentContext > SAL_CALL bootstrap_InitialComponentContext(
     Reference< XComponentContext > xContext(
         bootstrapInitialContext(
             xSF, xRegistry, xRegistry, rBootstrapPath, bootstrap ) );
-
+    
     // initialize sf
     Reference< lang::XInitialization > xInit( xSF, UNO_QUERY );
     OSL_ASSERT( xInit.is() );

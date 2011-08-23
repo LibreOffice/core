@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,11 +42,11 @@ class ScHFEditDlg : public SfxTabDialog
 {
     SvxNumType eNumType;
 public:
-            ScHFEditDlg( SfxViewFrame*      pFrame,
-                         Window*            pParent,
-                         const SfxItemSet&  rCoreSet,
-                         const String&      rPageStyle,
-                         USHORT             nResId = RID_SCDLG_HFEDIT );
+            ScHFEditDlg( SfxViewFrame*		pFrame,
+                         Window*			pParent,
+                         const SfxItemSet&	rCoreSet,
+                         const String&		rPageStyle,
+                         USHORT				nResId = RID_SCDLG_HFEDIT );
 
             ~ScHFEditDlg();
 

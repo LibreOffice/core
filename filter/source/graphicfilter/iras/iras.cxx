@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,16 +33,16 @@
 #include <vcl/bmpacc.hxx>
 #include <svtools/fltcall.hxx>
 
-#define RAS_TYPE_OLD            0x00000000      // supported formats by this filter
-#define RAS_TYPE_STANDARD       0x00000001
-#define RAS_TYPE_BYTE_ENCODED   0x00000002
-#define RAS_TYPE_RGB_FORMAT     0x00000003
+#define RAS_TYPE_OLD			0x00000000		// supported formats by this filter
+#define RAS_TYPE_STANDARD		0x00000001
+#define RAS_TYPE_BYTE_ENCODED	0x00000002
+#define RAS_TYPE_RGB_FORMAT		0x00000003
 
-#define RAS_COLOR_NO_MAP        0x00000000
-#define RAS_COLOR_RGB_MAP       0x00000001
-#define RAS_COLOR_RAW_MAP       0x00000002
+#define RAS_COLOR_NO_MAP		0x00000000
+#define RAS_COLOR_RGB_MAP		0x00000001
+#define RAS_COLOR_RAW_MAP		0x00000002
 
-#define SUNRASTER_MAGICNUMBER   0x59a66a95
+#define SUNRASTER_MAGICNUMBER	0x59a66a95
 
 //============================ RASReader ==================================
 
@@ -50,36 +50,36 @@ class RASReader {
 
 private:
 
-    SvStream*           mpRAS;                  // Die einzulesende RAS-Datei
+    SvStream*			mpRAS;					// Die einzulesende RAS-Datei
 
-    BOOL                mbStatus;
-    Bitmap              maBmp;
-    BitmapWriteAccess*  mpAcc;
-    sal_uInt32          mnWidth, mnHeight;      // Bildausmass in Pixeln
-    USHORT              mnDstBitsPerPix;
-    USHORT              mnDstColors;
-    sal_uInt32          mnDepth, mnImageDatSize, mnType;
-    sal_uInt32          mnColorMapType, mnColorMapSize;
-    BYTE                mnRepCount, mnRepVal;   // RLE Decoding
-    BOOL                mbPalette;
+    BOOL				mbStatus;
+    Bitmap				maBmp;
+    BitmapWriteAccess*	mpAcc;
+    sal_uInt32			mnWidth, mnHeight;		// Bildausmass in Pixeln
+    USHORT 				mnDstBitsPerPix;
+    USHORT				mnDstColors;
+    sal_uInt32			mnDepth, mnImageDatSize, mnType;
+    sal_uInt32			mnColorMapType, mnColorMapSize;
+    BYTE				mnRepCount, mnRepVal;	// RLE Decoding
+    BOOL				mbPalette;
 
-    BOOL                ImplReadBody();
-    BOOL                ImplReadHeader();
-    BYTE                ImplGetByte();
+    BOOL				ImplReadBody();
+    BOOL				ImplReadHeader();
+    BYTE				ImplGetByte();
 
 public:
                         RASReader();
                         ~RASReader();
-    BOOL                ReadRAS( SvStream & rRAS, Graphic & rGraphic );
+    BOOL				ReadRAS( SvStream & rRAS, Graphic & rGraphic );
 };
 
 //=================== Methoden von RASReader ==============================
 
 RASReader::RASReader() :
-    mbStatus    ( TRUE ),
-    mpAcc       ( NULL ),
-    mnRepCount  ( 0 ),
-    mbPalette   ( FALSE )
+    mbStatus	( TRUE ),
+    mpAcc		( NULL ),
+    mnRepCount	( 0 ),
+    mbPalette	( FALSE )
 {
 }
 
@@ -111,14 +111,14 @@ BOOL RASReader::ReadRAS( SvStream & rRAS, Graphic & rGraphic )
     if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == FALSE )
         return FALSE;
 
-    if ( mnDstBitsPerPix <= 8 )     // paletten bildchen
+    if ( mnDstBitsPerPix <= 8 )		// paletten bildchen
     {
-        if ( mnColorMapType == RAS_COLOR_RAW_MAP )      // RAW Colormap wird geskipped
+        if ( mnColorMapType == RAS_COLOR_RAW_MAP )		// RAW Colormap wird geskipped
         {
             ULONG nCurPos = mpRAS->Tell();
             mpRAS->Seek( nCurPos + mnColorMapSize );
         }
-        else if ( mnColorMapType == RAS_COLOR_RGB_MAP ) // RGB koennen wir auslesen
+        else if ( mnColorMapType == RAS_COLOR_RGB_MAP )	// RGB koennen wir auslesen
         {
             mnDstColors = (USHORT)( mnColorMapSize / 3 );
 
@@ -129,7 +129,7 @@ BOOL RASReader::ReadRAS( SvStream & rRAS, Graphic & rGraphic )
             {
                 mpAcc->SetPaletteEntryCount( mnDstColors );
                 USHORT  i;
-                BYTE    nRed[256], nGreen[256], nBlue[256];
+                BYTE	nRed[256], nGreen[256], nBlue[256];
                 for ( i = 0; i < mnDstColors; i++ ) *mpRAS >> nRed[ i ];
                 for ( i = 0; i < mnDstColors; i++ ) *mpRAS >> nGreen[ i ];
                 for ( i = 0; i < mnDstColors; i++ ) *mpRAS >> nBlue[ i ];
@@ -143,7 +143,7 @@ BOOL RASReader::ReadRAS( SvStream & rRAS, Graphic & rGraphic )
                 return FALSE;
 
         }
-        else if ( mnColorMapType != RAS_COLOR_NO_MAP )  // alles andere ist kein standard
+        else if ( mnColorMapType != RAS_COLOR_NO_MAP )	// alles andere ist kein standard
             return FALSE;
 
         if ( !mbPalette )
@@ -159,8 +159,8 @@ BOOL RASReader::ReadRAS( SvStream & rRAS, Graphic & rGraphic )
     }
     else
     {
-        if ( mnColorMapType != RAS_COLOR_NO_MAP )   // when graphic has more then 256 colors and a color map we skip
-        {                                           // the colormap
+        if ( mnColorMapType != RAS_COLOR_NO_MAP )	// when graphic has more then 256 colors and a color map we skip
+        {											// the colormap
             ULONG nCurPos = mpRAS->Tell();
             mpRAS->Seek( nCurPos + mnColorMapSize );
         }
@@ -209,7 +209,7 @@ BOOL RASReader::ImplReadHeader()
         case RAS_TYPE_OLD :
         case RAS_TYPE_STANDARD :
         case RAS_TYPE_RGB_FORMAT :
-        case RAS_TYPE_BYTE_ENCODED :            // this type will be supported later
+        case RAS_TYPE_BYTE_ENCODED :			// this type will be supported later
             break;
 
         default:
@@ -222,8 +222,8 @@ BOOL RASReader::ImplReadHeader()
 
 BOOL RASReader::ImplReadBody()
 {
-    ULONG   x, y;
-    BYTE    nDat = 0;
+    ULONG	x, y;
+    BYTE	nDat = 0;
     BYTE    nRed, nGreen, nBlue;
     switch ( mnDstBitsPerPix )
     {
@@ -239,7 +239,7 @@ BOOL RASReader::ImplReadBody()
                         sal::static_int_cast< BYTE >(
                             nDat >> ( ( x & 7 ) ^ 7 )) );
                 }
-                if (!( ( x - 1 ) & 0x8 ) ) ImplGetByte();       // WORD ALIGNMENT ???
+                if (!( ( x - 1 ) & 0x8 ) ) ImplGetByte();		// WORD ALIGNMENT ???
             }
             break;
 
@@ -251,7 +251,7 @@ BOOL RASReader::ImplReadBody()
                     nDat = ImplGetByte();
                     mpAcc->SetPixel ( y, x, nDat );
                 }
-                if ( x & 1 ) ImplGetByte();                     // WORD ALIGNMENT ???
+                if ( x & 1 ) ImplGetByte();						// WORD ALIGNMENT ???
             }
             break;
 
@@ -278,7 +278,7 @@ BOOL RASReader::ImplReadBody()
                             }
                             mpAcc->SetPixel ( y, x, BitmapColor( nRed, nGreen, nBlue ) );
                         }
-                        if ( x & 1 ) ImplGetByte();                     // WORD ALIGNMENT ???
+                        if ( x & 1 ) ImplGetByte();						// WORD ALIGNMENT ???
                     }
                     break;
 
@@ -287,7 +287,7 @@ BOOL RASReader::ImplReadBody()
                     {
                         for ( x = 0; x < mnWidth; x++ )
                         {
-                            nDat = ImplGetByte();               // pad byte > nil
+                            nDat = ImplGetByte();				// pad byte > nil
                             if ( mnType == RAS_TYPE_RGB_FORMAT )
                             {
                                 nRed = ImplGetByte();
@@ -339,7 +339,7 @@ BYTE RASReader::ImplGetByte()
             *mpRAS >> nRetVal;
             if ( nRetVal == 0 )
                 return 0x80;
-            mnRepCount = nRetVal    ;
+            mnRepCount = nRetVal	;
             *mpRAS >> mnRepVal;
             return mnRepVal;
         }

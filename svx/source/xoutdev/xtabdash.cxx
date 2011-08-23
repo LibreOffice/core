@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,10 +70,10 @@ using namespace rtl;
 
 #define GLOBALOVERFLOW
 
-sal_Unicode const pszExtDash[]  = {'s','o','d'};
-char const aChckDash[]  = { 0x04, 0x00, 'S','O','D','L'};   // < 5.2
-char const aChckDash0[] = { 0x04, 0x00, 'S','O','D','0'};   // = 5.2
-char const aChckXML[]   = { '<', '?', 'x', 'm', 'l' };      // = 6.0
+sal_Unicode const pszExtDash[] 	= {'s','o','d'};
+char const aChckDash[]  = { 0x04, 0x00, 'S','O','D','L'};	// < 5.2
+char const aChckDash0[] = { 0x04, 0x00, 'S','O','D','0'};	// = 5.2
+char const aChckXML[]   = { '<', '?', 'x', 'm', 'l' };		// = 6.0
 
 // -----------------
 // class XDashTable
@@ -163,9 +163,9 @@ class impXDashList
 {
 private:
     VirtualDevice*          mpVirtualDevice;
-    SdrModel*               mpSdrModel;
-    SdrObject*              mpBackgroundObject;
-    SdrObject*              mpLineObject;
+    SdrModel*				mpSdrModel;
+    SdrObject*			    mpBackgroundObject;
+    SdrObject*			    mpLineObject;
 
 public:
     impXDashList(VirtualDevice* pV, SdrModel* pM, SdrObject* pB, SdrObject* pL)
@@ -203,7 +203,7 @@ void XDashList::impCreate()
         pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
             : DRAWMODE_DEFAULT);
-
+    
         SdrModel* pSdrModel = new SdrModel();
         OSL_ENSURE(0 != pSdrModel, "XDashList: no SdrModel created!" );
         pSdrModel->GetItemPool().FreezeIdRanges();

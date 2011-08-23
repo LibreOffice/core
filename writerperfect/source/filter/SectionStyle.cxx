@@ -5,7 +5,7 @@
  *
  * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
  * Copyright (c) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
- *
+ * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -24,7 +24,7 @@
  *
  */
 
-/* "This product is not manufactured, approved, or supported by
+/* "This product is not manufactured, approved, or supported by 
  * Corel Corporation or Corel Corporation Limited."
  */
 #include "FilterInternal.hxx"
@@ -36,9 +36,9 @@
 double rint(double x);
 #endif /* _WIN32 */
 
-SectionStyle::SectionStyle(const WPXPropertyList &xPropList,
-                           const WPXPropertyListVector &xColumns,
-                           const char *psName) :
+SectionStyle::SectionStyle(const WPXPropertyList &xPropList, 
+                           const WPXPropertyListVector &xColumns, 
+                           const char *psName) : 
         Style(psName),
         mPropList(xPropList),
         mColumns(xColumns)
@@ -60,10 +60,10 @@ void SectionStyle::write(DocumentHandlerInterface *pHandler) const
     WPXPropertyList columnProps;
 
     if (mColumns.count() > 1)
-    {
+    {		
                 columnProps.insert("fo:column-count", (int)mColumns.count());
                 pHandler->startElement("style:columns", columnProps);
-
+    
                 WPXPropertyListVector::Iter i(mColumns);
                 for (i.rewind(); i.next();)
         {
@@ -80,7 +80,7 @@ void SectionStyle::write(DocumentHandlerInterface *pHandler) const
 
     pHandler->endElement("style:columns");
 
-
+        
     pHandler->endElement("style:section-properties");
 
     pHandler->endElement("style:style");

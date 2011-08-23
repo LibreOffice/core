@@ -61,10 +61,10 @@
  * Change History
  * 2005-01-28 create this file.
  ************************************************************************/
-#include    "xfcellstyle.hxx"
-#include    "xfborders.hxx"
-#include    "xffont.hxx"
-#include    "xfbgimage.hxx"
+#include	"xfcellstyle.hxx"
+#include	"xfborders.hxx"
+#include	"xffont.hxx"
+#include	"xfbgimage.hxx"
 
 
 XFCellStyle::XFCellStyle()
@@ -85,22 +85,22 @@ XFCellStyle::~XFCellStyle()
 }
 
 
-void    XFCellStyle::SetParentStyle(rtl::OUString parent)
+void	XFCellStyle::SetParentStyle(rtl::OUString parent)
 {
     m_strParentStyleName = parent;
 }
 
-void    XFCellStyle::SetFont(XFFont *pFont)
+void	XFCellStyle::SetFont(XFFont *pFont)
 {
     m_pFont = pFont;
 }
 
-void    XFCellStyle::SetIndent(double indent )
+void	XFCellStyle::SetIndent(double indent )
 {
     m_fTextIndent = indent;
 }
 
-void    XFCellStyle::SetMargins(double left, double right, double top, double bottom)
+void	XFCellStyle::SetMargins(double left, double right, double top, double bottom)
 {
     if( left != -1 )
         m_aMargin.SetLeft(left);
@@ -124,33 +124,33 @@ void XFCellStyle::SetPadding(double left, double right,double top, double bottom
         m_aPadding.SetBottom( bottom );
 }
 
-void    XFCellStyle::SetShadow(enumXFShadowPos pos, double offset, XFColor& color)
+void	XFCellStyle::SetShadow(enumXFShadowPos pos, double offset, XFColor& color)
 {
     m_aShadow.SetPosition(pos);
     m_aShadow.SetOffset(offset);
     m_aShadow.SetColor(color);
 }
 
-void    XFCellStyle::SetBackColor(XFColor& color)
+void	XFCellStyle::SetBackColor(XFColor& color)
 {
     m_aBackColor = color;
 }
 
-void    XFCellStyle::SetBackImage(XFBGImage *pImage)
+void	XFCellStyle::SetBackImage(XFBGImage *pImage)
 {
     if( m_pBackImage )
         delete m_pBackImage;
     m_pBackImage = pImage;
 }
 
-void    XFCellStyle::SetBorders(XFBorders *pBorders)
+void	XFCellStyle::SetBorders(XFBorders *pBorders)
 {
     if( m_pBorders )
         delete m_pBorders;
     m_pBorders = pBorders;
 }
 
-enumXFStyle XFCellStyle::GetStyleFamily()
+enumXFStyle	XFCellStyle::GetStyleFamily()
 {
     return enumXFStyleTableCell;
 }
@@ -158,14 +158,14 @@ enumXFStyle XFCellStyle::GetStyleFamily()
 /**
  *Affirm whether two XFCellStyle objects are equal.
  */
-sal_Bool    XFCellStyle::Equal(IXFStyle *pStyle)
+sal_Bool	XFCellStyle::Equal(IXFStyle *pStyle)
 {
     if( this == pStyle )
         return sal_True;
     if( !pStyle || pStyle->GetStyleFamily() != enumXFStyleTableCell )
         return sal_False;
 
-    XFCellStyle *pOther = static_cast<XFCellStyle*>(pStyle);
+    XFCellStyle	*pOther = static_cast<XFCellStyle*>(pStyle);
     if( !pOther )
         return sal_False;
 
@@ -240,7 +240,7 @@ sal_Bool    XFCellStyle::Equal(IXFStyle *pStyle)
 
 void XFCellStyle::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     rtl::OUString style = GetStyleName();
 
     pAttrList->Clear();

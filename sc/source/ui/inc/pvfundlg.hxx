@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -225,8 +225,8 @@ public:
 
     virtual short       Execute();
 
-    /**
-     * @return String internal name of the selected field.  Note that this may
+    /** 
+     * @return String internal name of the selected field.  Note that this may 
      *         be different from the name displayed in the dialog if the field
      *         has a layout name.
      */

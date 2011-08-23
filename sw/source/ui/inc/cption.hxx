@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,28 +68,28 @@ class SwCaptionDialog : public SvxStandardDialog
             : ComboBox( pParent, rResId )
         {}
 
-        virtual long    PreNotify( NotifyEvent& rNEvt );
+        virtual long 	PreNotify( NotifyEvent& rNEvt );
     };
 
-    FixedText    aTextText;
-    Edit         aTextEdit;
+    FixedText	 aTextText;
+    Edit		 aTextEdit;
     FixedLine    aSettingsFL;
-    FixedText    aCategoryText;
-    CategoryBox  aCategoryBox;
-    FixedText    aFormatText;
-    ListBox      aFormatBox;
-    //#i61007# order of captions
+    FixedText	 aCategoryText;
+    CategoryBox	 aCategoryBox;
+    FixedText	 aFormatText;
+    ListBox 	 aFormatBox;
+    //#i61007# order of captions 
     FixedText    aNumberingSeparatorFT;
     Edit         aNumberingSeparatorED;
     FixedText    aSepText;
     Edit         aSepEdit;
-    FixedText    aPosText;
-    ListBox      aPosBox;
-    OKButton     aOKButton;
+    FixedText	 aPosText;
+    ListBox 	 aPosBox;
+    OKButton	 aOKButton;
     CancelButton aCancelButton;
-    HelpButton   aHelpButton;
+    HelpButton 	 aHelpButton;
     PushButton   aAutoCaptionButton;
-    PushButton   aOptionButton;
+    PushButton	 aOptionButton;
 
     String       sNone;
 
@@ -101,11 +101,11 @@ class SwCaptionDialog : public SvxStandardDialog
 
     String       sCharacterStyle;
     String       sObjectName;
-    bool         bCopyAttributes;
+    bool		 bCopyAttributes;
     bool        bOrderNumberingFirst; //#i61007# order of captions
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    xNameAccess;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >         xNamed;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > 	xNameAccess;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >  		xNamed;
 
     DECL_LINK( SelectHdl, ListBox * );
     DECL_LINK( ModifyHdl, Edit * );
@@ -116,7 +116,7 @@ class SwCaptionDialog : public SvxStandardDialog
 
     void    DrawSample();
     void    CheckButtonWidth();
-    void    ApplyCaptionOrder(); //#i61007# order of captions
+    void    ApplyCaptionOrder(); //#i61007# order of captions 
 
 public:
      SwCaptionDialog( Window *pParent, SwView &rV );

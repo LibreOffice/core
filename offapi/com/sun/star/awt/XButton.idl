@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,56 +24,56 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XButton_idl__
-#define __com_sun_star_awt_XButton_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XActionListener_idl__
-#include <com/sun/star/awt/XActionListener.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
+#ifndef __com_sun_star_awt_XButton_idl__ 
+#define __com_sun_star_awt_XButton_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_awt_XActionListener_idl__ 
+#include <com/sun/star/awt/XActionListener.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module awt {  
+ 
+//============================================================================= 
+ 
 /** makes it possible to set the label of a button and to register for action events.
  */
 published interface XButton: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+        
     /** registers an event handler for button action events.
      */
-    [oneway] void addActionListener( [in] com::sun::star::awt::XActionListener l );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void addActionListener( [in] com::sun::star::awt::XActionListener l ); 
+ 
+    //------------------------------------------------------------------------- 
+        
     /** unregisters an event handler for button action events.
      */
-    [oneway] void removeActionListener( [in] com::sun::star::awt::XActionListener l );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void removeActionListener( [in] com::sun::star::awt::XActionListener l ); 
+ 
+    //------------------------------------------------------------------------- 
+        
     /** sets the label of the button.
      */
-    [oneway] void setLabel( [in] string Label );
-
-    //-------------------------------------------------------------------------
-
+    [oneway] void setLabel( [in] string Label ); 
+ 
+    //------------------------------------------------------------------------- 
+        
     /** sets a command string for pushing the button.
      */
-    [oneway] void setActionCommand( [in] string Command );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    [oneway] void setActionCommand( [in] string Command ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ TYPEINIT1(E3dCubeObj, E3dCompoundObject);
 \************************************************************************/
 
 E3dCubeObj::E3dCubeObj(E3dDefaultAttributes& rDefault, basegfx::B3DPoint aPos, const basegfx::B3DVector& r3DSize)
-:   E3dCompoundObject(rDefault)
+:	E3dCompoundObject(rDefault)
 {
     // Defaults setzen
     SetDefaultAttributes(rDefault);
@@ -67,7 +67,7 @@ E3dCubeObj::E3dCubeObj(E3dDefaultAttributes& rDefault, basegfx::B3DPoint aPos, c
 }
 
 E3dCubeObj::E3dCubeObj()
-:   E3dCompoundObject()
+:	E3dCompoundObject()
 {
     // Defaults setzen
     E3dDefaultAttributes aDefault;

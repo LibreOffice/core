@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -137,24 +137,24 @@ enum SdrObjKind {OBJ_NONE       = 0,  // Abstraktes Objekt (SdrObject)
                  OBJ_FRAME      =31,  // staendig aktives OLE (PlugIn-Frame oder sowas)
                  OBJ_UNO        =32,  // Universal Network Object im SvDraw-Obj eingepackt
                  OBJ_CUSTOMSHAPE=33,  // CustomShape
-                 OBJ_MEDIA      =34,  // Media shape
-                 OBJ_TABLE      =35,  // Table
+                 OBJ_MEDIA		=34,  // Media shape
+                 OBJ_TABLE		=35,  // Table
                  OBJ_MAXI};
 
-enum SdrUserCallType {SDRUSERCALL_MOVEONLY,         // Nur verschoben, Groesse unveraendert
-                      SDRUSERCALL_RESIZE,           // Groesse und evtl. auch Pos veraendert
-                      SDRUSERCALL_CHGATTR,          // Attribute veraendert. Moeglicherweise neue Groesse wg. Linienbreite
-                      SDRUSERCALL_DELETE,           // Obj gibt es gleich nicht mehr. Schon keine Attr mehr.
-                      SDRUSERCALL_COPY,             // Zuweisungsoperator gerufen. Kann alles geaendert sein
-                      SDRUSERCALL_INSERTED,         // In eine Objektliste (z.B. Page) eingefuegt
-                      SDRUSERCALL_REMOVED,          // Aus der Objektliste entfernt
-                      SDRUSERCALL_CHILD_MOVEONLY,   // Ein Child einer Gruppe hat sich veraendert
-                      SDRUSERCALL_CHILD_RESIZE,     // Ein Child einer Gruppe hat sich veraendert
-                      SDRUSERCALL_CHILD_CHGATTR,    // Ein Child einer Gruppe hat sich veraendert
-                      SDRUSERCALL_CHILD_DELETE,     // Ein Child einer Gruppe hat sich veraendert
-                      SDRUSERCALL_CHILD_COPY,       // Ein Child einer Gruppe hat sich veraendert
-                      SDRUSERCALL_CHILD_INSERTED,   // Ein Child einer Gruppe hat sich veraendert
-                      SDRUSERCALL_CHILD_REMOVED};   // Ein Child einer Gruppe hat sich veraendert
+enum SdrUserCallType {SDRUSERCALL_MOVEONLY,       	// Nur verschoben, Groesse unveraendert
+                      SDRUSERCALL_RESIZE,         	// Groesse und evtl. auch Pos veraendert
+                      SDRUSERCALL_CHGATTR,  		// Attribute veraendert. Moeglicherweise neue Groesse wg. Linienbreite
+                      SDRUSERCALL_DELETE,   		// Obj gibt es gleich nicht mehr. Schon keine Attr mehr.
+                      SDRUSERCALL_COPY,     		// Zuweisungsoperator gerufen. Kann alles geaendert sein
+                      SDRUSERCALL_INSERTED, 		// In eine Objektliste (z.B. Page) eingefuegt
+                      SDRUSERCALL_REMOVED,  		// Aus der Objektliste entfernt
+                      SDRUSERCALL_CHILD_MOVEONLY, 	// Ein Child einer Gruppe hat sich veraendert
+                      SDRUSERCALL_CHILD_RESIZE,   	// Ein Child einer Gruppe hat sich veraendert
+                      SDRUSERCALL_CHILD_CHGATTR,  	// Ein Child einer Gruppe hat sich veraendert
+                      SDRUSERCALL_CHILD_DELETE,   	// Ein Child einer Gruppe hat sich veraendert
+                      SDRUSERCALL_CHILD_COPY,     	// Ein Child einer Gruppe hat sich veraendert
+                      SDRUSERCALL_CHILD_INSERTED, 	// Ein Child einer Gruppe hat sich veraendert
+                      SDRUSERCALL_CHILD_REMOVED}; 	// Ein Child einer Gruppe hat sich veraendert
 
 /* nur voruebergehend, weil sonst MUSS-Aenderung */
 // #define nLayerID nLayerId
@@ -178,17 +178,17 @@ public:
 class SdrObjMacroHitRec
 {
 public:
-    Point                       aPos;
-    Point                       aDownPos;
-    OutputDevice*               pOut;
-    const SetOfByte*            pVisiLayer;
-    const SdrPageView*          pPageView;
-    USHORT                      nTol;
+    Point						aPos;
+    Point						aDownPos;
+    OutputDevice*				pOut;
+    const SetOfByte*			pVisiLayer;
+    const SdrPageView*			pPageView;
+    USHORT						nTol;
     bool                        bDown;
 
 public:
     SdrObjMacroHitRec()
-    :   pOut(NULL),
+    :	pOut(NULL),
         pVisiLayer(NULL),
         pPageView(NULL),
         nTol(0),
@@ -209,9 +209,9 @@ public:
 class SVX_DLLPUBLIC SdrObjUserData
 {
 protected:
-    UINT32                      nInventor;
-    UINT16                      nIdentifier;
-    UINT16                      nVersion;
+    UINT32						nInventor;
+    UINT16						nIdentifier;
+    UINT16						nVersion;
 
 private:
     SVX_DLLPRIVATE void operator=(const SdrObjUserData& rData);        // nicht implementiert
@@ -222,12 +222,12 @@ public:
     TYPEINFO();
 
     SdrObjUserData(UINT32 nInv, UINT16 nId, UINT16 nVer)
-    :   nInventor(nInv),
+    :	nInventor(nInv),
         nIdentifier(nId),
         nVersion(nVer)
     {}
     SdrObjUserData(const SdrObjUserData& rData)
-    :   nInventor(rData.nInventor),
+    :	nInventor(rData.nInventor),
         nIdentifier(rData.nIdentifier),
         nVersion(rData.nVersion)
     {}
@@ -251,11 +251,11 @@ public:
 
 class SdrObjUserDataList
 {
-    Container                   aList;
+    Container					aList;
 
 public:
     SdrObjUserDataList()
-    :   aList(1024,4,4)
+    :	aList(1024,4,4)
     {}
     ~SdrObjUserDataList() { Clear(); }
 
@@ -277,15 +277,15 @@ public:
 class SVX_DLLPUBLIC SdrObjGeoData
 {
 public:
-    Rectangle                   aBoundRect;
-    Point                       aAnchor;
-    SdrGluePointList*           pGPL;
-    BOOL                        bMovProt;
-    BOOL                        bSizProt;
-    BOOL                        bNoPrint;
-    BOOL                        bClosedObj;
-    bool                        mbVisible;
-    SdrLayerID                  mnLayerID;
+    Rectangle					aBoundRect;
+    Point						aAnchor;
+    SdrGluePointList*			pGPL;
+    BOOL						bMovProt;
+    BOOL						bSizProt;
+    BOOL						bNoPrint;
+    BOOL						bClosedObj;
+    bool						mbVisible;
+    SdrLayerID					mnLayerID;
 
 public:
     SdrObjGeoData();
@@ -301,22 +301,22 @@ public:
 
 class SdrObjPlusData
 {
-    friend class                SdrObject;
+    friend class				SdrObject;
 
 public:
-    SfxBroadcaster*             pBroadcast;    // Broadcaster, falls dieses Obj referenziert wird (bVirtObj=TRUE). Auch fuer Konnektoren etc.
-    SdrObjUserDataList*         pUserDataList; // applikationsspeziefische Daten
-    SdrGluePointList*           pGluePoints;   // Klebepunkte zum Ankleben von Objektverbindern
-    AutoTimer*                  pAutoTimer;
+    SfxBroadcaster*				pBroadcast;    // Broadcaster, falls dieses Obj referenziert wird (bVirtObj=TRUE). Auch fuer Konnektoren etc.
+    SdrObjUserDataList*			pUserDataList; // applikationsspeziefische Daten
+    SdrGluePointList*			pGluePoints;   // Klebepunkte zum Ankleben von Objektverbindern
+    AutoTimer*					pAutoTimer;
 
     // #i68101#
     // object name, title and description
-    String                      aObjName;
-    String                      aObjTitle;
-    String                      aObjDescription;
+    String						aObjName;
+    String						aObjTitle;
+    String						aObjDescription;
 
     // Name to be used by applications
-    XubString                   aHTMLName;
+    XubString					aHTMLName;
 
 public:
     TYPEINFO();
@@ -335,30 +335,30 @@ public:
 class SdrObjTransformInfoRec
 {
 public:
-    unsigned                    bSelectAllowed : 1;     // FALSE=Obj kann nicht selektiert werden
-    unsigned                    bMoveAllowed : 1;       // FALSE=Obj kann nicht verschoben werden
-    unsigned                    bResizeFreeAllowed : 1; // FALSE=Obj kann nicht frei resized werden
-    unsigned                    bResizePropAllowed : 1; // FALSE=Obj kann nichtmal proportional resized werden
-    unsigned                    bRotateFreeAllowed : 1; // FALSE=Obj kann nicht frei gedreht werden
-    unsigned                    bRotate90Allowed : 1;   // FALSE=Obj kann nichtmal im 90deg Raster gedreht werden
-    unsigned                    bMirrorFreeAllowed : 1; // FALSE=Obj kann nicht frei gespiegelt werden
-    unsigned                    bMirror45Allowed : 1;   // FALSE=Obj kann nichtmal ueber Achse im 45deg Raster gespiegelt werden
-    unsigned                    bMirror90Allowed : 1;   // FALSE=Obj kann ebenfalls nicht ueber Achse im 90deg Raster gespiegelt werden
-    unsigned                    bTransparenceAllowed : 1; // FALSE=Obj does not have an interactive transparence control
-    unsigned                    bGradientAllowed : 1; // FALSE=Obj dooes not have an interactive gradient control
-    unsigned                    bShearAllowed : 1;      // FALSE=Obj kann nicht verzerrt werden
-    unsigned                    bEdgeRadiusAllowed : 1;
-    unsigned                    bNoOrthoDesired : 1;    // TRUE bei Rect; ... FALSE bei BMP,MTF;
-    unsigned                    bNoContortion : 1;      // FALSE=Kein verzerren (bei Crook) moeglich (nur TRUE bei PathObj und Gruppierten PathObjs)
-    unsigned                    bCanConvToPath : 1;     // FALSE=Keine Konvertierung in PathObj moeglich
-    unsigned                    bCanConvToPoly : 1;     // FALSE=Keine Konvertierung in PolyObj moeglich
-    unsigned                    bCanConvToContour : 1;     // FALSE=no conversion down to whole contour possible
-    unsigned                    bCanConvToPathLineToArea : 1; // FALSE=Keine Konvertierung in PathObj moeglich mit Wandlung von LineToArea
-    unsigned                    bCanConvToPolyLineToArea : 1; // FALSE=Keine Konvertierung in PolyObj moeglich mit Wandlung von LineToArea
+    unsigned					bSelectAllowed : 1;     // FALSE=Obj kann nicht selektiert werden
+    unsigned					bMoveAllowed : 1;       // FALSE=Obj kann nicht verschoben werden
+    unsigned					bResizeFreeAllowed : 1; // FALSE=Obj kann nicht frei resized werden
+    unsigned					bResizePropAllowed : 1; // FALSE=Obj kann nichtmal proportional resized werden
+    unsigned					bRotateFreeAllowed : 1; // FALSE=Obj kann nicht frei gedreht werden
+    unsigned					bRotate90Allowed : 1;   // FALSE=Obj kann nichtmal im 90deg Raster gedreht werden
+    unsigned					bMirrorFreeAllowed : 1; // FALSE=Obj kann nicht frei gespiegelt werden
+    unsigned					bMirror45Allowed : 1;   // FALSE=Obj kann nichtmal ueber Achse im 45deg Raster gespiegelt werden
+    unsigned					bMirror90Allowed : 1;   // FALSE=Obj kann ebenfalls nicht ueber Achse im 90deg Raster gespiegelt werden
+    unsigned					bTransparenceAllowed : 1; // FALSE=Obj does not have an interactive transparence control
+    unsigned					bGradientAllowed : 1; // FALSE=Obj dooes not have an interactive gradient control
+    unsigned					bShearAllowed : 1;      // FALSE=Obj kann nicht verzerrt werden
+    unsigned					bEdgeRadiusAllowed : 1;
+    unsigned					bNoOrthoDesired : 1;    // TRUE bei Rect; ... FALSE bei BMP,MTF;
+    unsigned					bNoContortion : 1;      // FALSE=Kein verzerren (bei Crook) moeglich (nur TRUE bei PathObj und Gruppierten PathObjs)
+    unsigned					bCanConvToPath : 1;     // FALSE=Keine Konvertierung in PathObj moeglich
+    unsigned					bCanConvToPoly : 1;     // FALSE=Keine Konvertierung in PolyObj moeglich
+    unsigned					bCanConvToContour : 1;     // FALSE=no conversion down to whole contour possible
+    unsigned					bCanConvToPathLineToArea : 1; // FALSE=Keine Konvertierung in PathObj moeglich mit Wandlung von LineToArea
+    unsigned					bCanConvToPolyLineToArea : 1; // FALSE=Keine Konvertierung in PolyObj moeglich mit Wandlung von LineToArea
 
 public:
     SdrObjTransformInfoRec()
-    :   bSelectAllowed(TRUE),
+    :	bSelectAllowed(TRUE),
         bMoveAllowed(TRUE),
         bResizeFreeAllowed(TRUE),
         bResizePropAllowed(TRUE),
@@ -416,7 +416,7 @@ class SVX_DLLPUBLIC SdrObject: public SfxListener, public tools::WeakBase< SdrOb
 {
 private:
     // ObjectUser section
-    sdr::ObjectUserVector                                           maObjectUsers;
+    sdr::ObjectUserVector											maObjectUsers;
 
 public:
     void AddObjectUser(sdr::ObjectUser& rNewUser);
@@ -424,7 +424,7 @@ public:
 
     // BaseProperties section
 private:
-    sdr::properties::BaseProperties*                                mpProperties;
+    sdr::properties::BaseProperties*								mpProperties;
 protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 public:
@@ -433,7 +433,7 @@ public:
     ///////////////////////////////////////////////////////////////////////////////
     // #110094# DrawContact section
 private:
-    sdr::contact::ViewContact*                                      mpViewContact;
+    sdr::contact::ViewContact*										mpViewContact;
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 public:
@@ -443,71 +443,71 @@ public:
     void ActionChanged() const;
 
 private:
-    friend class                SdrObjListIter;
-    friend class                SdrVirtObj;
-    friend class                SdrRectObj;
+    friend class				SdrObjListIter;
+    friend class				SdrVirtObj;
+    friend class				SdrRectObj;
 
 protected:
-    Rectangle                   aOutRect;     // umschliessendes Rechteck fuer Paint (inkl. LineWdt, ...)
-    Point                       aAnchor;      // Ankerposition (Writer)
-    SdrObjList*                 pObjList;     // Liste, in dem das Obj eingefuegt ist.
-    SdrPage*                    pPage;
-    SdrModel*                   pModel;
-    SdrObjUserCall*             pUserCall;
-    SdrObjPlusData*             pPlusData;    // Broadcaster, UserData, Konnektoren, ... (Das ist der Bitsack)
+    Rectangle					aOutRect;     // umschliessendes Rechteck fuer Paint (inkl. LineWdt, ...)
+    Point						aAnchor;      // Ankerposition (Writer)
+    SdrObjList*					pObjList;     // Liste, in dem das Obj eingefuegt ist.
+    SdrPage*					pPage;
+    SdrModel*					pModel;
+    SdrObjUserCall*				pUserCall;
+    SdrObjPlusData*				pPlusData;    // Broadcaster, UserData, Konnektoren, ... (Das ist der Bitsack)
 
-    sal_uInt32                  nOrdNum;      // Rangnummer des Obj in der Liste
+    sal_uInt32					nOrdNum;      // Rangnummer des Obj in der Liste
 
     /** Position in the navigation order.  SAL_MAX_UINT32 when not used.
     */
     sal_uInt32                  mnNavigationPosition;
-    SdrLayerID                  mnLayerID;
+    SdrLayerID					mnLayerID;
 
     // Objekt zeigt nur auf ein Anderes
-    unsigned                    bVirtObj : 1;
-    unsigned                    bSnapRectDirty : 1;
-    unsigned                    bNetLock : 1;   // ni
-    unsigned                    bInserted : 1;  // nur wenn TRUE gibt's RepaintBroadcast & SetModify
-    unsigned                    bGrouped : 1;   // Member eines GroupObjektes?
+    unsigned					bVirtObj : 1;
+    unsigned					bSnapRectDirty : 1;
+    unsigned					bNetLock : 1;   // ni
+    unsigned					bInserted : 1;  // nur wenn TRUE gibt's RepaintBroadcast & SetModify
+    unsigned					bGrouped : 1;   // Member eines GroupObjektes?
 
     // Die folgende Flags werden gestreamt
-    unsigned                    bMovProt : 1; // If true, the position is protected
-    unsigned                    bSizProt : 1; // If true, the size is protected
-    unsigned                    bNoPrint : 1; // If true, the object is not printed.
-    unsigned                    mbVisible : 1; // If false, the object is not visible on screen (but maybe on printer, depending on bNoprint
+    unsigned					bMovProt : 1; // If true, the position is protected
+    unsigned					bSizProt : 1; // If true, the size is protected
+    unsigned					bNoPrint : 1; // If true, the object is not printed.
+    unsigned					mbVisible : 1; // If false, the object is not visible on screen (but maybe on printer, depending on bNoprint
     // Wenn bEmptyPresObj TRUE ist, handelt es sich um ein
     // Praesentationsobjekt, dem noch kein Inhalt zugewiesen
     // wurde. Default ist das Flag auf FALSE. Die Verwaltung
     // uebernimmt die Applikation. Im Zuweisungsoperator sowie
     // beim Clone wird das Flag nicht mitkopiert!
     // Das Flag ist persistent.
-    unsigned                    bEmptyPresObj : 1;     // Leeres Praesentationsobjekt (Draw)
+    unsigned					bEmptyPresObj : 1;     // Leeres Praesentationsobjekt (Draw)
 
     // TRUE=Objekt ist als Objekt der MasterPage nicht sichtbar
-    unsigned                    bNotVisibleAsMaster : 1;
+    unsigned					bNotVisibleAsMaster : 1;
 
     // TRUE=Es handelt sich hierbei um ein geschlossenes Objekt, also nicht Linie oder Kreisbogen ...
-    unsigned                    bClosedObj : 1;
+    unsigned					bClosedObj : 1;
 
-    unsigned                    bIsEdge : 1;
-    unsigned                    bIs3DObj : 1;
-    unsigned                    bMarkProt : 1;  // Markieren verboten. Persistent
-    unsigned                    bIsUnoObj : 1;
-    unsigned                    bNotMasterCachable : 1;
-
-    // #i25616#
-    unsigned                    mbLineIsOutsideGeometry : 1;
+    unsigned					bIsEdge : 1;
+    unsigned					bIs3DObj : 1;
+    unsigned					bMarkProt : 1;  // Markieren verboten. Persistent
+    unsigned					bIsUnoObj : 1;
+    unsigned					bNotMasterCachable : 1;
 
     // #i25616#
-    unsigned                    mbSupportTextIndentingOnLineWidthChange : 1;
+    unsigned					mbLineIsOutsideGeometry : 1;
+
+    // #i25616#
+    unsigned					mbSupportTextIndentingOnLineWidthChange : 1;
 
     // on import of OLE object from MS documents the BLIP size might be retrieved,
     // in this case the following member is initialized as nonempty rectangle
-    Rectangle                   maBLIPSizeRectangle;
+    Rectangle					maBLIPSizeRectangle;
 
     // global static ItemPool for not-yet-insetred items
 private:
-    static SdrItemPool*         mpGlobalItemPool;
+    static SdrItemPool*			mpGlobalItemPool;
 public:
     static SdrItemPool& GetGlobalDrawObjectItemPool();
 private:
@@ -655,7 +655,7 @@ public:
         Use SdrObjList::SetObjectNavigationPosition() instead.
     */
     void SetNavigationPosition (const sal_uInt32 nPosition);
-
+    
     const AutoTimer* GetAutoTimer() const { return pPlusData!=NULL ? pPlusData->pAutoTimer : NULL; }
     AutoTimer* GetAutoTimer() { return pPlusData!=NULL ? pPlusData->pAutoTimer : NULL; }
     AutoTimer* ForceAutoTimer();
@@ -815,7 +815,7 @@ public:
     /** the defaul is to set the logic rect to the given rectangle rMaxRect. If the shape
         has an intrinsic aspect ratio it may set the logic rect so the aspect
         ratio is kept but still inside the rectangle rMaxRect.
-
+        
         If bShrinkOnly is set to true, the size of the current logic rect will not
         be changed if it is smaller than the given rectangle rMaxRect. */
     virtual void AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false );
@@ -1156,17 +1156,17 @@ private:
 class SVX_DLLPUBLIC SdrObjFactory
 {
 public:
-    UINT32                      nInventor;
-    UINT16                      nIdentifier;
+    UINT32						nInventor;
+    UINT16						nIdentifier;
 
     // fuer MakeNewObj():
-    SdrPage*                    pPage;
-    SdrModel*                   pModel;
-    SdrObject*                  pNewObj;
+    SdrPage*					pPage;
+    SdrModel*					pModel;
+    SdrObject*					pNewObj;
 
     // fuer MakeNewObjUserData():
-    SdrObject*                  pObj;
-    SdrObjUserData*             pNewData;
+    SdrObject*					pObj;
+    SdrObjUserData*				pNewData;
 
 private:
     SVX_DLLPRIVATE SdrObjFactory(UINT32 nInvent, UINT16 nIdent, SdrPage* pNewPage, SdrModel* pNewModel);

@@ -61,7 +61,7 @@
  * Change History
  * 2004-12-23 create this file.
  ************************************************************************/
-#include    "xfshadow.hxx"
+#include	"xfshadow.hxx"
 
 XFShadow::XFShadow():m_aColor(128,128,0)
 {
@@ -75,8 +75,8 @@ XFShadow::~XFShadow()
 
 rtl::OUString XFShadow::ToString()
 {
-    rtl::OUString   buf;
-    rtl::OUString   strOff = DoubleToOUString(m_fOffset);
+    rtl::OUString	buf;
+    rtl::OUString	strOff = DoubleToOUString(m_fOffset);
 
     buf = m_aColor.ToString();
     switch(m_ePosition)
@@ -100,15 +100,15 @@ rtl::OUString XFShadow::ToString()
     return buf;
 }
 
-void    XFShadow::Reset()
+void	XFShadow::Reset()
 {
     m_ePosition = enumXFShadowNone;
     m_fOffset = 0;
 }
 
-void    XFShadow::ToXml(IXFStream *pStrm)
+void	XFShadow::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
     if( m_ePosition == enumXFShadowNone )
         return;
     else

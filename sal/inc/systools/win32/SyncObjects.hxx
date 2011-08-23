@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,14 +37,14 @@
 #include <windows.h>
 
 //------------------------------------------------------------------------
-// a simple helper template for automatic locking/unlocking
+// a simple helper template for automatic locking/unlocking 
 //------------------------------------------------------------------------
 
 template< class LOCK >
 class CLockGuard
 {
 public:
-    CLockGuard( LOCK* aLock ) :
+    CLockGuard( LOCK* aLock ) : 
         m_pLock( aLock )
     {
         m_pLock->Lock( );
@@ -73,7 +73,7 @@ public:
 };
 
 //------------------------------------------------------------------------
-// if no synchronization is necessary this class will be used
+// if no synchronization is necessary this class will be used 
 // declaring the functions as inline safes runtime overhead
 //------------------------------------------------------------------------
 

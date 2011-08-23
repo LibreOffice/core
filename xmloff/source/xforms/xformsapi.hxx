@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> lcl_createXF
 
 com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> lcl_createXFormsBinding();
 
-void lcl_addXFormsModel(
+void lcl_addXFormsModel( 
     const com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xDocument,
     const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xModel );
 
@@ -59,13 +59,13 @@ com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> lcl_findXFor
 
 com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> lcl_findXFormsSubmission( com::sun::star::uno::Reference<com::sun::star::frame::XModel>&, const rtl::OUString& );
 
-void lcl_setValue(
+void lcl_setValue( 
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xPropSet,
     const rtl::OUString& rName,
     const com::sun::star::uno::Any rAny );
 
 template<typename T>
-void lcl_setValue(
+void lcl_setValue( 
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xPropSet,
     const rtl::OUString& rName,
     T& aValue )
@@ -76,17 +76,17 @@ void lcl_setValue(
 
 com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> lcl_getXFormsModel( const com::sun::star::uno::Reference<com::sun::star::frame::XModel>& );
 
-sal_uInt16 lcl_getTypeClass(
+sal_uInt16 lcl_getTypeClass( 
     const com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
     const rtl::OUString& rXMLName );
 
-rtl::OUString lcl_getTypeName(
+rtl::OUString lcl_getTypeName( 
     const com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
     const rtl::OUString& rXMLName );
 
-rtl::OUString lcl_getBasicTypeName(
+rtl::OUString lcl_getBasicTypeName( 
     const com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
     const rtl::OUString& rXMLName );

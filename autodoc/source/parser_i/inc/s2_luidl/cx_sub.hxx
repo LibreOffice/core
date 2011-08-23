@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,29 +49,29 @@ class Token;
 class Cx_Base : public ::TkpContext
 {
   public:
-    virtual bool        PassNewToken();
+    virtual bool		PassNewToken();
     virtual TkpContext &
                         FollowUpContext();
   protected:
     // LIFECYCLE
                         Cx_Base(
-                            Token_Receiver &    o_rReceiver,
-                            TkpContext &        i_rFollowUpContext )
-                                                :   rReceiver(o_rReceiver),
+                            Token_Receiver &	o_rReceiver,
+                            TkpContext &		i_rFollowUpContext )
+                                                : 	rReceiver(o_rReceiver),
                                                     pFollowUpContext(&i_rFollowUpContext),
                                                     pNewToken()
                                                     {}
   protected:
-    void                SetToken(
-                            DYN Token *         let_dpToken )
+    void				SetToken(
+                            DYN Token *			let_dpToken )
                                                 { pNewToken = let_dpToken; }
-    Token_Receiver &    Receiver()              { return rReceiver; }
+    Token_Receiver &	Receiver()              { return rReceiver; }
 
   private:
     // DATA
-    Token_Receiver &    rReceiver;
-    TkpContext *        pFollowUpContext;
-    Dyn<Token>          pNewToken;
+    Token_Receiver &	rReceiver;
+    TkpContext *		pFollowUpContext;
+    Dyn<Token>			pNewToken;
 };
 
 
@@ -84,44 +84,44 @@ class Context_MLComment : public Cx_Base
 {
   public:
                         Context_MLComment(
-                            Token_Receiver &    o_rReceiver,
-                            TkpContext &        i_rFollowUpContext )
-                                                :   Cx_Base(o_rReceiver, i_rFollowUpContext) {}
-    virtual void        ReadCharChain(
-                            CharacterSource &   io_rText );
+                            Token_Receiver &	o_rReceiver,
+                            TkpContext &		i_rFollowUpContext )
+                                                : 	Cx_Base(o_rReceiver, i_rFollowUpContext) {}
+    virtual void		ReadCharChain(
+                            CharacterSource &	io_rText );
 };
 
 class Context_SLComment : public Cx_Base
 {
   public:
                         Context_SLComment(
-                            Token_Receiver &    o_rReceiver,
-                            TkpContext &        i_rFollowUpContext )
-                                                :   Cx_Base(o_rReceiver, i_rFollowUpContext) {}
-    virtual void        ReadCharChain(
-                            CharacterSource &   io_rText );
+                            Token_Receiver &	o_rReceiver,
+                            TkpContext &		i_rFollowUpContext )
+                                                : 	Cx_Base(o_rReceiver, i_rFollowUpContext) {}
+    virtual void		ReadCharChain(
+                            CharacterSource &	io_rText );
 };
 
 class Context_Praeprocessor : public Cx_Base
 {
   public:
                         Context_Praeprocessor(
-                            Token_Receiver &    o_rReceiver,
-                            TkpContext &        i_rFollowUpContext )
-                                                :   Cx_Base(o_rReceiver, i_rFollowUpContext) {}
-    virtual void        ReadCharChain(
-                            CharacterSource &   io_rText );
+                            Token_Receiver &	o_rReceiver,
+                            TkpContext &		i_rFollowUpContext )
+                                                : 	Cx_Base(o_rReceiver, i_rFollowUpContext) {}
+    virtual void		ReadCharChain(
+                            CharacterSource &	io_rText );
 };
 
 class Context_Assignment : public Cx_Base
 {
   public:
                         Context_Assignment(
-                            Token_Receiver &    o_rReceiver,
-                            TkpContext &        i_rFollowUpContext )
-                                                :   Cx_Base(o_rReceiver, i_rFollowUpContext) {}
-    virtual void        ReadCharChain(
-                            CharacterSource &   io_rText );
+                            Token_Receiver &	o_rReceiver,
+                            TkpContext &		i_rFollowUpContext )
+                                                : 	Cx_Base(o_rReceiver, i_rFollowUpContext) {}
+    virtual void		ReadCharChain(
+                            CharacterSource &	io_rText );
 };
 
 

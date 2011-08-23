@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -179,7 +179,7 @@ Directory::GetContainedDirectories( StringVector & o_rResult ) const
 
 void
 Directory::GetContainedFiles( StringVector &    o_rResult,
-                              const char *      i_sFilter,
+                              const char *	    i_sFilter,
                               E_Recursivity     i_eRecursivity ) const
 {
     StreamStr       sNew(240);
@@ -203,7 +203,7 @@ Directory::GetContainedFiles( StringVector &    o_rResult,
         sNew << aEntry.name;
         String sNewAsString( sNew.c_str() );
         o_rResult.push_back(sNewAsString);
-    }   // end for
+    }	// end for
 
     _findclose(hFile);
     if ( i_eRecursivity == flat )
@@ -256,7 +256,7 @@ Directory::GetContainedDirectories( StringVector & o_rResult ) const
 
     DIR *           pDir = opendir( StrPath() );
     dirent *        pEntry = 0;
-    struct stat     aEntryStatus;
+    struct stat 	aEntryStatus;
 
     while ( (pEntry = readdir(pDir)) != 0 )
     {
@@ -270,13 +270,13 @@ Directory::GetContainedDirectories( StringVector & o_rResult ) const
             String sNew2(pEntry->d_name);
             o_rResult.push_back(sNew2);
         }   // endif (aEntry.attrib == _A_SUBDIR)
-    }   // end while
+    }	// end while
     closedir( pDir );
 }
 
 void
 Directory::GetContainedFiles( StringVector &    o_rResult,
-                              const char *      i_sFilter,
+                              const char *	    i_sFilter,
                               E_Recursivity     i_eRecursivity ) const
 {
     StreamStr       sNew(240);
@@ -289,7 +289,7 @@ Directory::GetContainedFiles( StringVector &    o_rResult,
 
     DIR *           pDir = opendir( StrPath() );
     dirent *        pEntry = 0;
-    struct stat     aEntryStatus;
+    struct stat 	aEntryStatus;
 
     while ( (pEntry = readdir(pDir)) != 0 )
     {
@@ -313,7 +313,7 @@ Directory::GetContainedFiles( StringVector &    o_rResult,
         sNew << pEntry->d_name;
         String sNewAsString( sNew.c_str() );
         o_rResult.push_back(sNewAsString);
-    }   // end while
+    }	// end while
 
     closedir( pDir );
     if ( i_eRecursivity == flat )

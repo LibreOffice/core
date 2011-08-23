@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,15 +34,15 @@
 
 module com { module sun { module star { module script {
 //==============================================================================
-/**
+/** 
     An object supporting this interface indicates to interested
     parties or clients the name of the default method for
-    this object.
-    <p>For example where ExampleObject is an instance of an Object that
-    supports this interface which returns the default method name
-    "defaultMethod".A scripting engine could use this information to support
-    syntax like <p>"ExampleObject( Param1 .... ParamN )"</p>
-    which would be equivalent to writing
+    this object. 
+    <p>For example where ExampleObject is an instance of an Object that 
+    supports this interface which returns the default method name 
+    "defaultMethod".A scripting engine could use this information to support 
+    syntax like <p>"ExampleObject( Param1 .... ParamN )"</p> 
+    which would be equivalent to writing 
     <p>"ExampleObject.defaultMethod( Param1 ... ParamN )"</p>
 */
 interface XDefaultMethod : ::com::sun::star::uno::XInterface

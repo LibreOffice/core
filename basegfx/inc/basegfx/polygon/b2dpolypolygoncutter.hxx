@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ namespace basegfx
         // it's depth is increased when inside a polygon, decreased when inside a hole. The result is a depth
         // which e.g. is -1 for holes outside everything, 1 for a polygon covered by another polygon and zero
         // for e.g. holes in a polygon or polygons outside everythig else.
-        // In the 2nd step, all polygons with depth other than zero are removed. If bKeepAboveZero is used,
+        // In the 2nd step, all polygons with depth other than zero are removed. If bKeepAboveZero is used, 
         // all polygons < 1 are removed. The bKeepAboveZero mode is useful for clipping, e.g. just append
         // one polygon to another and use this mode -> only parts where two polygons overlapped will be kept.
         // In combination with correct orientation of the input orientations and the SolveCrossover calls this

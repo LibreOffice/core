@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,39 +69,39 @@ class SvxGeneralTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 private:
     FixedLine           aAddrFrm;
-    FixedText           aCompanyLbl;
+    FixedText 			aCompanyLbl;
     SvxUserEdit         aCompanyEdit;
-    FixedText           aNameLbl;
-    FixedText           aNameLblRuss;
-    FixedText           aNameLblEastern;
+    FixedText 			aNameLbl;
+    FixedText 			aNameLblRuss;
+    FixedText 			aNameLblEastern;
     SvxUserEdit         aFirstName;
     SvxUserEdit         aFatherName;
     SvxUserEdit         aName;
     SvxUserEdit         aShortName;
-    FixedText           aStreetLbl;
-    FixedText           aStreetLblRuss;
+    FixedText 			aStreetLbl;
+    FixedText 			aStreetLblRuss;
     SvxUserEdit         aStreetEdit;
     SvxUserEdit         aApartmentNrEdit;
-    FixedText           aCityLbl;
+    FixedText 			aCityLbl;
     SvxUserEdit         aPLZEdit;
     SvxUserEdit         aCityEdit;
     SvxUserEdit         aUsCityEdit;
     SvxUserEdit         aUsStateEdit;
     SvxUserEdit         aUsZipEdit;
-    FixedText           aCountryLbl;
+    FixedText			aCountryLbl;
     SvxUserEdit         aCountryEdit;
-    FixedText           aTitlePosLbl;
+    FixedText 			aTitlePosLbl;
     SvxUserEdit         aTitleEdit;
     SvxUserEdit         aPositionEdit;
-    FixedText           aPhoneLbl;
+    FixedText 			aPhoneLbl;
     SvxUserEdit         aTelPrivEdit;
     SvxUserEdit         aTelCompanyEdit;
-    FixedText           aFaxMailLbl;
+    FixedText 			aFaxMailLbl;
     SvxUserEdit         aFaxEdit;
     SvxUserEdit         aEmailEdit;
-    CheckBox            aUseDataCB;
+    CheckBox			aUseDataCB;
 
-    GeneralTabPage_Impl*    pImpl;
+    GeneralTabPage_Impl*	pImpl;
 
 #ifdef _SVX_OPTGENRL_CXX
     DECL_LINK( ModifyHdl_Impl, Edit * );
@@ -111,16 +111,16 @@ private:
 #endif
 
 protected:
-    virtual int         DeactivatePage( SfxItemSet* pSet );
+    virtual int			DeactivatePage( SfxItemSet* pSet );
 
 public:
     SvxGeneralTabPage( Window* pParent, const SfxItemSet& rSet );
     ~SvxGeneralTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 };
 
 #endif // #ifndef _SVX_CUIOPTGENRL_HXX

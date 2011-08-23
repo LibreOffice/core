@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ namespace comphelper
 
     class OMutexGuard
     {
-        IMutex* m_pMutex;
+        IMutex*	m_pMutex;
     public:
         inline OMutexGuard( IMutex* _pMutex )
             :m_pMutex( _pMutex )
@@ -86,9 +86,9 @@ namespace comphelper
     //=====================================================================
 
     class OContextHelper_Impl;
-    typedef ::cppu::WeakAggComponentImplHelper2 <   ::com::sun::star::accessibility::XAccessibleContext,
+    typedef	::cppu::WeakAggComponentImplHelper2	<	::com::sun::star::accessibility::XAccessibleContext,
                                                     ::com::sun::star::accessibility::XAccessibleEventBroadcaster
-                                                >   OAccessibleContextHelper_Base;
+                                                >	OAccessibleContextHelper_Base;
 
     /** helper class for implementing an AccessibleContext
     */
@@ -97,7 +97,7 @@ namespace comphelper
                 ,public OAccessibleContextHelper_Base
     {
     private:
-        OContextHelper_Impl*    m_pImpl;
+        OContextHelper_Impl*	m_pImpl;
 
     protected:
         OAccessibleContextHelper( );
@@ -144,7 +144,7 @@ namespace comphelper
             XAccessible, we can compare it with all the children, instead of asking all children for their
             context and comparing this context with ourself.</p>
         */
-        void    lateInit( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxAccessible );
+        void	lateInit( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxAccessible );
 
         /** retrieves the creator previously set with <method>lateInit</method>
         */
@@ -158,7 +158,7 @@ namespace comphelper
             <p>To be used in derived classes which do not supply the external lock themself, but instead get
             them passed from own derivees (or clients).</p>
         */
-        void    forgetExternalLock();
+        void	forgetExternalLock();
 
     public:
         // XAccessibleEventBroadcaster
@@ -201,9 +201,9 @@ namespace comphelper
         };
 
         // ensures that the object is alive
-        inline  void            ensureAlive( const OAccessControl& ) const SAL_THROW( ( ::com::sun::star::lang::DisposedException ) );
-        inline  IMutex*         getExternalLock( const OAccessControl& );
-        inline  ::osl::Mutex&   GetMutex( const OAccessControl& );
+        inline	void			ensureAlive( const OAccessControl& ) const SAL_THROW( ( ::com::sun::star::lang::DisposedException ) );
+        inline	IMutex*			getExternalLock( const OAccessControl& );
+        inline	::osl::Mutex&	GetMutex( const OAccessControl& );
 
     protected:
         // OComponentHelper
@@ -213,15 +213,15 @@ namespace comphelper
         // helper
         /** notifies all AccessibleEventListeners of a certain event
 
-        @precond    not too be called with our mutex locked
-        @param  _nEventId
+        @precond	not too be called with our mutex locked
+        @param	_nEventId
             the id of the even. See AccessibleEventType
-        @param  _rOldValue
+        @param	_rOldValue
             the old value to be notified
-        @param  _rNewValue
+        @param	_rNewValue
             the new value to be notified
         */
-        virtual void SAL_CALL   NotifyAccessibleEvent(
+        virtual void SAL_CALL	NotifyAccessibleEvent(
                     const sal_Int16 _nEventId,
                     const ::com::sun::star::uno::Any& _rOldValue,
                     const ::com::sun::star::uno::Any& _rNewValue
@@ -232,16 +232,16 @@ namespace comphelper
 
             Can even be called with our mutex locked.
 
-        @param  _nEventId
+        @param	_nEventId
             the id of the even. See AccessibleEventType
-        @param  _rOldValue
+        @param	_rOldValue
             the old value to be notified
-        @param  _rNewValue
+        @param	_rNewValue
             the new value to be notified
         @param  _rBuffer
             the buffer that records the event
         */
-        virtual void SAL_CALL   BufferAccessibleEvent(
+        virtual void SAL_CALL	BufferAccessibleEvent(
                     const sal_Int16 _nEventId,
                     const ::com::sun::star::uno::Any& _rOldValue,
                     const ::com::sun::star::uno::Any& _rNewValue,
@@ -250,15 +250,15 @@ namespace comphelper
 
         // life time control
         /// checks whether the object is alive (returns <TRUE/> then) or disposed
-        sal_Bool    isAlive() const;
+        sal_Bool	isAlive() const;
         /// checks for beeing alive. If the object is already disposed (i.e. not alive), an exception is thrown.
-        void        ensureAlive() const SAL_THROW( ( ::com::sun::star::lang::DisposedException ) );
+        void		ensureAlive() const SAL_THROW( ( ::com::sun::star::lang::DisposedException ) );
 
         /** ensures that the object is disposed.
         @precond
             to be called from within the destructor of your derived class only!
         */
-        void        ensureDisposed( );
+        void		ensureDisposed( );
 
         /** shortcut for retrieving the context of the parent (returned by getAccessibleParent)
         */
@@ -266,26 +266,26 @@ namespace comphelper
                     implGetParentContext() SAL_THROW( ( ::com::sun::star::uno::RuntimeException ) );
 
         // access to the base class' broadcast helper/mutex
-        ::cppu::OBroadcastHelper&       GetBroadcastHelper()        { return rBHelper; }
-        const ::cppu::OBroadcastHelper& GetBroadcastHelper() const  { return rBHelper; }
-        ::osl::Mutex&                   GetMutex()                  { return m_aMutex; }
-        IMutex*                         getExternalLock( );
+        ::cppu::OBroadcastHelper&		GetBroadcastHelper()		{ return rBHelper; }
+        const ::cppu::OBroadcastHelper&	GetBroadcastHelper() const	{ return rBHelper; }
+        ::osl::Mutex&					GetMutex()					{ return m_aMutex; }
+        IMutex*							getExternalLock( );
     };
 
     //---------------------------------------------------------------------
-    inline  void OAccessibleContextHelper::ensureAlive( const OAccessControl& ) const SAL_THROW( ( ::com::sun::star::lang::DisposedException ) )
+    inline	void OAccessibleContextHelper::ensureAlive( const OAccessControl& ) const SAL_THROW( ( ::com::sun::star::lang::DisposedException ) )
     {
         ensureAlive();
     }
 
     //---------------------------------------------------------------------
-    inline  IMutex* OAccessibleContextHelper::getExternalLock( const OAccessControl& )
+    inline	IMutex* OAccessibleContextHelper::getExternalLock( const OAccessControl& )
     {
         return getExternalLock();
     }
 
     //---------------------------------------------------------------------
-    inline  ::osl::Mutex& OAccessibleContextHelper::GetMutex( const OAccessControl& )
+    inline	::osl::Mutex& OAccessibleContextHelper::GetMutex( const OAccessControl& )
     {
         return GetMutex();
     }
@@ -293,7 +293,7 @@ namespace comphelper
     //=====================================================================
     //= OContextEntryGuard
     //=====================================================================
-    typedef ::osl::ClearableMutexGuard  OContextEntryGuard_Base;
+    typedef ::osl::ClearableMutexGuard	OContextEntryGuard_Base;
     /** helper class for guarding the entry into OAccessibleContextHelper methods.
 
         <p>The class has two responsibilities:
@@ -369,7 +369,7 @@ namespace comphelper
     }
 
 //.........................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.........................................................................
 
 #endif // COMPHELPER_ACCESSIBLE_CONTEXT_HELPER_HXX

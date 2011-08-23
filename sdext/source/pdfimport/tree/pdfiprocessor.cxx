@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,9 +63,9 @@ namespace pdfi
 {
 
  PDFIProcessor::PDFIProcessor( const uno::Reference< task::XStatusIndicator >& xStat ,
-            com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >  xContext) :
+            com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >  xContext) : 
 
-    m_xContext(xContext),
+    m_xContext(xContext), 
     fYPrevTextPosition(-10000.0),
     fPrevTextHeight(0.0),
     fXPrevTextPosition(0.0),
@@ -457,32 +457,32 @@ void PDFIProcessor::drawGlyphLine( const rtl::OUString&             rGlyphs,
     {
         processGlyphLine();
     }
-
+   
     CharGlyph aGlyph;
-
+    
     aGlyph.setGlyph ( rGlyphs );
     aGlyph.setRect  ( rRect );
     aGlyph.setFontMatrix ( rFontMatrix );
     aGlyph.setGraphicsContext ( getCurrentContext() );
     getGCId(getCurrentContext());
     aGlyph.setCurElement( m_pCurElement );
-
+    
     aGlyph.setYPrevGlyphPosition( fYPrevTextPosition );
     aGlyph.setXPrevGlyphPosition( fXPrevTextPosition );
     aGlyph.setPrevGlyphHeight  ( fPrevTextHeight );
     aGlyph.setPrevGlyphWidth   ( fPrevTextWidth );
-
+    
     m_GlyphsList.push_back( aGlyph );
-
+    
     fYPrevTextPosition  = rRect.Y1;
     fXPrevTextPosition  = rRect.X2;
     fPrevTextHeight     = rRect.Y2-rRect.Y1;
     fPrevTextWidth      = rRect.X2-rRect.X1;
-
+    
     if( !m_bIsWhiteSpaceInLine )
     {
         static rtl::OUString tempWhiteSpaceStr( 0x20 );
-        static rtl::OUString tempWhiteSpaceNonBreakingStr( 0xa0 );
+        static rtl::OUString tempWhiteSpaceNonBreakingStr( 0xa0 ); 
         m_bIsWhiteSpaceInLine=(rGlyphs.equals( tempWhiteSpaceStr ) || rGlyphs.equals( tempWhiteSpaceNonBreakingStr ));
     }
 }
@@ -579,7 +579,7 @@ void PDFIProcessor::setupImage(ImageId nImage)
     // TODDO(F4): correcting rotation when fShearX != 0 ?
     if( fRotate != 0.0 )
     {
-
+        
         // try to create a Transformation that corrects for the wrong rotation
         aTrans.identity();
         aTrans.scale( aScale.getX(), aScale.getY() );
@@ -587,7 +587,7 @@ void PDFIProcessor::setupImage(ImageId nImage)
 
         basegfx::B2DRange aRect( 0, 0, 1, 1 );
         aRect.transform( aTrans );
-
+        
         // TODO(F3) treat translation correctly
         // the corrections below work for multiples of 90 degree
         // which is a common case (landscape/portrait/seascape)
@@ -609,7 +609,7 @@ void PDFIProcessor::setupImage(ImageId nImage)
         aTrans.translate( aTranslation.getX(),
                           aTranslation.getY() );
     }
-
+    
     bool bMirrorVertical = aScale.getY() > 0;
 
     // transform unit rect to determine view box
@@ -625,7 +625,7 @@ void PDFIProcessor::setupImage(ImageId nImage)
     pFrame->w = pImageElement->w = aRect.getWidth();
     pFrame->h = pImageElement->h = aRect.getHeight();
     pFrame->ZOrder = m_nNextZOrder++;
-
+    
     if( bMirrorVertical )
     {
         pFrame->MirrorVertical = pImageElement->MirrorVertical = true;
@@ -802,7 +802,7 @@ void PDFIProcessor::startPage( const geometry::RealSize2D& rSize )
 {
     // initial clip is to page bounds
     getCurrentContext().Clip = basegfx::B2DPolyPolygon(
-        basegfx::tools::createPolygonFromRect(
+        basegfx::tools::createPolygonFromRect( 
             basegfx::B2DRange( 0, 0, rSize.Width, rSize.Height )));
 
     sal_Int32 nNextPageNr = m_pCurPage ? m_pCurPage->PageNumber+1 : 1;
@@ -815,10 +815,10 @@ void PDFIProcessor::startPage( const geometry::RealSize2D& rSize )
     m_pCurPage = m_pElFactory->createPageElement(m_pDocument.get(), nNextPageNr);
     m_pCurElement = m_pCurPage;
     m_pCurPage->w = rSize.Width;
-    m_pCurPage->h = rSize.Height;
+    m_pCurPage->h = rSize.Height;    
     m_nNextZOrder = 1;
 
-
+    
 }
 
 void PDFIProcessor::emit( XmlEmitter&               rEmitter,
@@ -833,7 +833,7 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
     // FIXME: localization
     startIndicator( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) ) );
     m_pDocument->visitedBy( *optimizingVisitor, std::list<Element*>::iterator());
-
+   
 #if OSL_DEBUG_LEVEL > 1
     m_pDocument->emitStructure( 0 );
 #endif
@@ -843,13 +843,13 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
     ElementTreeVisitorSharedPtr finalizingVisitor(
         rVisitorFactory.createStyleCollectingVisitor(aStyles,*this));
     // FIXME: localization
-
+   
     m_pDocument->visitedBy( *finalizingVisitor, std::list<Element*>::iterator() );
-
+   
     EmitContext aContext( rEmitter, aStyles, m_aImages, *this, m_xStatusIndicator, m_xContext );
     ElementTreeVisitorSharedPtr aEmittingVisitor(
         rVisitorFactory.createEmittingVisitor(aContext));
-
+ 
     PropertyMap aProps;
     // document prolog
     #define OASIS_STR "urn:oasis:names:tc:opendocument:xmlns:"
@@ -878,7 +878,7 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
 
     // emit style list
     aStyles.emit( aContext, *aEmittingVisitor );
-
+    
     m_pDocument->visitedBy( *aEmittingVisitor, std::list<Element*>::iterator() );
     aContext.rEmitter.endTag( "office:document" );
     endIndicator();
@@ -957,7 +957,7 @@ static bool lr_tb_sort( Element* pLeft, Element* pRight )
     // then left is definitely not smaller
     if( pRight->x+pRight->w < pLeft->x )
         return false;
-
+    
     // here we have established vertical and horizontal overlap
     // so sort left first, top second
     if( pLeft->x < pRight->x )
@@ -966,7 +966,7 @@ static bool lr_tb_sort( Element* pLeft, Element* pRight )
         return false;
     if( pLeft->y < pRight->y )
         return true;
-
+    
     return false;
 }
 
@@ -974,7 +974,7 @@ void PDFIProcessor::sortElements( Element* pEle, bool bDeep )
 {
     if( pEle->Children.empty() )
         return;
-
+    
     if( bDeep )
     {
         for( std::list< Element* >::iterator it = pEle->Children.begin();
@@ -1009,9 +1009,9 @@ void PDFIProcessor::sortElements( Element* pEle, bool bDeep )
 }
 
 
-::basegfx::B2DRange& PDFIProcessor::calcTransformedRectBounds( ::basegfx::B2DRange&         outRect,
-                                                        const ::basegfx::B2DRange&      inRect,
-                                                        const ::basegfx::B2DHomMatrix&  transformation )
+::basegfx::B2DRange& PDFIProcessor::calcTransformedRectBounds( ::basegfx::B2DRange&			outRect,
+                                                        const ::basegfx::B2DRange&		inRect,
+                                                        const ::basegfx::B2DHomMatrix& 	transformation )
         {
             outRect.reset();
 
@@ -1020,7 +1020,7 @@ void PDFIProcessor::sortElements( Element* pEle, bool bDeep )
 
             // transform all four extremal points of the rectangle,
             // take bounding rect of those.
-
+            
             // transform left-top point
             outRect.expand( transformation * inRect.getMinimum() );
 

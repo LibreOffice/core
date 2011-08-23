@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1406,7 +1406,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
     m_aNewDocMediaDescriptor = GetValuableArgs_Impl( lArguments, sal_True );
 
     // TODO: register listeners for storages above, in case thay are disposed
-    //       an exception will be thrown on saveCompleted( true )
+    // 		 an exception will be thrown on saveCompleted( true )
 
     // TODO: should the listener notification be done here or in saveCompleted?
 }
@@ -1733,7 +1733,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
             LinkInit_Impl( aObject, lArguments, lObjArgs );
         }
     }
-
+    
     m_aDocMediaDescriptor = GetValuableArgs_Impl( lArguments, sal_True );
 
     // TODO: use lObjArgs for StoreVisualReplacement
@@ -1832,7 +1832,7 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     /*sal_Bool bElExists =*/ xNameAccess->hasByName( sEntName );
 
     m_bReadOnly = sal_False;
-//  sal_Int32 nStorageMode = embed::ElementModes::READWRITE;
+//	sal_Int32 nStorageMode = embed::ElementModes::READWRITE;
 
     if ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) )
         SwitchOwnPersistence( xStorage, sEntName );
@@ -1881,9 +1881,9 @@ sal_Bool SAL_CALL  OCommonEmbeddedObject::isLink()
 
     // Actually this information is clear even in case object is wayting for saveCompleted
     // if ( m_bWaitSaveCompleted )
-    //  throw embed::WrongStateException(
-    //              ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-    //              uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+    //	throw embed::WrongStateException(
+    //				::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
+    //				uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
     return m_bIsLink;
 }
@@ -1900,9 +1900,9 @@ sal_Bool SAL_CALL  OCommonEmbeddedObject::isLink()
 
     // Actually this information is clear even in case object is wayting for saveCompleted
     // if ( m_bWaitSaveCompleted )
-    //  throw embed::WrongStateException(
-    //              ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-    //              uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+    // 	throw embed::WrongStateException(
+    // 				::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
+    // 				uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( !m_bIsLink )
         throw embed::WrongStateException(

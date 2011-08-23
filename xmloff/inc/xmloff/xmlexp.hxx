@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -115,14 +115,14 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
              ::com::sun::star::container::XNamed,
              ::com::sun::star::lang::XUnoTunnel>
 {
-    SvXMLExport_Impl            *mpImpl;            // dummy
+    SvXMLExport_Impl			*mpImpl;			// dummy
 
     // #110680#
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceFactory;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >            mxHandler;      // the handlers
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler >    mxExtHandler;
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > 			mxHandler;		// the handlers
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > 	mxExtHandler;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > mxNumberFormatsSupplier;
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > mxGraphicResolver;
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedObjectResolver > mxEmbeddedResolver;
@@ -130,19 +130,19 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > mxExportInfo;
      ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > mxEventListener;
 
-    SvXMLAttributeList          *mpAttrList;        // a common attribute list
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >          mxAttrList;     // and an interface of it
+    SvXMLAttributeList			*mpAttrList;		// a common attribute list
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > 			mxAttrList;		// and an interface of it
 
-    ::rtl::OUString     msOrigFileName; // the original URL
-    ::rtl::OUString     msPicturesPath;
-    ::rtl::OUString     msGraphicObjectProtocol;
-    ::rtl::OUString     msEmbeddedObjectProtocol;
-    ::rtl::OUString     msObjectsPath;
+    ::rtl::OUString		msOrigFileName;	// the original URL
+    ::rtl::OUString		msPicturesPath;
+    ::rtl::OUString		msGraphicObjectProtocol;
+    ::rtl::OUString		msEmbeddedObjectProtocol;
+    ::rtl::OUString		msObjectsPath;
     ::rtl::OUString     msFilterName;
-    SvXMLNamespaceMap           *mpNamespaceMap;    // the namepspace map
-    SvXMLUnitConverter          *mpUnitConv;        // the unit converter
-    SvXMLNumFmtExport           *mpNumExport;
-    ProgressBarHelper           *mpProgressBarHelper;
+    SvXMLNamespaceMap			*mpNamespaceMap;	// the namepspace map
+    SvXMLUnitConverter			*mpUnitConv;		// the unit converter
+    SvXMLNumFmtExport			*mpNumExport;
+    ProgressBarHelper			*mpProgressBarHelper;
 
     UniReference< XMLTextParagraphExport > mxTextParagraphExport;
     UniReference< XMLShapeExport > mxShapeExport;
@@ -153,20 +153,20 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
     UniReference< xmloff::OFormLayerXMLExport > mxFormExport;
     XMLEventExport* mpEventExport;
     XMLImageMapExport* mpImageMapExport;
-    XMLErrors*  mpXMLErrors;
+    XMLErrors*	mpXMLErrors;
 
-    sal_Bool                        mbExtended;     // Does document contain extens.
+    sal_Bool						mbExtended;		// Does document contain extens.
 
     const enum ::xmloff::token::XMLTokenEnum meClass;
     SAL_DLLPRIVATE void _InitCtor();
 
-    sal_uInt16  mnExportFlags;
-    sal_uInt16  mnErrorFlags;
+    sal_uInt16	mnExportFlags;
+    sal_uInt16	mnErrorFlags;
     bool  mbEnableExperimentalOdfExport;
 
 public:
 
-    const ::rtl::OUString               msWS;           // " "
+    const ::rtl::OUString				msWS;			// " "
 
 private:
 
@@ -290,9 +290,9 @@ public:
 
     // #110680#
     //SvXMLExport( const ::rtl::OUString& rFileName,
-    //           const ::com::sun::star::uno::Reference<
-    //              ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-    //           MapUnit eDfltUnit = MAP_INCH );
+    //			 const ::com::sun::star::uno::Reference<
+    //			 	::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+    //		  	 MapUnit eDfltUnit = MAP_INCH );
     SvXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         const ::rtl::OUString& rFileName,
@@ -301,11 +301,11 @@ public:
 
     // #110680#
     //SvXMLExport( const ::rtl::OUString& rFileName,
-    //           const ::com::sun::star::uno::Reference<
-    //              ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-    //           const ::com::sun::star::uno::Reference<
-    //              ::com::sun::star::frame::XModel > &,
-    //           sal_Int16 eDfltUnit );
+    //			 const ::com::sun::star::uno::Reference<
+    //			 	::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+    //			 const ::com::sun::star::uno::Reference<
+    //				::com::sun::star::frame::XModel > &,
+    //		  	 sal_Int16 eDfltUnit );
     SvXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         const ::rtl::OUString& rFileName,
@@ -315,13 +315,13 @@ public:
 
     // #110680#
     //SvXMLExport( const ::rtl::OUString& rFileName,
-    //           const ::com::sun::star::uno::Reference<
-    //              ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-    //           const ::com::sun::star::uno::Reference<
-    //              ::com::sun::star::frame::XModel > &,
-    //           const ::com::sun::star::uno::Reference<
-    //              ::com::sun::star::document::XGraphicObjectResolver > &,
-    //           sal_Int16 eDfltUnit );
+    //			 const ::com::sun::star::uno::Reference<
+    //			 	::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+    //			 const ::com::sun::star::uno::Reference<
+    //				::com::sun::star::frame::XModel > &,
+    //			 const ::com::sun::star::uno::Reference<
+    //				::com::sun::star::document::XGraphicObjectResolver > &,
+    //		  	 sal_Int16 eDfltUnit );
     SvXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         const ::rtl::OUString& rFileName,
@@ -474,7 +474,7 @@ public:
     // get font auto style pool
     inline UniReference< XMLFontAutoStylePool > GetFontAutoStylePool();
 
-    ProgressBarHelper*  GetProgressBarHelper();
+    ProgressBarHelper*	GetProgressBarHelper();
 
     // get Formlayer Export
     inline UniReference< xmloff::OFormLayerXMLExport > GetFormExport();
@@ -726,6 +726,6 @@ public:
     ~SvXMLElementExport();
 };
 
-#endif  //  _XMLOFF_SVXMLEXP_HXX
+#endif	//  _XMLOFF_SVXMLEXP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

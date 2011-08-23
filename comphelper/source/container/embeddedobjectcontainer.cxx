@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -335,7 +335,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::GetEmbeddedOb
     uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
     uno::Sequence< ::rtl::OUString> aSeq = xAccess->getElementNames();
     const ::rtl::OUString* pIter = aSeq.getConstArray();
-    const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+    const ::rtl::OUString* pEnd	  = pIter + aSeq.getLength();
     for(;pIter != pEnd;++pIter)
     {
         (void)*pIter;
@@ -1378,7 +1378,7 @@ sal_Bool EmbeddedObjectContainer::StoreAsChildren(sal_Bool _bOasisFormat,sal_Boo
         comphelper::EmbeddedObjectContainer aCnt( _xStorage );
         const uno::Sequence < ::rtl::OUString > aNames = GetObjectNames();
         const ::rtl::OUString* pIter = aNames.getConstArray();
-        const ::rtl::OUString* pEnd   = pIter + aNames.getLength();
+        const ::rtl::OUString* pEnd	  = pIter + aNames.getLength();
         for(;pIter != pEnd;++pIter)
         {
             uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( *pIter );
@@ -1493,7 +1493,7 @@ sal_Bool EmbeddedObjectContainer::StoreChildren(sal_Bool _bOasisFormat,sal_Bool 
     sal_Bool bResult = sal_True;
     const uno::Sequence < ::rtl::OUString > aNames = GetObjectNames();
     const ::rtl::OUString* pIter = aNames.getConstArray();
-    const ::rtl::OUString* pEnd   = pIter + aNames.getLength();
+    const ::rtl::OUString* pEnd	  = pIter + aNames.getLength();
     for(;pIter != pEnd;++pIter)
     {
         uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( *pIter );
@@ -1618,7 +1618,7 @@ sal_Bool EmbeddedObjectContainer::SetPersistentEntries(const uno::Reference< emb
     sal_Bool bError = sal_False;
     const uno::Sequence < ::rtl::OUString > aNames = GetObjectNames();
     const ::rtl::OUString* pIter = aNames.getConstArray();
-    const ::rtl::OUString* pEnd   = pIter + aNames.getLength();
+    const ::rtl::OUString* pEnd	  = pIter + aNames.getLength();
     for(;pIter != pEnd;++pIter)
     {
         uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( *pIter );

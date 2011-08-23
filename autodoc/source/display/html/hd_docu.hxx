@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ class Docu_Display : public ary::Display,
                         Docu_Display(
                             OuputPage_Environment &
                                                 io_rEnv );
-    virtual             ~Docu_Display();
+    virtual				~Docu_Display();
 
     void                Assign_Out(
                             csi::xml::Element & o_rOut );
@@ -134,25 +134,25 @@ class Docu_Display : public ary::Display,
 
   private:
     // Interface csv::ConstProcessor<>:
-    virtual void        do_Process(
+    virtual void	  	do_Process(
                             const ary::cpp::Namespace &
                                                 i_rData );
-    virtual void        do_Process(
+    virtual void	  	do_Process(
                             const ary::cpp::Class &
                                                 i_rData );
-    virtual void        do_Process(
+    virtual void	  	do_Process(
                             const ary::cpp::Enum &
                                                 i_rData );
-    virtual void        do_Process(
+    virtual void	  	do_Process(
                             const ary::cpp::Typedef &
                                                 i_rData );
-    virtual void        do_Process(
+    virtual void	  	do_Process(
                             const ary::cpp::Function &
                                                 i_rData );
-    virtual void        do_Process(
+    virtual void	  	do_Process(
                             const ary::cpp::Variable &
                                                 i_rData );
-    virtual void        do_Process(
+    virtual void	  	do_Process(
                             const ary::doc::Documentation &
                                                 i_rData );
     // Interface ary::Display:

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,15 +57,15 @@ PE_Ignore::Call_Handler( const cpp::Token & i_rTok )
     {
         switch (i_rTok.TypeId())
         {
-            case Tid_SwBracket_Left:    SetTokenResult(done, stay);
+            case Tid_SwBracket_Left:	SetTokenResult(done, stay);
                                         nBracketCounter++;
                                         bBlockOpened = true;
                                         break;
-            case Tid_Semicolon:         SetTokenResult(done, pop_success);
+            case Tid_Semicolon:			SetTokenResult(done, pop_success);
                                         break;
             default:
                                         SetTokenResult(done, stay);
-        }   // end switch
+        }	// end switch
     }
     else if ( nBracketCounter > 0 )
     {
@@ -73,11 +73,11 @@ PE_Ignore::Call_Handler( const cpp::Token & i_rTok )
 
         switch (i_rTok.TypeId())
         {
-            case Tid_SwBracket_Left:    nBracketCounter++;
+            case Tid_SwBracket_Left:	nBracketCounter++;
                                         break;
-            case Tid_SwBracket_Right:   nBracketCounter--;
+            case Tid_SwBracket_Right:	nBracketCounter--;
                                         break;
-        }   // end switch
+        }	// end switch
     }
     else if ( i_rTok.TypeId() == Tid_Semicolon )
     {

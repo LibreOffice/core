@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,9 +28,9 @@
 #ifndef __com_sun_star_accessibility_XAccessibleImage_idl__
 #define __com_sun_star_accessibility_XAccessibleImage_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
 
 module com { module sun { module star { module accessibility {
 
@@ -46,23 +46,23 @@ module com { module sun { module star { module accessibility {
 published interface XAccessibleImage : ::com::sun::star::uno::XInterface
 {
     /** Returns the localized description of the image.
-
+        
         <p>It depends on the usage of an image whether the description
         should express the image's function (e.g. for icons) or the actual
         content of the image (e.g. for image maps or non-iconic images
         embedded into a document.)</p>
-
+            
         @return
             Returns a localized string that describes the image's function
             or content.
     */
     string getAccessibleImageDescription ();
-
+    
     /** Returns the height of the image.
-
+        
         <p>The height is returned in units specified by the parents
         coordinate system.</p>
-
+        
         @return
             Returns the image's height with respect to the parent's
             coordinate system.
@@ -70,17 +70,17 @@ published interface XAccessibleImage : ::com::sun::star::uno::XInterface
     long getAccessibleImageHeight ();
 
     /** Returns the width of the image.
-
+        
         <p>The width is returned in units specified by the parents
         coordinate system.</p>
-
+        
         @return
             Returns the image's width with respect to the parent's
             coordinate system.
     */
     long getAccessibleImageWidth ();
 };
-
+          
 }; }; }; };
 
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ class FontHeightToolBoxControl : public svt::ToolboxController,
                                  public ::com::sun::star::lang::XServiceInfo
 {
     public:
-        FontHeightToolBoxControl(
+        FontHeightToolBoxControl( 
             const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
         ~FontHeightToolBoxControl();
 
@@ -61,7 +61,7 @@ class FontHeightToolBoxControl : public svt::ToolboxController,
         }
 
         static ::com::sun::star::uno::Sequence< ::rtl::OUString >  getSupportedServiceNames_Static() throw();
-
+        
         // XComponent
         virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
 

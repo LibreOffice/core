@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,13 +46,13 @@ namespace connectivity
             ,public ORefBase
     {
     protected:
-        ::dbtools::OCharsetMap      m_aCharsetInfo;
+        ::dbtools::OCharsetMap		m_aCharsetInfo;
 
     public:
         ODataAccessCharSet() { }
 
         // IDataAccessCharSet
-        sal_Int32   getSupportedTextEncodings(
+        sal_Int32	getSupportedTextEncodings(
             ::std::vector< rtl_TextEncoding >& /* [out] */ _rEncs
         ) const;
 
@@ -62,7 +62,7 @@ namespace connectivity
     };
 
 //........................................................................
-}   // namespace connectivity
+}	// namespace connectivity
 //........................................................................
 
 #endif // CONNECTIVITY_DBTOOLS_CHARSET_S_HXX

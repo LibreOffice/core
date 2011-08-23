@@ -54,9 +54,9 @@ namespace dbaccess
     //=======================================================================================
     typedef ::cppu::WeakComponentImplHelper1< ::com::sun::star::sdbc::XConnection
                                             > OSharedConnection_BASE;
-    typedef ::connectivity::OConnectionWrapper  OSharedConnection_BASE2;
+    typedef ::connectivity::OConnectionWrapper	OSharedConnection_BASE2;
 
-    class OSharedConnection :   public ::comphelper::OBaseMutex
+    class OSharedConnection :	public ::comphelper::OBaseMutex
                               , public OSharedConnection_BASE
                               , public OSharedConnection_BASE2
     {
@@ -137,7 +137,7 @@ namespace dbaccess
     IMPLEMENT_GET_IMPLEMENTATION_ID( OSharedConnection );
 #endif
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 
 #endif // DBA_CORE_SHARED_CONNECTION_HXX
 

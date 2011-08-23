@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,13 +32,13 @@
 #include <xml/statusbarconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <rtl/ustring.hxx>
@@ -48,7 +48,7 @@
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
@@ -56,7 +56,7 @@ namespace framework{
 //*****************************************************************************************************************
 // Hash code function for using in all hash maps of follow implementation.
 
-class OReadStatusBarDocumentHandler :   private ThreadHelpBase, // Struct for right initalization of lock member! Must be first of baseclasses.
+class OReadStatusBarDocumentHandler :	private ThreadHelpBase,	// Struct for right initalization of lock member! Must be first of baseclasses.
                                         public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
@@ -81,54 +81,54 @@ class OReadStatusBarDocumentHandler :   private ThreadHelpBase, // Struct for ri
             SB_NS_XLINK,
             SB_XML_NAMESPACES_COUNT
         };
-
+        
         OReadStatusBarDocumentHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& aStatusBarItems );
         virtual ~OReadStatusBarDocumentHandler();
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument(void)
-        throw ( ::com::sun::star::xml::sax::SAXException,
+        throw (	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL endDocument(void)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL startElement(
             const rtl::OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL endElement(const rtl::OUString& aName)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL characters(const rtl::OUString& aChars)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL ignorableWhitespace(const rtl::OUString& aWhitespaces)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL processingInstruction(const rtl::OUString& aTarget,
                                                     const rtl::OUString& aData)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL setDocumentLocator(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > &xLocator)
-        throw(  ::com::sun::star::xml::sax::SAXException,
+        throw(	::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
     private:
         ::rtl::OUString getErrorLineString();
 
-        class StatusBarHashMap : public ::std::hash_map< ::rtl::OUString                ,
-                                                         StatusBar_XML_Entry            ,
-                                                         OUStringHashCode               ,
-                                                         ::std::equal_to< ::rtl::OUString > >
+        class StatusBarHashMap : public ::std::hash_map< ::rtl::OUString				,
+                                                         StatusBar_XML_Entry			,
+                                                         OUStringHashCode				,
+                                                         ::std::equal_to< ::rtl::OUString >	>
         {
             public:
                 inline void free()
@@ -137,12 +137,12 @@ class OReadStatusBarDocumentHandler :   private ThreadHelpBase, // Struct for ri
                 }
         };
 
-        sal_Bool                                                                            m_bStatusBarStartFound;
-        sal_Bool                                                                            m_bStatusBarEndFound;
-        sal_Bool                                                                            m_bStatusBarItemStartFound;
-        StatusBarHashMap                                                                    m_aStatusBarMap;
+        sal_Bool																	        m_bStatusBarStartFound;
+        sal_Bool																	        m_bStatusBarEndFound;
+        sal_Bool																	        m_bStatusBarItemStartFound;
+        StatusBarHashMap															        m_aStatusBarMap;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >    m_aStatusBarItems;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >            m_xLocator;
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >	        m_xLocator;
 };
 
 class OWriteStatusBarDocumentHandler : private ThreadHelpBase // Struct for right initalization of lock member! Must be first of baseclasses.
@@ -156,9 +156,9 @@ class OWriteStatusBarDocumentHandler : private ThreadHelpBase // Struct for righ
         void WriteStatusBarDocument() throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
-
+    
     protected:
-        virtual void WriteStatusBarItem(
+        virtual void WriteStatusBarItem( 
             const rtl::OUString& rCommandURL,
             const rtl::OUString& rHelpURL,
             sal_Int16            nOffset,
@@ -168,12 +168,12 @@ class OWriteStatusBarDocumentHandler : private ThreadHelpBase // Struct for righ
               ::com::sun::star::uno::RuntimeException );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >       m_aStatusBarItems;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >      m_xEmptyList;
-        ::rtl::OUString                                                                     m_aXMLStatusBarNS;
-        ::rtl::OUString                                                                     m_aXMLXlinkNS;
-        ::rtl::OUString                                                                     m_aAttributeType;
-        ::rtl::OUString                                                                     m_aAttributeURL;
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >	m_xWriteDocumentHandler;
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >		m_xEmptyList;
+        ::rtl::OUString																		m_aXMLStatusBarNS;
+        ::rtl::OUString																		m_aXMLXlinkNS;
+        ::rtl::OUString																		m_aAttributeType;
+        ::rtl::OUString																		m_aAttributeURL;
 };
 
 } // namespace framework

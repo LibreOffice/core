@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,16 +64,16 @@ class VCL_DLLPUBLIC SalSystem
 public:
             SalSystem() {}
     virtual ~SalSystem();
-
+    
     // get info about the display
 
     /*  Gets the number of active screens attached to the display
-
+    
         @returns the number of active screens
     */
     virtual unsigned int GetDisplayScreenCount() = 0;
     /*  Queries whether multiple screens are truly separate
-
+    
         @returns true if screens are distinct and windows cannot
                   be moved between them or span multiple of them
                  false if screens form up one big display
@@ -82,57 +82,57 @@ public:
     /*  Queries the default screen number. The default screen is the
         screen on which windows will appear if no special positioning
         is made.
-
+    
         @returns the default screen number
     */
     virtual unsigned int GetDefaultDisplayNumber() = 0;
     /*  Gets relative position and size of the screens attached to the display
-
+    
         @param nScreen
         The screen number to be queried
-
+    
         @returns position: (0,0) in case of IsMultiscreen() == true
                            else position relative to whole display
                  size: size of the screen
     */
     virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen ) = 0;
     /*  Gets position and size of the work area of a screen attached to the display
-
+    
         @param nScreen
         The screen number to be queried
-
+    
         @returns position and size relative to the scree
     */
     virtual Rectangle GetDisplayWorkAreaPosSizePixel( unsigned int nScreen ) = 0;
     /* Gets the name of a screen
-
+    
        @param nScreen
        The screen number to be queried
-
+    
        @returns the name of the screen
     */
     virtual rtl::OUString GetScreenName( unsigned int nScreen ) = 0;
 
     /*  Shows a native message box with the specified title, message and button
-        combination.
-
+        combination. 
+                
         @param  rTitle
         The title to be shown by the dialog box.
-
+            
         @param  rMessage
         The message to be shown by the dialog box.
-
+            
         @param  nButtonCombination
         Specify which button combination the message box should display.
         See button combinations above.
-
+                        
         @param  nDefaultButton
-        Specifies which button has the focus initially.
-        See button identifiers above.
+        Specifies which button has the focus initially. 
+        See button identifiers above. 
         The effect of specifying a button that doesn't belong
         to the specified button combination is undefined.
-
-        @returns the identifier of the button that was pressed by the user.
+                                             
+        @returns the identifier of the button that was pressed by the user.            
         See button identifier above. If the function fails the
         return value is 0.
     */

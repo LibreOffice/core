@@ -170,8 +170,8 @@ void LwpGraphicObject::Read()
 
             // read external file object stuff
             sal_uInt16 type = m_pObjStrm->QuickReaduInt16();
-//          if (EF_ODMA == type)
-//              ;
+//			if (EF_ODMA == type)
+//				;
             if ((EF_ODMA != type) && (EF_NONE != type)) // don't know about this
             {
                 sal_uInt32 size = m_pObjStrm->QuickReaduInt32();
@@ -207,7 +207,7 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
 {
     if ((m_sServerContextFormat[1]=='s'&&m_sServerContextFormat[2]=='d'&&m_sServerContextFormat[3]=='w'))
     {
-/*      LwpSvStream* pStream = m_pStrm;
+/*		LwpSvStream* pStream = m_pStrm;
         //test code
         OpenStormBento::LtcBenContainer* pBentoContainer;
         ULONG ulRet = OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
@@ -267,9 +267,9 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
     {
         //LwpSvStream* pDocStream = m_pStrm;
         //LwpChartStreamTools::ParseChart(pDocStream, GetObjectID(),
-        //                              GetRectIn100thMM(), GetRectInCM(), pOutputStream);
+        //								GetRectIn100thMM(), GetRectInCM(), pOutputStream);
         //LwpChartStreamTools::ParseChart(pDocStream, GetObjectID(),
-        //                              GetRectIn100thMM(), GetRectInCM(), pCont, m_strStyleName);
+        //								GetRectIn100thMM(), GetRectInCM(), pCont, m_strStyleName);
     }
 }
 
@@ -289,7 +289,7 @@ Rectangle LwpGraphicObject::GetRectIn100thMM()
 /**
 * @short   Get the rectangle of a chart in CM
 * @descr
-* @return   The rectangle of the chart
+* @return	The rectangle of the chart
 */
 XFRect LwpGraphicObject::GetRectInCM()
 {
@@ -325,8 +325,8 @@ void LwpGraphicObject::GetRect(INT32& nLeft, INT32& nTop, INT32& nRight, INT32& 
                 LwpPoint aOrigin = pGeometry->GetOrigin();
 // 2005.6
 //frame width/height are not width/height of a chart
-//              sal_Int32 nWidth = pGeometry->GetWidth();
-//              sal_Int32 nHeight = pGeometry->GetHeight();
+//				sal_Int32 nWidth = pGeometry->GetWidth();
+//				sal_Int32 nHeight = pGeometry->GetHeight();
                 double fWidth =0;
                 double fHeight = 0;
                 GetGrafScaledSize(fWidth, fHeight);
@@ -345,7 +345,7 @@ void LwpGraphicObject::GetRect(INT32& nLeft, INT32& nTop, INT32& nRight, INT32& 
 
 /**
  * @descr   judge if the graphic format is what we can support: bmp, jpg, wmf, gif, tgf(tif). other format will be filtered to
- *  these formats by Word Pro.
+ *	these formats by Word Pro.
  * @return  sal_True if yes sal_False if not.
  */
 sal_Bool LwpGraphicObject::IsGrafFormatValid()
@@ -380,7 +380,7 @@ void LwpGraphicObject::RegisterStyle()
     {
         this->CreateGrafObject();
     }
-/*  if (m_sServerContextFormat[1]=='s'&&m_sServerContextFormat[2]=='d'&&m_sServerContextFormat[3]=='w')
+/*	if (m_sServerContextFormat[1]=='s'&&m_sServerContextFormat[2]=='d'&&m_sServerContextFormat[3]=='w')
     {
         LwpSvStream* pStream = m_pStrm;
         //test code
@@ -688,8 +688,8 @@ void LwpGraphicObject::CreateGrafObject()
             else
             {
                 // set left-top alignment
-//                  pImageStyle->SetXPosType(enumXFFrameXPosLeft, enumXFFrameXRelFrame);
-//                  pImageStyle->SetYPosType(enumXFFrameYPosTop, enumXFFrameYRelFrame);
+//					pImageStyle->SetXPosType(enumXFFrameXPosLeft, enumXFFrameXRelFrame);
+//					pImageStyle->SetYPosType(enumXFFrameYPosTop, enumXFFrameYRelFrame);
                 pImageStyle->SetYPosType(enumXFFrameYPosFromTop, enumXFFrameYRelFrame);
                 pImageStyle->SetXPosType(enumXFFrameXPosFromLeft, enumXFFrameXRelFrame);
 
@@ -769,7 +769,7 @@ void LwpGraphicObject::CreateGrafObject()
 
     // set archor to frame
     pImage->SetAnchorType(enumXFAnchorFrame);
-//      pImage->SetAnchorType(enumXFAnchorPara);//enumXFAnchorFrame);
+//		pImage->SetAnchorType(enumXFAnchorPara);//enumXFAnchorFrame);
 
     // set object name
     LwpAtomHolder* pHolder = this->GetName();

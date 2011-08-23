@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,22 +45,22 @@
 // -----------------------------------------------------------------------
 
 ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLink& rSource ) :
-    aFileName   ( rSource.GetFile() ),
-    aFilterName ( rSource.GetFilter() ),
-    aOptions    ( rSource.GetOptions() ),
-    aSourceArea ( rSource.GetSource() ),
-    aDestArea   ( rSource.GetDestArea() ),
+    aFileName	( rSource.GetFile() ),
+    aFilterName	( rSource.GetFilter() ),
+    aOptions	( rSource.GetOptions() ),
+    aSourceArea	( rSource.GetSource() ),
+    aDestArea	( rSource.GetDestArea() ),
     nRefresh    ( rSource.GetRefreshDelay() )       // seconds
 {
 }
 
 ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLinkSaver& rCopy ) :
     ScDataObject(),
-    aFileName   ( rCopy.aFileName ),
-    aFilterName ( rCopy.aFilterName ),
-    aOptions    ( rCopy.aOptions ),
-    aSourceArea ( rCopy.aSourceArea ),
-    aDestArea   ( rCopy.aDestArea ),
+    aFileName	( rCopy.aFileName ),
+    aFilterName	( rCopy.aFilterName ),
+    aOptions	( rCopy.aOptions ),
+    aSourceArea	( rCopy.aSourceArea ),
+    aDestArea	( rCopy.aDestArea ),
     nRefresh    ( rCopy.nRefresh )
 {
 }
@@ -69,16 +69,16 @@ ScAreaLinkSaver::~ScAreaLinkSaver()
 {
 }
 
-ScDataObject*   ScAreaLinkSaver::Clone() const
+ScDataObject*	ScAreaLinkSaver::Clone() const
 {
     return new ScAreaLinkSaver( *this );
 }
 
 BOOL ScAreaLinkSaver::IsEqualSource( const ScAreaLink& rCompare ) const
 {
-    return ( aFileName   == rCompare.GetFile() &&
+    return ( aFileName	 == rCompare.GetFile() &&
              aFilterName == rCompare.GetFilter() &&
-             aOptions    == rCompare.GetOptions() &&
+             aOptions	 == rCompare.GetOptions() &&
              aSourceArea == rCompare.GetSource() &&
              nRefresh    == rCompare.GetRefreshDelay() );
 }
@@ -128,7 +128,7 @@ ScAreaLinkSaveCollection::~ScAreaLinkSaveCollection()
 {
 }
 
-ScDataObject*   ScAreaLinkSaveCollection::Clone() const
+ScDataObject*	ScAreaLinkSaveCollection::Clone() const
 {
     return new ScAreaLinkSaveCollection( *this );
 }

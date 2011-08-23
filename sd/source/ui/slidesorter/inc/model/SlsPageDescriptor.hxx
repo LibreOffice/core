@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,9 +59,9 @@ class SlideRenderer;
 
 namespace css = ::com::sun::star;
 
-/** Each PageDescriptor object represents the preview of one draw page,
+/** Each PageDescriptor object represents the preview of one draw page, 
     slide, or master page of a Draw or Impress document as they are displayed
-    in the slide sorter.  This class gives access to some associated
+    in the slide sorter.  This class gives access to some associated 
     information like prerendered preview or position on the screen.
 
     <p>Bounding boxes of page objects come in four varieties:
@@ -79,7 +79,7 @@ public:
         @param pPage
             The page pointer can in some situations not be detected from
             rxPage, e.g. after undo of page deletion.  Therefore supply it
-            seperately.
+            seperately. 
         @param nIndex
             This index is displayed in the view as page number.  It is not
             necessaryily the page index (not even when you add or subtract 1
@@ -109,8 +109,8 @@ public:
     /** Return <TRUE/> when the page object is fully or parially visible. */
     bool IsVisible (void) const;
 
-    /** Set the visible state that is returned by the IsVisible() method.
-        This method is typically called by the view who renders the object
+    /** Set the visible state that is returned by the IsVisible() method.  
+        This method is typically called by the view who renders the object 
         onto the screen.
     */
     void SetVisible (bool bVisible);
@@ -184,9 +184,9 @@ private:
 
     /// The factory that is used to create PageObject objects.
     const controller::PageObjectFactory* mpPageObjectFactory;
-
+    
     /** The page object will be destroyed by the page into which it has
-        been inserted.
+        been inserted. 
     */
     view::PageObject* mpPageObject;
 

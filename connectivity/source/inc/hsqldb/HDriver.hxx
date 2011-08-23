@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,31 +50,31 @@ namespace connectivity
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ODriverDelegator_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );
 
-        typedef ::cppu::WeakComponentImplHelper5<   ::com::sun::star::sdbc::XDriver
+        typedef ::cppu::WeakComponentImplHelper5<	::com::sun::star::sdbc::XDriver
                                         ,::com::sun::star::sdbcx::XDataDefinitionSupplier
                                         , ::com::sun::star::lang::XServiceInfo
                                         , ::com::sun::star::sdbcx::XCreateCatalog
                                         , ::com::sun::star::embed::XTransactionListener
-                                        >   ODriverDelegator_BASE;
+                                        >	ODriverDelegator_BASE;
 
         typedef ::std::pair< ::com::sun::star::uno::WeakReferenceHelper,::com::sun::star::uno::WeakReferenceHelper> TWeakRefPair;
         typedef ::std::pair< ::rtl::OUString ,TWeakRefPair > TWeakConnectionPair;
-
+        
         typedef ::std::pair< ::com::sun::star::uno::WeakReferenceHelper,TWeakConnectionPair> TWeakPair;
         typedef ::std::vector< TWeakPair > TWeakPairVector;
-
+        
 
         /** delegates all calls to the orignal driver and extend the existing one with the SDBCX layer.
-
+        
         */
         class ODriverDelegator : public ::comphelper::OBaseMutex
                                 ,public ODriverDelegator_BASE
         {
-            TWeakPairVector                                                     m_aConnections; //  vector containing a list
+            TWeakPairVector														m_aConnections;	//	vector containing a list
                                                                                                 //  of all the Connection objects
                                                                                                 //  for this Driver
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                 m_xDriver;
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xFactory;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >					m_xDriver;
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >	m_xFactory;
             sal_Bool                                                                            m_bInShutDownConnections;
 
             /** load the driver we want to delegate.
@@ -139,7 +139,7 @@ namespace connectivity
     }
 
 //........................................................................
-}   // namespace connectivity
+}	// namespace connectivity
 //........................................................................
 #endif // CONNECTIVITY_HSQLDB_DRIVER_HXX
 

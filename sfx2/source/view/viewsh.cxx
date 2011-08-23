@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -126,7 +126,7 @@ class SfxClipboardChangeListener : public ::cppu::WeakImplHelper1<
 
 public:
     SfxClipboardChangeListener( SfxViewShell* pView );
-    virtual ~SfxClipboardChangeListener();
+    virtual	~SfxClipboardChangeListener();
 
     void DisconnectViewShell() { pViewShell = NULL; }
 };
@@ -790,7 +790,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                 if ( !bEnabled )
                 {
                     // will now be handled by requeing the request
-                /*  rSet.DisableItem( SID_PRINTDOC );
+                /*	rSet.DisableItem( SID_PRINTDOC );
                     rSet.DisableItem( SID_PRINTDOCDIRECT );
                     rSet.DisableItem( SID_SETUPPRINTER ); */
                 }
@@ -1271,7 +1271,7 @@ SfxViewShell::SfxViewShell
     pImp->eScroll = SCROLLING_DEFAULT;
     pImp->nPrinterLocks = 0;
     pImp->bControllerSet = FALSE;
-    pImp->nFamily = 0xFFFF;                 // undefined, default set by TemplateDialog
+    pImp->nFamily = 0xFFFF;					// undefined, default set by TemplateDialog
     SetMargin( pViewFrame->GetMargin_Impl() );
 
     SetPool( &pViewFrame->GetObjectShell()->GetPool() );
@@ -1376,7 +1376,7 @@ SfxViewShell* SfxViewShell::Get( const Reference< XController>& i_rController )
 
 SdrView* SfxViewShell::GetDrawView() const
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese virtuelle Methode mu\s von den Subklassen "uberladen werden, wenn
     der Property-Editor zur Verf"ugung stehen soll.
@@ -1392,7 +1392,7 @@ SdrView* SfxViewShell::GetDrawView() const
 
 String SfxViewShell::GetSelectionText
 (
-    BOOL /*bCompleteWords*/     /*  FALSE (default)
+    BOOL /*bCompleteWords*/		/* 	FALSE (default)
                                 Nur der tats"achlich selektierte Text wird
                                 zur"uckgegeben.
 
@@ -1561,8 +1561,8 @@ void SfxViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::c
 
 SfxViewShell* SfxViewShell::GetFirst
 (
-    const TypeId*   pType,
-    BOOL            bOnlyVisible
+    const TypeId*	pType,
+    BOOL			bOnlyVisible
 )
 {
     // search for a SfxViewShell of the specified type
@@ -1598,9 +1598,9 @@ SfxViewShell* SfxViewShell::GetFirst
 
 SfxViewShell* SfxViewShell::GetNext
 (
-    const SfxViewShell& rPrev,
-    const TypeId*       pType,
-    BOOL                bOnlyVisible
+    const SfxViewShell&	rPrev,
+    const TypeId*		pType,
+    BOOL				bOnlyVisible
 )
 {
     SfxViewShellArr_Impl &rShells = SFX_APP()->GetViewShells_Impl();
@@ -1992,7 +1992,7 @@ void SfxViewShell::SetController( SfxBaseController* pController )
     pImp->pController = pController;
     pImp->pController->acquire();
     pImp->bControllerSet = TRUE;
-
+    
     // there should be no old listener, but if there is one, it should be disconnected
     if (  pImp->xClipboardListener.is() )
         pImp->xClipboardListener->DisconnectViewShell();
@@ -2199,7 +2199,7 @@ BOOL SfxViewShell::HasMouseClickListeners_Impl()
 void SfxViewShell::SetAdditionalPrintOptions( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rOpts )
 {
     pImp->aPrintOpts = rOpts;
-//  GetObjectShell()->Broadcast( SfxPrintingHint( -3, NULL, NULL, rOpts ) );
+// 	GetObjectShell()->Broadcast( SfxPrintingHint( -3, NULL, NULL, rOpts ) );
 }
 
 BOOL SfxViewShell::Escape()

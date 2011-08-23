@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,8 +82,8 @@ static struct SvXMLTokenMapEntry aAttributeMap[] =
 void lcl_fillNamespaceContainer( const SvXMLNamespaceMap&,
                                  Reference<XNameContainer>& );
 
-XFormsSubmissionContext::XFormsSubmissionContext(
-    SvXMLImport& rImport,
+XFormsSubmissionContext::XFormsSubmissionContext( 
+    SvXMLImport& rImport, 
     USHORT nPrefix,
     const OUString& rLocalName,
     const Reference<XPropertySet>& xModel ) :
@@ -114,7 +114,7 @@ Any toBool( const OUString& rValue )
     return aValue;
 }
 
-void XFormsSubmissionContext::HandleAttribute( sal_uInt16 nToken,
+void XFormsSubmissionContext::HandleAttribute( sal_uInt16 nToken, 
                                                const OUString& rValue )
 {
     switch( nToken )
@@ -147,7 +147,7 @@ void XFormsSubmissionContext::HandleAttribute( sal_uInt16 nToken,
         lcl_setValue( mxSubmission, OUSTRING("Encoding"), rValue );
         break;
     case XML_OMIT_XML_DECLARATION:
-        lcl_setValue( mxSubmission, OUSTRING("OmitXmlDeclaration"),
+        lcl_setValue( mxSubmission, OUSTRING("OmitXmlDeclaration"), 
                       toBool( rValue ) );
         break;
     case XML_STANDALONE:
@@ -172,7 +172,7 @@ void XFormsSubmissionContext::HandleAttribute( sal_uInt16 nToken,
 }
 
 /** will be called for each child element */
-SvXMLImportContext* XFormsSubmissionContext::HandleChild(
+SvXMLImportContext* XFormsSubmissionContext::HandleChild( 
     sal_uInt16,
     sal_uInt16,
     const OUString&,

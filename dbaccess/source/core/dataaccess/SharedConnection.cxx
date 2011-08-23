@@ -38,7 +38,7 @@ namespace dbaccess
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
-//  using namespace ::com::sun::star::reflection;
+//	using namespace ::com::sun::star::reflection;
 using namespace connectivity;
 
 DBG_NAME(OSharedConnection)
@@ -164,5 +164,5 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OSharedConnection
     return m_xConnection->getTypeMap();
 }
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

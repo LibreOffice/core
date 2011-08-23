@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -134,7 +134,7 @@ namespace drawinglayer
                     // TexturePrimitive3D: Process children, do not try to decompose
                     const primitive3d::TexturePrimitive3D& rTexturePrimitive = static_cast< const primitive3d::TexturePrimitive3D& >(rCandidate);
                     const primitive3d::Primitive3DSequence aChildren(rTexturePrimitive.getChildren());
-
+                    
                     if(aChildren.hasElements())
                     {
                         process(aChildren);
@@ -158,7 +158,7 @@ namespace drawinglayer
         Geometry2DExtractingProcessor::Geometry2DExtractingProcessor(
             const geometry::ViewInformation3D& rViewInformation,
             const basegfx::B2DHomMatrix& rObjectTransformation)
-        :   BaseProcessor3D(rViewInformation),
+        :	BaseProcessor3D(rViewInformation),
             maPrimitive2DSequence(),
             maObjectTransformation(rObjectTransformation),
             maBColorModifierStack()

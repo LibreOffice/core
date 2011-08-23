@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ public class AccessibleMenuItem extends TestCase {
      * Finds first accessible component with role <code>MENUITEM</code>
      * walking through the accessible component tree of a document.
      */
-    protected TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param, 
                                                     PrintWriter log) {
         XInterface oObj = null;
 
@@ -110,13 +110,13 @@ public class AccessibleMenuItem extends TestCase {
 
         Object atw = tk.getActiveTopWindow();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
                                                               atw);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-        XAccessibleContext MenuBar = at.getAccessibleObjectForRole(xRoot,
+        XAccessibleContext MenuBar = at.getAccessibleObjectForRole(xRoot, 
                                                                    AccessibleRole.MENU_BAR);
 
         try {
@@ -142,7 +142,7 @@ public class AccessibleMenuItem extends TestCase {
         final XAccessibleAction action = (XAccessibleAction) UnoRuntime.queryInterface(
                                                  XAccessibleAction.class, oObj);
 
-        tEnv.addObjRelation("EventProducer",
+        tEnv.addObjRelation("EventProducer", 
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 try {
@@ -157,7 +157,7 @@ public class AccessibleMenuItem extends TestCase {
 
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());
 
-        tEnv.addObjRelation("EditOnly",
+        tEnv.addObjRelation("EditOnly", 
                             "Can't change or select Text in MenuBarItem");
 
         tEnv.addObjRelation("Destroy", new Boolean(true));

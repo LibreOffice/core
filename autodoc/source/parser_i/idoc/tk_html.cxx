@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ namespace dsapi
 {
 
 void
-Tok_HtmlTag::Trigger( TokenInterpreter &    io_rInterpreter ) const
+Tok_HtmlTag::Trigger( TokenInterpreter &	io_rInterpreter ) const
 {
     io_rInterpreter.Process_HtmlTag(*this);
 }

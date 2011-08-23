@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell* pDocSh )
         bOwner = FALSE;
 
         aOldMapMode = pDevice->GetMapMode();
-        pDevice->SetMapMode( MAP_PIXEL );       // GetNeededSize needs pixel MapMode
+        pDevice->SetMapMode( MAP_PIXEL );		// GetNeededSize needs pixel MapMode
         // printer has right DigitLanguage already
     }
     else

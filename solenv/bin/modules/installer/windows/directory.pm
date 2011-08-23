@@ -309,7 +309,7 @@ sub create_directorytable_from_collection
 
 sub add_root_directories
 {
-    my ($directorytableref, $allvariableshashref) = @_;
+    my ($directorytableref, $allvariableshashref, $onelanguage) = @_;
 
 #   my $sourcediraddon = "";
 #   if (($installer::globals::addchildprojects) ||
@@ -324,7 +324,12 @@ sub add_root_directories
 
     if (( ! $installer::globals::patch ) && ( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ) && ( ! $allvariableshashref->{'DONTUSESTARTMENUFOLDER'} ))
     {
-        my $productname = $allvariableshashref->{'PRODUCTNAME'};
+        my $productname;
+
+    $productname = $allvariableshashref->{'PRODUCTNAME'};
+    if ($onelanguage eq 'pt-BR' && defined $allvariableshashref->{'PRODUCTNAME_BR'}) {
+        $productname = $allvariableshashref->{'PRODUCTNAME_BR'};
+    }
         my $productversion = $allvariableshashref->{'PRODUCTVERSION'};
         my $baseproductversion = $productversion;
 
@@ -427,7 +432,7 @@ sub add_root_directories
 
 sub create_directory_table
 {
-    my ($directoryref, $basedir, $allvariableshashref, $shortdirnamehashref, $loggingdir) = @_;
+    my ($directoryref, $languagesarrayref, $basedir, $allvariableshashref, $shortdirnamehashref, $loggingdir) = @_;
 
     # Structure of the directory table:
     # Directory Directory_Parent DefaultDir
@@ -436,6 +441,11 @@ sub create_directory_table
     # DefaultDir is .:APPLIC~1|Application Data with
     # Before ":" : [sourcedir]:[destdir] (not programmed yet)
     # After ":" : 8+3 and not 8+3 the destination directory name
+
+    for ( my $m = 0; $m <= $#{$languagesarrayref}; $m++ )
+    {
+        my $onelanguage = ${$languagesarrayref}[$m];
+        $installer::globals::installlocationdirectoryset = 0;
 
     my @directorytable = ();
     my $infoline;
@@ -448,16 +458,16 @@ sub create_directory_table
     set_installlocation_directory($directoryref, $allvariableshashref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_3.log", $directoryref); }
     installer::windows::idtglobal::write_idt_header(\@directorytable, "directory");
-    add_root_directories(\@directorytable, $allvariableshashref);
+    add_root_directories(\@directorytable, $allvariableshashref, $onelanguage);
     create_directorytable_from_collection(\@directorytable, $directoryref);
 
     # Saving the file
 
-    my $directorytablename = $basedir . $installer::globals::separator . "Director.idt";
+    my $directorytablename = $basedir . $installer::globals::separator . "Director.idt" . "." . $onelanguage;
     installer::files::save_file($directorytablename ,\@directorytable);
     $infoline = "Created idt file: $directorytablename\n";
     push(@installer::globals::logfileinfo, $infoline);
-
+    }
 }
 
 1;

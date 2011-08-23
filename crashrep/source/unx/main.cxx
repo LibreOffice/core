@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,26 +51,26 @@
 
 typedef int SOCKET;
 
-#define closesocket     close
-#define SOCKET_ERROR    -1
+#define closesocket		close
+#define SOCKET_ERROR	-1
 
 #ifdef SOLARIS
 const char *basename( const char *filename )
 {
     const char *pSlash = strrchr( filename, '/' );
-
+    
     return pSlash ? pSlash + 1 : pSlash;
 }
 #endif
 
 using namespace std;
 
-static bool g_bNoUI = false;
+static bool	g_bNoUI = false;
 static bool g_bSendReport = false;
 static bool g_bLoadReport = false;
 
 static bool g_bDebugMode = false;
-static int  g_signal = 0;
+static int	g_signal = 0;
 
 static string g_strProductKey;
 static string g_strReportServer;
@@ -86,17 +86,17 @@ static char g_szStackFile[L_tmpnam] = "";
 static char g_szDescriptionFile[2048] = "";
 static char g_szReportFile[2048] = "";
 
-#define SO_CRASHREPORT_MAIL "so-report@sun.com"
-#define PSTACK_CMD          "pstack %d"
+#define SO_CRASHREPORT_MAIL	"so-report@sun.com"
+#define PSTACK_CMD			"pstack %d"
 
 #ifdef LINUX
-#define PMAP_CMD            "cat /proc/%d/maps"
+#define PMAP_CMD			"cat /proc/%d/maps"
 #else
-#define PMAP_CMD            "pmap %d"
+#define PMAP_CMD			"pmap %d"
 #endif
 
-#define REPORT_SERVER   (g_strReportServer.c_str())
-#define REPORT_PORT     g_uReportPort
+#define REPORT_SERVER	(g_strReportServer.c_str())
+#define REPORT_PORT		g_uReportPort
 
 static string getprogramdir()
 {
@@ -106,7 +106,7 @@ static string getprogramdir()
 static const char *getlocale()
 {
     const char * locale = getenv( "LC_ALL" );
-
+    
     if( NULL == locale )
         locale = getenv( "LC_CTYPE" );
 
@@ -115,7 +115,7 @@ static const char *getlocale()
 
     if( NULL == locale )
         locale = "C";
-
+        
     return locale;
 }
 
@@ -129,18 +129,18 @@ static const char *get_home_dir()
 static string trim_string( const string& rString )
 {
     string temp = rString;
-
+    
     while ( temp.length() && (temp[0] == ' ' || temp[0] == '\t') )
         temp.erase( 0, 1 );
-
-    string::size_type   len = temp.length();
-
+        
+    string::size_type	len = temp.length();
+    
     while ( len && (temp[len-1] == ' ' || temp[len-1] == '\t') )
     {
         temp.erase( len - 1, 1 );
         len = temp.length();
     }
-
+    
     return temp;
 }
 
@@ -185,10 +185,10 @@ static size_t fcopy( FILE *fpout, FILE *fpin )
 
 bool write_report( const hash_map< string, string >& rSettings )
 {
-    FILE    *fp = fopen( tmpnam( g_szReportFile ), "w" );
+    FILE	*fp = fopen( tmpnam( g_szReportFile ), "w" );
     const char *pszUserType = getenv( "STAROFFICE_USERTYPE" );
 
-    fprintf( fp,
+    fprintf( fp, 
        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
        "<!DOCTYPE errormail:errormail PUBLIC \"-//OpenOffice.org//DTD ErrorMail 1.0//EN\" \"errormail.dtd\">\n"
        "<errormail:errormail xmlns:errormail=\"http://openoffice.org/2002/errormail\" usertype=\"%s\">\n"
@@ -198,7 +198,7 @@ bool write_report( const hash_map< string, string >& rSettings )
        "<reportmail:attachment name=\"stack.txt\" media-type=\"text/plain\" class=\"pstack output\"/>\n"
        "</reportmail:mail>\n"
        "<officeinfo:officeinfo xmlns:officeinfo=\"http://openoffice.org/2002/officeinfo\" build=\"%s\" platform=\"%s\" language=\"%s\" exceptiontype=\"%d\" product=\"%s\" procpath=\"%s\"/>\n"
-       ,
+       , 
        pszUserType ? xml_encode( pszUserType ).c_str() : "",
        xml_encode(rSettings.find( "CONTACT" )->second).c_str(),
        xml_encode(rSettings.find( "EMAIL" )->second).c_str(),
@@ -211,10 +211,10 @@ bool write_report( const hash_map< string, string >& rSettings )
        xml_encode(getprogramdir()).c_str()
        );
 
-    struct utsname  info;
+    struct utsname	info;
 
     memset( &info, 0, sizeof(info) );
-    uname( &info );
+    uname( &info );	
 
     fprintf( fp,
        "<systeminfo:systeminfo xmlns:systeminfo=\"http://openoffice.org/2002/systeminfo\">\n"
@@ -245,24 +245,24 @@ bool write_report( const hash_map< string, string >& rSettings )
     fprintf( fp, "</errormail:errormail>\n" );
 
     fclose( fp );
-
+    
     return true;
 }
 
 
 bool write_description( const hash_map< string, string >& rSettings )
 {
-    bool    bSuccess = false;
-    FILE    *fp = fopen( tmpnam( g_szDescriptionFile ), "w" );
+    bool	bSuccess = false;
+    FILE	*fp = fopen( tmpnam( g_szDescriptionFile ), "w" );
 
     if ( fp )
-    {
+    {	
         bSuccess = true;
         fprintf( fp, "\xEF\xBB\xBF" );
         fprintf( fp, "%s\n", rSettings.find( "DESCRIPTION" )->second.c_str() );
         fclose( fp );
     }
-
+    
     return bSuccess;
 }
 
@@ -281,43 +281,43 @@ static void printSettings( const hash_map<string,string>& rSettings )
 bool save_crash_report( const string& rFileName, const hash_map< string, string >& /*rSettings*/ )
 {
     bool bSuccess = false;
-    FILE    *fpout = fopen( rFileName.c_str(), "w" );
-
+    FILE	*fpout = fopen( rFileName.c_str(), "w" );
+    
     if ( fpout )
     {
         FILE *fpin = fopen( g_szStackFile, "r" );
-
+        
         if ( fpin )
         {
-            char    buf[1024];
-
+            char	buf[1024];
+            
             while (fgets(buf, sizeof(buf), fpin) != NULL)
             {
                 fputs(buf, fpout);
             }
-
+            
             bSuccess = true;
-
+            
             fclose ( fpin );
         }
-
+        
         fclose( fpout );
     }
-
+    
     return bSuccess;
 }
 
-bool SendHTTPRequest(
-                FILE *fp,
-                const char *pszServer,
-                unsigned short uPort = 80,
-                const char *pszProxyServer = NULL,
+bool SendHTTPRequest( 
+                FILE *fp, 
+                const char *pszServer, 
+                unsigned short uPort = 80, 
+                const char *pszProxyServer = NULL, 
                 unsigned short uProxyPort = 8080 )
 {
     bool success = false;
 
     struct hostent *hp;
-
+    
     if ( pszProxyServer )
         hp = gethostbyname( pszProxyServer );
     else
@@ -325,7 +325,7 @@ bool SendHTTPRequest(
 
     if ( hp )
     {
-        SOCKET  s = socket( AF_INET, SOCK_STREAM, 0 );
+        SOCKET	s = socket( AF_INET, SOCK_STREAM, 0 );
 
         if ( s )
         {
@@ -348,7 +348,7 @@ bool SendHTTPRequest(
                 char buffer[2048];
 
                 if ( pszProxyServer )
-                    sprintf( buffer,
+                    sprintf( buffer, 
                     "POST http://%s:%d/soap/servlet/rpcrouter HTTP/1.0\r\n"
                         "Content-Type: text/xml; charset=\"utf-8\"\r\n"
                         "Content-Length: %d\r\n"
@@ -358,7 +358,7 @@ bool SendHTTPRequest(
                         static_cast<int>(length)
                         );
                 else
-                    sprintf( buffer,
+                    sprintf( buffer, 
                         "POST /soap/servlet/rpcrouter HTTP/1.0\r\n"
                         "Content-Type: text/xml; charset=\"utf-8\"\r\n"
                         "Content-Length: %d\r\n"
@@ -375,7 +375,7 @@ bool SendHTTPRequest(
                 if ( SOCKET_ERROR != send( s, buffer, strlen(buffer), 0 ) )
                 {
                     size_t nBytes;
-
+                    
                     do
                     {
                         nBytes = fread( buffer, 1, sizeof(buffer), fp );
@@ -439,10 +439,10 @@ static void WriteSOAPRequest( FILE *fp )
     fprintf( fp, "<body xsi:type=\"xsd:string\">This is an autogenerated crash report mail.</body>\n" );
     fprintf( fp, "<hash xsi:type=\"apache:Map\">\n" );
 
-    FILE    *fpin = fopen( g_szReportFile, "r" );
+    FILE	*fpin = fopen( g_szReportFile, "r" );
     if ( fpin )
     {
-        fprintf( fp,
+        fprintf( fp, 
             "<item>\n"
             "<key xsi:type=\"xsd:string\">reportmail.xml</key>\n"
             "<value xsi:type=\"xsd:string\"><![CDATA[" );
@@ -454,7 +454,7 @@ static void WriteSOAPRequest( FILE *fp )
     fpin = fopen( g_szDescriptionFile, "r" );
     if ( fpin )
     {
-        fprintf( fp,
+        fprintf( fp, 
             "<item>\n"
             "<key xsi:type=\"xsd:string\">description.txt</key>\n"
             "<value xsi:type=\"xsd:string\"><![CDATA[" );
@@ -466,7 +466,7 @@ static void WriteSOAPRequest( FILE *fp )
     fpin = fopen( g_szStackFile, "r" );
     if ( fpin )
     {
-        fprintf( fp,
+        fprintf( fp, 
             "<item>\n"
             "<key xsi:type=\"xsd:string\">stack.txt</key>\n"
             "<value xsi:type=\"xsd:string\"><![CDATA[" );
@@ -475,18 +475,18 @@ static void WriteSOAPRequest( FILE *fp )
         fclose( fpin );
     };
 
-    fprintf( fp,
+    fprintf( fp, 
         "</hash>\n"
         "</rds:submitReport>\n"
-        "</SOAP-ENV:Body>\n"
-        "</SOAP-ENV:Envelope>\n"
+        "</SOAP-ENV:Body>\n" 
+        "</SOAP-ENV:Envelope>\n" 
         );
 }
 
 struct RequestParams
 {
     bool    success;
-    FILE    *fpin;
+    FILE	*fpin;
     const char *pServer;
     unsigned short uPort;
     const char *pProxyServer;
@@ -515,16 +515,16 @@ bool send_crash_report( const hash_map< string, string >& rSettings )
 
     bool bSuccess = false;
 
-    FILE    *fptemp = tmpfile();
+    FILE	*fptemp = tmpfile();
     if ( fptemp )
     {
         WriteSOAPRequest( fptemp );
         fseek( fptemp, 0, SEEK_SET );
 
-        bSuccess = SendHTTPRequest(
-            fptemp,
-            REPORT_SERVER, REPORT_PORT,
-            bUseProxy ? pProxyServer : NULL,
+        bSuccess = SendHTTPRequest( 
+            fptemp, 
+            REPORT_SERVER, REPORT_PORT, 
+            bUseProxy ? pProxyServer : NULL, 
             uProxyPort ? uProxyPort : 8080
             );
 
@@ -534,27 +534,27 @@ bool send_crash_report( const hash_map< string, string >& rSettings )
 
     unlink( g_szDescriptionFile );
     unlink( g_szReportFile );
-
+    
     return bSuccess;
 }
 
 
 static bool append_file( const char *filename, string& rString )
 {
-    char    buf[1024];
-    bool    bSuccess = false;
-
+    char	buf[1024];	
+    bool	bSuccess = false;
+    
     FILE *fp = fopen( filename, "r" );
     if ( fp )
     {
         bSuccess = true;
-        while (fgets(buf, sizeof(buf), fp) != NULL)
+        while (fgets(buf, sizeof(buf), fp) != NULL) 
         {
             rString.append( buf );
         }
         fclose( fp );
     }
-
+    
     return true;
 }
 
@@ -562,9 +562,9 @@ string crash_get_details( const hash_map< string, string >& rSettings )
 {
     string aRet;
 
-    write_description( rSettings );
+    write_description( rSettings );	
     write_report( rSettings );
-
+        
     aRet.append( rSettings.find( "TITLE" )->second.c_str() );
     aRet.append( "\n\n" );
     append_file( g_szDescriptionFile, aRet );
@@ -575,7 +575,7 @@ string crash_get_details( const hash_map< string, string >& rSettings )
 
     unlink( g_szDescriptionFile );
     unlink( g_szReportFile );
-
+    
     return aRet;
 }
 
@@ -583,7 +583,7 @@ string crash_get_details( const hash_map< string, string >& rSettings )
 // ensure validity of program relative paths
 static void setup_program_dir( const char* progname )
 {
-    char    szCanonicProgPath[PATH_MAX];
+    char	szCanonicProgPath[PATH_MAX];
 
 
     if ( realpath( progname, szCanonicProgPath ) )
@@ -604,9 +604,9 @@ static void setup_program_dir( const char* progname )
 
 static long setup_commandline_arguments( int argc, char** argv, int *pSignal )
 {
-    long    pid = 0;
-    int     signal = 0;
-
+    long	pid = 0;
+    int		signal = 0;
+    
     for ( int n = 1; n < argc; n++ )
     {
         if ( 0 == strcmp( argv[n], "-p" ) )
@@ -652,22 +652,22 @@ static long setup_commandline_arguments( int argc, char** argv, int *pSignal )
         }
         else if ( argv[n] && strlen(argv[n]) )
         {
-            printf(
+            printf( 
                 "\n%s crash_report %s\n\n" \
                 "/?, -h[elp]          %s\n\n" \
                 "%-20s %s\n\n",
-                "%MSG_CMDLINE_USAGE%",
-                "%MSG_PARAM_PROCESSID%",
-                "%MSG_PARAM_HELP_DESCRIPTION%",
-                "%MSG_PARAM_PROCESSID%",
-                "%MSG_PARAM_PROCESSID_DESCRIPTION%"
+                "%MSG_CMDLINE_USAGE%", 
+                "%MSG_PARAM_PROCESSID%", 
+                "%MSG_PARAM_HELP_DESCRIPTION%", 
+                "%MSG_PARAM_PROCESSID%", 
+                "%MSG_PARAM_PROCESSID_DESCRIPTION%" 
                 );
             break;
         }
     }
 
     *pSignal = signal;
-
+    
     return pid;
 }
 
@@ -678,51 +678,51 @@ static bool read_line( FILE *fp, string& rLine )
     char szBuffer[1024];
     bool bSuccess = false;
     bool bEOL = false;
-    string  line;
+    string	line;
 
-
+        
     while ( !bEOL && fgets( szBuffer, sizeof(szBuffer), fp ) )
     {
-        int len = strlen(szBuffer);
-
+        int	len = strlen(szBuffer);
+        
         bSuccess = true;
-
+        
         while ( len && szBuffer[len - 1] == '\n' )
         {
             szBuffer[--len] = 0;
             bEOL = true;
         }
-
+            
         line.append( szBuffer );
     }
-
+    
     rLine = line;
     return bSuccess;
 }
 
 static string get_script_string( const char *pFileName, const char *pKeyName )
 {
-    FILE    *fp = fopen( pFileName, "r" );
-    string  retValue;
-
+    FILE	*fp = fopen( pFileName, "r" );
+    string	retValue;
+    
     if ( fp )
     {
         string line;
         string section;
-
+        
         while ( read_line( fp, line ) )
         {
             line = trim_string( line );
+            
 
-
-            string::size_type iEqualSign = line.find( '=', 0 );
+            string::size_type iEqualSign = line.find( '=', 0 ); 
 
             if ( iEqualSign != string::npos )
             {
-                string  keyname = line.substr( 0, iEqualSign );
+                string	keyname = line.substr( 0, iEqualSign );
                 keyname = trim_string( keyname );
-
-                string  value = line.substr( iEqualSign + 1, string::npos );
+                
+                string	value = line.substr( iEqualSign + 1, string::npos );
                 value = trim_string( value );
 
                 if ( value.length() && '\"' == value[0] )
@@ -734,7 +734,7 @@ static string get_script_string( const char *pFileName, const char *pKeyName )
                     if ( iQuotes != string::npos )
                         value.erase( iQuotes );
                 }
-
+                
                 if ( 0 == strcasecmp( keyname.c_str(), pKeyName ) )
                 {
                     retValue = value;
@@ -742,49 +742,49 @@ static string get_script_string( const char *pFileName, const char *pKeyName )
                 }
             }
         }
-
+        
         fclose( fp );
     }
-
+    
     return retValue;
 }
 
 static string get_profile_string( const char *pFileName, const char *pSectionName, const char *pKeyName, const char *pDefault = NULL )
 {
-    FILE    *fp = fopen( pFileName, "r" );
-    string  retValue = pDefault ? pDefault : "";
-
+    FILE	*fp = fopen( pFileName, "r" );
+    string	retValue = pDefault ? pDefault : "";
+    
     if ( fp )
     {
         string line;
         string section;
-
+        
         while ( read_line( fp, line ) )
         {
             line = trim_string( line );
-
+            
             if ( line.length() && line[0] == '[' )
             {
                 line.erase( 0, 1 );
                 string::size_type end = line.find( ']', 0 );
-
+                
                 if ( string::npos != end )
                     section = trim_string( line.substr( 0, end ) );
             }
             else
             {
 
-                string::size_type iEqualSign = line.find( '=', 0 );
+                string::size_type iEqualSign = line.find( '=', 0 ); 
 
                 if ( iEqualSign != string::npos )
                 {
-                    string  keyname = line.substr( 0, iEqualSign );
+                    string	keyname = line.substr( 0, iEqualSign );
                     keyname = trim_string( keyname );
-
-                    string  value = line.substr( iEqualSign + 1, string::npos );
+                    
+                    string	value = line.substr( iEqualSign + 1, string::npos );
                     value = trim_string( value );
-
-                    if (
+                    
+                    if ( 
                         0 == strcasecmp( section.c_str(), pSectionName ) &&
                         0 == strcasecmp( keyname.c_str(), pKeyName )
                          )
@@ -795,10 +795,10 @@ static string get_profile_string( const char *pFileName, const char *pSectionNam
                 }
             }
         }
-
+        
         fclose( fp );
     }
-
+    
     return retValue;
 }
 
@@ -814,13 +814,13 @@ static string get_environment_string( const char *pEnvName )
 
 static string read_from_file( const string& rFileName )
 {
-    string  content;
+    string	content;
     FILE *fp = fopen( rFileName.c_str(), "r" );
 
     if ( fp )
     {
-        char    buffer[256 + 1];
-        size_t  nBytesRead;
+        char	buffer[256 + 1];
+        size_t	nBytesRead;
 
         while( 0 != ( nBytesRead = fread( buffer, 1, sizeof(buffer) - 1,  fp ) ) )
         {
@@ -854,7 +854,7 @@ static void load_crash_data()
 static bool write_crash_data()
 {
     bool success = true;
-    string  sFile = get_home_dir();
+    string	sFile = get_home_dir();
 
     sFile += "/";
     sFile += string(XMLFILE);
@@ -863,7 +863,7 @@ static bool write_crash_data()
 
     if ( fp )
     {
-        FILE    *fpin = fopen( g_strXMLFileName.c_str(), "r" );
+        FILE	*fpin = fopen( g_strXMLFileName.c_str(), "r" );
 
         if ( fpin )
         {
@@ -883,7 +883,7 @@ static bool write_crash_data()
 
     if ( fp )
     {
-        FILE    *fpin = fopen( g_strChecksumFileName.c_str(), "r" );
+        FILE	*fpin = fopen( g_strChecksumFileName.c_str(), "r" );
 
         if ( fpin )
         {
@@ -915,7 +915,7 @@ static bool write_crash_data()
 static bool write_settings( const hash_map< string, string >& rSettings )
 {
     bool success = false;
-    string  sRCFile = get_home_dir();
+    string	sRCFile = get_home_dir();
 
     sRCFile += "/";
     sRCFile += string(RCFILE);
@@ -939,7 +939,7 @@ static bool write_settings( const hash_map< string, string >& rSettings )
 
 static void read_settings( hash_map< string, string >& rSettings )
 {
-    string  sRCFile = get_home_dir();
+    string	sRCFile = get_home_dir();
 
     sRCFile += "/";
     sRCFile += string(RCFILE);
@@ -955,7 +955,7 @@ static void read_settings( hash_map< string, string >& rSettings )
 
 static void read_settings_from_environment( hash_map< string, string >& rSettings )
 {
-    string  strEnv;
+    string	strEnv;
 
     strEnv = get_environment_string( "ERRORREPORT_RETURNADDRESS" );
     if ( strEnv.length() )
@@ -989,23 +989,23 @@ static void read_settings_from_environment( hash_map< string, string >& rSetting
         rSettings[ "TITLE" ] = strEnv;
 }
 
-static bool setup_version()
+static bool	setup_version()
 {
     if ( !getenv( "PRODUCTNAME" ) )
     {
         string productkey = get_profile_string( "bootstraprc", "Bootstrap", "ProductKey" );
-
+        
         g_strProductKey = productkey;
 
         if ( productkey.length() )
         {
             static string productname;
             static string productversion;
-            string::size_type   iSpace = productkey.find( ' ', 0 );
+            string::size_type	iSpace = productkey.find( ' ', 0 );
 
             if ( string::npos != iSpace )
             {
-                productname = productkey.substr( 0, iSpace );
+                productname = productkey.substr( 0, iSpace );	
                 productversion = productkey.substr( iSpace + 1, string::npos );
             }
             else
@@ -1013,13 +1013,13 @@ static bool setup_version()
 
             productname.insert( 0, "PRODUCTNAME=" );
             putenv( (char *)productname.c_str() );
-
+            
             productversion.insert( 0, "PRODUCTVERSION=" );
             putenv( (char *)productversion.c_str() );
         }
     }
-
-    g_buildid = get_profile_string( "versionrc", "Version", "BuildId" );
+    
+    g_buildid =	get_profile_string( "versionrc", "Version", "BuildId" );
     g_strDefaultLanguage = get_script_string( "instdb.ins", "DefaultLanguage"  );
 
     g_strReportServer = get_profile_string( "bootstraprc", "ErrorReport", "ErrorReportServer" );
@@ -1064,7 +1064,7 @@ int main( int argc, char** argv )
     if ( setup_version() )
     {
         /*long pid =*/ setup_commandline_arguments( argc, argv, &g_signal );
-
+        
         if ( g_bLoadReport )
         {
             load_crash_data();
@@ -1089,7 +1089,7 @@ int main( int argc, char** argv )
             write_crash_data();
             write_report( aDialogSettings );
 
-            string  sPreviewFile = get_home_dir();
+            string	sPreviewFile = get_home_dir();
             sPreviewFile += "/";
             sPreviewFile += string(PRVFILE);
 
@@ -1118,7 +1118,7 @@ int main( int argc, char** argv )
 
         return 0;
     }
-
+    
     return -1;
 }
 

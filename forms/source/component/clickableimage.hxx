@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,17 +67,17 @@ namespace frm
                                     ,public OPropertyChangeListener
     {
     protected:
-        ::com::sun::star::form::FormButtonType  m_eButtonType;      // Art des Buttons (push,submit,reset)
-        ::rtl::OUString                         m_sTargetURL;       // URL fuer den URL-Button
-        ::rtl::OUString                         m_sTargetFrame;     // TargetFrame zum Oeffnen
+        ::com::sun::star::form::FormButtonType	m_eButtonType;		// Art des Buttons (push,submit,reset)
+        ::rtl::OUString							m_sTargetURL;		// URL fuer den URL-Button
+        ::rtl::OUString							m_sTargetFrame;		// TargetFrame zum Oeffnen
 
         // ImageProducer stuff
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer>    m_xProducer;
-        SfxMedium*                              m_pMedium;          // Download-Medium
-        ImageProducer*                          m_pProducer;
-        sal_Bool                                m_bDispatchUrlInternal; // property: is not allowed to set : 1
-        sal_Bool                                m_bDownloading : 1; // laeuft ein Download?
-        sal_Bool                                m_bProdStarted : 1;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer>  	m_xProducer;
+        SfxMedium*								m_pMedium;			// Download-Medium
+        ImageProducer*							m_pProducer;
+        sal_Bool								m_bDispatchUrlInternal; // property: is not allowed to set : 1
+        sal_Bool								m_bDownloading : 1;	// laeuft ein Download?
+        sal_Bool 								m_bProdStarted : 1;
 
         // XSubmission stuff
         ::com::sun::star::uno::Reference< ::com::sun::star::form::submission::XSubmission >
@@ -96,7 +96,7 @@ namespace frm
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
         inline sal_Bool isDispatchUrlInternal() const { return m_bDispatchUrlInternal; }
-        inline void     setDispatchUrlInternal(sal_Bool _bDispatch) { m_bDispatchUrlInternal = _bDispatch; }
+        inline void		setDispatchUrlInternal(sal_Bool _bDispatch) { m_bDispatchUrlInternal = _bDispatch; }
 
     public:
         DECLARE_DEFAULT_XTOR( OClickableImageBaseModel );
@@ -289,7 +289,7 @@ namespace frm
     };
 
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 
 #endif // FORMS_SOURCE_CLICKABLEIMAGE_HXX

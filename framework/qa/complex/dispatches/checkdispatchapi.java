@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,14 +49,14 @@ public class checkdispatchapi extends ComplexTestCase
 {
     //-------------------------------------------
     // some const
-
+    
     //-------------------------------------------
     // member
-
-    /** points to the global uno service manager. */
+    
+    /** points to the global uno service manager. */    
     private XMultiServiceFactory m_xMSF = null;
     private connectivity.tools.HsqlDatabase db;
-
+    
     /** can be used to create new test frames. */
     private XFrame m_xDesktop = null;
 
@@ -65,13 +65,13 @@ public class checkdispatchapi extends ComplexTestCase
 
     //-------------------------------------------
     // test environment
-
+    
     //-------------------------------------------
     /** @short  A function to tell the framework,
                 which test functions are available.
-
+                
         @return All test methods.
-        @todo   Think about selection of tests from outside ...
+        @todo   Think about selection of tests from outside ...     
      */
     public String[] getTestMethodNames()
     {
@@ -95,7 +95,7 @@ public class checkdispatchapi extends ComplexTestCase
             "checkInterception"
         };
     }
-
+    
     //-------------------------------------------
     /** @short  Create the environment for following tests.
 
@@ -283,11 +283,11 @@ public class checkdispatchapi extends ComplexTestCase
     {
         String [] lDisabledURLs    = new String [1];
                   lDisabledURLs[0] = ".uno:Open";
-
+    
         log.println("create and initialize interceptor ...");
         Interceptor aInterceptor = new Interceptor(log);
         aInterceptor.setURLs4URLs4Blocking(lDisabledURLs);
-
+    
         com.sun.star.frame.XDispatchProviderInterceptor xInterceptor = (com.sun.star.frame.XDispatchProviderInterceptor)UnoRuntime.queryInterface(
                                                                                 com.sun.star.frame.XDispatchProviderInterceptor.class,
                                                                                 aInterceptor);
@@ -295,14 +295,14 @@ public class checkdispatchapi extends ComplexTestCase
         log.println("create and initialize frame ...");
         com.sun.star.frame.XFrame xFrame = impl_createNewFrame();
         impl_loadIntoFrame(xFrame, "private:factory/swriter", null);
-
+                                                                                
         com.sun.star.frame.XDispatchProviderInterception xInterception = (com.sun.star.frame.XDispatchProviderInterception)UnoRuntime.queryInterface(
                                                                                 com.sun.star.frame.XDispatchProviderInterception.class,
                                                                                 xFrame);
 
         log.println("register interceptor ...");
         xInterception.registerDispatchProviderInterceptor(xInterceptor);
-
+                                                                                
         log.println("deregister interceptor ...");
         xInterception.releaseDispatchProviderInterceptor(xInterceptor);
     }

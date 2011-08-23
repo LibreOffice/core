@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,24 +58,24 @@ namespace accessibility
             Make sure you only create such an object if the shape _really_
             does not contain text.
         */
-        AccessibleEmptyEditSource(  SdrObject& rObj, SdrView& rView, const Window& rViewWindow );
+        AccessibleEmptyEditSource(	SdrObject& rObj, SdrView& rView, const Window& rViewWindow );
         ~AccessibleEmptyEditSource();
 
         // from the SvxEditSource interface
-        SvxTextForwarder*       GetTextForwarder();
-        SvxViewForwarder*       GetViewForwarder();
+        SvxTextForwarder*		GetTextForwarder();
+        SvxViewForwarder*		GetViewForwarder();
 
-        SvxEditSource*          Clone() const;
+        SvxEditSource*			Clone() const;
 
         // this method internally switches from empty to proxy mode,
         // creating an SvxTextEditSource for the functionality.
-        SvxEditViewForwarder*   GetEditViewForwarder( sal_Bool bCreate = sal_False );
+        SvxEditViewForwarder*	GetEditViewForwarder( sal_Bool bCreate = sal_False );
 
-        void                    UpdateData();
-        SfxBroadcaster&         GetBroadcaster() const;
+        void					UpdateData();
+        SfxBroadcaster&			GetBroadcaster() const;
 
         // from the SfxListener interface
-        void                    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+        void					Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     private:
         void Switch2ProxyEditSource();
@@ -86,13 +86,13 @@ namespace accessibility
 
             @dyn
          */
-        std::auto_ptr< SvxEditSource >  mpEditSource;
+        std::auto_ptr< SvxEditSource > 	mpEditSource;
+    
+        SdrObject& 						mrObj; 
+        SdrView& 						mrView; 
+        const Window& 					mrViewWindow;
 
-        SdrObject&                      mrObj;
-        SdrView&                        mrView;
-        const Window&                   mrViewWindow;
-
-        bool                            mbEditSourceEmpty;
+        bool							mbEditSourceEmpty;
     };
 
 } // namespace accessibility

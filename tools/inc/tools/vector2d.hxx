@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,10 +39,10 @@
 class Vector2D
 {
 private:
-    double                      mfX;
-    double                      mfY;
-
-public:
+    double						mfX;
+    double						mfY;
+                        
+public:					
     inline Vector2D() : mfX( 0.0 ), mfY( 0.0 ) {}
     inline Vector2D( double fX, double fY ) : mfX( fX ), mfY( fY ) {}
     inline Vector2D( const Vector2D& rVec ) : mfX( rVec.mfX ), mfY( rVec.mfY ) {}
@@ -63,46 +63,46 @@ public:
     inline void Max(const Vector2D& rVec) { if(rVec.mfX > mfX) mfX = rVec.mfX; if(rVec.mfY > mfY) mfY = rVec.mfY; }
     inline void Abs() { if(mfX < 0.0) mfX = -mfX; if(mfY < 0.0) mfY = -mfY; }
 
-    inline void CalcInBetween(Vector2D& rOld1, Vector2D& rOld2, double t)
+    inline void CalcInBetween(Vector2D& rOld1, Vector2D& rOld2, double t) 
         { mfX = ((rOld2.mfX - rOld1.mfX) + t) + rOld1.mfX; mfY = ((rOld2.mfY - rOld1.mfY) + t) + rOld1.mfY; }
-    inline void CalcMiddle(Vector2D& rOld1, Vector2D& rOld2)
+    inline void CalcMiddle(Vector2D& rOld1, Vector2D& rOld2) 
         { mfX = (rOld1.mfX + rOld2.mfX) / 2.0; mfY = (rOld1.mfY + rOld2.mfY) / 2.0; }
     inline void CalcMiddle(Vector2D& rOld1, Vector2D& rOld2, Vector2D& rOld3)
         { mfX = (rOld1.mfX + rOld2.mfX + rOld3.mfX) / 3.0; mfY = (rOld1.mfY + rOld2.mfY + rOld3.mfY) / 3.0; }
+    
+    inline Vector2D&	operator+=( const Vector2D& rVec ) { mfX += rVec.mfX, mfY += rVec.mfY; return *this; }
+    inline Vector2D&	operator-=( const Vector2D& rVec ) { mfX -= rVec.mfX, mfY -= rVec.mfY; return *this; }
+    inline Vector2D		operator+(const Vector2D& rVec) const { Vector2D aSum(*this); aSum += rVec; return aSum; }
+    inline Vector2D		operator-(const Vector2D& rVec) const { Vector2D aSub(*this); aSub -= rVec; return aSub; }
+    inline Vector2D		operator-(void) const {	return Vector2D(-mfX, -mfY); }
+                        
+    inline double		Scalar( const Vector2D& rVec ) const { return( mfX * rVec.mfX + mfY * rVec.mfY ); }
 
-    inline Vector2D&    operator+=( const Vector2D& rVec ) { mfX += rVec.mfX, mfY += rVec.mfY; return *this; }
-    inline Vector2D&    operator-=( const Vector2D& rVec ) { mfX -= rVec.mfX, mfY -= rVec.mfY; return *this; }
-    inline Vector2D     operator+(const Vector2D& rVec) const { Vector2D aSum(*this); aSum += rVec; return aSum; }
-    inline Vector2D     operator-(const Vector2D& rVec) const { Vector2D aSub(*this); aSub -= rVec; return aSub; }
-    inline Vector2D     operator-(void) const { return Vector2D(-mfX, -mfY); }
+    inline Vector2D&	operator/=( const Vector2D& rVec ) { mfX /= rVec.mfX, mfY /= rVec.mfY; return *this; }
+    inline Vector2D&	operator*=( const Vector2D& rVec ) { mfX *= rVec.mfX, mfY *= rVec.mfY; return *this; }
+    inline Vector2D		operator/(const Vector2D& rVec) const { Vector2D aDiv(*this); aDiv /= rVec; return aDiv; }
+    inline Vector2D		operator*(const Vector2D& rVec) const { Vector2D aMul(*this); aMul *= rVec; return aMul; }
 
-    inline double       Scalar( const Vector2D& rVec ) const { return( mfX * rVec.mfX + mfY * rVec.mfY ); }
-
-    inline Vector2D&    operator/=( const Vector2D& rVec ) { mfX /= rVec.mfX, mfY /= rVec.mfY; return *this; }
-    inline Vector2D&    operator*=( const Vector2D& rVec ) { mfX *= rVec.mfX, mfY *= rVec.mfY; return *this; }
-    inline Vector2D     operator/(const Vector2D& rVec) const { Vector2D aDiv(*this); aDiv /= rVec; return aDiv; }
-    inline Vector2D     operator*(const Vector2D& rVec) const { Vector2D aMul(*this); aMul *= rVec; return aMul; }
-
-    inline Vector2D&    operator*=(double t) { mfX *= t; mfY *= t; return *this; }
-    inline Vector2D     operator*(double t) const { Vector2D aNew(*this); aNew *= t; return aNew; }
-    inline Vector2D&    operator/=(double t) { mfX /= t; mfY /= t; return *this; }
-    inline Vector2D     operator/(double t) const { Vector2D aNew(*this); aNew /= t; return aNew; }
-
-    inline BOOL         operator==( const Vector2D& rVec ) const { return( mfX == rVec.mfX && mfY == rVec.mfY ); }
-    inline BOOL         operator!=( const Vector2D& rVec ) const { return !( *this == rVec ); }
-
-    inline Vector2D&    operator=( const Vector2D& rVec ) { mfX = rVec.mfX, mfY = rVec.mfY; return *this; }
-    inline Vector2D&    operator=( const Pair& rPair ) { mfX = rPair.nA, mfY = rPair.nB; return *this; }
-    inline Vector2D&    operator-=( const Pair& rPair ) { mfX -= rPair.nA, mfY -= rPair.nB; return *this; }
-    inline Vector2D&    operator+=( const Pair& rPair ) { mfX += rPair.nA, mfY += rPair.nB; return *this; }
-    inline Vector2D&    operator*=( const Pair& rPair ) { mfX *= rPair.nA, mfY *= rPair.nB; return *this; }
-    inline Vector2D&    operator/=( const Pair& rPair ) { mfX /= rPair.nA, mfY /= rPair.nB; return *this; }
-
-    inline BOOL         operator==( const Pair& rPair ) const { return( mfX == rPair.nA && mfY == rPair.nB ); }
-    inline BOOL         operator!=( const Pair& rPair ) const { return !( *this == rPair ); }
-
-    inline BOOL         IsPositive( Vector2D& rVec ) const { return( ( mfX * rVec.mfY - mfY * rVec.mfX ) >= 0.0 ); }
-    inline BOOL         IsNegative( Vector2D& rVec ) const { return !IsPositive( rVec ); }
+    inline Vector2D&	operator*=(double t) { mfX *= t; mfY *= t; return *this; }
+    inline Vector2D		operator*(double t) const { Vector2D aNew(*this); aNew *= t; return aNew; }
+    inline Vector2D&	operator/=(double t) { mfX /= t; mfY /= t; return *this; }
+    inline Vector2D		operator/(double t) const { Vector2D aNew(*this); aNew /= t; return aNew; }
+    
+    inline BOOL			operator==( const Vector2D& rVec ) const { return( mfX == rVec.mfX && mfY == rVec.mfY ); }
+    inline BOOL			operator!=( const Vector2D& rVec ) const { return !( *this == rVec ); }
+    
+    inline Vector2D&	operator=( const Vector2D& rVec ) { mfX = rVec.mfX, mfY = rVec.mfY; return *this; }
+    inline Vector2D&	operator=( const Pair& rPair ) { mfX = rPair.nA, mfY = rPair.nB; return *this; }
+    inline Vector2D&	operator-=( const Pair& rPair ) { mfX -= rPair.nA, mfY -= rPair.nB; return *this; }
+    inline Vector2D&	operator+=( const Pair& rPair ) { mfX += rPair.nA, mfY += rPair.nB; return *this; }
+    inline Vector2D&	operator*=( const Pair& rPair ) { mfX *= rPair.nA, mfY *= rPair.nB; return *this; }
+    inline Vector2D&	operator/=( const Pair& rPair ) { mfX /= rPair.nA, mfY /= rPair.nB; return *this; }
+    
+    inline BOOL			operator==( const Pair& rPair ) const { return( mfX == rPair.nA && mfY == rPair.nB ); }
+    inline BOOL			operator!=( const Pair& rPair ) const { return !( *this == rPair ); }
+    
+    inline BOOL			IsPositive( Vector2D& rVec ) const { return( ( mfX * rVec.mfY - mfY * rVec.mfX ) >= 0.0 ); }
+    inline BOOL			IsNegative( Vector2D& rVec ) const { return !IsPositive( rVec ); }
 };
 
 // -----------------------------------------------------------------------------

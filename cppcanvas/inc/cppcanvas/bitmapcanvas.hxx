@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,10 +51,10 @@ namespace cppcanvas
     class BitmapCanvas : public virtual Canvas
     {
     public:
-        virtual ::basegfx::B2ISize      getSize() const = 0;
+        virtual ::basegfx::B2ISize 		getSize() const = 0;
 
         // shared_ptr does not allow for covariant return types
-        BitmapCanvasSharedPtr           cloneBitmapCanvas() const
+        BitmapCanvasSharedPtr			cloneBitmapCanvas() const
         {
             BitmapCanvasSharedPtr p( ::boost::dynamic_pointer_cast< BitmapCanvas >(this->clone()) );
             OSL_ENSURE(p.get(), "BitmapCanvas::cloneBitmapCanvas(): dynamic cast failed");

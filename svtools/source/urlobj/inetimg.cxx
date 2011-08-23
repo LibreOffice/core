@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -103,7 +103,7 @@ sal_Bool INetImage::Read( SvStream& rIStm, ULONG nFormat )
     int     iAltOffset;         // (alternate text?)
     int     iAnchorOffset;      // HREF in image
     int     iExtraHTML_Offset;  // Extra HTML (stored in CImageElement)
-    sal_Char pImageURL[1];      // Append all variable-length strings starting here
+    sal_Char pImageURL[1]; 		// Append all variable-length strings starting here
 */
             rtl_TextEncoding eSysCSet = gsl_getSystemTextEncoding();
             sal_Int32 nVal, nAnchorOffset, nAltOffset, nFilePos;
@@ -112,8 +112,8 @@ sal_Bool INetImage::Read( SvStream& rIStm, ULONG nFormat )
             nFilePos = rIStm.Tell();
             // skip over iSize (int), bIsMao ( BOOL ) alignment of 4 !!!!
             rIStm.SeekRel( 8 );
-            rIStm >> nVal;  aSizePixel.Width() = nVal;
-            rIStm >> nVal;  aSizePixel.Height() = nVal;
+            rIStm >> nVal;	aSizePixel.Width() = nVal;
+            rIStm >> nVal;	aSizePixel.Height() = nVal;
             // skip over iHSpace, iVSpace, iBorder, iLowResOffset
             rIStm.SeekRel( 3 * sizeof( INT32 ) + sizeof( int ) );
             rIStm >> nAltOffset;

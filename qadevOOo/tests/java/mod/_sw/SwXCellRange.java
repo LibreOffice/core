@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -157,9 +157,9 @@ public class SwXCellRange extends TestCase {
         NewData[4] = new Double[]
             {new Double(4),new Double(9),new Double(2.5),new Double(5)};
         tEnv.addObjRelation("NewData",NewData);
-
+        
         // com::sun::star::chart::XChartDataArray
-        tEnv.addObjRelation("CRDESC",
+        tEnv.addObjRelation("CRDESC", 
                  "Column and RowDescriptions can't be changed for this Object");
 
 

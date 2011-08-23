@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,24 +49,24 @@ class VCL_DLLPUBLIC FontCache
     typedef std::list< PrintFontManager::PrintFont* > FontCacheEntry;
     struct FontFile
     {
-        FontCacheEntry      m_aEntry;
+        FontCacheEntry		m_aEntry;
     };
 
     typedef std::hash_map< ::rtl::OString, FontFile, ::rtl::OStringHash > FontDirMap;
     struct FontDir
     {
-        sal_Int64   m_nTimestamp;
-        bool        m_bNoFiles;
+        sal_Int64	m_nTimestamp;
+        bool		m_bNoFiles;
         bool        m_bUserOverrideOnly;
-        FontDirMap  m_aEntries;
+        FontDirMap	m_aEntries;
 
         FontDir() : m_nTimestamp(0), m_bNoFiles(false), m_bUserOverrideOnly( false ) {}
     };
-
+    
     typedef std::hash_map< int, FontDir > FontCacheData;
-    FontCacheData   m_aCache;
-    String          m_aCacheFile;
-    bool            m_bDoFlush;
+    FontCacheData	m_aCache;
+    String			m_aCacheFile;
+    bool			m_bDoFlush;
 
     void read();
     void clearCache();

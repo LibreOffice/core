@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,18 +36,18 @@ import org.openoffice.xmerge.util.EndianConverter;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
 /**
- * Represents a BIFF record defiuning the default row height
+ * Represents a BIFF record defiuning the default row height 
  */
 public class DefRowHeight implements BIFFRecord {
 
     private byte[] unknown1 = new byte[2];
     private byte[] unknown2 = new byte[2];
-
+    
     /**
       * Constructs a pocket Excel Document from the
       * <code>InputStream</code> and assigns it the document name passed in
       *
-      * @param  is InputStream containing a Pocket Excel Data file.
+      * @param	is InputStream containing a Pocket Excel Data file.
       */
     public DefRowHeight() {
         unknown1 = new byte[] {(byte)0x00, (byte)0x00};
@@ -55,33 +55,33 @@ public class DefRowHeight implements BIFFRecord {
     }
 
     /**
-      * Constructs a DefRowHeight from the <code>InputStream</code>
+      * Constructs a DefRowHeight from the <code>InputStream</code> 
       *
-      * @param  is InputStream containing a Pocket Excel Data file.
+      * @param	is InputStream containing a Pocket Excel Data file.
       */
     public DefRowHeight(InputStream is) throws IOException {
         read(is);
     }
 
     /**
-     * Get the hex code for this particular <code>BIFFRecord</code>
+     * Get the hex code for this particular <code>BIFFRecord</code> 
      *
      * @return the hex code for <code>DefRowHeight</code>
      */
     public short getBiffType() {
         return PocketExcelConstants.DEFAULT_ROW_HEIGHT;
     }
-
+    
     public int read(InputStream input) throws IOException {
 
         int numOfBytesRead  = input.read(unknown1);
-        numOfBytesRead      += input.read(unknown2);
+        numOfBytesRead		+= input.read(unknown2);
 
-        Debug.log(Debug.TRACE,"\tunknown1 : "+ EndianConverter.readShort(unknown1) +
-                            " unknown2 : " + EndianConverter.readShort(unknown2));
+        Debug.log(Debug.TRACE,"\tunknown1 : "+ EndianConverter.readShort(unknown1) + 
+                            " unknown2 : " + EndianConverter.readShort(unknown2));        
         return numOfBytesRead;
     }
-
+    
     public void write(OutputStream output) throws IOException {
 
         output.write(getBiffType());
@@ -90,7 +90,7 @@ public class DefRowHeight implements BIFFRecord {
 
         Debug.log(Debug.TRACE,"Writing DefRowHeight record");
 
-
+    
     }
-
+    
 }

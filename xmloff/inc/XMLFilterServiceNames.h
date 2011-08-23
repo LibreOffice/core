@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,19 +30,19 @@
 #define _XMLOFF_XMLFILTERSERVICENAMES_H
 
 
-#define XML_IMPORT_FILTER_WRITER    "com.sun.star.comp.Writer.XMLOasisImporter"
-#define XML_IMPORT_FILTER_CALC      "com.sun.star.comp.Calc.XMLOasisImporter"
-#define XML_IMPORT_FILTER_DRAW      "com.sun.star.comp.Draw.XMLOasisImporter"
-#define XML_IMPORT_FILTER_IMPRESS   "com.sun.star.comp.Impress.XMLOasisImporter"
-#define XML_IMPORT_FILTER_MATH      "com.sun.star.comp.Math.XMLImporter"
-#define XML_IMPORT_FILTER_CHART     "com.sun.star.comp.Chart.XMLOasisImporter"
+#define XML_IMPORT_FILTER_WRITER	"com.sun.star.comp.Writer.XMLOasisImporter"
+#define XML_IMPORT_FILTER_CALC		"com.sun.star.comp.Calc.XMLOasisImporter"
+#define XML_IMPORT_FILTER_DRAW		"com.sun.star.comp.Draw.XMLOasisImporter"
+#define XML_IMPORT_FILTER_IMPRESS	"com.sun.star.comp.Impress.XMLOasisImporter"
+#define XML_IMPORT_FILTER_MATH		"com.sun.star.comp.Math.XMLImporter"
+#define XML_IMPORT_FILTER_CHART		"com.sun.star.comp.Chart.XMLOasisImporter"
 
-#define XML_EXPORT_FILTER_WRITER    "com.sun.star.comp.Writer.XMLOasisExporter"
-#define XML_EXPORT_FILTER_CALC      "com.sun.star.comp.Calc.XMLOasisExporter"
-#define XML_EXPORT_FILTER_DRAW      "com.sun.star.comp.Draw.XMLOasisExporter"
-#define XML_EXPORT_FILTER_IMPRESS   "com.sun.star.comp.Impress.XMLOasisExporter"
-#define XML_EXPORT_FILTER_MATH      "com.sun.star.comp.Math.XMLExporter"
-#define XML_EXPORT_FILTER_CHART     "com.sun.star.comp.Chart.XMLOasisExporter"
+#define XML_EXPORT_FILTER_WRITER	"com.sun.star.comp.Writer.XMLOasisExporter"
+#define XML_EXPORT_FILTER_CALC		"com.sun.star.comp.Calc.XMLOasisExporter"
+#define XML_EXPORT_FILTER_DRAW		"com.sun.star.comp.Draw.XMLOasisExporter"
+#define XML_EXPORT_FILTER_IMPRESS	"com.sun.star.comp.Impress.XMLOasisExporter"
+#define XML_EXPORT_FILTER_MATH		"com.sun.star.comp.Math.XMLExporter"
+#define XML_EXPORT_FILTER_CHART		"com.sun.star.comp.Chart.XMLOasisExporter"
 
 #endif
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,16 +41,16 @@ module com { module sun { module star { module graphic
 published service MediaProperties
 {
     /** Property that describes the location of the source or target
-        of the graphic as URL.
-
-        <p>A URL can be used instead of the
+        of the graphic as URL. 
+        
+        <p>A URL can be used instead of the 
         <member>InputStream</member> or <member>OutputStream</member>
         property</p>
-
+    
         <p>In addition to the normal protocols like file:// or http://
         you can use private URL's as follows to get access to graphics
         lying inside the resource system within an Office context:
-
+        
         <ul>
             <li>private:resource/projectshortname/bitmap/12345</li>
             <li>private:resource/projectshortname/bitmapex/12345</li>
@@ -58,14 +58,14 @@ published service MediaProperties
             <li>private:resource/projectshortname/imagelist/12345</li>
             <li>private:resource/projectshortname/imagelist/12345/12</li>
         </ul>
-And additionally, GraphicObject scheme url's like
+And additionally, GraphicObject scheme url's like 
             <ul> <li>vnd.sun.star.GraphicObject:10000000000001940000012FB99807BD</li> </ul>
-              can be used to access graphics held by the GraphicCache implementation.
+              can be used to access graphics held by the GraphicCache implementation. 
         </p>
 
         <p>Yet more, you can access graphics in the application-wide image
         repository by specifying URLs of the form
-        <code>private:graphicrepository/<em>&lt;path_in_repository&gt;</em></code>.
+        <code>private:graphicrepository/<em>&lt;path_in_repository&gt;</em></code>. 
 </p>
     */
     [optional, property ] string URL;
@@ -73,28 +73,28 @@ And additionally, GraphicObject scheme url's like
     /** This property is only used for loading graphics or querying
         graphic descriptors
 
-        <p>A <member>InputStream</member> can be used instead of the
+        <p>A <member>InputStream</member> can be used instead of the 
         <member>URL</member> property</p>
-
+                
         @see com::sun::star::io::XInputStream
     */
     [optional, property ] ::com::sun::star::io::XInputStream InputStream;
-
+    
     /** This property is only used for storing graphics
 
-        <p>A <member>OutputStream</member> can be used instead of the
+        <p>A <member>OutputStream</member> can be used instead of the 
         <member>URL</member> property</p>
-
+            
         @see com::sun::star::io::XStream
     */
     [optional, property ] ::com::sun::star::io::XStream OutputStream;
 
     /** This property is only used for storing graphics and describes the
         format into which the graphic is to be converted
-
+    
         <p>At the moment, the following mime types are supported for storing
         graphics:</p>
-
+        
         <ul>
             <li>image/bmp</li>
             <li>image/gif</li>
@@ -116,13 +116,13 @@ And additionally, GraphicObject scheme url's like
         </ul>
     */
     [optional, property ] string MimeType;
-
+    
     /** Additional properties that will be passed to the
     appropriate filter module.
     */
     [optional, property] ::com::sun::star::beans::PropertyValues FilterData;
 };
 
-} ; } ; } ; } ;
+} ; } ; } ; } ; 
 
 #endif

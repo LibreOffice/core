@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,32 +70,32 @@ class Distributor : public cpp::TokenDealer,        /// Handle C++ code tokens.
 
     // LIFECYCLE
                         Distributor(
-                            ary::cpp::Gate &    io_rGate );
+                            ary::cpp::Gate & 	io_rGate );
                         ~Distributor();
     // OPERATIONS
-    void                AssignPartners(
+    void				AssignPartners(
                             CharacterSource &   io_rSourceText,
                             const MacroMap &    i_rValidMacros );
     void                StartNewFile(
                             const csv::ploc::Path &
                                                 i_file );
-    virtual void        Deal_Eol();
-    virtual void        Deal_Eof();
+    virtual void		Deal_Eol();
+    virtual void		Deal_Eof();
 
-    virtual void        Deal_CppCode(
-                            cpp::Token &        let_drToken );
+    virtual void		Deal_CppCode(
+                            cpp::Token & 		let_drToken );
     virtual void        Deal_Cpp_UnblockMacro(
-                            Tok_UnblockMacro &  let_drToken );
+                            Tok_UnblockMacro & 	let_drToken );
 
-    virtual void        Deal_AdcDocu(
-                            adoc::Token &       let_drToken );
+    virtual void		Deal_AdcDocu(
+                            adoc::Token & 		let_drToken );
     virtual Distributor *
                         AsDistributor();
   private:
     // DATA
     PreProcessor        aCppPreProcessor;
-    CodeExplorer        aCodeExplorer;
-    adoc::DocuExplorer  aDocuExplorer;
+    CodeExplorer	    aCodeExplorer;
+    adoc::DocuExplorer	aDocuExplorer;
     ary::cpp::Gate *    pGate;
     FileScope_EventHandler *
                         pFileEventHandler;

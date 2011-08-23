@@ -62,7 +62,7 @@ namespace dbaccess
 {
 
 /// helper class for column property change events which holds the OComponentDefinition weak
-typedef ::cppu::WeakImplHelper1 < XPropertyChangeListener > TColumnPropertyListener_BASE;
+typedef ::cppu::WeakImplHelper1	< XPropertyChangeListener > TColumnPropertyListener_BASE;
 class OColumnPropertyListener : public TColumnPropertyListener_BASE
 {
     OComponentDefinition* m_pComponent;
@@ -121,7 +121,7 @@ void OComponentDefinition::registerProperties()
 }
 
 OComponentDefinition::OComponentDefinition(const Reference< XMultiServiceFactory >& _xORB
-                                           ,const Reference< XInterface >&  _xParentContainer
+                                           ,const Reference< XInterface >&	_xParentContainer
                                            ,const TContentPtr& _pImpl
                                            ,sal_Bool _bTable)
     :OContentHelper(_xORB,_xParentContainer,_pImpl)
@@ -138,7 +138,7 @@ OComponentDefinition::~OComponentDefinition()
 }
 
 
-OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxContainer
+OComponentDefinition::OComponentDefinition(	const Reference< XInterface >& _rxContainer
                                        ,const ::rtl::OUString& _rElementName
                                        ,const Reference< XMultiServiceFactory >& _xORB
                                        ,const TContentPtr& _pImpl
@@ -297,5 +297,5 @@ void OComponentDefinition::columnAppended( const Reference< XPropertySet >& _rxS
     notifyDataSourceModified();
 }
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

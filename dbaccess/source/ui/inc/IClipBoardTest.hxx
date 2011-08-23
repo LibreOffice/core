@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,15 +34,15 @@ namespace dbaui
     class SAL_NO_VTABLE IClipboardTest
     {
     public:
-        virtual sal_Bool isCutAllowed()         = 0;
-        virtual sal_Bool isCopyAllowed()        = 0;
-        virtual sal_Bool isPasteAllowed()       = 0;
+        virtual sal_Bool isCutAllowed()			= 0;
+        virtual sal_Bool isCopyAllowed()		= 0;
+        virtual sal_Bool isPasteAllowed()		= 0;
 
-        virtual sal_Bool hasChildPathFocus()    = 0;
+        virtual sal_Bool hasChildPathFocus()	= 0;
 
-        virtual void copy()     = 0;
-        virtual void cut()      = 0;
-        virtual void paste()    = 0;
+        virtual void copy()		= 0;
+        virtual void cut()		= 0;
+        virtual void paste()	= 0;
     };
 }
 #endif // DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX

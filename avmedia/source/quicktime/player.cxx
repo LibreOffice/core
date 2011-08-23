@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,8 +92,8 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     OSErr result;
 
     NSApplicationLoad();
-    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    // check the version of QuickTime installed
+    NSAutoreleasePool* pool	= [[NSAutoreleasePool alloc] init];
+    // check the version of QuickTime installed 
     result = Gestalt(gestaltQuickTime,&mnVersion);
     if ((result == noErr) && (mnVersion >= QT701))
     {
@@ -117,7 +117,7 @@ Player::~Player()
 
 QTMovie* Player::getMovie()
 {
-    OSL_ASSERT( mpMovie );
+    OSL_ASSERT( mpMovie ); 
     return mpMovie;
 }
 
@@ -126,17 +126,17 @@ QTMovie* Player::getMovie()
 bool Player::create( const ::rtl::OUString& rURL )
 {
     bool    bRet = false;
-    // create the Movie
+    // create the Movie    
     if( mbInitialized )
     {
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-
+        NSAutoreleasePool* pool	= [[NSAutoreleasePool alloc] init];
+        
         if( mpMovie )
         {
             [mpMovie release];
             mpMovie = nil;
         }
-
+        
         NSString* aNSStr = [[[NSString alloc] initWithCharacters: rURL.getStr() length: rURL.getLength()]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ;
         NSURL* aURL = [NSURL URLWithString:aNSStr ];
 
@@ -201,7 +201,7 @@ sal_Bool SAL_CALL Player::isPlaying()
             bRet = true;
         }
     }
-
+        
     return bRet;
 }
 
@@ -214,7 +214,7 @@ double SAL_CALL Player::getDuration(  )
     double duration = 0.01;
 
     if ( mpMovie ) // && mnDuration > 0 ) {
-    {
+    {   
         QTTime structDuration =  [mpMovie duration] ;
         duration = (double)structDuration.timeValue / (double)structDuration.timeScale;
     }
@@ -228,7 +228,7 @@ void SAL_CALL Player::setMediaTime( double fTime )
     throw (uno::RuntimeException)
 {
     OSL_TRACE ("Player::setMediaTime");
-
+    
     if ( mpMovie )
     {
         [mpMovie setCurrentTime: QTMakeTimeWithTimeInterval(fTime)];
@@ -282,7 +282,7 @@ void SAL_CALL Player::setRate( double fRate )
     throw (uno::RuntimeException)
 {
     OSL_TRACE ("Player::setRate");
-
+    
     // Quicktime: 0 = stop, 1 = normal speed, 2 = double speed, -1 = normal speed backwards
     if ( mpMovie )
     {
@@ -299,7 +299,7 @@ double SAL_CALL Player::getRate(  )
     double rate = 1.0;
 
     OSL_TRACE ("Player::getRate");
-
+        
     if ( mpMovie )
     {
         rate = (double) [mpMovie rate];
@@ -333,7 +333,7 @@ sal_Bool SAL_CALL Player::isPlaybackLoop(  )
     bool bRet = [[mpMovie attributeForKey:QTMovieLoopsAttribute] boolValue];
 
     OSL_TRACE ("Player::isPlaybackLoop ? %s", bRet?"True":"False" );
-
+    
     return bRet;
 }
 
@@ -347,7 +347,7 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
     // change the volume to 0 or the unmuted volume
     if(  mpMovie && mbMuted != bSet )
     {
-        [mpMovie setMuted: bSet ];
+        [mpMovie setMuted: bSet ]; 
         mbMuted = bSet;
     }
 
@@ -365,7 +365,7 @@ sal_Bool SAL_CALL Player::isMute(  )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
+void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB ) 
     throw (uno::RuntimeException)
 {
     // OOo db volume -40 = QTVolume 0
@@ -378,24 +378,24 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
     {
         mnUnmutedVolume = pow( 10.0, nVolumeDB / 20.0 );
     }
-
+    
     OSL_TRACE( "set volume: %d gst volume: %f", nVolumeDB, mnUnmutedVolume );
 
     // change volume
     if( !mbMuted && mpMovie )
     {
-        [mpMovie setVolume: mnUnmutedVolume ];
+        [mpMovie setVolume: mnUnmutedVolume ]; 
     }
 }
 
 // ------------------------------------------------------------------------------
-
-sal_Int16 SAL_CALL Player::getVolumeDB(  )
+    
+sal_Int16 SAL_CALL Player::getVolumeDB(  ) 
     throw (uno::RuntimeException)
 {
     sal_Int16 nVolumeDB = 0.0;
-
-    if( mpMovie )
+    
+    if( mpMovie ) 
       {
           float volume = 0.0;
 
@@ -409,7 +409,7 @@ sal_Int16 SAL_CALL Player::getVolumeDB(  )
               nVolumeDB = -40 ;  // QT zero volume is no volume, -40db
           }
       }
-
+    
     return nVolumeDB;
 }
 
@@ -432,13 +432,13 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
     uno::Reference< ::media::XPlayerWindow >    xRet;
     awt::Size                                   aSize( getPreferredPlayerWindowSize() );
     NSSize                                      nsSize( NSMakeSize(aSize.Width, aSize.Height) );
-
+    
     OSL_TRACE( "Player::createPlayerWindow %d %d length: %d", aSize.Width, aSize.Height, aArguments.getLength() );
 
     if( aSize.Width > 0 && aSize.Height > 0 )
     {
         sal_IntPtr nPtr = NULL;
-        aArguments[0] >>= nPtr;
+        aArguments[0] >>= nPtr;        
         NSView* pParentView = reinterpret_cast< NSView * >(nPtr);
 
         ::avmedia::quicktime::Window* pWindow = new ::avmedia::quicktime::Window( mxMgr, *this, pParentView );
@@ -450,7 +450,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 
 // ------------------------------------------------------------------------------
 
-uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
+uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  ) 
     throw (::com::sun::star::uno::RuntimeException)
 {
   uno::Reference< media::XFrameGrabber > xRet;
@@ -459,15 +459,15 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
   if( maURL.getLength() > 0 )
   {
       FrameGrabber* pGrabber = new FrameGrabber( mxMgr );
-
+      
       xRet = pGrabber;
-
+      
       if( !pGrabber->create( maURL ) )
       {
           xRet.clear();
       }
   }
-
+    
   return xRet;
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
     if( m_pCert != NULL ) {
         if( m_pCert->version.len > 0 ) {
             return ( char )*( m_pCert->version.data ) ;
-        } else
+        } else 
             return 0 ;
     } else {
         return -1 ;
@@ -301,7 +301,7 @@ void X509Certificate_NssImpl :: setRawCert( Sequence< sal_Int8 > rawCert ) throw
 
 /* XUnoTunnel */
 sal_Int64 SAL_CALL X509Certificate_NssImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw( RuntimeException ) {
-    if( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) {
+    if( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) { 
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }
     return 0 ;
@@ -350,19 +350,19 @@ X509Certificate_NssImpl* X509Certificate_NssImpl :: getImplementation( const Ref
         //char *fpStr = NULL;
         SECItem fpItem;
         int length = ((id == SEC_OID_MD5)?MD5_LENGTH:SHA1_LENGTH);
-
+        
         memset(fingerprint, 0, sizeof fingerprint);
         PK11_HashBuf(id, fingerprint, pCert->derCert.data, pCert->derCert.len);
         fpItem.data = fingerprint;
         fpItem.len = length;
         //fpStr = CERT_Hexify(&fpItem, 1);
-
+    
         Sequence< sal_Int8 > thumbprint( length ) ;
         for( int i = 0 ; i < length ; i ++ )
         {
             thumbprint[i] = fingerprint[i];
         }
-
+        
         //PORT_Free(fpStr);
         return thumbprint;
     }
@@ -388,11 +388,11 @@ X509Certificate_NssImpl* X509Certificate_NssImpl :: getImplementation( const Ref
 ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_NssImpl::getSubjectPublicKeyValue()
     throw ( ::com::sun::star::uno::RuntimeException)
 {
-    if( m_pCert != NULL )
+    if( m_pCert != NULL ) 
     {
         SECItem spk = m_pCert->subjectPublicKeyInfo.subjectPublicKey;
         DER_ConvertBitString(&spk);
-
+    
         if ( spk.len>0)
         {
             Sequence< sal_Int8 > key( spk.len ) ;
@@ -400,14 +400,14 @@ X509Certificate_NssImpl* X509Certificate_NssImpl :: getImplementation( const Ref
             {
                 key[i] = *( spk.data + i ) ;
             }
-
+    
             return key ;
         }
     }
-
+    
     return ::com::sun::star::uno::Sequence< sal_Int8 >();
 }
-
+    
 ::rtl::OUString SAL_CALL X509Certificate_NssImpl::getSignatureAlgorithm()
     throw ( ::com::sun::star::uno::RuntimeException)
 {
@@ -420,7 +420,7 @@ X509Certificate_NssImpl* X509Certificate_NssImpl :: getImplementation( const Ref
         return OUString() ;
     }
 }
-
+    
 ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_NssImpl::getSHA1Thumbprint()
     throw ( ::com::sun::star::uno::RuntimeException)
 {
@@ -439,9 +439,9 @@ sal_Int32 SAL_CALL X509Certificate_NssImpl::getCertificateUsage(  )
     SECStatus rv;
     SECItem tmpitem;
     sal_Int32 usage;
-
+    
     rv = CERT_FindKeyUsageExtension(m_pCert, &tmpitem);
-    if ( rv == SECSuccess )
+    if ( rv == SECSuccess ) 
     {
         usage = tmpitem.data[0];
         PORT_Free(tmpitem.data);
@@ -451,18 +451,18 @@ sal_Int32 SAL_CALL X509Certificate_NssImpl::getCertificateUsage(  )
     {
         usage = KU_ALL;
     }
-
+    
     /*
      * to make the nss implementation compatible with MSCrypto,
      * the following usage is ignored
      *
      *
-    if ( CERT_GovtApprovedBitSet(m_pCert) )
+    if ( CERT_GovtApprovedBitSet(m_pCert) ) 
     {
         usage |= KU_NS_GOVT_APPROVED;
     }
     */
-
+    
     return usage;
 }
 

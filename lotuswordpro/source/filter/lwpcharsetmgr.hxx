@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 #ifndef _LWPCHARSETMGR_HXX
 #define _LWPCHARSETMGR_HXX
@@ -74,8 +74,8 @@ public:
     ~LwpCharSetMgr(){};
     static LwpCharSetMgr* GetInstance();
     void SetCodePageMap();
-    rtl_TextEncoding    GetTextCharEncoding(sal_uInt16 wordproCode);
-    rtl_TextEncoding    GetTextCharEncoding();
+    rtl_TextEncoding	GetTextCharEncoding(sal_uInt16 wordproCode);
+    rtl_TextEncoding	GetTextCharEncoding();
 private:
     std::map<sal_uInt16,rtl_TextEncoding> m_CodePageMap;
     static LwpCharSetMgr* Instance;

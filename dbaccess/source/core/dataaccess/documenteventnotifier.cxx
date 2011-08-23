@@ -77,8 +77,8 @@ namespace dbaccess
         bool                                                    m_bInitialized;
         bool                                                    m_bDisposed;
         ::rtl::Reference< ::comphelper::AsyncEventNotifier >    m_pEventBroadcaster;
-        ::cppu::OInterfaceContainerHelper                       m_aLegacyEventListeners;
-        ::cppu::OInterfaceContainerHelper                       m_aDocumentEventListeners;
+        ::cppu::OInterfaceContainerHelper					    m_aLegacyEventListeners;
+        ::cppu::OInterfaceContainerHelper					    m_aDocumentEventListeners;
 
     public:
         DocumentEventNotifier_Impl( ::cppu::OWeakObject& _rBroadcasterDocument, ::osl::Mutex& _rMutex )

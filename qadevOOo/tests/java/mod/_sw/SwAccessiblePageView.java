@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,12 +110,12 @@ public class SwAccessiblePageView extends TestCase {
             e.printStackTrace(log);
             throw new StatusException( "Couldn't insert lines", e );
         }
-
+        
         // Enumeration
         XEnumerationAccess oEnumA = (XEnumerationAccess)
         UnoRuntime.queryInterface(XEnumerationAccess.class, oText );
         XEnumeration oEnum = oEnumA.createEnumeration();
-
+        
         try {
             para = (XInterface) AnyConverter.toObject(
             new Type(XInterface.class),oEnum.nextElement());
@@ -134,7 +134,7 @@ public class SwAccessiblePageView extends TestCase {
             e.printStackTrace(log);
             log.println("Error: exception occured...");
         }
-
+        
         try {
             portP = (XPropertySet)
             UnoRuntime.queryInterface(XPropertySet.class, port);

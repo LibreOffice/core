@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ TYPEINIT1(XMLAutoTextContainerEventImport, SvXMLImportContext);
 
 
 XMLAutoTextContainerEventImport::XMLAutoTextContainerEventImport(
-    SvXMLImport& rImport,
+    SvXMLImport& rImport, 
     USHORT nPrfx,
     const OUString& rLName,
     const Reference<XNameReplace> & rEvnts ) :
@@ -67,15 +67,15 @@ XMLAutoTextContainerEventImport::~XMLAutoTextContainerEventImport()
 {
 }
 
-SvXMLImportContext* XMLAutoTextContainerEventImport::CreateChildContext(
+SvXMLImportContext* XMLAutoTextContainerEventImport::CreateChildContext( 
     USHORT nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & )
 {
-    if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
+    if ( (XML_NAMESPACE_OFFICE == nPrefix) && 
          IsXMLToken( rLocalName, XML_EVENT_LISTENERS)   )
     {
-        return new XMLEventsImportContext(GetImport(), nPrefix, rLocalName,
+        return new XMLEventsImportContext(GetImport(), nPrefix, rLocalName, 
                                           rEvents);
     }
     else

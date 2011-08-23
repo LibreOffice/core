@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ public class WriterTools {
         return WriterDoc;
     } // finish createTextDoc
 
-    public static XTextDocument loadTextDoc(XMultiServiceFactory xMSF,
+    public static XTextDocument loadTextDoc(XMultiServiceFactory xMSF, 
                                             String url) {
         PropertyValue[] Args = new PropertyValue[0];
         XTextDocument WriterDoc = loadTextDoc(xMSF, url, Args);
@@ -63,7 +63,7 @@ public class WriterTools {
         return WriterDoc;
     } // finish createTextDoc
 
-    public static XTextDocument loadTextDoc(XMultiServiceFactory xMSF,
+    public static XTextDocument loadTextDoc(XMultiServiceFactory xMSF, 
                                             String url, PropertyValue[] Args) {
         XComponent comp = DesktopTools.loadDoc(xMSF, url, Args);
         XTextDocument WriterDoc = (XTextDocument) UnoRuntime.queryInterface(
@@ -86,9 +86,9 @@ public class WriterTools {
         return oDP;
     }
 
-    public static void insertTextGraphic(XTextDocument aDoc,
-                                         XMultiServiceFactory xMSF, int hpos,
-                                         int vpos, int width, int height,
+    public static void insertTextGraphic(XTextDocument aDoc, 
+                                         XMultiServiceFactory xMSF, int hpos, 
+                                         int vpos, int width, int height, 
                                          String pic, String name) {
         try {
             Object oGObject = (XInterface) xMSF.createInstance(
@@ -110,7 +110,7 @@ public class WriterTools {
             oProps.setPropertyValue("Width", new Integer(width));
             oProps.setPropertyValue("Height", new Integer(height));
 
-            XNamed the_name = (XNamed) UnoRuntime.queryInterface(XNamed.class,
+            XNamed the_name = (XNamed) UnoRuntime.queryInterface(XNamed.class, 
                                                                  oGObject);
             the_name.setName(name);
         } catch (Exception ex) {

@@ -74,16 +74,16 @@ void SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const un
         a queue. First element in the queue is the next event to be processed. */
     EventQueue aEventQueue;
     aEventQueue.push_back( EventQueueEntry( nEventId, rArgs ) );
-
+    
     /*  bEnabled will track if event processing is enabled. Every event handler
         may disable handling of other events. */
     bool bEnabled = true;
-
+    
     /*  bCancel will contain the current Cancel value. It is possible that
         multiple events will try to modify the Cancel value. Every event
         handler receives the Cancel value of the previous event handler. */
     bool bCancel = false;
-
+    
     /*  bSuccess will change to true if at least one event handler has been
         executed successfully. */
     bool bSuccess = false;

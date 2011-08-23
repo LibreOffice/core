@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,16 +73,16 @@ namespace basegfx
     public:
         /// Type of the basic entity (rect + user data)
         typedef ::std::pair< B2DRange, UserData > ComponentType;
-        typedef ::std::list< ComponentType >      ComponentListType;
+        typedef ::std::list< ComponentType >	  ComponentListType;
 
         /// List of (intersecting) components, plus overall bounds
         struct ConnectedComponents
         {
-            ComponentListType   maComponentList;
-            B2DRange            maTotalBounds;
+            ComponentListType	maComponentList;
+            B2DRange			maTotalBounds;
         };
 
-        typedef ::std::list< ConnectedComponents > ConnectedComponentsType;
+        typedef ::std::list< ConnectedComponents > ConnectedComponentsType;	
 
 
         /// Create the range calculator
@@ -109,15 +109,15 @@ namespace basegfx
             ranges (typically, for well-behaved input, it is O(n)
             though).
          */
-        void addRange( const B2DRange&  rRange,
-                       const UserData&  rUserData )
+        void addRange( const B2DRange& 	rRange,
+                       const UserData&	rUserData )
         {
             // check whether fast path is possible: if new range is
             // outside accumulated total range, can add it as a
             // separate component right away.
-            const bool bNotOutsideEverything(
+            const bool bNotOutsideEverything( 
                 maTotalBounds.overlaps( rRange ) );
-
+            
             // update own global bounds range
             maTotalBounds.expand( rRange );
 
@@ -172,7 +172,7 @@ namespace basegfx
                         // no position and size.
 
                         if( !aCurrAggregate->maTotalBounds.isEmpty() &&
-                            aCurrAggregate->maTotalBounds.overlaps(
+                            aCurrAggregate->maTotalBounds.overlaps( 
                                 aNewConnectedComponent.maTotalBounds ) )
                         {
                             // union the intersecting
@@ -181,13 +181,13 @@ namespace basegfx
 
                             // calc union bounding box
                             aNewConnectedComponent.maTotalBounds.expand( aCurrAggregate->maTotalBounds );
-
+                        
                             // extract all aCurrAggregate components
                             // to aNewConnectedComponent
-                            aNewConnectedComponent.maComponentList.splice(
-                                aNewConnectedComponent.maComponentList.end(),
+                            aNewConnectedComponent.maComponentList.splice( 
+                                aNewConnectedComponent.maComponentList.end(), 
                                 aCurrAggregate->maComponentList );
-
+                        
                             // remove and delete aCurrAggregate entry
                             // from list (we've gutted it's content
                             // above). list::erase() will update our
@@ -212,17 +212,17 @@ namespace basegfx
             //
 
             // add new component to the end of the component list
-            aNewConnectedComponent.maComponentList.push_back(
+            aNewConnectedComponent.maComponentList.push_back( 
                 ComponentType( rRange, rUserData ) );
-
+                               
             // do some consistency checks (aka post conditions)
             OSL_ENSURE( !aNewConnectedComponent.maComponentList.empty(),
                         "B2DConnectedRanges::addRange(): empty aggregate list" );
-            OSL_ENSURE( !aNewConnectedComponent.maTotalBounds.isEmpty() ||
-                        (aNewConnectedComponent.maTotalBounds.isEmpty() &&
+            OSL_ENSURE( !aNewConnectedComponent.maTotalBounds.isEmpty() || 
+                        (aNewConnectedComponent.maTotalBounds.isEmpty() && 
                          aNewConnectedComponent.maComponentList.size() == 1),
                         "B2DConnectedRanges::addRange(): empty ranges must be solitary");
-
+            
             // add aNewConnectedComponent as a new entry to
             // maDisjunctAggregatesList
             maDisjunctAggregatesList.push_back( aNewConnectedComponent );
@@ -242,7 +242,7 @@ namespace basegfx
                                     maDisjunctAggregatesList.end(),
                                     aFunctor );
         }
-
+        
     private:
         // default: disabled copy/assignment
         B2DConnectedRanges(const B2DConnectedRanges&);
@@ -253,11 +253,11 @@ namespace basegfx
             Each entry corresponds to one of the top-level rectangles
             in the drawing above.
          */
-        ConnectedComponentsType maDisjunctAggregatesList;
-
+        ConnectedComponentsType	maDisjunctAggregatesList;
+        
         /** Global bound rect over all added ranges.
          */
-        B2DRange                maTotalBounds;
+        B2DRange				maTotalBounds;
     };
 }
 

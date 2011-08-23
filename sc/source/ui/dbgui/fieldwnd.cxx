@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -275,14 +275,14 @@ void ScDPFieldWindow::DrawField(
 
 void ScDPFieldWindow::Redraw()
 {
-    VirtualDevice   aVirDev;
+    VirtualDevice	aVirDev;
     // #i97623# VirtualDevice is always LTR while other windows derive direction from parent
     aVirDev.EnableRTL( IsRTLEnabled() );
     aVirDev.SetMapMode( MAP_PIXEL );
 
-    Point           aPos0;
-    Size            aSize( GetSizePixel() );
-    Font            aFont( GetFont() );         // Font vom Window
+    Point			aPos0;
+    Size			aSize( GetSizePixel() );
+    Font			aFont( GetFont() );			// Font vom Window
     aFont.SetTransparent( TRUE );
     aVirDev.SetFont( aFont );
     aVirDev.SetOutputSizePixel( aSize );

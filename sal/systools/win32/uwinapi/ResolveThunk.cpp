@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 EXTERN_C void WINAPI ResolveThunk_WINDOWS( FARPROC *lppfn, LPCSTR lpLibFileName, LPCSTR lpFuncName, FARPROC lpfnEmulate, FARPROC lpfnFailure )
 {
-    FARPROC lpfnResult = (LONG)GetVersion() < 0 ? lpfnEmulate : GetProcAddress( LoadLibraryA( lpLibFileName ), lpFuncName );
+    FARPROC	lpfnResult = (LONG)GetVersion() < 0 ? lpfnEmulate : GetProcAddress( LoadLibraryA( lpLibFileName ), lpFuncName );
 
     if ( !lpfnResult )
         lpfnResult = lpfnEmulate;
@@ -45,7 +45,7 @@ EXTERN_C void WINAPI ResolveThunk_WINDOWS( FARPROC *lppfn, LPCSTR lpLibFileName,
 
 EXTERN_C void WINAPI ResolveThunk_TRYLOAD( FARPROC *lppfn, LPCSTR lpLibFileName, LPCSTR lpFuncName, FARPROC lpfnEmulate, FARPROC lpfnFailure )
 {
-    FARPROC lpfnResult = GetProcAddress( LoadLibraryA( lpLibFileName ), lpFuncName );
+    FARPROC	lpfnResult = GetProcAddress( LoadLibraryA( lpLibFileName ), lpFuncName );
 
     if ( !lpfnResult )
         lpfnResult = lpfnEmulate;

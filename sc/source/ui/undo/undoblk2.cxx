@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,14 +53,14 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1(ScUndoWidthOrHeight,      SfxUndoAction);
+TYPEINIT1(ScUndoWidthOrHeight,		SfxUndoAction);
 
 // -----------------------------------------------------------------------
 
 
 
 //
-//      Spaltenbreiten oder Zeilenhoehen aendern
+//		Spaltenbreiten oder Zeilenhoehen aendern
 //
 
 ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
@@ -124,12 +124,12 @@ void __EXPORT ScUndoWidthOrHeight::Undo()
         {
             pViewShell->SetMarkData( aMarkData );
 
-            nPaintStart = 0;        // paint all, because of changed selection
+            nPaintStart = 0;		// paint all, because of changed selection
         }
     }
 
-    //! outlines from all tables?
-    if (pUndoTab)                                           // Outlines mit gespeichert?
+    //!	outlines from all tables?
+    if (pUndoTab)											// Outlines mit gespeichert?
         pDoc->SetOutlineTable( nStartTab, pUndoTab );
 
     SCTAB nTabCount = pDoc->GetTableCount();
@@ -137,7 +137,7 @@ void __EXPORT ScUndoWidthOrHeight::Undo()
     for (nTab=0; nTab<nTabCount; nTab++)
         if (aMarkData.GetTableSelect(nTab))
         {
-            if (bWidth) // Width
+            if (bWidth)	// Width
             {
                 pUndoDoc->CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab,
                         static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE,
@@ -146,7 +146,7 @@ void __EXPORT ScUndoWidthOrHeight::Undo()
                 pDocShell->PostPaint( static_cast<SCCOL>(nPaintStart), 0, nTab,
                         MAXCOL, MAXROW, nTab, PAINT_GRID | PAINT_TOP );
             }
-            else        // Height
+            else		// Height
             {
                 pUndoDoc->CopyToDocument( 0, nStart, nTab, MAXCOL, nEnd, nTab, IDF_NONE, FALSE, pDoc );
                 pDoc->UpdatePageBreaks( nTab );
@@ -181,7 +181,7 @@ void __EXPORT ScUndoWidthOrHeight::Redo()
         {
             pViewShell->SetMarkData( aMarkData );
 
-            bPaintAll = TRUE;       // paint all, because of changed selection
+            bPaintAll = TRUE;		// paint all, because of changed selection
         }
     }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@ namespace connectivity
             MacabConnection* m_pConnection;
 
         public:
-            MacabTable( sdbcx::OCollection* _pTables, MacabConnection* _pConnection);
-            MacabTable( sdbcx::OCollection* _pTables,
+            MacabTable(	sdbcx::OCollection* _pTables, MacabConnection* _pConnection);
+            MacabTable(	sdbcx::OCollection* _pTables, 
                     MacabConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,

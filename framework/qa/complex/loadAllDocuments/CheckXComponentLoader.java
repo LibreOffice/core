@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,19 +72,19 @@ import java.util.Vector;
                 <li>2. ftp</li>
                 <li>3. http</li>
             </ul>
-            <p>
+            <p>            
             The test will look for a list of files from the <i>TestDocumentPath</i>
             on and load these files from the mounted directory, via ftp and http.
             The parameters for this have to be "ftp_access" and "http_access".
             If they are not given, tests for ftp and http will fail.
-
-    @todo   We need a further test for accessing UNC pathes on windows!
+            
+    @todo   We need a further test for accessing UNC pathes on windows!            
  */
 public class CheckXComponentLoader extends ComplexTestCase
 {
     //-------------------------------------------
     // some const
-
+    
     /** used to classify the result of a loadComponentFromURL() request. */
     private static final int RESULT_UNKNOWN                  = 0;
     private static final int RESULT_VALID_DOC                = 1;
@@ -93,11 +93,11 @@ public class CheckXComponentLoader extends ComplexTestCase
     private static final int RESULT_IOEXCEPTION              = 4;
     private static final int RESULT_RUNTIMEEXCEPTION         = 5;
     private static final int RESULT_EXCEPTION                = 6;
-
+    
     /** File/URL separators. */
     private static final String fs_url = "/";
     private static final String fs_sys = System.getProperty("file.separator");
-
+    
     /** used for testing password protected files. */
     private static final String SUFFIX_PASSWORD_TEMPFILE = "password_";
     private static final String PREFIX_PASSWORD_TEMPFILE = ".sxw";
@@ -105,25 +105,25 @@ public class CheckXComponentLoader extends ComplexTestCase
 
     //-------------------------------------------
     // member
-
-    /** points to the global uno service manager. */
+    
+    /** points to the global uno service manager. */    
     private XMultiServiceFactory m_xMSF = null;
-
+    
     /** provides XComponentLoader interface. */
     private XFrame m_xDesktop = null;
-
+    
     /** provides XComponentLoader interface too. */
     private XFrame m_xFrame = null;
-
+    
     /** will be set to xDesktop OR xFrame. */
     private XComponentLoader m_xLoader = null;
-
+    
     /** can be used to open local files as stream. */
     private XSimpleFileAccess m_xStreamProvider = null;
 
     /** directory for creating temp. files. */
     private String m_sTempPath = null;
-
+    
     /** directory for searching files to load */
     private String m_sTestDocPath = null;
 
@@ -132,13 +132,13 @@ public class CheckXComponentLoader extends ComplexTestCase
 
     //-------------------------------------------
     // test environment
-
+    
     //-------------------------------------------
     /** @short  A function to tell the framework,
                 which test functions are available.
-
+                
         @return All test methods.
-        @todo   Think about selection of tests from outside ...
+        @todo   Think about selection of tests from outside ...     
      */
     public String[] getTestMethodNames()
     {
@@ -155,7 +155,7 @@ public class CheckXComponentLoader extends ComplexTestCase
 
     //-------------------------------------------
     /** @short  Create the environment for following tests.
-
+    
         @descr  Use either a component loader from desktop or
                 from frame
      */
@@ -168,7 +168,7 @@ public class CheckXComponentLoader extends ComplexTestCase
         try
         {
             m_xStreamProvider = (XSimpleFileAccess)UnoRuntime.queryInterface(
-                                                    XSimpleFileAccess.class,
+                                                    XSimpleFileAccess.class, 
                                                     m_xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess"));
         }
         catch(java.lang.Throwable ex)
@@ -176,12 +176,12 @@ public class CheckXComponentLoader extends ComplexTestCase
             ex.printStackTrace();
             failed("Could not create a stream provider instance.");
         }
-
+        
         // create desktop instance
         try
         {
             m_xDesktop = (XFrame)UnoRuntime.queryInterface(
-                                    XFrame.class,
+                                    XFrame.class, 
                                     m_xMSF.createInstance("com.sun.star.frame.Desktop"));
         }
         catch(java.lang.Throwable ex)
@@ -191,7 +191,7 @@ public class CheckXComponentLoader extends ComplexTestCase
         }
 
         // create frame instance
-        m_xFrame = m_xDesktop.findFrame("testFrame_componentLoader"                    ,
+        m_xFrame = m_xDesktop.findFrame("testFrame_componentLoader"                    , 
                                         FrameSearchFlag.TASKS | FrameSearchFlag.CREATE);
         if (m_xFrame==null)
             failed("Couldn't create test frame.");
@@ -199,7 +199,7 @@ public class CheckXComponentLoader extends ComplexTestCase
         // define default loader for testing
         // TODO think about using of bot loader instances!
         m_xLoader = (XComponentLoader)UnoRuntime.queryInterface(
-                                         XComponentLoader.class,
+                                         XComponentLoader.class, 
                                          m_xDesktop);
         if (m_xLoader==null)
             failed("Desktop service doesnt support needed component loader interface.");
@@ -207,11 +207,11 @@ public class CheckXComponentLoader extends ComplexTestCase
         // get temp path for this environment
         m_sTempPath = (String) param.get("TempPath");
         m_sTempPath = "."+fs_sys;
-
+        
         // get all files from the given directory
         // TODO URLHelper should ignore directories!
         m_lTestFiles = new Vector();
-        m_sTestDocPath = (String) param.get("TestDocumentPath");
+        m_sTestDocPath = (String) param.get("TestDocumentPath"); 
         try
         {
             File        aBaseDir        = new File(m_sTestDocPath);
@@ -221,7 +221,7 @@ public class CheckXComponentLoader extends ComplexTestCase
             while(lList.hasMoreElements())
             {
                 File aFile = (File)lList.nextElement();
-
+                
                 // ignore broken links and directories at all
                 if (
                     (!aFile.exists()) ||
@@ -230,14 +230,14 @@ public class CheckXComponentLoader extends ComplexTestCase
                 {
                     continue;
                 }
-
+                
                 String sCompletePath = aFile.getAbsolutePath();
                 String sSubPath      = sCompletePath.substring(nBasePathLength + 1);
-
+                
                 // Some test files are checked into CVS. ignore CVS  helper files!
                 if (sSubPath.indexOf("CVS") > -1)
                     continue;
-
+                
                 m_lTestFiles.add(sSubPath);
             }
         }
@@ -262,7 +262,7 @@ public class CheckXComponentLoader extends ComplexTestCase
         }
         catch(com.sun.star.util.CloseVetoException exVeto)
             { failed("Test frame couldn't be closed successfully."); }
-
+        
         m_xFrame  = null;
         m_xLoader = null;
     }
@@ -274,7 +274,7 @@ public class CheckXComponentLoader extends ComplexTestCase
     {
         InteractionHandler xHandler   = new InteractionHandler();
         StatusIndicator    xIndicator = new StatusIndicator(StatusIndicator.SHOWSTATUS_LOG);
-
+        
         PropertyValue[] lProps = new PropertyValue[3];
 
         lProps[0] = new PropertyValue();
@@ -294,7 +294,7 @@ public class CheckXComponentLoader extends ComplexTestCase
         {
             File   aSysFile = new File(m_sTestDocPath+fs_sys+(String)aSnapshot.nextElement());
             String sURL     = URLHelper.getFileURLFromSystemPath(aSysFile);
-
+            
             loadURL(m_xLoader, RESULT_VALID_DOC, sURL, "_blank", 0, lProps);
 
             // Its not needed to reset this using states!
@@ -315,18 +315,18 @@ public class CheckXComponentLoader extends ComplexTestCase
         File aDir = new File(sTempPath);
         if (!aDir.exists())
             failed("Could not access temp directory \""+sTempPath+"\".");
-
+        
         for (int i=0; i<999999; ++i)
         {
             File aTempFile = new File(aDir, sSuffix+i+sPrefix);
             if (!aTempFile.exists())
                 return aTempFile.getAbsolutePath();
         }
-
+        
         failed("Seems that all temp file names are currently in use!");
         return null;
     }
-
+    
     //-------------------------------------------
     /** TODO document me and move this method to a more global helper! */
     private void impl_createTempOfficeDocument(XComponentLoader xLoader   ,
@@ -336,25 +336,25 @@ public class CheckXComponentLoader extends ComplexTestCase
                                                String           sPassword )
     {
         PropertyValue[] lLoadProps = new PropertyValue[1];
-
+        
         lLoadProps[0] = new PropertyValue();
         lLoadProps[0].Name = "Hidden";
         lLoadProps[0].Value = Boolean.TRUE;
 
         PropertyValue[] lSaveProps = new PropertyValue[3];
-
+        
         lSaveProps[0] = new PropertyValue();
         lSaveProps[0].Name = "FilterName";
         lSaveProps[0].Value = sFilter;
-
+        
         lSaveProps[1] = new PropertyValue();
         lSaveProps[1].Name = "PassWord";
         lSaveProps[1].Value = sPassword;
-
+        
         lSaveProps[2] = new PropertyValue();
         lSaveProps[2].Name = "Overwrite";
         lSaveProps[2].Value = Boolean.TRUE;
-
+        
         XComponent xDoc = null;
         try
         {
@@ -368,12 +368,12 @@ public class CheckXComponentLoader extends ComplexTestCase
                                             XStorable.class,
                                             xDoc);
             xStore.storeAsURL(sTargetURL, lSaveProps);
-
+            
             // Dont forget to close this file. Otherwise the temp file is locked!
             XCloseable xClose = (XCloseable)UnoRuntime.queryInterface(
                                                 XCloseable.class,
                                                 xDoc);
-            xClose.close(false);
+            xClose.close(false);                                                
         }
         catch(java.lang.Throwable ex)
         {
@@ -381,10 +381,10 @@ public class CheckXComponentLoader extends ComplexTestCase
             failed("Could not create temp office document.");
         }
     }
-
+    
     //-------------------------------------------
     /** @short  Check the password handling.
-
+    
         @descr  The used password is the one given
                 as password for the ftp connection,
                 or - if none given a default one.
@@ -398,17 +398,17 @@ public class CheckXComponentLoader extends ComplexTestCase
         impl_createTempOfficeDocument(m_xLoader, "private:factory/swriter", sTestURL, "StarOffice XML (Writer)", DEFAULT_PASSWORD);
 
         PropertyValue[] lArgs1 = new PropertyValue[2];
-
+        
         lArgs1[0] = new PropertyValue();
         lArgs1[0].Name  = "Hidden";
         lArgs1[0].Value = Boolean.TRUE;
-
+        
         lArgs1[1] = new PropertyValue();
         lArgs1[1].Name  = "Password";
         lArgs1[1].Value = DEFAULT_PASSWORD;
-
+        
         PropertyValue[] lArgs2 = new PropertyValue[1];
-
+        
         lArgs2[0] = new PropertyValue();
         lArgs2[0].Name  = "Hidden";
         lArgs2[0].Value = Boolean.TRUE;
@@ -445,7 +445,7 @@ public class CheckXComponentLoader extends ComplexTestCase
         byte[] baURL = null;
 
         while (aSnapshot.hasMoreElements()) {
-            File aFile = new File(m_sTestDocPath + fs_sys +
+            File aFile = new File(m_sTestDocPath + fs_sys + 
                                   aSnapshot.nextElement());
             String sFile = URLHelper.getFileURLFromSystemPath(aFile);
 
@@ -480,15 +480,15 @@ public class CheckXComponentLoader extends ComplexTestCase
                 log.println("ENC[" + sEncoding[i] + "]");
 
                 if (sEncoding[i + 1].equals("TRUE")) {
-                    loadURL(m_xLoader, RESULT_VALID_DOC, encURL, "_blank", 0,
+                    loadURL(m_xLoader, RESULT_VALID_DOC, encURL, "_blank", 0, 
                             lProps);
                 } else {
                     //with cws_loadenv01 changed to IllegalArgumentException
-                    loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, encURL, "_blank", 0,
+                    loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, encURL, "_blank", 0, 
                             lProps);
                 }
             } catch (java.io.UnsupportedEncodingException e) {
-                failed("Unsopported Encoding: " + sEncoding[i] +
+                failed("Unsopported Encoding: " + sEncoding[i] + 
                        "\n Not able to test encoding on this platform.", true);
             }
         }
@@ -512,57 +512,57 @@ public class CheckXComponentLoader extends ComplexTestCase
         log.println("check possible but unsupported URLs");
 
         String[] sIllegalArgs = new String[] {
-            "slot:5000", "slot:10909", ".uno:SaveAs", ".uno:Open",
+            "slot:5000", "slot:10909", ".uno:SaveAs", ".uno:Open", 
         };
-        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sIllegalArgs,
+        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sIllegalArgs, 
                 "_blank", 0, lProps);
 
         log.println("check stupid URLs");
 
         sIllegalArgs = new String[] {
-            "slot:xxx", "slot:111111111", ".uno:save_as", ".uno:open_this",
-            ".UnO:*",
+            "slot:xxx", "slot:111111111", ".uno:save_as", ".uno:open_this", 
+            ".UnO:*", 
         };
-        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sIllegalArgs,
+        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sIllegalArgs, 
                 "_blank", 0, lProps);
 
         String[] sEmptyDocs = new String[] {
-            "mailo:hansi.meier@germany.sun.com", "file:/c:\\test/file.cxx",
-            "file:///c|:\\test/file.cxx", "http_server://staroffice-doc\\",
-            "c:\\\\test///\\test.sxw", "news_:staroffice-doc",
-            "newsletter@blubber", "private_factory/swriter",
-            "private:factory//swriter", "private:factory/swriter/___",
-            "c:\\test\\test.sxw", "macro:///ImportWizard.Main.Main",
-            "macro:///Euro.AutoPilotRun.StartAutoPilot",
-            "service:com.sun.star.frame.Frame",
-            "mailto:steffen.grund@germany.sun.com", "news:staroffice-doc",
-            "macro:/ExportWizard", "macro://Euro.AutoPilotRun.StartAutoPilot",
+            "mailo:hansi.meier@germany.sun.com", "file:/c:\\test/file.cxx", 
+            "file:///c|:\\test/file.cxx", "http_server://staroffice-doc\\", 
+            "c:\\\\test///\\test.sxw", "news_:staroffice-doc", 
+            "newsletter@blubber", "private_factory/swriter", 
+            "private:factory//swriter", "private:factory/swriter/___", 
+            "c:\\test\\test.sxw", "macro:///ImportWizard.Main.Main", 
+            "macro:///Euro.AutoPilotRun.StartAutoPilot", 
+            "service:com.sun.star.frame.Frame", 
+            "mailto:steffen.grund@germany.sun.com", "news:staroffice-doc", 
+            "macro:/ExportWizard", "macro://Euro.AutoPilotRun.StartAutoPilot", 
             "service:com.sun.star.frame."
         };
-
+        
         //with cws_loadenv01 changed to IllegalArgumentException
-        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sEmptyDocs, "_blank", 0,
+        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sEmptyDocs, "_blank", 0, 
                 lProps);
 
         log.println("check case senstive URLs");
 
         sIllegalArgs = new String[] {
-            "sLot:5000", "sloT:10909", ".unO:SaveAs", ".uno:OPEN",
+            "sLot:5000", "sloT:10909", ".unO:SaveAs", ".uno:OPEN", 
         };
-        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sIllegalArgs,
+        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sIllegalArgs, 
                 "_blank", 0, lProps);
 
         sEmptyDocs = new String[] {
-            "private:factory/SWRITER", "private:factory/SWRITER/WEB",
-            "macro:///importwizard.main.main",
-            "Macro:///euro.autopilotrun.startautopilot",
-            "Service:Com.Sun.Star.Frame.Frame",
-            "Mailto:andreas.schluens@germany.sun.com", "neWs:staroffice-doc",
+            "private:factory/SWRITER", "private:factory/SWRITER/WEB", 
+            "macro:///importwizard.main.main", 
+            "Macro:///euro.autopilotrun.startautopilot", 
+            "Service:Com.Sun.Star.Frame.Frame", 
+            "Mailto:andreas.schluens@germany.sun.com", "neWs:staroffice-doc", 
             "News:Staroffice-doc"
         };
-
+        
         //with cws_loadenv01 changed to IllegalArgumentException
-        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sEmptyDocs, "_blank", 0,
+        loadURL(m_xLoader, RESULT_ILLEGALARGUMENTEXCEPTION, sEmptyDocs, "_blank", 0, 
                 lProps);
 
         log.println("check FTP URLs");
@@ -577,7 +577,7 @@ public class CheckXComponentLoader extends ComplexTestCase
             // if os is windows
             doc = doc.replace('\\', '/');
         if (doc.indexOf("CVS")<0) {
-            loadURL(m_xLoader, RESULT_VALID_DOC, sFTPURL + "/" + doc,
+            loadURL(m_xLoader, RESULT_VALID_DOC, sFTPURL + "/" + doc, 
                     "_blank", 0, lProps);
         }
         }
@@ -593,8 +593,8 @@ public class CheckXComponentLoader extends ComplexTestCase
 
             // if os is windows
             doc = doc.replace('\\', '/');
-        if (doc.indexOf("CVS")<0) {
-            loadURL(m_xLoader, RESULT_VALID_DOC, sHTTPURL + "/" + doc,
+        if (doc.indexOf("CVS")<0) {	    
+            loadURL(m_xLoader, RESULT_VALID_DOC, sHTTPURL + "/" + doc, 
                     "_blank", 0, lProps);
         }
         }
@@ -609,7 +609,7 @@ public class CheckXComponentLoader extends ComplexTestCase
         lProps[0] = new PropertyValue();
         lProps[0].Name = "Hidden";
         lProps[0].Value = Boolean.TRUE;
-
+        
         lProps[1] = new PropertyValue();
         lProps[1].Name = "InputStream";
 
@@ -618,10 +618,10 @@ public class CheckXComponentLoader extends ComplexTestCase
         {
             File   aFile = new File(m_sTestDocPath + fs_sys + (String) aSnapshot.nextElement());
             String sURL  = URLHelper.getFileURLFromSystemPath(aFile);
-
+            
             if (sURL.indexOf("CVS") > -1)
                 continue;
-
+            
             try
             {
                 XInputStream xStream = m_xStreamProvider.openFileRead(sURL);
@@ -629,13 +629,13 @@ public class CheckXComponentLoader extends ComplexTestCase
             }
             catch(com.sun.star.uno.Exception e)
                 { failed("Could not open test file \""+sURL+"\" for stream test."); }
-
-            // check different version of "private:stream" URL!
+                
+            // check different version of "private:stream" URL!                
             loadURL(m_xLoader, RESULT_VALID_DOC, "private:stream" , "_blank", 0, lProps);
             loadURL(m_xLoader, RESULT_VALID_DOC, "private:stream/", "_blank", 0, lProps);
         }
     }
-
+    
     /**
      * Loads one URL with the given parameters using the method
      * loadComponentFromURL(). Further it's possible to specify, whch result is
@@ -644,14 +644,14 @@ public class CheckXComponentLoader extends ComplexTestCase
      * all possible exceptions and try to leave the office without any forgotten
      * but opened documents.
      */
-    private void loadURL(XComponentLoader m_xLoader, int nRequiredResult,
-                         String sURL, String sTarget, int nFlags,
+    private void loadURL(XComponentLoader m_xLoader, int nRequiredResult, 
+                         String sURL, String sTarget, int nFlags, 
                          PropertyValue[] lProps) {
         int nResult = RESULT_EMPTY_DOC;
         XComponent xDoc = null;
 
         try {
-            xDoc = m_xLoader.loadComponentFromURL(sURL, sTarget, nFlags,
+            xDoc = m_xLoader.loadComponentFromURL(sURL, sTarget, nFlags, 
                                                      lProps);
 
             if (xDoc != null) {
@@ -677,30 +677,30 @@ public class CheckXComponentLoader extends ComplexTestCase
                 xDoc = null;
             }
         } catch (com.sun.star.uno.RuntimeException exClosing) {
-            log.println("exception during disposing of a document found!" +
+            log.println("exception during disposing of a document found!" + 
                         " Doesn't influence test - but should be checked.");
         }
 
         String sMessage = "URL[\"" + sURL + "\"]";
 
         if (nResult == nRequiredResult) {
-            log.println(sMessage + " expected result [" +
+            log.println(sMessage + " expected result [" + 
                         convertResult2String(nResult) + "] ");
         } else {
-            failed(sMessage + " unexpected result [" +
-                   convertResult2String(nResult) + "] " +
-                   "\nrequired was [" +
-                   convertResult2String(nRequiredResult) + "]" +
-                   "\nwe got       [" + convertResult2String(nResult) + "]",
+            failed(sMessage + " unexpected result [" + 
+                   convertResult2String(nResult) + "] " + 
+                   "\nrequired was [" + 
+                   convertResult2String(nRequiredResult) + "]" + 
+                   "\nwe got       [" + convertResult2String(nResult) + "]", 
                    true);
         }
     }
 
-    private void loadURL(XComponentLoader m_xLoader, int nRequiredResult,
-                         String[] sURL, String sTarget, int nFlags,
+    private void loadURL(XComponentLoader m_xLoader, int nRequiredResult, 
+                         String[] sURL, String sTarget, int nFlags, 
                          PropertyValue[] lProps) {
         for (int i = 0; i < sURL.length; i++)
-            loadURL(m_xLoader, nRequiredResult, sURL[i], sTarget, nFlags,
+            loadURL(m_xLoader, nRequiredResult, sURL[i], sTarget, nFlags, 
                     lProps);
     }
 

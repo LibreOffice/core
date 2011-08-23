@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace dbaui;
-OTableFieldControl::OTableFieldControl( Window* pParent, OTableDesignHelpBar* pHelpBar) :OFieldDescControl(pParent,pHelpBar)
+OTableFieldControl::OTableFieldControl( Window* pParent, OTableDesignHelpBar* pHelpBar) :OFieldDescControl(pParent,pHelpBar) 
 {
 }
 //------------------------------------------------------------------
@@ -122,7 +122,7 @@ void OTableFieldControl::SetModified(BOOL bModified)
     return xCon->getMetaData();
 }
 // -----------------------------------------------------------------------------
-Reference< XNumberFormatter >   OTableFieldControl::GetFormatter() const
+Reference< XNumberFormatter >	OTableFieldControl::GetFormatter() const
 {
     return GetCtrl()->GetView()->getController().getNumberFormatter();
 }
@@ -132,7 +132,7 @@ TOTypeInfoSP OTableFieldControl::getTypeInfo(sal_Int32 _nPos)
     return GetCtrl()->GetView()->getController().getTypeInfo(_nPos);
 }
 // -----------------------------------------------------------------------------
-const OTypeInfoMap* OTableFieldControl::getTypeInfo() const
+const OTypeInfoMap*	OTableFieldControl::getTypeInfo() const
 {
     return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController().getTypeInfo();
 }

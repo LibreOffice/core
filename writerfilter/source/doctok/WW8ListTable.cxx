@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@ void WW8ListTable::initPayload()
     for (sal_uInt32 n = 0; n < nCount; ++n)
     {
         WW8List aList(this, nOffset);
-
+        
         entryOffsets.push_back(nOffset);
         payloadIndices.push_back(payloadOffsets.size());
         nOffset += WW8List::getSize();
@@ -66,7 +66,7 @@ void WW8ListTable::initPayload()
     }
 
     payloadOffsets.push_back(nOffsetLevel);
-    entryOffsets.push_back(nOffset);
+    entryOffsets.push_back(nOffset);    
 }
 
 sal_uInt32 WW8ListTable::getEntryCount()
@@ -74,7 +74,7 @@ sal_uInt32 WW8ListTable::getEntryCount()
     return getU16(0);
 }
 
-writerfilter::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t 
 WW8ListTable::getEntry(sal_uInt32 nIndex)
 {
     WW8List * pList = new WW8List(this, entryOffsets[nIndex]);
@@ -93,14 +93,14 @@ sal_uInt32 WW8List::get_listlevel_count()
     return 9;
 }
 
-writerfilter::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t 
 WW8List::get_listlevel(sal_uInt32 nIndex)
 {
     WW8ListTable * pListTable = dynamic_cast<WW8ListTable *>(mpParent);
     sal_uInt32 nPayloadIndex = pListTable->getPayloadIndex(mnIndex) + nIndex;
     sal_uInt32 nPayloadOffset = pListTable->getPayloadOffset(nPayloadIndex);
     sal_uInt32 nPayloadSize = pListTable->getPayloadSize(nPayloadIndex);
-
+        
     return writerfilter::Reference<Properties>::Pointer_t
         (new WW8ListLevel(mpParent, nPayloadOffset, nPayloadSize));
 }
@@ -108,7 +108,7 @@ WW8List::get_listlevel(sal_uInt32 nIndex)
 ::rtl::OUString WW8ListLevel::get_xst()
 {
     sal_uInt32 nOffset = WW8ListLevel::getSize();
-
+    
     nOffset += get_cbGrpprlPapx();
     nOffset += get_cbGrpprlChpx();
 
@@ -132,7 +132,7 @@ void WW8ListLevel::resolveNoAuto(Properties & rHandler)
     {
         WW8PropertySet::Pointer_t pSet
             (new WW8PropertySetImpl(*this, nOffset, get_cbGrpprlChpx()));
-
+    
         WW8PropertiesReference aRef(pSet);
         aRef.resolve(rHandler);
     }

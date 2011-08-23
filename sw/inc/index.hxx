@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,8 +30,8 @@
 
 #include <limits.h>
 #include <tools/solar.h>
-#include <tools/rtti.hxx>               // for RTTI of SwIndexReg
-#include <tools/string.hxx>             // for xub_StrLen
+#include <tools/rtti.hxx>				// for RTTI of SwIndexReg
+#include <tools/string.hxx>				// for xub_StrLen
 #include <swdllapi.h>
 
 #define INVALID_INDEX STRING_NOTFOUND
@@ -56,12 +56,12 @@ class SW_DLLPUBLIC SwIndex
     int MySerial;
 #endif
 
-    xub_StrLen  nIndex;
-    SwIndexReg* pArray;
+    xub_StrLen	nIndex;
+    SwIndexReg*	pArray;
     SwIndex *pNext, *pPrev;
 
     SwIndex& ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue );
-    void Remove();                  // Ausketten
+    void Remove();					// Ausketten
 
 public:
     explicit SwIndex(SwIndexReg *const pReg, xub_StrLen const nIdx = 0);
@@ -91,7 +91,7 @@ public:
     BOOL operator!=( const SwIndex& rSwIndex ) const
     { return (nIndex != rSwIndex.nIndex) ||  (pArray != rSwIndex.pArray); }
 
-    BOOL operator<( xub_StrLen nWert ) const    { return nIndex <  nWert; }
+    BOOL operator<( xub_StrLen nWert ) const 	{ return nIndex <  nWert; }
     BOOL operator<=( xub_StrLen nWert ) const   { return nIndex <= nWert; }
     BOOL operator>( xub_StrLen nWert ) const    { return nIndex >  nWert; }
     BOOL operator>=( xub_StrLen nWert ) const   { return nIndex >= nWert; }
@@ -102,7 +102,7 @@ public:
     SwIndex& operator=( const SwIndex & );
 
     // gebe den Wert vom Index als xub_StrLen zurueck
-    xub_StrLen GetIndex() const { return nIndex; }
+    xub_StrLen GetIndex() const	{ return nIndex; }
 
     // ermoeglicht Zuweisungen ohne Erzeugen eines temporaeren
     // Objektes

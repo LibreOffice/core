@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,11 +94,11 @@ TYPEINIT1( FuConstructCustomShape, FuConstruct );
 \************************************************************************/
 
 FuConstructCustomShape::FuConstructCustomShape (
-        ViewShell*          pViewSh,
-        ::sd::Window*       pWin,
-        ::sd::View*         pView,
-        SdDrawDocument*     pDoc,
-        SfxRequest&         rReq ) :
+        ViewShell* 			pViewSh,
+        ::sd::Window*		pWin,
+        ::sd::View*			pView,
+        SdDrawDocument*		pDoc,
+        SfxRequest&			rReq ) :
     FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
 {
 }
@@ -263,7 +263,7 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
                             if( pSourceObj )
                             {
                                 const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
-                                SfxItemSet aDest( pObj->GetModel()->GetItemPool(),              // ranges from SdrAttrObj
+                                SfxItemSet aDest( pObj->GetModel()->GetItemPool(), 				// ranges from SdrAttrObj
                                 SDRATTR_START, SDRATTR_SHADOW_LAST,
                                 SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,

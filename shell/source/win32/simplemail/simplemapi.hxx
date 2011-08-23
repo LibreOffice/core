@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #endif
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif
+#endif 
 
 class CSimpleMapi
 {
@@ -51,37 +51,37 @@ public:
         or necessary function exports are missing
     */
     CSimpleMapi(); // throws std::runtime_error;
-
+    
     ~CSimpleMapi();
-
-    ULONG MAPILogon(
-        ULONG ulUIParam,
-        LPTSTR lpszProfileName,
-        LPTSTR lpszPassword,
-        FLAGS flFlags,
-        ULONG ulReserved,
+    
+    ULONG MAPILogon( 
+        ULONG ulUIParam, 
+        LPTSTR lpszProfileName, 
+        LPTSTR lpszPassword, 
+        FLAGS flFlags, 
+        ULONG ulReserved, 
         LPLHANDLE lplhSession );
 
-    ULONG MAPILogoff(
+    ULONG MAPILogoff( 
         LHANDLE lhSession,
         ULONG ulUIParam,
         FLAGS flFlags,
         ULONG ulReserved );
 
-    ULONG MAPISendMail(
-        LHANDLE lhSession,
-        ULONG ulUIParam,
-        lpMapiMessage lpMessage,
-        FLAGS flFlags,
+    ULONG MAPISendMail( 
+        LHANDLE lhSession,         
+        ULONG ulUIParam,           
+        lpMapiMessage lpMessage,   
+        FLAGS flFlags,             
         ULONG ulReserved );
-
-private:
+    
+private:    
     HMODULE         m_hMapiDll;
-    LPMAPILOGON     m_lpfnMapiLogon;
+    LPMAPILOGON     m_lpfnMapiLogon;    
     LPMAPILOGOFF    m_lpfnMapiLogoff;
     LPMAPISENDMAIL  m_lpfnMapiSendMail;
 };
 
-#endif
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,7 +45,7 @@
 
 #include <unoctrl.hxx>
 
-#include <svtools/unoiface.hxx> // InitExtToolkit
+#include <svtools/unoiface.hxx>	// InitExtToolkit
 
 UsrAny UsrAny_UINT16( UINT16 n )
 {
@@ -68,13 +68,13 @@ MyApp aMyApp;
 
 class MyWin : public WorkWindow
 {
-    XControlRef             xCtrl;
-    XPropertySetRef         xCtrlModel;
-    XControlContainerRef    xCont;
-    XPropertySetRef         xContModel;
-    XControlRef             xDrawCtrl;
-    XGraphicsRef            xG;
-
+    XControlRef				xCtrl;
+    XPropertySetRef			xCtrlModel;
+    XControlContainerRef	xCont;
+    XPropertySetRef			xContModel;
+    XControlRef				xDrawCtrl;
+    XGraphicsRef			xG;
+    
 public:
                 MyWin( Window* pParent, WinBits nWinStyle );
                 ~MyWin();
@@ -116,7 +116,7 @@ MyWin::~MyWin()
 
 void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if( rMEvt.GetClicks() == 2 )
+    if( rMEvt.GetClicks() == 2 ) 
     {
         XViewRef xV( xDrawCtrl, USR_QUERY );
         XWindowRef xC( xDrawCtrl, USR_QUERY );
@@ -128,13 +128,13 @@ void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
         XServiceProviderRef xSSI = xProv->queryServiceProvider( L"stardiv.vcl.PrinterServer" );
         XPrinterServerRef xPrinterServer( xSSI->createInstance(), USR_QUERY );
 
-        Sequence< UString > aPrinterNames = xPrinterServer->getPrinterNames();
+        Sequence< UString >	aPrinterNames = xPrinterServer->getPrinterNames();
         USHORT nPrinters = aPrinterNames.getLen();
         String aInfo( "Printers: " );
-        aInfo += nPrinters;
-        if ( nPrinters )
+        aInfo += nPrinters; 
+        if ( nPrinters ) 
         {
-            for ( USHORT n = 0; n < nPrinters; n++ )
+            for ( USHORT n = 0; n < nPrinters; n++ ) 
             {
                 aInfo += '\n';
                 aInfo += OUStringToString( aPrinterNames.getConstArray()[n], CHARSET_SYSTEM );
@@ -149,9 +149,9 @@ void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
             xPrinter->end();
         }
         InfoBox( this, aInfo ).Execute();
-*/
+*/	
     }
-    else if( rMEvt.GetClicks() == 1 )
+    else if( rMEvt.GetClicks() == 1 ) 
     {
         if( xContModel )
         {
@@ -165,7 +165,7 @@ void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
             XServiceManagerRef xProv = getGlobalServiceManager();
 
             XMultiServiceFactoryRef xMSF = NAMESPACE_USR( getProcessServiceManager )();
-
+            
             XServiceProviderRef xSSI = xProv->queryServiceProvider( L"stardiv.vcl.VclToolkit" );
             XToolkitRef xToolkit( xMSF->createInstance( L"stardiv.vcl.VclToolkit" ), USR_QUERY );
             DBG_ASSERT( xToolkit, "No Toolkit!" );
@@ -180,7 +180,7 @@ void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
             xModelProv = xProv->queryServiceProvider( L"stardiv.vcl.control.ControlContainer" );
             XInterfaceRef xCCRef( xModelProv->createInstance(), USR_QUERY );
             xCCRef->queryInterface( XControlContainer::getSmartUik(), xCont );
-
+            
             XControlModelRef xCM( xContModel, USR_QUERY );
             XControlRef xContControl( xCont, USR_QUERY );
             xContControl->setModel( xCM );
@@ -188,14 +188,14 @@ void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
             xContComp->setPosSize( 0, 0, 500, 600, PosSize_POSSIZE );
 
             // Zwei EditControls auf einem Model...
-//          xModelProv = xProv->queryServiceProvider( L"stardiv.uno.awt.UnoControlEditModel" );
+//			xModelProv = xProv->queryServiceProvider( L"stardiv.uno.awt.UnoControlEditModel" );
             XInterfaceRef xModel( xMSF->createInstance(L"stardiv.uno.awt.UnoControlEditModel") );
             DBG_ASSERT( xModel, "No Model!" );
 
             XPropertySetRef xPSet( xModel, USR_QUERY );
             xPSet->setPropertyValue( L"Text", UsrAny( UString( L"Hallo!" ) ) );
             xPSet->setPropertyValue( L"FontName", UsrAny( UString( L"Times New Roman" ) ) );
-//          xPSet->setPropertyValue( L"FontWeight", UsrAny( 200 ) );
+//			xPSet->setPropertyValue( L"FontWeight", UsrAny( 200 ) );
 
             XServiceProviderRef xEditCtrlProv = xProv->queryServiceProvider( L"stardiv.uno.awt.UnoControlEdit" );
             // Edit1
@@ -211,7 +211,7 @@ void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
             xEdit2->setModel( xCM );
             XWindowRef xEditCmp2( xEdit2, USR_QUERY );
             XLayoutConstrainsRef xL( xEdit2, USR_QUERY );
-            if ( xL.is() )
+            if ( xL.is() ) 
             {
                 Size aSz = xL->getPreferredSize();
                 xEditCmp2->setPosSize( 100, 180, aSz.Width(), aSz.Height(), PosSize_POSSIZE );
@@ -232,7 +232,7 @@ void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
             XWindowRef xNumFieldWin( xNumField, USR_QUERY );
             xNumFieldWin->setPosSize( 50, 250, 100, 60, PosSize_POSSIZE );
             xCont->addControl( L"", xNumField );
-
+            
             XMultiPropertySetRef xPSet2( xNumModel, USR_QUERY );
             Sequence<UString> Names( 2 );
             Names.getArray()[0] = L"Value";
@@ -242,7 +242,7 @@ void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
             Values.getArray()[1] = UsrAny( -2000000.0 );
             xPSet2->setPropertyValues( Names, Values );
 
-
+            
             // Button...
             xModelProv = xProv->queryServiceProvider( L"stardiv.vcl.controlmodel.Button" );
             xModelProv->createInstance()->queryInterface( XInterface::getSmartUik(), xModel );
@@ -264,11 +264,11 @@ void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
             xCont->addControl( L"", xButton1 );
 
 /*
-
+            
             // ListBox...
             xModelProv = xProv->queryServiceProvider( L"stardiv.vcl.controlmodel.ListBox" );
             xModel = (XInterface*)xModelProv->createInstance()->queryInterface( XInterface::getSmartUik() );
-
+            
             xPSet = (XPropertySet*)xModel->queryInterface( XPropertySet::getSmartUik() );
             Sequence<UString> aSeq( 7 );
             aSeq.getArray()[0] = L"Item1";
@@ -325,10 +325,10 @@ void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
             XWindowRef xGroupBoxCmp1 = (XWindow*)xGroupBox1->queryInterface( XWindow::getSmartUik() );
             xGroupBoxCmp1->setPosSize( 30, 410, 100, 130, PosSize_POSSIZE );
             xCont->addControl( L"", xGroupBox1 );
-
+            
             XServiceProviderRef xRadioButtonModelProv = xProv->queryServiceProvider( L"stardiv.vcl.controlmodel.RadioButton" );
             XServiceProviderRef xRadioButtonCtrlProv = xProv->queryServiceProvider( L"stardiv.vcl.control.RadioButton" );
-
+            
             xModel = (XInterface*)xRadioButtonModelProv->createInstance()->queryInterface( XInterface::getSmartUik() );
             XControlRef xT1 = (XControl*)xRadioButtonCtrlProv->createInstance()->queryInterface( XControl::getSmartUik() );
             xT1->setModel( (XControlModel*)xModel->queryInterface( XControlModel::getSmartUik() ) );
@@ -338,7 +338,7 @@ void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
             xPSet = (XPropertySet*)xModel->queryInterface( XPropertySet::getSmartUik() );
             xPSet->setPropertyValue( L"Label", UsrAny( L"Radio1" ) );
             xPSet->setPropertyValue( L"State", UsrAny_UINT16( 1 ) );
-
+            
             xModel = (XInterface*)xRadioButtonModelProv->createInstance()->queryInterface( XInterface::getSmartUik() );
             XControlRef xT2 = (XControl*)xRadioButtonCtrlProv->createInstance()->queryInterface( XControl::getSmartUik() );
             xT2->setModel( (XControlModel*)xModel->queryInterface( XControlModel::getSmartUik() ) );
@@ -347,7 +347,7 @@ void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
             xCont->addControl( L"", xT2 );
             xPSet = (XPropertySet*)xModel->queryInterface( XPropertySet::getSmartUik() );
             xPSet->setPropertyValue( L"Label", UsrAny( L"Radio2" ) );
-
+            
             xModel = (XInterface*)xRadioButtonModelProv->createInstance()->queryInterface( XInterface::getSmartUik() );
             XControlRef xT3 = (XControl*)xRadioButtonCtrlProv->createInstance()->queryInterface( XControl::getSmartUik() );
             xT3->setModel( (XControlModel*)xModel->queryInterface( XControlModel::getSmartUik() ) );
@@ -356,7 +356,7 @@ void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
             xCont->addControl( L"", xT3 );
             xPSet = (XPropertySet*)xModel->queryInterface( XPropertySet::getSmartUik() );
             xPSet->setPropertyValue( L"Label", UsrAny( L"Radio3" ) );
-
+            
             xModel = (XInterface*)xRadioButtonModelProv->createInstance()->queryInterface( XInterface::getSmartUik() );
             XControlRef xT4 = (XControl*)xRadioButtonCtrlProv->createInstance()->queryInterface( XControl::getSmartUik() );
             xT4->setModel( (XControlModel*)xModel->queryInterface( XControlModel::getSmartUik() ) );
@@ -385,26 +385,26 @@ void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
             aControls.getArray()[3] = xT2->getModel();
             aControls.getArray()[4] = xT4->getModel();
             xTCModel->setControls( aControls );
-
+            
             Sequence<XControlModelRef> aGroup( 3 );
             aGroup.getArray()[0] = xT1->getModel();
             aGroup.getArray()[1] = xT3->getModel();
             aGroup.getArray()[2] = xT2->getModel();
             xTCModel->setGroup( aGroup, L"test" );
-*/
+*/			
             // Container anzeigen...
             // Als Child zu diesem Fenster
-            xContControl->createPeer( XToolkitRef(), GetComponentInterface( TRUE ) );
+            xContControl->createPeer( XToolkitRef(), GetComponentInterface( TRUE ) ); 
 
             XDeviceRef xD( xContControl->getPeer(), USR_QUERY );
             xG = xD->createGraphics();
             XViewRef xV ( xDrawCtrl, USR_QUERY );
             xV->setGraphics( xG );
 
-//      ((UnoControl*)(XControl*)xNumField))->updateFromModel();
+//		((UnoControl*)(XControl*)xNumField))->updateFromModel();
 
 /*
-            // TEST:
+            // TEST: 
             WindowDecriptor aDescr;
             aDescr.ComponentServiceName = "window";
             aDescr.Type = VCLCOMPONENTTYPE_CONTAINER;
@@ -412,7 +412,7 @@ void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
             aDescr.WindowAttributes = WA_SHOW|WA_BORDER;
             aDescr.Bounds = Rectangle( Point( 500, 50 ), Size( 300, 200 ) );
             XVclWindowPeerRef xSPWin = xToolkit->createComponent( aDescr );
-
+            
             WindowDecriptor aDescr2;
             aDescr2.ComponentServiceName = "scrollbar";
             aDescr2.Type = VCLCOMPONENTTYPE_SIMPLE;
@@ -438,13 +438,13 @@ void MyWin::Resize()
 void MyWin::Paint( const Rectangle& r )
 {
     // Muss ueber PaintListener geschehen...
-    if ( xDrawCtrl.is() )
+    if ( xDrawCtrl.is() ) 
     {
         XViewRef xV( xDrawCtrl, USR_QUERY );
         XWindowRef xC( xDrawCtrl, USR_QUERY );
         xV->draw( xC->getPosSize().Left(), xC->getPosSize().Top() );
     }
-
+   
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

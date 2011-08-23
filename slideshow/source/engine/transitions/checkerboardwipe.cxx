@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,9 @@ namespace internal {
 {
     const double d = (1.0 / m_unitsPerEdge);
     ::basegfx::B2DHomMatrix aTransform;
-    aTransform.scale( ::basegfx::pruneScaleValue( d * 2.0 * t ),
+    aTransform.scale( ::basegfx::pruneScaleValue( d * 2.0 * t ), 
                       ::basegfx::pruneScaleValue( d ) );
-
+    
     ::basegfx::B2DPolyPolygon res;
     for ( sal_Int32 i = m_unitsPerEdge; i--; )
     {

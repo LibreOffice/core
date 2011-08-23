@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -180,8 +180,8 @@ public class _XTableColumns extends MultiMethodTest {
             log.println("Inserting column at Index " + cnt + " ... OK");
             result &= true;
         }
-
-        if (tEnv.getTestCase().getObjectName().equals("ScTableColumnsObj")) {
+        
+        if (tEnv.getTestCase().getObjectName().equals("ScTableColumnsObj")) {        
 
             try {
                 oObj.insertByIndex(0,0);
@@ -191,7 +191,7 @@ public class _XTableColumns extends MultiMethodTest {
                 log.println("Inserting 0 columns ... OK");
                 result &= true;
             }
-
+            
         }
 
         tRes.tested( "insertByIndex()", result );

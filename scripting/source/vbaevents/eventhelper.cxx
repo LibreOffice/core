@@ -248,7 +248,7 @@ struct TranslateInfo
     rtl::OUString sVBAName; //vba event name
     Translator toVBA;       //the method to convert OO event parameters to VBA event parameters
     bool (*ApproveRule)(const ScriptEvent& evt, void* pPara); //this method is used to determine which types of controls should execute the event
-    void *pPara;            //Parameters for the above approve method
+    void *pPara;			//Parameters for the above approve method
 };
 
 
@@ -751,7 +751,7 @@ IMPL_LINK( EventListener, OnAsyncScriptEvent, ScriptEvent*, _pEvent )
         //::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         //if ( !impl_isDisposed_nothrow() )
-        //  impl_doFireScriptEvent_nothrow( aGuard, *_pEvent, NULL );
+        //	impl_doFireScriptEvent_nothrow( aGuard, *_pEvent, NULL );
         firing_Impl( *_pEvent, NULL );
     }
 

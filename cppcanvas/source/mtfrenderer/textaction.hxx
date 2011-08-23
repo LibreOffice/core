@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@ class String;
 
 /* Definition of internal::TextActionFactory class */
 
-namespace cppcanvas
-{
+namespace cppcanvas 
+{ 
     namespace internal
     {
         struct OutDevState;
@@ -60,7 +60,7 @@ namespace cppcanvas
          */
         class TextActionFactory
         {
-        public:
+        public: 
             /** Create text action, optionally shadow/relief effect
 
                 Note that this method accepts all coordinates in
@@ -75,20 +75,20 @@ namespace cppcanvas
                 subsettable (Action::render( Subset ) works on
                 characters)
              */
-            static ActionSharedPtr createTextAction( const ::Point&                 rStartPoint,
-                                                     const ::Size&                  rReliefOffset,
-                                                     const ::Color&                 rReliefColor,
-                                                     const ::Size&                  rShadowOffset,
-                                                     const ::Color&                 rShadowColor,
-                                                     const ::String&                rText,
-                                                     sal_Int32                      nStartPos,
-                                                     sal_Int32                      nLen,
-                                                     const sal_Int32*               pDXArray,
-                                                     VirtualDevice&                 rVDev,
-                                                     const CanvasSharedPtr&         rCanvas,
-                                                     const OutDevState&             rState,
-                                                     const Renderer::Parameters&    rParms,
-                                                     bool                           bSubsettable );
+            static ActionSharedPtr createTextAction( const ::Point&					rStartPoint,  
+                                                     const ::Size&					rReliefOffset,  
+                                                     const ::Color&					rReliefColor,
+                                                     const ::Size&					rShadowOffset,
+                                                     const ::Color&					rShadowColor,
+                                                     const ::String& 				rText,
+                                                     sal_Int32 						nStartPos,
+                                                     sal_Int32 						nLen,
+                                                     const sal_Int32*				pDXArray,
+                                                     VirtualDevice&					rVDev,
+                                                     const CanvasSharedPtr&			rCanvas, 
+                                                     const OutDevState& 			rState,
+                                                     const Renderer::Parameters& 	rParms,
+                                                     bool							bSubsettable );
 
         private:
             // static factory, disable big four
@@ -97,7 +97,7 @@ namespace cppcanvas
             TextActionFactory(const TextActionFactory&);
             TextActionFactory& operator=( const TextActionFactory& );
         };
-    }
+    } 
 }
 
 #endif /* _CPPCANVAS_TEXTACTION_HXX */

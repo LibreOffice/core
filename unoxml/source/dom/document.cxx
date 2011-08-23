@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,10 +59,10 @@ namespace DOM
         xmlFreeDoc(m_aDocPtr);
     }
 
-    CDocument::CDocument(xmlDocPtr aDocPtr):
+    CDocument::CDocument(xmlDocPtr aDocPtr): 
         m_aDocPtr(aDocPtr),
         m_streamListeners()
-    {
+    {   
         // init node base
         m_aNodeType = NodeType_DOCUMENT_NODE;
         init_node((xmlNodePtr)m_aDocPtr);
@@ -304,7 +304,7 @@ namespace DOM
         return Reference< XEntityReference >(static_cast< CEntityReference* >(CNode::get(aNodePtr)));
     }
 
-    // Creates a ProcessingInstruction node given the specified name and
+    // Creates a ProcessingInstruction node given the specified name and 
     // data strings.
     Reference< XProcessingInstruction > SAL_CALL CDocument::createProcessingInstruction(
             const OUString& target, const OUString& data)
@@ -576,11 +576,11 @@ namespace DOM
         }
 
         /* DOMNodeInsertedIntoDocument
-         * Fired when a node is being inserted into a document,
-         * either through direct insertion of the Node or insertion of a
-         * subtree in which it is contained. This event is dispatched after
-         * the insertion has taken place. The target of this event is the node
-         * being inserted. If the Node is being directly inserted the DOMNodeInserted
+         * Fired when a node is being inserted into a document, 
+         * either through direct insertion of the Node or insertion of a 
+         * subtree in which it is contained. This event is dispatched after 
+         * the insertion has taken place. The target of this event is the node 
+         * being inserted. If the Node is being directly inserted the DOMNodeInserted 
          * event will fire before the DOMNodeInsertedIntoDocument event.
          *   Bubbles: No
          *   Cancelable: No
@@ -672,10 +672,10 @@ namespace DOM
     }
 
     // ::com::sun::star::xml::sax::XFastSAXSerializable
-    void SAL_CALL CDocument::fastSerialize( const Reference< XFastDocumentHandler >& i_xHandler,
-                                            const Reference< XFastTokenHandler >& i_xTokenHandler,
+    void SAL_CALL CDocument::fastSerialize( const Reference< XFastDocumentHandler >& i_xHandler, 
+                                            const Reference< XFastTokenHandler >& i_xTokenHandler, 
                                             const Sequence< beans::StringPair >& i_rNamespaces,
-                                            const Sequence< beans::Pair< rtl::OUString, sal_Int32 > >& i_rRegisterNamespaces )
+                                            const Sequence< beans::Pair< rtl::OUString, sal_Int32 > >& i_rRegisterNamespaces ) 
         throw (SAXException, RuntimeException)
     {
         // add new namespaces to root node
@@ -702,7 +702,7 @@ namespace DOM
         // register namespace ids
         const beans::Pair<OUString,sal_Int32>* pSeq = i_rRegisterNamespaces.getConstArray();
         for (const beans::Pair<OUString,sal_Int32>* pNs = pSeq;
-             pNs < pSeq + i_rRegisterNamespaces.getLength(); ++pNs)
+             pNs < pSeq + i_rRegisterNamespaces.getLength(); ++pNs) 
         {
             OSL_ENSURE(pNs->Second >= FastToken::NAMESPACE,
                        "CDocument::fastSerialize(): invalid NS token id");

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,12 +34,12 @@
 
 #include <algorithm>
 
-// -------------------------------------------------------------
+// ------------------------------------------------------------- 
 // class HashItem
 //
 class HashItem
 {
-    enum ETag { TAG_EMPTY, TAG_USED, TAG_DELETED };
+    enum ETag { TAG_EMPTY, TAG_USED, TAG_DELETED };   
 
     void*   m_pObject;
     ETag    m_Tag;
@@ -50,13 +50,13 @@ public:
 
     BOOL IsDeleted() const
     {   return m_Tag == TAG_DELETED; }
-
+    
     BOOL IsEmpty() const
-    {   return m_Tag == TAG_DELETED || m_Tag == TAG_EMPTY; }
+    {   return m_Tag == TAG_DELETED || m_Tag == TAG_EMPTY; } 
 
     BOOL IsFree() const
     {   return m_Tag == TAG_EMPTY; }
-
+    
     BOOL IsUsed() const
     {   return m_Tag == TAG_USED; }
 
@@ -76,7 +76,7 @@ public:
 // #define MIN(a,b) (a)<(b)?(a):(b)
 // #define MAX(a,b) (a)>(b)?(a):(b)
 
-// -------------------------------------------------------------
+// ------------------------------------------------------------- 
 // class HashTable
 //
 
@@ -89,14 +89,14 @@ HashTable::HashTable(ULONG lSize, BOOL bOwner, double dMaxLoadFactor, double dGr
     m_bOwner         = bOwner;
     m_lElem          = 0;
     m_dMaxLoadFactor = std::max(0.5,std::min(1.0,dMaxLoadFactor));  // 0.5 ... 1.0
-    m_dGrowFactor    = std::max(1.3,(5.0,dGrowFactor));     // 1.3 ... 5.0
+    m_dGrowFactor    = std::max(1.3,(5.0,dGrowFactor));     // 1.3 ... 5.0    
     m_pData          = new HashItem [lSize];
 
 // Statistik
 #ifdef DBG_UTIL
     m_aStatistic.m_lSingleHash = 0;
     m_aStatistic.m_lDoubleHash = 0;
-    m_aStatistic.m_lProbe      = 0;
+    m_aStatistic.m_lProbe	   = 0;
 #endif
 }
 
@@ -130,7 +130,7 @@ void* HashTable::GetObjectAt(ULONG lPos) const
 // Gibt Objekt zurück, wenn es eines gibt, sonst NULL;
 {
     DBG_ASSERT(lPos<m_lSize, "HashTable::GetObjectAt()");
-
+    
     HashItem *pItem = &m_pData[lPos];
 
     return pItem->IsUsed() ? pItem->GetObject() : NULL;
@@ -146,9 +146,9 @@ ULONG HashTable::Hash(String const& Key) const
     /*
     ULONG lHash = 0;
     ULONG i,n;
-
+    
     for (i=0,n=Key.Len(); i<n; i++)
-    {
+    {   
         lHash *= 256L;
         lHash += (ULONG)(USHORT)Key.GetStr()[i];
         lHash %= m_lSize;
@@ -161,7 +161,7 @@ ULONG HashTable::Hash(String const& Key) const
     ULONG i,n;
     ULONG h = 0;
     ULONG g = 0;
-
+    
     for (i=0,n=Key.Len(); i<n; i++)
     {
         h = (h<<4) + (ULONG)(USHORT)Key.GetStr()[i];
@@ -175,28 +175,28 @@ ULONG HashTable::Hash(String const& Key) const
     }
 
     return h % m_lSize;
-}
+} 
 
 ULONG HashTable::DHash(String const& Key, ULONG lOldHash) const
 {
     ULONG lHash = lOldHash;
     ULONG i,n;
-
+    
     for (i=0,n=Key.Len(); i<n; i++)
-    {
+    {   
         lHash *= 256L;
         lHash += (ULONG)(USHORT)Key.GetStr()[i];
         lHash %= m_lSize;
     }
     return lHash;
 
-/*    return
+/*    return 
         (
             lHash
-        +   (char)Key.GetStr()[0] * 256
-        +   (char)Key.GetStr()[Key.Len()-1]
-        +   1
-        )
+        +	(char)Key.GetStr()[0] * 256
+        +	(char)Key.GetStr()[Key.Len()-1]
+        +	1
+        ) 
         % m_lSize;
 */
 }
@@ -207,10 +207,10 @@ ULONG HashTable::Probe(ULONG lPos) const
     lPos++; if (lPos==m_lSize) lPos=0;
     return lPos;
 }
-
+ 
 BOOL HashTable::IsFull() const
-{
-    return m_lElem>=m_lSize;
+{   
+    return m_lElem>=m_lSize; 
 }
 
 BOOL HashTable::Insert(String const& Key, void* pObject)
@@ -235,7 +235,7 @@ BOOL HashTable::Insert(String const& Key, void* pObject)
     // first hashing
     //
     if (pItem->IsEmpty())
-    {
+    {                    
         pItem->SetObject(Key, pObject);
         m_lElem++;
 
@@ -244,13 +244,13 @@ BOOL HashTable::Insert(String const& Key, void* pObject)
         #endif
 
         return TRUE;
-    }
-
+    } 
+                          
     // double hashing
     //
     lPos  = DHash(Key,lPos);
     pItem = &m_pData[lPos];
-
+    
     if (pItem->IsEmpty())
     {
         pItem->SetObject(Key, pObject);
@@ -264,7 +264,7 @@ BOOL HashTable::Insert(String const& Key, void* pObject)
     }
 
     // linear probing
-    //
+    //                  
     do
     {
         #ifdef DBG_UTIL
@@ -292,55 +292,55 @@ HashItem* HashTable::FindPos(String const& Key) const
     //
     ULONG     lPos  = Hash(Key);
     HashItem *pItem = &m_pData[lPos];
-
+    
     if (pItem->IsUsed()
     &&  pItem->GetKey() == Key)
     {
         return pItem;
-    }
-
+    }   
+                        
     // double hashing
     //
     if (pItem->IsDeleted() || pItem->IsUsed())
     {
         lPos  = DHash(Key,lPos);
         pItem = &m_pData[lPos];
-
+            
         if (pItem->IsUsed()
         &&  pItem->GetKey() == Key)
         {
             return pItem;
-        }
+        }        
 
         // linear probing
-        //
+        //                  
         if (pItem->IsDeleted() || pItem->IsUsed())
-        {
+        { 
             ULONG n      = 0;
             BOOL  bFound = FALSE;
             BOOL  bEnd   = FALSE;
-
+            
             do
-            {
+            {                      
                 n++;
                 lPos   = Probe(lPos);
                 pItem  = &m_pData[lPos];
 
-                bFound =  pItem->IsUsed()
+                bFound =  pItem->IsUsed() 
                        && pItem->GetKey() == Key;
-
-                bEnd = !(n<m_lSize || pItem->IsFree());
+                       
+                bEnd = !(n<m_lSize || pItem->IsFree());       
             }
             while(!bFound && !bEnd);
-
-            return bFound ? pItem : NULL;
+            
+            return bFound ? pItem : NULL;       
         }
-    }
+    }      
 
     // nicht gefunden
     //
     return NULL;
-}
+}   
 
 void* HashTable::Find(String const& Key) const
 // Gibt Verweis des Objektes zurück, das unter Key abgespeichert ist,
@@ -348,9 +348,9 @@ void* HashTable::Find(String const& Key) const
 //
 // pre:  -
 // post: -
-{
+{                  
     HashItem *pItem = FindPos(Key);
-
+    
     if (pItem != NULL
     &&  pItem->GetKey() == Key)
         return pItem->GetObject();
@@ -368,7 +368,7 @@ void* HashTable::Delete(String const& Key)
 //       Wenn die HashTable der Owner ist, wurde das Object gelöscht
 {
     HashItem *pItem = FindPos(Key);
-
+    
     if (pItem != NULL
     &&  pItem->GetKey() == Key)
     {
@@ -400,10 +400,10 @@ void HashTable::SmartGrow()
     double dLoadFactor = CalcLoadFactor();
 
     if (dLoadFactor <= m_dMaxLoadFactor)
-        return; // nothing to grow
+        return; // nothing to grow 
 
     ULONG     lOldSize = m_lSize;              // alte Daten sichern
-    HashItem* pOldData = m_pData;
+    HashItem* pOldData = m_pData;              
 
     m_lSize = ULONG (m_dGrowFactor * m_lSize); // neue Größe
     m_pData = new HashItem[m_lSize];           // neue Daten holen
@@ -418,7 +418,7 @@ void HashTable::SmartGrow()
         return;
     }
 
-    m_lElem = 0;                               // noch keine neuen Daten
+    m_lElem = 0;                               // noch keine neuen Daten 
 
     // Umkopieren der Daten
     //
@@ -472,26 +472,26 @@ void* HashTableIterator::GetPrev()
     return FindValidObject(FALSE /* backward */);
 }
 
-void* HashTableIterator::FindValidObject(BOOL bForward)
+void* HashTableIterator::FindValidObject(BOOL bForward) 
 // Sucht nach einem vorhandenen Objekt ab der aktuellen
 // Position.
 //
 // pre:  ab inkl. m_lAt soll die Suche beginnen
 // post: if not found then
-//          if bForward == TRUE then
-//              m_lAt == m_aTable.GetSize() -1
-//          else
-//              m_lAt == 0
-//       else
-//          m_lAt ist die gefundene Position
+//			if bForward == TRUE then
+//				m_lAt == m_aTable.GetSize() -1
+//			else
+//				m_lAt == 0
+//		 else
+//			m_lAt ist die gefundene Position
 {
     void *pObject = m_aTable.GetObjectAt(m_lAt);
 
     if (pObject != NULL)
         return pObject;
-
+    
     while (pObject == NULL
-       && (bForward ? ((m_lAt+1) < m_aTable.GetSize())
+       && (bForward ? ((m_lAt+1) < m_aTable.GetSize()) 
                     :   m_lAt    > 0))
     {
         if (bForward)
@@ -500,7 +500,7 @@ void* HashTableIterator::FindValidObject(BOOL bForward)
             m_lAt--;
 
         pObject = m_aTable.GetObjectAt(m_lAt);
-    }
+    } 
 
 #ifdef DBG_UTIL
 
@@ -512,7 +512,7 @@ void* HashTableIterator::FindValidObject(BOOL bForward)
 
 #endif
 
-    return pObject;
+    return pObject; 
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

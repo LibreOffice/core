@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -139,7 +139,7 @@ public class _XDriverManager extends MultiMethodTest {
      * the method <code>getLoginTimeout()</code> are equal.
      */
     public void _setLoginTimeout() {
-        requiredMethod("getLoginTimeout()");
+        requiredMethod("getLoginTimeout()");        
         final int TO = 111;
         log.println("setLoginTimeout(" + TO + ")");
         oObj.setLoginTimeout(TO);

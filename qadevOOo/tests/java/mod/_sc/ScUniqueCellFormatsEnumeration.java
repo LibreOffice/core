@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,12 +75,12 @@ public class ScUniqueCellFormatsEnumeration extends TestCase {
     * Disposes Spreadsheet document.
     */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
-        //add this lines after synchronisation
+        //add this lines after synchronisation 
     //log.println("    disposing xSheetDoc ");
         //DesktopTools.closeDoc(xSheetDoc);
     }
 
-    protected TestEnvironment createTestEnvironment(TestParameters tParam,
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, 
                                                     PrintWriter log) {
         log.println("Getting the first sheet");
 
@@ -107,11 +107,11 @@ public class ScUniqueCellFormatsEnumeration extends TestCase {
         changeColor("D1:D10", 0, 255, 0);
 
         XUniqueCellFormatRangesSupplier xUCRS = (XUniqueCellFormatRangesSupplier) UnoRuntime.queryInterface(
-                                                        XUniqueCellFormatRangesSupplier.class,
+                                                        XUniqueCellFormatRangesSupplier.class, 
                                                         oSheet);
 
         XEnumerationAccess xEnum = (XEnumerationAccess) UnoRuntime.queryInterface(
-                                           XEnumerationAccess.class,
+                                           XEnumerationAccess.class, 
                                            xUCRS.getUniqueCellFormatRanges());
         XInterface oObj = xEnum.createEnumeration();
         log.println("Implementationname: " + util.utils.getImplName(oObj));
@@ -119,7 +119,7 @@ public class ScUniqueCellFormatsEnumeration extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("ExpectedCount", new Integer(4));
-
+        
         return tEnv;
     }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,16 +56,16 @@
 // sw/inc/expfld.hxx
 SV_IMPL_PTRARR( _SwSeqFldList, _SeqFldLstElem* )
 
-#define REFFLDFLAG          0x4000
-#define REFFLDFLAG_BOOKMARK 0x4800
-#define REFFLDFLAG_FOOTNOTE 0x5000
-#define REFFLDFLAG_ENDNOTE  0x6000
+#define REFFLDFLAG			0x4000
+#define REFFLDFLAG_BOOKMARK	0x4800
+#define REFFLDFLAG_FOOTNOTE	0x5000
+#define REFFLDFLAG_ENDNOTE	0x6000
 // --> OD 2007-11-09 #i83479#
 #define REFFLDFLAG_HEADING  0x7100
 #define REFFLDFLAG_NUMITEM  0x7200
 // <--
 
-USHORT  nFldDlgFmtSel       = 0;
+USHORT	nFldDlgFmtSel		= 0;
 
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
@@ -78,22 +78,22 @@ USHORT  nFldDlgFmtSel       = 0;
 SwFldRefPage::SwFldRefPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     SwFldPage( pParent, SW_RES( TP_FLD_REF ), rCoreSet ),
 
-    aTypeFT         (this, SW_RES(FT_REFTYPE)),
-    aTypeLB         (this, SW_RES(LB_REFTYPE)),
-    aSelectionFT    (this, SW_RES(FT_REFSELECTION)),
-    aSelectionLB    (this, SW_RES(LB_REFSELECTION)),
+    aTypeFT			(this, SW_RES(FT_REFTYPE)),
+    aTypeLB			(this, SW_RES(LB_REFTYPE)),
+    aSelectionFT	(this, SW_RES(FT_REFSELECTION)),
+    aSelectionLB	(this, SW_RES(LB_REFSELECTION)),
     // --> OD 2007-11-21 #i83479#
     aSelectionToolTipLB( this, SW_RES(LB_REFSELECTION_TOOLTIP) ),
     // <--
-    aFormatFT       (this, SW_RES(FT_REFFORMAT)),
-    aFormatLB       (this, SW_RES(LB_REFFORMAT)),
-    aNameFT         (this, SW_RES(FT_REFNAME)),
-    aNameED         (this, SW_RES(ED_REFNAME)),
-    aValueFT        (this, SW_RES(FT_REFVALUE)),
-    aValueED        (this, SW_RES(ED_REFVALUE)),
+    aFormatFT		(this, SW_RES(FT_REFFORMAT)),
+    aFormatLB		(this, SW_RES(LB_REFFORMAT)),
+    aNameFT			(this, SW_RES(FT_REFNAME)),
+    aNameED			(this, SW_RES(ED_REFNAME)),
+    aValueFT		(this, SW_RES(FT_REFVALUE)),
+    aValueED		(this, SW_RES(ED_REFVALUE)),
 
-    sBookmarkTxt    (SW_RES(STR_REFBOOKMARK)),
-    sFootnoteTxt    (SW_RES(STR_REFFOOTNOTE)),
+    sBookmarkTxt	(SW_RES(STR_REFBOOKMARK)),
+    sFootnoteTxt	(SW_RES(STR_REFFOOTNOTE)),
     sEndnoteTxt     (SW_RES(STR_REFENDNOTE)),
     // --> OD 2007-11-09 #i83479#
     sHeadingTxt     (SW_RES(STR_REFHEADING)),
@@ -194,7 +194,7 @@ void SwFldRefPage::Reset(const SfxItemSet& )
     }
     SetSelectionSel(LISTBOX_ENTRY_NOTFOUND);
     SetTypeSel(LISTBOX_ENTRY_NOTFOUND);
-    Init(); // Allgemeine initialisierung
+    Init();	// Allgemeine initialisierung
 
     // TypeListBox initialisieren
     aTypeLB.SetUpdateMode(FALSE);
@@ -370,7 +370,7 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
                     break;
             }
 
-            if (aTypeLB.GetEntryPos(sName) == LISTBOX_ENTRY_NOTFOUND)   // Referenz zu gel?schter Marke
+            if (aTypeLB.GetEntryPos(sName) == LISTBOX_ENTRY_NOTFOUND)	// Referenz zu gel?schter Marke
             {
                 USHORT nPos = aTypeLB.InsertEntry(sName);
                 aTypeLB.SetEntryData(nPos, reinterpret_cast<void*>(nFlag));
@@ -869,7 +869,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
         {
             SwFieldType* pType = GetFldMgr().GetFldType(RES_SETEXPFLD, aName);
 
-            if(!pType)  // Nur einfuegen, wenn es den Namen noch nicht gibt
+            if(!pType)	// Nur einfuegen, wenn es den Namen noch nicht gibt
             {
                 aSelectionLB.InsertEntry(aName);
                 aSelectionLB.Enable();
@@ -888,13 +888,13 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
         {
             pSh = ::GetActiveWrtShell();
         }
-        if (nTypeId == REFFLDFLAG_BOOKMARK)     // TextMarken!
+        if (nTypeId == REFFLDFLAG_BOOKMARK)		// TextMarken!
         {
             aName = aNameED.GetText();
             nTypeId = TYP_GETREFFLD;
             nSubType = REF_BOOKMARK;
         }
-        else if (REFFLDFLAG_FOOTNOTE == nTypeId)        // Fussnoten
+        else if (REFFLDFLAG_FOOTNOTE == nTypeId) 		// Fussnoten
         {
             SwSeqFldList aArr;
             _SeqFldLstElem aElem( aSelectionLB.GetSelectEntry(), 0 );
@@ -915,7 +915,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
             else if (IsFldEdit())
                 aVal = String::CreateFromInt32( pRefFld->GetSeqNo() );
         }
-        else if (REFFLDFLAG_ENDNOTE == nTypeId)         // Endnoten
+        else if (REFFLDFLAG_ENDNOTE == nTypeId) 		// Endnoten
         {
             SwSeqFldList aArr;
             _SeqFldLstElem aElem( aSelectionLB.GetSelectEntry(), 0 );
@@ -1023,7 +1023,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
         InsertFld( nTypeId, nSubType, aName, aVal, nFormat );
     }
 
-    ModifyHdl();    // Insert ggf enablen/disablen
+    ModifyHdl();	// Insert ggf enablen/disablen
 
     return FALSE;
 }
@@ -1032,7 +1032,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-SfxTabPage* SwFldRefPage::Create(   Window* pParent,
+SfxTabPage* SwFldRefPage::Create( 	Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldRefPage( pParent, rAttrSet ) );
@@ -1050,7 +1050,7 @@ USHORT SwFldRefPage::GetGroup()
 /* -----------------12.01.99 10:09-------------------
  *
  * --------------------------------------------------*/
-void    SwFldRefPage::FillUserData()
+void	SwFldRefPage::FillUserData()
 {
     String sData( String::CreateFromAscii(
                     RTL_CONSTASCII_STRINGPARAM( USER_DATA_VERSION )));

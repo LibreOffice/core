@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,22 +49,22 @@ class SvxFontSubstCheckListBox : public SvxSimpleTable
     using SvTreeListBox::SetCheckButtonState;
 
     protected:
-        virtual void    SetTabs();
+        virtual void	SetTabs();
         virtual void    KeyInput( const KeyEvent& rKEvt );
 
     public:
         SvxFontSubstCheckListBox(Window* pParent, const ResId& rResId ) :
             SvxSimpleTable( pParent, rResId ){}
 
-        inline void     *GetUserData(ULONG nPos) { return GetEntry(nPos)->GetUserData(); }
-        inline void     SetUserData(ULONG nPos, void *pData ) { GetEntry(nPos)->SetUserData(pData); }
+        inline void 	*GetUserData(ULONG nPos) { return GetEntry(nPos)->GetUserData(); }
+        inline void		SetUserData(ULONG nPos, void *pData ) { GetEntry(nPos)->SetUserData(pData); }
 
-        BOOL            IsChecked(ULONG nPos, USHORT nCol = 0);
-        BOOL            IsChecked(SvLBoxEntry* pEntry, USHORT nCol = 0);
-        void            CheckEntryPos(ULONG nPos, USHORT nCol, BOOL bChecked);
-        void            CheckEntry(SvLBoxEntry* pEntry, USHORT nCol, BOOL bChecked);
-        SvButtonState   GetCheckButtonState( SvLBoxEntry*, USHORT nCol ) const;
-        void            SetCheckButtonState( SvLBoxEntry*, USHORT nCol, SvButtonState );
+        BOOL			IsChecked(ULONG nPos, USHORT nCol = 0);
+        BOOL			IsChecked(SvLBoxEntry* pEntry, USHORT nCol = 0);
+        void			CheckEntryPos(ULONG nPos, USHORT nCol, BOOL bChecked);
+        void			CheckEntry(SvLBoxEntry* pEntry, USHORT nCol, BOOL bChecked);
+        SvButtonState	GetCheckButtonState( SvLBoxEntry*, USHORT nCol ) const;
+        void			SetCheckButtonState( SvLBoxEntry*, USHORT nCol, SvButtonState );
 };
 
 // class SvxFontSubstTabPage ----------------------------------------------------
@@ -72,12 +72,12 @@ class SvtFontSubstConfig;
 namespace svt {class SourceViewConfig;}
 class SvxFontSubstTabPage : public SfxTabPage
 {
-    CheckBox                    aUseTableCB;
+    CheckBox					aUseTableCB;
     FixedText                   aFont1FT;
-    FontNameBox                 aFont1CB;
-    FixedText                   aFont2FT;
-    FontNameBox                 aFont2CB;
-    ToolBox                     aNewDelTBX;
+    FontNameBox					aFont1CB;
+    FixedText					aFont2FT;
+    FontNameBox					aFont2CB;
+    ToolBox						aNewDelTBX;
     SvxFontSubstCheckListBox    aCheckLB;
 
     FixedLine                   aSourceViewFontsFL;
@@ -90,24 +90,24 @@ class SvxFontSubstTabPage : public SfxTabPage
     ImageList                   aImageList;
     String                      sAutomatic;
 
-    SvtFontSubstConfig*         pConfig;
+    SvtFontSubstConfig*			pConfig;
     utl::SourceViewConfig*      pSourceViewConfig;
 
-    String          sHeader1;
-    String          sHeader2;
-    String          sHeader3;
-    String          sHeader4;
+    String			sHeader1;
+    String			sHeader2;
+    String			sHeader3;
+    String			sHeader4;
 
-    Color           aTextColor;
-    ByteString      sFontGroup;
+    Color			aTextColor;
+    ByteString		sFontGroup;
 
-    SvLBoxButtonData*   pCheckButtonData;
+    SvLBoxButtonData*	pCheckButtonData;
 
     DECL_LINK(SelectHdl, Window *pWin = 0);
     DECL_LINK(NonPropFontsHdl, CheckBox* pBox);
 
-    SvLBoxEntry*    CreateEntry(String& rFont1, String& rFont2);
-    void            CheckEnable();
+    SvLBoxEntry*	CreateEntry(String& rFont1, String& rFont2);
+    void			CheckEnable();
 
 
     SvxFontSubstTabPage( Window* pParent, const SfxItemSet& rSet );

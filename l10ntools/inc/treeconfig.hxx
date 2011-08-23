@@ -10,14 +10,14 @@ class Treeconfig
 {
 
     private:
-        INIreader   inireader;
+        INIreader   inireader;    
         INImap      map;
         bool        has_config_file;
         void getCurrentDir( string& dir );
         bool isConfigFilePresent();
 
     public:
-
+    
         Treeconfig() : has_config_file( false ) { parseConfig(); }
         // read the config file, returns true in case a config file had been found
         bool parseConfig();

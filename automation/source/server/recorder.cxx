@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -154,7 +154,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
         //     or ( new_window and new_window_is_interesting )    ( ignore interesting events to uninteresting window )
 
         if (  aKeyString.Len()
-            && (  ( nEventID != VCLEVENT_WINDOW_KEYINPUT
+            && (  ( nEventID != VCLEVENT_WINDOW_KEYINPUT 
                  && nEventID != VCLEVENT_WINDOW_MOUSEMOVE
                  && nEventID != VCLEVENT_WINDOW_COMMAND
                  && nEventID != VCLEVENT_WINDOW_KEYUP )
@@ -431,7 +431,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                         }
                 }
                 break;
-/*          case C_MoreButton:
+/*			case C_MoreButton:
                 switch( nEventID )
                 {
                     case M_IsOpen :
@@ -563,16 +563,16 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
 //                                if ( pActionParent != pWin )
 //                                {   // it IS a tearoff not an undock
 //                                    // compare to 1 for floating ToolBoxes
-//                                  if ( m_bRecord )
-//                                  {
-//                                      if ( !pWin->GetSmartUniqueOrHelpId().HasAny() || pWin->GetSmartUniqueOrHelpId().Matches( 1 ) )
-//                                          // generate direct Button access
-//                                          StatementList::pRet->GenReturn( RET_MacroRecorder, SmartId( pActionParent->GetHelpId( pActionParent->GetCurItemId() ) ), (comm_USHORT)(M_TearOff) );
-//                                      else
-//                                          // access via Toolbox
-//                                          StatementList::pRet->GenReturn( RET_MacroRecorder, pActionParent->GetSmartUniqueOrHelpId(), (comm_USHORT)(M_TearOff|M_RET_NUM_CONTROL), static_cast<comm_ULONG>(pActionParent->GetHelpId( pActionParent->GetCurItemId() )) ); // GetHelpId() ULONG != comm_ULONG on 64bit
-//                                      bSendData = TRUE;
-//                                  }
+//									if ( m_bRecord )
+//									{
+//										if ( !pWin->GetSmartUniqueOrHelpId().HasAny() || pWin->GetSmartUniqueOrHelpId().Matches( 1 ) )
+//											// generate direct Button access
+//											StatementList::pRet->GenReturn( RET_MacroRecorder, SmartId( pActionParent->GetHelpId( pActionParent->GetCurItemId() ) ), (comm_USHORT)(M_TearOff) );
+//										else
+//											// access via Toolbox
+//											StatementList::pRet->GenReturn( RET_MacroRecorder, pActionParent->GetSmartUniqueOrHelpId(), (comm_USHORT)(M_TearOff|M_RET_NUM_CONTROL), static_cast<comm_ULONG>(pActionParent->GetHelpId( pActionParent->GetCurItemId() )) ); // GetHelpId() ULONG != comm_ULONG on 64bit
+//										bSendData = TRUE;
+//									}
 //                                    if ( m_bLog )
 //                                    {
 //                                        LogVCL( pActionParent->GetSmartUniqueOrHelpId(), pWin->GetType(), SmartId( pActionParent->GetHelpId( pActionParent->GetCurItemId() ) ), CUniString("TearOff") );
@@ -587,11 +587,11 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                     }
                 }
                 break;
-/*                  ToolBox *pTB = ((ToolBox*)pControl);
-                    if ( pTB->GetUniqueOrHelpId() != nUId ) // Also Button auf der ToolBox gefunden
+/*					ToolBox *pTB = ((ToolBox*)pControl);
+                    if ( pTB->GetUniqueOrHelpId() != nUId )	// Also Button auf der ToolBox gefunden
                     {
                         if ( nParams == PARAM_NONE )
-                        {           // Wir fälschen einen Parameter
+                        {			// Wir fälschen einen Parameter
                             nParams = PARAM_USHORT_1;
                             nNr1 = nUId;
                         }
@@ -725,11 +725,11 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
               case WINDOW_DOCKINGWINDOW:
 //                switch( nEventID )
                 {
-//                  case 1 .. 0xffff:
+//					case 1 .. 0xffff:
     DBG_TRACE3( "TT_VCLMessage %u %u  %X",nEventID, pWin->GetType(), pWin );
-//                      BOOL bx = ((DockingWindow*)pWin)->IsFloatingMode();
-//                      break;
-/*                  case M_Dock :
+//						BOOL bx = ((DockingWindow*)pWin)->IsFloatingMode();
+//						break;
+/*					case M_Dock :
                         if ( ((DockingWindow*)pControl)->IsFloatingMode() )
                             ((DockingWindow*)pControl)->SetFloatingMode(FALSE);
                         else
@@ -763,7 +763,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                         else
                             ReportError( nUId, GEN_RES_STR1( S_ALLOWED_ONLY_IN_DOCKING_MODE, MethodString( nMethodId ) ) );
                         break;
-                    case M_Help:        // Alles was unten weiterbehandelt werden soll
+                    case M_Help:		// Alles was unten weiterbehandelt werden soll
                         goto MoreDialog;
 
                     default:
@@ -781,7 +781,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                 {
     DBG_TRACE3( "TT_VCLMessage %u %u  %X",nEventID, pWin->GetType(), pWin );
 //                    FloatingWindow *pFW = ((FloatingWindow*)pWin);
-/*                  switch( nEventID )
+/*				    switch( nEventID )
                     {
 
 // M_OpenMenu an einem ToolboxButton
@@ -798,7 +798,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                 bSendData = TRUE;
                             }
                             break;
-
+  
                     }
   */              }
                 break;
@@ -831,7 +831,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                         SET_WINP_CLOSING(pControl);
                         ((FloatingWindow*)pControl)->Close();
                         break;
-                    case M_Help:        // Alles was unten weiterbehandelt werden soll
+                    case M_Help:		// Alles was unten weiterbehandelt werden soll
                     case M_Move:
                         goto MoreDialog;
                     default:
@@ -901,7 +901,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                     case M_Move:
                         goto FloatWin;
                         break;
-                    case M_Help:        // Alles was unten weiterbehandelt werden soll
+                    case M_Help:		// Alles was unten weiterbehandelt werden soll
                         goto MoreDialog;
                     default:
                         ReportError( nUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "WorkWindow" ) );
@@ -911,7 +911,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
   */
 
 
-/*          case C_TabPage:
+/*			case C_TabPage:
                 switch( nEventID )
                 {
                 }
@@ -964,7 +964,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                             break;
                     }
                     if ( bDone )
-                        break;  // break the case here else continue at C_ButtonDialog
+                        break;	// break the case here else continue at C_ButtonDialog
                 }
             case C_ButtonDialog:
                 {
@@ -1048,7 +1048,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
 
 
     if ( bSendData )
-        new StatementFlow( NULL, F_EndCommandBlock );   // Kommando zum Senden erzeugen und in que eintragen
+        new StatementFlow( NULL, F_EndCommandBlock );	// Kommando zum Senden erzeugen und in que eintragen
 
     return 0;
 }

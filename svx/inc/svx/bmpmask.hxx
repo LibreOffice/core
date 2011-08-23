@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 
 /*************************************************************************
 |*
-|*  class SvxBmpMaskSelectItem
+|*	class SvxBmpMaskSelectItem
 |*
 \************************************************************************/
 class SvxBmpMask;
@@ -90,65 +90,65 @@ class SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
     friend class MaskData;
     friend class MaskSet;
 
-    Window*             pParentWin;
-    Size                aLastSize;
-    ToolBox             aTbxPipette;
-    ColorWindow*        pCtlPipette;
-    PushButton          aBtnExec;
+    Window* 			pParentWin;
+    Size				aLastSize;
+    ToolBox				aTbxPipette;
+    ColorWindow*		pCtlPipette;
+    PushButton			aBtnExec;
     FixedLine           aGrpQ;
 
-    CheckBox            aCbx1;
-    MaskSet*            pQSet1;
-    MetricField         aSp1;
-    ColorLB             aLbColor1;
+    CheckBox			aCbx1;
+    MaskSet*			pQSet1;
+    MetricField			aSp1;
+    ColorLB				aLbColor1;
 
-    CheckBox            aCbx2;
-    MaskSet*            pQSet2;
-    MetricField         aSp2;
-    ColorLB             aLbColor2;
+    CheckBox			aCbx2;
+    MaskSet*			pQSet2;
+    MetricField			aSp2;
+    ColorLB				aLbColor2;
 
-    CheckBox            aCbx3;
-    MaskSet*            pQSet3;
-    MetricField         aSp3;
-    ColorLB             aLbColor3;
+    CheckBox			aCbx3;
+    MaskSet*			pQSet3;
+    MetricField			aSp3;
+    ColorLB				aLbColor3;
 
-    CheckBox            aCbx4;
-    MaskSet*            pQSet4;
-    MetricField         aSp4;
-    ColorLB             aLbColor4;
+    CheckBox			aCbx4;
+    MaskSet*			pQSet4;
+    MetricField			aSp4;
+    ColorLB				aLbColor4;
 
-    MaskData*           pData;
-    CheckBox            aCbxTrans;
-    ColorLB             aLbColorTrans;
-    FixedText           aFt1;
-    FixedText           aFt2;
-    FixedText           aFt3;
-    const XColorTable*  pColTab;
-    Color               aPipetteColor;
+    MaskData*			pData;
+    CheckBox			aCbxTrans;
+    ColorLB				aLbColorTrans;
+    FixedText			aFt1;
+    FixedText			aFt2;
+    FixedText			aFt3;
+    const XColorTable* 	pColTab;
+    Color				aPipetteColor;
     SvxBmpMaskSelectItem aSelItem;
 
-    Image               maImgPipette;
-    Image               maImgPipetteH;
+    Image				maImgPipette;
+    Image				maImgPipetteH;
 
-    virtual BOOL        Close();
+    virtual BOOL 		Close();
 
 #ifdef BMPMASK_PRIVATE
 
-    USHORT              InitColorArrays( Color* pSrcCols, Color* pDstCols,
+    USHORT				InitColorArrays( Color* pSrcCols, Color* pDstCols,
                                          ULONG* pTols );
 
-    Bitmap              ImpMask( const Bitmap& rBitmap );
-    BitmapEx            ImpMask( const BitmapEx& rBitmapEx );
-    GDIMetaFile         ImpMask( const GDIMetaFile& rMtf );
-    Animation           ImpMask( const Animation& rAnimation );
-    BitmapEx            ImpMaskTransparent( const BitmapEx& rBitmapEx,
+    Bitmap 				ImpMask( const Bitmap& rBitmap );
+    BitmapEx			ImpMask( const BitmapEx& rBitmapEx );
+    GDIMetaFile 		ImpMask( const GDIMetaFile& rMtf );
+    Animation 			ImpMask( const Animation& rAnimation );
+    BitmapEx			ImpMaskTransparent( const BitmapEx& rBitmapEx,
                                             const Color& rColor,
                                             const long nTol );
-    BitmapEx            ImpReplaceTransparency( const BitmapEx& rBmpEx,
+    BitmapEx			ImpReplaceTransparency( const BitmapEx& rBmpEx,
                                                 const Color& rColor );
-    Animation           ImpReplaceTransparency( const Animation& rAnim,
+    Animation			ImpReplaceTransparency( const Animation& rAnim,
                                                 const Color& rColor );
-    GDIMetaFile         ImpReplaceTransparency( const GDIMetaFile& rMtf,
+    GDIMetaFile			ImpReplaceTransparency( const GDIMetaFile& rMtf,
                                                 const Color& rColor );
 
 #endif // BMPMASK_PRIVATE
@@ -161,19 +161,19 @@ public:
                                     const ResId& rResId );
                         ~SvxBmpMask();
 
-    void                SetColor( const Color& rColor );
-    void                PipetteClicked();
+    void				SetColor( const Color& rColor );
+    void				PipetteClicked();
 
-    BOOL                NeedsColorTable() const;
-    void                SetColorTable( const XColorTable* pColorTable );
+    BOOL				NeedsColorTable() const;
+    void 				SetColorTable( const XColorTable* pColorTable );
 
-    void                SetExecState( BOOL bEnable );
+    void				SetExecState( BOOL bEnable );
 
-    Graphic             Mask( const Graphic& rGraphic );
+    Graphic 			Mask( const Graphic& rGraphic );
 
-    BOOL                IsEyedropping() const;
+    BOOL				IsEyedropping() const;
 
-    void                onSelect( MaskSet* pSet );
+    void				onSelect( MaskSet* pSet );
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
     void ApplyStyle();
@@ -193,8 +193,8 @@ private:
 |*
 \************************************************************************/
 
-#define SVXBMPMASK() ( (SvxBmpMask*) ( SfxViewFrame::Current()->GetChildWindow(     \
-                     SvxBmpMaskChildWindow::GetChildWindowId() )->  \
+#define SVXBMPMASK() ( (SvxBmpMask*) ( SfxViewFrame::Current()->GetChildWindow( 	\
+                     SvxBmpMaskChildWindow::GetChildWindowId() )-> 	\
                      GetWindow() ) )
 
 #endif // _BMPMASK_HXX_

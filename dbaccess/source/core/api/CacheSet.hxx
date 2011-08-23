@@ -52,19 +52,19 @@ namespace dbaccess
     class OCacheSet : public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XRow>
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           m_xDriverSet;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>                 m_xDriverRow;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xSetMetaData;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>			m_xDriverSet;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>					m_xDriverRow;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>	m_xSetMetaData;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>			m_xConnection;
 
-        ::com::sun::star::uno::Sequence<sal_Bool>   m_aNullable;
-        ::com::sun::star::uno::Sequence<sal_Bool>   m_aSignedFlags;
-        ::com::sun::star::uno::Sequence<sal_Int32>  m_aColumnTypes;
-        ORowSetRow                                  m_aInsertRow;
-        ::rtl::OUString                             m_aComposedTableName;
-        sal_Bool                                    m_bInserted;
-        sal_Bool                                    m_bUpdated;
-        sal_Bool                                    m_bDeleted;
+        ::com::sun::star::uno::Sequence<sal_Bool>	m_aNullable;
+        ::com::sun::star::uno::Sequence<sal_Bool>	m_aSignedFlags;
+        ::com::sun::star::uno::Sequence<sal_Int32>	m_aColumnTypes;
+        ORowSetRow									m_aInsertRow;
+        ::rtl::OUString								m_aComposedTableName;
+        sal_Bool									m_bInserted;
+        sal_Bool									m_bUpdated;
+        sal_Bool									m_bDeleted;
 
         OCacheSet();
         virtual ~OCacheSet();

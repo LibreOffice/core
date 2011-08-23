@@ -35,7 +35,7 @@ import java.io.File;
 
 public final class Test {
     @org.junit.Before
-    public void setUp() throws Exception
+    public void setUp() throws Exception 
         {
             connection.setUp();
         }
@@ -62,7 +62,7 @@ public final class Test {
             {
                 sShow = "-show";
             }
-
+            
             final String sComparePath = FileHelper.appendPath(sPRJ, "source");
             final String sCompareName = FileHelper.appendPath(sComparePath, "compare.pl");
 
@@ -72,7 +72,7 @@ public final class Test {
                 System.out.println("Path to compare.pl is wrong: '" + aCompareFile.getAbsolutePath() + "'");
                 assertTrue(false);
             }
-
+            
             final String sConnectionString = connection.getDescription();
 
             String[] sCommandArray =
@@ -101,7 +101,7 @@ public final class Test {
             {
                 good = false;
             }
-
+            
             assertTrue(good);
 
             // Runner.run(

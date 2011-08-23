@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -140,7 +140,7 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
 
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
-
+    
     if ( !m_refCount )
         throw uno::RuntimeException(); // the object must be refcounted already!
 
@@ -167,7 +167,7 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
             !( aArguments[1] >>= nModes ) ||
             (
               !( nModes & embed::Actions::PREVENT_CLOSE ) &&
-              !( nModes & embed::Actions::PREVENT_TERMINATION )
+              !( nModes & embed::Actions::PREVENT_TERMINATION ) 
             )
            )
         {
@@ -183,7 +183,7 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("If the third argument is provided, it must be XActionsApproval implementation!" ) ),
                     uno::Reference< uno::XInterface >(),
                     0 );
-
+    
         m_pLockListener = new OLockListener( uno::Reference< lang::XComponent > ( static_cast< lang::XComponent* >( this ) ),
                                             xInstance,
                                             nModes,
@@ -309,7 +309,7 @@ void OLockListener::Dispose()
         catch( uno::Exception& )
         {}
     }
-
+    
     m_xInstance = uno::Reference< uno::XInterface >();
     m_bDisposed = sal_True;
 }

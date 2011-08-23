@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -165,8 +165,8 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
             aGeo.nDrehWink=18000;
             aGeo.RecalcSinCos();
         }
-    }
-    else
+    } 
+    else 
     {
         // #100663# aRect is NOT initialized for lines (polgon objects with two
         // exceptionally handled points). Thus, after this call the text rotaion is
@@ -174,21 +174,21 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
         // It's astonishing that noone discovered it earlier.
         // Polygon aPol(Rect2Poly(aRect,aGeo));
         // Polygon aPol(Rect2Poly(GetSnapRect(), aGeo));
-
+        
         // #101412# go back to old method, side effects are impossible
         // to calculate.
         Polygon aPol(Rect2Poly(aRect,aGeo));
 
-        for(sal_uInt16 a(0); a < aPol.GetSize(); a++)
+        for(sal_uInt16 a(0); a < aPol.GetSize(); a++) 
         {
              ResizePoint(aPol[a], rRef, xFact, yFact);
         }
 
-        if(bXMirr != bYMirr)
+        if(bXMirr != bYMirr) 
         {
             // Polygon wenden und etwas schieben
             Polygon aPol0(aPol);
-
+            
             aPol[0] = aPol0[1];
             aPol[1] = aPol0[0];
             aPol[2] = aPol0[3];
@@ -259,7 +259,7 @@ void SdrTextObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear
 
     // #75889# when this is a SdrPathObj aRect maybe not initialized
     Polygon aPol(Rect2Poly(aRect.IsEmpty() ? GetSnapRect() : aRect, aGeo));
-
+    
     USHORT nPointCount=aPol.GetSize();
     for (USHORT i=0; i<nPointCount; i++) {
          ShearPoint(aPol[i],rRef,tn,bVShear);
@@ -392,7 +392,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
 
                     // always clear objectshadow; this is included in the extraction
                     aAttributeSet.Put(SdrShadowItem(false));
-
+                    
                     if(rCandidate.getIsFilled())
                     {
                         // set needed items
@@ -419,7 +419,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
                     pPathObj->ImpSetAnchorPos(GetAnchorPos());
                     pPathObj->NbcSetLayer(GetLayer());
 
-                    if(GetModel())
+                    if(GetModel()) 
                     {
                         pPathObj->SetModel(GetModel());
                         pPathObj->NbcSetStyleSheet(GetStyleSheet(), true);
@@ -436,7 +436,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
             {
                 delete pGroup;
             }
-            else if(1 == pObjectList->GetObjCount())
+            else if(1 == pObjectList->GetObjCount()) 
             {
                 pRetval = pObjectList->RemoveObject(0);
                 delete pGroup;
@@ -458,8 +458,8 @@ SdrObject* SdrTextObj::DoConvertToPolyObj(BOOL bBezier) const
     return ImpConvertContainedTextToSdrPathObjs(!bBezier);
 }
 
-bool SdrTextObj::ImpCanConvTextToCurve() const
-{
+bool SdrTextObj::ImpCanConvTextToCurve() const 
+{ 
     return !IsOutlText();
 }
 
@@ -469,7 +469,7 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPol
     basegfx::B2DPolyPolygon aB2DPolyPolygon(rPolyPolygon);
 
     // #i37011#
-    if(!bBezier)
+    if(!bBezier) 
     {
         aB2DPolyPolygon = basegfx::tools::adaptiveSubdivideByAngle(aB2DPolyPolygon);
         ePathKind = bClosed ? OBJ_POLY : OBJ_PLIN;
@@ -477,25 +477,25 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPol
 
     SdrPathObj* pPathObj = new SdrPathObj(ePathKind, aB2DPolyPolygon);
 
-    if(bBezier)
+    if(bBezier) 
     {
         // create bezier curves
         pPathObj->SetPathPoly(basegfx::tools::expandToCurve(pPathObj->GetPathPoly()));
     }
 
-    if(pPathObj)
+    if(pPathObj) 
     {
         pPathObj->ImpSetAnchorPos(aAnchor);
         pPathObj->NbcSetLayer(SdrLayerID(GetLayer()));
 
-        if(pModel)
+        if(pModel) 
         {
             pPathObj->SetModel(pModel);
-
-            if(!bNoSetAttr)
+        
+            if(!bNoSetAttr) 
             {
                 sdr::properties::ItemChangeBroadcaster aC(*pPathObj);
-
+            
                 pPathObj->ClearMergedItem();
                 pPathObj->SetMergedItemSet(GetObjectItemSet());
                 pPathObj->GetProperties().BroadcastItemChange(aC);
@@ -509,7 +509,7 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPol
 
 SdrObject* SdrTextObj::ImpConvertAddText(SdrObject* pObj, bool bBezier) const
 {
-    if(!ImpCanConvTextToCurve())
+    if(!ImpCanConvTextToCurve()) 
     {
         return pObj;
     }
@@ -521,20 +521,20 @@ SdrObject* SdrTextObj::ImpConvertAddText(SdrObject* pObj, bool bBezier) const
         return pObj;
     }
 
-    if(!pObj)
+    if(!pObj) 
     {
         return pText;
     }
 
-    if(pText->IsGroupObject())
+    if(pText->IsGroupObject()) 
     {
         // is already group object, add partial shape in front
         SdrObjList* pOL=pText->GetSubList();
         pOL->InsertObject(pObj,0);
 
         return pText;
-    }
-    else
+    } 
+    else 
     {
         // not yet a group, create one and add partial and new shapes
         SdrObjGroup* pGrp=new SdrObjGroup;

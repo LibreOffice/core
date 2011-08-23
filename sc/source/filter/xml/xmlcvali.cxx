@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ class ScXMLContentValidationContext : public SvXMLImportContext
     sal_Bool           bDisplayHelp;
     sal_Bool           bDisplayError;
 
-    SvXMLImportContextRef           xEventContext;
+    SvXMLImportContextRef			xEventContext;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -100,10 +100,10 @@ public:
 
 class ScXMLHelpMessageContext : public SvXMLImportContext
 {
-    rtl::OUString   sTitle;
-    rtl::OUStringBuffer sMessage;
-    sal_Int32       nParagraphCount;
-    sal_Bool        bDisplay;
+    rtl::OUString	sTitle;
+    rtl::OUStringBuffer	sMessage;
+    sal_Int32		nParagraphCount;
+    sal_Bool		bDisplay;
 
     ScXMLContentValidationContext* pValidationContext;
 
@@ -130,11 +130,11 @@ public:
 
 class ScXMLErrorMessageContext : public SvXMLImportContext
 {
-    rtl::OUString   sTitle;
-    rtl::OUStringBuffer sMessage;
-    rtl::OUString   sMessageType;
-    sal_Int32       nParagraphCount;
-    sal_Bool        bDisplay;
+    rtl::OUString	sTitle;
+    rtl::OUStringBuffer	sMessage;
+    rtl::OUString	sMessageType;
+    sal_Int32		nParagraphCount;
+    sal_Bool		bDisplay;
 
     ScXMLContentValidationContext* pValidationContext;
 
@@ -161,10 +161,10 @@ public:
 
 class ScXMLErrorMacroContext : public SvXMLImportContext
 {
-    rtl::OUString   sName;
-    sal_Bool        bExecute;
+    rtl::OUString	sName;
+    sal_Bool		bExecute;
 
-    ScXMLContentValidationContext*  pValidationContext;
+    ScXMLContentValidationContext*	pValidationContext;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

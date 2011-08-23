@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,11 +38,11 @@
 
 //=============================================================================
 
-module com { module sun { module star { module ucb {
+module com { module sun { module star { module ucb { 
 
 //=============================================================================
 /** An interaction continuation handing back some authentication data.
-
+    
     <p> This continuation is typically used in conjunction with
     <type>AuthenticationRequest</type>. </p>
 */
@@ -55,10 +55,10 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
 
     //-------------------------------------------------------------------------
     /** Set a new 'realm' value to hand back.
-
-        <p>This method should be called before
+        
+        <p>This method should be called before 
         <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
-        and should only be called if
+        and should only	be called if 
         <member>XInteractionSupplyAuthentication::canSetRealm</member> returned
         <true/>.</p>
     */
@@ -72,10 +72,10 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
     //-------------------------------------------------------------------------
     /** Set a new 'user name' value to hand back.
 
-        <p>This method should be called before
+        <p>This method should be called before 
         <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
-        and should only be called if
-        <member>XInteractionSupplyAuthentication::canSetUserName</member>
+        and should only	be called if 
+        <member>XInteractionSupplyAuthentication::canSetUserName</member> 
         returned <true/>.</p>
     */
     void setUserName( [in] string UserName );
@@ -87,11 +87,11 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
 
     //-------------------------------------------------------------------------
     /** Set a new 'password' value to hand back.
-
-        <p>This method should be called before
+        
+        <p>This method should be called before 
         <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
-        and should only be called if
-        <member>XInteractionSupplyAuthentication::canSetPassword</member>
+        and should only	be called if 
+        <member>XInteractionSupplyAuthentication::canSetPassword</member> 
         returned <true/>.</p>
     */
     void setPassword( [in] string Password );
@@ -104,7 +104,7 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
 
         @returns
         A sequence of available modes to hand back.  Each individual mode
-        should appear at most once in the sequence.  If the sequence is empty,
+        should appear at most once in the sequence.  If the sequence is	empty,
         a new mode cannot be handed back.
     */
     sequence<com::sun::star::ucb::RememberAuthentication> getRememberPasswordModes( [out] com::sun::star::ucb::RememberAuthentication Default );
@@ -112,13 +112,13 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
     //-------------------------------------------------------------------------
     /** Set a new mode of how long to remember the password.
 
-        <p>This method should be called before
+        <p>This method should be called before 
         <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
-        and should only be called if
-        <member>XInteractionSupplyAuthentication::setPassword</member>
+        and should only	be called if 
+        <member>XInteractionSupplyAuthentication::setPassword</member> 
         is also called.</p>
-
-        @param Remember
+        
+        @param Remember  
         The mode to hand back, should be contained in the sequence returned by
         <member>XInteractionSupplyAuthentication::getRememberPasswordModes</member>.
     */
@@ -131,11 +131,11 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
 
     //-------------------------------------------------------------------------
     /** Set a new 'account' value to hand back.
-
-        <p>This method should be called before
+        
+        <p>This method should be called before 
         <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
-        and should only be called if
-        <member>XInteractionSupplyAuthentication::canSetAccount</member>
+        and should only	be called if 
+        <member>XInteractionSupplyAuthentication::canSetAccount</member> 
         returned <true/>.</p>
 
     */
@@ -155,15 +155,15 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
 
     //-------------------------------------------------------------------------
     /** Set a new mode of how long to remember the account.
-
-        <p>This method should be called before
+        
+        <p>This method should be called before 
         <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
-        and should only be called if
-        <member>XInteractionSupplyAuthentication::setAccount</member>
+        and should only	be called if 
+        <member>XInteractionSupplyAuthentication::setAccount</member> 
         is also called.</p>
-
+        
         @param Remember  The mode to hand back, should be contained in the
-        sequence returned by
+        sequence returned by 
         <member>XInteractionSupplyAuthentication::getRememberAccountModes</member>.
     */
     void setRememberAccount( [in] com::sun::star::ucb::RememberAuthentication Remember );
@@ -172,6 +172,6 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 #endif

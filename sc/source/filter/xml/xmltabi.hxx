@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,10 +48,10 @@ struct ScXMLExternalTabData
 
 class ScXMLTableContext : public SvXMLImportContext
 {
-    rtl::OUString   sPrintRanges;
+    rtl::OUString	sPrintRanges;
     ::std::auto_ptr<ScXMLExternalTabData> pExternalRefInfo;
     sal_Int32       nStartOffset;
-    sal_Bool        bStartFormPage;
+    sal_Bool		bStartFormPage;
     sal_Bool        bPrintEntireSheet;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }

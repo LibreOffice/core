@@ -61,17 +61,17 @@
  * Change History
  * 2004-12-23 create this file.
  ************************************************************************/
-#ifndef     _XFSTYLECONTAINER_HXX
-#define     _XFSTYLECONTAINER_HXX
+#ifndef		_XFSTYLECONTAINER_HXX
+#define		_XFSTYLECONTAINER_HXX
 
-#include    "xfglobal.hxx"
-#include    <vector>
+#include	"xfglobal.hxx"
+#include	<vector>
 
 class IXFStyle;
 
 /**
- * @descr   container obejct for styles.
- *          All styles can be placed into an style container.
+ * @descr	container obejct for styles.
+ *			All styles can be placed into an style container.
  */
 class XFStyleContainer : public IXFObject
 {
@@ -88,48 +88,48 @@ public:
 
 public:
     /**
-     * @descr   Add style to container.
-     *          If the same style has exist, then pStyle will be deleted, and the same style will be return.
+     * @descr	Add style to container.
+     *			If the same style has exist, then pStyle will be deleted, and the same style will be return.
      */
-    IXFStyle*       AddStyle(IXFStyle *pStyle);
+    IXFStyle*		AddStyle(IXFStyle *pStyle);
 
     /**
-     * @descr   Find the same style.
+     * @descr	Find the same style.
      */
-    IXFStyle*       FindSameStyle(IXFStyle *pStyle);
+    IXFStyle*		FindSameStyle(IXFStyle *pStyle);
 
     /**
-     * @descr   get style by name.
+     * @descr	get style by name.
      */
-    IXFStyle*       FindStyle(rtl::OUString name);
+    IXFStyle*		FindStyle(rtl::OUString name);
 
     /**
-     * @descr   clear container.
+     * @descr	clear container.
      */
-    void            Reset();
+    void			Reset();
 
     /**
-     * @descr   get count of styles in the container.
+     * @descr	get count of styles in the container.
      */
-    size_t      GetCount();
+    size_t		GetCount();
 
     /**
-     * @descr   get style by index.
+     * @descr	get style by index.
      */
-    IXFStyle*       Item(size_t index);
+    IXFStyle*		Item(size_t index);
 
     /**
-     * @descr   Output all style.
+     * @descr	Output all style.
      */
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
     friend bool operator==(XFStyleContainer& b1, XFStyleContainer& b2);
     friend bool operator!=(XFStyleContainer& b1, XFStyleContainer& b2);
 private:
-    static void     ManageStyleFont(IXFStyle *pStyle);
+    static void		ManageStyleFont(IXFStyle *pStyle);
 private:
-    std::vector<IXFStyle*>  m_aStyles;
-    rtl::OUString   m_strStyleNamePrefix;
+    std::vector<IXFStyle*>	m_aStyles;
+    rtl::OUString	m_strStyleNamePrefix;
 };
 
 inline size_t XFStyleContainer::GetCount()

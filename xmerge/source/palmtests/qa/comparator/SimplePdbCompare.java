@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 /**
  *
  * @author  mh101528
- * @version
+ * @version 
  */
 public final class SimplePdbCompare {
 
@@ -45,7 +45,7 @@ public final class SimplePdbCompare {
     /**
     * @param args the command line arguments
     */
-    public static void main (String args[])
+    public static void main (String args[]) 
     {
         SimplePdbCompare comparator = new SimplePdbCompare();
         if (comparator.comparePDB(args[0], args[1]))
@@ -53,22 +53,22 @@ public final class SimplePdbCompare {
         else
             System.exit(3);
     }
-
+    
     public boolean  comparePDB(String pdbname1, String pdbname2)
     {
         PalmDB pdb1=null, pdb2=null;
         PDBDecoder decoder = new PDBDecoder();
-        try
+        try 
         {
             pdb1 = decoder.parse(pdbname1);
-        }
-        catch (Exception e)
+        } 
+        catch (Exception e) 
         {
             System.out.println("Could not parse PDB " + pdbname1);
             return false;
         }
 
-        try
+        try 
         {
             pdb2 = decoder.parse(pdbname2);
         }
@@ -78,17 +78,17 @@ public final class SimplePdbCompare {
             return false;
         }
 
-        if (pdb1.equals(pdb2))
+        if (pdb1.equals(pdb2)) 
         {
             //writeToLog("PDB " + pdbname1 + "  and PDB " + pdbname2 + " are equal");
             System.out.println("PDB " + pdbname1 + "  and PDB " + pdbname2 + " are equal");
             return true;
-        }
-        else
+        } 
+        else 
         {
             //writeToLog("PDB " + pdbname1 + "  and PDB " + pdbname2 + " are not equal");
             System.out.println("PDB " + pdbname1 + "  and PDB " + pdbname2 + " are not equal");
             return false;
         }
-    }
+    } 
 }

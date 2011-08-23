@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif	
 
 /** Generates a new Version 4 (random number based) UUID (Universally Unique
     IDentifier).
@@ -94,7 +94,7 @@ sal_Int32 SAL_CALL rtl_compareUuid( const sal_uInt8 *pUUID1 , const sal_uInt8 *p
     of names (and, implicitly, name spaces) might be DNS names, URLs, ISO
     Object IDs (OIDs), reserved words in a programming language, or X.500
     Distinguished Names (DNs); thus, the concept of name and name space
-    should be broadly construed, and not limited to textual names.
+    should be broadly construed, and not limited to textual names. 
 
     <p>
     The requirements for such UUIDs are as follows:
@@ -178,7 +178,7 @@ void SAL_CALL rtl_createNamedUuid(
       0x11, 0xd1,\
       0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8\
     }
-
+    
 
 /*
     This macro must have a value below the system time resolution of the

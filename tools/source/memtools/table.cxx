@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,11 +44,11 @@ ULONG Table::ImplGetIndex( ULONG nKey, ULONG* pIndex ) const
     if ( !nCount || (nKey < (ULONG)Container::ImpGetObject(0)) )
         return TABLE_ENTRY_NOTFOUND;
 
-    ULONG   nLow;
-    ULONG   nHigh;
-    ULONG   nMid;
-    ULONG   nCompareKey;
-    void**  pNodes = Container::ImpGetOnlyNodes();
+    ULONG	nLow;
+    ULONG	nHigh;
+    ULONG	nMid;
+    ULONG	nCompareKey;
+    void**	pNodes = Container::ImpGetOnlyNodes();
 
     // Binaeres Suchen
     nLow  = 0;
@@ -123,7 +123,7 @@ BOOL Table::Insert( ULONG nKey, void* p )
         {
             USHORT n = 0;
             USHORT nTempCount = (USHORT)nCount * 2;
-            //<!--Modified by PengYunQuan for resolving a NULL pointer access
+            //<!--Modified by PengYunQuan for resolving a NULL pointer access 
 
             if( void** pNodes = Container::ImpGetOnlyNodes() )
             {
@@ -153,7 +153,7 @@ BOOL Table::Insert( ULONG nKey, void* p )
                 if ( ImplGetIndex( nKey, &i ) != TABLE_ENTRY_NOTFOUND )
                     return FALSE;
             }
-            //-->Modified by PengYunQuan for resolving a NULL pointer access
+            //-->Modified by PengYunQuan for resolving a NULL pointer access 
         }
         else
         {

@@ -36,7 +36,7 @@ public class RegressionTest_i46848 implements StorageTest {
             XStream xTempFileStream = m_aTestHelper.CreateTempFileStream( m_xMSF );
             if ( xTempFileStream == null )
                 return false;
-
+        
             // create storage based on the temporary stream
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) xTempFileStream;
@@ -59,7 +59,7 @@ public class RegressionTest_i46848 implements StorageTest {
                 m_aTestHelper.Error( "Can't create substorage!" );
                 return false;
             }
-
+            
             byte pBytes1[] = { 1, 1, 1, 1, 1 };
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
@@ -79,7 +79,7 @@ public class RegressionTest_i46848 implements StorageTest {
                                                             false,
                                                             ElementModes.WRITE ) )
                 return false;
-
+    
             // commit substorage first
             if ( !m_aTestHelper.commitStorage( xTempSubStorage ) )
                 return false;
@@ -118,7 +118,7 @@ public class RegressionTest_i46848 implements StorageTest {
                 m_aTestHelper.Error( "Can't create substorage!" );
                 return false;
             }
-
+    
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempSubStorage,
                                                             "ChangedMediaType3",
@@ -164,7 +164,7 @@ public class RegressionTest_i46848 implements StorageTest {
                 m_aTestHelper.Error( "Can't create substorage!" );
                 return false;
             }
-
+    
             if ( !m_aTestHelper.checkStorageProperties( xTempStorage, "MediaType2", true, ElementModes.READ ) )
                 return false;
 
@@ -186,6 +186,6 @@ public class RegressionTest_i46848 implements StorageTest {
             m_aTestHelper.Error( "Exception: " + e );
             return false;
         }
-    }
+    } 
 }
 

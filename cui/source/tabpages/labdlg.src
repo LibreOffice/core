@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -255,7 +255,7 @@ TabDialog RID_SVXDLG_CAPTION\
                 Identifier = RID_SVXPAGE_POSITION_SIZE ;
                 PageResID = RID_SVXPAGE_POSITION_SIZE ;
                 _POS_SIZE_TEXT
-            };
+            };                                                              
             PageItem
             {
                 Identifier = RID_SVXPAGE_SWPOSSIZE;

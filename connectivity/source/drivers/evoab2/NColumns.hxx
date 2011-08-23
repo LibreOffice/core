@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,13 +39,13 @@ namespace connectivity
         class OEvoabColumns : public sdbcx::OCollection
         {
         protected:
-            OEvoabTable*    m_pTable;
+            OEvoabTable*	m_pTable;
 
             virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
 
         public:
-            OEvoabColumns(  OEvoabTable* _pTable,
+            OEvoabColumns(	OEvoabTable* _pTable,
                         ::osl::Mutex& _rMutex,
                         const TStringVector &_rVector
                         ) : sdbcx::OCollection(*_pTable,sal_True,_rMutex,_rVector),

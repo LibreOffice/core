@@ -61,10 +61,10 @@
  * Change History
  * 2005-01-21 create this file.
  ************************************************************************/
-#include    "xfframe.hxx"
-#include    "xfparagraph.hxx"
-#define     ZINDEX_MAX 0x7fffffff
-#define     ZINDEX_MIN 0
+#include	"xfframe.hxx"
+#include	"xfparagraph.hxx"
+#define		ZINDEX_MAX 0x7fffffff
+#define		ZINDEX_MIN 0
 XFFrame::XFFrame()
 {
     m_isTextBox = sal_False;
@@ -95,7 +95,7 @@ XFFrame::~XFFrame()
 {
 }
 
-void    XFFrame::Add(IXFContent *pContent)
+void	XFFrame::Add(IXFContent *pContent)
 {
     XFContentContainer::Add(pContent);
     if( pContent->GetContentType() == enumXFContentFrame )
@@ -109,7 +109,7 @@ void    XFFrame::Add(IXFContent *pContent)
 
 }
 
-void    XFFrame::SetZIndex(sal_uInt32 zIndex)
+void	XFFrame::SetZIndex(sal_uInt32 zIndex)
 {
     if( zIndex == m_nZIndex )
         return;
@@ -117,17 +117,17 @@ void    XFFrame::SetZIndex(sal_uInt32 zIndex)
     AdjustZIndex();
 }
 
-enumXFFrameType XFFrame::GetFrameType()
+enumXFFrameType	XFFrame::GetFrameType()
 {
     return m_eType;
 }
 
-enumXFContent   XFFrame::GetContentType()
+enumXFContent	XFFrame::GetContentType()
 {
     return enumXFContentFrame;
 }
 
-void    XFFrame::ToXml(IXFStream *pStrm)
+void	XFFrame::ToXml(IXFStream *pStrm)
 {
     StartFrame(pStrm);
 
@@ -136,14 +136,14 @@ void    XFFrame::ToXml(IXFStream *pStrm)
     EndFrame(pStrm);
 }
 
-void    XFFrame::StartFrame(IXFStream *pStrm)
+void	XFFrame::StartFrame(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     if( GetStyleName().getLength() )
         pAttrList->AddAttribute( A2OUSTR("draw:style-name"), GetStyleName() );
 
-    assert(m_strName.getLength()>0);    //name should not be null.
+    assert(m_strName.getLength()>0);	//name should not be null.
     if( m_strName.getLength()&&m_isTextBox == sal_False)
         pAttrList->AddAttribute( A2OUSTR("draw:name"), m_strName );
     //anchor type:
@@ -188,12 +188,12 @@ void    XFFrame::StartFrame(IXFStream *pStrm)
     pStrm->StartElement( A2OUSTR("draw:text-box") );
 }
 
-void    XFFrame::EndFrame(IXFStream *pStrm)
+void	XFFrame::EndFrame(IXFStream *pStrm)
 {
     pStrm->EndElement( A2OUSTR("draw:text-box") );
 }
 
-void    XFFrame::AdjustZIndex()
+void	XFFrame::AdjustZIndex()
 {
     for( int i=0; i<GetCount(); i++ )
     {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 
 public class PasswordContainerUnitTest extends ComplexTestCase {
     private XMultiServiceFactory m_xMSF = null;
-
+    
     public String[] getTestMethodNames() {
         return new String[] {
             "ExecuteTest01",
@@ -42,7 +42,7 @@ public class PasswordContainerUnitTest extends ComplexTestCase {
     public String getTestObjectName() {
         return "PasswordContainerUnitTest";
     }
-
+    
     public void before() {
         try {
             m_xMSF = (XMultiServiceFactory) param.getMSF();
@@ -53,11 +53,11 @@ public class PasswordContainerUnitTest extends ComplexTestCase {
             failed ("Cannot create service factory!");
         }
     }
-
+    
     public void after() {
         m_xMSF = null;
     }
-
+    
     public void ExecuteTest01() {
         PasswordContainerTest aTest = new Test01(m_xMSF, log);
         assure("Test01 failed!", aTest.test());

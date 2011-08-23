@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,16 +28,16 @@
 
 #ifndef INCLUDED_REPORTDESIGNDLLAPI_H
 #define INCLUDED_REPORTDESIGNDLLAPI_H
-
+                                                                                                                             
 #include "sal/types.h"
-
+                                                                                                                             
 #if defined(REPORTDESIGN_DLLIMPLEMENTATION)
 #define REPORTDESIGN_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT
 #else
 #define REPORTDESIGN_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
 #endif
 #define REPORTDESIGN_DLLPRIVATE SAL_DLLPRIVATE
-
+                                                                                                                             
 #endif /* INCLUDED_REPORTDESIGNDLLAPI_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

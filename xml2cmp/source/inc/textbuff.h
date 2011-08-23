@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,18 +34,18 @@
 
 typedef struct TextBuffer
 {
-    char *              dpText;
-    intt                nSize;
+    char *				dpText;
+    intt				nSize;
 
-    intt                nPosition;
+    intt				nPosition;
 
 } TextBuffer;
 
-#define TextBuffer_THIS     TextBuffer * pThis
+#define TextBuffer_THIS		TextBuffer * pThis
 
 
-#define ENDS    '\0'
-#define ENDL    '\n'
+#define ENDS	'\0'
+#define ENDL	'\n'
 
 typedef enum E_TB_Relation
 {
@@ -55,31 +55,31 @@ typedef enum E_TB_Relation
 } E_TB_Relation;
 
 
-void                TextBuffer_CTOR( TextBuffer_THIS,
-                        intt                i_nSize );
-void                TextBuffer_DTOR( TextBuffer_THIS );
-void                TB_Resize( TextBuffer_THIS,
-                        intt                i_nNewSize );
+void			   	TextBuffer_CTOR( TextBuffer_THIS,
+                        intt				i_nSize );
+void				TextBuffer_DTOR( TextBuffer_THIS );
+void				TB_Resize( TextBuffer_THIS,
+                        intt				i_nNewSize );
 
-Bool                TB_oin( TextBuffer_THIS,                /** operator>>(char *) */
-                        char *              i_pText );
-Bool                TB_oinChar( TextBuffer_THIS,            /** operator>>(char) */
-                        char                i_cChar );
-Bool                TB_oinFile( TextBuffer_THIS,            /** operator>>(TextFile*)  */
-                        TextFile *          i_pFile );
-void                TB_opp( TextBuffer_THIS );              /** operator++ */
+Bool				TB_oin( TextBuffer_THIS,				/** operator>>(char *) */
+                        char * 				i_pText );
+Bool				TB_oinChar( TextBuffer_THIS,			/** operator>>(char) */
+                        char  				i_cChar );
+Bool				TB_oinFile( TextBuffer_THIS,			/** operator>>(TextFile*)  */
+                        TextFile *			i_pFile );
+void				TB_opp( TextBuffer_THIS );				/** operator++ */
 
-intt                TB_Goto( TextBuffer_THIS,
-                        intt                i_nPosition,
-                        E_TB_Relation       i_nRelation );      /** tb_begin, tb_cur, tb_end */
+intt				TB_Goto( TextBuffer_THIS,
+                        intt				i_nPosition,
+                        E_TB_Relation		i_nRelation );		/**	tb_begin, tb_cur, tb_end */
 
 
-char *              TB_Text( TextBuffer_THIS );
-char                TB_CurChar( TextBuffer_THIS );
-char *              TB_CurCharPtr( TextBuffer_THIS );
-intt                TB_Size( TextBuffer_THIS );
-intt                TB_Position( TextBuffer_THIS );
-Bool                TB_EndOfBuffer( TextBuffer_THIS );
+char *				TB_Text( TextBuffer_THIS );
+char				TB_CurChar( TextBuffer_THIS );
+char *				TB_CurCharPtr( TextBuffer_THIS );
+intt				TB_Size( TextBuffer_THIS );
+intt				TB_Position( TextBuffer_THIS );
+Bool				TB_EndOfBuffer( TextBuffer_THIS );
 
 
 #endif

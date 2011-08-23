@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 #ifndef _SFXMODULE_HXX
-#define _SFXMODULE_HXX  // intern
-#define _SFXMOD_HXX     // extern
+#define _SFXMODULE_HXX	// intern
+#define _SFXMOD_HXX		// extern
 
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
@@ -78,25 +78,25 @@ public:
 
     ResMgr*                     GetResMgr() const { return SfxShell::GetResMgr(); }
     virtual ResMgr*             GetResMgr();
-    SfxSlotPool*                GetSlotPool() const;
+    SfxSlotPool*				GetSlotPool() const;
 
-    void                        RegisterToolBoxControl(SfxTbxCtrlFactory*);
+    void						RegisterToolBoxControl(SfxTbxCtrlFactory*);
     void                        RegisterChildWindow(SfxChildWinFactory*);
-    void                        RegisterChildWindowContext( sal_uInt16, SfxChildWinContextFactory* );
+    void                        RegisterChildWindowContext( sal_uInt16,	SfxChildWinContextFactory* );
     void                        RegisterStatusBarControl(SfxStbCtrlFactory*);
     void                        RegisterMenuControl(SfxMenuCtrlFactory*);
 
-    virtual SfxTabPage*         CreateTabPage( sal_uInt16 nId,
+    virtual SfxTabPage*			CreateTabPage( sal_uInt16 nId,
                                                Window* pParent,
                                                const SfxItemSet& rSet );
     virtual void                Invalidate(USHORT nId = 0);
-    BOOL                        IsActive() const;
+    BOOL						IsActive() const;
 
     /*virtual*/ bool            IsChildWindowAvailable( const USHORT i_nId, const SfxViewFrame* i_pViewFrame ) const;
 
     static SfxModule*           GetActiveModule( SfxViewFrame* pFrame=NULL );
-    static FieldUnit            GetCurrentFieldUnit();
-    FieldUnit                   GetFieldUnit() const;
+    static FieldUnit			GetCurrentFieldUnit();
+    FieldUnit					GetFieldUnit() const;
 
     SAL_DLLPRIVATE static SfxModuleArr_Impl& GetModules_Impl();
     SAL_DLLPRIVATE static void DestroyModules_Impl();

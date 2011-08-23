@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,8 +79,8 @@ class SfxFilter;
 
 class SwFilterDetect : public ::cppu::WeakImplHelper2< ::com::sun::star::document::XExtendedFilterDetection, ::com::sun::star::lang::XServiceInfo >
 {
-    static ULONG    DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter );
-    static ULONG    GlobDetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter );
+    static ULONG	DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter );
+    static ULONG	GlobDetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter );
 public:
                             SwFilterDetect( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
     virtual                 ~SwFilterDetect();

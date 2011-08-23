@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
+* 
 * Copyright 2009 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -343,7 +343,7 @@ public:
                     ~PanelDemoMainWindow();
 
     // window overridables
-    virtual void    Resize();
+    virtual void	Resize();
 
 public:
     // operations
@@ -387,22 +387,22 @@ OptionsWindow::OptionsWindow( PanelDemoMainWindow& i_rParent )
 {
     SetBorderStyle( WINDOW_BORDER_MONO );
 
-    m_aColors.InsertEntry( Color( COL_BLACK ),         String( RTL_CONSTASCII_USTRINGPARAM( "Black" ) ) );
-    m_aColors.InsertEntry( Color( COL_BLUE ),          String( RTL_CONSTASCII_USTRINGPARAM( "Blue" ) ) );
-    m_aColors.InsertEntry( Color( COL_GREEN ),         String( RTL_CONSTASCII_USTRINGPARAM( "Green" ) ) );
-    m_aColors.InsertEntry( Color( COL_CYAN ),          String( RTL_CONSTASCII_USTRINGPARAM( "Cyan" ) ) );
-    m_aColors.InsertEntry( Color( COL_RED ),           String( RTL_CONSTASCII_USTRINGPARAM( "Red" ) ) );
-    m_aColors.InsertEntry( Color( COL_MAGENTA ),       String( RTL_CONSTASCII_USTRINGPARAM( "Magenta" ) ) );
-    m_aColors.InsertEntry( Color( COL_BROWN ),         String( RTL_CONSTASCII_USTRINGPARAM( "Brown" ) ) );
-    m_aColors.InsertEntry( Color( COL_GRAY ),          String( RTL_CONSTASCII_USTRINGPARAM( "Gray" ) ) );
-    m_aColors.InsertEntry( Color( COL_LIGHTGRAY ),     String( RTL_CONSTASCII_USTRINGPARAM( "Light Gray" ) ) );
-    m_aColors.InsertEntry( Color( COL_LIGHTBLUE ),     String( RTL_CONSTASCII_USTRINGPARAM( "Light Blue" ) ) );
+    m_aColors.InsertEntry( Color( COL_BLACK ),		   String( RTL_CONSTASCII_USTRINGPARAM( "Black" ) ) );
+    m_aColors.InsertEntry( Color( COL_BLUE ),		   String( RTL_CONSTASCII_USTRINGPARAM( "Blue" ) ) );
+    m_aColors.InsertEntry( Color( COL_GREEN ),		   String( RTL_CONSTASCII_USTRINGPARAM( "Green" ) ) );
+    m_aColors.InsertEntry( Color( COL_CYAN ),		   String( RTL_CONSTASCII_USTRINGPARAM( "Cyan" ) ) );
+    m_aColors.InsertEntry( Color( COL_RED ),		   String( RTL_CONSTASCII_USTRINGPARAM( "Red" ) ) );
+    m_aColors.InsertEntry( Color( COL_MAGENTA ),	   String( RTL_CONSTASCII_USTRINGPARAM( "Magenta" ) ) );
+    m_aColors.InsertEntry( Color( COL_BROWN ),		   String( RTL_CONSTASCII_USTRINGPARAM( "Brown" ) ) );
+    m_aColors.InsertEntry( Color( COL_GRAY ),		   String( RTL_CONSTASCII_USTRINGPARAM( "Gray" ) ) );
+    m_aColors.InsertEntry( Color( COL_LIGHTGRAY ),	   String( RTL_CONSTASCII_USTRINGPARAM( "Light Gray" ) ) );
+    m_aColors.InsertEntry( Color( COL_LIGHTBLUE ),	   String( RTL_CONSTASCII_USTRINGPARAM( "Light Blue" ) ) );
     m_aColors.InsertEntry( Color( COL_LIGHTGREEN ),    String( RTL_CONSTASCII_USTRINGPARAM( "Light Green" ) ) );
-    m_aColors.InsertEntry( Color( COL_LIGHTCYAN ),     String( RTL_CONSTASCII_USTRINGPARAM( "Light Cyan" ) ) );
-    m_aColors.InsertEntry( Color( COL_LIGHTRED ),      String( RTL_CONSTASCII_USTRINGPARAM( "Light Red" ) ) );
+    m_aColors.InsertEntry( Color( COL_LIGHTCYAN ),	   String( RTL_CONSTASCII_USTRINGPARAM( "Light Cyan" ) ) );
+    m_aColors.InsertEntry( Color( COL_LIGHTRED ),	   String( RTL_CONSTASCII_USTRINGPARAM( "Light Red" ) ) );
     m_aColors.InsertEntry( Color( COL_LIGHTMAGENTA ),  String( RTL_CONSTASCII_USTRINGPARAM( "Light Magenta" ) ) );
-    m_aColors.InsertEntry( Color( COL_YELLOW ),        String( RTL_CONSTASCII_USTRINGPARAM( "Yellow" ) ) );
-    m_aColors.InsertEntry( Color( COL_WHITE ),         String( RTL_CONSTASCII_USTRINGPARAM( "White" ) ) );
+    m_aColors.InsertEntry( Color( COL_YELLOW ), 	   String( RTL_CONSTASCII_USTRINGPARAM( "Yellow" ) ) );
+    m_aColors.InsertEntry( Color( COL_WHITE ),		   String( RTL_CONSTASCII_USTRINGPARAM( "White" ) ) );
     m_aColors.SetDropDownLineCount( 16 );
 
     Window* pControls[] =

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ namespace // private
   const Type CPPUTYPE_SEQINT8  = getCppuType((Sequence<sal_Int8>*)0);
   const Type CPPUTYPE_OUSTRING = getCppuType( (OUString*)0 );
 
-  /* Determine whether or not a DataFlavor is valid.
+  /* Determine whether or not a DataFlavor is valid. 
    */
   bool isValidFlavor(const DataFlavor& aFlavor)
   {
@@ -112,7 +112,7 @@ namespace // private
   const char* FLAVOR_GDIMF = "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"";
   const char* FLAVOR_WMF = "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"";
   const char* FLAVOR_EMF = "application/x-openoffice-emf;windows_formatname=\"Image EMF\"";
-
+  
   const char* FLAVOR_DUMMY_INTERNAL = "application/x-openoffice-internal";
 
 
@@ -124,7 +124,7 @@ namespace // private
     Type DataType;
   };
 
-  /* At the moment it appears as if only MS Office pastes "public.html" to the clipboard.
+  /* At the moment it appears as if only MS Office pastes "public.html" to the clipboard. 
    */
   FlavorMap flavorMap[] =
     {
@@ -133,7 +133,7 @@ namespace // private
       { NSTIFFPboardType, "image/bmp", "Windows Bitmap", CPPUTYPE_SEQINT8 },
       { NSPICTPboardType, "image/bmp", "Windows Bitmap", CPPUTYPE_SEQINT8 },
       { NSHTMLPboardType, "text/html", "Plain Html", CPPUTYPE_SEQINT8 },
-      { NSFilenamesPboardType, "application/x-openoffice-filelist;windows_formatname=\"FileList\"", "FileList", CPPUTYPE_SEQINT8 },
+      { NSFilenamesPboardType, "application/x-openoffice-filelist;windows_formatname=\"FileList\"", "FileList", CPPUTYPE_SEQINT8 }, 
       { PBTYPE_SESX, FLAVOR_SESX, "Star Embed Source (XML)", CPPUTYPE_SEQINT8 },
       { PBTYPE_SLSDX, FLAVOR_SLSDX, "Star Link Source Descriptor (XML)", CPPUTYPE_SEQINT8 },
       { PBTYPE_ESX, FLAVOR_ESX, "Star Embed Source (XML)", CPPUTYPE_SEQINT8 },
@@ -166,7 +166,7 @@ namespace // private
 
 //###########################
 
-/* A base class for other data provider.
+/* A base class for other data provider. 
  */
 class DataProviderBaseImpl : public DataProvider
 {
@@ -187,7 +187,7 @@ DataProviderBaseImpl::DataProviderBaseImpl(const Any& data) :
 {
 }
 
-DataProviderBaseImpl::DataProviderBaseImpl(id data) :
+DataProviderBaseImpl::DataProviderBaseImpl(id data) : 
   mSystemData(data)
 {
   [mSystemData retain];
@@ -208,7 +208,7 @@ class UniDataProvider : public DataProviderBaseImpl
 {
 public:
   UniDataProvider(const Any& data);
-
+  
   UniDataProvider(NSData* data);
 
   virtual NSData* getSystemData();
@@ -243,8 +243,8 @@ Any UniDataProvider::getOOoData()
 
   if (mSystemData)
     {
-      oOOData = makeAny(OUString(reinterpret_cast<const sal_Char*>([mSystemData bytes]),
-                                 [mSystemData length],
+      oOOData = makeAny(OUString(reinterpret_cast<const sal_Char*>([mSystemData bytes]), 
+                                 [mSystemData length], 
                                  RTL_TEXTENCODING_UTF8));
     }
   else
@@ -285,7 +285,7 @@ NSData* ByteSequenceDataProvider::getSystemData()
    Sequence<sal_Int8> rawData;
    mData >>= rawData;
 
-   return [NSData dataWithBytes: rawData.getArray() length: rawData.getLength()];
+   return [NSData dataWithBytes: rawData.getArray()	length: rawData.getLength()];
 }
 
 Any ByteSequenceDataProvider::getOOoData()
@@ -304,7 +304,7 @@ Any ByteSequenceDataProvider::getOOoData()
     {
       oOOData =  mData;
     }
-
+  
   return oOOData;
 }
 
@@ -363,14 +363,14 @@ Any HTMLFormatDataProvider::getOOoData()
           plainHtml = HTMLFormatToTextHtml(unkHtmlData);
           pPlainHtml = &plainHtml;
         }
-
+      
       oOOData = makeAny(*pPlainHtml);
     }
   else
     {
       oOOData = mData;
     }
-
+  
   return oOOData;
 }
 
@@ -420,7 +420,7 @@ NSData* BMPDataProvider::getSystemData()
 /* At the moment the OOo 'PCT' filter is not good enough to be used
    and there is no flavor defined for exchanging 'PCT' with OOo so
    we will at the moment convert 'PCT' to a Windows BMP and provide
-   this to OOo
+   this to OOo 
 */
 Any BMPDataProvider::getOOoData()
 {
@@ -434,7 +434,7 @@ Any BMPDataProvider::getOOoData()
       memcpy(pictData.getArray(), [mSystemData bytes], flavorDataLength);
 
       Sequence<sal_Int8> bmpData;
-
+      
       if (ImageToBMP(pictData, bmpData, meImageType))
         {
           oOOData = makeAny(bmpData);
@@ -444,7 +444,7 @@ Any BMPDataProvider::getOOoData()
     {
       oOOData = mData;
     }
-
+  
   return oOOData;
 }
 
@@ -493,7 +493,7 @@ Any FileListDataProvider::getOOoData()
       Sequence<sal_Int8> oOOFileList(lenSeqRequired);
       unichar* pBuffer = reinterpret_cast<unichar*>(oOOFileList.getArray());
       rtl_zeroMemory(pBuffer, lenSeqRequired);
-
+      
       for (size_t i = 0; i < length; i++)
         {
           NSString* fname = [mSystemData objectAtIndex: i];
@@ -508,7 +508,7 @@ Any FileListDataProvider::getOOoData()
     {
       oOOData = mData;
     }
-
+  
   return oOOData;
 }
 
@@ -573,7 +573,7 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider(NSString* systemFlavor, Refe
       DataFlavor oOOFlavor = systemToOpenOfficeFlavor(systemFlavor);
 
       Any data = rTransferable->getTransferData(oOOFlavor);
-
+      
       if (isByteSequenceType(data.getValueType()))
         {
           if ([systemFlavor caseInsensitiveCompare: NSHTMLPboardType] == NSOrderedSame)
@@ -680,7 +680,7 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const com::sun::star::uno:
       else
       {
           NSString* str = openOfficeToSystemFlavor(flavors[i]);
-
+          
           if (str != NULL)
           {
               [array addObject: str];
@@ -690,7 +690,7 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const com::sun::star::uno:
 
    // #i89462# #i90747#
    // in case no system flavor was found to report
-   // report at least one so D&D between OOo targets works
+   // report at least one so D&D between OOo targets works 
   if( [array count] == 0 )
   {
       [array addObject: PBTYPE_DUMMY_INTERNAL];

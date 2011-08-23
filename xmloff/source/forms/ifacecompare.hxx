@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,9 +45,9 @@ namespace xmloff
     */
     template < class IAFCE >
     struct OInterfaceCompare
-        :public ::std::binary_function  <   ::com::sun::star::uno::Reference< IAFCE >
-                                        ,   ::com::sun::star::uno::Reference< IAFCE >
-                                        ,   bool
+        :public ::std::binary_function	<	::com::sun::star::uno::Reference< IAFCE >
+                                        ,	::com::sun::star::uno::Reference< IAFCE >
+                                        ,	bool
                                         >
     {
         bool operator() (const ::com::sun::star::uno::Reference< IAFCE >& lhs, const ::com::sun::star::uno::Reference< IAFCE >& rhs) const
@@ -60,11 +60,11 @@ namespace xmloff
         }
     };
 
-    typedef OInterfaceCompare< ::com::sun::star::beans::XPropertySet >  OPropertySetCompare;
-    typedef OInterfaceCompare< ::com::sun::star::drawing::XDrawPage >   ODrawPageCompare;
+    typedef OInterfaceCompare< ::com::sun::star::beans::XPropertySet >	OPropertySetCompare;
+    typedef OInterfaceCompare< ::com::sun::star::drawing::XDrawPage >	ODrawPageCompare;
 
 //.........................................................................
-}   // namespace xmloff
+}	// namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_IFACECOMPARE_HXX_

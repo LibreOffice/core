@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -126,10 +126,10 @@ public class OListBoxModel extends GenericModelTest {
      *    DataField.Value = DBTools.TST_DATE_F;
      *    super.m_propertiesToSet.add(DataField);
      *
-     *    NamedValue ListSource = new NamedValue();
-     *    ListSource.Name = "ListSource";
+     *    NamedValue ListSource = new NamedValue(); 
+     *    ListSource.Name = "ListSource"; 
      *    ListSource.Value = new String[] {
-     *           "OListBoxModel1", "OListBoxModel2", "OListBoxModel3"};
+     *           "OListBoxModel1", "OListBoxModel2", "OListBoxModel3"}; 
      *    super.m_propertiesToSet.add(ListSource);
      *    super.m_LCShape_Type = "FixedText";
      * </pre>
@@ -138,26 +138,26 @@ public class OListBoxModel extends GenericModelTest {
      * @param log the log writer
      */
     protected void initialize(TestParameters tParam, PrintWriter log) {
-
+        
         super.initialize(tParam, log);
 
         super.m_ChangePropertyName = "SelectedItems";
-
+        
         super.m_kindOfControl="ListBox";
-
+        
         super.m_ObjectName = "stardiv.one.form.component.ListBox";
 
-        NamedValue DataField = new NamedValue();
-        DataField.Name = "DataField";
-        DataField.Value = DBTools.TST_STRING_F;
+        NamedValue DataField = new NamedValue(); 
+        DataField.Name = "DataField"; 
+        DataField.Value = DBTools.TST_STRING_F; 
         super.m_propertiesToSet.add(DataField);
-
-        NamedValue ListSource = new NamedValue();
-        ListSource.Name = "ListSource";
+        
+        NamedValue ListSource = new NamedValue(); 
+        ListSource.Name = "ListSource"; 
         ListSource.Value = new String[] {
-                "OListBoxModel1", "OListBoxModel2", "OListBoxModel3"};
+                "OListBoxModel1", "OListBoxModel2", "OListBoxModel3"}; 
         super.m_propertiesToSet.add(ListSource);
-
+        
         super.m_LCShape_Type = "FixedText";
 
     }
@@ -169,7 +169,7 @@ public class OListBoxModel extends GenericModelTest {
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         super.cleanup(tParam, log);
     }
-
+    
 
     /**
      * calls <CODE>createTestEnvironment()</CODE> from it's super class
@@ -180,15 +180,15 @@ public class OListBoxModel extends GenericModelTest {
      * @param log the log writer
      * @return lib.TestEnvironment
      */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, 
                                                                  PrintWriter log) {
         TestEnvironment tEnv = super.createTestEnvironment(Param, log);
 
-        tEnv.addObjRelation("XUpdateBroadcaster.Checker",
+        tEnv.addObjRelation("XUpdateBroadcaster.Checker", 
                             new Checker(m_XFormLoader, m_XPS, m_XCtrl, m_ChangePropertyName, m_ChangePropertyValue));
         return tEnv;
     }
-
+    
     static class Checker implements UpdateChecker {
             private short lastItem = (short) 0;
             XLoadable formLoaderF = null;
@@ -196,7 +196,7 @@ public class OListBoxModel extends GenericModelTest {
             XInterface ctrl = null;
             String ChangePropertyName = null;
             Object ChangePropertyValue = null;
-
+            
             public Checker(XLoadable xl, XPropertySet ps, XInterface ctrl, String ChangePropertyName, Object ChangePropertyValue) {
                 formLoaderF = xl;
                 this.ps = ps;
@@ -204,7 +204,7 @@ public class OListBoxModel extends GenericModelTest {
                 this.ChangePropertyName=ChangePropertyName;
                 this.ChangePropertyValue=ChangePropertyValue;
             }
-
+            
             public void update() throws Exception {
                 if (!formLoaderF.isLoaded()) {
                     formLoaderF.load();
@@ -217,7 +217,7 @@ public class OListBoxModel extends GenericModelTest {
                 XBoundComponent bound = (XBoundComponent) UnoRuntime.queryInterface(
                                                 XBoundComponent.class, ctrl);
                 XResultSetUpdate update = (XResultSetUpdate) UnoRuntime.queryInterface(
-                                                  XResultSetUpdate.class,
+                                                  XResultSetUpdate.class, 
                                                   formLoaderF);
 
                 bound.commit();
@@ -232,5 +232,5 @@ public class OListBoxModel extends GenericModelTest {
                 return (getS.length > 0) && (lastItem == getS[0]);
             }
         }
-
+    
 } // finish class OListBoxModel

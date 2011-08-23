@@ -62,15 +62,15 @@
  * Change History
  * 2005-01-17 create this file.
  ************************************************************************/
-#include    "xfpagemaster.hxx"
-#include    "ixfstream.hxx"
-#include    "ixfattrlist.hxx"
-#include    "xfborders.hxx"
-#include    "xfshadow.hxx"
-#include    "xfcolumns.hxx"
-#include    "xfheaderstyle.hxx"
-#include    "xffooterstyle.hxx"
-#include    "xfbgimage.hxx"
+#include	"xfpagemaster.hxx"
+#include	"ixfstream.hxx"
+#include	"ixfattrlist.hxx"
+#include	"xfborders.hxx"
+#include	"xfshadow.hxx"
+#include	"xfcolumns.hxx"
+#include	"xfheaderstyle.hxx"
+#include	"xffooterstyle.hxx"
+#include	"xfbgimage.hxx"
 
 XFPageMaster::XFPageMaster()
 {
@@ -111,22 +111,22 @@ XFPageMaster::~XFPageMaster()
         delete m_pBGImage;
 }
 
-enumXFStyle XFPageMaster::GetStyleFamily()
+enumXFStyle	XFPageMaster::GetStyleFamily()
 {
     return enumXFStylePageMaster;
 }
 
-void    XFPageMaster::SetPageWidth(double width)
+void	XFPageMaster::SetPageWidth(double width)
 {
     m_fPageWidth = width;
 }
 
-void    XFPageMaster::SetPageHeight(double height)
+void	XFPageMaster::SetPageHeight(double height)
 {
     m_fPageHeight = height;
 }
 
-void    XFPageMaster::SetMargins(double left, double right,double top, double bottom)
+void	XFPageMaster::SetMargins(double left, double right,double top, double bottom)
 {
     if( left != -1 )
         m_aMargin.SetLeft(left);
@@ -138,54 +138,54 @@ void    XFPageMaster::SetMargins(double left, double right,double top, double bo
         m_aMargin.SetBottom(bottom);
 }
 
-void    XFPageMaster::SetBorders(XFBorders *pBorders)
+void	XFPageMaster::SetBorders(XFBorders *pBorders)
 {
     if( m_pBorders && (pBorders != m_pBorders) )
         delete m_pBorders;
     m_pBorders = pBorders;
 }
 
-void    XFPageMaster::SetShadow(XFShadow *pShadow)
+void	XFPageMaster::SetShadow(XFShadow *pShadow)
 {
     if( m_pShadow && (pShadow != m_pShadow) )
         delete m_pShadow;
     m_pShadow = pShadow;
 }
 
-void    XFPageMaster::SetBackColor(XFColor color)
+void	XFPageMaster::SetBackColor(XFColor color)
 {
     m_aBackColor = color;
 }
 
-void    XFPageMaster::SetBackImage(XFBGImage *image)
+void	XFPageMaster::SetBackImage(XFBGImage *image)
 {
     if( m_pBGImage )
         delete m_pBGImage;
     m_pBGImage = image;
 }
 
-void    XFPageMaster::SetColumns(XFColumns *pColumns)
+void	XFPageMaster::SetColumns(XFColumns *pColumns)
 {
     if( m_pColumns && (pColumns != m_pColumns) )
         delete m_pColumns;
     m_pColumns = pColumns;
 }
 
- void   XFPageMaster::SetHeaderStyle(XFHeaderStyle *pHeaderStyle)
+ void	XFPageMaster::SetHeaderStyle(XFHeaderStyle *pHeaderStyle)
 {
     if( m_pHeaderStyle && (pHeaderStyle != m_pHeaderStyle) )
         delete m_pHeaderStyle;
     m_pHeaderStyle = pHeaderStyle;
 }
 
-void    XFPageMaster::SetFooterStyle(XFFooterStyle *pFooterStyle)
+void	XFPageMaster::SetFooterStyle(XFFooterStyle *pFooterStyle)
 {
     if( m_pFooterStyle && (pFooterStyle != m_pFooterStyle) )
         delete m_pFooterStyle;
     m_pFooterStyle = pFooterStyle;
 }
 
-void    XFPageMaster::SetFootNoteSeparator(
+void	XFPageMaster::SetFootNoteSeparator(
                              enumXFAlignType align,
                              double width,
                              sal_Int32 lengthPercent,
@@ -224,9 +224,9 @@ void    XFPageMaster::SetFootNoteSeparator(
     </style:page-master>
 
  */
-void    XFPageMaster::ToXml(IXFStream *pStream)
+void	XFPageMaster::ToXml(IXFStream *pStream)
 {
-    IXFAttrList *pAttrList = pStream->GetAttrList();
+    IXFAttrList	*pAttrList = pStream->GetAttrList();
 
     pAttrList->Clear();
     pAttrList->AddAttribute(A2OUSTR("style:name"),GetStyleName());

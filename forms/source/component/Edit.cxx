@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -159,7 +159,7 @@ void OEditControl::disposing()
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-StringSequence  OEditControl::getSupportedServiceNames() throw()
+StringSequence	OEditControl::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
@@ -239,7 +239,7 @@ void OEditControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( 
         Reference<XPropertySet>  xFCSet;
         for( sal_Int32 nIndex=0; nIndex < nCount; nIndex++ )
         {
-            //  Any aElement(xElements->getByIndex(nIndex));
+            //	Any aElement(xElements->getByIndex(nIndex));
             xElements->getByIndex(nIndex) >>= xFCSet;
             OSL_ENSURE(xFCSet.is(),"OEditControl::keyPressed: No XPropertySet!");
 
@@ -351,7 +351,7 @@ void OEditModel::disposing()
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OEditModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    return FRM_COMPONENT_EDIT;  // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_EDIT;	// old (non-sun) name for compatibility !
 }
 
 // XServiceInfo
@@ -398,11 +398,11 @@ void SAL_CALL OEditModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) 
 void OEditModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 5, OEditBaseModel )
-        DECL_PROP2(PERSISTENCE_MAXTEXTLENGTH,sal_Int16,         READONLY, TRANSIENT);
-        DECL_PROP2(DEFAULT_TEXT,        ::rtl::OUString,        BOUND, MAYBEDEFAULT);
-        DECL_BOOL_PROP1(EMPTY_IS_NULL,                          BOUND);
-        DECL_PROP1(TABINDEX,            sal_Int16,              BOUND);
-        DECL_BOOL_PROP2(FILTERPROPOSAL,                         BOUND, MAYBEDEFAULT);
+        DECL_PROP2(PERSISTENCE_MAXTEXTLENGTH,sal_Int16,			READONLY, TRANSIENT);
+        DECL_PROP2(DEFAULT_TEXT,		::rtl::OUString,		BOUND, MAYBEDEFAULT);
+        DECL_BOOL_PROP1(EMPTY_IS_NULL,							BOUND);
+        DECL_PROP1(TABINDEX,			sal_Int16,				BOUND);
+        DECL_BOOL_PROP2(FILTERPROPOSAL,							BOUND, MAYBEDEFAULT);
     END_DESCRIBE_PROPERTIES();
 }
 
@@ -558,7 +558,7 @@ void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw
     sal_Int16 nOldTextLen = 0;
     // bin ich gerade loaded und habe dazu zeitweilig die MaxTextLen umgesetzt ?
     if ( m_bMaxTextLenModified )
-    {   // -> fuer die Dauer des Speicherns meinem aggregierten Model die alte TextLen einreden
+    {	// -> fuer die Dauer des Speicherns meinem aggregierten Model die alte TextLen einreden
 
         // before doing this we have to save the current text value of the aggregate, as this may be affected by resetting the text len
         // FS - 08.12.99 - 70606
@@ -571,7 +571,7 @@ void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw
     OEditBaseModel::write(_rxOutStream);
 
     if ( m_bMaxTextLenModified )
-    {   // wieder zuruecksetzen
+    {	// wieder zuruecksetzen
         m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, makeAny(nOldTextLen));
         // and reset the text
         // First we set it to an empty string : Without this the second setPropertyValue would not do anything as it thinks
@@ -593,8 +593,8 @@ void OEditModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( 
     if (m_xAggregateSet.is())
     {
         Any aDefaultControl = m_xAggregateSet->getPropertyValue(PROPERTY_DEFAULTCONTROL);
-        if  (   (aDefaultControl.getValueType().getTypeClass() == TypeClass_STRING)
-            &&  (getString(aDefaultControl).compareTo(STARDIV_ONE_FORM_CONTROL_TEXTFIELD) == COMPARE_EQUAL)
+        if	(	(aDefaultControl.getValueType().getTypeClass() == TypeClass_STRING)
+            &&	(getString(aDefaultControl).compareTo(STARDIV_ONE_FORM_CONTROL_TEXTFIELD) == COMPARE_EQUAL)
             )
         {
             m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( (::rtl::OUString)STARDIV_ONE_FORM_CONTROL_EDIT ) );
@@ -625,7 +625,7 @@ void OEditModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 
         if ( m_pValueFormatter->getKeyType() != NumberFormat::SCIENTIFIC )
         {
-            m_bMaxTextLenModified = getINT16(m_xAggregateSet->getPropertyValue(PROPERTY_MAXTEXTLEN)) != 0;
+            m_bMaxTextLenModified =	getINT16(m_xAggregateSet->getPropertyValue(PROPERTY_MAXTEXTLEN)) != 0;
             if ( !m_bMaxTextLenModified )
             {
                 sal_Int32 nFieldLen = 0;
@@ -656,7 +656,7 @@ void OEditModel::onDisconnectedDbColumn()
     if ( hasField() && m_bMaxTextLenModified )
     {
         Any aVal;
-        aVal <<= (sal_Int16)0;  // nur wenn es 0 war, habe ich es in onConnectedDbColumn umgesetzt
+        aVal <<= (sal_Int16)0;	// nur wenn es 0 war, habe ich es in onConnectedDbColumn umgesetzt
         m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, aVal);
         m_bMaxTextLenModified = sal_False;
     }

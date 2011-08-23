@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,9 +45,9 @@ using namespace ::com::sun::star;
 TYPEINIT1( SwAutoCorrect, SvxAutoCorrect );
 
 
-    //  - return den Ersetzungstext (nur fuer SWG-Format, alle anderen
-    //      koennen aus der Wortliste herausgeholt werden!)
-    //      rShort ist der Stream-Name - gecryptet!
+    //	- return den Ersetzungstext (nur fuer SWG-Format, alle anderen
+    //		koennen aus der Wortliste herausgeholt werden!)
+    //		rShort ist der Stream-Name - gecryptet!
 
 BOOL SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& rStg, const String& rFileName, const String& rShort, String& rLong )
 {
@@ -64,8 +64,8 @@ BOOL SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& rStg,
     return !IsError( nRet ) && rLong.Len();
 }
 
-    //  - Text mit Attributierung (kann nur der SWG - SWG-Format!)
-    //      rShort ist der Stream-Name - gecryptet!
+    //	- Text mit Attributierung (kann nur der SWG - SWG-Format!)
+    //		rShort ist der Stream-Name - gecryptet!
 BOOL SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg, const String& rFileName, const String& rShort,
                             SfxObjectShell& rObjSh, String& rLong )
 {

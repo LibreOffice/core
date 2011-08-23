@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,14 +42,14 @@ public:
         rgsabound[0].cElements= count;
         rgsabound[0].lLbound= 0;
         m_array= SafeArrayCreate( destVartype, 1, rgsabound);
-        SafeArrayLock( m_array);
-
+        SafeArrayLock( m_array);	
+        
         void* pData;
         if( m_array && (SUCCEEDED( SafeArrayAccessData( m_array, (void**)&pData)) ) )
         {
 
             for( int i=0; i< count; i++)
-            {
+            {	
                 CComVariant varSource( parParams[i]);
                 switch (destVartype)
                 {
@@ -121,18 +121,18 @@ public:
                         VARIANT *pVariant= (VARIANT*)pData;
                         hr= VariantCopy( &pVariant[i], &varSource); break;
                     }
-//              case VT_UNKNOWN:
-//                  {
-//                      long* pUnk= (long*)pData;
-//                      pUnk[i]= reinterpret_cast<long>(parParams[i]);
-//                      ((IUnknown*)pUnk[i])->AddRef(); break;
-//                  }
-//              case VT_DISPATCH:
-//                  {
-//                      long* pDisp= (long*)pData;
-//                      pDisp[i]= (long)parParams[i];
-//                      ((IDispatch*)pDisp[i])->AddRef(); break;
-//                  }
+//				case VT_UNKNOWN:
+//					{
+//						long* pUnk= (long*)pData;
+//						pUnk[i]= reinterpret_cast<long>(parParams[i]);
+//						((IUnknown*)pUnk[i])->AddRef(); break;
+//					}
+//				case VT_DISPATCH:
+//					{
+//						long* pDisp= (long*)pData;
+//						pDisp[i]= (long)parParams[i];
+//						((IDispatch*)pDisp[i])->AddRef(); break;
+//					}
                 default:
                     hr= E_FAIL;
                 }
@@ -145,7 +145,7 @@ public:
         }
         SafeArrayUnaccessData( m_array);
     }
-    ~SmartArray(){
+    ~SmartArray(){ 
         SafeArrayUnlock( m_array);
         SafeArrayDestroy( m_array );
     }
@@ -162,44 +162,44 @@ class SmartArray<IUnknown*>
     SAFEARRAY *m_array;
 public:
 
-    SmartArray( sourceType * parParams, int count, VARTYPE destVartype);
-//  {
-//      ATLTRACE("SmartArray<IUnknown>");
-//      HRESULT hr= S_OK;
-//      SAFEARRAYBOUND rgsabound[1];
-//      rgsabound[0].cElements= count;
-//      rgsabound[0].lLbound= 0;
-//      m_array= SafeArrayCreateVector( VT_UNKNOWN, 0, count);
-//      SafeArrayLock( m_array);
+    SmartArray( sourceType * parParams, int count, VARTYPE destVartype); 
+//	{
+//		ATLTRACE("SmartArray<IUnknown>");
+//		HRESULT hr= S_OK;
+//		SAFEARRAYBOUND rgsabound[1];
+//		rgsabound[0].cElements= count;
+//		rgsabound[0].lLbound= 0;
+//		m_array= SafeArrayCreateVector( VT_UNKNOWN, 0, count);
+//		SafeArrayLock( m_array);	
+//		
+//		IUnknown* *pData;
+//		if( m_array && (SUCCEEDED( SafeArrayAccessData( m_array, (void**)&pData)) ) )
+//		{
 //
-//      IUnknown* *pData;
-//      if( m_array && (SUCCEEDED( SafeArrayAccessData( m_array, (void**)&pData)) ) )
-//      {
+//			for( int i=0; i< count; i++)
+//			{	
+//				CComVariant varSource( parParams[i]);
+//				switch (destVartype)
+//				{
 //
-//          for( int i=0; i< count; i++)
-//          {
-//              CComVariant varSource( parParams[i]);
-//              switch (destVartype)
-//              {
-//
-//              case VT_UNKNOWN:
-//                  {
-//                      pData[i]= parParams[i];
-//                      pData[i]->AddRef();
-//                  }
-//              default:
-//                  hr= E_FAIL;
-//              }
-//          }
-//          if( FAILED( hr))
-//          {
-//              SafeArrayDestroy( m_array);
-//              m_array= NULL;
-//          }
-//      }
-//      SafeArrayUnaccessData( m_array);
-//  }
-    ~SmartArray(){
+//				case VT_UNKNOWN:
+//					{
+//						pData[i]= parParams[i];
+//						pData[i]->AddRef();
+//					}
+//				default:
+//					hr= E_FAIL;
+//				}
+//			}
+//			if( FAILED( hr))
+//			{
+//				SafeArrayDestroy( m_array);
+//				m_array= NULL;
+//			}
+//		}
+//		SafeArrayUnaccessData( m_array);
+//	}
+    ~SmartArray(){ 
         SafeArrayUnlock( m_array);
         SafeArrayDestroy( m_array );
     }
@@ -218,13 +218,13 @@ template <> SmartArray <IUnknown*>::SmartArray(sourceType * parParams, int count
     rgsabound[0].cElements= count;
     rgsabound[0].lLbound= 0;
     m_array= SafeArrayCreateVector( VT_UNKNOWN, 0, count);
-    SafeArrayLock( m_array);
-
+    SafeArrayLock( m_array);	
+    
     IUnknown* *pData;
     if( m_array && (SUCCEEDED( SafeArrayAccessData( m_array, (void**)&pData)) ) )
     {
         for( int i=0; i< count; i++)
-        {
+        {	
             pData[i]= parParams[i];
             pData[i]->AddRef();
         }

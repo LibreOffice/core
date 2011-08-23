@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <com/sun/star/frame/ControlCommand.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 
 #include <uielement/complextoolbarcontroller.hxx>
@@ -46,10 +46,10 @@ namespace framework
 
 class ToolBar;
 class ImageButtonToolbarController : public ComplexToolbarController
-
+                                  
 {
     public:
-        ImageButtonToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+        ImageButtonToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager, 
                                       const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                       ToolBox*             pToolBar,
                                       USHORT               nID,
@@ -62,7 +62,7 @@ class ImageButtonToolbarController : public ComplexToolbarController
     protected:
         virtual void executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand );
 
-    private:
+    private:    
         sal_Bool ReadImageFromURL( sal_Bool bBigImage, const rtl::OUString& aImageURL, Image& aImage );
 };
 

@@ -61,9 +61,9 @@
  * Change History
  * 2005-01-24 create and implements.
  ************************************************************************/
-#include    "xfrow.hxx"
-#include    "xfcell.hxx"
-#include    "xftable.hxx"
+#include	"xfrow.hxx"
+#include	"xfcell.hxx"
+#include	"xftable.hxx"
 
 XFRow::XFRow()
 {
@@ -112,11 +112,11 @@ XFRow::~XFRow()
     }
 }
 
-void    XFRow::AddCell(XFCell *pCell)
+void	XFRow::AddCell(XFCell *pCell)
 {
     if( !pCell )
         return;
-/*  sal_Int32   col = pCell->GetCol();
+/*	sal_Int32	col = pCell->GetCol();
     if( col<1 )
     {
         pCell->SetCol(m_aCells.size()+1);
@@ -132,12 +132,12 @@ void    XFRow::AddCell(XFCell *pCell)
     m_aCells[col]=pCell;
 }
 
-sal_Int32   XFRow::GetCellCount() const
+sal_Int32	XFRow::GetCellCount() const
 {
     return m_aCells.size();
 }
 
-XFCell* XFRow::GetCell(sal_Int32 col) const
+XFCell*	XFRow::GetCell(sal_Int32 col) const
 {
     if( m_aCells.find(col) == m_aCells.end() )
         return NULL;
@@ -145,17 +145,17 @@ XFCell* XFRow::GetCell(sal_Int32 col) const
         return m_aCells.find(col)->second;
 }
 
-rtl::OUString   XFRow::GetRowName()
+rtl::OUString	XFRow::GetRowName()
 {
     if( m_pOwnerTable && m_pOwnerTable->IsSubTable() )
         return m_pOwnerTable->GetTableName();
     return A2OUSTR("");
 }
 
-void    XFRow::ToXml(IXFStream *pStrm)
+void	XFRow::ToXml(IXFStream *pStrm)
 {
-    sal_Int32   lastCol = 0;
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    sal_Int32	lastCol = 0;
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     if( GetStyleName().getLength() )
@@ -164,11 +164,11 @@ void    XFRow::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute( A2OUSTR("table:number-rows-repeated"), Int32ToOUString(m_nRepeat) );
     pStrm->StartElement( A2OUSTR("table:table-row") );
 
-    std::map<sal_Int32,XFCell*>::iterator   it = m_aCells.begin();
+    std::map<sal_Int32,XFCell*>::iterator	it = m_aCells.begin();
     for( ; it!=m_aCells.end(); it++ )
     {
-        int col = (*it).first;
-        XFCell  *pCell = (*it).second;
+        int	col = (*it).first;
+        XFCell	*pCell = (*it).second;
         if( !pCell )
             continue;
         if( col>lastCol+1 )

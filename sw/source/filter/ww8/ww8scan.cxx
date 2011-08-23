@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -3446,7 +3446,7 @@ WW8PLCFx_SEPX::WW8PLCFx_SEPX(SvStream* pSt, SvStream* pTblSt,
     pStrm(pSt), nArrMax(256), nSprmSiz(0)
 {
     pPLCF =   rFib.lcbPlcfsed
-            ? new WW8PLCF(pTblSt, rFib.fcPlcfsed, rFib.lcbPlcfsed,
+            ? new WW8PLCF(pTblSt, rFib.fcPlcfsed, rFib.lcbPlcfsed, 
               GetFIBVersion() <= ww::eWW2 ? 6 : 12, nStartCp)
             : 0;
 
@@ -3506,13 +3506,13 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
             pStrm->Seek( nPo );
 
             // read len
-            if (GetFIBVersion() <= ww::eWW2)    // eWW6 ?, docs say yes, but...
+            if (GetFIBVersion() <= ww::eWW2)	// eWW6 ?, docs say yes, but...
             {
                 BYTE nSiz(0);
                 *pStrm >> nSiz;
                 nSprmSiz = nSiz;
             }
-            else
+            else 
                 *pStrm >> nSprmSiz;
 
             if( nSprmSiz > nArrMax )
@@ -5182,7 +5182,7 @@ WW8_CP WW8Fib::GetBaseCp(ManTypes nType) const
             nOffset = ccpText + ccpFtn + ccpHdr + ccpMcr + ccpAtn + ccpEdn;
             break;
         case MAN_TXBX_HDFT:
-            nOffset = ccpText + ccpFtn + ccpHdr + ccpMcr + ccpAtn + ccpEdn +
+            nOffset = ccpText + ccpFtn + ccpHdr + ccpMcr + ccpAtn + ccpEdn + 
                 ccpTxbx;
             break;
     }
@@ -5572,14 +5572,14 @@ WW8Fib::WW8Fib(SvStream& rSt, BYTE nWantedVersion, UINT32 nOffset)
             rSt.Seek( 0x372 );          // fcSttbListNames
             rSt >> fcSttbListNames;
             rSt >> lcbSttbListNames;
-
+        
             if (cfclcb > 93)
             {
                 rSt.Seek( 0x382 );          // MagicTables
                 rSt >> fcPlcfTch;
                 rSt >> lcbPlcfTch;
             }
-
+            
             if (cfclcb > 113)
             {
                 rSt.Seek( 0x41A );          // new ATRD
@@ -5640,7 +5640,7 @@ WW8Fib::WW8Fib(BYTE nVer)
         nProduct = 0xc02d;
     }
 
-    // --> #i90932#
+    // --> #i90932# 
     lid = 0x409; // LANGUAGE_ENGLISH_US
 
     LanguageType nLang = Application::GetSettings().GetLanguage();
@@ -5663,7 +5663,7 @@ WW8Fib::WW8Fib(BYTE nVer)
             fFarEast = false;
             break;
     };
-    // <-- #i90932#
+    // <-- #i90932# 
 
     Locale aTempLocale;
     SvxLanguageToLocale( aTempLocale, lid );
@@ -5677,7 +5677,7 @@ sal_Unicode WW8Fib::getNumDecimalSep() const
 }
 
 bool WW8Fib::WriteHeader(SvStream& rStrm)
-{
+{	
     bool bVer8 = 8 == nVersion;
 
     size_t nUnencryptedHdr = bVer8 ? 0x44 : 0x24;
@@ -5696,22 +5696,22 @@ bool WW8Fib::WriteHeader(SvStream& rStrm)
     Set_UInt16( pData, pnNext );
 
     UINT16 nBits16 = 0;
-    if( fDot )          nBits16 |= 0x0001;
-    if( fGlsy)          nBits16 |= 0x0002;
-    if( fComplex )      nBits16 |= 0x0004;
-    if( fHasPic )       nBits16 |= 0x0008;
+    if( fDot ) 			nBits16 |= 0x0001;
+    if( fGlsy) 			nBits16 |= 0x0002;
+    if( fComplex )		nBits16 |= 0x0004;
+    if( fHasPic ) 		nBits16 |= 0x0008;
     nBits16 |= (0xf0 & ( cQuickSaves << 4 ));
-    if( fEncrypted )    nBits16 |= 0x0100;
-    if( fWhichTblStm )  nBits16 |= 0x0200;
+    if( fEncrypted ) 	nBits16 |= 0x0100;
+    if( fWhichTblStm ) 	nBits16 |= 0x0200;
 
-    if (fReadOnlyRecommended)
+    if (fReadOnlyRecommended) 
         nBits16 |= 0x0400;
-    if (fWriteReservation)
+    if (fWriteReservation) 
         nBits16 |= 0x0800;
 
-    if( fExtChar )      nBits16 |= 0x1000;
+    if( fExtChar ) 		nBits16 |= 0x1000;
     if( fFarEast )      nBits16 |= 0x4000;  // #i90932#
-    if( fObfuscated )   nBits16 |= 0x8000;
+    if( fObfuscated )	nBits16 |= 0x8000;
     Set_UInt16( pData, nBits16 );
 
     Set_UInt16( pData, nFibBack );
@@ -5722,11 +5722,11 @@ bool WW8Fib::WriteHeader(SvStream& rStrm)
     BYTE nBits8 = 0;
     if( bVer8 )
     {
-        if( fMac )                  nBits8 |= 0x0001;
-        if( fEmptySpecial )         nBits8 |= 0x0002;
-        if( fLoadOverridePage )     nBits8 |= 0x0004;
-        if( fFuturesavedUndo )      nBits8 |= 0x0008;
-        if( fWord97Saved )          nBits8 |= 0x0010;
+        if( fMac ) 					nBits8 |= 0x0001;
+        if( fEmptySpecial ) 		nBits8 |= 0x0002;
+        if( fLoadOverridePage )		nBits8 |= 0x0004;
+        if( fFuturesavedUndo ) 		nBits8 |= 0x0008;
+        if( fWord97Saved ) 			nBits8 |= 0x0010;
         if( fWord2000Saved )        nBits8 |= 0x0020;
     }
     // unter Ver67 these are only reserved
@@ -5776,7 +5776,7 @@ bool WW8Fib::Write(SvStream& rStrm)
 
     ULONG nPos = rStrm.Tell();
     cbMac = rStrm.Seek( STREAM_SEEK_TO_END );
-    rStrm.Seek( nPos );
+    rStrm.Seek( nPos );    
 
     // 2 Longs uebergehen, da unwichtiger Quatsch
     pData += 2 * sizeof( INT32);
@@ -6907,44 +6907,44 @@ UINT32 WW8Dop::GetCompatabilityOptions() const
 // i#78591#
 void WW8Dop::SetCompatabilityOptions2(UINT32 a32Bit)
 {
-    fCompatabilityOptions_Unknown2_1                        = ( a32Bit &  0x00000001 );
-    fCompatabilityOptions_Unknown2_2                        = ( a32Bit &  0x00000002 ) >>  1 ;
-    fDontUseHTMLAutoSpacing     = ( a32Bit &  0x00000004 ) >>  2 ;
-    fCompatabilityOptions_Unknown2_4                    = ( a32Bit &  0x00000008 ) >>  3 ;
-       fCompatabilityOptions_Unknown2_5                 = ( a32Bit &  0x00000010 ) >>  4 ;
-       fCompatabilityOptions_Unknown2_6                 = ( a32Bit &  0x00000020 ) >>  5 ;
-       fCompatabilityOptions_Unknown2_7                 = ( a32Bit &  0x00000040 ) >>  6 ;
-       fCompatabilityOptions_Unknown2_8                 = ( a32Bit &  0x00000080 ) >>  7 ;
-       fCompatabilityOptions_Unknown2_9                 = ( a32Bit &  0x00000100 ) >>  8 ;
-       fCompatabilityOptions_Unknown2_10                    = ( a32Bit &  0x00000200 ) >>  9 ;
-       fCompatabilityOptions_Unknown2_11                    = ( a32Bit &  0x00000400 ) >> 10 ;
-       fCompatabilityOptions_Unknown2_12                    = ( a32Bit &  0x00000800 ) >> 11 ;
-    fCompatabilityOptions_Unknown2_13                   = ( a32Bit &  0x00001000 ) >> 12 ;
-    fCompatabilityOptions_Unknown2_14                   = ( a32Bit &  0x00002000 ) >> 13 ;
-    fCompatabilityOptions_Unknown2_15                   = ( a32Bit &  0x00004000 ) >> 14 ;
-    fCompatabilityOptions_Unknown2_16                   = ( a32Bit &  0x00008000 ) >> 15 ;
-       fCompatabilityOptions_Unknown2_17                    = ( a32Bit &  0x00010000 ) >> 16 ;
-       fCompatabilityOptions_Unknown2_18                    = ( a32Bit &  0x00020000 ) >> 17 ;
-       fCompatabilityOptions_Unknown2_19                    = ( a32Bit &  0x00040000 ) >> 18 ;
-       fCompatabilityOptions_Unknown2_20                    = ( a32Bit &  0x00080000 ) >> 19 ;
-    fCompatabilityOptions_Unknown2_21                   = ( a32Bit &  0x00100000 ) >> 20 ;
-       fCompatabilityOptions_Unknown2_22                    = ( a32Bit &  0x00200000 ) >> 21 ;
-    fCompatabilityOptions_Unknown2_23                   = ( a32Bit &  0x00400000 ) >> 22 ;
-    fCompatabilityOptions_Unknown2_24                   = ( a32Bit &  0x00800800 ) >> 23 ;
-    fCompatabilityOptions_Unknown2_25                   = ( a32Bit &  0x01000800 ) >> 24 ;
-    fCompatabilityOptions_Unknown2_26                   = ( a32Bit &  0x02000800 ) >> 25 ;
-    fCompatabilityOptions_Unknown2_27                   = ( a32Bit &  0x04000800 ) >> 26 ;
-    fCompatabilityOptions_Unknown2_28                   = ( a32Bit &  0x08000800 ) >> 27 ;
-    fCompatabilityOptions_Unknown2_29                   = ( a32Bit &  0x10000800 ) >> 28 ;
-    fCompatabilityOptions_Unknown2_30                   = ( a32Bit &  0x20000800 ) >> 29 ;
-    fCompatabilityOptions_Unknown2_31                   = ( a32Bit &  0x40000800 ) >> 30 ;
-       fCompatabilityOptions_Unknown2_32                    = ( a32Bit &  0x80000000 ) >> 31 ;
+    fCompatabilityOptions_Unknown2_1 						= ( a32Bit &  0x00000001 );
+    fCompatabilityOptions_Unknown2_2						= ( a32Bit &  0x00000002 ) >>  1 ;
+    fDontUseHTMLAutoSpacing		= ( a32Bit &  0x00000004 ) >>  2 ;
+    fCompatabilityOptions_Unknown2_4					= ( a32Bit &  0x00000008 ) >>  3 ;
+       fCompatabilityOptions_Unknown2_5					= ( a32Bit &  0x00000010 ) >>  4 ;
+       fCompatabilityOptions_Unknown2_6					= ( a32Bit &  0x00000020 ) >>  5 ;
+       fCompatabilityOptions_Unknown2_7					= ( a32Bit &  0x00000040 ) >>  6 ;
+       fCompatabilityOptions_Unknown2_8					= ( a32Bit &  0x00000080 ) >>  7 ;
+       fCompatabilityOptions_Unknown2_9					= ( a32Bit &  0x00000100 ) >>  8 ;
+       fCompatabilityOptions_Unknown2_10					= ( a32Bit &  0x00000200 ) >>  9 ;
+       fCompatabilityOptions_Unknown2_11					= ( a32Bit &  0x00000400 ) >> 10 ;
+       fCompatabilityOptions_Unknown2_12					= ( a32Bit &  0x00000800 ) >> 11 ;
+    fCompatabilityOptions_Unknown2_13					= ( a32Bit &  0x00001000 ) >> 12 ;	
+    fCompatabilityOptions_Unknown2_14					= ( a32Bit &  0x00002000 ) >> 13 ;	
+    fCompatabilityOptions_Unknown2_15					= ( a32Bit &  0x00004000 ) >> 14 ;	
+    fCompatabilityOptions_Unknown2_16					= ( a32Bit &  0x00008000 ) >> 15 ;	
+       fCompatabilityOptions_Unknown2_17					= ( a32Bit &  0x00010000 ) >> 16 ;
+       fCompatabilityOptions_Unknown2_18					= ( a32Bit &  0x00020000 ) >> 17 ;
+       fCompatabilityOptions_Unknown2_19					= ( a32Bit &  0x00040000 ) >> 18 ;
+       fCompatabilityOptions_Unknown2_20					= ( a32Bit &  0x00080000 ) >> 19 ;
+    fCompatabilityOptions_Unknown2_21					= ( a32Bit &  0x00100000 ) >> 20 ;	
+       fCompatabilityOptions_Unknown2_22					= ( a32Bit &  0x00200000 ) >> 21 ;
+    fCompatabilityOptions_Unknown2_23					= ( a32Bit &  0x00400000 ) >> 22 ;	
+    fCompatabilityOptions_Unknown2_24					= ( a32Bit &  0x00800800 ) >> 23 ;	
+    fCompatabilityOptions_Unknown2_25					= ( a32Bit &  0x01000800 ) >> 24 ;	
+    fCompatabilityOptions_Unknown2_26					= ( a32Bit &  0x02000800 ) >> 25 ;	
+    fCompatabilityOptions_Unknown2_27					= ( a32Bit &  0x04000800 ) >> 26 ;	
+    fCompatabilityOptions_Unknown2_28					= ( a32Bit &  0x08000800 ) >> 27 ;	
+    fCompatabilityOptions_Unknown2_29					= ( a32Bit &  0x10000800 ) >> 28 ;	
+    fCompatabilityOptions_Unknown2_30					= ( a32Bit &  0x20000800 ) >> 29 ;	
+    fCompatabilityOptions_Unknown2_31					= ( a32Bit &  0x40000800 ) >> 30 ;	
+       fCompatabilityOptions_Unknown2_32					= ( a32Bit &  0x80000000 ) >> 31 ;
 }
 
 UINT32 WW8Dop::GetCompatabilityOptions2() const
 {
     UINT32 a32Bit = 0;
-    if (fCompatabilityOptions_Unknown2_1)           a32Bit |= 0x00000001;
+    if (fCompatabilityOptions_Unknown2_1)			a32Bit |= 0x00000001;
     if (fCompatabilityOptions_Unknown2_2)           a32Bit |= 0x00000002;
     if (fDontUseHTMLAutoSpacing)     a32Bit |= 0x00000004;
     if (fCompatabilityOptions_Unknown2_4)           a32Bit |= 0x00000008;
@@ -6958,13 +6958,13 @@ UINT32 WW8Dop::GetCompatabilityOptions2() const
     if (fCompatabilityOptions_Unknown2_12)          a32Bit |= 0x00000800;
     if (fCompatabilityOptions_Unknown2_13)          a32Bit |= 0x00001000;
     //#i42909# set thai "line breaking rules" compatibility option
-    // pflin, wonder whether bUseThaiLineBreakingRules is correct
+    // pflin, wonder whether bUseThaiLineBreakingRules is correct 
     // when importing word document.
     if (bUseThaiLineBreakingRules)          a32Bit |= 0x00002000;
-    else if (fCompatabilityOptions_Unknown2_14)         a32Bit |= 0x00002000;
+    else if (fCompatabilityOptions_Unknown2_14) 		a32Bit |= 0x00002000;
     if (fCompatabilityOptions_Unknown2_15)          a32Bit |= 0x00004000;
     if (fCompatabilityOptions_Unknown2_16)          a32Bit |= 0x00008000;
-    if (fCompatabilityOptions_Unknown2_17)          a32Bit |= 0x00010000;
+    if (fCompatabilityOptions_Unknown2_17)        	a32Bit |= 0x00010000;
     if (fCompatabilityOptions_Unknown2_18)          a32Bit |= 0x00020000;
     if (fCompatabilityOptions_Unknown2_19)          a32Bit |= 0x00040000;
     if (fCompatabilityOptions_Unknown2_20)          a32Bit |= 0x00080000;
@@ -7176,7 +7176,7 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
             a16Bit |= 0x2000;
         }
         Set_UInt16(pData, a16Bit);
-
+        
         pData += 48;
         a16Bit = 0x0080;
         Set_UInt16(pData, a16Bit);
@@ -7206,7 +7206,7 @@ void WW8DopTypography::ReadFromMem(BYTE *&pData)
 
     if (cchFollowingPunct >= 0 && cchFollowingPunct < nMaxFollowing)
         rgxchFPunct[cchFollowingPunct]=0;
-    else
+    else    
         rgxchFPunct[nMaxFollowing - 1]=0;
 
     if (cchLeadingPunct >= 0 && cchLeadingPunct < nMaxLeading)

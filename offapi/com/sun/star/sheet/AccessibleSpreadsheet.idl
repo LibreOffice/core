@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,11 +70,11 @@ published service AccessibleSpreadsheet
             >XAccessibleContext::getAccessibleChild</method> all
             support the interface XAccessible. Calling
             <method scope="::com::sun::star::accessibility"
-            >XAccessible::getAccessibleContext</method> for these children
+            >XAccessible::getAccessibleContext</method> for these children 
             returns an object that supports the following service.</li>
         <ul>
             <li><type scope="::com::sun::star::sheet">AccessibleCell</type>:
-                A child where calling
+                A child where calling 
                 <method scope="::com::sun::star::accessibility"
                 >XAccessibleContext::getAccessibleChild</method>
                 an object that supports this service is returned for
@@ -111,17 +111,17 @@ published service AccessibleSpreadsheet
                 <li><const scope="::com::sun::star::accessibility"
                     >AccessibleStateType::OPAQUE</const> is always true.</li>
                 <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::RESIZEABLE</const>is always
+                    >AccessibleStateType::RESIZEABLE</const>is always 
                     false.</li>
                 <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::SELECTABLE</const> is always
+                    >AccessibleStateType::SELECTABLE</const> is always 
                     true.</li>
                 <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::SELECTED</const> is true if the
+                    >AccessibleStateType::SELECTED</const> is true if the 
                     complete table (all cells) is selected.</li>
                 <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::SHOWING</const>Is true if the
-                    Bounding Box lies in the Bounding Box of the parent.
+                    >AccessibleStateType::SHOWING</const>Is true if the 
+                    Bounding Box lies in the Bounding Box of the parent. 
                     Otherwise it is false.</li>
                 <li><const scope="::com::sun::star::accessibility"
                     >AccessibleStateType::VISIBLE</const>Is always true.</li>

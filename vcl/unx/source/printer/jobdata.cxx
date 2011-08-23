@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,18 +41,18 @@ using namespace rtl;
 
 JobData& JobData::operator=(const JobData& rRight)
 {
-    m_nCopies               = rRight.m_nCopies;
-    m_nLeftMarginAdjust     = rRight.m_nLeftMarginAdjust;
-    m_nRightMarginAdjust    = rRight.m_nRightMarginAdjust;
-    m_nTopMarginAdjust      = rRight.m_nTopMarginAdjust;
-    m_nBottomMarginAdjust   = rRight.m_nBottomMarginAdjust;
-    m_nColorDepth           = rRight.m_nColorDepth;
-    m_eOrientation          = rRight.m_eOrientation;
-    m_aPrinterName          = rRight.m_aPrinterName;
-    m_pParser               = rRight.m_pParser;
-    m_aContext              = rRight.m_aContext;
-    m_nPSLevel              = rRight.m_nPSLevel;
-    m_nColorDevice          = rRight.m_nColorDevice;
+    m_nCopies				= rRight.m_nCopies;
+    m_nLeftMarginAdjust		= rRight.m_nLeftMarginAdjust;
+    m_nRightMarginAdjust	= rRight.m_nRightMarginAdjust;
+    m_nTopMarginAdjust		= rRight.m_nTopMarginAdjust;
+    m_nBottomMarginAdjust	= rRight.m_nBottomMarginAdjust;
+    m_nColorDepth			= rRight.m_nColorDepth;
+    m_eOrientation			= rRight.m_eOrientation;
+    m_aPrinterName			= rRight.m_aPrinterName;
+    m_pParser				= rRight.m_pParser;
+    m_aContext				= rRight.m_aContext;
+    m_nPSLevel				= rRight.m_nPSLevel;
+    m_nColorDevice			= rRight.m_nColorDevice;
 
     if( ! m_pParser && m_aPrinterName.getLength() )
     {

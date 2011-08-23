@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,9 +47,9 @@ rtl::OUString CreateMD5FromString( const rtl::OUString& aMsg )
     if ( handle > 0 )
     {
         const sal_uInt8* pData = (const sal_uInt8*)aMsg.getStr();
-        sal_uInt32       nSize = ( aMsg.getLength() * sizeof( sal_Unicode ));
-        sal_uInt32       nMD5KeyLen = rtl_digest_queryLength( handle );
-        sal_uInt8*       pMD5KeyBuffer = new sal_uInt8[ nMD5KeyLen ];
+        sal_uInt32		 nSize = ( aMsg.getLength() * sizeof( sal_Unicode ));
+        sal_uInt32		 nMD5KeyLen = rtl_digest_queryLength( handle );
+        sal_uInt8*		 pMD5KeyBuffer = new sal_uInt8[ nMD5KeyLen ];
 
         rtl_digest_init( handle, pData, nSize );
         rtl_digest_update( handle, pData, nSize );
@@ -579,7 +579,7 @@ public:
 
             rtl::OString aMsg = sSampleString;
             const sal_uInt8 *pData = (const sal_uInt8*)aMsg.getStr();
-            sal_uInt32       nSize = ( aMsg.getLength() );
+            sal_uInt32	     nSize = ( aMsg.getLength() );
 
             rtlDigestError aError = rtl_digest_init(handle, pData, nSize);
 
@@ -607,7 +607,7 @@ public:
 
             rtl::OString aMsg = sSampleString;
             const sal_uInt8 *pData = (const sal_uInt8*)aMsg.getStr();
-            sal_uInt32       nSize = ( aMsg.getLength() );
+            sal_uInt32	     nSize = ( aMsg.getLength() );
 
             rtlDigestError aError = rtl_digest_init(handle, pData, nSize);
 
@@ -635,7 +635,7 @@ public:
 
             rtl::OString aMsg = sSampleString;
             const sal_uInt8 *pData = (const sal_uInt8*)aMsg.getStr();
-            sal_uInt32       nSize = ( aMsg.getLength() );
+            sal_uInt32	     nSize = ( aMsg.getLength() );
 
             rtlDigestError aError = rtl_digest_init(handle, pData, nSize);
 
@@ -662,7 +662,7 @@ public:
 
             rtl::OString aMsg = sSampleString;
             const sal_uInt8 *pData = (const sal_uInt8*)aMsg.getStr();
-            sal_uInt32       nSize = ( aMsg.getLength() );
+            sal_uInt32	     nSize = ( aMsg.getLength() );
 
             rtlDigestError aError = rtl_digest_init(handle, pData, nSize);
 
@@ -689,7 +689,7 @@ public:
 
             rtl::OString aMsg = sSampleString;
             const sal_uInt8 *pData = (const sal_uInt8*)aMsg.getStr();
-            sal_uInt32       nSize = ( aMsg.getLength() );
+            sal_uInt32	     nSize = ( aMsg.getLength() );
 
             sal_uInt32     nKeyLen = rtl_digest_queryLength( handle );
             CPPUNIT_ASSERT_MESSAGE( "Keylen must be greater 0", nKeyLen );
@@ -720,7 +720,7 @@ public:
 
             rtl::OString aMsg = sSampleString;
             const sal_uInt8 *pData = (const sal_uInt8*)aMsg.getStr();
-            sal_uInt32       nSize = ( aMsg.getLength() );
+            sal_uInt32	     nSize = ( aMsg.getLength() );
 
             sal_uInt32     nKeyLen = rtl_digest_queryLength( handle );
             CPPUNIT_ASSERT_MESSAGE( "Keylen must be greater 0", nKeyLen );
@@ -770,7 +770,7 @@ rtl::OString getMD5Sum(rtl::OString const& _aMsg )
     rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
 
     const sal_uInt8 *pData = (const sal_uInt8*)_aMsg.getStr();
-    sal_uInt32       nSize = ( _aMsg.getLength() );
+    sal_uInt32	     nSize = ( _aMsg.getLength() );
 
     rtl_digest_init(handle, pData, nSize);
     rtl_digest_update( handle, pData, nSize );
@@ -1240,7 +1240,7 @@ public:
 
             rtl::OString aMsg = sSampleString;
             const sal_uInt8* pData = (const sal_uInt8*)aMsg.getStr();
-            sal_uInt32       nSize = ( aMsg.getLength() );
+            sal_uInt32	     nSize = ( aMsg.getLength() );
 
             rtlDigestError aError = rtl_digest_updateMD5(aHandle, pData, nSize);
             CPPUNIT_ASSERT_MESSAGE("handle parameter 'handle' wrong", aError == rtl_Digest_E_Algorithm );

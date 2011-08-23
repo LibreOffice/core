@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,14 +31,14 @@ import com.sun.star.container.XNameContainer;
 
 public class _XFormsSupplier extends lib.MultiMethodTest {
 
-    public com.sun.star.form.XFormsSupplier oObj = null;
+    public com.sun.star.form.XFormsSupplier oObj = null;    
 
     public void _getForms() {
         XNameContainer forms = oObj.getForms();
         if (!forms.hasElements()) {
             log.println("NameContainer doesn't contain forms");
         }
-        tRes.tested("getForms()",forms.hasElements());
+        tRes.tested("getForms()",forms.hasElements());        
     }
-
+    
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,7 +82,7 @@ String GetDicInfoStr( const String& rName, const USHORT nLang, BOOL bNeg )
 }
 
 //========================================================================
-//  misc local helper functions
+//	misc local helper functions
 //========================================================================
 
 static Sequence< INT16 > lcl_LocaleSeqToLangSeq( Sequence< Locale > &rSeq )
@@ -90,7 +90,7 @@ static Sequence< INT16 > lcl_LocaleSeqToLangSeq( Sequence< Locale > &rSeq )
     const Locale *pLocale = rSeq.getConstArray();
     INT32 nCount = rSeq.getLength();
 
-    Sequence< INT16 >   aLangs( nCount );
+    Sequence< INT16 >	aLangs( nCount );
     INT16 *pLang = aLangs.getArray();
     for (INT32 i = 0;  i < nCount;  ++i)
     {
@@ -119,13 +119,13 @@ static BOOL lcl_SeqHasLang( const Sequence< INT16 > & rLangSeq, INT16 nLang )
 }
 
 //========================================================================
-//  class SvxLanguageBox
+//	class SvxLanguageBox
 //========================================================================
 
 USHORT TypeToPos_Impl( LanguageType eType, const ListBox& rLb )
 {
-    USHORT  nPos   = LISTBOX_ENTRY_NOTFOUND;
-    USHORT  nCount = rLb.GetEntryCount();
+    USHORT	nPos   = LISTBOX_ENTRY_NOTFOUND;
+    USHORT	nCount = rLb.GetEntryCount();
 
     for ( USHORT i=0; nPos == LISTBOX_ENTRY_NOTFOUND && i<nCount; i++ )
         if ( eType == LanguageType((ULONG)rLb.GetEntryData(i)) )
@@ -157,10 +157,10 @@ void SvxLanguageBox::Init()
     m_aNotCheckedImage = Image( SVX_RES( RID_SVXIMG_NOTCHECKED ) );
     m_aCheckedImage = Image( SVX_RES( RID_SVXIMG_CHECKED ) );
     m_aCheckedImageHC = Image( SVX_RES( RID_SVXIMG_CHECKED_H ) );
-    m_aAllString            = String( SVX_RESSTR( RID_SVXSTR_LANGUAGE_ALL ) );
-    m_nLangList             = LANG_LIST_EMPTY;
-    m_bHasLangNone          = FALSE;
-    m_bLangNoneIsLangAll    = FALSE;
+    m_aAllString			= String( SVX_RESSTR( RID_SVXSTR_LANGUAGE_ALL ) );
+    m_nLangList				= LANG_LIST_EMPTY;
+    m_bHasLangNone			= FALSE;
+    m_bLangNoneIsLangAll	= FALSE;
 
     // display entries sorted
     SetStyle( GetStyle() | WB_SORT );
@@ -184,7 +184,7 @@ void SvxLanguageBox::Init()
             if ( bInsert )
                 InsertLanguage( nLangType );
         }
-        m_nLangList = LANG_LIST_ALL;
+        m_nLangList	= LANG_LIST_ALL;
     }
 }
 //------------------------------------------------------------------------
@@ -216,10 +216,10 @@ void SvxLanguageBox::SetLanguageList( INT16 nLangList,
 {
     Clear();
 
-    m_nLangList             = nLangList;
-    m_bHasLangNone          = bHasLangNone;
-    m_bLangNoneIsLangAll    = bLangNoneIsLangAll;
-    m_bWithCheckmark        = bCheckSpellAvail;
+    m_nLangList				= nLangList;
+    m_bHasLangNone			= bHasLangNone;
+    m_bLangNoneIsLangAll	= bLangNoneIsLangAll;
+    m_bWithCheckmark		= bCheckSpellAvail;
 
     if ( LANG_LIST_EMPTY != nLangList )
     {
@@ -299,7 +299,7 @@ void SvxLanguageBox::SetLanguageList( INT16 nLangList,
                  nLangType != LANGUAGE_SYSTEM &&
                  nLangType != LANGUAGE_NONE &&
                  (nLangType < LANGUAGE_USER1 || nLangType > LANGUAGE_USER9) &&
-                 (MsLangId::getSubLanguage( nLangType) != 0 ||
+                 (MsLangId::getSubLanguage( nLangType) != 0 || 
                   (nLangList & LANG_LIST_ALSO_PRIMARY_ONLY)) &&
                  ((nLangList & LANG_LIST_ALL) != 0 ||
                   ((nLangList & LANG_LIST_WESTERN) != 0 &&
@@ -345,8 +345,8 @@ USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType, USHORT nPos
 USHORT SvxLanguageBox::ImplInsertLanguage( const LanguageType nLangType, USHORT nPos, sal_Int16 nType )
 {
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( nLangType);
-    // For obsolete and to be replaced languages check whether an entry of the
-    // replacement already exists and if so don't add an entry with identical
+    // For obsolete and to be replaced languages check whether an entry of the 
+    // replacement already exists and if so don't add an entry with identical 
     // string as would be returned by SvtLanguageTable::GetString().
     if (nLang != nLangType)
     {
@@ -405,8 +405,8 @@ USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType,
         BOOL bCheckEntry, USHORT nPos )
 {
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( nLangType);
-    // For obsolete and to be replaced languages check whether an entry of the
-    // replacement already exists and if so don't add an entry with identical
+    // For obsolete and to be replaced languages check whether an entry of the 
+    // replacement already exists and if so don't add an entry with identical 
     // string as would be returned by SvtLanguageTable::GetString().
     if (nLang != nLangType)
     {
@@ -439,7 +439,7 @@ void SvxLanguageBox::RemoveLanguage( const LanguageType eLangType )
 
 LanguageType SvxLanguageBox::GetSelectLanguage() const
 {
-    USHORT       nPos   = GetSelectEntryPos();
+    USHORT 		 nPos	= GetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         return LanguageType( (ULONG)GetEntryData(nPos) );
@@ -451,7 +451,7 @@ LanguageType SvxLanguageBox::GetSelectLanguage() const
 
 void SvxLanguageBox::SelectLanguage( const LanguageType eLangType, BOOL bSelect )
 {
-    // If the core uses a LangID of an imported MS document and wants to select
+    // If the core uses a LangID of an imported MS document and wants to select 
     // a language that is replaced, we need to select the replacement instead.
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( eLangType);
 

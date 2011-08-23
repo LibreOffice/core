@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ public class INIOutputter
             }
             a.m_sFilename = sFilename;
             a.m_sNamePrefix = _sNamePrefix;
-
+            
             return a;
         }
     public String getFilename() {return m_sFilename;}
@@ -83,7 +83,7 @@ public class INIOutputter
             {
             }
         }
-
+    
     public void writeSection(String _sSectionName)
         {
             try
@@ -95,7 +95,7 @@ public class INIOutputter
             {
             }
         }
-
+    
     public void writeValue(String _sName, String _sValue)
         {
             try
@@ -128,7 +128,7 @@ public class INIOutputter
     public void checkLine(StatusHelper _aStatus, boolean _bCurrentResult)
         {
             try
-            {
+            {                
                 m_aOut.write( "oldgfx=" + _aStatus.m_sOldGfx + ls);
                 m_aOut.write( "newgfx=" + _aStatus.m_sNewGfx + ls);
                 m_aOut.write( "diffgfx=" + _aStatus.m_sDiffGfx + ls);
@@ -139,7 +139,7 @@ public class INIOutputter
                     sPercent += " (less 5% is ok)";
                 }
                 m_aOut.write("percent=" +  sPercent + ls);
-
+                
                 if (_aStatus.m_sDiff_BM_Gfx == null)
                 {
                     m_aOut.write("BM=false" + ls);
@@ -179,7 +179,7 @@ public class INIOutputter
                 m_aOut.write("result=NO" + ls);
             }
         }
-
+    
     public void checkDiffDiffLine(StatusHelper _aStatus, boolean _bCurrentResult)
         {
             try

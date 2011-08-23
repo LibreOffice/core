@@ -175,13 +175,13 @@ namespace dbaccess
     //==================================================================
     // OEmbedObjectHolder
     //==================================================================
-    typedef ::cppu::WeakComponentImplHelper1<   embed::XStateChangeListener > TEmbedObjectHolder;
-    class OEmbedObjectHolder :   public ::comphelper::OBaseMutex
+    typedef ::cppu::WeakComponentImplHelper1<	embed::XStateChangeListener > TEmbedObjectHolder;
+    class OEmbedObjectHolder :	 public ::comphelper::OBaseMutex
                                 ,public TEmbedObjectHolder
     {
         Reference< XEmbeddedObject >    m_xBroadCaster;
-        ODocumentDefinition*            m_pDefinition;
-        bool                            m_bInStateChange;
+        ODocumentDefinition*			m_pDefinition;
+        bool							m_bInStateChange;
         bool                            m_bInChangingState;
     protected:
         virtual void SAL_CALL disposing();
@@ -362,14 +362,14 @@ namespace dbaccess
     //==================================================================
     class ODocumentSaveContinuation : public OInteraction< XInteractionDocumentSave >
     {
-        ::rtl::OUString     m_sName;
-        Reference<XContent> m_xParentContainer;
+        ::rtl::OUString		m_sName;
+        Reference<XContent>	m_xParentContainer;
 
     public:
         ODocumentSaveContinuation() { }
 
-        inline Reference<XContent>  getContent() const { return m_xParentContainer; }
-        inline ::rtl::OUString      getName() const { return m_sName; }
+        inline Reference<XContent>	getContent() const { return m_xParentContainer; }
+        inline ::rtl::OUString		getName() const { return m_sName; }
 
         // XInteractionDocumentSave
         virtual void SAL_CALL setName( const ::rtl::OUString& _sName,const Reference<XContent>& _xParent) throw(RuntimeException);
@@ -2207,5 +2207,5 @@ void NameChangeNotifier::impl_fireEvent_throw( const sal_Bool i_bVetoable )
     m_rClearForNotify.reset();
 }
 
-}   // namespace dbaccess
+}	// namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

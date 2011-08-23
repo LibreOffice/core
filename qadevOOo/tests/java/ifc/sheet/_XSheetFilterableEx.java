@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,10 +38,10 @@ import com.sun.star.uno.UnoRuntime;
 /**
  * Inteface test for XSheetFilterableEx
  *
- * methods:
+ * methods: 
  *
  *  createFilterDescriptorByObject
- *
+ * 
  */
 public class _XSheetFilterableEx extends MultiMethodTest {
     public XSheetFilterableEx oObj = null;
@@ -51,7 +51,7 @@ public class _XSheetFilterableEx extends MultiMethodTest {
      * a XSheetFilterDescriptor with it.
      * Returns OK if the Descriptor isn't null and checkFilterDescriptor returns true
      */
-
+    
     public void _createFilterDescriptorByObject() {
         boolean res = true;
         Object parent = tEnv.getTestObject();
@@ -68,11 +68,11 @@ public class _XSheetFilterableEx extends MultiMethodTest {
         }
         tRes.tested("createFilterDescriptorByObject()",res);
     }
-
+    
     /**
      * returns true if the Method getFilterFields() returns a non empty array
      * and all Fields can be gained without exception
-     */
+     */ 
 
     public boolean checkFilterDescriptor(XSheetFilterDescriptor desc) {
         TableFilterField[] fields = desc.getFilterFields();

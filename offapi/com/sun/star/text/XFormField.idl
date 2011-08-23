@@ -4,14 +4,14 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/container/XNameContainer.idl>
 
-module com {  module sun {  module star {  module text {
+module com {  module sun {  module star {  module text { 
 
     /** @deprecated
      */
     interface XFormField : com::sun::star::uno::XInterface
     {
         string getFieldType();
-        void setFieldType([in] string fieldType);
+        void setFieldType([in] string fieldType);     
         com::sun::star::container::XNameContainer getParameters();
     };
 

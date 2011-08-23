@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,16 +37,16 @@
 
 class SvxSplitTableDlg : public SvxStandardDialog
 {
-    FixedText           maCountLbl;
-    NumericField        maCountEdit;
+    FixedText 			maCountLbl;
+    NumericField 		maCountEdit;
     FixedLine           maCountFL;
-    ImageRadioButton    maHorzBox;
+    ImageRadioButton 	maHorzBox;
     ImageRadioButton    maVertBox;
     CheckBox            maPropCB;
     FixedLine           maDirFL;
-    OKButton            maOKBtn;
-    CancelButton        maCancelBtn;
-    HelpButton          maHelpBtn;
+    OKButton 			maOKBtn;
+    CancelButton 		maCancelBtn;
+    HelpButton 			maHelpBtn;
 
 protected:
     virtual void Apply();

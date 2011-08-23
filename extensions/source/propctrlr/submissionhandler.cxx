@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -178,7 +178,7 @@ namespace pcr
 
         return aReturn;
     }
-
+    
     //--------------------------------------------------------------------
     void SAL_CALL SubmissionPropertyHandler::setPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
@@ -221,7 +221,7 @@ namespace pcr
             OSL_ENSURE( sal_False, "SubmissionPropertyHandler::setPropertyValue: caught an exception!" );
         }
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL SubmissionPropertyHandler::getActuatingProperties( ) throw (RuntimeException)
     {
@@ -394,7 +394,7 @@ namespace pcr
 
         return aPropertyValue;
     }
-
+    
     //--------------------------------------------------------------------
     Any SAL_CALL SubmissionPropertyHandler::convertToControlValue( const ::rtl::OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException)
     {

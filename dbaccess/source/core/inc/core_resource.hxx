@@ -51,9 +51,9 @@ namespace dbaccess
     class ResourceManager
     {
         friend class OModuleClient;
-        static ::osl::Mutex s_aMutex;       /// access safety
-        static sal_Int32    s_nClients;     /// number of registered clients
-        static ResMgr*  m_pImpl;
+        static ::osl::Mutex	s_aMutex;		/// access safety
+        static sal_Int32	s_nClients;		/// number of registered clients
+        static ResMgr*	m_pImpl;
 
     private:
         // no instantiation allowed
@@ -63,9 +63,9 @@ namespace dbaccess
     protected:
         static void ensureImplExists();
         /// register a client for the module
-        static void registerClient();
+        static void	registerClient();
         /// revoke a client for the module
-        static void revokeClient();
+        static void	revokeClient();
 
     public:
         /** loads the string with the specified resource id
@@ -117,8 +117,8 @@ namespace dbaccess
     class OModuleClient
     {
     public:
-        OModuleClient()     { ResourceManager::registerClient(); }
-        ~OModuleClient()    { ResourceManager::revokeClient(); }
+        OModuleClient()		{ ResourceManager::registerClient(); }
+        ~OModuleClient()	{ ResourceManager::revokeClient(); }
     };
 }
 

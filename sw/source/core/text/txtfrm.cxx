@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,12 +41,12 @@
 #include <editeng/pgrditem.hxx>
 #include <swmodule.hxx>
 #include <SwSmartTagMgr.hxx>
-#include <doc.hxx>      // GetDoc()
-#include <pagefrm.hxx>  // InvalidateSpelling
+#include <doc.hxx>		// GetDoc()
+#include <pagefrm.hxx>	// InvalidateSpelling
 #include <rootfrm.hxx>
-#include <viewsh.hxx>   // ViewShell
-#include <pam.hxx>      // SwPosition
-#include <ndtxt.hxx>        // SwTxtNode
+#include <viewsh.hxx>	// ViewShell
+#include <pam.hxx>		// SwPosition
+#include <ndtxt.hxx>		// SwTxtNode
 #include <txtatr.hxx>
 #include <paratr.hxx>
 #include <viewopt.hxx>
@@ -64,11 +64,11 @@
 #include <charatr.hxx>
 #include <ftninfo.hxx>
 #include <fmtline.hxx>
-#include <txtfrm.hxx>       // SwTxtFrm
-#include <sectfrm.hxx>      // SwSectFrm
-#include <txtcfg.hxx>       // DBG_LOOP
-#include <itrform2.hxx>       // Iteratoren
-#include <widorp.hxx>       // SwFrmBreak
+#include <txtfrm.hxx>		// SwTxtFrm
+#include <sectfrm.hxx>		// SwSectFrm
+#include <txtcfg.hxx>		// DBG_LOOP
+#include <itrform2.hxx> 	  // Iteratoren
+#include <widorp.hxx>		// SwFrmBreak
 #include <txtcache.hxx>
 #include <fntcache.hxx>     // GetLineSpace benutzt pLastFont
 #include <SwGrammarMarkUp.hxx>
@@ -91,7 +91,7 @@
 #include <IGrammarContact.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
-#include <txtpaint.hxx>     // DbgRect
+#include <txtpaint.hxx> 	// DbgRect
 extern const sal_Char *GetPrepName( const enum PrepareHint ePrep );
 #endif
 
@@ -307,7 +307,7 @@ SwDigitModeModifier::~SwDigitModeModifier()
 }
 
 /*************************************************************************
- *                      SwTxtFrm::Init()
+ *						SwTxtFrm::Init()
  *************************************************************************/
 
 void SwTxtFrm::Init()
@@ -325,7 +325,7 @@ void SwTxtFrm::Init()
 }
 
 /*************************************************************************
-|*  SwTxtFrm::CTORen/DTOR
+|*	SwTxtFrm::CTORen/DTOR
 |*************************************************************************/
 
 void SwTxtFrm::InitCtor()
@@ -385,7 +385,7 @@ void SwTxtFrm::ResetPreps()
 }
 
 /*************************************************************************
- *                        SwTxtFrm::IsHiddenNow()
+ *						  SwTxtFrm::IsHiddenNow()
  *************************************************************************/
 sal_Bool SwTxtFrm::IsHiddenNow() const
 {
@@ -420,7 +420,7 @@ sal_Bool SwTxtFrm::IsHiddenNow() const
 
 
 /*************************************************************************
- *                        SwTxtFrm::HideHidden()
+ *						  SwTxtFrm::HideHidden()
  *************************************************************************/
 // Entfernt die Anhaengsel des Textfrms wenn dieser hidden ist
 
@@ -620,7 +620,7 @@ void SwTxtFrm::HideAndShowObjects()
 }
 
 /*************************************************************************
- *                      SwTxtFrm::FindBrk()
+ *						SwTxtFrm::FindBrk()
  *
  * Liefert die erste Trennmoeglichkeit in der aktuellen Zeile zurueck.
  * Die Methode wird in SwTxtFrm::Format() benutzt, um festzustellen, ob
@@ -660,7 +660,7 @@ xub_StrLen SwTxtFrm::FindBrk( const XubString &rTxt,
 }
 
 /*************************************************************************
- *                      SwTxtFrm::IsIdxInside()
+ *						SwTxtFrm::IsIdxInside()
  *************************************************************************/
 
 sal_Bool SwTxtFrm::IsIdxInside( const xub_StrLen nPos, const xub_StrLen nLen ) const
@@ -668,8 +668,8 @@ sal_Bool SwTxtFrm::IsIdxInside( const xub_StrLen nPos, const xub_StrLen nLen ) c
     if( GetOfst() > nPos + nLen ) // d.h., der Bereich liegt komplett vor uns.
         return sal_False;
 
-    if( !GetFollow() )         // der Bereich liegt nicht komplett vor uns,
-        return sal_True;           // nach uns kommt niemand mehr.
+    if( !GetFollow() )		   // der Bereich liegt nicht komplett vor uns,
+        return sal_True;		   // nach uns kommt niemand mehr.
 
     const xub_StrLen nMax = GetFollow()->GetOfst();
 
@@ -684,7 +684,7 @@ sal_Bool SwTxtFrm::IsIdxInside( const xub_StrLen nPos, const xub_StrLen nLen ) c
 }
 
 /*************************************************************************
- *                      SwTxtFrm::InvalidateRange()
+ *						SwTxtFrm::InvalidateRange()
  *************************************************************************/
 inline void SwTxtFrm::InvalidateRange(const SwCharRange &aRange, const long nD)
 {
@@ -693,13 +693,13 @@ inline void SwTxtFrm::InvalidateRange(const SwCharRange &aRange, const long nD)
 }
 
 /*************************************************************************
- *                      SwTxtFrm::_InvalidateRange()
+ *						SwTxtFrm::_InvalidateRange()
  *************************************************************************/
 
 void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
 {
     if ( !HasPara() )
-    {   InvalidateSize();
+    {	InvalidateSize();
         return;
     }
 
@@ -734,7 +734,7 @@ void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
 }
 
 /*************************************************************************
- *                      SwTxtFrm::CalcLineSpace()
+ *						SwTxtFrm::CalcLineSpace()
  *************************************************************************/
 
 void SwTxtFrm::CalcLineSpace()
@@ -902,7 +902,7 @@ void lcl_ModifyOfst( SwTxtFrm* pFrm, xub_StrLen nPos, xub_StrLen nLen )
 }
 
 /*************************************************************************
- *                      SwTxtFrm::Modify()
+ *						SwTxtFrm::Modify()
  *************************************************************************/
 
 void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
@@ -1131,7 +1131,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             }
             sal_Bool bLineSpace = SFX_ITEM_SET == rNewSet.GetItemState(
                                             RES_PARATR_LINESPACING, sal_False ),
-                     bRegister  = SFX_ITEM_SET == rNewSet.GetItemState(
+                     bRegister	= SFX_ITEM_SET == rNewSet.GetItemState(
                                             RES_PARATR_REGISTER, sal_False );
             if ( bLineSpace || bRegister )
             {
@@ -1360,7 +1360,7 @@ sal_Bool SwTxtFrm::GetInfo( SfxPoolItem &rHnt ) const
             if ( pPage == rInfo.GetOrigPage() && !GetPrev() )
             {
                 //Das sollte er sein (kann allenfalls temporaer anders sein,
-                //                    sollte uns das beunruhigen?)
+                //					  sollte uns das beunruhigen?)
                 rInfo.SetInfo( pPage, this );
                 return sal_False;
             }
@@ -1376,7 +1376,7 @@ sal_Bool SwTxtFrm::GetInfo( SfxPoolItem &rHnt ) const
 }
 
 /*************************************************************************
- *                      SwTxtFrm::PrepWidows()
+ *						SwTxtFrm::PrepWidows()
  *************************************************************************/
 
 void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
@@ -1420,7 +1420,7 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
     if( !nHave )
     {
         sal_Bool bSplit;
-        if( !IsFollow() )   //Nur ein Master entscheidet ueber Orphans
+        if( !IsFollow() )	//Nur ein Master entscheidet ueber Orphans
         {
             const WidowsAndOrphans aWidOrp( this );
             bSplit = ( aLine.GetLineNr() >= aWidOrp.GetOrphansLines() &&
@@ -1447,7 +1447,7 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
 }
 
 /*************************************************************************
- *                      SwTxtFrm::Prepare
+ *						SwTxtFrm::Prepare
  *************************************************************************/
 
 sal_Bool lcl_ErgoVadis( SwTxtFrm* pFrm, xub_StrLen &rPos, const PrepareHint ePrep )
@@ -1491,7 +1491,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 SetInvalidVert( TRUE );  // Test
             case PREP_WIDOWS_ORPHANS:
             case PREP_WIDOWS:
-            case PREP_FTN_GONE :    return;
+            case PREP_FTN_GONE :	return;
 
             case PREP_POS_CHGD :
             {
@@ -1554,7 +1554,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                                 _InvalidatePrt();
                                 _InvalidateSize();
                                 // KEIN break
-        case PREP_ADJUST_FRM :  pPara->SetPrepAdjust( sal_True );
+        case PREP_ADJUST_FRM :	pPara->SetPrepAdjust( sal_True );
                                 if( IsFtnNumFrm() != pPara->IsFtnNum() ||
                                     IsUndersized() )
                                 {
@@ -1563,9 +1563,9 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                                         _SetOfst( 0 );
                                 }
                                 break;
-        case PREP_MUST_FIT :        pPara->SetPrepMustFit( sal_True );
+        case PREP_MUST_FIT :		pPara->SetPrepMustFit( sal_True );
             /* no break here */
-        case PREP_WIDOWS_ORPHANS :  pPara->SetPrepAdjust( sal_True );
+        case PREP_WIDOWS_ORPHANS :	pPara->SetPrepAdjust( sal_True );
                                     break;
 
         case PREP_WIDOWS :
@@ -1651,7 +1651,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                     if( nStart >= GetOfst() )
                     {
                         if( nStart >= nEnd )
-                            i = nSize;          // fuehrt das Ende herbei
+                            i = nSize;			// fuehrt das Ende herbei
                         else
                         {
                 // 4029: wenn wir zurueckfliessen und eine Ftn besitzen, so
@@ -1751,7 +1751,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                     _InvalidateSize();
                 }
                 else
-                    return;     // damit kein SetPrep() erfolgt.
+                    return; 	// damit kein SetPrep() erfolgt.
             }
             break;
         }
@@ -1831,7 +1831,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 else
                     _InvalidateSize();
             }
-            return;     // damit kein SetPrep() erfolgt.
+            return; 	// damit kein SetPrep() erfolgt.
         }
     }
     if( pPara )
@@ -1900,7 +1900,7 @@ SwTestFormat::SwTestFormat( SwTxtFrm* pTxtFrm, const SwFrm* pPre, SwTwips nMaxHe
         pFrm->SwapWidthAndHeight();
 
     SwTxtFormatInfo aInf( pFrm, sal_False, sal_True, sal_True );
-    SwTxtFormatter  aLine( pFrm, &aInf );
+    SwTxtFormatter	aLine( pFrm, &aInf );
 
     pFrm->_Format( aLine, aInf );
 
@@ -1931,7 +1931,7 @@ sal_Bool SwTxtFrm::TestFormat( const SwFrm* pPrv, SwTwips &rMaxHeight, sal_Bool 
 
 
 /*************************************************************************
- *                      SwTxtFrm::WouldFit()
+ *						SwTxtFrm::WouldFit()
  *************************************************************************/
 
 /* SwTxtFrm::WouldFit()
@@ -2048,7 +2048,7 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit, sal_Bool bTs
 
 
 /*************************************************************************
- *                      SwTxtFrm::GetParHeight()
+ *						SwTxtFrm::GetParHeight()
  *************************************************************************/
 
 KSHORT SwTxtFrm::GetParHeight() const
@@ -2087,7 +2087,7 @@ KSHORT SwTxtFrm::GetParHeight() const
 
 
 /*************************************************************************
- *                      SwTxtFrm::GetFormatted()
+ *						SwTxtFrm::GetFormatted()
  *************************************************************************/
 
 // returnt this _immer_ im formatierten Zustand!
@@ -2118,7 +2118,7 @@ SwTxtFrm* SwTxtFrm::GetFormatted( bool bForceQuickFormat )
 }
 
 /*************************************************************************
- *                      SwTxtFrm::CalcFitToContent()
+ *						SwTxtFrm::CalcFitToContent()
  *************************************************************************/
 
 SwTwips SwTxtFrm::CalcFitToContent()
@@ -2155,7 +2155,7 @@ SwTwips SwTxtFrm::CalcFitToContent()
 
     SwTxtFormatInfo aInf( this, sal_False, sal_True, sal_True );
     aInf.SetIgnoreFly( sal_True );
-    SwTxtFormatter  aLine( this, &aInf );
+    SwTxtFormatter	aLine( this, &aInf );
     SwHookOut aHook( aInf );
 
     // --> OD 2005-09-06 #i54031# - assure mininum of MINLAY twips.
@@ -2401,7 +2401,7 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
 }
 
 /*************************************************************************
- *                      SwTxtFrm::GetLineSpace()
+ *						SwTxtFrm::GetLineSpace()
  *************************************************************************/
 // OD 07.01.2004 #i11859# - change return data type
 //      add default parameter <_bNoPropLineSpacing> to control, if the
@@ -2455,7 +2455,7 @@ long SwTxtFrm::GetLineSpace( const bool _bNoPropLineSpace ) const
 }
 
 /*************************************************************************
- *                      SwTxtFrm::FirstLineHeight()
+ *						SwTxtFrm::FirstLineHeight()
  *************************************************************************/
 
 KSHORT SwTxtFrm::FirstLineHeight() const

@@ -107,7 +107,7 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 
 
-#define DOCUMENT_BUFFER_SIZE    (USHORT)32768
+#define DOCUMENT_BUFFER_SIZE	(USHORT)32768
 
 static const char __FAR_DATA pStarMathDoc[] = "StarMathDocument";
 
@@ -456,7 +456,7 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, BOOL bDrawSel
     //angepasst werden.
 
     rPosition.X() += aFormat.GetDistance( DIS_LEFTSPACE );
-    rPosition.Y() += aFormat.GetDistance( DIS_TOPSPACE  );
+    rPosition.Y() += aFormat.GetDistance( DIS_TOPSPACE	);
 
     //! in case of high contrast-mode (accessibility option!)
     //! the draw mode needs to be set to default, because when imbedding
@@ -625,11 +625,11 @@ Printer* SmDocShell::GetPrt()
     {
         SfxItemSet *pOptions =
             new SfxItemSet(GetPool(),
-                           SID_PRINTSIZE,       SID_PRINTSIZE,
-                           SID_PRINTZOOM,       SID_PRINTZOOM,
-                           SID_PRINTTITLE,      SID_PRINTTITLE,
-                           SID_PRINTTEXT,       SID_PRINTTEXT,
-                           SID_PRINTFRAME,      SID_PRINTFRAME,
+                           SID_PRINTSIZE,		SID_PRINTSIZE,
+                           SID_PRINTZOOM,		SID_PRINTZOOM,
+                           SID_PRINTTITLE,		SID_PRINTTITLE,
+                           SID_PRINTTEXT,		SID_PRINTTEXT,
+                           SID_PRINTFRAME,		SID_PRINTFRAME,
                            SID_NO_RIGHT_SPACES, SID_NO_RIGHT_SPACES,
                            0);
 
@@ -661,7 +661,7 @@ void SmDocShell::SetPrinter( SfxPrinter *pNew )
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SetPrinter" );
 
     delete pPrinter;
-    pPrinter = pNew;    //Eigentumsuebergang!
+    pPrinter = pNew;	//Eigentumsuebergang!
     pPrinter->SetMapMode( MapMode(MAP_100TH_MM) );
     SetFormulaArranged(FALSE);
     Repaint();
@@ -703,13 +703,13 @@ void SmDocShell::Repaint()
 
 SmDocShell::SmDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     SfxObjectShell( i_nSfxCreationFlags ),
-    pTree               ( 0 ),
+    pTree				( 0 ),
     pEditEngineItemPool ( 0 ),
     pEditEngine         ( 0 ),
-    pPrinter            ( 0 ),
+    pPrinter			( 0 ),
     pTmpPrinter         ( 0 ),
-    nModifyCount        ( 0 ),
-    bIsFormulaArranged  ( FALSE )
+    nModifyCount		( 0 ),
+    bIsFormulaArranged	( FALSE )
 {
     pCursor = NULL;
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SmDocShell" );
@@ -761,7 +761,7 @@ BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::ConvertFrom" );
 
-    BOOL     bSuccess = FALSE;
+    BOOL	 bSuccess = FALSE;
     const String& rFltName = rMedium.GetFilter()->GetFilterName();
 
     OSL_ENSURE( !rFltName.EqualsAscii( STAROFFICE_XML ), "Wrong filter!");
@@ -1224,7 +1224,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
         case SID_AUTO_REDRAW :
             {
                 SmModule  *pp = SM_MOD();
-                BOOL       bRedraw = pp->GetConfig()->IsAutoRedraw();
+                BOOL	   bRedraw = pp->GetConfig()->IsAutoRedraw();
 
                 rSet.Put(SfxBoolItem(SID_AUTO_REDRAW, bRedraw));
             }
@@ -1386,15 +1386,15 @@ void SmDocShell::FillClass(SvGlobalName* pClassName,
 
     if (nFileFormat == SOFFICE_FILEFORMAT_60 )
     {
-        *pClassName     = SvGlobalName(SO3_SM_CLASSID_60);
-        *pFormat        = SOT_FORMATSTR_ID_STARMATH_60;
+        *pClassName 	= SvGlobalName(SO3_SM_CLASSID_60);
+        *pFormat		= SOT_FORMATSTR_ID_STARMATH_60;
         *pFullTypeName  = String(SmResId(STR_MATH_DOCUMENT_FULLTYPE_CURRENT));
         *pShortTypeName = String(SmResId(RID_DOCUMENTSTR));
     }
     else if (nFileFormat == SOFFICE_FILEFORMAT_8 )
     {
-        *pClassName     = SvGlobalName(SO3_SM_CLASSID_60);
-        *pFormat        = bTemplate ? SOT_FORMATSTR_ID_STARMATH_8_TEMPLATE : SOT_FORMATSTR_ID_STARMATH_8;
+        *pClassName 	= SvGlobalName(SO3_SM_CLASSID_60);
+        *pFormat		= bTemplate ? SOT_FORMATSTR_ID_STARMATH_8_TEMPLATE : SOT_FORMATSTR_ID_STARMATH_8;
         *pFullTypeName  = String(SmResId(STR_MATH_DOCUMENT_FULLTYPE_CURRENT));
         *pShortTypeName = String(SmResId(RID_DOCUMENTSTR));
     }

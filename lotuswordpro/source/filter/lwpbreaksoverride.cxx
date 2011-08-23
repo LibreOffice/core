@@ -61,9 +61,9 @@
 * Change History
 * 2005-01-12 Create and implement.
 ************************************************************************/
-#include    "lwpbreaksoverride.hxx"
-#include    "lwpobjstrm.hxx"
-#include    "lwpatomholder.hxx"
+#include	"lwpbreaksoverride.hxx"
+#include	"lwpobjstrm.hxx"
+#include	"lwpatomholder.hxx"
 
 
 LwpBreaksOverride::LwpBreaksOverride()
@@ -77,7 +77,7 @@ LwpBreaksOverride::~LwpBreaksOverride()
         delete m_pNextStyle;
 }
 
-void    LwpBreaksOverride::Read(LwpObjectStream *pStrm)
+void	LwpBreaksOverride::Read(LwpObjectStream *pStrm)
 {
     if (pStrm->QuickReadBool())
     {

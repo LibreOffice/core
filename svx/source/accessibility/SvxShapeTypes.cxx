@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -187,7 +187,7 @@ ShapeTypeDescriptor aSvxShapeTypeList[] = {
     ShapeTypeDescriptor (   DRAWING_CUSTOM,
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape")),
         CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_TABLE,
+    ShapeTypeDescriptor (	DRAWING_TABLE,
         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.TableShape" ) ),
         CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_MEDIA,

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 #include <svtools/ttprops.hxx>
 #include <stdio.h>
 #include <stdarg.h>
-#include <stdlib.h>             // wg. bsearch
+#include <stdlib.h>				// wg. bsearch
 
 #define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>
@@ -93,10 +93,10 @@ DECL_PTRSTACK(SfxShellStack_Impl, SfxShell*, 8, 4 );
 
 struct SfxToDo_Impl
 {
-    SfxShell*           pCluster;
-    bool                bPush;
-    bool                bDelete;
-    bool                bUntil;
+    SfxShell*			pCluster;
+    bool               	bPush;
+    bool    			bDelete;
+    bool    			bUntil;
 
     SfxToDo_Impl()
         : pCluster(0)
@@ -121,10 +121,10 @@ IMPL_OBJSTACK(SfxToDoStack_Impl, SfxToDo_Impl);
 
 struct SfxObjectBars_Impl
 {
-    sal_uInt32          nResId; // Resource - und ConfigId der Toolbox
-    sal_uInt16          nMode;  // spezielle Sichtbarkeitsflags
-    String              aName;
-    SfxInterface*       pIFace;
+    sal_uInt32          nResId;	// Resource - und ConfigId der Toolbox
+    sal_uInt16          nMode;	// spezielle Sichtbarkeitsflags
+    String   			aName;
+    SfxInterface*		pIFace;
 
     SfxObjectBars_Impl() :
         nResId( 0 )
@@ -136,41 +136,41 @@ struct SfxObjectBars_Impl
 struct SfxDispatcher_Impl
 {
     SfxRequestPtrArray      aReqArr;
-    const SfxSlotServer* pCachedServ1;       // zuletzt gerufene Message
-    const SfxSlotServer* pCachedServ2;       // vorletzt gerufene Message
-    SfxShellStack_Impl      aStack;             // aktive Funktionalitaet
-    Timer                   aTimer;             // fuers flushen
-    SfxToDoStack_Impl       aToDoStack;         // nicht abgearb. Push/Pop
-    SfxViewFrame*           pFrame;             // 0 oder zugeh"or. Frame
-    SfxDispatcher*          pParent;            // z.B. AppDispatcher, ggf. 0
-    SfxHintPosterRef        xPoster;            // asynchrones Execute
-    sal_Bool                    bFlushing;          // sal_True waehrend Flush //?
-    sal_Bool                    bUpdated;           // Update_Impl gelaufen
-    sal_Bool                    bLocked;            // kein Execute
-    sal_Bool                    bInvalidateOnUnlock;// da fragte jemand
-    sal_Bool                    bActive;            // nicht verwechseln mit gesetzt!
-    sal_Bool*                   pInCallAliveFlag;   // dem Stack den Dtor anzeigen
-    SfxObjectBars_Impl      aObjBars[SFX_OBJECTBAR_MAX];
-    SfxObjectBars_Impl      aFixedObjBars[SFX_OBJECTBAR_MAX];
-    SvULongs                aChildWins;
-    sal_uInt16                  nActionLevel;       // in EnterAction
-    sal_uInt32                  nEventId;           // EventId UserEvent
-    sal_Bool                    bUILocked;          // Update abgeklemmt (!zappeln)
-    sal_Bool                    bNoUI;              // UI nur vom Parent Dispatcher
-    sal_Bool                    bReadOnly;          // Dokument ist ReadOnly
-    sal_Bool                    bQuiet;             // nur parent dispatcher verwenden
-    sal_Bool                    bModal;             // nur Slots vom Parent-Dispatcher
+    const SfxSlotServer* pCachedServ1;		 // zuletzt gerufene Message
+    const SfxSlotServer* pCachedServ2;		 // vorletzt gerufene Message
+    SfxShellStack_Impl		aStack; 			// aktive Funktionalitaet
+    Timer					aTimer; 			// fuers flushen
+    SfxToDoStack_Impl		aToDoStack; 		// nicht abgearb. Push/Pop
+    SfxViewFrame*           pFrame;         	// 0 oder zugeh"or. Frame
+    SfxDispatcher*			pParent;			// z.B. AppDispatcher, ggf. 0
+    SfxHintPosterRef		xPoster;			// asynchrones Execute
+    sal_Bool                    bFlushing;      	// sal_True waehrend Flush //?
+    sal_Bool					bUpdated;			// Update_Impl gelaufen
+    sal_Bool                    bLocked;        	// kein Execute
+    sal_Bool					bInvalidateOnUnlock;// da fragte jemand
+    sal_Bool					bActive;			// nicht verwechseln mit gesetzt!
+    sal_Bool*   				pInCallAliveFlag;   // dem Stack den Dtor anzeigen
+    SfxObjectBars_Impl		aObjBars[SFX_OBJECTBAR_MAX];
+    SfxObjectBars_Impl		aFixedObjBars[SFX_OBJECTBAR_MAX];
+    SvULongs				aChildWins;
+    sal_uInt16					nActionLevel;   	// in EnterAction
+    sal_uInt32					nEventId;			// EventId UserEvent
+    sal_Bool					bUILocked;			// Update abgeklemmt (!zappeln)
+    sal_Bool					bNoUI;				// UI nur vom Parent Dispatcher
+    sal_Bool					bReadOnly;			// Dokument ist ReadOnly
+    sal_Bool					bQuiet;             // nur parent dispatcher verwenden
+    sal_Bool					bModal;             // nur Slots vom Parent-Dispatcher
 
-    sal_Bool                    bFilterEnabling;    // sal_True=filter enabled slots, 2==ReadOnlyDoc uebersteuert
-    sal_uInt16                  nFilterCount;       // Anzahl der SIDs in pFilterSIDs
-    const sal_uInt16*           pFilterSIDs;        // sortiertes Array von SIDs
-    sal_uInt16                  nStandardMode;      // ExecuteMode f. PlugInDispatcher
-    SvUShorts*              pDisableList;
-    sal_uInt32                  nDisableFlags;
+    sal_Bool					bFilterEnabling;	// sal_True=filter enabled slots, 2==ReadOnlyDoc uebersteuert
+    sal_uInt16					nFilterCount;		// Anzahl der SIDs in pFilterSIDs
+    const sal_uInt16*			pFilterSIDs;		// sortiertes Array von SIDs
+    sal_uInt16					nStandardMode;		// ExecuteMode f. PlugInDispatcher
+    SvUShorts*				pDisableList;
+    sal_uInt32					nDisableFlags;
 };
 
-#define NO_OBJECTBAR    0
-#define OWN_OBJECTBAR   1
+#define NO_OBJECTBAR	0
+#define OWN_OBJECTBAR	1
 #define OTHER_OBJECTBAR 2
 
 //------------------------------------------------------------------
@@ -201,7 +201,7 @@ sal_Bool SfxDispatcher::IsLocked( sal_uInt16 ) const
 //--------------------------------------------------------------------
 sal_Bool SfxDispatcher::IsAppDispatcher() const
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Mit dieser Methode l"a\st sich festellen, ob der SfxDispacher der
     Applikations-Dispatcher ist.
@@ -209,7 +209,7 @@ sal_Bool SfxDispatcher::IsAppDispatcher() const
 
     [R"uckgabewert]
 
-    sal_Bool                sal_True
+    sal_Bool				sal_True
                         Es ist der Applikations-Dispatcher.
 
                         sal_False
@@ -223,7 +223,7 @@ sal_Bool SfxDispatcher::IsAppDispatcher() const
 //--------------------------------------------------------------------
 int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest &rReq, sal_Bool bRecord )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Hilfsfunktion zum pr"ufen, ob ein Slot executed werden darf und
     der Execution selbst.
@@ -378,7 +378,7 @@ SfxDispatcher::SfxDispatcher( SfxDispatcher* pParent )
 
 SfxDispatcher::SfxDispatcher( SfxViewFrame *pViewFrame )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Der Konstruktor der Klasse SfxDispatcher legt einen leeren Stack
     von <SfxShell>-Pointern an. Er ist initial nicht gelockt und gilt als
@@ -402,7 +402,7 @@ SfxDispatcher::SfxDispatcher( SfxViewFrame *pViewFrame )
 //====================================================================
 SfxDispatcher::~SfxDispatcher()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Der Destruktor der Klasse SfxDispatcher darf nicht gerufen werden,
     wenn die SfxDispatcher-Instanz aktiv ist. Es d"urfen sich allerdings
@@ -430,8 +430,8 @@ SfxDispatcher::~SfxDispatcher()
     SfxApplication *pSfxApp = SFX_APP();
     SfxBindings* pBindings = GetBindings();
 
-//  if (pImp->nEventId)
-//      pSfxApp->RemoveEventHdl(pImp->nEventId);
+//	if (pImp->nEventId)
+//		pSfxApp->RemoveEventHdl(pImp->nEventId);
 
     // wenn noch nicht flushed, die Bindings wiederbeleben
     if ( pBindings && !pSfxApp->IsDowning() && !bFlushed )
@@ -479,8 +479,8 @@ void SfxDispatcher::Pop
     DBG_ASSERT( rShell.GetInterface(),
                 "pushing SfxShell without previous RegisterInterface()" );
     DBG_ASSERT( pImp->nActionLevel == 0, "Push or Pop within Action" );
-//  DBG_ASSERT( SFX_APP()->IsInAsynchronCall_Impl(),
-//                "Dispatcher Push/Pop in synchron-call-stack" );
+//	DBG_ASSERT( SFX_APP()->IsInAsynchronCall_Impl(),
+//				  "Dispatcher Push/Pop in synchron-call-stack" );
 
     bool bDelete = (nMode & SFX_SHELL_POP_DELETE) == SFX_SHELL_POP_DELETE;
     bool bUntil = (nMode & SFX_SHELL_POP_UNTIL) == SFX_SHELL_POP_UNTIL;
@@ -569,7 +569,7 @@ void SfxDispatcher::Pop
 
 IMPL_LINK_INLINE_START( SfxDispatcher, EventHdl_Impl, void *, pvoid )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Dieser Handler wird nach <SfxDispatcher::Invalidate()> oder Bewegungen
     auf dem Stack (<SfxDispatcher::Push()> und <SfxDispatcher::Pop()) gerufen.
@@ -594,7 +594,7 @@ IMPL_LINK_INLINE_END( SfxDispatcher, EventHdl_Impl, void *, pvoid )
 //--------------------------------------------------------------------
 sal_Bool SfxDispatcher::CheckVirtualStack( const SfxShell& rShell, sal_Bool bDeep )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Mit dieser Methode kann gepr"uft werden, ob sich die <SfxShell> rShell
     auf dem Stack befindet, wenn er geflusht w"are. Dabei wird der
@@ -638,7 +638,7 @@ sal_Bool SfxDispatcher::CheckVirtualStack( const SfxShell& rShell, sal_Bool bDee
 //--------------------------------------------------------------------
 sal_uInt16 SfxDispatcher::GetShellLevel( const SfxShell& rShell )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Ermittelt die Position einer SfxShell im Stack des Dispatchers.
     Dazu wird dieser ggf. zuvor geflusht.
@@ -646,7 +646,7 @@ sal_uInt16 SfxDispatcher::GetShellLevel( const SfxShell& rShell )
 
     [Rueckgabewert]
 
-    sal_uInt16                      == USRT_MAX
+    sal_uInt16						== USRT_MAX
                                 Die SfxShell befindet sich nicht auf
                                 diesem SfxDispatcher.
 
@@ -677,7 +677,7 @@ sal_uInt16 SfxDispatcher::GetShellLevel( const SfxShell& rShell )
 //--------------------------------------------------------------------
 SfxShell *SfxDispatcher::GetShell(sal_uInt16 nIdx) const
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Liefert einen Pointer auf die <SfxShell>, welche sich an der Position
     nIdx (von oben, letzt-gepushte liegt bei 0) auf dem Stack befindet.
@@ -694,14 +694,14 @@ SfxShell *SfxDispatcher::GetShell(sal_uInt16 nIdx) const
     if ( nIdx < nShellCount )
         return pImp->aStack.Top(nIdx);
     else if ( pImp->pParent )
-        return pImp->pParent->GetShell( nIdx - nShellCount );
+        return pImp->pParent->GetShell(	nIdx - nShellCount );
     return 0;
 }
 
 //--------------------------------------------------------------------
 SfxBindings* SfxDispatcher::GetBindings() const
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese Methode liefert einen Pointer auf die <SfxBindings> Instanz
     zur"uck, an die der SfxDispatcher gerade gebunden ist. Ein SfxDispatcher
@@ -722,7 +722,7 @@ SfxBindings* SfxDispatcher::GetBindings() const
 //--------------------------------------------------------------------
 SfxViewFrame* SfxDispatcher::GetFrame() const
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Liefert einen Pointer auf die <SfxViewFrame> Instanz, der dieser
     SfxDispatcher geh"ort. Falls es sich um den Applikations-Dispatcher
@@ -737,7 +737,7 @@ SfxViewFrame* SfxDispatcher::GetFrame() const
 //--------------------------------------------------------------------
 void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese Methode steuert das Aktivieren eines Dispatchers.
 
@@ -916,15 +916,15 @@ void SfxDispatcher::DoParentDeactivate_Impl()
 //--------------------------------------------------------------------
 int SfxDispatcher::GetShellAndSlot_Impl
 (
-    sal_uInt16          nSlot,      // die zu suchende Slot-Id
-    SfxShell**      ppShell,    // die SfxShell, welche nSlot z.Zt. bedient
-    const SfxSlot** ppSlot,     // der SfxSlot, welcher nSlot z.Zt. bedient
-    sal_Bool            bOwnShellsOnly,
-    sal_Bool            bModal,     // trotz ModalMode
-    sal_Bool        bRealSlot
+    sal_uInt16			nSlot,		// die zu suchende Slot-Id
+    SfxShell**		ppShell,	// die SfxShell, welche nSlot z.Zt. bedient
+    const SfxSlot** ppSlot, 	// der SfxSlot, welcher nSlot z.Zt. bedient
+    sal_Bool			bOwnShellsOnly,
+    sal_Bool			bModal,		// trotz ModalMode
+    sal_Bool		bRealSlot
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese Methode sucht im SfxDispatcher nach der <SfxShell>, von der
     die Slot-Id nSlot zur Zeit bedient wird. Dazu wird der Dispatcher
@@ -933,7 +933,7 @@ int SfxDispatcher::GetShellAndSlot_Impl
 
     [R"uckgabewert]
 
-    int                 sal_True
+    int 				sal_True
                         Die SfxShell wurde gefunden, ppShell und ppSlot
                         sind g"ultig.
 
@@ -999,13 +999,13 @@ struct Executer : public SfxHint
 //--------------------------------------------------------------------
 void SfxDispatcher::_Execute
 (
-    SfxShell&       rShell,     // zu rufende <SfxShell>
-    const SfxSlot&  rSlot,      // zu rufender <SfxSlot>
-    SfxRequest&     rReq,       // auszuf"uhrende Funktion (Id und optional Parameter)
-    SfxCallMode     eCallMode   // synchron, asynchron oder wie beim Slot angegeben
+    SfxShell&		rShell,		// zu rufende <SfxShell>
+    const SfxSlot&	rSlot,		// zu rufender <SfxSlot>
+    SfxRequest&		rReq,		// auszuf"uhrende Funktion (Id und optional Parameter)
+    SfxCallMode 	eCallMode	// synchron, asynchron oder wie beim Slot angegeben
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese Methode f"uhrt einen Request "uber einen gecachten <Slot-Server>
     aus.
@@ -1053,7 +1053,7 @@ void SfxDispatcher::_Execute
 //--------------------------------------------------------------------
 void MappedPut_Impl( SfxAllItemSet &rSet, const SfxPoolItem &rItem )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Hilfsfunktion zum putten von rItem unter der im Pool des Item-Sets
     rSet geltenden Which-Id.
@@ -1248,7 +1248,7 @@ SfxExecuteItem::SfxExecuteItem( const SfxExecuteItem& rArg )
 //--------------------------------------------------------------------
 SfxExecuteItem::SfxExecuteItem(
     sal_uInt16 nWhichId, sal_uInt16 nSlotP, SfxCallMode eModeP,
-    const SfxPoolItem*  pArg1, ... ) :
+    const SfxPoolItem*	pArg1, ... ) :
     SfxPoolItem( nWhichId ), nSlot( nSlotP ), eCall( eModeP ), nModifier( 0 )
 {
     va_list pVarArgs;
@@ -1282,7 +1282,7 @@ const SfxPoolItem* SfxDispatcher::Execute( const SfxExecuteItem& rItem )
 }
 
 //--------------------------------------------------------------------
-const SfxPoolItem*  SfxDispatcher::Execute(
+const SfxPoolItem*	SfxDispatcher::Execute(
     USHORT nSlot,
     SfxCallMode nCall,
     SfxItemSet* pArgs,
@@ -1320,9 +1320,9 @@ const SfxPoolItem*  SfxDispatcher::Execute(
 //--------------------------------------------------------------------
 const SfxPoolItem* SfxDispatcher::Execute
 (
-    sal_uInt16 nSlot,               // die Id der auszufuehrenden Funktion
-    SfxCallMode eCall,          // SFX_CALLMODE_SYNCRHON, ..._ASYNCHRON oder ..._SLOT
-    const SfxPoolItem **pArgs,  // 0-terminiertes C-Array von Parametern
+    sal_uInt16 nSlot,				// die Id der auszufuehrenden Funktion
+    SfxCallMode eCall,			// SFX_CALLMODE_SYNCRHON, ..._ASYNCHRON oder ..._SLOT
+    const SfxPoolItem **pArgs,	// 0-terminiertes C-Array von Parametern
     sal_uInt16 nModi,
     const SfxPoolItem **pInternalArgs // 0-terminiertes C-Array von Parametern
 )
@@ -1334,7 +1334,7 @@ const SfxPoolItem* SfxDispatcher::Execute
 
     [R"uckgabewert]
 
-    const SfxPoolItem*      Pointer auf ein bis zum n"achsten Durchlauf
+    const SfxPoolItem*		Pointer auf ein bis zum n"achsten Durchlauf
                             der Message-Loop g"ultiges SfxPoolItem,
                             welches den R"uckgabewert enth"alt.
 
@@ -1380,9 +1380,9 @@ const SfxPoolItem* SfxDispatcher::Execute
 //--------------------------------------------------------------------
 const SfxPoolItem* SfxDispatcher::Execute
 (
-    sal_uInt16 nSlot,               // die Id der auszufuehrenden Funktion
-    SfxCallMode eCall,          // SFX_CALLMODE_SYNCRHON, ..._ASYNCHRON oder ..._SLOT
-    const SfxItemSet &rArgs     // <SfxItemSet> mit Parametern
+    sal_uInt16 nSlot,				// die Id der auszufuehrenden Funktion
+    SfxCallMode eCall,			// SFX_CALLMODE_SYNCRHON, ..._ASYNCHRON oder ..._SLOT
+    const SfxItemSet &rArgs	    // <SfxItemSet> mit Parametern
 )
 
 /*  [Beschreibung]
@@ -1392,7 +1392,7 @@ const SfxPoolItem* SfxDispatcher::Execute
 
     [R"uckgabewert]
 
-    const SfxPoolItem*      Pointer auf ein bis zum n"achsten Durchlauf
+    const SfxPoolItem*		Pointer auf ein bis zum n"achsten Durchlauf
                             der Message-Loop g"ultiges SfxPoolItem,
                             welches den R"uckgabewert enth"alt.
 
@@ -1439,10 +1439,10 @@ const SfxPoolItem*  SfxDispatcher::Execute
 //--------------------------------------------------------------------
 const SfxPoolItem* SfxDispatcher::_Execute
 (
-    sal_uInt16              nSlot,      // die Id der auszufuehrenden Funktion
-    SfxCallMode         eCall,      // SFX_CALLMODE_SYNCRHON, ..._ASYNCHRON oder ..._SLOT
-    va_list             pVarArgs,   // Parameterliste ab 2. Parameter
-    const SfxPoolItem*  pArg1       // erster Parameter
+    sal_uInt16				nSlot,		// die Id der auszufuehrenden Funktion
+    SfxCallMode 		eCall,		// SFX_CALLMODE_SYNCRHON, ..._ASYNCHRON oder ..._SLOT
+    va_list 			pVarArgs,	// Parameterliste ab 2. Parameter
+    const SfxPoolItem*	pArg1   	// erster Parameter
 )
 
 /*  [Beschreibung]
@@ -1452,7 +1452,7 @@ const SfxPoolItem* SfxDispatcher::_Execute
 
     [R"uckgabewert]
 
-    const SfxPoolItem*      Pointer auf ein bis zum n"achsten Durchlauf
+    const SfxPoolItem*		Pointer auf ein bis zum n"achsten Durchlauf
                             der Message-Loop g"ultiges SfxPoolItem,
                             welches den R"uckgabewert enth"alt.
 
@@ -1487,10 +1487,10 @@ const SfxPoolItem* SfxDispatcher::_Execute
 //--------------------------------------------------------------------
 const SfxPoolItem* SfxDispatcher::Execute
 (
-    sal_uInt16              nSlot,      // die Id der auszufuehrenden Funktion
-    SfxCallMode         eCall,      // SFX_CALLMODE_SYNCRHON, ..._ASYNCHRON oder ..._SLOT
-    const SfxPoolItem*  pArg1,      // erster Parameter
-    ...                             // 0-terminiertes Liste Parametern
+    sal_uInt16				nSlot,		// die Id der auszufuehrenden Funktion
+    SfxCallMode 		eCall,		// SFX_CALLMODE_SYNCRHON, ..._ASYNCHRON oder ..._SLOT
+    const SfxPoolItem*	pArg1,		// erster Parameter
+    ... 							// 0-terminiertes Liste Parametern
 )
 
 /*  [Beschreibung]
@@ -1506,7 +1506,7 @@ const SfxPoolItem* SfxDispatcher::Execute
 
     [R"uckgabewert]
 
-    const SfxPoolItem*      Pointer auf ein bis zum n"achsten Durchlauf
+    const SfxPoolItem*		Pointer auf ein bis zum n"achsten Durchlauf
                             der Message-Loop g"ultiges SfxPoolItem,
                             welches den R"uckgabewert enth"alt.
 
@@ -1554,7 +1554,7 @@ const SfxPoolItem* SfxDispatcher::Execute
 
 IMPL_LINK( SfxDispatcher, PostMsgHandler, SfxRequest*, pReq )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Hilfsmethode zum Empfangen der asynchron auszuf"uhrenden <SfxRequest>s.
 */
@@ -1951,7 +1951,7 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, 
 //--------------------------------------------------------------------
 void SfxDispatcher::FlushImpl()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Hilfsmethode zum Ausf"uhren der ausstehenden Push- und Pop-Befehle.
 */
@@ -1974,8 +1974,8 @@ void SfxDispatcher::FlushImpl()
     if ( pImp->pParent )
         pImp->pParent->Flush();
 
-//  if ( pImp->bQuiet )
-//      return;
+//	if ( pImp->bQuiet )
+//		return;
 
     pImp->bFlushing = !pImp->bFlushing;
     if ( !pImp->bFlushing )
@@ -2097,7 +2097,7 @@ void SfxDispatcher::FlushImpl()
 void SfxDispatcher::SetSlotFilter
 (
     HACK(hier muss mal ein enum rein)
-    sal_Bool            bEnable,    /*  sal_True:
+    sal_Bool 			bEnable,	/*	sal_True:
                                     nur angegebene Slots enablen,
                                     alle anderen disablen
 
@@ -2105,11 +2105,11 @@ void SfxDispatcher::SetSlotFilter
                                     die angegebenen Slots disablen,
                                     alle anderen zun"achst enablen
                                 */
-    sal_uInt16          nCount,     //  Anzahl der SIDs im folgenden Array
-    const sal_uInt16*   pSIDs       //  sortiertes Array von 'nCount' SIDs
+    sal_uInt16 			nCount, 	// 	Anzahl der SIDs im folgenden Array
+    const sal_uInt16*	pSIDs		// 	sortiertes Array von 'nCount' SIDs
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Mit dieser Methode wird ein Filter gesetzt, mit dem gezielt Slots
     enabled bzw. disabled werden k"onnen. Das "ubergebene Array mu\s
@@ -2176,16 +2176,16 @@ SfxCompareSIDs_Impl( const void* pSmaller, const void* pBigger )
 //--------------------------------------------------------------------
 sal_Bool SfxDispatcher::IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) const
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Sucht 'nSID' in dem mit <SetSlotFilter()> gesetzten Filter und
     liefert sal_True, falls die SID erlaubt ist, bzw. sal_False, falls sie
     durch den Filter disabled ist.
 
     [R"uckgabewert]
-    sal_Bool                0   =>  disabled
-                        1   =>  enabled
-                        2   =>  enabled even if ReadOnlyDoc
+    sal_Bool				0	=>	disabled
+                        1	=> 	enabled
+                        2	=>	enabled even if ReadOnlyDoc
 */
 
 {
@@ -2208,9 +2208,9 @@ sal_Bool SfxDispatcher::IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) const
 //--------------------------------------------------------------------
 sal_Bool SfxDispatcher::_TryIntercept_Impl
 (
-    sal_uInt16              nSlot,      // zu suchende Slot-Id
-    SfxSlotServer&      rServer,    // zu f"uellende <SfxSlotServer>-Instanz
-    sal_Bool                bSelf
+    sal_uInt16				nSlot,		// zu suchende Slot-Id
+    SfxSlotServer&	 	rServer,	// zu f"uellende <SfxSlotServer>-Instanz
+    sal_Bool				bSelf
 )
 {
     // Eventuell geh"ort der parent auch zu einer Komponente
@@ -2263,12 +2263,12 @@ sal_Bool SfxDispatcher::_TryIntercept_Impl
 
 sal_Bool SfxDispatcher::_FindServer
 (
-    sal_uInt16              nSlot,      // zu suchende Slot-Id
-    SfxSlotServer&   rServer,    // zu f"uellnde <SfxSlotServer>-Instanz
-    sal_Bool                bModal      // trotz ModalMode
+    sal_uInt16				nSlot,		// zu suchende Slot-Id
+    SfxSlotServer&	 rServer,	 // zu f"uellnde <SfxSlotServer>-Instanz
+    sal_Bool				bModal		// trotz ModalMode
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese Hilfsmethode sucht den <Slot-Server>, der nSlot zur Zeit bedient.
     Als Ergebnis wird rServer entsprechend gef"ullt.
@@ -2281,7 +2281,7 @@ sal_Bool SfxDispatcher::_FindServer
 
     [R"uckgabewert]
 
-    sal_Bool                sal_True
+    sal_Bool				sal_True
                         Der Slot wurde gefunden, rServer ist g"ultig.
 
                         sal_False
@@ -2375,8 +2375,8 @@ sal_Bool SfxDispatcher::_FindServer
     }
 
     sal_Bool bReadOnly = ( 2 != nSlotEnableMode && pImp->bReadOnly );
-//              ( pImp->pFrame && pImp->pFrame->GetObjectShell() );
-//                pImp->pFrame->GetObjectShell()->IsLoading() );
+//				( pImp->pFrame && pImp->pFrame->GetObjectShell() );
+//				  pImp->pFrame->GetObjectShell()->IsLoading() );
 
     // durch alle Shells der verketteten Dispatchern von oben nach unten suchen
 #ifdef DBG_UTILx
@@ -2499,8 +2499,8 @@ sal_Bool SfxDispatcher::HasSlot_Impl( sal_uInt16 nSlot )
         return sal_False;
 
     sal_Bool bReadOnly = ( 2 != nSlotEnableMode && pImp->bReadOnly );
-//              ( pImp->pFrame && pImp->pFrame->GetObjectShell());
-//                pImp->pFrame->GetObjectShell()->IsLoading() );
+//				( pImp->pFrame && pImp->pFrame->GetObjectShell());
+//				  pImp->pFrame->GetObjectShell()->IsLoading() );
 
     for ( sal_uInt16 i=0 ; i < nTotCount; ++i )
     {
@@ -2556,12 +2556,12 @@ sal_Bool SfxDispatcher::HasSlot_Impl( sal_uInt16 nSlot )
 //--------------------------------------------------------------------
 sal_Bool SfxDispatcher::_FillState
 (
-    const SfxSlotServer& rSvr,       // abzufragende <Slot-Server>
-    SfxItemSet&             rState,     // zu f"ullendes <SfxItemSet>
-    const SfxSlot*          pRealSlot   // ggf. der tats"achliche Slot
+    const SfxSlotServer& rSvr,		 // abzufragende <Slot-Server>
+    SfxItemSet& 			rState, 	// zu f"ullendes <SfxItemSet>
+    const SfxSlot*			pRealSlot	// ggf. der tats"achliche Slot
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Hilfsmethode zum Abfragen des Status des <Slot-Server>s rSvr.
     In rState m"ussen die gew"unschten Slots-Ids (teilweise in Which-Ids
@@ -2705,7 +2705,7 @@ SfxPopupMenuManager* SfxDispatcher::Popup( sal_uInt16 nConfigId,Window *pWin, co
     sal_uInt16 nShLevel = 0;
     SfxShell *pSh;
     nShLevel=0;
-
+    
     if ( rDisp.pImp->bQuiet )
     {
         nConfigId = 0;
@@ -2873,8 +2873,8 @@ void SfxDispatcher::LockUI_Impl( sal_Bool bLock )
 //-------------------------------------------------------------------------
 void SfxDispatcher::HideUI( sal_Bool bHide )
 {
-//  if ( !bHide && pImp->bReadOnly )
-//      bHide = sal_True;
+//	if ( !bHide && pImp->bReadOnly )
+//		bHide = sal_True;
     sal_Bool bWasHidden = pImp->bNoUI;
     pImp->bNoUI = bHide;
     if ( pImp->pFrame )
@@ -2905,7 +2905,7 @@ void SfxDispatcher::HideUI( sal_Bool bHide )
 void SfxDispatcher::SetReadOnly_Impl( sal_Bool bOn )
 {
     pImp->bReadOnly = bOn;
-//  pImp->bNoUI = bOn;
+//	pImp->bNoUI = bOn;
 }
 
 sal_Bool SfxDispatcher::GetReadOnly_Impl() const
@@ -2916,7 +2916,7 @@ sal_Bool SfxDispatcher::GetReadOnly_Impl() const
 //-------------------------------------------------------------------------
 void SfxDispatcher::SetQuietMode_Impl( sal_Bool bOn )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Bei 'bOn' stellt sich dieser Dispatcher quasi tot und leitet alles
     an den Parent-Dispatcher weiter.
@@ -2932,7 +2932,7 @@ void SfxDispatcher::SetQuietMode_Impl( sal_Bool bOn )
 //-------------------------------------------------------------------------
 void SfxDispatcher::SetModalMode_Impl( sal_Bool bOn )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Bei 'bOn' werden nur noch Slots des Parent-Dispatchers gefunden.
 */

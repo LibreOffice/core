@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,21 +58,21 @@ namespace sd {
 \************************************************************************/
 
 BreakDlg::BreakDlg(
-    ::Window* pWindow,
-    DrawView* _pDrView,
+    ::Window* pWindow, 
+    DrawView* _pDrView, 
     DrawDocShell* pShell,
-    ULONG nSumActionCount,
-    ULONG nObjCount )
+    ULONG nSumActionCount, 
+    ULONG nObjCount ) 
     : SfxModalDialog     ( pWindow, SdResId( DLG_BREAK ) ),
-      aFtObjInfo            ( this, SdResId( FT_OBJ_INFO ) ),
-      aFtActInfo            ( this, SdResId( FT_ACT_INFO ) ),
-      aFtInsInfo            ( this, SdResId( FT_INS_INFO ) ),
-      aFiObjInfo            ( this, SdResId( FI_OBJ_INFO ) ),
-      aFiActInfo            ( this, SdResId( FI_ACT_INFO ) ),
-      aFiInsInfo            ( this, SdResId( FI_INS_INFO ) ),
-      aBtnCancel            ( this, SdResId( BTN_CANCEL ) ),
-      aLink             ( LINK( this, BreakDlg, UpDate)),
-      mpProgress            ( NULL )
+      aFtObjInfo			( this, SdResId( FT_OBJ_INFO ) ),
+      aFtActInfo			( this, SdResId( FT_ACT_INFO ) ),
+      aFtInsInfo			( this, SdResId( FT_INS_INFO ) ),
+      aFiObjInfo			( this, SdResId( FI_OBJ_INFO ) ),
+      aFiActInfo			( this, SdResId( FI_ACT_INFO ) ),
+      aFiInsInfo			( this, SdResId( FI_INS_INFO ) ),
+      aBtnCancel			( this, SdResId( BTN_CANCEL ) ),
+      aLink				( LINK( this, BreakDlg, UpDate)),
+      mpProgress			( NULL )
 {
     aBtnCancel.SetClickHdl( LINK( this, BreakDlg, CancelButtonHdl));
 

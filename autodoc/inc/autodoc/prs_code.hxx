@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,14 +58,14 @@ namespace autodoc
 class CodeParser_Ifc
 {
   public:
-    virtual             ~CodeParser_Ifc() {}
+    virtual				~CodeParser_Ifc() {}
 
-    virtual void        Setup(
+    virtual void		Setup(
                             ary::Repository &   o_rRepository,
                             const autodoc::DocumentationParser_Ifc &
                                                 i_rDocumentationInterpreter ) = 0;
 
-    virtual void        Run(
+    virtual void		Run(
                             const autodoc::FileCollector_Ifc &
                                                 i_rFiles ) = 0;
 };

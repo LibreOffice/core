@@ -50,7 +50,7 @@ import ov.ObjectViewContainer;
 public class AccessibilityWorkBench
     extends JFrame
     implements ActionListener, XTerminateListener, TreeSelectionListener
-
+    
 {
     public static final String msVersion = "v1.7.2";
     public String msOptionsFileName = ".AWBrc";
@@ -74,7 +74,7 @@ public class AccessibilityWorkBench
                 nPortNumber = Integer.parseInt (args[++i]);
             }
         }
-
+        
         saWorkBench = new AccessibilityWorkBench (nPortNumber);
     }
 
@@ -101,7 +101,7 @@ public class AccessibilityWorkBench
         mbInitialized = false;
 
         Layout ();
-
+        
         MessageArea.println (System.getProperty ("os.name") + " / "
             + System.getProperty ("os.arch") + " / "
             + System.getProperty ("os.version"));
@@ -123,7 +123,7 @@ public class AccessibilityWorkBench
 
 
     /** Create and arrange the widgets of the GUI.
-    */
+    */    
     public void Layout  ()
     {
         setSize (new Dimension (8000,600));
@@ -157,7 +157,7 @@ public class AccessibilityWorkBench
         // Split pane for tree view and object view.
         JSplitPane aLeftViewSplitPane = new JSplitPane (
             JSplitPane.VERTICAL_SPLIT,
-            aTreeScrollPane,
+            aTreeScrollPane, 
             aObjectViewContainerScrollPane
             );
         aLeftViewSplitPane.setDividerLocation (300);
@@ -166,7 +166,7 @@ public class AccessibilityWorkBench
         maCanvas = new Canvas ();
         maCanvas.setTree (maAccessibilityTree.getComponent());
         maAccessibilityTree.SetCanvas (maCanvas);
-        JScrollPane aScrolledCanvas = new JScrollPane(maCanvas,
+        JScrollPane aScrolledCanvas = new JScrollPane(maCanvas, 
             JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
             JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         aScrolledCanvas.getViewport().setBackground (Color.RED);
@@ -175,12 +175,12 @@ public class AccessibilityWorkBench
         // Split pane for tree view and canvas.
         JSplitPane aViewSplitPane = new JSplitPane (
             JSplitPane.HORIZONTAL_SPLIT,
-            aLeftViewSplitPane,
+            aLeftViewSplitPane, 
             aScrolledCanvas
             );
         aViewSplitPane.setOneTouchExpandable(true);
         aViewSplitPane.setDividerLocation (400);
-
+            
         //  Text output area.
         maMessageArea = MessageArea.Instance ();
         //        maMessageArea.setPreferredSize (new Dimension (300,50));
@@ -204,7 +204,7 @@ public class AccessibilityWorkBench
         aUpdateButton = createButton ("Update", "update");
         aShapesButton = createButton ("Expand Shapes", "shapes");
         aExpandButton = createButton ("Expand All", "expand");
-        aQuitButton = createButton ("Quit", "quit");
+        aQuitButton = createButton ("Quit", "quit");        
         UpdateButtonStates ();
 
         Options.Instance().Load (msOptionsFileName);
@@ -224,7 +224,7 @@ public class AccessibilityWorkBench
 
     /** Shortcut method for adding an object to a GridBagLayout.
     */
-    void addGridElement (JComponent object,
+    void addGridElement (JComponent object, 
         int x, int y, int width, int height, int weightx, int weighty,
         int anchor, int fill)
     {
@@ -252,7 +252,7 @@ public class AccessibilityWorkBench
         aButton.setEnabled (false);
         aButton.setActionCommand (command);
         aButton.addActionListener (this);
-
+        
         maButtonBar.add (aButton);
         return aButton;
     }
@@ -269,7 +269,7 @@ public class AccessibilityWorkBench
     {
         // Menu bar.
         maMenuBar = new JMenuBar ();
-
+   
         // File menu.
         JMenu aFileMenu = new JMenu ("File");
         maMenuBar.add (aFileMenu);
@@ -330,7 +330,7 @@ public class AccessibilityWorkBench
         // Help menu.
         JMenu aHelpMenu = new JMenu ("Help");
         maMenuBar.add (aHelpMenu);
-
+        
         aItem = new JMenuItem ("Help");
         aHelpMenu.add (aItem);
         aItem.addActionListener (this);
@@ -413,7 +413,7 @@ public class AccessibilityWorkBench
 
     /** Callback for GUI actions from the buttons.
     */
-    public void actionPerformed (java.awt.event.ActionEvent e)
+    public void actionPerformed (java.awt.event.ActionEvent e) 
     {
         if (e.getActionCommand().equals("connect"))
         {
@@ -578,17 +578,17 @@ public class AccessibilityWorkBench
 
 
     /// The Singleton Workbench object.
-    private static AccessibilityWorkBench
+    private static AccessibilityWorkBench 
         saWorkBench = null;
-
-    protected SimpleOffice
+    
+    protected SimpleOffice 
         office;
-    protected InformationWriter
+    protected InformationWriter 
         info;
-
-    private XModel
+        
+    private XModel 
         mxModel;
-    private JPanel
+    private JPanel 
         maMainPanel,
         maButtonBar;
     private Canvas
@@ -599,9 +599,9 @@ public class AccessibilityWorkBench
         maObjectViewContainer;
     private JScrollPane
         maScrollPane;
-    private MessageArea
+    private MessageArea 
         maMessageArea;
-    private JButton
+    private JButton 
         aConnectButton,
         aQuitButton,
         aUpdateButton,
@@ -615,6 +615,6 @@ public class AccessibilityWorkBench
         mbInitialized;
     private TopWindowListener
         maTopWindowListener;
-    private QueuedTopWindowListener
+    private QueuedTopWindowListener 
         maQueuedTopWindowListener;
 }

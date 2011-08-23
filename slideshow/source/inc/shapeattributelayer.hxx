@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -265,7 +265,7 @@ namespace slideshow
                 New alpha value, must be in the [0,1] range
              */
             void setAlpha( const double& rNewValue );
-
+            
             /** Query whether the clip attribute is valid
              */
             bool isClipValid() const;
@@ -280,7 +280,7 @@ namespace slideshow
                 with the origin of the clip polygon).
              */
             void setClip( const ::basegfx::B2DPolyPolygon& rNewClip );
-
+            
             /** Query whether the dim color attribute is valid
 
                 The dim color globally 'dims' the shape towards that
@@ -336,7 +336,7 @@ namespace slideshow
              */
             bool isLineStyleValid() const;
             /** Get the current line mode for line drawing.
-
+                
                 @returns the current line style
              */
             sal_Int16 getLineStyle() const;
@@ -368,7 +368,7 @@ namespace slideshow
             /** Set the text color globally for the whole shape.
              */
             void setCharColor( const RGBColor& nNewColor );
-
+            
             /** Query whether the char rotation angle attribute is valid
              */
             bool isCharRotationAngleValid() const;
@@ -400,7 +400,7 @@ namespace slideshow
                 ::com::sun::star::awt::FontWeight constant group.
              */
             void setCharWeight( const double& rStyle );
-
+            
             /** Query whether the underline mode attribute is valid
              */
             bool isUnderlineModeValid() const;
@@ -479,76 +479,76 @@ namespace slideshow
             bool haveChild() const { return mpChild; }
             void updateStateIds();
 
-            template< typename T > T calcValue( const T&                   rCurrValue,
-                                                bool                           bThisInstanceValid,
+            template< typename T > T calcValue( const T& 				   rCurrValue,
+                                                bool						   bThisInstanceValid,
                                                 bool (ShapeAttributeLayer::*pIsValid)() const,
-                                                T   (ShapeAttributeLayer::*pGetValue)() const ) const;
+                                                T 	(ShapeAttributeLayer::*pGetValue)() const ) const;
+            
+            ShapeAttributeLayerSharedPtr				mpChild; // may be NULL
 
-            ShapeAttributeLayerSharedPtr                mpChild; // may be NULL
+            ::basegfx::B2DSize 							maSize;
+            ::basegfx::B2DPoint							maPosition;
+            ::basegfx::B2DPolyPolygon					maClip;
 
-            ::basegfx::B2DSize                          maSize;
-            ::basegfx::B2DPoint                         maPosition;
-            ::basegfx::B2DPolyPolygon                   maClip;
+            ::rtl::OUString								maFontFamily;
 
-            ::rtl::OUString                             maFontFamily;
+            double										mnRotationAngle;
+            double 										mnShearXAngle;
+            double										mnShearYAngle;
+            double										mnAlpha;
+            double										mnCharRotationAngle;
+            double										mnCharScale;
+            double										mnCharWeight;
 
-            double                                      mnRotationAngle;
-            double                                      mnShearXAngle;
-            double                                      mnShearYAngle;
-            double                                      mnAlpha;
-            double                                      mnCharRotationAngle;
-            double                                      mnCharScale;
-            double                                      mnCharWeight;
+            ::com::sun::star::drawing::FillStyle		meFillStyle;
+            ::com::sun::star::drawing::LineStyle		meLineStyle;
+            ::com::sun::star::awt::FontSlant			meCharPosture;
+            sal_Int16									mnUnderlineMode;
 
-            ::com::sun::star::drawing::FillStyle        meFillStyle;
-            ::com::sun::star::drawing::LineStyle        meLineStyle;
-            ::com::sun::star::awt::FontSlant            meCharPosture;
-            sal_Int16                                   mnUnderlineMode;
+            RGBColor									maDimColor;
+            RGBColor									maFillColor;
+            RGBColor									maLineColor;
+            RGBColor									maCharColor;
 
-            RGBColor                                    maDimColor;
-            RGBColor                                    maFillColor;
-            RGBColor                                    maLineColor;
-            RGBColor                                    maCharColor;
+            State::StateId 								mnTransformationState;
+            State::StateId 								mnClipState;
+            State::StateId 								mnAlphaState;
+            State::StateId 								mnPositionState;
+            State::StateId 								mnContentState;
+            State::StateId 								mnVisibilityState;
 
-            State::StateId                              mnTransformationState;
-            State::StateId                              mnClipState;
-            State::StateId                              mnAlphaState;
-            State::StateId                              mnPositionState;
-            State::StateId                              mnContentState;
-            State::StateId                              mnVisibilityState;
+            sal_Int16									mnAdditiveMode;
 
-            sal_Int16                                   mnAdditiveMode;
+            bool										mbVisibility 			: 1;
 
-            bool                                        mbVisibility            : 1;
+            bool										mbWidthValid 			: 1;
+            bool										mbHeightValid 			: 1;
+            bool										mbPosXValid 			: 1;
+            bool										mbPosYValid 			: 1;
+            bool										mbClipValid				: 1;
 
-            bool                                        mbWidthValid            : 1;
-            bool                                        mbHeightValid           : 1;
-            bool                                        mbPosXValid             : 1;
-            bool                                        mbPosYValid             : 1;
-            bool                                        mbClipValid             : 1;
+            bool										mbFontFamilyValid 		: 1;
 
-            bool                                        mbFontFamilyValid       : 1;
+            bool										mbRotationAngleValid	: 1;
+            bool										mbShearXAngleValid		: 1;
+            bool										mbShearYAngleValid		: 1;
 
-            bool                                        mbRotationAngleValid    : 1;
-            bool                                        mbShearXAngleValid      : 1;
-            bool                                        mbShearYAngleValid      : 1;
+            bool										mbAlphaValid			: 1;
 
-            bool                                        mbAlphaValid            : 1;
+            bool										mbCharRotationAngleValid: 1;
+            bool										mbCharScaleValid		: 1;
 
-            bool                                        mbCharRotationAngleValid: 1;
-            bool                                        mbCharScaleValid        : 1;
+            bool										mbDimColorValid			: 1;
+            bool										mbFillColorValid		: 1;
+            bool										mbLineColorValid		: 1;
+            bool										mbCharColorValid		: 1;
 
-            bool                                        mbDimColorValid         : 1;
-            bool                                        mbFillColorValid        : 1;
-            bool                                        mbLineColorValid        : 1;
-            bool                                        mbCharColorValid        : 1;
-
-            bool                                        mbFillStyleValid        : 1;
-            bool                                        mbLineStyleValid        : 1;
-            bool                                        mbCharWeightValid       : 1;
-            bool                                        mbUnderlineModeValid    : 1;
-            bool                                        mbCharPostureValid      : 1;
-            bool                                        mbVisibilityValid       : 1;
+            bool										mbFillStyleValid		: 1;
+            bool										mbLineStyleValid		: 1;
+            bool										mbCharWeightValid		: 1;
+            bool										mbUnderlineModeValid	: 1;
+            bool										mbCharPostureValid		: 1;
+            bool										mbVisibilityValid		: 1;
         };
 
     }

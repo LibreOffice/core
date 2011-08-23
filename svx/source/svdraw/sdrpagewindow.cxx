@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,10 +83,10 @@ using namespace ::com::sun::star;
             // BOOL bVis = pWindow->IsVisible();
             // xC->setVisible(TRUE);
             // if ( !bVis )
-            //  pWindow->Hide();
-            //  if( !mxContext.is() && bVisible )
-            //      // Es ist ein TopWindow, also automatisch anzeigen
-            //      createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > (), ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > () );
+            // 	pWindow->Hide();
+            //	if( !mxContext.is() && bVisible )
+            //		// Es ist ein TopWindow, also automatisch anzeigen
+            //		createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > (), ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > () );
 
             uno::Reference< awt::XControl > xControl(mxControlContainer, uno::UNO_QUERY);
             if(xControl.is())
@@ -129,7 +129,7 @@ using namespace ::com::sun::star;
 }
 
 SdrPageWindow::SdrPageWindow(SdrPageView& rPageView, SdrPaintWindow& rPaintWindow)
-:   mpObjectContact(0L),
+:	mpObjectContact(0L),
     mrPageView(rPageView),
     mpPaintWindow(&rPaintWindow),
     mpOriginalPaintWindow(NULL)
@@ -163,9 +163,9 @@ sdr::contact::ObjectContact* SdrPageWindow::CreateViewSpecificObjectContact()
 }
 
 // OVERLAYMANAGER
-::sdr::overlay::OverlayManager* SdrPageWindow::GetOverlayManager() const
-{
-    return GetPaintWindow().GetOverlayManager();
+::sdr::overlay::OverlayManager* SdrPageWindow::GetOverlayManager() const 
+{ 
+    return GetPaintWindow().GetOverlayManager(); 
 }
 
 void SdrPageWindow::patchPaintWindow(SdrPaintWindow& rPaintWindow)
@@ -211,7 +211,7 @@ void SdrPageWindow::PrepareRedraw(const Region& rReg)
 #ifdef CLIPPER_TEST
 #include <svx/svdopath.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <vcl/salbtype.hxx>     // FRound
+#include <vcl/salbtype.hxx>		// FRound
 #include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -417,7 +417,7 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
         }
 
         const Rectangle aVCLDiscreteRectangle(
-                (sal_Int32)floor(aDiscreteRange.getMinX()), (sal_Int32)floor(aDiscreteRange.getMinY()),
+                (sal_Int32)floor(aDiscreteRange.getMinX()), (sal_Int32)floor(aDiscreteRange.getMinY()), 
                 (sal_Int32)ceil(aDiscreteRange.getMaxX()), (sal_Int32)ceil(aDiscreteRange.getMaxY()));
         const bool bWasMapModeEnabled(rWindow.IsMapModeEnabled());
 
@@ -444,12 +444,12 @@ bool SdrPageWindow::HasObjectContact() const
 }
 
 // #i26631#
-void SdrPageWindow::ResetObjectContact()
-{
-    if(mpObjectContact)
-    {
-        delete mpObjectContact;
-        mpObjectContact = 0L;
+void SdrPageWindow::ResetObjectContact() 
+{ 
+    if(mpObjectContact) 
+    { 
+        delete mpObjectContact; 
+        mpObjectContact = 0L; 
     }
 }
 

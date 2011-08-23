@@ -37,7 +37,7 @@ class NodeFactory
         maUNOHandler = new AccessibleUNOHandler();
     }
 
-
+        
     /** add default handlers based on the supported interfaces */
     private void addDefaultHandlers (AccTreeNode aNode, XAccessibleContext xContext)
     {
@@ -106,7 +106,7 @@ class NodeFactory
             sDisplay = xContext.getAccessibleName();
             if (sDisplay.length()==0)
             {
-                sDisplay = "<no name> Role: "
+                sDisplay = "<no name> Role: " 
                     + NameProvider.getRoleName (
                         xContext.getAccessibleRole());
             }

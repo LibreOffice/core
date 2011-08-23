@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -106,7 +106,7 @@ bool SfxImageItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
     if (( rVal >>= aSeq ) && ( aSeq.getLength() == 4 ))
     {
         sal_Int16     nVal = sal_Int16();
-        rtl::OUString aURL;
+        rtl::OUString aURL;  
         if ( aSeq[0] >>= nVal )
             SetValue( nVal );
         aSeq[1] >>= pImp->nAngle;

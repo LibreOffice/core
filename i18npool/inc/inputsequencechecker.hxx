@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,9 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//  ----------------------------------------------------
-//  class InputSequenceCheckerImpl
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class InputSequenceCheckerImpl
+//	----------------------------------------------------
 class InputSequenceCheckerImpl : public cppu::WeakImplHelper2
 <
     com::sun::star::i18n::XExtendedInputSequenceChecker,
@@ -60,7 +60,7 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName() throw( com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) 
         throw( com::sun::star::uno::RuntimeException );
     virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
         throw( com::sun::star::uno::RuntimeException );
@@ -86,7 +86,7 @@ private :
     sal_Char* SAL_CALL getLanguageByScripType(sal_Unicode cChar, sal_Unicode nChar);
 };
 
-} } } }
+} } } } 
 
 #endif // _I18N_BREAKITERATOR_HXX_
 

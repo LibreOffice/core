@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,8 +40,8 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 
-#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <uno/lbnames.h>			// CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
+#include <cppuhelper/implbase1.hxx>	// helper for implementations
 #include <unotools/pathoptions.hxx>
 #include <i18npool/lang.h>
 #include <tools/string.hxx>
@@ -63,14 +63,14 @@ class LocaleDataWrapper;
 ///////////////////////////////////////////////////////////////////////////
 #define SN_GRAMMARCHECKER           "com.sun.star.linguistic2.Proofreader"
 #define SN_GRAMMARCHECKINGITERATOR  "com.sun.star.linguistic2.ProofreadingIterator"
-#define SN_SPELLCHECKER             "com.sun.star.linguistic2.SpellChecker"
-#define SN_HYPHENATOR               "com.sun.star.linguistic2.Hyphenator"
-#define SN_THESAURUS                "com.sun.star.linguistic2.Thesaurus"
-#define SN_LINGU_SERVCICE_MANAGER   "com.sun.star.linguistic2.LinguServiceManager"
-#define SN_LINGU_PROPERTIES         "com.sun.star.linguistic2.LinguProperties"
-#define SN_DICTIONARY_LIST          "com.sun.star.linguistic2.DictionaryList"
-#define SN_OTHER_LINGU              "com.sun.star.linguistic2.OtherLingu"
-#define SN_DESKTOP                  "com.sun.star.frame.Desktop"
+#define SN_SPELLCHECKER				"com.sun.star.linguistic2.SpellChecker"
+#define SN_HYPHENATOR				"com.sun.star.linguistic2.Hyphenator"
+#define SN_THESAURUS				"com.sun.star.linguistic2.Thesaurus"
+#define SN_LINGU_SERVCICE_MANAGER	"com.sun.star.linguistic2.LinguServiceManager"
+#define SN_LINGU_PROPERTIES			"com.sun.star.linguistic2.LinguProperties"
+#define SN_DICTIONARY_LIST			"com.sun.star.linguistic2.DictionaryList"
+#define SN_OTHER_LINGU				"com.sun.star.linguistic2.OtherLingu"
+#define SN_DESKTOP					"com.sun.star.frame.Desktop"
 
 
 namespace linguistic
@@ -96,7 +96,7 @@ namespace linguistic
 
 ///////////////////////////////////////////////////////////////////////////
 
-::osl::Mutex &  GetLinguMutex();
+::osl::Mutex &	GetLinguMutex();
 
 LocaleDataWrapper & GetLocaleDataWrapper( INT16 nLang );
 
@@ -172,7 +172,7 @@ String     SearchFileInPaths( const String &rFile, const ::com::sun::star::uno::
 
 ///////////////////////////////////////////////////////////////////////////
 
-INT32       GetPosInWordToCheck( const rtl::OUString &rTxt, INT32 nPos );
+INT32		GetPosInWordToCheck( const rtl::OUString &rTxt, INT32 nPos );
 
 ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XHyphenatedWord >
@@ -191,10 +191,10 @@ inline BOOL        IsLower( const String &rText, INT16 nLanguage )     { return 
 String      ToLower( const String &rText, INT16 nLanguage );
 String      ToUpper( const String &rText, INT16 nLanguage );
 String      ToTitle( const String &rText, INT16 nLanguage );
-sal_Unicode ToLower( const sal_Unicode cChar, INT16 nLanguage );
-sal_Unicode ToUpper( const sal_Unicode cChar, INT16 nLanguage );
-BOOL        HasDigits( const ::rtl::OUString &rText );
-BOOL        IsNumeric( const String &rText );
+sal_Unicode	ToLower( const sal_Unicode cChar, INT16 nLanguage );
+sal_Unicode	ToUpper( const sal_Unicode cChar, INT16 nLanguage );
+BOOL		HasDigits( const ::rtl::OUString &rText );
+BOOL		IsNumeric( const String &rText );
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -243,16 +243,16 @@ class AppExitListener :
     >
 {
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XDesktop >     xDesktop;
+        ::com::sun::star::frame::XDesktop >		xDesktop;
 
 public:
     AppExitListener();
     virtual ~AppExitListener();
 
-    virtual void    AtExit() = 0;
+    virtual	void	AtExit() = 0;
 
-    void            Activate();
-    void            Deactivate();
+    void			Activate();
+    void			Deactivate();
 
     // XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
@@ -264,7 +264,7 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////
 
-}   // namespace linguistic
+}	// namespace linguistic
 
 #endif
 

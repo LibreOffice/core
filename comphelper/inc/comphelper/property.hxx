@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,12 +46,12 @@ namespace comphelper
 {
 //.........................................................................
 
-    namespace starbeans = ::com::sun::star::beans;
-    namespace staruno   = ::com::sun::star::uno;
+    namespace starbeans	= ::com::sun::star::beans;
+    namespace staruno	= ::com::sun::star::uno;
 
 /** compare two properties by name
 */
-    struct PropertyStringLessFunctor : ::std::binary_function< ::com::sun::star::beans::Property, ::rtl::OUString, bool >
+    struct PropertyStringLessFunctor : ::std::binary_function< ::com::sun::star::beans::Property, ::rtl::OUString, bool > 
     {
         // ................................................................
         inline bool operator()( const ::com::sun::star::beans::Property& lhs, const ::rtl::OUString& rhs ) const
@@ -77,7 +77,7 @@ namespace comphelper
     //--------------------------------------------------------------------------
     /** compare two properties by name
      */
-    struct PropertyStringEqualFunctor : ::std::binary_function< ::com::sun::star::beans::Property, ::rtl::OUString, bool >
+    struct PropertyStringEqualFunctor : ::std::binary_function< ::com::sun::star::beans::Property, ::rtl::OUString, bool > 
     {
         // ................................................................
         inline bool operator()( const ::com::sun::star::beans::Property& lhs, const ::rtl::OUString& rhs ) const
@@ -119,20 +119,20 @@ COMPHELPER_DLLPUBLIC void RemoveProperty(staruno::Sequence<starbeans::Property>&
 
 //------------------------------------------------------------------
 /** within the given property sequence, modify attributes of a special property
-    @param  _rProps         the sequence of properties to search in
-    @param  _sPropName      the name of the property which's attributes should be modified
-    @param  _nAddAttrib     the attributes which should be added
-    @param  _nRemoveAttrib  the attributes which should be removed
+    @param	_rProps			the sequence of properties to search in
+    @param	_sPropName		the name of the property which's attributes should be modified
+    @param	_nAddAttrib		the attributes which should be added
+    @param	_nRemoveAttrib	the attributes which should be removed
 */
 COMPHELPER_DLLPUBLIC void ModifyPropertyAttributes(staruno::Sequence<starbeans::Property>& _rProps, const ::rtl::OUString& _sPropName, sal_Int16 _nAddAttrib, sal_Int16 _nRemoveAttrib);
 
 //------------------------------------------------------------------
-/** check if the given set has the given property.
+/**	check if the given set has the given property.
 */
 COMPHELPER_DLLPUBLIC sal_Bool hasProperty(const rtl::OUString& _rName, const staruno::Reference<starbeans::XPropertySet>& _rxSet);
 
 //------------------------------------------------------------------
-/** copy properties between property sets, in compliance with the property
+/**	copy properties between property sets, in compliance with the property
     attributes of the target object
 */
 COMPHELPER_DLLPUBLIC void copyProperties(const staruno::Reference<starbeans::XPropertySet>& _rxSource,
@@ -143,13 +143,13 @@ COMPHELPER_DLLPUBLIC void copyProperties(const staruno::Reference<starbeans::XPr
 //==================================================================
 
 /** helper for implementing ::cppu::OPropertySetHelper::convertFastPropertyValue
-    @param          _rConvertedValue    the conversion result (if successfull)
-    @param          _rOldValue          the old value of the property, calculated from _rCurrentValue
-    @param          _rValueToSet        the new value which is about to be set
-    @param          _rCurrentValue      the current value of the property
-    @return         sal_True, if the value could be converted and has changed
+    @param			_rConvertedValue	the conversion result (if successfull)
+    @param			_rOldValue			the old value of the property, calculated from _rCurrentValue
+    @param			_rValueToSet		the new value which is about to be set
+    @param			_rCurrentValue		the current value of the property
+    @return			sal_True, if the value could be converted and has changed
                     sal_False, if the value could be converted and has not changed
-    @exception      InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
+    @exception		InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
 */
 template <class TYPE>
 sal_Bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /*out*/_rOldValue, const staruno::Any& _rValueToSet, const TYPE& _rCurrentValue)
@@ -167,13 +167,13 @@ sal_Bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /
 }
 
 /** helper for implementing ::cppu::OPropertySetHelper::convertFastPropertyValue for enum values
-    @param          _rConvertedValue    the conversion result (if successfull)
-    @param          _rOldValue          the old value of the property, calculated from _rCurrentValue
-    @param          _rValueToSet        the new value which is about to be set
-    @param          _rCurrentValue      the current value of the property
-    @return         sal_True, if the value could be converted and has changed
+    @param			_rConvertedValue	the conversion result (if successfull)
+    @param			_rOldValue			the old value of the property, calculated from _rCurrentValue
+    @param			_rValueToSet		the new value which is about to be set
+    @param			_rCurrentValue		the current value of the property
+    @return			sal_True, if the value could be converted and has changed
                     sal_False, if the value could be converted and has not changed
-    @exception      InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
+    @exception		InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
 */
 template <class ENUMTYPE>
 sal_Bool tryPropertyValueEnum(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /*out*/_rOldValue, const staruno::Any& _rValueToSet, const ENUMTYPE& _rCurrentValue)
@@ -197,13 +197,13 @@ sal_Bool tryPropertyValueEnum(staruno::Any& /*out*/_rConvertedValue, staruno::An
 }
 
 /** helper for implementing ::cppu::OPropertySetHelper::convertFastPropertyValue for boolean properties
-    @param          _rConvertedValue    the conversion result (if successfull)
-    @param          _rOldValue          the old value of the property, calculated from _rCurrentValue
-    @param          _rValueToSet        the new value which is about to be set
-    @param          _rCurrentValue      the current value of the property
-    @return         sal_True, if the value could be converted and has changed
+    @param			_rConvertedValue	the conversion result (if successfull)
+    @param			_rOldValue			the old value of the property, calculated from _rCurrentValue
+    @param			_rValueToSet		the new value which is about to be set
+    @param			_rCurrentValue		the current value of the property
+    @return			sal_True, if the value could be converted and has changed
                     sal_False, if the value could be converted and has not changed
-    @exception      InvalidArgumentException thrown if the value could not be converted to a boolean type
+    @exception		InvalidArgumentException thrown if the value could not be converted to a boolean type
 */
 inline sal_Bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /*out*/_rOldValue, const staruno::Any& _rValueToSet, sal_Bool _bCurrentValue)
 {
@@ -220,14 +220,14 @@ inline sal_Bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno:
 }
 
 /** helper for implementing ::cppu::OPropertySetHelper::convertFastPropertyValue
-    @param          _rConvertedValue    the conversion result (if successfull)
-    @param          _rOldValue          the old value of the property, calculated from _rCurrentValue
-    @param          _rValueToSet        the new value which is about to be set
-    @param          _rCurrentValue      the current value of the property
-    @param          _rExpectedType      the type which the property should have (if not void)
-    @return         sal_True, if the value could be converted and has changed
+    @param			_rConvertedValue	the conversion result (if successfull)
+    @param			_rOldValue			the old value of the property, calculated from _rCurrentValue
+    @param			_rValueToSet		the new value which is about to be set
+    @param			_rCurrentValue		the current value of the property
+    @param			_rExpectedType		the type which the property should have (if not void)
+    @return			sal_True, if the value could be converted and has changed
                     sal_False, if the value could be converted and has not changed
-    @exception      InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
+    @exception		InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
 */
 COMPHELPER_DLLPUBLIC sal_Bool tryPropertyValue(staruno::Any& _rConvertedValue, staruno::Any& _rOldValue, const staruno::Any& _rValueToSet, const staruno::Any& _rCurrentValue, const staruno::Type& _rExpectedType);
 

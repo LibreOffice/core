@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ public class AccessibleIconChoiceCtrl extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, 
                                                         DesktopTools.createDesktop(
         (XMultiServiceFactory) Param.getMSF()));
     }
@@ -139,7 +139,7 @@ public class AccessibleIconChoiceCtrl extends TestCase {
      * @see ifc.accessibility._XAccessibleEventBroadcaster
      * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      */
-    protected TestEnvironment createTestEnvironment(TestParameters tParam,
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, 
                                                     PrintWriter log) {
         log.println("creating a test environment");
 
@@ -161,13 +161,13 @@ public class AccessibleIconChoiceCtrl extends TestCase {
 
         shortWait();
 
-        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+        XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class, 
                                                             xTextDoc);
 
         XController secondController = aModel1.getCurrentController();
 
         XDispatchProvider aProv = (XDispatchProvider) UnoRuntime.queryInterface(
-                                          XDispatchProvider.class,
+                                          XDispatchProvider.class, 
                                           secondController);
 
         XURLTransformer urlTransf = null;
@@ -214,15 +214,15 @@ public class AccessibleIconChoiceCtrl extends TestCase {
 
         shortWait();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, 
                                                               tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TREE);
 
-        XAccessibleContext closeButton = at.getAccessibleObjectForRole(xRoot,
-                                                                       AccessibleRole.PUSH_BUTTON,
+        XAccessibleContext closeButton = at.getAccessibleObjectForRole(xRoot, 
+                                                                       AccessibleRole.PUSH_BUTTON, 
                                                                        "Close");
 
         accCloseButton = (XAccessibleAction) UnoRuntime.queryInterface(
@@ -231,35 +231,35 @@ public class AccessibleIconChoiceCtrl extends TestCase {
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
-        tEnv.addObjRelation("XAccessibleSelection.multiSelection",
+        tEnv.addObjRelation("XAccessibleSelection.multiSelection", 
                             new Boolean(false));
-        tEnv.addObjRelation("XAccessibleSelection.OneAlwaysSelected",
+        tEnv.addObjRelation("XAccessibleSelection.OneAlwaysSelected", 
                             new Boolean(true));
 
         String[] expectedStateNames = new String[] {
-            "com.sun.star.accessibility.AccessibleStateType.ENABLED",
-            "com.sun.star.accessibility.AccessibleStateType.FOCUSABLE",
-            "com.sun.star.accessibility.AccessibleStateType.SHOWING",
-            "com.sun.star.accessibility.AccessibleStateType.VISIBLE",
-            "com.sun.star.accessibility.AccessibleStateType.MANAGES_DESCENDANTS",
+            "com.sun.star.accessibility.AccessibleStateType.ENABLED", 
+            "com.sun.star.accessibility.AccessibleStateType.FOCUSABLE", 
+            "com.sun.star.accessibility.AccessibleStateType.SHOWING", 
+            "com.sun.star.accessibility.AccessibleStateType.VISIBLE", 
+            "com.sun.star.accessibility.AccessibleStateType.MANAGES_DESCENDANTS", 
         };
 
         short[] expectedStates = new short[] {
-            com.sun.star.accessibility.AccessibleStateType.ENABLED,
-            com.sun.star.accessibility.AccessibleStateType.FOCUSABLE,
-            com.sun.star.accessibility.AccessibleStateType.SHOWING,
-            com.sun.star.accessibility.AccessibleStateType.VISIBLE,
-            com.sun.star.accessibility.AccessibleStateType.MANAGES_DESCENDANTS,
+            com.sun.star.accessibility.AccessibleStateType.ENABLED, 
+            com.sun.star.accessibility.AccessibleStateType.FOCUSABLE, 
+            com.sun.star.accessibility.AccessibleStateType.SHOWING, 
+            com.sun.star.accessibility.AccessibleStateType.VISIBLE, 
+            com.sun.star.accessibility.AccessibleStateType.MANAGES_DESCENDANTS, 
         };
 
         tEnv.addObjRelation("expectedStateNames", expectedStateNames);
         tEnv.addObjRelation("expectedStates", expectedStates);
 
         final XAccessibleSelection selection = (XAccessibleSelection) (XAccessibleSelection) UnoRuntime.queryInterface(
-                                                                              XAccessibleSelection.class,
+                                                                              XAccessibleSelection.class, 
                                                                               oObj);
 
-        tEnv.addObjRelation("EventProducer",
+        tEnv.addObjRelation("EventProducer", 
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 try {

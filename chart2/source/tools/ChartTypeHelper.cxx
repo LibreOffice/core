@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -307,7 +307,7 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
             xSeriesProp->getPropertyValue( C2U("StackingDirection") ) >>= eStacking;
             bStacked = (chart2::StackingDirection_Y_STACKING == eStacking);
         }
-
+        
         aRet.realloc( bStacked ? 3 : 6 );
         sal_Int32* pSeq = aRet.getArray();
         if(!bStacked)
@@ -320,7 +320,7 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
             else
             {
                 *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::TOP;
-                *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::BOTTOM;
+                *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::BOTTOM;            
             }
         }
         *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::CENTER;

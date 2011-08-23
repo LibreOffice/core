@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,12 +26,12 @@
  *
  ************************************************************************/
 
-#ifndef _SVX_UNOGALTHEME_HXX
-#define _SVX_UNOGALTHEME_HXX
+#ifndef _SVX_UNOGALTHEME_HXX 
+#define _SVX_UNOGALTHEME_HXX 
 
 #include <list>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase1.hxx> 
 #include <svl/lstner.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/gallery/XGalleryTheme.hpp>
@@ -39,7 +39,7 @@
 class Gallery;
 class GalleryTheme;
 struct GalleryObject;
-namespace unogallery { class GalleryItem; }
+namespace unogallery { class GalleryItem; } 
 
 namespace unogallery {
 
@@ -53,13 +53,13 @@ class GalleryTheme : public ::cppu::WeakImplHelper1< ::com::sun::star::gallery::
     friend class ::unogallery::GalleryItem;
 
 public:
-
+        
     GalleryTheme( const ::rtl::OUString& rThemeName );
     ~GalleryTheme();
-
+    
     static ::rtl::OUString getImplementationName_Static() throw();
     static ::com::sun::star::uno::Sequence< ::rtl::OUString >  getSupportedServiceNames_Static() throw();
-
+    
 protected:
 
     // XServiceInfo
@@ -70,11 +70,11 @@ protected:
     // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
-
+    
     // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL hasElements() throw (::com::sun::star::uno::RuntimeException);
-
+    
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -86,28 +86,28 @@ protected:
     virtual ::sal_Int32 SAL_CALL insertGraphicByIndex( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& Graphic, ::sal_Int32 Index ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL insertDrawingByIndex( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& Drawing, ::sal_Int32 Index ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-
+    
     // SfxListener
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-
+    
 private:
 
     typedef ::std::list< ::unogallery::GalleryItem* > GalleryItemList;
+    
+    GalleryItemList	maItemList;
+    ::Gallery*		mpGallery;
+    ::GalleryTheme*	mpTheme;
+    
+    ::GalleryTheme*	implGetTheme() const;
 
-    GalleryItemList maItemList;
-    ::Gallery*      mpGallery;
-    ::GalleryTheme* mpTheme;
-
-    ::GalleryTheme* implGetTheme() const;
-
-    void            implReleaseItems( GalleryObject* pObj );
-
-    void            implRegisterGalleryItem( ::unogallery::GalleryItem& rItem );
-    void            implDeregisterGalleryItem( ::unogallery::GalleryItem& rItem );
+    void 			implReleaseItems( GalleryObject* pObj );
+    
+    void			implRegisterGalleryItem( ::unogallery::GalleryItem& rItem );
+    void			implDeregisterGalleryItem( ::unogallery::GalleryItem& rItem );
 };
 
 }
 
-#endif
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

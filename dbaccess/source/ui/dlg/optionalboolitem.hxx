@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@ namespace dbaui
         OptionalBoolItem( sal_Int16 nWhich );
         OptionalBoolItem( const OptionalBoolItem& _rSource );
 
-        virtual int              operator==( const SfxPoolItem& _rItem ) const;
-        virtual SfxPoolItem*     Clone( SfxItemPool* _pPool = NULL ) const;
+        virtual int 			 operator==( const SfxPoolItem& _rItem ) const;
+        virtual SfxPoolItem*	 Clone( SfxItemPool* _pPool = NULL ) const;
 
         bool    HasValue() const                { return !!m_aValue; }
         void    ClearValue()                    { m_aValue.reset(); }

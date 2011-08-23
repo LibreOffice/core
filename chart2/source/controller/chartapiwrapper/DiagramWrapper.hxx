@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,8 +67,8 @@ class DiagramWrapper : public ::cppu::ImplInheritanceHelper12<
                       WrappedPropertySet
                      , ::com::sun::star::chart::XDiagram
                      , ::com::sun::star::chart::XAxisZSupplier
-                     , ::com::sun::star::chart::XTwoAxisXSupplier   //  : XAxisXSupplier
-                     , ::com::sun::star::chart::XTwoAxisYSupplier   //  : XAxisYSupplier
+                     , ::com::sun::star::chart::XTwoAxisXSupplier	//	: XAxisXSupplier
+                     , ::com::sun::star::chart::XTwoAxisYSupplier	//	: XAxisYSupplier
                      , ::com::sun::star::chart::XStatisticDisplay
                      , ::com::sun::star::chart::X3DDisplay
                      , ::com::sun::star::chart::X3DDefaultSetter

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -86,7 +86,7 @@ start:
         case SbxBYREF | SbxDECIMAL:
             {
             double dVal;
-            if( p->eType == SbxCURRENCY )
+            if( p->eType ==	SbxCURRENCY )
                 dVal = ImpCurrencyToDouble( p->nLong64 );
             else if( p->eType == SbxLONG64 )
                 dVal = ImpINT64ToDouble( p->nLong64 );
@@ -312,7 +312,7 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW ); *p->puInt64 = 0;
             }
             else
-                *p->puInt64 = n;
+                *p->puInt64 = n; 
             break;
         case SbxBYREF | SbxSINGLE:
             *p->pSingle = (float) n; break;

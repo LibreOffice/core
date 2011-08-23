@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,25 +45,25 @@ namespace xml { namespace sax { class XAttributeList; } }
 class XMLParaContext : public SvXMLImportContext
 {
     ::com::sun::star::uno::Reference <
-        ::com::sun::star::text::XTextRange > xStart;    // xub_StrLen nStart;
-    ::rtl::OUString             sStyleName;
+        ::com::sun::star::text::XTextRange > xStart;	// xub_StrLen nStart;
+    ::rtl::OUString				sStyleName;
     ::rtl::OUString             m_sXmlId;
     ::rtl::OUString             m_sAbout;
     ::rtl::OUString             m_sProperty;
     ::rtl::OUString             m_sContent;
     ::rtl::OUString             m_sDatatype;
     bool                        m_bHaveAbout;
-    sal_Int8                nOutlineLevel;
-    XMLHints_Impl           *pHints;
+    sal_Int8 				nOutlineLevel;
+    XMLHints_Impl			*pHints;
     // --> OD 2007-07-25 #i73509#
     sal_Bool                mbOutlineLevelAttrFound;
     // <--
-    sal_Bool                bIgnoreLeadingSpace;
-    sal_Bool                bHeading;
+    sal_Bool				bIgnoreLeadingSpace;
+    sal_Bool				bHeading;
     sal_Bool                bIsListHeader;
     sal_Bool                bIsRestart;
     sal_Int16               nStartValue;
-    sal_uInt8               nStarFontsConvFlags;
+    sal_uInt8				nStarFontsConvFlags;
 
 public:
 

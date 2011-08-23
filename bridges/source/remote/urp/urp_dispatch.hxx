@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ namespace bridges_urp {
     const sal_uInt8 HDRFLAG_EXCEPTION        = 0x20;
 
     void SAL_CALL urp_sendCloseConnection( uno_Environment *pEnvRemote );
-
+    
     extern "C" void SAL_CALL urp_sendRequest(
         uno_Environment *pEnvRemote,
         typelib_TypeDescription const * pMemberType,

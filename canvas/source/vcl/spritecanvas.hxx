@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,11 +67,11 @@ namespace vclcanvas
                                               ::com::sun::star::awt::XWindowListener,
                                               ::com::sun::star::util::XUpdatable,
                                               ::com::sun::star::beans::XPropertySet,
-                                              ::com::sun::star::lang::XServiceName >    WindowGraphicDeviceBase_Base;
+                                              ::com::sun::star::lang::XServiceName >	WindowGraphicDeviceBase_Base;
     typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::BaseMutexHelper< WindowGraphicDeviceBase_Base >,
-                                                 SpriteDeviceHelper,
+                                                 SpriteDeviceHelper, 
                                                  tools::LocalGuard,
-                                                 ::cppu::OWeakObject >  SpriteCanvasBase_Base;
+                                                 ::cppu::OWeakObject > 	SpriteCanvasBase_Base;
 
     /** Mixin SpriteSurface
 
@@ -96,9 +96,9 @@ namespace vclcanvas
     };
 
     typedef ::canvas::SpriteCanvasBase< SpriteCanvasBaseSpriteSurface_Base,
-                                        SpriteCanvasHelper,
+                                        SpriteCanvasHelper, 
                                         tools::LocalGuard,
-                                        ::cppu::OWeakObject >           SpriteCanvasBaseT;
+                                        ::cppu::OWeakObject >			SpriteCanvasBaseT;
 
     /** Product of this component's factory.
 
@@ -113,9 +113,9 @@ namespace vclcanvas
                          public RepaintTarget
     {
     public:
-        SpriteCanvas( const ::com::sun::star::uno::Sequence<
+        SpriteCanvas( const ::com::sun::star::uno::Sequence< 
                             ::com::sun::star::uno::Any >&               aArguments,
-                      const ::com::sun::star::uno::Reference<
+                      const ::com::sun::star::uno::Reference< 
                             ::com::sun::star::uno::XComponentContext >& rxContext );
 
         void initialize();
@@ -135,7 +135,7 @@ namespace vclcanvas
         //                                    Classname     Base doing refcounting        Base implementing the XComponent interface
         //                                       |                 |                            |
         //                                       V                 V                            V
-        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( SpriteCanvas, WindowGraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase );
+        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( SpriteCanvas, WindowGraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase ); 
 
         // XBufferController (partial)
         virtual ::sal_Bool SAL_CALL showBuffer( ::sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException);
@@ -151,7 +151,7 @@ namespace vclcanvas
         virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,
                               const ::com::sun::star::rendering::ViewState&   viewState,
                               const ::com::sun::star::rendering::RenderState& renderState,
-                              const ::Point&                                  rPt,
+                              const ::Point&                                  rPt, 
                               const ::Size&                                   rSz,
                               const GraphicAttr&                              rAttr ) const;
 

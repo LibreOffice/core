@@ -55,7 +55,7 @@ namespace connectivity
     {
 
         /*
-        **  java_sql_ResultSet
+        **	java_sql_ResultSet
         */
         typedef ::cppu::WeakComponentImplHelper12<      ::com::sun::star::sdbc::XResultSet,
                                                         ::com::sun::star::sdbc::XRow,
@@ -72,21 +72,21 @@ namespace connectivity
 
 
         typedef sal_Int64 TVoidPtr;
-        typedef ::std::allocator< TVoidPtr >    TVoidAlloc;
-        typedef ::std::vector<TVoidPtr>         TVoidVector;
+        typedef ::std::allocator< TVoidPtr >	TVoidAlloc;
+        typedef ::std::vector<TVoidPtr>			TVoidVector;
 
-        class OResultSet :  public  comphelper::OBaseMutex,
-                            public  OResultSet_BASE,
-                            public  ::cppu::OPropertySetHelper,
-                            public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
+        class OResultSet :	public	comphelper::OBaseMutex,
+                            public	OResultSet_BASE,
+                            public	::cppu::OPropertySetHelper,
+                            public	::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
         protected:
-            OCommonStatement*                           m_pStatement;
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>            m_xStatement;
+            OCommonStatement*							m_pStatement;
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>			m_xStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
-            sal_uInt32                                  m_nRowPos;
-            sal_uInt32                                  m_nOldRowPos;
-            sal_Bool                                    m_bWasNull;
+            sal_uInt32									m_nRowPos;
+            sal_uInt32									m_nOldRowPos;
+            sal_Bool									m_bWasNull;
             sal_Int32                                   m_nFetchSize;
             sal_Int32                                   m_nResultSetType;
             sal_Int32                                   m_nFetchDirection;
@@ -232,7 +232,7 @@ namespace connectivity
 protected:
             MQuery                   m_aQuery;
             OTable*                  m_pTable;
-            sal_Int32                   m_CurrentRowCount;
+            sal_Int32					m_CurrentRowCount;
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                                      m_xTableColumns;
 
@@ -244,13 +244,13 @@ protected:
             OValueRow                m_aParameterRow;
             ::std::vector< ::rtl::OUString> m_aAttributeStrings;
             sal_Int32                m_nParamIndex;
-            sal_Bool                 m_bIsAlwaysFalseQuery;
+            sal_Bool 				 m_bIsAlwaysFalseQuery;
             ::rtl::Reference<OKeySet>     m_pKeySet;
             OSortIndex*              m_pSortIndex;
-            sal_Int32                 m_nNewRow;        //inserted row
-            sal_Int32                     m_nUpdatedRow;    //updated row
-            sal_Int32                 m_RowStates;
-            sal_Int32                     m_bIsReadOnly;
+            sal_Int32 				  m_nNewRow;		//inserted row
+            sal_Int32					  m_nUpdatedRow;	//updated row
+            sal_Int32				  m_RowStates;
+            sal_Int32			          m_bIsReadOnly;
             inline void resetParameters() { m_nParamIndex = 0; }
 
             ::rtl::Reference<connectivity::OSQLColumns>  m_xColumns; // this are the select columns
@@ -282,7 +282,7 @@ protected:
             sal_Bool validRow( sal_uInt32 nRow );
             sal_Bool seekRow( eRowPosition pos, sal_Int32 nOffset = 0 );
             sal_Int32 deletedCount();
-            sal_Bool fillKeySet(sal_Int32 nMaxCardNumber);  //When we get new rows, fill the m_pKeySet items for them
+            sal_Bool fillKeySet(sal_Int32 nMaxCardNumber);	//When we get new rows, fill the m_pKeySet items for them
             sal_Int32 getRowForCardNumber(sal_Int32 nCardNum);
             const ORowSetValue& getValue(sal_Int32 rowIndex, sal_Int32 columnIndex)
                 throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

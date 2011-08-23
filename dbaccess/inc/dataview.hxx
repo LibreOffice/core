@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,19 +40,19 @@ class SvtMiscOptions;
 namespace dbaui
 {
     class IController;
-    class DBACCESS_DLLPUBLIC ODataView :    public Window
+    class DBACCESS_DLLPUBLIC ODataView :	public Window
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;  // the service factory to work with
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >	m_xServiceFactory;	// the service factory to work with
 
     protected:
-        IController&        m_rController;  // the controller in where we resides in
-        FixedLine*          m_pSeparator;   // our separator above the toolbox (may be NULL)
+        IController&        m_rController;	// the controller in where we resides in
+        FixedLine*			m_pSeparator;	// our separator above the toolbox (may be NULL)
         ::std::auto_ptr< ::svt::AcceleratorExecute> m_pAccel;
 
     public:
-        ODataView(  Window* pParent,
+        ODataView(	Window* pParent, 
                     IController& _rController,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& , 
                     WinBits nStyle = 0 );
         virtual ~ODataView();
 
@@ -71,8 +71,8 @@ namespace dbaui
         */
         virtual void resizeControls(const Size& /*_rDiff*/) { Resize(); }
 
-        void        enableSeparator( const sal_Bool _bEnable = sal_True );
-        sal_Bool    isSeparatorEnabled() const { return NULL != m_pSeparator; }
+        void		enableSeparator( const sal_Bool _bEnable = sal_True );
+        sal_Bool	isSeparatorEnabled() const { return NULL != m_pSeparator; }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() { return m_xServiceFactory;}
 

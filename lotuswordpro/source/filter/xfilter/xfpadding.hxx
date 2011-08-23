@@ -61,16 +61,16 @@
  * Change History
  * 2005-01-28 move some structure out of this file.
  ************************************************************************/
-#ifndef     _XFPADDING_HXX
-#define     _XFPADDING_HXX
+#ifndef		_XFPADDING_HXX
+#define		_XFPADDING_HXX
 
-#include    "xfglobal.hxx"
-#include    "ixfproperty.hxx"
+#include	"xfglobal.hxx"
+#include	"ixfproperty.hxx"
 
-#define XFPADDING_FLAG_LEFT     0X00000001
-#define XFPADDING_FLAG_RIGHT    0X00000002
-#define XFPADDING_FLAG_TOP      0X00000004
-#define XFPADDING_FLAG_BOTTOM   0X00000008
+#define XFPADDING_FLAG_LEFT		0X00000001
+#define XFPADDING_FLAG_RIGHT	0X00000002
+#define XFPADDING_FLAG_TOP		0X00000004
+#define XFPADDING_FLAG_BOTTOM	0X00000008
 
 /**
  * @brief
@@ -83,43 +83,43 @@ public:
 
 public:
     /**
-     * @descr   Reset all values.
+     * @descr	Reset all values.
      */
-    void    Reset();
+    void	Reset();
 
     /**
-     * @descr   Set padding left.
+     * @descr	Set padding left.
      */
-    void    SetLeft(double left);
+    void	SetLeft(double left);
 
     /**
-     * @descr   Set padding right.
+     * @descr	Set padding right.
      */
-    void    SetRight(double right);
+    void	SetRight(double right);
 
     /**
-     * @descr   Set padding top.
+     * @descr	Set padding top.
      */
-    void    SetTop(double top);
+    void	SetTop(double top);
 
     /**
-     * @descr   Set padding bottom.
+     * @descr	Set padding bottom.
      */
-    void    SetBottom(double bottom);
+    void	SetBottom(double bottom);
 
     /**
-     * @descr   Output padding properties.
+     * @descr	Output padding properties.
      */
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
     friend bool operator==(XFPadding& p1, XFPadding& p2);
     friend bool operator!=(XFPadding& p1, XFPadding& p2);
 private:
-    int     m_nFlag;
-    double  m_fLeft;
-    double  m_fRight;
-    double  m_fTop;
-    double  m_fBottom;
+    int		m_nFlag;
+    double	m_fLeft;
+    double	m_fRight;
+    double	m_fTop;
+    double	m_fBottom;
 };
 
 
@@ -128,7 +128,7 @@ inline XFPadding::XFPadding()
     Reset();
 }
 
-inline void XFPadding::Reset()
+inline void	XFPadding::Reset()
 {
     m_nFlag = 0;
     m_fLeft = 0;
@@ -137,33 +137,33 @@ inline void XFPadding::Reset()
     m_fBottom = 0;
 }
 
-inline void XFPadding::SetLeft(double left)
+inline void	XFPadding::SetLeft(double left)
 {
     m_fLeft = left;
     m_nFlag |= XFPADDING_FLAG_LEFT;
 }
 
-inline void XFPadding::SetRight(double right)
+inline void	XFPadding::SetRight(double right)
 {
     m_fRight = right;
     m_nFlag |= XFPADDING_FLAG_RIGHT;
 }
 
-inline void XFPadding::SetTop(double top)
+inline void	XFPadding::SetTop(double top)
 {
     m_fTop = top;
     m_nFlag |= XFPADDING_FLAG_TOP;
 }
 
-inline void XFPadding::SetBottom(double bottom)
+inline void	XFPadding::SetBottom(double bottom)
 {
     m_fBottom = bottom;
     m_nFlag |= XFPADDING_FLAG_BOTTOM;
 }
 
-inline void XFPadding::ToXml(IXFStream *pStrm)
+inline void	XFPadding::ToXml(IXFStream *pStrm)
 {
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
+    IXFAttrList	*pAttrList = pStrm->GetAttrList();
 
     if( (m_fLeft == m_fRight) && (m_fLeft == m_fTop) && (m_fLeft== m_fBottom ) && m_nFlag == 0x00000015 )
     {

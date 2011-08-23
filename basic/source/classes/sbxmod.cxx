@@ -814,7 +814,7 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                     if( nVarParCount > 1 )
                     {
                         SbxArrayRef xMethParameters = new SbxArray;
-                        xMethParameters->Put( pMethVar, 0 );    // Method as parameter 0
+                        xMethParameters->Put( pMethVar, 0 );	// Method as parameter 0
                         for( USHORT i = 1 ; i < nVarParCount ; ++i )
                         {
                             SbxVariable* pPar = pArg->Get( i );
@@ -847,7 +847,7 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                     aProcName += pProcProperty->GetName();
                     pMethVar = Find( aProcName, SbxCLASS_METHOD );
                 }
-                if( !pMethVar ) // Let
+                if( !pMethVar )	// Let
                 {
                     String aProcName;
                     aProcName.AppendAscii( "Property Let " );
@@ -859,7 +859,7 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 {
                     // Setup parameters
                     SbxArrayRef xArray = new SbxArray;
-                    xArray->Put( pMethVar, 0 ); // Method as parameter 0
+                    xArray->Put( pMethVar, 0 );	// Method as parameter 0
                     xArray->Put( pVar, 1 );
                     pMethVar->SetParameters( xArray );
 
@@ -1218,7 +1218,7 @@ USHORT SbModule::Run( SbMethod* pMeth )
 
             nRes = TRUE;
             pINST->pRun = pRt->pNext;
-            pINST->nCallLvl--;          // Call-Level down again
+            pINST->nCallLvl--;			// Call-Level down again
 
             // Exist an higher-ranking runtime instance?
             // Then take over SbDEBUG_BREAK, if set
@@ -1254,11 +1254,11 @@ USHORT SbModule::Run( SbMethod* pMeth )
             }
         }
         else
-               pINST->nCallLvl--;           // Call-Level down again
+               pINST->nCallLvl--;			// Call-Level down again
     }
     else
     {
-        pINST->nCallLvl--;          // Call-Level down again
+        pINST->nCallLvl--;			// Call-Level down again
         StarBASIC::FatalError( SbERR_STACK_OVERFLOW );
     }
 
@@ -1884,11 +1884,11 @@ BOOL SbJScriptModule::StoreData( SvStream& rStrm ) const
 SbMethod::SbMethod( const String& r, SbxDataType t, SbModule* p )
         : SbxMethod( r, t ), pMod( p )
 {
-    bInvalid     = TRUE;
-    nStart       =
+    bInvalid	 = TRUE;
+    nStart		 =
     nDebugFlags  =
-    nLine1       =
-    nLine2       = 0;
+    nLine1		 =
+    nLine2		 = 0;
     refStatics = new SbxArray;
     mCaller          = 0;
     // From: 1996-07.02: HACK due to 'Referenz could not be saved'
@@ -1899,11 +1899,11 @@ SbMethod::SbMethod( const SbMethod& r )
     : SvRefBase( r ), SbxMethod( r )
 {
     pMod         = r.pMod;
-    bInvalid     = r.bInvalid;
-    nStart       = r.nStart;
+    bInvalid	 = r.bInvalid;
+    nStart		 = r.nStart;
     nDebugFlags  = r.nDebugFlags;
-    nLine1       = r.nLine1;
-    nLine2       = r.nLine2;
+    nLine1		 = r.nLine1;
+    nLine2		 = r.nLine2;
         refStatics = r.refStatics;
     mCaller          = r.mCaller;
     SetFlag( SBX_NO_MODIFY );
@@ -1938,7 +1938,7 @@ BOOL SbMethod::LoadData( SvStream& rStrm, USHORT nVer )
     INT16 n;
     rStrm >> n;
     INT16 nTempStart = (INT16)nStart;
-    // nDebugFlags = n;     // From 1996-01-16: no longer take over
+    // nDebugFlags = n; 	// From 1996-01-16: no longer take over
     if( nVer == 2 )
         rStrm >> nLine1 >> nLine2 >> nTempStart >> bInvalid;
     // From: 1996-07-02: HACK ue to 'Referenz could not be saved'
@@ -2327,7 +2327,7 @@ void SbUserFormModule::triggerMethod( const String& aMethodToRun, Sequence< Any 
         if ( aArguments.getLength() > 0 )   // Setup parameters
         {
             SbxArrayRef xArray = new SbxArray;
-            xArray->Put( pMeth, 0 );    // Method as parameter 0
+            xArray->Put( pMeth, 0 );	// Method as parameter 0
 
             for ( sal_Int32 i = 0; i < aArguments.getLength(); ++i )
             {

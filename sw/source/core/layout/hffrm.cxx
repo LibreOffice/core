@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@
 #include <objectformatter.hxx>
 // <--
 
-extern BOOL bObjsDirect;    //frmtool.cxx
+extern BOOL bObjsDirect;	//frmtool.cxx
 
 static SwTwips lcl_GetFrmMinHeight(const SwLayoutFrm & rFrm)
 {
@@ -673,11 +673,11 @@ BOOL SwHeadFootFrm::GetEatSpacing() const
 
 /*************************************************************************
 |*
-|*  SwPageFrm::PrepareHeader()
+|*	SwPageFrm::PrepareHeader()
 |*
-|*  Beschreibung        Erzeugt oder Entfernt Header
-|*  Ersterstellung      MA 04. Feb. 93
-|*  Letzte Aenderung    MA 12. May. 96
+|*	Beschreibung		Erzeugt oder Entfernt Header
+|*	Ersterstellung		MA 04. Feb. 93
+|*	Letzte Aenderung	MA 12. May. 96
 |*
 |*************************************************************************/
 
@@ -714,14 +714,14 @@ void SwPageFrm::PrepareHeader()
     const BOOL bOn = !((SwFrmFmt*)pRegisteredIn)->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
 
     if ( bOn && rH.IsActive() )
-    {   //Header einsetzen, vorher entfernen falls vorhanden.
+    {	//Header einsetzen, vorher entfernen falls vorhanden.
         OSL_ENSURE( rH.GetHeaderFmt(), "FrmFmt fuer Header nicht gefunden." );
 
         if ( pLay->GetFmt() == (SwFrmFmt*)rH.GetHeaderFmt() )
-            return; //Der Footer ist bereits der richtige
+            return;	//Der Footer ist bereits der richtige
 
         if ( pLay->IsHeaderFrm() )
-        {   SwLayoutFrm *pDel = pLay;
+        {	SwLayoutFrm *pDel = pLay;
             pLay = (SwLayoutFrm*)pLay->GetNext();
             ::DelFlys( pDel, this );
             pDel->Cut();
@@ -734,7 +734,7 @@ void SwPageFrm::PrepareHeader()
             ::RegistFlys( this, pH );
     }
     else if ( pLay && pLay->IsHeaderFrm() )
-    {   //Header entfernen falls vorhanden.
+    {	//Header entfernen falls vorhanden.
         ::DelFlys( pLay, this );
         pLay->Cut();
         delete pLay;
@@ -742,11 +742,11 @@ void SwPageFrm::PrepareHeader()
 }
 /*************************************************************************
 |*
-|*  SwPageFrm::PrepareFooter()
+|*	SwPageFrm::PrepareFooter()
 |*
-|*  Beschreibung        Erzeugt oder Entfernt Footer
-|*  Ersterstellung      MA 04. Feb. 93
-|*  Letzte Aenderung    MA 12. May. 96
+|*	Beschreibung		Erzeugt oder Entfernt Footer
+|*	Ersterstellung		MA 04. Feb. 93
+|*	Letzte Aenderung	MA 12. May. 96
 |*
 |*************************************************************************/
 
@@ -764,14 +764,14 @@ void SwPageFrm::PrepareFooter()
     const BOOL bOn = !((SwFrmFmt*)pRegisteredIn)->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
 
     if ( bOn && rF.IsActive() )
-    {   //Footer einsetzen, vorher entfernen falls vorhanden.
+    {	//Footer einsetzen, vorher entfernen falls vorhanden.
         OSL_ENSURE( rF.GetFooterFmt(), "FrmFmt fuer Footer nicht gefunden." );
 
         if ( pLay->GetFmt() == (SwFrmFmt*)rF.GetFooterFmt() )
             return; //Der Footer ist bereits der richtige.
 
         if ( pLay->IsFooterFrm() )
-        {   ::DelFlys( pLay, this );
+        {	::DelFlys( pLay, this );
             pLay->Cut();
             delete pLay;
         }
@@ -781,7 +781,7 @@ void SwPageFrm::PrepareFooter()
             ::RegistFlys( this, pF );
     }
     else if ( pLay && pLay->IsFooterFrm() )
-    {   //Footer entfernen falls vorhanden.
+    {	//Footer entfernen falls vorhanden.
         ::DelFlys( pLay, this );
         ViewShell *pSh;
         if ( pLay->GetPrev() && 0 != (pSh = GetShell()) &&

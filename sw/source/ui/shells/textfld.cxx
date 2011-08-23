@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 #include <crsskip.hxx>
-#include <hintids.hxx>  //_immer_ vor den solar-Items
+#include <hintids.hxx>	//_immer_ vor den solar-Items
 
 #include <sfx2/lnkbase.hxx>
 #include <fmtfld.hxx>
@@ -85,18 +85,18 @@
 
 using namespace nsSwDocInfoSubType;
 
-extern BOOL bNoInterrupt;       // in mainwn.cxx
+extern BOOL bNoInterrupt;		// in mainwn.cxx
 
 String& lcl_AppendRedlineStr( String& rStr, USHORT nRedlId )
 {
     USHORT nResId = 0;
     switch( nRedlId )
     {
-    case nsRedlineType_t::REDLINE_INSERT:   nResId = STR_REDLINE_INSERTED;      break;
-    case nsRedlineType_t::REDLINE_DELETE:   nResId = STR_REDLINE_DELETED;       break;
-    case nsRedlineType_t::REDLINE_FORMAT:   nResId = STR_REDLINE_FORMATED;      break;
-    case nsRedlineType_t::REDLINE_TABLE:        nResId = STR_REDLINE_TABLECHG;      break;
-    case nsRedlineType_t::REDLINE_FMTCOLL:  nResId = STR_REDLINE_FMTCOLLSET;    break;
+    case nsRedlineType_t::REDLINE_INSERT:	nResId = STR_REDLINE_INSERTED; 		break;
+    case nsRedlineType_t::REDLINE_DELETE:	nResId = STR_REDLINE_DELETED;		break;
+    case nsRedlineType_t::REDLINE_FORMAT:	nResId = STR_REDLINE_FORMATED;		break;
+    case nsRedlineType_t::REDLINE_TABLE:		nResId = STR_REDLINE_TABLECHG;		break;
+    case nsRedlineType_t::REDLINE_FMTCOLL:	nResId = STR_REDLINE_FMTCOLLSET;	break;
     }
     if( nResId )
         rStr += SW_RESSTR( nResId );
@@ -302,7 +302,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             {
                 SfxViewFrame* pVFrame = GetView().GetViewFrame();
                 if (!pVFrame->HasChildWindow(FN_INSERT_FIELD))
-                    pVFrame->ToggleChildWindow(FN_INSERT_FIELD);    // Dialog anzeigen
+                    pVFrame->ToggleChildWindow(FN_INSERT_FIELD);	// Dialog anzeigen
 
                 // Flddlg auf neue TabPage umschalten
                 USHORT nId = SwFldDlgWrapper::GetChildWindowId();
@@ -370,7 +370,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     rSh.Push();
                     rSh.SwCrsrShell::Left(1, CRSR_SKIP_CHARS, FALSE);
                     pPostIt = (SwPostItField*)aFldMgr.GetCurFld();
-                    rSh.Pop(FALSE); // Cursorpos restaurieren
+                    rSh.Pop(FALSE);	// Cursorpos restaurieren
                  }
 
                 if (pPostIt)
@@ -393,7 +393,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             break;
             case FN_REDLINE_COMMENT:
             {
-                /*  this code can be used once we want redline comments in the margin, all other stuff can
+                /*	this code can be used once we want redline comments in the margin, all other stuff can
                     then be deleted
                 String sComment;
                 const SwRedline *pRedline = rSh.GetCurrRedline();
@@ -436,8 +436,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     const SwRedline *pActRed = rSh.SelPrevRedline();
 
                     if (pActRed == pRedline)
-                    {   // Neuer Cursor steht am Anfang des Current Redlines
-                        rSh.Pop();  // Alten Cursor wegwerfen
+                    {	// Neuer Cursor steht am Anfang des Current Redlines
+                        rSh.Pop();	// Alten Cursor wegwerfen
                         rSh.Push();
                         pActRed = rSh.SelPrevRedline();
                     }
@@ -447,13 +447,13 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     rSh.EndAction();
 
                     rSh.ClearMark();
-                    rSh.SelNextRedline();   // Aktueller Redline wird selektiert
+                    rSh.SelNextRedline();	// Aktueller Redline wird selektiert
 
                     rSh.StartAction();
                     rSh.Push();
                     pActRed = rSh.SelNextRedline();
                     BOOL bNext = pActRed != 0;
-                    rSh.Pop(FALSE); // Cursorpos restaurieren
+                    rSh.Pop(FALSE);	// Cursorpos restaurieren
 
                     if( rSh.IsCrsrPtAtEnd() )
                         rSh.SwapPam();
@@ -654,7 +654,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                 }
 
                 USHORT nTempWhich = pField ? pField->GetTyp()->Which() : USHRT_MAX;
-                if( USHRT_MAX == nTempWhich ||
+                if(	USHRT_MAX == nTempWhich ||
                     RES_POSTITFLD == nTempWhich ||
                     RES_SCRIPTFLD == nTempWhich ||
                     RES_AUTHORITY == nTempWhich )
@@ -797,7 +797,7 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
     {
         // Traveling nur bei mehr als einem Feld
         if( !pSh->IsCrsrPtAtEnd() )
-            pSh->SwapPam(); // Cursor hinter den Redline stellen
+            pSh->SwapPam();	// Cursor hinter den Redline stellen
 
         pSh->Push();
         const SwRedline *pActRed = pSh->SelNextRedline();

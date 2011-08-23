@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,18 +49,18 @@ namespace formula
             // not implemented. OModule is a static class
 
     protected:
-        static ::osl::Mutex s_aMutex;       /// access safety
-        static sal_Int32    s_nClients;     /// number of registered clients
-        static OModuleImpl* s_pImpl;        /// impl class. lives as long as at least one client for the module is registered
+        static ::osl::Mutex	s_aMutex;		/// access safety
+        static sal_Int32	s_nClients;		/// number of registered clients
+        static OModuleImpl*	s_pImpl;		/// impl class. lives as long as at least one client for the module is registered
 
     public:
         /// get the vcl res manager of the module
-        static ResMgr*  getResManager();
+        static ResMgr*	getResManager();
     protected:
         /// register a client for the module
-        static void registerClient();
+        static void	registerClient();
         /// revoke a client for the module
-        static void revokeClient();
+        static void	revokeClient();
 
     private:
         /** ensure that the impl class exists
@@ -72,13 +72,13 @@ namespace formula
     //=========================================================================
     //= OModuleClient
     //=========================================================================
-    /** base class for objects which uses any global module-specific ressources
+    /** base class for objects which uses any global module-specific ressources 
     */
     class FORMULA_DLLPUBLIC OModuleClient
     {
     public:
-        OModuleClient()     { OModule::registerClient(); }
-        ~OModuleClient()    { OModule::revokeClient(); }
+        OModuleClient()		{ OModule::registerClient(); }
+        ~OModuleClient()	{ OModule::revokeClient(); }
     };
 
     //=========================================================================
@@ -92,7 +92,7 @@ namespace formula
         ModuleRes(USHORT _nId) : ResId(_nId, *OModule::getResManager()) { }
     };
 //.........................................................................
-}   // namespace formula
+}	// namespace formula
 //.........................................................................
 
 #endif // FORMULA_MODULE_HELPER_RPT_HXX_

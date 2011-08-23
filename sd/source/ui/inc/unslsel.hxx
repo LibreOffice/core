@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,11 +43,11 @@ public:
                            : SdUndoAction(pTheDoc),
                              pOldOrder(pOld),
                              pNewOrder(pNew) {}
-    virtual ~SlideSelectionUndoAction()      {}
+    virtual ~SlideSelectionUndoAction() 	 {}
     virtual void Undo();
     virtual void Redo();
 };
 
-#endif      // _SD_UNSLSEL_HXX
+#endif		// _SD_UNSLSEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

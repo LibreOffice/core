@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,12 +49,12 @@ class bistream
 {
   public:
     // LIFECYCLE
-    virtual             ~bistream() {}
+    virtual				~bistream() {}
 
-    //  OPERATIONS
+    //	OPERATIONS
         /// @return Number of actually read bytes.
-    uintt               read(
-                            void *          out_pDest,
+    uintt 		        read(
+                            void *	        out_pDest,
                             uintt           i_nNrofBytes);
     // INQUIRY
         /**  @return True, if already one try to read had failed.
@@ -63,13 +63,13 @@ class bistream
              Though it will return false, if there is still somemething
              to read.
         */
-    bool                eod() const;
+    bool		        eod() const;
 
   private:
-    virtual uintt       do_read(
-                            void *          out_pDest,
+    virtual uintt 		do_read(
+                            void *	        out_pDest,
                             uintt           i_nNrofBytes) = 0;
-    virtual bool        inq_eod() const = 0;
+    virtual bool		inq_eod() const = 0;
 };
 
 
@@ -77,22 +77,22 @@ class bostream
 {
   public:
     // LIFECYCLE
-    virtual             ~bostream() {}
+    virtual				~bostream() {}
 
-    //  OPERATIONS
+    //	OPERATIONS
         /// @return Number of actually written bytes.
-    uintt               write(
-                            const void *    i_pSrc,
+    uintt 		        write(
+                            const void *   	i_pSrc,
                             uintt           i_nNrofBytes);
         /// @return Number of actually written bytes.
-    uintt               write(
-                            const char *    i_pSrc );
+    uintt 				write(
+                            const char *   	i_pSrc );
         /// @return Number of actually written bytes.
-    uintt               write(
-                            const String &  i_pSrc );
+    uintt 				write(
+                            const String &	i_pSrc );
   private:
-    virtual uintt       do_write(
-                            const void *    i_pSrc,
+    virtual uintt 		do_write(
+                            const void *   	i_pSrc,
                             uintt           i_nNrofBytes) = 0;
 };
 
@@ -101,44 +101,44 @@ class bstream : public bistream,
                 public bostream
 {
   public:
-    uintt               seek(
-                            intt            i_nDistanceFromBegin,
+    uintt 		        seek(
+                            intt 			i_nDistanceFromBegin,
                             seek_dir        i_eStartPoint = ::csv::beg );
-    uintt               position() const;
+    uintt 		        position() const;
 
   private:
-    virtual uintt       do_seek(
-                            intt            i_nDistance,
+    virtual uintt 		do_seek(
+                            intt 			i_nDistance,
                             seek_dir        i_eStartPoint = ::csv::beg ) = 0;
-    virtual uintt       inq_position() const = 0;
+    virtual uintt 		inq_position() const = 0;
 };
 
 
 // IMPLEMENTATION
-inline uintt
-bistream::read( void *         o_pDest,
+inline uintt 
+bistream::read( void *	       o_pDest,
                uintt           i_nNrofBytes)
     { return do_read(o_pDest, i_nNrofBytes); }
 inline bool
 bistream::eod() const
     { return inq_eod(); }
 
-inline uintt
+inline uintt 
 bostream::write( const void *   i_pSrc,
                  uintt          i_nNrofBytes)
     { return do_write( i_pSrc, i_nNrofBytes ); }
-inline uintt
+inline uintt 
 bostream::write( const char * i_sSrc )
     { return write( i_sSrc, strlen(i_sSrc) ); }
-inline uintt
-bostream::write( const String & i_sSrc )
+inline uintt 
+bostream::write( const String &	i_sSrc )
     { return write( i_sSrc.c_str(), i_sSrc.length() ); }
 
-inline uintt
+inline uintt 
 bstream::seek( intt     i_nDistance,
                seek_dir i_eStartPoint )
     { return do_seek( i_nDistance, i_eStartPoint ); }
-inline uintt
+inline uintt 
 bstream::position() const
     { return inq_position(); }
 

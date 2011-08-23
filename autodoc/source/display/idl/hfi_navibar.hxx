@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,16 +35,16 @@
     // COMPONENTS
 #include "hi_factory.hxx"
     // PARAMETERS
-
+                                                
 namespace ary
 {
 namespace idl
 {
-class CodeEntity;
+class CodeEntity;                                  
 }
 }
-
-
+                                                
+                                  
 class HF_NaviSubRow;
 
 /** @resp
@@ -54,8 +54,8 @@ class HF_IdlNavigationBar : public HtmlFactory_Idl
 {
   public:
                         HF_IdlNavigationBar(
-                            HtmlEnvironment_Idl &
-                                                io_rEnv,
+                            HtmlEnvironment_Idl & 
+                                                io_rEnv,  
                             Xml::Element &      o_rOut );
     virtual             ~HF_IdlNavigationBar();
 
@@ -70,13 +70,13 @@ class HF_IdlNavigationBar : public HtmlFactory_Idl
 
     /** Adds the subrow to the o_rOut argument of the constructor.
     */
-    DYN HF_NaviSubRow & Add_SubRow();
-
+    DYN HF_NaviSubRow & Add_SubRow();                
+    
   private:
-    const ary::idl::CodeEntity *
+    const ary::idl::CodeEntity *  
                         pCe;
 };
-
+        
 extern const String
     C_sLocalManualLinks;
 

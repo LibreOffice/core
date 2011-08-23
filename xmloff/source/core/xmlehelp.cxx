@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ void SvXMLExportHelper::AddLength( sal_Int32 nValue, MapUnit eValueUnit,
         nValue = -nValue;
         rOut.append( sal_Unicode('-') );
     }
-
+    
     // The new length is (nVal * nMul)/(nDiv*nFac*10)
     sal_Int32 nMul = 1000;
     sal_Int32 nDiv = 1;
@@ -68,16 +68,16 @@ void SvXMLExportHelper::AddLength( sal_Int32 nValue, MapUnit eValueUnit,
                         "output unit not supported for twip values" );
         case MAP_MM:
             // 0.01mm = 0.57twip (exactly)
-            nMul = 25400;   // 25.4 * 1000
-            nDiv = 1440;    // 72 * 20;
+            nMul = 25400;	// 25.4 * 1000
+            nDiv = 1440;	// 72 * 20;
             nFac = 100;
             eUnit = XML_UNIT_MM;
             break;
 
         case MAP_CM:
             // 0.001cm = 0.57twip (exactly)
-            nMul = 25400;   // 2.54 * 10000
-            nDiv = 1440;    // 72 * 20;
+            nMul = 25400;	// 2.54 * 10000
+            nDiv = 1440;	// 72 * 20;
             nFac = 1000;
             eUnit = XML_UNIT_CM;
             break;
@@ -96,7 +96,7 @@ void SvXMLExportHelper::AddLength( sal_Int32 nValue, MapUnit eValueUnit,
                         "output unit not supported for twip values" );
             // 0.0001in = 0.144twip (exactly)
             nMul = 100000;
-            nDiv = 1440;    // 72 * 20;
+            nDiv = 1440;	// 72 * 20;
             nFac = 10000;
             eUnit = XML_UNIT_INCH;
             break;
@@ -124,8 +124,8 @@ void SvXMLExportHelper::AddLength( sal_Int32 nValue, MapUnit eValueUnit,
                             "output unit not supported for 1/100mm values" );
             case MAP_MM:
                 // 0.01mm = 1 mm/100 (exactly)
-                nMul = 10;
-                nDiv = 1;
+                nMul = 10;	
+                nDiv = 1;	
                 nFac = nFac2;
                 eUnit = XML_UNIT_MM;
                 break;
@@ -133,7 +133,7 @@ void SvXMLExportHelper::AddLength( sal_Int32 nValue, MapUnit eValueUnit,
             case MAP_CM:
                 // 0.001mm = 1 mm/100 (exactly)
                 nMul = 10;
-                nDiv = 1;   // 72 * 20;
+                nDiv = 1;	// 72 * 20;
                 nFac = 10*nFac2;
                 eUnit = XML_UNIT_CM;
                 break;
@@ -231,7 +231,7 @@ void SvXMLExportHelper::AddPercentage( sal_Int32 nValue, OUStringBuffer& rOut )
     rOut.append( sal_Unicode('%' ) );
 }
 
-double SvXMLExportHelper::GetConversionFactor(::rtl::OUStringBuffer& rUnit,
+double SvXMLExportHelper::GetConversionFactor(::rtl::OUStringBuffer& rUnit, 
     const MapUnit eCoreUnit, const MapUnit eDestUnit)
 {
     double fRetval(1.0);
@@ -294,7 +294,7 @@ double SvXMLExportHelper::GetConversionFactor(::rtl::OUStringBuffer& rUnit,
                         fRetval = ( 25.4 / 72.0 );
                         eUnit = XML_UNIT_MM;
                         break;
-
+                        
                     case MAP_CM:
                         // 1cm = 72 / 2.54 pt (exactly)
                         fRetval = ( 2.54 / 72.0 );
@@ -454,7 +454,7 @@ MapUnit SvXMLExportHelper::GetUnitFromString(const ::rtl::OUString& rString, Map
             case sal_Unicode('c'):
             case sal_Unicode('C'):
             {
-                if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('m')
+                if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('m') 
                     || rString[nPos+1] == sal_Unicode('M')))
                     eRetUnit = MAP_CM;
                 break;
@@ -468,7 +468,7 @@ MapUnit SvXMLExportHelper::GetUnitFromString(const ::rtl::OUString& rString, Map
             case sal_Unicode('i'):
             case sal_Unicode('I'):
             {
-                if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('n')
+                if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('n') 
                     || rString[nPos+1] == sal_Unicode('n')))
                     eRetUnit = MAP_INCH;
                 break;
@@ -476,7 +476,7 @@ MapUnit SvXMLExportHelper::GetUnitFromString(const ::rtl::OUString& rString, Map
             case sal_Unicode('m'):
             case sal_Unicode('M'):
             {
-                if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('m')
+                if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('m') 
                     || rString[nPos+1] == sal_Unicode('M')))
                     eRetUnit = MAP_MM;
                 break;
@@ -484,10 +484,10 @@ MapUnit SvXMLExportHelper::GetUnitFromString(const ::rtl::OUString& rString, Map
             case sal_Unicode('p'):
             case sal_Unicode('P'):
             {
-                if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('t')
+                if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('t') 
                     || rString[nPos+1] == sal_Unicode('T')))
                     eRetUnit = MAP_POINT;
-                if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('c')
+                if(nPos+1 < nLen && (rString[nPos+1] == sal_Unicode('c') 
                     || rString[nPos+1] == sal_Unicode('C')))
                     eRetUnit = MAP_TWIP;
                 break;

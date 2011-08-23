@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ public class HTMLResult
     private FileWriter m_aOut;
     // private String m_sFilename;
     // private String m_sNamePrefix;              // the HTML files used a suffix to build it's right name
-
+    
     /**
      * ls is the current line separator (carridge return)
      */
@@ -66,9 +66,9 @@ public class HTMLResult
             // a.m_sNamePrefix = _sNamePrefix;
             // return a;
         }
-
+    
     // public String getFilename() {return m_sFilename;}
-
+    
     private void writeln(String _sStr)
     {
             try
@@ -91,7 +91,7 @@ public class HTMLResult
         }
     }
 
-
+    
     /**
      * create the HTML header
      * @param _sTitle
@@ -105,14 +105,14 @@ public class HTMLResult
                 writeln( "<LINK rel=\"stylesheet\" type=\"text/css\" href=\"/gfxcmp_ui/style.css\" media=\"screen\" />");
                 writeln( "</HEAD>");
                 writeln( "<BODY bgcolor=white>");
-                flush();
+                flush();            
         }
-
+    
     final static String TEST_TABLETITLE = "Document";
     final static String VISUAL_STATUS_TABLETITLE = "Visual status";
     final static String VISUAL_STATUS_MESSAGE_TABLETITLE = "Message";
     final static String FIRSTGFX_TABLETITLE = "Original print file as jpeg";
-
+    
     public void indexSection(String _sOfficeInfo)
         {
                 writeln( "<H2>Results for " + _sOfficeInfo + "</H2>");
@@ -160,7 +160,7 @@ public class HTMLResult
             a.append("</TD>");
             return a.toString();
         }
-
+    
     /**
      * Returns the given _sValue as a HTML Table header cell with _sValue as content
      * @param _sValue
@@ -174,18 +174,18 @@ public class HTMLResult
             a.append("</TH>");
             return a.toString();
         }
-
+    
     public void indexLine(String _sHTMLFile, String _sHTMLName, String _sStatusRunThrough, String _sStatusMessage)
         {
                 writeln( "<TR>");
                 writeln(tableDataCell( getHREF(_sHTMLFile, _sHTMLName) ) );
-                writeln(tableDataCell( "" ) );
+                writeln(tableDataCell( "" ) );                
                 writeln( tableDataCell(_sStatusRunThrough) );
                 writeln( tableDataCell(_sStatusMessage) );
                 writeln( "</TR>");
                 flush();
         }
-
+    
     public void close()
         {
             writeln( "</TABLE>");
@@ -198,7 +198,7 @@ public class HTMLResult
             {
             }
         }
-
+    
 // -----------------------------------------------------------------------------
     private String stronghtml(String _sValue)
         {
@@ -208,5 +208,5 @@ public class HTMLResult
             a.append("</STRONG>");
             return a.toString();
         }
-
+    
 }

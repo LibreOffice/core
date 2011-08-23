@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ struct SvXMLTokenMapEntry aEmptyMap[1] =
 };
 
 
-TokenContext::TokenContext( SvXMLImport& rImport,
+TokenContext::TokenContext( SvXMLImport& rImport, 
                             USHORT nPrefix,
                             const OUString& rLocalName,
                             const SvXMLTokenMapEntry* pAttributes,
@@ -62,7 +62,7 @@ TokenContext::~TokenContext()
 {
 }
 
-void TokenContext::StartElement(
+void TokenContext::StartElement( 
     const Reference<XAttributeList>& xAttributeList )
 {
     // iterate over attributes
@@ -100,7 +100,7 @@ void TokenContext::StartElement(
     }
 }
 
-SvXMLImportContext* TokenContext::CreateChildContext(
+SvXMLImportContext* TokenContext::CreateChildContext( 
     USHORT nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList>& xAttrList )
@@ -129,7 +129,7 @@ SvXMLImportContext* TokenContext::CreateChildContext(
 
 bool lcl_IsWhiteSpace( sal_Unicode c )
 {
-    return c == sal_Unicode(  ' ' )
+    return c == sal_Unicode(  ' ' )  
         || c == sal_Unicode( 0x09 )
         || c == sal_Unicode( 0x0A )
         || c == sal_Unicode( 0x0D );

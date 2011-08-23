@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,8 +36,8 @@
 class ImplB3DPolyPolygon;
 
 namespace basegfx
-{
-    class B3DPolygon;
+{ 
+    class B3DPolygon; 
     class B3DHomMatrix;
     class B2DHomMatrix;
 } // end of namespace basegfx
@@ -54,7 +54,7 @@ namespace basegfx
     private:
         ImplType                                        mpPolyPolygon;
 
-    public:
+    public:		
         B3DPolyPolygon();
         B3DPolyPolygon(const B3DPolyPolygon& rPolyPolygon);
         explicit B3DPolyPolygon(const B3DPolygon& rPolygon);

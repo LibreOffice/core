@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ Cx_Base::FollowUpContext()
 }
 
 void
-Context_MLComment::ReadCharChain( CharacterSource & io_rText )
+Context_MLComment::ReadCharChain( CharacterSource &	io_rText )
 {
     char cNext = NULCH;
 
@@ -89,7 +89,7 @@ Context_MLComment::ReadCharChain( CharacterSource & io_rText )
 }
 
 void
-Context_SLComment::ReadCharChain( CharacterSource & io_rText )
+Context_SLComment::ReadCharChain( CharacterSource &	io_rText )
 {
     jumpToEol(io_rText);
     if (io_rText.CurChar() != NULCH)
@@ -101,7 +101,7 @@ Context_SLComment::ReadCharChain( CharacterSource & io_rText )
 }
 
 void
-Context_Praeprocessor::ReadCharChain( CharacterSource & io_rText )
+Context_Praeprocessor::ReadCharChain( CharacterSource &	io_rText )
 {
     jumpToEol(io_rText);
     if (io_rText.CurChar() != NULCH)
@@ -113,7 +113,7 @@ Context_Praeprocessor::ReadCharChain( CharacterSource & io_rText )
 }
 
 void
-Context_Assignment::ReadCharChain( CharacterSource &    io_rText )
+Context_Assignment::ReadCharChain( CharacterSource &	io_rText )
 {
     // KORR_FUTURE
     // How to handle new lines within this, so he y get realised by
@@ -134,7 +134,7 @@ Context_Assignment::ReadCharChain( CharacterSource &    io_rText )
                     io_rText.MoveOn();
             }
             cNext = io_rText.MoveOn();
-        }   // endif (cNext == '"')
+        }	// endif (cNext == '"')
     } while (cNext != ';' AND cNext != ',' AND cNext != '}');
 
     if (cNext == ',' OR cNext == ';')

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -98,7 +98,7 @@ public class SpellChecker extends TestCase {
         String Iname = util.utils.getImplName(oObj);
         log.println("Implementation Name: "+Iname);
         TestEnvironment tEnv = new TestEnvironment(oObj);
-
+        
         XLinguServiceManager xLinguServiceManager = (XLinguServiceManager) UnoRuntime.queryInterface(XLinguServiceManager.class, LinguServiceManager);
         tEnv.addObjRelation("AlternativeChecker",xLinguServiceManager.getSpellChecker());
 

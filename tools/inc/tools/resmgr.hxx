@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,14 +53,14 @@ class InternalResMgr;
 struct RSHEADER_TYPE
 {
 private:
-    sal_uInt32              nId;        // Identifier der Resource
-    RESOURCE_TYPE           nRT;        // Resource Typ
-    sal_uInt32              nGlobOff;   // Globaler Offset
-    sal_uInt32              nLocalOff;  // Lokaler Offset
+    sal_uInt32				nId;		// Identifier der Resource
+    RESOURCE_TYPE			nRT;		// Resource Typ
+    sal_uInt32				nGlobOff;	// Globaler Offset
+    sal_uInt32				nLocalOff;	// Lokaler Offset
 
 public:
-    inline sal_uInt32       GetId();       // Identifier der Resource
-    inline RESOURCE_TYPE    GetRT();       // Resource Typ
+    inline sal_uInt32       GetId(); 	   // Identifier der Resource
+    inline RESOURCE_TYPE    GetRT(); 	   // Resource Typ
     inline sal_uInt32       GetGlobOff();   // Globaler Offset
     inline sal_uInt32       GetLocalOff();  // Lokaler Offset
 };
@@ -76,10 +76,10 @@ typedef void (*ResHookProc)( UniString& rStr );
 // ----------
 
 // Initialisierung
-#define RC_NOTYPE               0x00
+#define RC_NOTYPE				0x00
 // Globale Resource
-#define RC_GLOBAL               0x01
-#define RC_AUTORELEASE          0x02
+#define RC_GLOBAL				0x01
+#define RC_AUTORELEASE			0x02
 #define RC_NOTFOUND             0x04
 #define RC_FALLBACK_DOWN        0x08
 #define RC_FALLBACK_UP          0x10
@@ -89,23 +89,23 @@ class ResMgr;
 struct ImpRCStack
 {
     // pResource and pClassRes equal NULL: resource was not loaded
-    RSHEADER_TYPE * pResource;          // pointer to resource
-    void          * pClassRes;          // pointer to class specified init data
-    short           Flags;              // resource status
-    void *          aResHandle;         // Resource-Identifier from InternalResMgr
-    const Resource* pResObj;            // pointer to Resource object
-    sal_uInt32      nId;                // ResId used for error message
-    ResMgr*         pResMgr;            // ResMgr for Resource pResObj
+    RSHEADER_TYPE * pResource;		    // pointer to resource
+    void		  * pClassRes;		    // pointer to class specified init data
+    short			Flags;			    // resource status
+    void *			aResHandle; 	    // Resource-Identifier from InternalResMgr
+    const Resource* pResObj;		    // pointer to Resource object
+    sal_uInt32		nId;			    // ResId used for error message
+    ResMgr*         pResMgr;		    // ResMgr for Resource pResObj
 
-    void            Clear();
-    void            Init( ResMgr * pMgr, const Resource * pObj, sal_uInt32 nId );
+    void			Clear();
+    void			Init( ResMgr * pMgr, const Resource * pObj, sal_uInt32 nId );    
 };
 
 class TOOLS_DLLPUBLIC ResMgr
 {
 private:
     InternalResMgr*            pImpRes;
-    std::vector< ImpRCStack >  aStack;  // resource context stack
+    std::vector< ImpRCStack >  aStack;	// resource context stack
     int                        nCurStack;
     ResMgr*         pFallbackResMgr;    // fallback ResMgr in case the Resource
                                         // was not contained in this ResMgr
@@ -115,11 +115,11 @@ private:
     TOOLS_DLLPRIVATE void         incStack();
     TOOLS_DLLPRIVATE void         decStack();
 
-    TOOLS_DLLPRIVATE const ImpRCStack * StackTop( sal_uInt32 nOff = 0 ) const
+    TOOLS_DLLPRIVATE const ImpRCStack *	StackTop( sal_uInt32 nOff = 0 ) const
     {
         return (((int)nOff >= nCurStack) ? NULL : &aStack[nCurStack-nOff]);
     }
-    TOOLS_DLLPRIVATE void               Init( const rtl::OUString& rFileName );
+    TOOLS_DLLPRIVATE void				Init( const rtl::OUString& rFileName );
 
     TOOLS_DLLPRIVATE ResMgr( InternalResMgr * pImp );
 
@@ -139,9 +139,9 @@ private:
     // the next two methods are needed to prevent the string hook called
     // with the res mgr mutex locked
     // like GetString, but doesn't call the string hook
-    TOOLS_DLLPRIVATE static sal_uInt32  GetStringWithoutHook( UniString& rStr, const BYTE* pStr );
+    TOOLS_DLLPRIVATE static sal_uInt32	GetStringWithoutHook( UniString& rStr, const BYTE* pStr );
     // like ReadString but doesn't call the string hook
-    TOOLS_DLLPRIVATE UniString          ReadStringWithoutHook();
+    TOOLS_DLLPRIVATE UniString			ReadStringWithoutHook();
 
     static ResMgr* ImplCreateResMgr( InternalResMgr* pImpl ) { return new ResMgr( pImpl ); }
 
@@ -149,73 +149,73 @@ private:
     ResMgr(const ResMgr&);
     ResMgr& operator=(const ResMgr&);
 public:
-    static void         DestroyAllResMgr();  // Wird gerufen, wenn App beendet wird
+    static void 		DestroyAllResMgr();  // Wird gerufen, wenn App beendet wird
 
     ~ResMgr();
 
                         // Sprachabhaengige Ressource Library
-    static const sal_Char*  GetLang( LanguageType& eLanguage, USHORT nPrio = 0 ); //depricated! see "tools/source/rc/resmgr.cxx"
+    static const sal_Char*	GetLang( LanguageType& eLanguage, USHORT nPrio = 0 ); //depricated! see "tools/source/rc/resmgr.cxx"
     static ResMgr*      SearchCreateResMgr( const sal_Char* pPrefixName,
                                             com::sun::star::lang::Locale& rLocale );
-     static ResMgr*     CreateResMgr( const sal_Char* pPrefixName,
+     static ResMgr*		CreateResMgr( const sal_Char* pPrefixName,
                                       com::sun::star::lang::Locale aLocale = com::sun::star::lang::Locale( rtl::OUString(),
                                                                                                            rtl::OUString(),
                                                                                                            rtl::OUString()));
 
     // Testet ob Resource noch da ist
-    void                TestStack( const Resource * );
+    void				TestStack( const Resource * );
 
     // ist Resource verfuegbar
-    BOOL                IsAvailable( const ResId& rId,
+    BOOL				IsAvailable( const ResId& rId,
                                      const Resource* = NULL) const;
 
     // Resource suchen und laden
-    BOOL                GetResource( const ResId& rId, const Resource * = NULL );
-    static void *       GetResourceSkipHeader( const ResId& rResId, ResMgr ** ppResMgr );
+    BOOL				GetResource( const ResId& rId, const Resource * = NULL );
+    static void *		GetResourceSkipHeader( const ResId& rResId, ResMgr ** ppResMgr );
     // Kontext freigeben
-    void                PopContext( const Resource* = NULL );
+    void				PopContext( const Resource* = NULL );
 
     // Resourcezeiger erhoehen
-    void*               Increment( sal_uInt32 nSize );
+    void*				Increment( sal_uInt32 nSize );
 
     // Groesse ein Objektes in der Resource
-    static sal_uInt32   GetObjSize( RSHEADER_TYPE* pHT )
+    static sal_uInt32	GetObjSize( RSHEADER_TYPE* pHT )
                             { return( pHT->GetGlobOff() ); }
 
     // Liefert einen String aus der Resource
-    static sal_uInt32   GetString( UniString& rStr, const BYTE* pStr );
+    static sal_uInt32	GetString( UniString& rStr, const BYTE* pStr );
 
     // Groesse eines Strings in der Resource
-    static sal_uInt32   GetStringSize( sal_uInt32 nLen )
+    static sal_uInt32	GetStringSize( sal_uInt32 nLen )
                             { nLen++; return (nLen + nLen%2); }
-    static sal_uInt32   GetStringSize( const BYTE* pStr );
+    static sal_uInt32	GetStringSize( const BYTE* pStr );
 
     // return a int64
     static sal_uInt64   GetUInt64( void* pDatum );
     // Gibt einen long zurueck
-    static INT32        GetLong( void * pLong );
+    static INT32		GetLong( void * pLong );
     // return a short
-    static INT16        GetShort( void * pShort );
+    static INT16		GetShort( void * pShort );
 
     // Gibt einen Zeiger auf die Resource zurueck
-    void *              GetClass();
+    void *				GetClass();
 
-    RSHEADER_TYPE *     CreateBlock( const ResId & rId );
+    RSHEADER_TYPE * 	CreateBlock( const ResId & rId );
 
     // Gibt die verbleibende Groesse zurueck
-    sal_uInt32          GetRemainSize();
+    sal_uInt32			GetRemainSize();
 
     const rtl::OUString&GetFileName() const;
 
-    INT16               ReadShort();
-    INT32               ReadLong();
-    UniString           ReadString();
+    INT16				ReadShort();
+    INT32				ReadLong();
+    UniString			ReadString();
 
      // generate auto help id for current resource stack
     ULONG               GetAutoHelpId();
 
-    static void         SetReadStringHook( ResHookProc pProc );
-    static ResHookProc  GetReadStringHook();
+    static void 		SetReadStringHook( ResHookProc pProc );
+    static ResHookProc	GetReadStringHook();
     static void         SetDefaultLocale( const com::sun::star::lang::Locale& rLocale );
 };
 

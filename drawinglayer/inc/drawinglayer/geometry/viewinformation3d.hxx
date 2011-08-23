@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ namespace drawinglayer
         {
         private:
             /// pointer to private implementation class
-            ImpViewInformation3D*                   mpViewInformation3D;
+            ImpViewInformation3D*					mpViewInformation3D;
 
         public:
             /** Constructor: Create a ViewInformation3D
@@ -104,17 +104,17 @@ namespace drawinglayer
                 be preferred and overwrite the given parameter
             */
             ViewInformation3D(
-                const basegfx::B3DHomMatrix& rObjectTransformation,
-                const basegfx::B3DHomMatrix& rOrientation,
-                const basegfx::B3DHomMatrix& rProjection,
-                const basegfx::B3DHomMatrix& rDeviceToView,
+                const basegfx::B3DHomMatrix& rObjectTransformation, 
+                const basegfx::B3DHomMatrix& rOrientation, 
+                const basegfx::B3DHomMatrix& rProjection, 
+                const basegfx::B3DHomMatrix& rDeviceToView, 
                 double fViewTime,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rExtendedParameters);
 
             /** Constructor: Create a ViewInformation3D
 
                 @param rViewParameters
-                A sequence of property values which allows holding any combination of local and various
+                A sequence of property values which allows holding any combination of local and various 
                 other parameters. This constructor is feeded completely with a sequence of PropertyValues
                 which will be parsed to be able to offer the most used ones in a convenient way.
             */

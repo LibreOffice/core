@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,40 +34,40 @@
 
 #include <map>
 
-extern "C" const char*
+extern "C" const char* 
 pGetEncodingName( rtl_TextEncoding nEncoding );
 
 //
 // Cache TextToUnicode and UnicodeToText converter and conversion info which is
 // used in DrawXYZ routines and in the Event loop
-//
+//	
 
 class SalConverterCache {
 
     public:
                         SalConverterCache();
                         ~SalConverterCache();
-        Bool            EncodingHasChar(
+        Bool			EncodingHasChar( 
                                 rtl_TextEncoding nEncoding, sal_Unicode nChar );
-        rtl_UnicodeToTextConverter
+        rtl_UnicodeToTextConverter 
                         GetU2TConverter( rtl_TextEncoding nEncoding );
-        rtl_TextToUnicodeConverter
+        rtl_TextToUnicodeConverter 
                         GetT2UConverter( rtl_TextEncoding nEncoding );
-        Bool            IsSingleByteEncoding( rtl_TextEncoding nEncoding );
-        sal_Size        ConvertStringUTF16( const sal_Unicode *pText, int nTextLen,
-                                sal_Char *pBuffer, sal_Size nBufferSize,
+        Bool			IsSingleByteEncoding( rtl_TextEncoding nEncoding );
+        sal_Size 		ConvertStringUTF16( const sal_Unicode *pText, int nTextLen, 
+                                sal_Char *pBuffer, sal_Size nBufferSize, 
                                 rtl_TextEncoding nEncoding);
 
-        static SalConverterCache*
-                        GetInstance ();
+        static SalConverterCache* 
+                        GetInstance (); 
 
     private:
 
         struct ConverterT {
-            rtl_UnicodeToTextConverter  mpU2T;
-            rtl_TextToUnicodeConverter  mpT2U;
-            Bool                        mbSingleByteEncoding;
-            Bool                        mbValid;
+            rtl_UnicodeToTextConverter 	mpU2T;
+            rtl_TextToUnicodeConverter 	mpT2U;
+            Bool						mbSingleByteEncoding;
+            Bool						mbValid;
             ConverterT() :
                     mpU2T( NULL ),
                     mpT2U( NULL ),
@@ -84,7 +84,7 @@ class SalConverterCache {
             }
         };
 
-    std::map< rtl_TextEncoding, ConverterT >        m_aConverters;
+    std::map< rtl_TextEncoding, ConverterT >		m_aConverters;
 };
 
 

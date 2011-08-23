@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <WW8PieceTable.hxx>
 
 namespace writerfilter {
-namespace doctok
+namespace doctok 
 {
 using namespace ::std;
 
@@ -42,14 +42,14 @@ class WW8PieceTableImpl : public WW8PieceTable
 {
     typedef std::vector<CpAndFc> tEntries;
     tEntries mEntries;
-
+        
     tEntries::const_iterator findCp(const Cp & rCp) const;
     tEntries::const_iterator findFc(const Fc & rFc) const;
 
     mutable Cp2FcHashMap_t mCp2FcCache;
 
 public:
-    WW8PieceTableImpl(WW8Stream & rStream, sal_uInt32 nOffset,
+    WW8PieceTableImpl(WW8Stream & rStream, sal_uInt32 nOffset, 
                       sal_uInt32 nCount);
 
     virtual Fc cp2fc(const Cp & aCpIn) const;

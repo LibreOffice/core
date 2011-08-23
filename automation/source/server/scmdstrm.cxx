@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ SCmdStream::SCmdStream(SvStream *pIn)
 {
     pSammel = pIn;
     pCommStream = new SvCommStream( pSammel );
-//  SetCommStream( pCommStream );
+//	SetCommStream( pCommStream );
 }
 
 SCmdStream::~SCmdStream()

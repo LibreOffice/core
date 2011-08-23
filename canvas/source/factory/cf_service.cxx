@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
-namespace
+namespace 
 {
 
 OUString SAL_CALL getImplName()
@@ -95,7 +95,7 @@ class CanvasFactory
     mutable bool                      m_bCacheHasUseAcceleratedEntry;
     mutable bool                      m_bCacheHasUseAAEntry;
 
-    void checkConfigFlag( bool& r_bFlag,
+    void checkConfigFlag( bool& r_bFlag, 
                           bool& r_CacheFlag,
                           const OUString& nodeName ) const;
     Reference<XInterface> use(
@@ -150,7 +150,7 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
     m_bCacheHasUseAcceleratedEntry(),
     m_bCacheHasUseAAEntry()
 {
-    try
+    try 
     {
         // read out configuration for preferred services:
         Reference<lang::XMultiServiceFactory> xConfigProvider(
@@ -167,10 +167,10 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
         m_xCanvasConfigNameAccess.set(
             xConfigProvider->createInstanceWithArguments(
                 OUSTR("com.sun.star.configuration.ConfigurationAccess"),
-                Sequence<Any>( &propValue, 1 ) ),
+                Sequence<Any>( &propValue, 1 ) ), 
             UNO_QUERY_THROW );
 
-        propValue = makeAny(
+        propValue = makeAny( 
             beans::PropertyValue(
                 OUSTR("nodepath"), -1,
                 makeAny( OUSTR("/org.openoffice.Office.Canvas/CanvasServiceList") ),
@@ -189,7 +189,7 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
         while( pCurr != pEnd )
         {
             Reference<container::XNameAccess> xEntryNameAccess(
-                xHierarchicalNameAccess->getByHierarchicalName(*pCurr),
+                xHierarchicalNameAccess->getByHierarchicalName(*pCurr), 
                 UNO_QUERY );
 
             if( xEntryNameAccess.is() )
@@ -206,11 +206,11 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
             ++pCurr;
         }
     }
-    catch (RuntimeException &)
+    catch (RuntimeException &) 
     {
         throw;
     }
-    catch (Exception&)
+    catch (Exception&) 
     {
     }
 
@@ -222,7 +222,7 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
         aServices[0] = OUSTR("com.sun.star.comp.rendering.Canvas.VCL");
         m_aAvailableImplementations.push_back( std::make_pair(OUSTR("com.sun.star.rendering.Canvas"),
                                                               aServices) );
-
+        
         aServices[0] = OUSTR("com.sun.star.comp.rendering.SpriteCanvas.VCL");
         m_aAvailableImplementations.push_back( std::make_pair(OUSTR("com.sun.star.rendering.SpriteCanvas"),
                                                               aServices) );
@@ -286,25 +286,25 @@ Reference<XInterface> CanvasFactory::createInstanceWithContext(
 //______________________________________________________________________________
 Reference<XInterface> CanvasFactory::use(
     OUString const & serviceName,
-    Sequence<Any> const & args,
+    Sequence<Any> const & args, 
     Reference<XComponentContext> const & xContext ) const
 {
     try {
         return m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
             serviceName, args, xContext);
     }
-    catch (RuntimeException &)
+    catch (RuntimeException &) 
     {
         throw;
     }
-    catch (Exception &)
+    catch (Exception &) 
     {
         return Reference<XInterface>();
     }
 }
 
 //______________________________________________________________________________
-void CanvasFactory::checkConfigFlag( bool& r_bFlag,
+void CanvasFactory::checkConfigFlag( bool& r_bFlag, 
                                      bool& r_CacheFlag,
                                      const OUString& nodeName ) const
 {
@@ -331,28 +331,28 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
 
     // forcing last entry from impl list, if config flag set
     bool bForceLastEntry(false);
-    checkConfigFlag( bForceLastEntry,
+    checkConfigFlag( bForceLastEntry, 
                      m_bCacheHasForcedLastImpl,
                      OUSTR("ForceSafeServiceImpl") );
-
+    
     // use anti-aliasing canvas, if config flag set (or not existing)
     bool bUseAAEntry(true);
     checkConfigFlag( bUseAAEntry,
                      m_bCacheHasUseAAEntry,
                      OUSTR("UseAntialiasingCanvas") );
-
+    
     // use accelerated canvas, if config flag set (or not existing)
     bool bUseAcceleratedEntry(true);
     checkConfigFlag( bUseAcceleratedEntry,
                      m_bCacheHasUseAcceleratedEntry,
                      OUSTR("UseAcceleratedCanvas") );
-
+    
     // try to reuse last working implementation for given service name
     const CacheVector::iterator aEnd(m_aCachedImplementations.end());
     CacheVector::iterator aMatch;
-    if( (aMatch=std::find_if(m_aCachedImplementations.begin(),
-                             aEnd,
-                             boost::bind(&OUString::equals,
+    if( (aMatch=std::find_if(m_aCachedImplementations.begin(), 
+                             aEnd, 
+                             boost::bind(&OUString::equals, 
                                          boost::cref(serviceName),
                                          boost::bind(
                                              std::select1st<CachePair>(),
@@ -366,9 +366,9 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     // lookup in available service list
     const AvailVector::const_iterator aAvailEnd(m_aAvailableImplementations.end());
     AvailVector::const_iterator aAvailImplsMatch;
-    if( (aAvailImplsMatch=std::find_if(m_aAvailableImplementations.begin(),
-                                       aAvailEnd,
-                                       boost::bind(&OUString::equals,
+    if( (aAvailImplsMatch=std::find_if(m_aAvailableImplementations.begin(), 
+                                       aAvailEnd, 
+                                       boost::bind(&OUString::equals, 
                                                    boost::cref(serviceName),
                                                    boost::bind(
                                                        std::select1st<AvailPair>(),
@@ -379,9 +379,9 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
 
     const AvailVector::const_iterator aAAEnd(m_aAAImplementations.end());
     AvailVector::const_iterator aAAImplsMatch;
-    if( (aAAImplsMatch=std::find_if(m_aAAImplementations.begin(),
-                                    aAAEnd,
-                                    boost::bind(&OUString::equals,
+    if( (aAAImplsMatch=std::find_if(m_aAAImplementations.begin(), 
+                                    aAAEnd, 
+                                    boost::bind(&OUString::equals, 
                                                 boost::cref(serviceName),
                                                 boost::bind(
                                                     std::select1st<AvailPair>(),
@@ -392,9 +392,9 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
 
     const AvailVector::const_iterator aAccelEnd(m_aAcceleratedImplementations.end());
     AvailVector::const_iterator aAccelImplsMatch;
-    if( (aAccelImplsMatch=std::find_if(m_aAcceleratedImplementations.begin(),
-                                       aAccelEnd,
-                                       boost::bind(&OUString::equals,
+    if( (aAccelImplsMatch=std::find_if(m_aAcceleratedImplementations.begin(), 
+                                       aAccelEnd, 
+                                       boost::bind(&OUString::equals, 
                                                    boost::cref(serviceName),
                                                    boost::bind(
                                                        std::select1st<AvailPair>(),
@@ -419,7 +419,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     if( bForceLastEntry )
         pCurrImpl = pEndImpl-1;
 
-    while( pCurrImpl != pEndImpl )
+    while( pCurrImpl != pEndImpl ) 
     {
         const OUString aCurrName(pCurrImpl->trim());
 
@@ -428,7 +428,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
         const bool bIsAcceleratedImpl(
             std::find_if(pFirstAccelImpl,
                          pEndAccelImpl,
-                         boost::bind(&OUString::equals,
+                         boost::bind(&OUString::equals, 
                                      boost::cref(aCurrName),
                                      boost::bind(
                                          &OUString::trim,
@@ -439,7 +439,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
         const bool bIsAAImpl(
             std::find_if(pFirstAAImpl,
                          pEndAAImpl,
-                         boost::bind(&OUString::equals,
+                         boost::bind(&OUString::equals, 
                                      boost::cref(aCurrName),
                                      boost::bind(
                                          &OUString::trim,
@@ -456,7 +456,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
             Reference<XInterface> xCanvas(
                 use( pCurrImpl->trim(), args, xContext ) );
 
-            if(xCanvas.is())
+            if(xCanvas.is()) 
             {
                 if( aMatch != aEnd )
                 {
@@ -467,7 +467,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
                 else
                 {
                     // new service name, add new cache entry
-                    m_aCachedImplementations.push_back(std::make_pair(serviceName,
+                    m_aCachedImplementations.push_back(std::make_pair(serviceName, 
                                                                       pCurrImpl->trim()));
                 }
 

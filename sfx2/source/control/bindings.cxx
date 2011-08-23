@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -2365,7 +2365,7 @@ BOOL SfxBindings::ExecuteCommand_Impl( const String& rCommand )
             ::rtl::OUString sAppName;
             try
             {
-                static ::rtl::OUString our_aModuleManagerName = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
+                static ::rtl::OUString our_aModuleManagerName = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager"); 
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager =
                     ::comphelper::getProcessServiceFactory();
                 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > xModuleManager(

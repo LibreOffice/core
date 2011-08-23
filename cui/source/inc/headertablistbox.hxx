@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,23 +36,23 @@
 class _HeaderTabListBox : public Control
 {
 private:
-    SvHeaderTabListBox          maListBox;
-    HeaderBar                   maHeaderBar;
+    SvHeaderTabListBox			maListBox;
+    HeaderBar					maHeaderBar;
 protected:
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar* );
-    virtual long                Notify( NotifyEvent& rNEvt );
+    virtual long				Notify( NotifyEvent& rNEvt );
 public:
                                 _HeaderTabListBox( Window* pParent, const ResId& rId );
-    virtual                     ~_HeaderTabListBox();
+    virtual						~_HeaderTabListBox();
 
-    inline SvHeaderTabListBox&  GetListBox( void );
-    inline HeaderBar&           GetHeaderBar( void );
+    inline SvHeaderTabListBox&	GetListBox( void );
+    inline HeaderBar&			GetHeaderBar( void );
 
-    void                        ConnectElements( void );
+    void						ConnectElements( void );
                                     // should be called after all manipulations on elements are done
                                     // calcs real sizes depending on sizes of this
-    void                        Show( BOOL bVisible = TRUE, USHORT nFlags = 0 );    // same meaning as Windows::Show()
-    void                        Enable( bool bEnable = true, bool bChild = true );  // same meaning as Windows::Enable()
+    void						Show( BOOL bVisible = TRUE, USHORT nFlags = 0 );	// same meaning as Windows::Show()
+    void						Enable( bool bEnable = true, bool bChild = true );	// same meaning as Windows::Enable()
 };
 
 inline SvHeaderTabListBox& _HeaderTabListBox::GetListBox( void )

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,10 +39,10 @@ namespace dxcanvas
 {
     namespace
     {
-        ::osl::Mutex*   p_gdiPlusUsageCountMutex( osl::Mutex::getGlobalMutex() );
-        int             n_gdiPlusUsageCount( 0 );
+        ::osl::Mutex* 	p_gdiPlusUsageCountMutex( osl::Mutex::getGlobalMutex() );
+        int				n_gdiPlusUsageCount( 0 );
 
-        ULONG_PTR       a_GdiPlusToken;     // GDI+ handle. Owned by this object
+        ULONG_PTR		a_GdiPlusToken;		// GDI+ handle. Owned by this object        
     }
 
     GDIPlusUserSharedPtr GDIPlusUser::createInstance()
@@ -52,7 +52,7 @@ namespace dxcanvas
 
     GDIPlusUser::~GDIPlusUser()
     {
-        ::osl::MutexGuard aGuard( *p_gdiPlusUsageCountMutex );
+        ::osl::MutexGuard aGuard( *p_gdiPlusUsageCountMutex ); 
 
         --n_gdiPlusUsageCount;
 
@@ -62,7 +62,7 @@ namespace dxcanvas
 
     GDIPlusUser::GDIPlusUser()
     {
-        ::osl::MutexGuard aGuard( *p_gdiPlusUsageCountMutex );
+        ::osl::MutexGuard aGuard( *p_gdiPlusUsageCountMutex ); 
 
         if( n_gdiPlusUsageCount == 0 )
         {
@@ -72,8 +72,8 @@ namespace dxcanvas
             // default constructor
             Gdiplus::GdiplusStartupInput gdiPlusStartupInput;
 
-            Gdiplus::GdiplusStartup( &a_GdiPlusToken,
-                                     &gdiPlusStartupInput,
+            Gdiplus::GdiplusStartup( &a_GdiPlusToken, 
+                                     &gdiPlusStartupInput, 
                                      NULL );
         }
 

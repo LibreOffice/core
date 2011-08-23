@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,23 +39,23 @@ namespace comphelper
 
     //==================================================================================
     //= OMutexAndBroadcastHelper - a class which holds a Mutex and a OBroadcastHelper;
-    //=                 needed because when deriving from OPropertySetHelper,
-    //=                 the OBroadcastHelper has to be initialized before
-    //=                 the OPropertySetHelper
+    //=					needed because when deriving from OPropertySetHelper,
+    //=					the OBroadcastHelper has to be initialized before
+    //=					the OPropertySetHelper
     //==================================================================================
     class OMutexAndBroadcastHelper
     {
     protected:
-        ::osl::Mutex                m_aMutex;
-        ::cppu::OBroadcastHelper    m_aBHelper;
-
+        ::osl::Mutex				m_aMutex;
+        ::cppu::OBroadcastHelper	m_aBHelper;
+        
     public:
         OMutexAndBroadcastHelper() : m_aBHelper( m_aMutex ) { }
-
-        ::osl::Mutex&                   GetMutex()                  { return m_aMutex; }
-        ::cppu::OBroadcastHelper&       GetBroadcastHelper()        { return m_aBHelper; }
-        const ::cppu::OBroadcastHelper& GetBroadcastHelper() const  { return m_aBHelper; }
-
+        
+        ::osl::Mutex&					GetMutex()					{ return m_aMutex; }
+        ::cppu::OBroadcastHelper&		GetBroadcastHelper()		{ return m_aBHelper; }
+        const ::cppu::OBroadcastHelper&	GetBroadcastHelper() const	{ return m_aBHelper; }
+        
     };
 
     // base class for all classes who are derived from OPropertySet and from OComponent

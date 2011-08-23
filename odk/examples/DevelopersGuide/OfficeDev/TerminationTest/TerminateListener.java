@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import com.sun.star.frame.TerminationVetoException;
@@ -45,9 +45,9 @@ public class TerminateListener implements XTerminateListener {
         System.out.println("about to terminate...");
     }
 
-    public void queryTermination(com.sun.star.lang.EventObject eventObject)
+    public void queryTermination(com.sun.star.lang.EventObject eventObject) 
         throws TerminationVetoException {
-
+        
         // test if we can terminate now
         if (TerminationTest.isAtWork() == true) {
             System.out.println("Terminate while we are at work? You can't mean it serious ;-)!");
@@ -56,5 +56,5 @@ public class TerminateListener implements XTerminateListener {
     }
 
     public void disposing(com.sun.star.lang.EventObject eventObject) {
-    }
+    }    
 }

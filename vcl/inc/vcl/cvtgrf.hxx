@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,15 +37,15 @@
 // - GraphicConverter -
 // --------------------
 
-struct  ConvertData;
-class   Graphic;
+struct	ConvertData;
+class	Graphic;
 
 class VCL_DLLPUBLIC GraphicConverter
 {
 private:
 
-    Link                maFilterHdl;
-    ConvertData*        mpConvertData;
+    Link				maFilterHdl;
+    ConvertData*		mpConvertData;
 
 public:
     SAL_DLLPRIVATE ULONG    ImplConvert( ULONG nInFormat, void* pInBuffer, ULONG nInBufSize,
@@ -56,13 +56,13 @@ public:
                         GraphicConverter();
                         ~GraphicConverter();
 
-    static ULONG        Import( SvStream& rIStm, Graphic& rGraphic, ULONG nFormat = CVT_UNKNOWN );
-    static ULONG        Export( SvStream& rOStm, const Graphic& rGraphic, ULONG nFormat );
+    static ULONG		Import( SvStream& rIStm, Graphic& rGraphic, ULONG nFormat = CVT_UNKNOWN );
+    static ULONG		Export( SvStream& rOStm, const Graphic& rGraphic, ULONG nFormat );
 
-    ConvertData*        GetConvertData() { return mpConvertData; }
+    ConvertData*		GetConvertData() { return mpConvertData; }
 
-    void                SetFilterHdl( const Link& rLink ) { maFilterHdl = rLink; }
-    const Link&         GetFilterHdl() const { return maFilterHdl; }
+    void				SetFilterHdl( const Link& rLink ) { maFilterHdl = rLink; }
+    const Link&			GetFilterHdl() const { return maFilterHdl; }
 };
 
 #endif // _SV_CVTGRF_HXX

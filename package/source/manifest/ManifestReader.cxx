@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,13 +50,13 @@ using namespace ::com::sun::star::packages::manifest;
 using ::rtl::OUString;
 
 ManifestReader::ManifestReader( const Reference < XMultiServiceFactory > & xNewFactory )
-: xFactory ( xNewFactory )
+: xFactory ( xNewFactory ) 
 {
 }
 ManifestReader::~ManifestReader()
 {
 }
-Sequence< Sequence< PropertyValue > > SAL_CALL ManifestReader::readManifestSequence( const Reference< XInputStream >& rStream )
+Sequence< Sequence< PropertyValue > > SAL_CALL ManifestReader::readManifestSequence( const Reference< XInputStream >& rStream ) 
     throw (::com::sun::star::uno::RuntimeException)
 {
     Sequence < Sequence < PropertyValue > > aManifestSequence;
@@ -74,8 +74,8 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ManifestReader::readManifestSeque
             xParser->parseStream( aParserInput );
             aManifestSequence.realloc ( aManVector.size() );
             Sequence < PropertyValue > * pSequence = aManifestSequence.getArray();
-            ::std::vector < Sequence < PropertyValue > >::const_iterator aIter = aManVector.begin();
-            ::std::vector < Sequence < PropertyValue > >::const_iterator aEnd = aManVector.end();
+            ::std::vector < Sequence < PropertyValue > >::const_iterator aIter = aManVector.begin(); 
+            ::std::vector < Sequence < PropertyValue > >::const_iterator aEnd = aManVector.end(); 
             while( aIter != aEnd )
                 *pSequence++ = (*aIter++);
         }
@@ -124,7 +124,7 @@ OUString ManifestReader::getImplementationName()
 sal_Bool SAL_CALL ManifestReader::supportsService(OUString const & rServiceName)
     throw (RuntimeException)
 {
-    return static_supportsService ( rServiceName );
+    return static_supportsService ( rServiceName ); 
 }
 
 Sequence < OUString > ManifestReader::getSupportedServiceNames()

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <uielement/menubarmanager.hxx>
 #include <xml/menuconfiguration.hxx>
@@ -49,7 +49,7 @@
 #include <services.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -74,7 +74,7 @@
 #include <com/sun/star/frame/status/Visibility.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
@@ -109,7 +109,7 @@ struct SystemMenuData
 };
 
 //_________________________________________________________________________________________________________________
-//  namespace
+//	namespace
 //_________________________________________________________________________________________________________________
 
 using namespace ::cppu;
@@ -161,15 +161,15 @@ namespace framework
 {
 
 // special menu ids/command ids for dynamic popup menus
-#define SID_SFX_START           5000
-#define SID_NEWDOCDIRECT        (SID_SFX_START + 537)
-#define SID_AUTOPILOTMENU       (SID_SFX_START + 1381)
-#define SID_PICKLIST            (SID_SFX_START + 510)
-#define SID_MDIWINDOWLIST       (SID_SFX_START + 610)
-#define SID_ADDONLIST           (SID_SFX_START + 1677)
-#define SID_HELPMENU            (SID_SFX_START + 410)
+#define SID_SFX_START			5000
+#define SID_NEWDOCDIRECT		(SID_SFX_START + 537)
+#define SID_AUTOPILOTMENU		(SID_SFX_START + 1381)
+#define SID_PICKLIST			(SID_SFX_START + 510)
+#define SID_MDIWINDOWLIST		(SID_SFX_START + 610)
+#define SID_ADDONLIST			(SID_SFX_START + 1677)
+#define SID_HELPMENU			(SID_SFX_START + 410)
 
-#define SFX_REFERER_USER        "private:user"
+#define SFX_REFERER_USER		"private:user"
 
 const ::rtl::OUString aCmdHelpIndex( RTL_CONSTASCII_USTRINGPARAM( ".uno:HelpIndex" ));
 const ::rtl::OUString aCmdToolsMenu( RTL_CONSTASCII_USTRINGPARAM( ".uno:ToolsMenu" ));
@@ -656,7 +656,7 @@ void MenuBarManager::RemoveListener()
             if ( pItemHandler->xMenuItemDispatch.is() )
             {
                 URL aTargetURL;
-                aTargetURL.Complete = pItemHandler->aMenuItemURL;
+                aTargetURL.Complete	= pItemHandler->aMenuItemURL;
                 m_xURLTransformer->parseStrict( aTargetURL );
 
                 pItemHandler->xMenuItemDispatch->removeStatusListener(
@@ -745,7 +745,7 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
     {
         // Release references to the dispatch object
         URL aTargetURL;
-        aTargetURL.Complete = pMenuItemDisposing->aMenuItemURL;
+        aTargetURL.Complete	= pMenuItemDisposing->aMenuItemURL;
 
         // Check reference of service manager before we use it. Reference could
         // be cleared due to RemoveListener call!
@@ -843,9 +843,9 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
     if ( pMenu == m_pVCLMenu )
     {
         // set/unset hiding disabled menu entries
-        sal_Bool bDontHide           = SvtMenuOptions().IsEntryHidingEnabled();
+        sal_Bool bDontHide			 = SvtMenuOptions().IsEntryHidingEnabled();
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        sal_Bool bShowMenuImages     = rSettings.GetUseImagesInMenus();
+        sal_Bool bShowMenuImages	 = rSettings.GetUseImagesInMenus();
         sal_Bool bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
 
         ResetableGuard aGuard( m_aLock );
@@ -878,10 +878,10 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
              nSymbolsStyle != m_nSymbolsStyle )
         {
             // The mode changed so we have to replace all images
-            m_bWasHiContrast    = bIsHiContrast;
-            m_bShowMenuImages   = bShowMenuImages;
-            m_bRetrieveImages   = sal_False;
-            m_nSymbolsStyle     = nSymbolsStyle;
+            m_bWasHiContrast	= bIsHiContrast;
+            m_bShowMenuImages	= bShowMenuImages;
+            m_bRetrieveImages	= sal_False;
+            m_nSymbolsStyle		= nSymbolsStyle;
             MenuManager::FillMenuImages(m_xFrame,pMenu,bIsHiContrast,bShowMenuImages);
         }
 
@@ -991,7 +991,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                             if ( xMenuItemDispatch.is() )
                             {
                                 pMenuItemHandler->xMenuItemDispatch = xMenuItemDispatch;
-                                pMenuItemHandler->aMenuItemURL      = aTargetURL.Complete;
+                                pMenuItemHandler->aMenuItemURL		= aTargetURL.Complete;
 
                                 if ( !bPopupMenu )
                                 {
@@ -1077,9 +1077,9 @@ IMPL_LINK( MenuBarManager, AsyncSettingsHdl, Timer*,)
 IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::Select" );
-    URL                     aTargetURL;
-    Sequence<PropertyValue> aArgs;
-    Reference< XDispatch >  xDispatch;
+    URL						aTargetURL;
+    Sequence<PropertyValue>	aArgs;
+    Reference< XDispatch >	xDispatch;
 
     {
         ResetableGuard aGuard( m_aLock );
@@ -1256,18 +1256,18 @@ sal_Bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHa
 void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rFrame, const Reference< XDispatchProvider >& rDispatchProvider, const rtl::OUString& rModuleIdentifier, sal_Bool bDelete, sal_Bool bDeleteChildren )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::FillMenuManager" );
-    m_xFrame            = rFrame;
-    m_bActive           = sal_False;
-    m_bDeleteMenu       = bDelete;
-    m_bDeleteChildren   = bDeleteChildren;
-    m_pVCLMenu          = pMenu;
-    m_bInitialized      = sal_False;
-    m_bIsBookmarkMenu   = sal_False;
+    m_xFrame			= rFrame;
+    m_bActive			= sal_False;
+    m_bDeleteMenu		= bDelete;
+    m_bDeleteChildren	= bDeleteChildren;
+    m_pVCLMenu			= pMenu;
+    m_bInitialized		= sal_False;
+    m_bIsBookmarkMenu	= sal_False;
     m_xDispatchProvider = rDispatchProvider;
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    m_bWasHiContrast    = rSettings.GetHighContrastMode();
-    m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
+    m_bWasHiContrast	= rSettings.GetHighContrastMode();
+    m_bShowMenuImages	= rSettings.GetUseImagesInMenus();
     m_bRetrieveImages   = sal_False;
 
     sal_Int32 nAddonsURLPrefixLength = ADDONSPOPUPMENU_URL_PREFIX.getLength();
@@ -1287,8 +1287,8 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                  aCommand == aSpecialWindowCommand )
             {
                 // Retrieve addon popup menus and add them to our menu bar
-                Reference< com::sun::star::frame::XModel >      xModel;
-                Reference< com::sun::star::frame::XController > xController( rFrame->getController(), UNO_QUERY );
+                Reference< com::sun::star::frame::XModel >		xModel;
+                Reference< com::sun::star::frame::XController >	xController( rFrame->getController(), UNO_QUERY );
                 if ( xController.is() )
                     xModel = Reference< com::sun::star::frame::XModel >( xController->getModel(), UNO_QUERY );
                 framework::AddonMenuManager::MergeAddonPopupMenus( rFrame, xModel, nPos, (MenuBar *)pMenu );
@@ -1809,7 +1809,7 @@ void MenuBarManager::FillMenu(
                         if ( nStyle & ::com::sun::star::ui::ItemStyle::RADIO_CHECK )
                            nBits |= MIB_RADIOCHECK;
                         pMenu->SetItemBits( nId, nBits );
-                    }
+                    } 
                     if ( xIndexContainer.is() )
                     {
                         PopupMenu* pNewPopupMenu = new PopupMenu;
@@ -2053,13 +2053,13 @@ USHORT MenuBarManager::FillItemCommand(::rtl::OUString& _rItemCommand,Menu* _pMe
 void MenuBarManager::Init(const Reference< XFrame >& rFrame,AddonMenu* pAddonMenu,sal_Bool bDelete,sal_Bool bDeleteChildren,bool _bHandlePopUp)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::Init" );
-    m_bActive           = sal_False;
-    m_bDeleteMenu       = bDelete;
-    m_bDeleteChildren   = bDeleteChildren;
-    m_pVCLMenu          = pAddonMenu;
-    m_xFrame            = rFrame;
-    m_bInitialized      = sal_False;
-    m_bIsBookmarkMenu   = sal_True;
+    m_bActive			= sal_False;
+    m_bDeleteMenu		= bDelete;
+    m_bDeleteChildren	= bDeleteChildren;
+    m_pVCLMenu			= pAddonMenu;
+    m_xFrame			= rFrame;
+    m_bInitialized		= sal_False;
+    m_bIsBookmarkMenu	= sal_True;
 
     rtl::OUString aModuleIdentifier;
     m_xPopupMenuControllerRegistration = Reference< ::com::sun::star::frame::XUIControllerRegistration >(
@@ -2067,7 +2067,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,AddonMenu* pAddonMen
         UNO_QUERY );
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    m_bWasHiContrast    = rSettings.GetHighContrastMode();
+    m_bWasHiContrast	= rSettings.GetHighContrastMode();
 
     Reference< XStatusListener > xStatusListener;
     Reference< XDispatch > xDispatch;

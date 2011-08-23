@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -127,7 +127,7 @@ public class OCheckBoxControl extends TestCase {
         } catch (com.sun.star.util.CloseVetoException e) {
             log.println("couldn't close document");
         } catch (com.sun.star.lang.DisposedException e) {
-            log.println("couldn't close document");
+            log.println("couldn't close document");            
         }
     }
 

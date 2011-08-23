@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,15 +31,15 @@
 
 typedef void ( *OPCODE_FKT )( SvStream &aStream, USHORT nLaenge );
 
-#define FKT_LIMIT   101
+#define FKT_LIMIT	101
 
-#define FKT_LIMIT123    101
+#define FKT_LIMIT123	101
 
-#define LOTUS_EOF   0x01
+#define LOTUS_EOF	0x01
 
 #define LOTUS_FILEPASSWD 0x4b
 
-#define LOTUS_PATTERN   0x284
+#define LOTUS_PATTERN	0x284
 
 #define LOTUS_FORMAT_INDEX 0x800
 

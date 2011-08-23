@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,9 @@
 #define SEARCH_OPTIONS_SELECTION    ((sal_uInt16)0x0100)
 #define SEARCH_OPTIONS_FAMILIES     ((sal_uInt16)0x0200)
 #define SEARCH_OPTIONS_FORMAT       ((sal_uInt16)0x0400)
-#define SEARCH_OPTIONS_MORE         ((sal_uInt16)0x0800)
-#define SEARCH_OPTIONS_SIMILARITY   ((sal_uInt16)0x1000)
-#define SEARCH_OPTIONS_CONTENT      ((sal_uInt16)0x2000)
+#define SEARCH_OPTIONS_MORE			((sal_uInt16)0x0800)
+#define SEARCH_OPTIONS_SIMILARITY	((sal_uInt16)0x1000)
+#define SEARCH_OPTIONS_CONTENT		((sal_uInt16)0x2000)
 
 
 #endif

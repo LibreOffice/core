@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ import util.utils;
 
 public class UnoTreeModel extends TestCase {
     private static XTextDocument xTextDoc;
-
+    
     /**
      * Creates StarOffice Writer document.
      */
@@ -51,34 +51,34 @@ public class UnoTreeModel extends TestCase {
         xTextDoc = WriterTools.createTextDoc(
             (XMultiServiceFactory) tParam.getMSF());
     }
-
+    
     /**
      * Disposes StarOffice Writer document.
      */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
         log.println("    disposing xTextDoc ");
-
+        
         util.DesktopTools.closeDoc(xTextDoc);
     }
-
+    
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
         PrintWriter log) {
         XInterface oObj = null;
-
+        
         try {
             oObj = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
                 "com.sun.star.awt.tree.TreeControlModel");
         } catch (Exception e) {
         }
-
+        
         log.println(
             "creating a new environment for TreeControlModel object");
-
+        
         TestEnvironment tEnv = new TestEnvironment(oObj);
-
+        
         tEnv.addObjRelation("OBJNAME", "com.sun.star.awt.tree.TreeControlModel");
         System.out.println("ImplementationName: " + utils.getImplName(oObj));
-
+        
         return tEnv;
     } // finish method getTestEnvironment
 } // finish class UnoControlListBoxModel

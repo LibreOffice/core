@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@
 #include <editeng/charscaleitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/xtable.hxx>       // XColorTable
+#include <svx/xtable.hxx>		// XColorTable
 #include <editeng/brshitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/emphitem.hxx>
@@ -717,15 +717,15 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     };
 
     SfxItemPool* pPool( new SfxItemPool(String::CreateFromAscii("ReportCharProperties"), ITEMID_FONT,ITEMID_WEIGHT_COMPLEX, aItemInfos, pDefaults) );
-    // not needed for font height pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );  // ripped, don't understand why
-    pPool->FreezeIdRanges();                        // the same
+    // not needed for font height pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );	// ripped, don't understand why
+    pPool->FreezeIdRanges();						// the same
     bool bSuccess = false;
     try
     {
         ::std::auto_ptr<SfxItemSet> pDescriptor( new SfxItemSet( *pPool, pRanges ) );
         lcl_CharPropertiesToItems( _rxReportControlFormat, *pDescriptor );
 
-        {   // want the dialog to be destroyed before our set
+        {	// want the dialog to be destroyed before our set
             ORptPageDialog aDlg(pParent, pDescriptor.get(),RID_PAGEDIALOG_CHAR);
             uno::Reference< report::XShape > xShape( _rxReportControlFormat, uno::UNO_QUERY );
             if ( xShape.is() )
@@ -763,7 +763,7 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
 
     //static USHORT pRanges[] =
     //{
-    //  XATTR_START,XATTR_END,
+    //	XATTR_START,XATTR_END,
  //       0
     //};
 
@@ -775,7 +775,7 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
 
         lcl_fillShapeToItems(_xShape,*pDescriptor);
 
-        {   // want the dialog to be destroyed before our set
+        {	// want the dialog to be destroyed before our set
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             ::std::auto_ptr<AbstractSvxAreaTabDialog> pDialog(pFact->CreateSvxAreaTabDialog( pParent,pDescriptor.get(),pModel.get() ));
             // #i74099# by default, the dialog deletes the current color table if a different one is loaded

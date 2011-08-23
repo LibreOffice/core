@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
     Window *pWindow = GetWindow();
     if ( pWindow->GetType() != WINDOW_WORKWINDOW )
     {
-        ::com::sun::star::uno::Exception *pException =
+        ::com::sun::star::uno::Exception *pException = 
             new ::com::sun::star::uno::RuntimeException;
         pException->Message = ::rtl::OUString::createFromAscii( "not a work window" );
         throw pException;
@@ -92,7 +92,7 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
         throw pException;
     }
     // create system parent data
-    SystemParentData aSysParentData;
+    SystemParentData aSysParentData; 
     aSysParentData.nSize = sizeof ( SystemParentData );
 #if defined( WIN ) || defined( WNT ) || defined ( OS2 )
     aSysParentData.hWnd = (HWND) nHandle;

@@ -2,7 +2,7 @@
 <!--***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
         <prop oor:name="ooVendor" install:module="brand">
             <value>${OOOVENDOR}</value>
         </prop>
-
+    
         <prop oor:name="ooSetupExtension" install:module="brand">
             <value >${PRODUCTEXTENSION}</value>
         </prop>

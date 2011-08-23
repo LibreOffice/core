@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ void OldStylePrintAdaptor::StartPage()
     mpData->maPages.back().maPageSize.Width = aPaperSize.getWidth();
     mpData->maPages.back().maPageSize.Height = aPaperSize.getHeight();
     getPrinter()->SetConnectMetaFile( &mpData->maPages.back().maPage );
-
+    
     // copy state into metafile
     boost::shared_ptr<Printer> pPrinter( getPrinter() );
     pPrinter->SetMapMode( pPrinter->GetMapMode() );

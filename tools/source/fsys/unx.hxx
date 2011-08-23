@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@
 #define DEFSTYLE        FSYS_STYLE_BSD
 #endif
 
-#define CMP_LOWER(s)    (s)
+#define CMP_LOWER(s) 	(s)
 #define TEMPNAME()      tmpnam(0)
 #define LOWER(aString)  (aString.Lower())
 

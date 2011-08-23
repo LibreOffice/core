@@ -15,7 +15,7 @@
 //
 //------------------------------
 
-WindowsRegistry::WindowsRegistry()
+WindowsRegistry::WindowsRegistry() 
 {
     OSVERSIONINFOA osverinfo;
     ZeroMemory(&osverinfo, sizeof(osverinfo));
@@ -37,7 +37,7 @@ RegistryKey WindowsRegistry::GetClassesRootKey(bool Writeable) const
 //------------------------------
 //
 //------------------------------
-
+    
 RegistryKey WindowsRegistry::GetCurrentUserKey(bool Writeable) const
 {
     return GetRegistryKey(HKEY_CURRENT_USER, Writeable);
@@ -68,14 +68,14 @@ RegistryKey WindowsRegistry::GetUserKey(bool Writeable) const
 RegistryKey WindowsRegistry::GetRegistryKey(HKEY RootKey, bool Writeable) const
 {
     RegistryKey regkey;
-
+    
     if (m_IsWinNT)
         regkey = RegistryKey(new RegistryKeyImplWinNT(RootKey));
     else
         regkey = RegistryKey(new RegistryKeyImplWin9x(RootKey));
 
     regkey->Open(Writeable);
-
+        
     return regkey;
 }
 

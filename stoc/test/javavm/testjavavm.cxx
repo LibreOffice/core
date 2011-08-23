@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
     if( ! xXInt.is())
         return sal_False;
     Reference<XJavaVM> xVM( xXInt, UNO_QUERY);
-    if( ! xVM.is())
+    if( ! xVM.is()) 
         return sal_False;
     Reference<XJavaThreadRegister_11> xreg11(xVM, UNO_QUERY);
     if( ! xreg11.is())
@@ -99,23 +99,23 @@ sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
 
     JavaVM* _jvm= *(JavaVM**) anyVM.getValue();
     JNIEnv *p_env;
-    if( _jvm->AttachCurrentThread((void**) &p_env, 0))
+    if( _jvm->AttachCurrentThread((void**) &p_env, 0)) 
         return sal_False;
 
-//  jclass aJProg = p_env->FindClass("TestJavaVM");
-//  if( p_env->ExceptionOccurred()){
-//      p_env->ExceptionDescribe();
-//      p_env->ExceptionClear();
-//  }
+//	jclass aJProg = p_env->FindClass("TestJavaVM");
+//	if( p_env->ExceptionOccurred()){
+//		p_env->ExceptionDescribe();
+//		p_env->ExceptionClear();
+//	}
 //
-//  jmethodID mid= p_env->GetStaticMethodID( aJProg,"main", "([Ljava/lang/String;)V");
+//	jmethodID mid= p_env->GetStaticMethodID( aJProg,"main", "([Ljava/lang/String;)V");
 
     jclass cls = p_env->FindClass( "TestJavaVM");
     if (cls == 0) {
         OSL_TRACE( "Can't find Prog class\n");
         exit(1);
     }
-
+ 
 //   jmethodID methid = p_env->GetStaticMethodID( cls, "main", "([Ljava/lang/String;)V");
 //    if (methid == 0) {
 //        OSL_TRACE("Can't find Prog.main\n");
@@ -127,7 +127,7 @@ sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
 //        OSL_TRACE("Out of memory\n");
 //        exit(1);
 //    }
-//    jobjectArray args = p_env->NewObjectArray( 1,
+//    jobjectArray args = p_env->NewObjectArray( 1, 
 //                        p_env->FindClass("java/lang/String"), jstr);
 //    if (args == 0) {
 //        OSL_TRACE( "Out of memory\n");
@@ -139,10 +139,10 @@ sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
     jmethodID id = p_env->GetStaticMethodID( cls, "getInt", "()I");
     if( id)
     {
-//      jint _i= p_env->CallStaticIntMethod(cls, id);
-        p_env->CallStaticIntMethod(cls, id);
+//		jint _i= p_env->CallStaticIntMethod(cls, id);
+        p_env->CallStaticIntMethod(cls, id);        
     }
-
+        
     if( p_env->ExceptionOccurred()){
         p_env->ExceptionDescribe();
         p_env->ExceptionClear();
@@ -162,7 +162,7 @@ SAL_IMPLEMENT_MAIN()
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
     Reference<XMultiComponentFactory> fac= context->getServiceManager();
     Reference<XMultiServiceFactory> xMgr( fac, UNO_QUERY);
-
+    
     sal_Bool bSucc = sal_False;
     try
     {
@@ -178,7 +178,7 @@ SAL_IMPLEMENT_MAIN()
             RTL_CONSTASCII_USTRINGPARAM( "javavm.uno" SAL_DLLEXTENSION ) );
         xImplReg->registerImplementation(
             sLibLoader, sJenLib, Reference< XSimpleRegistry >() );
-
+        
         bSucc = testJavaVM( xMgr );
     }
     catch (Exception & rExc)
@@ -193,7 +193,7 @@ SAL_IMPLEMENT_MAIN()
     Reference< XComponent > xCompContext( context, UNO_QUERY );
     xCompContext->dispose();
     printf("javavm %s", bSucc ? "succeeded" : "failed");
-//  cout << "javavm " << (bSucc ? "succeeded" : "failed") << " !" << endl;
+//	cout << "javavm " << (bSucc ? "succeeded" : "failed") << " !" << endl;
     return (bSucc ? 0 : -1);
 }
 

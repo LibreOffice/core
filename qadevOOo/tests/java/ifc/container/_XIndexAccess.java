@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -125,16 +125,16 @@ public class _XIndexAccess extends MultiMethodTest {
         tRes.tested("getByIndex()", result);
 
     } // end getByIndex
-
+    
     private boolean checkGetByIndex(int index){
         Object o = null;
         boolean result = true;
         try {
             log.println("getByIndex(" + index + ")");
             o = oObj.getByIndex(index);
-
+            
             if ( tEnv.getObjRelation("XIndexAccess.getByIndex.mustBeNull") != null){
-                result = (o == null);
+                result = (o == null);                
                 if (result) log.println("OK"); else log.println("FAILED ->  not null");
             } else {
                 result = (o != null);
@@ -148,7 +148,7 @@ public class _XIndexAccess extends MultiMethodTest {
                 log.println("Exception! " + e);
                 result = false;
         }
-
+        
         return result;
     }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ PE_Enum::PE_Enum(Cpp_PE * i_pParent )
     Setup_StatusFunctions();
 
     pSpValue    = new SP_EnumValue(*this);
-    pSpuValue   = new SPU_EnumValue(*pSpValue, 0, 0);
+    pSpuValue	= new SPU_EnumValue(*pSpValue, 0, 0);
 }
 
 
@@ -70,24 +70,24 @@ PE_Enum::Call_Handler( const cpp::Token & i_rTok )
 void
 PE_Enum::Setup_StatusFunctions()
 {
-    typedef CallFunction<PE_Enum>::F_Tok    F_Tok;
-    static F_Tok stateF_expectName[] =      { &PE_Enum::On_expectName_Identifier,
+    typedef CallFunction<PE_Enum>::F_Tok	F_Tok;
+    static F_Tok stateF_expectName[] = 		{ &PE_Enum::On_expectName_Identifier,
                                               &PE_Enum::On_expectName_SwBracket_Left
                                             };
-    static INT16 stateT_expectName[] =      { Tid_Identifier,
+    static INT16 stateT_expectName[] = 		{ Tid_Identifier,
                                               Tid_SwBracket_Left
                                             };
 
-    static F_Tok stateF_gotName[] =         { &PE_Enum::On_gotName_SwBracket_Left };
-    static INT16 stateT_gotName[] =         { Tid_SwBracket_Left };
+    static F_Tok stateF_gotName[] =			{ &PE_Enum::On_gotName_SwBracket_Left };
+    static INT16 stateT_gotName[] =       	{ Tid_SwBracket_Left };
 
-    static F_Tok stateF_bodyStd[] =         { &PE_Enum::On_bodyStd_Identifier,
+    static F_Tok stateF_bodyStd[] =			{ &PE_Enum::On_bodyStd_Identifier,
                                               &PE_Enum::On_bodyStd_SwBracket_Right };
-    static INT16 stateT_bodyStd[] =         { Tid_Identifier,
+    static INT16 stateT_bodyStd[] =       	{ Tid_Identifier,
                                               Tid_SwBracket_Right };
 
-    static F_Tok stateF_afterBlock[] =      { &PE_Enum::On_afterBlock_Semicolon };
-    static INT16 stateT_afterBlock[] =      { Tid_Semicolon };
+    static F_Tok stateF_afterBlock[] = 	    { &PE_Enum::On_afterBlock_Semicolon };
+    static INT16 stateT_afterBlock[] =   	{ Tid_Semicolon };
 
     SEMPARSE_CREATE_STATUS(PE_Enum, expectName, Hdl_SyntaxError);
     SEMPARSE_CREATE_STATUS(PE_Enum, gotName, On_gotName_Return2Type);

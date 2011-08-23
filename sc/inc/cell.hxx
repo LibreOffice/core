@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,11 +47,11 @@
 #include "scdllapi.h"
 
 #define USE_MEMPOOL
-#define TEXTWIDTH_DIRTY     0xffff
+#define TEXTWIDTH_DIRTY		0xffff
 
 // in addition to SCRIPTTYPE_... flags from scripttypeitem.hxx:
 // set (in nScriptType) if type has not been determined yet
-#define SC_SCRIPTTYPE_UNKNOWN   0x08
+#define SC_SCRIPTTYPE_UNKNOWN	0x08
 
 class ScDocument;
 class EditTextObject;
@@ -84,7 +84,7 @@ const int SC_CLONECELL_NOCAPTION        = 0x0004;
 class SC_DLLPUBLIC ScBaseCell
 {
 protected:
-                    ~ScBaseCell();  // nicht virtuell -> darf nicht direkt aufgerufen werden
+                    ~ScBaseCell();	// nicht virtuell -> darf nicht direkt aufgerufen werden
 
 public:
     explicit        ScBaseCell( CellType eNewType );
@@ -108,7 +108,7 @@ public:
         deletes the cell by calling the appropriate d'tor of the derived class. */
     void            Delete();
 
-    inline CellType GetCellType() const { return (CellType)eCellType; }
+    inline CellType GetCellType() const	{ return (CellType)eCellType; }
 
     /** Returns true, if the cell is empty (neither value nor formula nor cell note).
         Returns false for formula cells returning nothing, use HasEmptyData() for that. */
@@ -149,8 +149,8 @@ public:
     static ScBaseCell* CreateTextCell( const String& rString, ScDocument* );
 
     // nOnlyNames may be one or more of SC_LISTENING_NAMES_*
-    void            StartListeningTo( ScDocument* pDoc );
-    void            EndListeningTo( ScDocument* pDoc,
+    void			StartListeningTo( ScDocument* pDoc );
+    void			EndListeningTo( ScDocument* pDoc,
                                     ScTokenArray* pArr = NULL,
                                     ScAddress aPos = ScAddress() );
 
@@ -158,12 +158,12 @@ public:
     USHORT          GetErrorCode() const;
     /** ScFormulaCell with formula::svEmptyCell result, or ScNoteCell (may have been
         created due to reference to empty cell). */
-    BOOL            HasEmptyData() const;
-    BOOL            HasValueData() const;
-    BOOL            HasStringData() const;
-    String          GetStringData() const;          // nur echte Strings
+    BOOL			HasEmptyData() const;
+    BOOL			HasValueData() const;
+    BOOL			HasStringData() const;
+    String			GetStringData() const;			// nur echte Strings
 
-    static BOOL     CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 );
+    static BOOL		CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 );
 
 private:
     ScBaseCell&     operator=( const ScBaseCell& );
@@ -209,7 +209,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScValueCell )
 #endif
                     ScValueCell();
-    explicit        ScValueCell( double fValue );
+    explicit		ScValueCell( double fValue );
 
 #ifdef DBG_UTIL
                     ~ScValueCell();
@@ -219,7 +219,7 @@ public:
     inline double   GetValue() const { return mfValue; }
 
 private:
-    double          mfValue;
+    double		    mfValue;
 };
 
 // ============================================================================
@@ -232,18 +232,18 @@ public:
 #endif
 
                     ScStringCell();
-    explicit        ScStringCell( const String& rString );
+    explicit		ScStringCell( const String& rString );
 
 #ifdef DBG_UTIL
                     ~ScStringCell();
 #endif
 
-    inline void     SetString( const String& rString ) { maString = rString; }
-    inline void     GetString( String& rString ) const { rString = maString; }
+    inline void		SetString( const String& rString ) { maString = rString; }
+    inline void		GetString( String& rString ) const { rString = maString; }
     inline const String& GetString() const { return maString; }
 
 private:
-    String          maString;
+    String		    maString;
 };
 
 // ============================================================================
@@ -251,11 +251,11 @@ private:
 class SC_DLLPUBLIC ScEditCell : public ScBaseCell
 {
 private:
-    EditTextObject*     pData;
-    String*             pString;        // fuer schnelleren Zugriff von Formeln
-    ScDocument*         pDoc;           // fuer EditEngine Zugriff mit Pool
+    EditTextObject*		pData;
+    String*				pString;		// fuer schnelleren Zugriff von Formeln
+    ScDocument*			pDoc;			// fuer EditEngine Zugriff mit Pool
 
-    void            SetTextObject( const EditTextObject* pObject,
+    void			SetTextObject( const EditTextObject* pObject,
                                     const SfxItemPool* pFromPool );
 
                     // not implemented
@@ -267,7 +267,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScEditCell )
 #endif
 
-                    ~ScEditCell();              // wegen pData immer!
+                    ~ScEditCell();				// wegen pData immer!
 
                     ScEditCell( const EditTextObject* pObject, ScDocument*,
                                 const SfxItemPool* pFromPool /* = NULL */ );
@@ -275,12 +275,12 @@ public:
                     // fuer Zeilenumbrueche
                     ScEditCell( const String& rString, ScDocument* );
 
-    void            SetData( const EditTextObject* pObject,
+    void			SetData( const EditTextObject* pObject,
                             const SfxItemPool* pFromPool /* = NULL */ );
-    void            GetData( const EditTextObject*& rpObject ) const;
-    void            GetString( String& rString ) const;
+    void			GetData( const EditTextObject*& rpObject ) const;
+    void			GetString( String& rString ) const;
 
-    const EditTextObject* GetData() const   { return pData; }
+    const EditTextObject* GetData() const	{ return pData; }
 
     /** Removes character attribute based on new pattern attributes. */
     void            RemoveCharAttribs( const ScPatternAttr& rAttr );
@@ -370,7 +370,7 @@ private:
                         SCITP_FROM_ITERATION,
                         SCITP_CLOSE_ITERATION_CIRCLE
                     };
-    void            InterpretTail( ScInterpretTailParameter );
+    void			InterpretTail( ScInterpretTailParameter );
 
     ScFormulaCell( const ScFormulaCell& );
 
@@ -380,7 +380,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScFormulaCell )
 #endif
 
-    ScAddress       aPos;
+    ScAddress		aPos;
 
                     ~ScFormulaCell();
                     ScFormulaCell();
@@ -401,33 +401,33 @@ public:
 
     ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, const ScAddress& rPos, int nCloneFlags = SC_CLONECELL_DEFAULT );
 
-    void            GetFormula( String& rFormula,
+    void			GetFormula( String& rFormula,
                                 const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
-    void            GetFormula( rtl::OUStringBuffer& rBuffer,
+    void			GetFormula( rtl::OUStringBuffer& rBuffer,
                                 const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
 
-    void            SetDirty();
-    void            SetDirtyVar();
+    void			SetDirty();
+    void			SetDirtyVar();
     // If setting entire document dirty after load, no broadcasts but still append to FormulaTree.
     void            SetDirtyAfterLoad();
-    inline void     ResetTableOpDirtyVar() { bTableOpDirty = FALSE; }
-    void            SetTableOpDirty();
-    BOOL            IsDirtyOrInTableOpDirty() const;
-    BOOL            GetDirty() const { return bDirty; }
+    inline void		ResetTableOpDirtyVar() { bTableOpDirty = FALSE; }
+    void			SetTableOpDirty();
+    BOOL			IsDirtyOrInTableOpDirty() const;
+    BOOL			GetDirty() const { return bDirty; }
     BOOL            NeedsListening() const { return bNeedListening; }
     void            SetNeedsListening( BOOL bVar ) { bNeedListening = bVar; }
-    void            Compile(const String& rFormula,
+    void			Compile(const String& rFormula,
                             BOOL bNoListening = FALSE,
                             const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
-    void            CompileTokenArray( BOOL bNoListening = FALSE );
-    void            CompileXML( ScProgress& rProgress );        // compile temporary string tokens
-    void            CalcAfterLoad();
+    void			CompileTokenArray( BOOL bNoListening = FALSE );
+    void			CompileXML( ScProgress& rProgress );		// compile temporary string tokens
+    void			CalcAfterLoad();
     bool            MarkUsedExternalReferences();
-    void            Interpret();
+    void			Interpret();
     inline BOOL     IsIterCell() const { return bIsIterCell; }
     inline USHORT   GetSeenInIteration() const { return nSeenInIteration; }
 
-    BOOL            HasOneReference( ScRange& r ) const;
+    BOOL			HasOneReference( ScRange& r ) const;
     /* Checks if the formula contains reference list that can be
        expressed by one reference (like A1;A2;A3:A5 -> A1:A5). The
        reference list is not required to be sorted (i.e. A3;A1;A2 is
@@ -437,88 +437,88 @@ public:
        It is similar to HasOneReference(), but more general.
      */
     bool HasRefListExpressibleAsOneReference(ScRange& rRange) const;
-    BOOL            HasRelNameReference() const;
-    BOOL            HasColRowName() const;
+    BOOL			HasRelNameReference() const;
+    BOOL			HasColRowName() const;
 
-    void            UpdateReference(UpdateRefMode eUpdateRefMode,
+    void			UpdateReference(UpdateRefMode eUpdateRefMode,
                                     const ScRange& r,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                     ScDocument* pUndoDoc = NULL,
                                     const ScAddress* pUndoCellPos = NULL );
 
-    void            TransposeReference();
-    void            UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
+    void			TransposeReference();
+    void			UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
                                         ScDocument* pUndoDoc );
 
-    void            UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
+    void			UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
-    void            UpdateInsertTab(SCTAB nTable);
-    void            UpdateInsertTabAbs(SCTAB nTable);
-    BOOL            UpdateDeleteTab(SCTAB nTable, BOOL bIsMove = FALSE);
-    void            UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo);
-    void            UpdateRenameTab(SCTAB nTable, const String& rName);
-    BOOL            TestTabRefAbs(SCTAB nTable);
-    void            UpdateCompile( BOOL bForceIfNameInUse = FALSE );
-    BOOL            IsRangeNameInUse(USHORT nIndex) const;
+    void			UpdateInsertTab(SCTAB nTable);
+    void 			UpdateInsertTabAbs(SCTAB nTable);
+    BOOL			UpdateDeleteTab(SCTAB nTable, BOOL bIsMove = FALSE);
+    void			UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo);
+    void			UpdateRenameTab(SCTAB nTable, const String& rName);
+    BOOL 			TestTabRefAbs(SCTAB nTable);
+    void			UpdateCompile( BOOL bForceIfNameInUse = FALSE );
+    BOOL			IsRangeNameInUse(USHORT nIndex) const;
     void            FindRangeNamesInUse(std::set<USHORT>& rIndexes) const;
-    void            ReplaceRangeNamesInUse( const ScRangeData::IndexMap& rMap );
-    BOOL            IsSubTotal() const                      { return bSubTotal; }
-    BOOL            IsChanged() const                       { return bChanged; }
-    void            ResetChanged()                          { bChanged = FALSE; }
-    BOOL            IsEmpty();      // formula::svEmptyCell result
+    void 			ReplaceRangeNamesInUse( const ScRangeData::IndexMap& rMap );
+    BOOL			IsSubTotal() const 						{ return bSubTotal; }
+    BOOL			IsChanged() const  						{ return bChanged; }
+    void			ResetChanged()							{ bChanged = FALSE; }
+    BOOL			IsEmpty();      // formula::svEmptyCell result
                     // display as empty string if formula::svEmptyCell result
-    BOOL            IsEmptyDisplayedAsString();
-    BOOL            IsValue();      // also TRUE if formula::svEmptyCell
-    double          GetValue();
-    double          GetValueAlways();   // ignore errors
-    void            GetString( String& rString );
+    BOOL			IsEmptyDisplayedAsString();
+    BOOL			IsValue();      // also TRUE if formula::svEmptyCell
+    double			GetValue();
+    double			GetValueAlways();	// ignore errors
+    void			GetString( String& rString );
     const ScMatrix* GetMatrix();
-    BOOL            GetMatrixOrigin( ScAddress& rPos ) const;
-    void            GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows );
-    USHORT          GetMatrixEdge( ScAddress& rOrgPos );
-    USHORT          GetErrCode();   // interpret first if necessary
-    USHORT          GetRawError();  // don't interpret, just return code or result error
-    short           GetFormatType() const                   { return nFormatType; }
-    ULONG           GetFormatIndex() const                  { return nFormatIndex; }
-    void            GetFormatInfo( short& nType, ULONG& nIndex ) const
+    BOOL			GetMatrixOrigin( ScAddress& rPos ) const;
+    void			GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows );
+    USHORT 			GetMatrixEdge( ScAddress& rOrgPos );
+    USHORT			GetErrCode();   // interpret first if necessary
+    USHORT			GetRawError();  // don't interpret, just return code or result error
+    short			GetFormatType() const   				{ return nFormatType; }
+    ULONG			GetFormatIndex() const					{ return nFormatIndex; }
+    void			GetFormatInfo( short& nType, ULONG& nIndex ) const
                         { nType = nFormatType; nIndex = nFormatIndex; }
-    BYTE            GetMatrixFlag() const                   { return cMatrixFlag; }
+    BYTE			GetMatrixFlag() const   				{ return cMatrixFlag; }
     ScTokenArray*   GetCode() const                         { return pCode; }
 
-    BOOL            IsRunning() const                       { return bRunning; }
-    void            SetRunning( BOOL bVal )                 { bRunning = bVal; }
-    void            CompileDBFormula();
-    void            CompileDBFormula( BOOL bCreateFormulaString );
-    void            CompileNameFormula( BOOL bCreateFormulaString );
-    void            CompileColRowNameFormula();
-    ScFormulaCell*  GetPrevious() const                 { return pPrevious; }
-    ScFormulaCell*  GetNext() const                     { return pNext; }
-    void            SetPrevious( ScFormulaCell* pF )    { pPrevious = pF; }
-    void            SetNext( ScFormulaCell* pF )        { pNext = pF; }
-    ScFormulaCell*  GetPreviousTrack() const                { return pPreviousTrack; }
-    ScFormulaCell*  GetNextTrack() const                    { return pNextTrack; }
-    void            SetPreviousTrack( ScFormulaCell* pF )   { pPreviousTrack = pF; }
-    void            SetNextTrack( ScFormulaCell* pF )       { pNextTrack = pF; }
+    BOOL			IsRunning() const						{ return bRunning; }
+    void			SetRunning( BOOL bVal )					{ bRunning = bVal; }
+    void 			CompileDBFormula();
+    void 			CompileDBFormula( BOOL bCreateFormulaString );
+    void 			CompileNameFormula( BOOL bCreateFormulaString );
+    void 			CompileColRowNameFormula();
+    ScFormulaCell*	GetPrevious() const					{ return pPrevious; }
+    ScFormulaCell*	GetNext() const						{ return pNext; }
+    void			SetPrevious( ScFormulaCell* pF )	{ pPrevious = pF; }
+    void			SetNext( ScFormulaCell* pF )		{ pNext = pF; }
+    ScFormulaCell*	GetPreviousTrack() const				{ return pPreviousTrack; }
+    ScFormulaCell*	GetNextTrack() const					{ return pNextTrack; }
+    void			SetPreviousTrack( ScFormulaCell* pF )	{ pPreviousTrack = pF; }
+    void			SetNextTrack( ScFormulaCell* pF )		{ pNextTrack = pF; }
 
     virtual void    Notify( SvtBroadcaster& rBC, const SfxHint& rHint);
-    void            SetCompile( BOOL bVal ) { bCompile = bVal; }
-    ScDocument*     GetDocument() const     { return pDocument; }
-    void            SetMatColsRows( SCCOL nCols, SCROW nRows );
-    void            GetMatColsRows( SCCOL& nCols, SCROW& nRows ) const;
+    void			SetCompile( BOOL bVal ) { bCompile = bVal; }
+    ScDocument*		GetDocument() const		{ return pDocument; }
+    void			SetMatColsRows( SCCOL nCols, SCROW nRows );
+    void			GetMatColsRows( SCCOL& nCols, SCROW& nRows ) const;
 
                     // ob Zelle im ChangeTrack und nicht im echten Dokument ist
-    void            SetInChangeTrack( BOOL bVal ) { bInChangeTrack = bVal; }
-    BOOL            IsInChangeTrack() const { return bInChangeTrack; }
+    void			SetInChangeTrack( BOOL bVal ) { bInChangeTrack = bVal; }
+    BOOL			IsInChangeTrack() const { return bInChangeTrack; }
 
                     // Zu Typ und Format das entsprechende Standardformat.
                     // Bei Format "Standard" evtl. das in die Formelzelle
                     // uebernommene Format.
-    ULONG           GetStandardFormat( SvNumberFormatter& rFormatter, ULONG nFormat ) const;
+    ULONG			GetStandardFormat( SvNumberFormatter& rFormatter, ULONG nFormat ) const;
 
     // For import filters!
-    void            AddRecalcMode( formula::ScRecalcMode );
+    void 			AddRecalcMode( formula::ScRecalcMode );
     /** For import only: set a double result. */
-    void            SetHybridDouble( double n )     { aResult.SetHybridDouble( n); }
+    void			SetHybridDouble( double n )     { aResult.SetHybridDouble( n); }
     /** For import only: set a string result.
         If for whatever reason you have to use both, SetHybridDouble() and
         SetHybridString() or SetHybridFormula(), use SetHybridDouble() first
@@ -532,9 +532,9 @@ public:
     void            SetHybridFormula( const String& r,
                                     const formula::FormulaGrammar::Grammar eGrammar )
                         { aResult.SetHybridFormula( r); eTempGrammar = eGrammar; }
-    void            SetErrCode( USHORT n );
-    inline BOOL     IsHyperLinkCell() const { return pCode && pCode->IsHyperLink(); }
-    EditTextObject*     CreateURLObject() ;
+    void			SetErrCode( USHORT n );
+    inline BOOL		IsHyperLinkCell() const { return pCode && pCode->IsHyperLink(); }
+    EditTextObject*		CreateURLObject() ;
     void            GetURLResult( String& rURL, String& rCellText );
 
     /** Determines whether or not the result string contains more than one paragraph */
@@ -543,7 +543,7 @@ public:
     void            MaybeInterpret();
 };
 
-//          Iterator fuer Referenzen in einer Formelzelle
+//			Iterator fuer Referenzen in einer Formelzelle
 class ScDetectiveRefIter
 {
 private:
@@ -551,7 +551,7 @@ private:
     ScAddress aPos;
 public:
                 ScDetectiveRefIter( ScFormulaCell* pCell );
-    BOOL        GetNextRef( ScRange& rRange );
+    BOOL		GetNextRef( ScRange& rRange );
     ScToken*    GetNextRefToken();
 };
 

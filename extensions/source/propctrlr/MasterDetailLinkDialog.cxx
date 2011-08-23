@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,11 +25,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
  #include "precompiled_extensions.hxx"
  #include "MasterDetailLinkDialog.hxx"
  #include "formlinkdialog.hxx"
-
+ 
  extern "C" void SAL_CALL createRegistryInfo_MasterDetailLinkDialog()
 {
     ::pcr::OAutoRegistration< ::pcr::MasterDetailLinkDialog > aAutoRegistration;
@@ -113,7 +113,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------------
-    Dialog* MasterDetailLinkDialog::createDialog(Window* _pParent)
+    Dialog*	MasterDetailLinkDialog::createDialog(Window* _pParent)
     {
         return new FormLinkDialog(_pParent,m_xDetail,m_xMaster,m_aContext.getLegacyServiceFactory()
             ,m_sExplanation,m_sDetailLabel,m_sMasterLabel);

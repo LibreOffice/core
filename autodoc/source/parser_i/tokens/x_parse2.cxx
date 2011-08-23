@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,12 +33,12 @@
 
     enum E_Type
     {
-        x_Any                       = 0,
+        x_Any						= 0,
         x_InvalidChar,
         x_UnexpectedEOF
     };
 void
-X_AutodocParser::GetInfo( std::ostream &        o_rOutputMedium ) const
+X_AutodocParser::GetInfo( std::ostream &     	o_rOutputMedium ) const
 {
     switch (eType)
     {

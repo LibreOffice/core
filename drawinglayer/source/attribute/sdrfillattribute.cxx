@@ -53,23 +53,23 @@ namespace drawinglayer
         {
         public:
             // refcounter
-            sal_uInt32                          mnRefCount;
+            sal_uInt32							mnRefCount;
 
             // fill definitions
-            double                              mfTransparence;     // [0.0 .. 1.0], 0.0==no transp.
-            basegfx::BColor                     maColor;            // fill color
-            FillGradientAttribute               maGradient;         // fill gradient (if used)
-            FillHatchAttribute                  maHatch;            // fill hatch (if used)
-            SdrFillBitmapAttribute              maBitmap;           // fill bitmap (if used)
+            double								mfTransparence;		// [0.0 .. 1.0], 0.0==no transp.
+            basegfx::BColor						maColor;			// fill color
+            FillGradientAttribute				maGradient;			// fill gradient (if used)
+            FillHatchAttribute					maHatch;			// fill hatch (if used)
+            SdrFillBitmapAttribute				maBitmap;			// fill bitmap (if used)
 
         public:
             ImpSdrFillAttribute(
-                double fTransparence,
-                const basegfx::BColor& rColor,
-                const FillGradientAttribute& rGradient,
-                const FillHatchAttribute& rHatch,
+                double fTransparence, 
+                const basegfx::BColor& rColor, 
+                const FillGradientAttribute& rGradient, 
+                const FillHatchAttribute& rHatch, 
                 const SdrFillBitmapAttribute& rBitmap)
-            :   mnRefCount(0),
+            :	mnRefCount(0),
                 mfTransparence(fTransparence),
                 maColor(rColor),
                 maGradient(rGradient),
@@ -79,7 +79,7 @@ namespace drawinglayer
             }
 
             // data read access
-            double getTransparence() const { return mfTransparence; }
+            double getTransparence() const { return mfTransparence;	}
             const basegfx::BColor& getColor() const { return maColor; }
             const FillGradientAttribute& getGradient() const { return maGradient; }
             const FillHatchAttribute& getHatch() const { return maHatch; }
@@ -102,7 +102,7 @@ namespace drawinglayer
                 if(!pDefault)
                 {
                     pDefault = new ImpSdrFillAttribute(
-                        0.0,
+                        0.0, 
                         basegfx::BColor(),
                         FillGradientAttribute(),
                         FillHatchAttribute(),
@@ -117,24 +117,24 @@ namespace drawinglayer
         };
 
         SdrFillAttribute::SdrFillAttribute(
-            double fTransparence,
-            const basegfx::BColor& rColor,
-            const FillGradientAttribute& rGradient,
-            const FillHatchAttribute& rHatch,
+            double fTransparence, 
+            const basegfx::BColor& rColor, 
+            const FillGradientAttribute& rGradient, 
+            const FillHatchAttribute& rHatch, 
             const SdrFillBitmapAttribute& rBitmap)
-        :   mpSdrFillAttribute(new ImpSdrFillAttribute(
+        :	mpSdrFillAttribute(new ImpSdrFillAttribute(
                 fTransparence, rColor, rGradient, rHatch, rBitmap))
         {
         }
 
         SdrFillAttribute::SdrFillAttribute()
-        :   mpSdrFillAttribute(ImpSdrFillAttribute::get_global_default())
+        :	mpSdrFillAttribute(ImpSdrFillAttribute::get_global_default())
         {
             mpSdrFillAttribute->mnRefCount++;
         }
 
         SdrFillAttribute::SdrFillAttribute(const SdrFillAttribute& rCandidate)
-        :   mpSdrFillAttribute(rCandidate.mpSdrFillAttribute)
+        :	mpSdrFillAttribute(rCandidate.mpSdrFillAttribute)
         {
             mpSdrFillAttribute->mnRefCount++;
         }
@@ -168,7 +168,7 @@ namespace drawinglayer
                 {
                     delete mpSdrFillAttribute;
                 }
-
+                
                 mpSdrFillAttribute = rCandidate.mpSdrFillAttribute;
                 mpSdrFillAttribute->mnRefCount++;
             }
@@ -191,29 +191,29 @@ namespace drawinglayer
             return (*rCandidate.mpSdrFillAttribute == *mpSdrFillAttribute);
         }
 
-        double SdrFillAttribute::getTransparence() const
-        {
-            return mpSdrFillAttribute->getTransparence();
+        double SdrFillAttribute::getTransparence() const 
+        { 
+            return mpSdrFillAttribute->getTransparence();	
         }
 
-        const basegfx::BColor& SdrFillAttribute::getColor() const
-        {
-            return mpSdrFillAttribute->getColor();
+        const basegfx::BColor& SdrFillAttribute::getColor() const 
+        { 
+            return mpSdrFillAttribute->getColor(); 
         }
 
-        const FillGradientAttribute& SdrFillAttribute::getGradient() const
-        {
-            return mpSdrFillAttribute->getGradient();
+        const FillGradientAttribute& SdrFillAttribute::getGradient() const 
+        { 
+            return mpSdrFillAttribute->getGradient(); 
         }
 
-        const FillHatchAttribute& SdrFillAttribute::getHatch() const
-        {
-            return mpSdrFillAttribute->getHatch();
+        const FillHatchAttribute& SdrFillAttribute::getHatch() const 
+        { 
+            return mpSdrFillAttribute->getHatch(); 
         }
 
-        const SdrFillBitmapAttribute& SdrFillAttribute::getBitmap() const
-        {
-            return mpSdrFillAttribute->getBitmap();
+        const SdrFillBitmapAttribute& SdrFillAttribute::getBitmap() const 
+        { 
+            return mpSdrFillAttribute->getBitmap(); 
         }
     } // end of namespace attribute
 } // end of namespace drawinglayer

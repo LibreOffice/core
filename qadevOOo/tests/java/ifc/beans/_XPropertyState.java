@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -153,12 +153,12 @@ public class _XPropertyState extends MultiMethodTest {
         */
         public void _getPropertyState(){
             boolean result = true ;
-
+            
             String localName = pName;
             if (localName == null) {
                 localName = (propertySetInfo.getProperties()[0]).Name;
-            }
-
+            }            
+            
             try {
                 PropertyState ps = oObj.getPropertyState(localName);
                 if (ps == null) {
@@ -181,12 +181,12 @@ public class _XPropertyState extends MultiMethodTest {
         */
         public void _getPropertyStates(){
             boolean result = true ;
-
+            
             String localName = pName;
             if (localName == null) {
                 localName = (propertySetInfo.getProperties()[0]).Name;
-            }
-
+            }            
+            
             try {
                 PropertyState[] ps = oObj.getPropertyStates
                     (new String[] {localName});
@@ -222,7 +222,7 @@ public class _XPropertyState extends MultiMethodTest {
         */
         public void _setPropertyToDefault(){
             requiredMethod("getPropertyDefault()") ;
-
+            
             if (pName == null) {
                 log.println("all found properties are read only");
                 tRes.tested("setPropertyToDefault()",Status.skipped(true));

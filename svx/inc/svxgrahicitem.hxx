@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,20 +36,20 @@
 
 class SVX_DLLPUBLIC SvxGraphicItem: public SfxPoolItem
 {
-    Graphic         aGraphic;
+    Graphic			aGraphic;
 
 public:
                             TYPEINFO();
                             SvxGraphicItem();
-                            SvxGraphicItem( USHORT nWhich ,const Graphic& rGraphic);
+                            SvxGraphicItem( USHORT nWhich ,const Graphic& rGraphic);									
                             SvxGraphicItem( const SvxGraphicItem& );
 
+    
+    virtual int 			operator==( const SfxPoolItem& ) const;
+    virtual SfxPoolItem*	Clone( SfxItemPool *pPool = 0 ) const;
 
-    virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-
-    Graphic             GetGraphic() const { return aGraphic; }
-
+    Graphic 			GetGraphic() const { return aGraphic; }
+    
 };
 
 #endif

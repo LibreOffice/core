@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,14 +70,14 @@ int __cdecl _tmain( int /*argc*/, _TCHAR * /*argv[]*/ )
         return -1;
     }
 
-
+    
     if( FAILED(hr=doTest()))
     {
         _com_error err( hr);
         const TCHAR * errMsg= err.ErrorMessage();
         MessageBox( NULL, errMsg, "Test failed", MB_ICONERROR);
     }
-
+    
     CoUninitialize();
     return 0;
 }
@@ -104,11 +104,11 @@ HRESULT doTest()
 
         // disp contains now oletest.OleTest
 
-        // one dimensional array
+        // one dimensional array 
         par= SafeArrayCreateVector( VT_UI1, 0, 5);
         unsigned char arbyte[]= { 1,2,3,4,5};
         for(long i= 0; i < 5;i++)
-            hr= SafeArrayPutElement( par, &i, &arbyte[i]);
+            hr=	SafeArrayPutElement( par, &i, &arbyte[i]);
 
         result.Clear();
         param1.vt= VT_ARRAY| VT_UI1;
@@ -131,7 +131,7 @@ HRESULT doTest()
         long uBound2;
         hr= SafeArrayGetUBound( par, 1, &uBound1);
         hr= SafeArrayGetUBound( par, 2, &uBound2);
-
+        
         long index2[2];
         memset( index2, 0, 2 * sizeof( long) );
         long dimLengths[]={3,2};
@@ -147,28 +147,28 @@ HRESULT doTest()
         long (*dataL)[2][3];
         hr= SafeArrayAccessData( par, (void**)&pdata);
         dataL= (long(*)[2][3])pdata;
-
+        
         for (long i= 0; i < 2; i ++)
         {
             for(long j= 0; j < 3; j++)
                 data= (*dataL)[i][j];
         }
         hr= SafeArrayUnaccessData(par);
-
+        
         result.Clear();
         param1.vt= VT_ARRAY | VT_I4;
         param1.byref= par;
         disp.Invoke1(L"methodSequence", &param1, &result);
-
+        
         SAFEARRAY* arRet= result.parray;
-
+        
         for(long i= 0; i < 2 ; i++)
         {
             CComVariant varx;
             varx.Clear();
             hr= SafeArrayGetElement( arRet, &i, &varx);
             SAFEARRAY* ari= varx.parray;
-
+            
             for( j= 0; j < 3; j++)
             {
                 CComVariant varj;
@@ -188,7 +188,7 @@ HRESULT doTest()
 // left index is least significant
 bool incrementMultidimensionalIndex(
     sal_Int32 dimensions,
-    const sal_Int32 * parDimensionLengths,
+    const sal_Int32 * parDimensionLengths, 
     sal_Int32 * parMultidimensionalIndex)
 {
     if( dimensions < 1)
@@ -196,7 +196,7 @@ bool incrementMultidimensionalIndex(
 
     bool ret= sal_True;
     bool carry= sal_True; // to get into the while loop
-
+    
     sal_Int32 currentDimension= 0; //most significant is 1
     while( carry)
     {

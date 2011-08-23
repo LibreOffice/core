@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ using ::rtl::OString;
 
 static String lcl_GetVbaTabName( SCTAB n )
 {
-    String  aRet( RTL_CONSTASCII_USTRINGPARAM( "__VBA__" ) );
+    String	aRet( RTL_CONSTASCII_USTRINGPARAM( "__VBA__" ) );
     aRet += String::CreateFromInt32( static_cast<sal_uInt16>(n) );
     return aRet;
 }
@@ -192,8 +192,8 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     else
         Add( new ExcBofW8 );
 
-    SCTAB   nC;
-    String  aTmpString;
+    SCTAB	nC;
+    String	aTmpString;
     SCTAB  nScTabCount     = rTabInfo.GetScTabCount();
     UINT16  nExcTabCount    = rTabInfo.GetXclTabCount();
     UINT16  nCodenames      = static_cast< UINT16 >( GetExtDocOptions().GetCodeNameCount() );
@@ -248,7 +248,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     Add( new XclExpUInt16Record( EXC_ID_FNGROUPCOUNT, 14 ) );
 
     // erst Namen- und Tabellen-Eintraege aufbauen
-    String          aName;
+    String			aName;
 
     for( nC = 0 ; nC < nScTabCount ; nC++ )
         if( rTabInfo.IsExportTab( nC ) )

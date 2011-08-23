@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,7 +107,7 @@ public class _Shape extends MultiPropertyTest {
         } else if (tEnv.getTestCase().getObjectName().equals("ScShapeObj")) {
             log.println("There is only one Layer for ScShapeObj");
             log.println("Therefore this property can't be changed");
-            tRes.tested("LayerName",true);
+            tRes.tested("LayerName",true); 
         } else if (tEnv.getTestCase().getObjectName().equals("ScAnnotationShapeObj")) {
             log.println("There is only one Layer for ScAnnotationShapeObj");
             log.println("Therefore this property can't be changed");
@@ -118,7 +118,7 @@ public class _Shape extends MultiPropertyTest {
             } catch (Exception e) {
                 e.printStackTrace (log);
             }
-            tRes.tested("LayerName",aName != null);
+            tRes.tested("LayerName",aName != null);             
         } else {
             log.println("Testing with custom Property tester") ;
             testProperty("LayerName", StringTester) ;
@@ -129,12 +129,12 @@ public class _Shape extends MultiPropertyTest {
         if (tEnv.getTestCase().getObjectName().equals("ScAnnotationShapeObj")) {
             log.println("There is only one Layer for ScAnnotationShapeObj");
             log.println("Therefore this property can't be changed");
-            tRes.tested("ZOrder",true);
+            tRes.tested("ZOrder",true);        
         } else {
             testProperty("ZOrder", new Integer(0), new Integer(1));
         }
     }
-
+    
     public void _LayerID() {
         if (tEnv.getTestCase().getObjectName().equals("ScAnnotationShapeObj")) {
             log.println("There is only one Layer for ScAnnotationShapeObj");
@@ -146,7 +146,7 @@ public class _Shape extends MultiPropertyTest {
             } catch (Exception e) {
                 e.printStackTrace (log);
             }
-            tRes.tested("LayerID",aID != null);
+            tRes.tested("LayerID",aID != null);             
         } else {
             log.println("Testing with custom Property tester") ;
             testProperty("LayerID");

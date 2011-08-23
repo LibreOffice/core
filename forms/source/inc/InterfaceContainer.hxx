@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,18 +69,18 @@ namespace frm
     struct ElementDescription
     {
     public:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >       xInterface;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   xPropertySet;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >     xChild;
-        ::com::sun::star::uno::Any                                                  aElementTypeInterface;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >		xInterface;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >	xPropertySet;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >		xChild;
+        ::com::sun::star::uno::Any													aElementTypeInterface;
 
     public:
         ElementDescription( );
         virtual ~ElementDescription();
 
     private:
-        ElementDescription( const ElementDescription& );            // never implemented
-        ElementDescription& operator=( const ElementDescription& ); // never implemented
+        ElementDescription( const ElementDescription& );			// never implemented
+        ElementDescription& operator=( const ElementDescription& );	// never implemented
     };
 
 typedef ::std::vector<InterfaceRef> OInterfaceArray;
@@ -100,22 +100,22 @@ typedef ::cppu::ImplHelper8 <   ::com::sun::star::container::XNameContainer
                             ,   ::com::sun::star::util::XCloneable
                             > OInterfaceContainer_BASE;
 
-class OInterfaceContainer : public OInterfaceContainer_BASE
+class OInterfaceContainer :	public OInterfaceContainer_BASE
 {
 protected:
-    ::osl::Mutex&                           m_rMutex;
+    ::osl::Mutex&							m_rMutex;
 
-    OInterfaceArray                         m_aItems;
-    OInterfaceMap                           m_aMap;
-    ::cppu::OInterfaceContainerHelper       m_aContainerListeners;
+    OInterfaceArray							m_aItems;
+    OInterfaceMap							m_aMap;
+    ::cppu::OInterfaceContainerHelper		m_aContainerListeners;
 
     const ::com::sun::star::uno::Type       m_aElementType;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>     m_xServiceFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>		m_xServiceFactory;
 
 
     // EventManager
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager>  m_xEventAttacher;
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager> 	m_xEventAttacher;
 
 public:
     OInterfaceContainer(
@@ -247,7 +247,7 @@ protected:
 
         @precond <arg>_nIndex</arg> is a valid index
         @precond our mutex is locked exactly once, by the guard specified with <arg>_rClearBeforeNotify</arg>
-
+          
     */
     void implReplaceByIndex(
             const sal_Int32 _nIndex,
@@ -259,7 +259,7 @@ protected:
 
         @precond <arg>_nIndex</arg> is a valid index
         @precond our mutex is locked exactly once, by the guard specified with <arg>_rClearBeforeNotify</arg>
-
+          
     */
     void implRemoveByIndex(
             const sal_Int32 _nIndex,
@@ -282,7 +282,7 @@ private:
         efVersionSO5x,
         efVersionSO6x
     };
-    void    transformEvents( const EventFormat _eTargetFormat );
+    void	transformEvents( const EventFormat _eTargetFormat );
 
     void    impl_createEventAttacher_nothrow();
 };
@@ -298,8 +298,8 @@ class OFormComponents   :public FormComponentsBase
                         ,public OFormComponents_BASE
 {
 protected:
-    ::osl::Mutex                m_aMutex;
-    ::comphelper::InterfaceRef  m_xParent;
+    ::osl::Mutex				m_aMutex;
+    ::comphelper::InterfaceRef 	m_xParent;
 
 public:
     OFormComponents(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
@@ -322,7 +322,7 @@ public:
     using OInterfaceContainer::disposing;
 };
 //.........................................................................
-}   // namespace frm
+}	// namespace frm
 //.........................................................................
 
 #endif          // _FRM_INTERFACE_CONTAINER_HXX_

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,11 +70,11 @@ static void ImplInitMsgBoxImageList()
 
 void MessBox::ImplInitMessBoxData()
 {
-    mpFixedText         = NULL;
-    mpFixedImage        = NULL;
-    mnSoundType         = 0;
-    mbHelpBtn           = FALSE;
-    mbSound             = TRUE;
+    mpFixedText 		= NULL;
+    mpFixedImage		= NULL;
+    mnSoundType 		= 0;
+    mbHelpBtn			= FALSE;
+    mbSound 			= TRUE;
     mpCheckBox          = NULL;
     mbCheck             = FALSE;
 }
@@ -84,11 +84,11 @@ void MessBox::ImplInitMessBoxData()
 void MessBox::ImplInitButtons()
 {
     WinBits nStyle = GetStyle();
-    USHORT  nOKFlags = BUTTONDIALOG_OKBUTTON;
-    USHORT  nCancelFlags = BUTTONDIALOG_CANCELBUTTON;
-    USHORT  nRetryFlags = 0;
-    USHORT  nYesFlags = 0;
-    USHORT  nNoFlags = 0;
+    USHORT	nOKFlags = BUTTONDIALOG_OKBUTTON;
+    USHORT	nCancelFlags = BUTTONDIALOG_CANCELBUTTON;
+    USHORT	nRetryFlags = 0;
+    USHORT	nYesFlags = 0;
+    USHORT	nNoFlags = 0;
 
     if ( nStyle & WB_OK_CANCEL )
     {
@@ -189,13 +189,13 @@ MessBox::MessBox( Window* pParent, const ResId& rResId ) :
     ImplInitMessBoxData();
 
     GetRes( rResId.SetRT( RSC_MESSBOX ) );
-    USHORT nHiButtons   = ReadShortRes();
-    USHORT nLoButtons   = ReadShortRes();
+    USHORT nHiButtons	= ReadShortRes();
+    USHORT nLoButtons	= ReadShortRes();
     USHORT nHiDefButton = ReadShortRes();
     USHORT nLoDefButton = ReadShortRes();
-    USHORT nHiHelpId    = ReadShortRes();
-    USHORT nLoHelpId    = ReadShortRes();
-    /* USHORT bSysModal = */ ReadShortRes();
+    USHORT nHiHelpId	= ReadShortRes();
+    USHORT nLoHelpId	= ReadShortRes();
+    /* USHORT bSysModal	= */ ReadShortRes();
     SetHelpId( ((ULONG)nHiHelpId << 16) + nLoHelpId );
     WinBits nBits = (((ULONG)nHiButtons << 16) + nLoButtons) |
                     (((ULONG)nHiDefButton << 16) + nLoDefButton);
@@ -247,21 +247,21 @@ void MessBox::ImplPosControls()
         }
     }
 
-    XubString       aMessText( maMessText );
-    TextRectInfo    aTextInfo;
-    Rectangle       aRect( 0, 0, 30000, 30000 );
-    Rectangle       aFormatRect;
-    Point           aTextPos( IMPL_DIALOG_OFFSET, IMPL_DIALOG_OFFSET+IMPL_MSGBOX_OFFSET_EXTRA_Y );
-    Size            aImageSize;
-    Size            aPageSize;
-    Size            aFixedSize;
-    long            nTitleWidth;
-    long            nButtonSize = ImplGetButtonSize();
-    long            nMaxWidth = GetDesktopRectPixel().GetWidth()-8;
-    long            nMaxLineWidth;
-    long            nWidth;
-    WinBits         nWinStyle = WB_LEFT | WB_WORDBREAK | WB_NOLABEL | WB_INFO;
-    USHORT          nTextStyle = TEXT_DRAW_MULTILINE | TEXT_DRAW_TOP | TEXT_DRAW_LEFT;
+    XubString		aMessText( maMessText );
+    TextRectInfo	aTextInfo;
+    Rectangle		aRect( 0, 0, 30000, 30000 );
+    Rectangle		aFormatRect;
+    Point			aTextPos( IMPL_DIALOG_OFFSET, IMPL_DIALOG_OFFSET+IMPL_MSGBOX_OFFSET_EXTRA_Y );
+    Size			aImageSize;
+    Size			aPageSize;
+    Size			aFixedSize;
+    long			nTitleWidth;
+    long			nButtonSize = ImplGetButtonSize();
+    long			nMaxWidth = GetDesktopRectPixel().GetWidth()-8;
+    long			nMaxLineWidth;
+    long			nWidth;
+    WinBits 		nWinStyle = WB_LEFT | WB_WORDBREAK | WB_NOLABEL | WB_INFO;
+    USHORT			nTextStyle = TEXT_DRAW_MULTILINE | TEXT_DRAW_TOP | TEXT_DRAW_LEFT;
 
     if ( mpFixedText )
         delete mpFixedText;
@@ -279,8 +279,8 @@ void MessBox::ImplPosControls()
 
 
     // Message-Text um Tabs bereinigen
-    XubString   aTabStr( RTL_CONSTASCII_USTRINGPARAM( "    " ) );
-    USHORT      nIndex = 0;
+    XubString	aTabStr( RTL_CONSTASCII_USTRINGPARAM( "    " ) );
+    USHORT		nIndex = 0;
     while ( nIndex != STRING_NOTFOUND )
         nIndex = aMessText.SearchAndReplace( '\t', aTabStr, nIndex );
 
@@ -304,7 +304,7 @@ void MessBox::ImplPosControls()
     aImageSize = maImage.GetSizePixel();
     if ( aImageSize.Width() )
     {
-        aImageSize.Width()  += 4;
+        aImageSize.Width()	+= 4;
         aImageSize.Height() += 4;
         aTextPos.X() += aImageSize.Width()+IMPL_SEP_MSGBOX_IMAGE;
         mpFixedImage = new FixedImage( this );
@@ -348,19 +348,19 @@ void MessBox::ImplPosControls()
     }
 
     // Style fuer FixedText ermitteln
-    aPageSize.Width()   = aImageSize.Width();
-    aFixedSize.Width()  = aTextInfo.GetMaxLineWidth()+1;
+    aPageSize.Width()	= aImageSize.Width();
+    aFixedSize.Width()	= aTextInfo.GetMaxLineWidth()+1;
     aFixedSize.Height() = aFormatRect.GetHeight();
     if ( aFixedSize.Height() < aImageSize.Height() )
     {
         nWinStyle |= WB_VCENTER;
-        aPageSize.Height()  = aImageSize.Height();
+        aPageSize.Height()	= aImageSize.Height();
         aFixedSize.Height() = aImageSize.Height();
     }
     else
     {
         nWinStyle |= WB_TOP;
-        aPageSize.Height()  = aFixedSize.Height();
+        aPageSize.Height()	= aFixedSize.Height();
     }
     if ( aImageSize.Width() )
         aPageSize.Width() += IMPL_SEP_MSGBOX_IMAGE;
@@ -585,7 +585,7 @@ void ErrorBox::ImplInitErrorBoxData()
     if ( !GetText().Len() )
         SetText( Application::GetDisplayName() );
 
-    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
+    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ? 
         ErrorBox::GetStandardImageHC() : ErrorBox::GetStandardImage() );
     mnSoundType = ((USHORT)SOUND_ERROR)+1;
 }

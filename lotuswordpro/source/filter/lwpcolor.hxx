@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPCOLOR_HXX
@@ -68,8 +68,8 @@
 #include "lwpobjstrm.hxx"
 #include "lwpheader.hxx"
 /**
- * @brief   lwpcolor class
- *      (red, green, blue, extra)
+ * @brief	lwpcolor class
+ * 		(red, green, blue, extra)
 */
 class LwpColor
 {
@@ -88,9 +88,9 @@ public:
     //end
     sal_Bool IsTransparent();
 private:
-    sal_uInt16 m_nRed;          // When extra is AGLRGB_INDEX, m_nRed holds the
-    sal_uInt16 m_nGreen;        // hi 16 bits and m_nGreen holds the lo 16 bits of
-    sal_uInt16 m_nBlue;     // the 32-bit LUT index.
+    sal_uInt16 m_nRed;			// When extra is AGLRGB_INDEX, m_nRed holds the
+    sal_uInt16 m_nGreen;		// hi 16 bits and m_nGreen holds the lo 16 bits of
+    sal_uInt16 m_nBlue;		// the 32-bit LUT index.
     sal_uInt16 m_nExtra;
     enum ColorOverride {
           AGLRGB_RGB = 0,

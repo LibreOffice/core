@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ struct FontTable_Impl;
 struct FontEntry
 {
     typedef boost::shared_ptr<FontEntry> Pointer_t;
-
+    
     ::rtl::OUString sFontName;
     ::rtl::OUString sFontName1;
     bool            bTrueType;

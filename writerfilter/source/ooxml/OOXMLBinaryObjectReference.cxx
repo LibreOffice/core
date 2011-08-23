@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ void OOXMLBinaryObjectReference::read()
 {
     sal_uInt32 nMaxReadBytes = 1024*1024;
     uno::Sequence<sal_Int8> aSeq(nMaxReadBytes);
-    uno::Reference<io::XInputStream> xInputStream =
+    uno::Reference<io::XInputStream> xInputStream = 
         mpStream->getDocumentStream();
 
     sal_uInt32 nSize = 0;
@@ -75,7 +75,7 @@ void OOXMLBinaryObjectReference::resolve(BinaryObj & rHandler)
     writerfilter::Reference<Properties>::Pointer_t pRef =
         writerfilter::Reference<Properties>::Pointer_t();
 
-    rHandler.data(reinterpret_cast<sal_uInt8 *>(&mSequence[0]),
+    rHandler.data(reinterpret_cast<sal_uInt8 *>(&mSequence[0]), 
                   mSequence.getLength(), pRef);
 }
 

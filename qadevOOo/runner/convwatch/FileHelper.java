@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,13 +44,13 @@ public class FileHelper
             String sOSName = System.getProperty("os.name");
             String sOSArch = System.getProperty("os.arch");
             String sOSVersion = System.getProperty("os.version");
-
+            
             GlobalLogWriter.get().println(sOSName);
             GlobalLogWriter.get().println(sOSArch);
             GlobalLogWriter.get().println(sOSVersion);
 
         }
-
+    
     public static void MessageBox(String _sStr)
         {
             String sVersion = System.getProperty("java.version");
@@ -75,17 +75,17 @@ public class FileHelper
             //     System.out.println( _sFile );
             //     System.out.println( aFile.getAbsolutePath() );
             //     MessageBox("Der JavaProzess wartet auf eine interaktion ihrerseits.");
-            //
+            // 
             //     File aFile2 = new File(_sFile);
             //     if (aFile2.exists())
             //     {
             //         System.out.println("Thanks, file exists." );
             //         return true;
             //     }
-            // }
+            // }   
             return false;
         }
-
+    
     public static boolean isDir(String _sDir)
         {
             if (_sDir == null) return false;
@@ -104,7 +104,7 @@ public class FileHelper
             }
             return false;
         }
-
+    
     public static String getBasename(String _sFilename)
         {
             if (_sFilename == null) return "";
@@ -128,7 +128,7 @@ public class FileHelper
             }
             return _sFilename;
         }
-
+    
     public static String getSuffix(String _sFilename)
         {
             if (_sFilename == null) return "";
@@ -139,7 +139,7 @@ public class FileHelper
             }
             return "";
         }
-
+    
     public static String getPath(String _sFilename)
         {
             if (_sFilename == null) return "";
@@ -155,19 +155,19 @@ public class FileHelper
 
 /*
     static ArrayList files = new ArrayList();
-    public static Object[] traverse( String afileDirectory )
+    public static Object[] traverse( String afileDirectory ) 
         {
-
+            
             File fileDirectory = new File(afileDirectory);
             // Testing, if the file is a directory, and if so, it throws an exception
             if ( !fileDirectory.isDirectory() )
             {
                 throw new IllegalArgumentException( "not a directory: " + fileDirectory.getName() );
             }
-
+            
             // Getting all files and directories in the current directory
             File[] entries = fileDirectory.listFiles();
-
+            
             // Iterating for each file and directory
             for ( int i = 0; i < entries.length; ++i )
             {
@@ -206,7 +206,7 @@ public class FileHelper
                 first = path.substring(0, n);
                 path = path.substring(n + 1);
             }
-
+            
             String already_done = null;
             StringTokenizer path_tokenizer = new StringTokenizer(path,fs,false);
             already_done = first;
@@ -218,7 +218,7 @@ public class FileHelper
                 // System.out.println(already_done);
                 //create the directory
                 new_dir.mkdirs();
-                if (OSHelper.isUnix() &&
+                if (OSHelper.isUnix() && 
                     _sMode.length() > 0)
                 {
                     try
@@ -237,7 +237,7 @@ public class FileHelper
     public static void chmod(File file, String mode) throws java.io.IOException
         {
             Runtime.getRuntime().exec
-                (new String[]
+                (new String[] 
                     {"chmod", mode, file.getAbsolutePath()});
         }
 
@@ -274,7 +274,7 @@ public class FileHelper
                     sSubDirs = sSubDirs.substring(1);
                 }
             }
-
+            
             return sSubDirs;
         }
 
@@ -340,7 +340,7 @@ public class FileHelper
             return bDebug;
         }
 
-    public static void copy(String _sSource, String _sDestination)
+    public static void copy(String _sSource, String _sDestination) 
         {
             try
             {
@@ -350,10 +350,10 @@ public class FileHelper
                 java.io.FileReader in = new java.io.FileReader(inputFile);
                 java.io.FileWriter out = new java.io.FileWriter(outputFile);
                 int c;
-
+                
                 while ((c = in.read()) != -1)
                     out.write(c);
-
+                
                 in.close();
                 out.close();
             }
@@ -363,12 +363,12 @@ public class FileHelper
                 GlobalLogWriter.get().println("Message: " + e.getMessage());
             }
         }
-
+    
     /**
      * Within the directory run through, it's possible to say which file extension types should not
      * consider like '*.prn' because it's not a document.
      *
-     * @return a FileFilter function
+     * @return a FileFilter function 
      */
     public static FileFilter getFileFilter()
         {
@@ -381,7 +381,7 @@ public class FileHelper
                             {
                                 return false;
                             }
-
+                                
                             if (pathname.getName().endsWith(".prn"))
                             {
                                 return false;
@@ -395,7 +395,7 @@ public class FileHelper
                             if (pathname.getName().endsWith("_"))
                             {
                                 return false;
-                            }
+                            }                            
                             return true;
                         }
                 };

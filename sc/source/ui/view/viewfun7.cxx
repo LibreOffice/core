@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/embed/Aspects.hpp>
 
-#include "document.hxx"     // fuer MapMode Initialisierung in PasteDraw
+#include "document.hxx"		// fuer MapMode Initialisierung in PasteDraw
 #include "viewfunc.hxx"
 #include "tabvwsh.hxx"
 #include "drawview.hxx"
@@ -70,7 +70,7 @@ using namespace com::sun::star;
 
 void lcl_AdjustInsertPos( ScViewData* pData, Point& rPos, Size& rSize )
 {
-//  SdrPage* pPage = pData->GetDocument()->GetDrawLayer()->GetPage( pData->GetTabNo() );
+//	SdrPage* pPage = pData->GetDocument()->GetDrawLayer()->GetPage( pData->GetTabNo() );
     SdrPage* pPage = pData->GetScDrawView()->GetModel()->GetPage( static_cast<sal_uInt16>(pData->GetTabNo()) );
     DBG_ASSERT(pPage,"pPage ???");
     Size aPgSize( pPage->GetSize() );
@@ -83,7 +83,7 @@ void lcl_AdjustInsertPos( ScViewData* pData, Point& rPos, Size& rSize )
         rPos.X() += x + 80;
     if( y < 0 )
         rPos.Y() += y + 200;
-    rPos.X() += rSize.Width() / 2;          // Position bei Paste gibt Mittelpunkt an
+    rPos.X() += rSize.Width() / 2;			// Position bei Paste gibt Mittelpunkt an
     rPos.Y() += rSize.Height() / 2;
 }
 
@@ -93,8 +93,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
     MakeDrawLayer();
     Point aPos( rLogicPos );
 
-    //  #64184# MapMode am Outliner-RefDevice muss stimmen (wie in FuText::MakeOutliner)
-    //! mit FuText::MakeOutliner zusammenfassen?
+    //	#64184# MapMode am Outliner-RefDevice muss stimmen (wie in FuText::MakeOutliner)
+    //!	mit FuText::MakeOutliner zusammenfassen?
     MapMode aOldMapMode;
     OutputDevice* pRef = GetViewData()->GetDocument()->GetDrawLayer()->GetRefDevice();
     if (pRef)
@@ -169,7 +169,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                     pNeuObj->SetModel(pDrawModel);
                     pNeuObj->SetPage(pDestPage);
 
-                    //  #68787# copy graphics within the same model - always needs new name
+                    //	#68787# copy graphics within the same model - always needs new name
                     if ( pNeuObj->ISA(SdrGrafObj) && !bPasteIsMove )
                         pNeuObj->SetName(((ScDrawLayer*)pDrawModel)->GetNewGraphicName());
 
@@ -178,8 +178,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                     pDestPage->InsertObject( pNeuObj );
                     pScDrawView->AddUndo(new SdrUndoInsertObj( *pNeuObj ));
 
-                    //  Chart braucht nicht mehr getrennt behandelt zu werden,
-                    //  weil es seine Daten jetzt selber hat
+                    //	Chart braucht nicht mehr getrennt behandelt zu werden,
+                    //	weil es seine Daten jetzt selber hat
                 }
             }
 
@@ -189,7 +189,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
     }
     else
     {
-        bPasteIsMove = FALSE;       // kein internes Verschieben passiert
+        bPasteIsMove = FALSE;		// kein internes Verschieben passiert
 
         SdrView aView(pModel);      // #i71529# never create a base class of SdrView directly!
         SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
@@ -197,8 +197,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         Size aSize = aView.GetAllMarkedRect().GetSize();
         lcl_AdjustInsertPos( GetViewData(), aPos, aSize );
 
-        //  #41333# Markierung nicht aendern, wenn Ole-Objekt aktiv
-        //  (bei Drop aus Ole-Objekt wuerde sonst mitten im ExecuteDrag deaktiviert!)
+        //	#41333# Markierung nicht aendern, wenn Ole-Objekt aktiv
+        //	(bei Drop aus Ole-Objekt wuerde sonst mitten im ExecuteDrag deaktiviert!)
 
         ULONG nOptions = 0;
         SfxInPlaceClient* pClient = GetViewData()->GetViewShell()->GetIPClient();
@@ -294,7 +294,7 @@ BOOL ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
                 aSz.Height = aSize.Height();
                 xObj->setVisualAreaSize( nAspect, aSz );
             }
-
+        
             awt::Size aSz;
             try
             {
@@ -304,9 +304,9 @@ BOOL ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
             {
                 // the default size will be set later
             }
-
+        
             aSize = Size( aSz.Width, aSz.Height );
-            aSize = OutputDevice::LogicToLogic( aSize, aMapObj, aMap100 );  // fuer SdrOle2Obj
+            aSize = OutputDevice::LogicToLogic( aSize, aMapObj, aMap100 );	// fuer SdrOle2Obj
 
             if( aSize.Height() == 0 || aSize.Width() == 0 )
             {
@@ -330,7 +330,7 @@ BOOL ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
         SdrOle2Obj* pSdrObj = new SdrOle2Obj( aObjRef, aName, aRect );
 
         SdrPageView* pPV = pDrView->GetSdrPageView();
-        pDrView->InsertObjectSafe( pSdrObj, *pPV );             // nicht markieren wenn Ole
+        pDrView->InsertObjectSafe( pSdrObj, *pPV );				// nicht markieren wenn Ole
         GetViewData()->GetViewShell()->SetDrawShell( TRUE );
         return TRUE;
     }
@@ -365,7 +365,7 @@ BOOL ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
 
     if (aSourceMap.GetMapUnit() == MAP_PIXEL)
     {
-            //  Pixel-Korrektur beruecksichtigen, damit Bitmap auf dem Bildschirm stimmt
+            //	Pixel-Korrektur beruecksichtigen, damit Bitmap auf dem Bildschirm stimmt
 
         Fraction aScaleX, aScaleY;
         pScDrawView->CalcNormScale( aScaleX, aScaleY );
@@ -374,7 +374,7 @@ BOOL ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     }
 
     Size aSize = pWin->LogicToLogic( rGraphic.GetPrefSize(), &aSourceMap, &aDestMap );
-//  lcl_AdjustInsertPos( GetViewData(), aPos, aSize );
+//	lcl_AdjustInsertPos( GetViewData(), aPos, aSize );
     if ( GetViewData()->GetDocument()->IsNegativePage( GetViewData()->GetTabNo() ) )
         aPos.X() -= aSize.Width();
 
@@ -385,10 +385,10 @@ BOOL ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
 
     // #118522# calling SetGraphicLink here doesn't work
 
-    //  #49961# Pfad wird nicht mehr als Name der Grafik gesetzt
+    //	#49961# Pfad wird nicht mehr als Name der Grafik gesetzt
 
     ScDrawLayer* pLayer = (ScDrawLayer*) pScDrawView->GetModel();
-    String aName = pLayer->GetNewGraphicName();                 // "Grafik x"
+    String aName = pLayer->GetNewGraphicName();					// "Grafik x"
     pGrafObj->SetName(aName);
 
     // nicht markieren wenn Ole

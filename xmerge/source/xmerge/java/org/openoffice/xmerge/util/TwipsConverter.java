@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,19 +29,19 @@ package org.openoffice.xmerge.util;
 
 
 /**
- * <p>Helper class providing static methods to convert data to/from
+ * <p>Helper class providing static methods to convert data to/from 
  *    twips</p>
  *
- * @author  Martin Maher
+ * @author	Martin Maher 
  */
 public class TwipsConverter {
-
+    
     /**
      * <p>Convert from twips to cm's</p>
      *
      * @param   value   The <code>short</code> to be converted.
      *
-     * @return   float containing the converted
+     * @return   float containing the converted 
      */
     public static float twips2cm(int value) {
 
@@ -50,50 +50,50 @@ public class TwipsConverter {
 
         return cm;
     }
-
-
-
+    
+    
+    
     /**
      * <p>Convert from cm's to twips</p>
      *
-     * @param   value   <code>byte</code> array containing the LE representation
+     * @param   value   <code>byte</code> array containing the LE representation 
      *                  of the value.
      *
      * @return  int containing the converted value.
      */
     public static int cm2twips(float value) {
-
-        int twips = (int) ((value/2.54)*1440);
-
+    
+        int twips = (int) ((value/2.54)*1440); 
+        
         return twips;
     }
-
+    
     /**
      * <p>Convert from twips to cm's</p>
      *
      * @param   value   The <code>short</code> to be converted.
      *
-     * @return   float containing the converted
+     * @return   float containing the converted 
      */
     public static float twips2inches(int value) {
 
         return (float) value/1440;
     }
-
-
-
+    
+    
+    
     /**
      * <p>Convert from cm's to twips</p>
      *
-     * @param   value   <code>byte</code> array containing the LE representation
+     * @param   value   <code>byte</code> array containing the LE representation 
      *                  of the value.
      *
      * @return  int containing the converted value.
      */
     public static int inches2twips(float value) {
-
+    
         return (int) (value*1440);
     }
-
-
+    
+    
 }

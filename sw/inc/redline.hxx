@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@
 #include <svl/svstdarr.hxx>
 #include <pam.hxx>
 
-#include <IDocumentRedlineAccess.hxx>
+#include <IDocumentRedlineAccess.hxx> 
 
 #include <svl/smplhint.hxx>
 
@@ -93,7 +93,7 @@ public:
 class SW_DLLPUBLIC SwRedlineData
 {
     friend class SwRedline;
-    SwRedlineData* pNext;       // Verweis auf weitere Daten
+    SwRedlineData* pNext;		// Verweis auf weitere Daten
     SwRedlineExtraData* pExtraData;
 
     String sComment;
@@ -124,19 +124,19 @@ public:
                             *pExtraData == *rCmp.pExtraData ));
         }
     int operator!=( const SwRedlineData& rCmp ) const
-        {   return !operator==( rCmp ); }
+        {	return !operator==( rCmp ); }
 
     RedlineType_t GetType() const
   { return ((RedlineType_t)(eType & nsRedlineType_t::REDLINE_NO_FLAG_MASK)); }
     RedlineType_t GetRealType() const { return eType; }
-    USHORT GetAuthor() const                { return nAuthor; }
-    const String& GetComment() const        { return sComment; }
-    const DateTime& GetTimeStamp() const    { return aStamp; }
-    inline const SwRedlineData* Next() const{ return pNext; }
+    USHORT GetAuthor() const 				{ return nAuthor; }
+    const String& GetComment() const 		{ return sComment; }
+    const DateTime& GetTimeStamp() const 	{ return aStamp; }
+    inline const SwRedlineData* Next() const{ return pNext;	}
 
     void SetComment( const String& rS )     { sComment = rS; }
     void SetTimeStamp( const DateTime& rDT ) { aStamp = rDT; }
-
+    
     void SetAutoFmtFlag()
   { eType = (RedlineType_t)(eType | nsRedlineType_t::REDLINE_FORM_AUTOFMT); }
     int CanCombine( const SwRedlineData& rCmp ) const
@@ -161,8 +161,8 @@ public:
     // fuers UI-seitige zusammenfassen von Redline-Actionen. Wird z.Z. nur
     // fuers Autoformat mit Redline benoetigt. Der Wert != 0 bedeutet dabei,
     // das es noch weitere geben kann!
-    USHORT GetSeqNo() const                     { return nSeqNo; }
-    void SetSeqNo( USHORT nNo )                 { nSeqNo = nNo; }
+    USHORT GetSeqNo() const 					{ return nSeqNo; }
+    void SetSeqNo( USHORT nNo ) 				{ nSeqNo = nNo; }
 
     String GetDescr() const;
 };
@@ -221,7 +221,7 @@ public:
         { return *pRedlineData == rCmp; }
     int operator!=( const SwRedlineData& rCmp ) const
         { return *pRedlineData != rCmp; }
-    void SetAutoFmtFlag()               { pRedlineData->SetAutoFmtFlag(); }
+    void SetAutoFmtFlag()				{ pRedlineData->SetAutoFmtFlag(); }
 
     USHORT GetStackCount() const;
     USHORT GetAuthor( USHORT nPos = 0) const;
@@ -244,12 +244,12 @@ public:
     // fuers UI-seitige zusammenfassen von Redline-Actionen. Wird z.Z. nur
     // fuers Autoformat mit Redline benoetigt. Der Wert != 0 bedeutet dabei,
     // das es noch weitere geben kann!
-    USHORT GetSeqNo() const             { return pRedlineData->GetSeqNo(); }
-    void SetSeqNo( USHORT nNo )         { pRedlineData->SetSeqNo( nNo ); }
+    USHORT GetSeqNo() const 			{ return pRedlineData->GetSeqNo(); }
+    void SetSeqNo( USHORT nNo ) 		{ pRedlineData->SetSeqNo( nNo ); }
 
     // Beim Hide/ShowOriginal wird 2 mal ueber die Liste gelaufen, damit
-    //  die Del-Redlines per Copy und Delete versteckt werden. Beim Move
-    //  wird sonst die Attributierung falsch behandelt.
+    //	die Del-Redlines per Copy und Delete versteckt werden. Beim Move
+    //	wird sonst die Attributierung falsch behandelt.
     // Alle anderen Aufrufer muessen immer 0 angeben.
     void CallDisplayFunc( USHORT nLoop = 0 );
     void Show( USHORT nLoop = 0 );
@@ -288,11 +288,11 @@ public:
 
 class SW_DLLPUBLIC SwRedlineHint : public SfxHint
 {
-#define SWREDLINE_INSERTED  1
-#define SWREDLINE_REMOVED   2
-#define SWREDLINE_FOCUS     3
-#define SWREDLINE_CHANGED   4
-#define SWREDLINE_LANGUAGE  5
+#define SWREDLINE_INSERTED	1
+#define SWREDLINE_REMOVED	2
+#define SWREDLINE_FOCUS		3
+#define SWREDLINE_CHANGED	4
+#define SWREDLINE_LANGUAGE	5
 
     const SwRedline* pRedline;
     sal_Int16 nWhich;
@@ -303,7 +303,7 @@ public:
         : pRedline(p)
         , nWhich(n)
         , pView(pV)
-        {}
+        {}   
 
     TYPEINFO();
     const SwRedline* GetRedline() const { return pRedline; }

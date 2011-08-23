@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ typedef cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleValue>
                     ScAccessibleCellBaseImpl;
 
 class ScAccessibleCellBase
-    :   public ScAccessibleContextBase,
+    :	public ScAccessibleContextBase,
         public ScAccessibleCellBaseImpl
 {
 public:
@@ -59,12 +59,12 @@ public:
 
     ///=====  XInterface  =====================================================
 
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-        ::com::sun::star::uno::Type const & rType )
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( 
+        ::com::sun::star::uno::Type const & rType ) 
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL acquire() throw ();
-
+       
     virtual void SAL_CALL release() throw ();
 
     ///=====  XAccessibleComponent  ============================================
@@ -72,26 +72,26 @@ public:
     virtual sal_Bool SAL_CALL isVisible(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getForeground(  )
+    virtual sal_Int32 SAL_CALL getForeground(  ) 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getBackground(  )
+    virtual sal_Int32 SAL_CALL getBackground(  ) 
         throw (::com::sun::star::uno::RuntimeException);
 
     ///=====  XAccessibleContext  ==============================================
 
-    /// Return this objects index among the parents children.
-    virtual sal_Int32 SAL_CALL
+    ///	Return this objects index among the parents children.
+    virtual	sal_Int32 SAL_CALL
         getAccessibleIndexInParent(void)
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:
-    /// Return this object's description.
+    ///	Return this object's description.
     virtual ::rtl::OUString SAL_CALL
         createAccessibleDescription(void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the object's current name.
+    ///	Return the object's current name.
     virtual ::rtl::OUString SAL_CALL
         createAccessibleName(void)
         throw (::com::sun::star::uno::RuntimeException);
@@ -117,7 +117,7 @@ public:
 
     ///=====  XServiceInfo  ====================================================
 
-    /** Returns an identifier for the implementation of this object.
+    /**	Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName(void)
@@ -126,11 +126,11 @@ public:
     ///=====  XTypeProvider  ===================================================
 
     /// returns the possible types
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
-        getTypes()
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL 
+        getTypes() 
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Returns a implementation id.
+    /**	Returns a implementation id.
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId(void)
@@ -148,7 +148,7 @@ private:
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 };
-
+    
 
 
 #endif

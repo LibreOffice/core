@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,14 +48,14 @@ namespace basegfx
     {
         class EdgeEntry
         {
-            EdgeEntry*                              mpNext;
-            B2DPoint                                maStart;
-            B2DPoint                                maEnd;
-            double                                  mfAtan2;
+            EdgeEntry*								mpNext;
+            B2DPoint								maStart;
+            B2DPoint								maEnd;
+            double									mfAtan2;
 
         public:
             EdgeEntry(const B2DPoint& rStart, const B2DPoint& rEnd)
-            :   mpNext(0L),
+            :	mpNext(0L),
                 maStart(rStart),
                 maEnd(rEnd),
                 mfAtan2(0.0)
@@ -130,11 +130,11 @@ namespace basegfx
 
         class Triangulator
         {
-            EdgeEntry*                                      mpList;
-            EdgeEntries                                     maStartEntries;
-            EdgeEntryPointers                               maNewEdgeEntries;
-            B2DPolygon                                      maResult;
-
+            EdgeEntry*										mpList;
+            EdgeEntries										maStartEntries;
+            EdgeEntryPointers								maNewEdgeEntries;
+            B2DPolygon										maResult;
+    
             void handleClosingEdge(const B2DPoint& rStart, const B2DPoint& rEnd);
             bool CheckPointInTriangle(EdgeEntry* pEdgeA, EdgeEntry* pEdgeB, const B2DPoint& rTestPoint);
             void createTriangle(const B2DPoint& rA, const B2DPoint& rB, const B2DPoint& rC);
@@ -153,7 +153,7 @@ namespace basegfx
             EdgeEntry* pCurr = mpList;
             EdgeEntry* pPrev = 0L;
 
-            while(pCurr
+            while(pCurr 
                 && pCurr->getStart().getY() <= aNew.getStart().getY()
                 && *pCurr != aNew)
             {
@@ -213,7 +213,7 @@ namespace basegfx
                     EdgeEntry* pEnd = new EdgeEntry(*pStart);
                     maNewEdgeEntries.push_back(pStart);
                     maNewEdgeEntries.push_back(pEnd);
-
+                    
                     pStart->setNext(pEnd);
                     pEnd->setNext(pEdgeA->getNext());
                     pEdgeA->setNext(pStart);
@@ -234,7 +234,7 @@ namespace basegfx
 
         // consume as long as there are edges
         Triangulator::Triangulator(const B2DPolyPolygon& rCandidate)
-        :   mpList(0L)
+        :	mpList(0L)
         {
             // add all available edges to the single linked local list which will be sorted
             // by Y,X,atan2 when adding nodes
@@ -344,7 +344,7 @@ namespace basegfx
                             {
                                 // look for end point in triange
                                 pTestEdge = pEdgeB->getNext();
-
+                                
                                 while(bNoPointInTriangle && pTestEdge)
                                 {
                                     if(aRange.getMaxY() < pTestEdge->getStart().getY())

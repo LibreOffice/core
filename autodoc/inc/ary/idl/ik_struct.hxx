@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ struct xref : public ifc_ce::xref
     static void         Get_Derivations(
                             Dyn_CeIterator &    o_result,
                             const CodeEntity &  i_ce );
-    static void         Get_SynonymTypedefs(
+    static void         Get_SynonymTypedefs(     
                             Dyn_CeIterator &    o_result,
                             const CodeEntity &  i_ce );
     static void         Get_AsReturns(

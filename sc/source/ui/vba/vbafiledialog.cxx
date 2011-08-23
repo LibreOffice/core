@@ -41,7 +41,7 @@ using namespace ::com::sun::star::uno;
 
 
 ScVbaFileDialog::ScVbaFileDialog( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > &xContext, const css::uno::Reference< css::frame::XModel >& xModel )
-:   ScVbaFileDialog_BASE( xParent, xContext, xModel )
+:	ScVbaFileDialog_BASE( xParent, xContext, xModel )
 {
     m_pFileDialogSelectedItems = new VbaFileDialogSelectedItems(xParent, xContext, (com::sun::star::container::XIndexAccess *)&m_FileDialogSelectedObj);
 }

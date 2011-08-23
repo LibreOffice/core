@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,12 +54,12 @@ import lib.TestParameters;
  * @see lib.TestEnvironment
  */
 public abstract class TestCase {
-
+        
     /**
      * Specifies the PrintWriter to log information.
      */
-    public PrintWriter log;
-
+    public PrintWriter log;    
+    
     //public static TestCase tCase;
 
     /**
@@ -67,7 +67,7 @@ public abstract class TestCase {
      */
     public void setLogWriter( PrintWriter log ) {
         this.log = log;
-    }
+    }    
 
     /**
      * Initializes the <code>TestCase</code>. Calls <code>initialize()</code>
@@ -91,7 +91,7 @@ public abstract class TestCase {
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
     }
-
+    
 
     /**
      * Cleans up the <code>TestCase</code>. Calls <code>cleanup()</code>.
@@ -129,19 +129,19 @@ public abstract class TestCase {
     public synchronized TestEnvironment getTestEnvironment( TestParameters tParam ) {
         TestEnvironment tEnv = null;
         try {
-            tEnv = createTestEnvironment( tParam, log );
+            tEnv = createTestEnvironment( tParam, log ); 
             System.out.println("Environment created");
             if (tEnv != null) {
                 tEnv.setTestCase(this);
             }
-        } catch (Exception e) {
+        } catch (Exception e) {            
             String message = e.getMessage();
             if (message == null)
                 message = e.toString();
             System.out.println("Exception while getting Environment "+message);
             e.printStackTrace();
             cleanup(tParam, log);
-        }
+        }                   
         return tEnv;
     }
 
@@ -177,6 +177,6 @@ public abstract class TestCase {
     public String getObjectName() {
         String clName = this.getClass().getName();
         return clName.substring( clName.lastIndexOf('.') + 1 );
-    }
+    }           
 
 }

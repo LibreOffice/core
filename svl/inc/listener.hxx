@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,23 +42,23 @@ class SVL_DLLPUBLIC SvtListener
     friend class SvtListenerBase;
     SvtListenerBase *pBrdCastLst;
 
-    const SvtListener&  operator=(const SvtListener &); // n.i., ist verboten
+    const SvtListener&	operator=(const SvtListener &); // n.i., ist verboten
 
 public:
     TYPEINFO();
 
                         SvtListener();
                         SvtListener( const SvtListener &rCopy );
-    virtual             ~SvtListener();
+    virtual 			~SvtListener();
 
-    BOOL                StartListening( SvtBroadcaster& rBroadcaster );
-    BOOL                EndListening( SvtBroadcaster& rBroadcaster );
-    void                EndListeningAll();
-    BOOL                IsListening( SvtBroadcaster& rBroadcaster ) const;
+    BOOL				StartListening( SvtBroadcaster& rBroadcaster );
+    BOOL				EndListening( SvtBroadcaster& rBroadcaster );
+    void				EndListeningAll();
+    BOOL				IsListening( SvtBroadcaster& rBroadcaster ) const;
 
-    BOOL                HasBroadcaster() const { return 0 != pBrdCastLst; }
+    BOOL 				HasBroadcaster() const { return 0 != pBrdCastLst; }
 
-    virtual void        Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
+    virtual void		Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
 };
 
 

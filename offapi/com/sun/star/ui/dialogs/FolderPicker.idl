@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,18 +40,18 @@
 #include <com/sun/star/lang/XTypeProvider.idl>
 #endif
 
-#ifndef __com_sun_star_util_XCancellable_idl__
+#ifndef __com_sun_star_util_XCancellable_idl__ 
 #include <com/sun/star/util/XCancellable.idl>
 #endif
 
 //=============================================================================
 
 module com { module sun { module star { module ui { module dialogs {
-
+    
 //=============================================================================
 
  published interface XFolderPicker;
-
+    
 //=============================================================================
 /** A FolderPicker service.
 */
@@ -59,7 +59,7 @@ module com { module sun { module star { module ui { module dialogs {
 published service FolderPicker
 {
     //-------------------------------------------------------------------------
-    /** Provides the ability to execute a FolderPicker dialog and
+    /** Provides the ability to execute a FolderPicker dialog and 
         browse for and select folders.
     */
     interface XFolderPicker;
@@ -75,7 +75,7 @@ published service FolderPicker
     interface com::sun::star::lang::XTypeProvider;
 
     //-------------------------------------------------------------------------
-    /** For canceling a running dialog instance.
+    /** For canceling a running dialog instance. 
         <p>This may be usefull for automatic test tools for instance.</p>
     */
     [optional] interface com::sun::star::util::XCancellable;

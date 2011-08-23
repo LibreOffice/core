@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ namespace connectivity
     class ORefBase : public ::rtl::IReference
     {
     protected:
-        oslInterlockedCount     m_refCount;
+        oslInterlockedCount		m_refCount;
 
     protected:
         ORefBase() : m_refCount(0) { }
@@ -54,7 +54,7 @@ namespace connectivity
     };
 
 //........................................................................
-}   // namespace connectivity
+}	// namespace connectivity
 //........................................................................
 
 #endif // CONNECTIVITY_DBTOOLS_REFBASE_HXX

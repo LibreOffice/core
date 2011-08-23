@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,14 +76,14 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
         m_xChartModel;
 
-    FixedText       m_aFT_Scheme;
-    ListBox         m_aLB_Scheme;
+    FixedText		m_aFT_Scheme;
+    ListBox		    m_aLB_Scheme;
 
-    FixedLine       m_aFL_Seperator;
+    FixedLine		m_aFL_Seperator;
 
-    CheckBox        m_aCB_RoundedEdge;
-    CheckBox        m_aCB_Shading;
-    CheckBox        m_aCB_ObjectLines;
+    CheckBox		m_aCB_RoundedEdge;
+    CheckBox		m_aCB_Shading;
+    CheckBox		m_aCB_ObjectLines;
 
     bool            m_bUpdateOtherControls;
     bool            m_bCommitToModel;

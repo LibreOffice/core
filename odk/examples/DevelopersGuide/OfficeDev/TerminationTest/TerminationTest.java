@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import com.sun.star.uno.UnoRuntime;
@@ -42,7 +42,7 @@ import com.sun.star.frame.XDesktop;
  * @author  dschulten
  */
 public class TerminationTest extends java.lang.Object {
-
+    
     private static boolean atWork = false;
     /**
      * @param args the command line arguments
@@ -52,8 +52,8 @@ public class TerminationTest extends java.lang.Object {
         XComponentContext xRemoteContext = null;
         XMultiComponentFactory xRemoteServiceManager = null;
         XDesktop xDesktop = null;
-
-        try {
+        
+        try {           
             // get the remote office context. If necessary a new office
             // process is started
             xRemoteContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
@@ -63,26 +63,26 @@ public class TerminationTest extends java.lang.Object {
             Object desktop = xRemoteServiceManager.createInstanceWithContext(
                 "com.sun.star.frame.Desktop", xRemoteContext);
             xDesktop = (XDesktop)UnoRuntime.queryInterface(XDesktop.class, desktop);
-
+            
             TerminateListener terminateListener = new TerminateListener();
             xDesktop.addTerminateListener(terminateListener);
-
+            
             atWork = true;
             // try to terminate while we are at work
             boolean terminated = xDesktop.terminate();
             System.out.println("The Office " +
-                (terminated == true ?
-                 "has been terminated" :
+                (terminated == true ? 
+                 "has been terminated" : 
                  "is still running, we are at work"));
-
+     
             // no longer at work
             atWork = false;
-            // once more: try to terminate
+            // once more: try to terminate 
             terminated = xDesktop.terminate();
-            System.out.println("The Office " +
+            System.out.println("The Office " + 
                 (terminated == true ?
                     "has been terminated" :
-                    "is still running. Someone else prevents termination, " +
+                    "is still running. Someone else prevents termination, " + 
                     "e.g. the quickstarter"));
         }
         catch (java.lang.Exception e){
@@ -91,8 +91,8 @@ public class TerminationTest extends java.lang.Object {
         finally {
             System.exit(0);
         }
-
-
+        
+        
     }
     public static boolean isAtWork() {
         return atWork;

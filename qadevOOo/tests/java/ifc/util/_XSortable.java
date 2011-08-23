@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,18 +85,18 @@ public class _XSortable extends MultiMethodTest {
             bResult = true;
 
             for (int k = 0; k < oPV.length; k++) {
-                log.println("DescriptorProperty " + k + ": Name=" +
+                log.println("DescriptorProperty " + k + ": Name=" + 
                             oPV[k].Name + "; Value=" + oPV[k].Value);
 
                 if (oPV[k].Name.equals("SortFields")) {
                     TableSortField[] tsf = (TableSortField[]) oPV[k].Value;
 
                     for (int l = 0; l < tsf.length; l++) {
-                        log.println("\t isAscending:  " +
+                        log.println("\t isAscending:  " + 
                                     tsf[l].IsAscending);
-                        log.println("\t IsCaseSensitive:  " +
+                        log.println("\t IsCaseSensitive:  " + 
                                     tsf[l].IsCaseSensitive);
-                        log.println("\t CollatorAlgorithm:  " +
+                        log.println("\t CollatorAlgorithm:  " + 
                                     tsf[l].CollatorAlgorithm);
                     }
                 }
@@ -158,7 +158,7 @@ public class _XSortable extends MultiMethodTest {
         tRes.tested("sort()", res);
     }
 
-    protected void modifyDescriptor(boolean isSortNumeric,
+    protected void modifyDescriptor(boolean isSortNumeric, 
                                     boolean isSortAscending) {
         for (int i = 0; i < oPV.length; i++) {
             if (oPV[i].Name.equals("SortFields")) {
@@ -197,18 +197,18 @@ public class _XSortable extends MultiMethodTest {
 
         if (oPV.length > 0) {
             for (int k = 0; k < oPV.length; k++) {
-                log.println("DescriptorProperty " + k + ": Name=" +
+                log.println("DescriptorProperty " + k + ": Name=" + 
                             oPV[k].Name + "; Value=" + oPV[k].Value);
 
                 if (oPV[k].Name.equals("SortFields")) {
                     TableSortField[] tsf = (TableSortField[]) oPV[k].Value;
 
                     for (int l = 0; l < tsf.length; l++) {
-                        log.println("\t isAscending:  " +
+                        log.println("\t isAscending:  " + 
                                     tsf[l].IsAscending);
-                        log.println("\t IsCaseSensitive:  " +
+                        log.println("\t IsCaseSensitive:  " + 
                                     tsf[l].IsCaseSensitive);
-                        log.println("\t CollatorAlgorithm:  " +
+                        log.println("\t CollatorAlgorithm:  " + 
                                     tsf[l].CollatorAlgorithm);
                     }
                 }
@@ -222,17 +222,17 @@ public class _XSortable extends MultiMethodTest {
     public static interface XSortChecker {
         public void prepareToSort();
 
-        public boolean checkSort(boolean isSortNumbering,
+        public boolean checkSort(boolean isSortNumbering, 
                                  boolean isSortAscending);
 
         public void setPrintWriter(PrintWriter log);
     }
-
+    
     /**
     * Forces environment recreation.
     */
     protected void after() {
         disposeEnvironment();
-    }
-
+    }   
+    
 } // finish class _XSortable

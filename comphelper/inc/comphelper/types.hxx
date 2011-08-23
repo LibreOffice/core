@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,12 +48,12 @@ namespace comphelper
 {
 //.........................................................................
 
-    namespace staruno       = ::com::sun::star::uno;
-    namespace starawt       = ::com::sun::star::awt;
-    namespace starlang      = ::com::sun::star::lang;
+    namespace staruno		= ::com::sun::star::uno;
+    namespace starawt		= ::com::sun::star::awt;
+    namespace starlang		= ::com::sun::star::lang;
 
-    typedef staruno::Reference< staruno::XInterface >           InterfaceRef;
-    typedef staruno::Sequence< ::rtl::OUString >                StringSequence;
+    typedef staruno::Reference< staruno::XInterface >			InterfaceRef;
+    typedef staruno::Sequence< ::rtl::OUString >				StringSequence;
 
     //-------------------------------------------------------------------------
     /** compare the two given Anys
@@ -65,8 +65,8 @@ namespace comphelper
     //-------------------------------------------------------------------------
     /** compare two FontDescriptor's
     */
-    COMPHELPER_DLLPUBLIC sal_Bool   operator ==(const starawt::FontDescriptor& _rLeft, const starawt::FontDescriptor& _rRight);
-    inline  sal_Bool    operator !=(const starawt::FontDescriptor& _rLeft, const starawt::FontDescriptor& _rRight)
+    COMPHELPER_DLLPUBLIC sal_Bool	operator ==(const starawt::FontDescriptor& _rLeft, const starawt::FontDescriptor& _rRight);
+    inline	sal_Bool	operator !=(const starawt::FontDescriptor& _rLeft, const starawt::FontDescriptor& _rRight)
     {
         return !(_rLeft == _rRight);
     }
@@ -138,11 +138,11 @@ namespace comphelper
 
 
     //-------------------------------------------------------------------------
-    /** get a com::sun::star::awt::FontDescriptor that is fully initialized with
+    /**	get a com::sun::star::awt::FontDescriptor that is fully initialized with
         the XXX_DONTKNOW enum values (which isn't the case if you instantiate it
         via the default constructor)
     */
-    COMPHELPER_DLLPUBLIC starawt::FontDescriptor    getDefaultFont();
+    COMPHELPER_DLLPUBLIC starawt::FontDescriptor	getDefaultFont();
 
     /** examine a sequence for the <type scope="com.sun.star.uno">Type</type> of it's elements.
     */
@@ -156,14 +156,14 @@ namespace comphelper
     // no, we don't use templates here. This would lead to a lot of implicit uses of the conversion methods,
     // which would be difficult to trace ...
 
-    COMPHELPER_DLLPUBLIC sal_Int32      getINT32(const staruno::Any& _rAny);
-    COMPHELPER_DLLPUBLIC sal_Int16      getINT16(const staruno::Any& _rAny);
-    COMPHELPER_DLLPUBLIC double         getDouble(const staruno::Any& _rAny);
-    COMPHELPER_DLLPUBLIC float          getFloat(const staruno::Any& _rAny);
-    COMPHELPER_DLLPUBLIC ::rtl::OUString    getString(const staruno::Any& _rAny);
-    COMPHELPER_DLLPUBLIC sal_Bool       getBOOL(const staruno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC sal_Int32		getINT32(const staruno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC sal_Int16		getINT16(const staruno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC double			getDouble(const staruno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC float			getFloat(const staruno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC ::rtl::OUString	getString(const staruno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC sal_Bool		getBOOL(const staruno::Any& _rAny);
 
-    COMPHELPER_DLLPUBLIC sal_Int32      getEnumAsINT32(const staruno::Any& _rAny) throw(starlang::IllegalArgumentException);
+    COMPHELPER_DLLPUBLIC sal_Int32		getEnumAsINT32(const staruno::Any& _rAny) throw(starlang::IllegalArgumentException);
 
 //= replacement of some former UsrAny.setXXX methods - can be used with rvalues
     inline void setBOOL(staruno::Any& _rAny, sal_Bool _b)
@@ -174,7 +174,7 @@ namespace comphelper
     { return staruno::Any(&_b, ::getBooleanCppuType()); }
 
 //.........................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.........................................................................
 
 #endif // _COMPHELPER_TYPES_HXX_

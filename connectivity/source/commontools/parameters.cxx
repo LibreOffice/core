@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -403,7 +403,7 @@ namespace dbtools
                 {
                     if ( sAdditionalFilter.getLength() )
                         sAdditionalFilter.append(s_sAnd);
-
+                    
                     sAdditionalFilter.appendAscii("( ",((sal_Int32)(sizeof("( ")-1)));
                     sAdditionalFilter.append(*aComponent);
                     sAdditionalFilter.appendAscii(" )",((sal_Int32)(sizeof(" )")-1)));
@@ -558,7 +558,7 @@ namespace dbtools
 
         try
         {
-            // the master and detail field( name)s of the
+            // the master and detail field( name)s of the 
             const ::rtl::OUString* pMasterFields = m_aMasterFields.getConstArray();
             const ::rtl::OUString* pDetailFields = m_aDetailFields.getConstArray();
 
@@ -623,7 +623,7 @@ namespace dbtools
                     {
                         OSL_ENSURE( sal_False,
                                     ::rtl::OString( "ParameterManager::fillLinkedParameters: master-detail parameter number " )
-                                +=  ::rtl::OString::valueOf( sal_Int32( *aPosition + 1 ) )
+                                +=	::rtl::OString::valueOf( sal_Int32( *aPosition + 1 ) )
                                 +=  ::rtl::OString( " could not be filled!" ) );
                     }
                 }
@@ -822,7 +822,7 @@ namespace dbtools
             if ( !xParent.is() )
                 return false;
 
-            // the columns supplier: either from a composer, or directly from the
+            // the columns supplier: either from a composer, or directly from the 
             Reference< XColumnsSupplier > xParentColSupp;
             if ( _bFromComposer )
             {
@@ -837,7 +837,7 @@ namespace dbtools
             else
                 xParentColSupp = xParentColSupp.query( xParent );
 
-            // get the columns of the parent
+            // get the columns of the parent 
             if ( xParentColSupp.is() )
                 _out_rxParentColumns = xParentColSupp->getColumns();
         }
@@ -931,7 +931,7 @@ namespace dbtools
                     ::rtl::OUString sParamColumnRealName;
                     xInnerParameter->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME) ) >>= sParamColumnRealName;
                     if ( xColumns->hasByName( sParamColumnRealName ) )
-                    {   // our own columns have a column which's name equals the real name of the param column
+                    {	// our own columns have a column which's name equals the real name of the param column
                         // -> transfer the value property
                         xColumns->getByName( sParamColumnRealName ) >>= xDetailField;
                         if ( xDetailField.is() )

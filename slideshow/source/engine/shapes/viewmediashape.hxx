@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,15 +42,15 @@ class SystemChildWindow;
 
 namespace com { namespace sun { namespace star { namespace drawing {
     class XShape;
-}
-namespace media {
+} 
+namespace media { 
     class XPlayer;
     class XPlayerWindow;
-}
+} 
 namespace uno {
     class XComponentContext;
 }
-namespace beans{
+namespace beans{ 
     class XPropertySet;
 } } } }
 
@@ -72,16 +72,16 @@ namespace slideshow
                 @param rView
                 The associated View object.
              */
-            ViewMediaShape( const ViewLayerSharedPtr&                          rViewLayer,
-                            const ::com::sun::star::uno::Reference<
+            ViewMediaShape( const ViewLayerSharedPtr&                          rViewLayer, 
+                            const ::com::sun::star::uno::Reference< 
                                   ::com::sun::star::drawing::XShape >&         rxShape,
-                             const ::com::sun::star::uno::Reference<
+                             const ::com::sun::star::uno::Reference< 
                                    ::com::sun::star::uno::XComponentContext >& rxContext );
 
             /** destroy the object
              */
             virtual ~ViewMediaShape();
-
+            
             /** Query the associated view layer of this shape
              */
             ViewLayerSharedPtr getViewLayer() const;
@@ -125,14 +125,14 @@ namespace slideshow
 
             /** Render the ViewShape
 
-                This method renders the ViewMediaShape on the associated view.
+                This method renders the ViewMediaShape on the associated view. 
 
                 @param rBounds
                 The current media shape bounds
 
                 @return whether the rendering finished successfully.
             */
-            bool render( const ::basegfx::B2DRectangle& rBounds ) const;
+            bool render( const ::basegfx::B2DRectangle&	rBounds ) const;
 
             /** Resize the ViewShape
 
@@ -144,10 +144,10 @@ namespace slideshow
 
                 @return whether the resize finished successfully.
             */
-            bool resize( const ::basegfx::B2DRectangle& rNewBounds ) const;
+            bool resize( const ::basegfx::B2DRectangle&	rNewBounds ) const;
 
         private:
-
+            
             bool implInitialize( const ::basegfx::B2DRectangle& rBounds );
             void implSetMediaProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rxProps );
             void implInitializeMediaPlayer( const ::rtl::OUString& rMediaURL );
@@ -155,20 +155,20 @@ namespace slideshow
                                                      const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rVCLDeviceParams );
             bool implInitializeDXBasedPlayerWindow( const ::basegfx::B2DRectangle& rBounds,
                                                     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rDXDeviceParams );
-
-            ViewLayerSharedPtr                    mpViewLayer;
+            
+            ViewLayerSharedPtr					  mpViewLayer;
 #ifdef GSTREAMER
-            ::std::auto_ptr< SystemChildWindow >    mpMediaWindow;
+            ::std::auto_ptr< SystemChildWindow >	mpMediaWindow;
 #else
             ::std::auto_ptr< JavaChildWindow >    mpMediaWindow;
 #endif
             mutable ::com::sun::star::awt::Point  maWindowOffset;
             mutable ::basegfx::B2DRectangle       maBounds;
-
-            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >       mxShape;
-            ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >        mxPlayer;
-            ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow >  mxPlayerWindow;
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> mxComponentContext;
+        
+            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >		mxShape;
+            ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >		mxPlayer;
+            ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow >	mxPlayerWindow;
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>	mxComponentContext;
             bool mbIsSoundEnabled;
         };
 

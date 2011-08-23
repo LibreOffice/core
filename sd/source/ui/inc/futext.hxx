@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace sd {
 |*
 \************************************************************************/
 
-class FuText
+class FuText 
     : public FuConstruct
 {
 public:
@@ -65,11 +65,11 @@ public:
     virtual void ReceiveRequest(SfxRequest& rReq);
     virtual void DoubleClick(const MouseEvent& rMEvt);
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();		   // Function aktivieren
+    virtual void Deactivate();		   // Function deaktivieren
 
     void    SetInEditMode(const MouseEvent& rMEvt, BOOL bQuickDrag);
-    BOOL    DeleteDefaultText();
+    BOOL	DeleteDefaultText();
     SdrTextObj* GetTextObj() { return static_cast< SdrTextObj* >( mxTextObj.get() ); }
 
     DECL_LINK(SpellError, void* );
@@ -88,19 +88,19 @@ public:
     static void ChangeFontSize( bool, OutlinerView*, const FontList*, ::sd::View* );
 
 protected:
-    FuText (ViewShell* pViewSh,
-        ::sd::Window* pWin,
+    FuText (ViewShell* pViewSh, 
+        ::sd::Window* pWin, 
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument* pDoc, 
         SfxRequest& rReq);
 
     virtual void disposing();
 
-    SdrObjectWeakRef    mxTextObj;
+    SdrObjectWeakRef	mxTextObj;
     Link                aOldLink;
     BOOL                bFirstObjCreated;
 
-    SfxRequest&         rRequest;
+    SfxRequest&			rRequest;
 
 private:
     // #97016#

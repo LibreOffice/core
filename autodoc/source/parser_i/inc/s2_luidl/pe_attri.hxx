@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,30 +69,30 @@ class PE_Attribute : public UnoIDL_PE,
                         PE_Attribute(
                             const Ce_id &       i_rCurOwner );
 
-    virtual void        EstablishContacts(
-                            UnoIDL_PE *         io_pParentPE,
+    virtual void	 	EstablishContacts(
+                            UnoIDL_PE *			io_pParentPE,
                             ary::Repository &
                                                 io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
-    virtual             ~PE_Attribute();
+    virtual				~PE_Attribute();
 
-    virtual void        ProcessToken(
-                            const Token &       i_rToken );
+    virtual void	  	ProcessToken(
+                            const Token &		i_rToken );
 
-    virtual void        Process_Identifier(
+    virtual void		Process_Identifier(
                             const TokIdentifier &
                                                 i_rToken );
-    virtual void        Process_Stereotype(
+    virtual void		Process_Stereotype(
                             const TokStereotype &
                                                 i_rToken );
-    virtual void        Process_MetaType(
-                            const TokMetaType & i_rToken );
-    virtual void        Process_Punctuation(
+    virtual void		Process_MetaType(
+                            const TokMetaType &	i_rToken );
+    virtual void		Process_Punctuation(
                             const TokPunctuation &
                                                 i_rToken );
-    virtual void        Process_Raises();
-    virtual void        Process_Default();
+    virtual void		Process_Raises();
+    virtual void		Process_Default();
 
   private:
     enum E_State
@@ -106,23 +106,23 @@ class PE_Attribute : public UnoIDL_PE,
         in_set
     };
 
-    virtual void        InitData();
-    virtual void        ReceiveData();
-    virtual void        TransferData();
-    virtual UnoIDL_PE & MyPE();
+    virtual void		InitData();
+    virtual void		ReceiveData();
+    virtual void		TransferData();
+    virtual UnoIDL_PE &	MyPE();
 
     // DATA
     E_State             eState;
     const Ce_id *       pCurOwner;
 
-    Dyn<PE_Variable>    pPE_Variable;
-    Dyn<PE_Type>        pPE_Exception;
+    Dyn<PE_Variable>	pPE_Variable;
+    Dyn<PE_Type>	    pPE_Exception;
 
         // object-data
     ary::idl::Attribute *
                         pCurAttribute;
-    Type_id             nCurParsedType;
-    String              sCurParsedName;
+    Type_id	            nCurParsedType;
+    String 			    sCurParsedName;
     bool                bReadOnly;
     bool                bBound;
 };

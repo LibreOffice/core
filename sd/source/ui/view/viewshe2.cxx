@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -343,9 +343,9 @@ void ViewShell::Scroll(long nScrollX, long nScrollY)
         long nNewThumb = mpVerticalScrollBar->GetThumbPos() + nScrollY;
         mpVerticalScrollBar->SetThumbPos(nNewThumb);
     }
-    double  fX = (double) mpHorizontalScrollBar->GetThumbPos() /
+    double	fX = (double) mpHorizontalScrollBar->GetThumbPos() /
                             mpHorizontalScrollBar->GetRange().Len();
-    double  fY = (double) mpVerticalScrollBar->GetThumbPos() /
+    double	fY = (double) mpVerticalScrollBar->GetThumbPos() /
                             mpVerticalScrollBar->GetRange().Len();
 
     GetActiveWindow()->SetVisibleXY(fX, fY);
@@ -1091,7 +1091,7 @@ sal_Int8 ViewShell::ExecuteDrop (
     USHORT nPage,
     USHORT nLayer)
 {
-    ::sd::View* pView = GetView();
+    ::sd::View*	pView = GetView();
     return( pView ? pView->ExecuteDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) : DND_ACTION_NONE );
 }
 

@@ -365,7 +365,7 @@ Sequence< OUString > SAL_CALL LotusWordProImportFilter_getSupportedServiceNames(
     throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
-//  Sequence < OUString > aRet(1);
+//	Sequence < OUString > aRet(1);
         OUString* pArray = aRet.getArray();
         pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
     pArray[1] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME2 ) );

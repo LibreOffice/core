@@ -45,17 +45,17 @@ namespace dbaccess
     class OFilteredContainer : public ::connectivity::sdbcx::OCollection
     {
     private:
-        mutable sal_Bool m_bConstructed;        // late ctor called
+        mutable sal_Bool m_bConstructed;		// late ctor called
 
     protected:
         ::dbtools::IWarningsContainer*  m_pWarningsContainer;
-        IRefreshListener*               m_pRefreshListener;
+        IRefreshListener*		        m_pRefreshListener;
         oslInterlockedCount&            m_nInAppend;
 
         // holds the original container which where set in construct but they can be null
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xMasterContainer;
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection >     m_xConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >	m_xMasterContainer;
+        ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection >		m_xConnection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >	m_xMetaData;
 
         /** returns a string denoting the only type of tables allowed in this container, or an empty string
             if there is no such restriction
@@ -101,18 +101,18 @@ namespace dbaccess
     public:
         /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
             interface.<BR>
-            @param          _rParent            the object which acts as parent for the container.
+            @param			_rParent			the object which acts as parent for the container.
                                                 all refcounting is rerouted to this object
-            @param          _rMutex             the access safety object of the parent
-            @param          _rTableFilter       restricts the visible tables by name
-            @param          _rTableTypeFilter   restricts the visible tables by type
-            @see            construct
+            @param			_rMutex				the access safety object of the parent
+            @param			_rTableFilter		restricts the visible tables by name
+            @param			_rTableTypeFilter	restricts the visible tables by type
+            @see			construct
         */
         OFilteredContainer( ::cppu::OWeakObject& _rParent,
                             ::osl::Mutex& _rMutex,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
                             sal_Bool _bCase,
-                            IRefreshListener*   _pRefreshListener,
+                            IRefreshListener*	_pRefreshListener,
                             ::dbtools::IWarningsContainer* _pWarningsContainer,
                             oslInterlockedCount& _nInAppend
                         );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,11 +97,11 @@ SD_CONSTASCII_ACTION( sUNO_SdLayerManager, "SdUnoLayerManager" );
 
 // SdLayer
 SD_CONSTASCII_ACTION( sUNO_SdLayer, "SdUnoLayer" );
-SD_CONSTASCII_ACTION( sUNO_LayerName_background,         "background" );
+SD_CONSTASCII_ACTION( sUNO_LayerName_background,		 "background" );
 SD_CONSTASCII_ACTION( sUNO_LayerName_background_objects, "backgroundobjects" );
-SD_CONSTASCII_ACTION( sUNO_LayerName_layout,             "layout" );
-SD_CONSTASCII_ACTION( sUNO_LayerName_controls,           "controls" );
-SD_CONSTASCII_ACTION( sUNO_LayerName_measurelines,       "measurelines" );
+SD_CONSTASCII_ACTION( sUNO_LayerName_layout,			 "layout" );
+SD_CONSTASCII_ACTION( sUNO_LayerName_controls,			 "controls" );
+SD_CONSTASCII_ACTION( sUNO_LayerName_measurelines,		 "measurelines" );
 
 // SdXShape
 SD_CONSTASCII_ACTION( sUNO_shape_style, "Style" );
@@ -130,88 +130,88 @@ SD_CONSTASCII_ACTION( sUNO_Service_ImageMapCircleObject, UNO_PREFIX "image.Image
 SD_CONSTASCII_ACTION( sUNO_Service_ImageMapPolygonObject, UNO_PREFIX "image.ImageMapPolygonObject" );
 
 // properties
-SD_CONSTASCII_ACTION( sUNO_Prop_Background,             "Background" );
-SD_CONSTASCII_ACTION( sUNO_Prop_ForbiddenCharacters,    "ForbiddenCharacters" );
-SD_CONSTASCII_ACTION( sUNO_Prop_MapUnit,                "MapUnit" );
-SD_CONSTASCII_ACTION( sUNO_Prop_VisibleArea,            "VisibleArea" );
-SD_CONSTASCII_ACTION( sUNO_Prop_Aspect,                 "Aspect" );
-SD_CONSTASCII_ACTION( sUNO_Prop_TabStop,                "TabStop" );
-SD_CONSTASCII_ACTION( sUNO_Prop_CharLocale,             "CharLocale" );
-SD_CONSTASCII_ACTION( sUNO_Prop_AutomContFocus,         "AutomaticControlFocus" );
-SD_CONSTASCII_ACTION( sUNO_Prop_ApplyFrmDsgnMode,       "ApplyFormDesignMode" );
-SD_CONSTASCII_ACTION( sUNO_Prop_IsBackgroundVisible,    "IsBackgroundVisible" );
-SD_CONSTASCII_ACTION( sUNO_Prop_IsBackgroundObjectsVisible, "IsBackgroundObjectsVisible" );
+SD_CONSTASCII_ACTION( sUNO_Prop_Background,				"Background" );
+SD_CONSTASCII_ACTION( sUNO_Prop_ForbiddenCharacters,	"ForbiddenCharacters" );
+SD_CONSTASCII_ACTION( sUNO_Prop_MapUnit,				"MapUnit" );
+SD_CONSTASCII_ACTION( sUNO_Prop_VisibleArea,			"VisibleArea" );
+SD_CONSTASCII_ACTION( sUNO_Prop_Aspect,					"Aspect" );
+SD_CONSTASCII_ACTION( sUNO_Prop_TabStop,				"TabStop" );
+SD_CONSTASCII_ACTION( sUNO_Prop_CharLocale,				"CharLocale" );
+SD_CONSTASCII_ACTION( sUNO_Prop_AutomContFocus,			"AutomaticControlFocus" );
+SD_CONSTASCII_ACTION( sUNO_Prop_ApplyFrmDsgnMode,		"ApplyFormDesignMode" );
+SD_CONSTASCII_ACTION( sUNO_Prop_IsBackgroundVisible,	"IsBackgroundVisible" );
+SD_CONSTASCII_ACTION( sUNO_Prop_IsBackgroundObjectsVisible,	"IsBackgroundObjectsVisible" );
 SD_CONSTASCII_ACTION( sUNO_Prop_UserDefinedAttributes, "UserDefinedAttributes" );
-SD_CONSTASCII_ACTION( sUNO_Prop_BookmarkURL,            "BookmarkURL" );
+SD_CONSTASCII_ACTION( sUNO_Prop_BookmarkURL,			"BookmarkURL" );
 SD_CONSTASCII_ACTION( sUNO_Prop_RuntimeUID,             "RuntimeUID" );
 SD_CONSTASCII_ACTION( sUNO_Prop_HasValidSignatures,     "HasValidSignatures" );
 
 // view settings
-SD_CONSTASCII_ACTION( sUNO_View_ViewId,                         "ViewId" );
-SD_CONSTASCII_ACTION( sUNO_View_SnapLinesDrawing,               "SnapLinesDrawing" );
-SD_CONSTASCII_ACTION( sUNO_View_SnapLinesNotes,                 "SnapLinesNotes" );
-SD_CONSTASCII_ACTION( sUNO_View_SnapLinesHandout,               "SnapLinesHandout" );
-SD_CONSTASCII_ACTION( sUNO_View_RulerIsVisible,                 "RulerIsVisible" );
-SD_CONSTASCII_ACTION( sUNO_View_PageKind,                       "PageKind" );
-SD_CONSTASCII_ACTION( sUNO_View_SelectedPage,                   "SelectedPage" );
-SD_CONSTASCII_ACTION( sUNO_View_IsLayerMode,                    "IsLayerMode" );
-SD_CONSTASCII_ACTION( sUNO_View_IsQuickEdit,                    "IsQuickEdit" );
-SD_CONSTASCII_ACTION( sUNO_View_IsBigHandles,                   "IsBigHandles" );
-SD_CONSTASCII_ACTION( sUNO_View_IsDoubleClickTextEdit,          "IsDoubleClickTextEdit" );
-SD_CONSTASCII_ACTION( sUNO_View_IsClickChangeRotation,          "IsClickChangeRotation" );
-SD_CONSTASCII_ACTION( sUNO_View_IsDragWithCopy,                 "IsDragWithCopy" );
-SD_CONSTASCII_ACTION( sUNO_View_SlidesPerRow,                   "SlidesPerRow" );
-SD_CONSTASCII_ACTION( sUNO_View_DrawMode,                       "DrawMode" );
-SD_CONSTASCII_ACTION( sUNO_View_PreviewDrawMode,                "PreviewDrawMode" );
-SD_CONSTASCII_ACTION( sUNO_View_IsShowPreviewInPageMode,        "IsShowPreviewInPageMode" );
-SD_CONSTASCII_ACTION( sUNO_View_IsShowPreviewInMasterPageMode,  "IsShowPreviewInMasterPageMode" );
-SD_CONSTASCII_ACTION( sUNO_View_SetShowPreviewInOutlineMode,    "SetShowPreviewInOutlineMode" );
-SD_CONSTASCII_ACTION( sUNO_View_EditModeStandard,               "EditModeStandard" );
-SD_CONSTASCII_ACTION( sUNO_View_EditModeNotes,                  "EditModeNotes" );
-SD_CONSTASCII_ACTION( sUNO_View_EditModeHandout,                "EditModeHandout" );
-SD_CONSTASCII_ACTION( sUNO_View_VisArea,                        "VisArea" );
+SD_CONSTASCII_ACTION( sUNO_View_ViewId,							"ViewId" );
+SD_CONSTASCII_ACTION( sUNO_View_SnapLinesDrawing,				"SnapLinesDrawing" );
+SD_CONSTASCII_ACTION( sUNO_View_SnapLinesNotes,					"SnapLinesNotes" );
+SD_CONSTASCII_ACTION( sUNO_View_SnapLinesHandout,				"SnapLinesHandout" );
+SD_CONSTASCII_ACTION( sUNO_View_RulerIsVisible,					"RulerIsVisible" );
+SD_CONSTASCII_ACTION( sUNO_View_PageKind,						"PageKind" );
+SD_CONSTASCII_ACTION( sUNO_View_SelectedPage,					"SelectedPage" );
+SD_CONSTASCII_ACTION( sUNO_View_IsLayerMode,					"IsLayerMode" );
+SD_CONSTASCII_ACTION( sUNO_View_IsQuickEdit,					"IsQuickEdit" );
+SD_CONSTASCII_ACTION( sUNO_View_IsBigHandles,					"IsBigHandles" );
+SD_CONSTASCII_ACTION( sUNO_View_IsDoubleClickTextEdit,			"IsDoubleClickTextEdit"	);
+SD_CONSTASCII_ACTION( sUNO_View_IsClickChangeRotation,			"IsClickChangeRotation" );
+SD_CONSTASCII_ACTION( sUNO_View_IsDragWithCopy,					"IsDragWithCopy" );
+SD_CONSTASCII_ACTION( sUNO_View_SlidesPerRow,					"SlidesPerRow" );
+SD_CONSTASCII_ACTION( sUNO_View_DrawMode,						"DrawMode" );
+SD_CONSTASCII_ACTION( sUNO_View_PreviewDrawMode,				"PreviewDrawMode" );
+SD_CONSTASCII_ACTION( sUNO_View_IsShowPreviewInPageMode,		"IsShowPreviewInPageMode" );
+SD_CONSTASCII_ACTION( sUNO_View_IsShowPreviewInMasterPageMode,	"IsShowPreviewInMasterPageMode" );
+SD_CONSTASCII_ACTION( sUNO_View_SetShowPreviewInOutlineMode,	"SetShowPreviewInOutlineMode" );
+SD_CONSTASCII_ACTION( sUNO_View_EditModeStandard,				"EditModeStandard" );
+SD_CONSTASCII_ACTION( sUNO_View_EditModeNotes,					"EditModeNotes" );
+SD_CONSTASCII_ACTION( sUNO_View_EditModeHandout,				"EditModeHandout" );
+SD_CONSTASCII_ACTION( sUNO_View_VisArea,						"VisArea" );
 
-SD_CONSTASCII_ACTION( sUNO_View_GridIsVisible,                  "GridIsVisible" );
-SD_CONSTASCII_ACTION( sUNO_View_GridIsFront,                    "GridIsFront" );
-SD_CONSTASCII_ACTION( sUNO_View_IsSnapToGrid,                   "IsSnapToGrid" );
-SD_CONSTASCII_ACTION( sUNO_View_IsSnapToPageMargins,            "IsSnapToPageMargins" );
-SD_CONSTASCII_ACTION( sUNO_View_IsSnapToSnapLines,              "IsSnapToSnapLines" );
-SD_CONSTASCII_ACTION( sUNO_View_IsSnapToObjectFrame,            "IsSnapToObjectFrame" );
-SD_CONSTASCII_ACTION( sUNO_View_IsSnapToObjectPoints,           "IsSnapToObjectPoints" );
-SD_CONSTASCII_ACTION( sUNO_View_IsSnapLinesVisible,             "IsSnapLinesVisible" );
-SD_CONSTASCII_ACTION( sUNO_View_IsDragStripes,                  "IsDragStripes" );
-SD_CONSTASCII_ACTION( sUNO_View_IsPlusHandlesAlwaysVisible,     "IsPlusHandlesAlwaysVisible" );
-SD_CONSTASCII_ACTION( sUNO_View_IsFrameDragSingles,             "IsFrameDragSingles" );
-SD_CONSTASCII_ACTION( sUNO_View_IsMarkedHitMovesAlways,         "IsMarkedHitMovesAlways" );
-SD_CONSTASCII_ACTION( sUNO_View_EliminatePolyPointLimitAngle,   "EliminatePolyPointLimitAngle" );
-SD_CONSTASCII_ACTION( sUNO_View_IsEliminatePolyPoints,          "IsEliminatePolyPoints" );
-SD_CONSTASCII_ACTION( sUNO_View_IsLineDraft,                    "IsLineDraft" );
-SD_CONSTASCII_ACTION( sUNO_View_IsFillDraft,                    "IsFillDraft" );
-SD_CONSTASCII_ACTION( sUNO_View_IsTextDraft,                    "IsTextDraft" );
-SD_CONSTASCII_ACTION( sUNO_View_IsGrafDraft,                    "IsGrafDraft" );
-SD_CONSTASCII_ACTION( sUNO_View_ActiveLayer,                    "ActiveLayer" );
-SD_CONSTASCII_ACTION( sUNO_View_NoAttribs,                      "NoAttribs" );
-SD_CONSTASCII_ACTION( sUNO_View_NoColors,                       "NoColors" );
-SD_CONSTASCII_ACTION( sUNO_View_GridCoarseWidth,                "GridCoarseWidth" );
-SD_CONSTASCII_ACTION( sUNO_View_GridCoarseHeight,               "GridCoarseHeight" );
-SD_CONSTASCII_ACTION( sUNO_View_GridFineWidth,                  "GridFineWidth" );
-SD_CONSTASCII_ACTION( sUNO_View_GridFineHeight,                 "GridFineHeight" );
-SD_CONSTASCII_ACTION( sUNO_View_IsAngleSnapEnabled,             "IsAngleSnapEnabled" );
-SD_CONSTASCII_ACTION( sUNO_View_SnapAngle,                      "SnapAngle" );
-SD_CONSTASCII_ACTION( sUNO_View_GridSnapWidthXNumerator,        "GridSnapWidthXNumerator" );
-SD_CONSTASCII_ACTION( sUNO_View_GridSnapWidthXDenominator,      "GridSnapWidthXDenominator" );
-SD_CONSTASCII_ACTION( sUNO_View_GridSnapWidthYNumerator,        "GridSnapWidthYNumerator" );
-SD_CONSTASCII_ACTION( sUNO_View_GridSnapWidthYDenominator,      "GridSnapWidthYDenominator" );
-SD_CONSTASCII_ACTION( sUNO_View_VisibleLayers,                  "VisibleLayers" );
-SD_CONSTASCII_ACTION( sUNO_View_PrintableLayers,                "PrintableLayers" );
-SD_CONSTASCII_ACTION( sUNO_View_LockedLayers,                   "LockedLayers" );
+SD_CONSTASCII_ACTION( sUNO_View_GridIsVisible,					"GridIsVisible" );
+SD_CONSTASCII_ACTION( sUNO_View_GridIsFront,					"GridIsFront" );
+SD_CONSTASCII_ACTION( sUNO_View_IsSnapToGrid,					"IsSnapToGrid" );
+SD_CONSTASCII_ACTION( sUNO_View_IsSnapToPageMargins,			"IsSnapToPageMargins" );
+SD_CONSTASCII_ACTION( sUNO_View_IsSnapToSnapLines,				"IsSnapToSnapLines" );
+SD_CONSTASCII_ACTION( sUNO_View_IsSnapToObjectFrame,			"IsSnapToObjectFrame" );
+SD_CONSTASCII_ACTION( sUNO_View_IsSnapToObjectPoints,			"IsSnapToObjectPoints" );
+SD_CONSTASCII_ACTION( sUNO_View_IsSnapLinesVisible,				"IsSnapLinesVisible" );
+SD_CONSTASCII_ACTION( sUNO_View_IsDragStripes,					"IsDragStripes" );
+SD_CONSTASCII_ACTION( sUNO_View_IsPlusHandlesAlwaysVisible,		"IsPlusHandlesAlwaysVisible" );
+SD_CONSTASCII_ACTION( sUNO_View_IsFrameDragSingles,				"IsFrameDragSingles" );
+SD_CONSTASCII_ACTION( sUNO_View_IsMarkedHitMovesAlways,			"IsMarkedHitMovesAlways" );
+SD_CONSTASCII_ACTION( sUNO_View_EliminatePolyPointLimitAngle,	"EliminatePolyPointLimitAngle" );
+SD_CONSTASCII_ACTION( sUNO_View_IsEliminatePolyPoints,			"IsEliminatePolyPoints" );
+SD_CONSTASCII_ACTION( sUNO_View_IsLineDraft,					"IsLineDraft" );
+SD_CONSTASCII_ACTION( sUNO_View_IsFillDraft,					"IsFillDraft" );
+SD_CONSTASCII_ACTION( sUNO_View_IsTextDraft,					"IsTextDraft" );
+SD_CONSTASCII_ACTION( sUNO_View_IsGrafDraft,					"IsGrafDraft" );
+SD_CONSTASCII_ACTION( sUNO_View_ActiveLayer,					"ActiveLayer" );
+SD_CONSTASCII_ACTION( sUNO_View_NoAttribs,						"NoAttribs" );
+SD_CONSTASCII_ACTION( sUNO_View_NoColors,						"NoColors" );
+SD_CONSTASCII_ACTION( sUNO_View_GridCoarseWidth,				"GridCoarseWidth" );
+SD_CONSTASCII_ACTION( sUNO_View_GridCoarseHeight,				"GridCoarseHeight" );
+SD_CONSTASCII_ACTION( sUNO_View_GridFineWidth,					"GridFineWidth" );
+SD_CONSTASCII_ACTION( sUNO_View_GridFineHeight,					"GridFineHeight" );
+SD_CONSTASCII_ACTION( sUNO_View_IsAngleSnapEnabled,				"IsAngleSnapEnabled" );
+SD_CONSTASCII_ACTION( sUNO_View_SnapAngle,						"SnapAngle" );
+SD_CONSTASCII_ACTION( sUNO_View_GridSnapWidthXNumerator,		"GridSnapWidthXNumerator" );
+SD_CONSTASCII_ACTION( sUNO_View_GridSnapWidthXDenominator,		"GridSnapWidthXDenominator" );
+SD_CONSTASCII_ACTION( sUNO_View_GridSnapWidthYNumerator,		"GridSnapWidthYNumerator" );
+SD_CONSTASCII_ACTION( sUNO_View_GridSnapWidthYDenominator,		"GridSnapWidthYDenominator" );
+SD_CONSTASCII_ACTION( sUNO_View_VisibleLayers,					"VisibleLayers" );
+SD_CONSTASCII_ACTION( sUNO_View_PrintableLayers,				"PrintableLayers" );
+SD_CONSTASCII_ACTION( sUNO_View_LockedLayers,					"LockedLayers" );
 
-SD_CONSTASCII_ACTION( sUNO_View_VisibleAreaTop,                 "VisibleAreaTop" );
-SD_CONSTASCII_ACTION( sUNO_View_VisibleAreaLeft,                "VisibleAreaLeft" );
-SD_CONSTASCII_ACTION( sUNO_View_VisibleAreaWidth,               "VisibleAreaWidth" );
-SD_CONSTASCII_ACTION( sUNO_View_VisibleAreaHeight,              "VisibleAreaHeight" );
+SD_CONSTASCII_ACTION( sUNO_View_VisibleAreaTop,					"VisibleAreaTop" );
+SD_CONSTASCII_ACTION( sUNO_View_VisibleAreaLeft,				"VisibleAreaLeft" );
+SD_CONSTASCII_ACTION( sUNO_View_VisibleAreaWidth,				"VisibleAreaWidth" );
+SD_CONSTASCII_ACTION( sUNO_View_VisibleAreaHeight,				"VisibleAreaHeight" );
 
-SD_CONSTASCII_ACTION( sUNO_View_ZoomOnPage,                     "ZoomOnPage" );
+SD_CONSTASCII_ACTION( sUNO_View_ZoomOnPage,						"ZoomOnPage" );
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

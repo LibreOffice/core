@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -1425,7 +1425,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
         {
             if( !m_xShapeFactory.is() && m_xChartView.is() )
             {
-                Reference< lang::XUnoTunnel> xUnoTunnel(m_xChartView,uno::UNO_QUERY);
+                Reference< lang::XUnoTunnel> xUnoTunnel(m_xChartView,uno::UNO_QUERY);    
                 if(xUnoTunnel.is())
                 {
                     ExplicitValueProvider* pProvider = reinterpret_cast<ExplicitValueProvider*>(xUnoTunnel->getSomething(

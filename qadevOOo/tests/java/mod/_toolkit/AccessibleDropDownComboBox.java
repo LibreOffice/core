@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,19 +79,19 @@ public class AccessibleDropDownComboBox extends TestCase {
      * Finds AccessibleDropDownComboBox walking through the
      * accessible component tree of a writer document.
      */
-    protected TestEnvironment createTestEnvironment(TestParameters Param,
+    protected TestEnvironment createTestEnvironment(TestParameters Param, 
                                                     PrintWriter log) {
         XInterface oObj = null;
 
         AccessibilityTools at = new AccessibilityTools();
 
         XWindow xWindow = at.getCurrentContainerWindow(
-                                  (XMultiServiceFactory) Param.getMSF(),
+                                  (XMultiServiceFactory) Param.getMSF(), 
                                   xTextDoc);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.COMBO_BOX,
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.COMBO_BOX, 
                                              "", "AccessibleDropDownComboBox");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
@@ -99,10 +99,10 @@ public class AccessibleDropDownComboBox extends TestCase {
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         final XAccessibleAction editAction = (XAccessibleAction) UnoRuntime.queryInterface(
-                                                     XAccessibleAction.class,
+                                                     XAccessibleAction.class, 
                                                      oObj);
 
-        tEnv.addObjRelation("EventProducer",
+        tEnv.addObjRelation("EventProducer", 
                             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 try {

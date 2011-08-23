@@ -61,17 +61,17 @@
  * Change History
  * 2004-2-17 create this file.
  ************************************************************************/
-#ifndef     _XFDRAWOBJ_HXX
-#define     _XFDRAWOBJ_HXX
+#ifndef		_XFDRAWOBJ_HXX
+#define		_XFDRAWOBJ_HXX
 
-#include    "xfframe.hxx"
-#include    "xfrect.hxx"
+#include	"xfframe.hxx"
+#include	"xfrect.hxx"
 
-#define     XFDRAWOBJECT_FLAG_ROTATE    0X00000001
-#define     XFDRAWOBJECT_FLAG_TRANLATE  0X00000002
-#define     XFDRAWOBJECT_FLAG_SKEWX     0X00000004
-#define     XFDRAWOBJECT_FLAG_SKEWY     0X00000008
-#define     XFDRAWOBJECT_FLAG_SCALE     0X00000010
+#define		XFDRAWOBJECT_FLAG_ROTATE	0X00000001
+#define		XFDRAWOBJECT_FLAG_TRANLATE	0X00000002
+#define		XFDRAWOBJECT_FLAG_SKEWX		0X00000004
+#define		XFDRAWOBJECT_FLAG_SKEWY		0X00000008
+#define		XFDRAWOBJECT_FLAG_SCALE		0X00000010
 
 /**
  * @brief
@@ -88,45 +88,45 @@ public:
 
 public:
     /**
-     * @descr   Set style name for drawing text.
+     * @descr	Set style name for drawing text.
      */
-    void    SetTextStyleName(rtl::OUString style);
+    void	SetTextStyleName(rtl::OUString style);
 
     /**
-     * @descr   Set drawing obejct rotate.
+     * @descr	Set drawing obejct rotate.
      */
-    void    SetRotate(double degree, XFPoint aRotatePoint=XFPoint(0,0));
+    void	SetRotate(double degree, XFPoint aRotatePoint=XFPoint(0,0));
 
     /**
-     * @descr   Set drawing object scale.
+     * @descr	Set drawing object scale.
      */
-    void    SetScale(double cx, double cy);
+    void	SetScale(double cx, double cy);
 
     /**
-     * @descr   Set drawing object skew.
+     * @descr	Set drawing object skew.
      */
-    void    SetSkewX(double cx);
+    void	SetSkewX(double cx);
 
     /**
-     * @descr   Set drawing obejct y skew.
+     * @descr	Set drawing obejct y skew.
      */
-    void    SetSkewY(double cy);
+    void	SetSkewY(double cy);
 
-    void    ContentToXml(IXFStream *pStrm);
+    void	ContentToXml(IXFStream *pStrm);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 protected:
-    XFContentContainer  m_aContents;
-    rtl::OUString   m_strTextStyle;
-    double  m_fRotate;
-    XFPoint m_aRotatePoint;
-    double  m_fScaleX;
-    double  m_fScaleY;
-    double  m_fSkewX;
-    double  m_fSkewY;
+    XFContentContainer	m_aContents;
+    rtl::OUString	m_strTextStyle;
+    double	m_fRotate;
+    XFPoint	m_aRotatePoint;
+    double	m_fScaleX;
+    double	m_fScaleY;
+    double	m_fSkewX;
+    double	m_fSkewY;
 
-    unsigned int    m_nFlag;
+    unsigned int	m_nFlag;
 };
 
 inline void XFDrawObject::SetTextStyleName(rtl::OUString style)

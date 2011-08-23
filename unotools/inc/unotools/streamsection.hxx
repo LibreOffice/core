@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,37 +36,37 @@
 namespace utl
 {
 
-    namespace stario    = ::com::sun::star::io;
-    namespace staruno   = ::com::sun::star::uno;
+    namespace stario	= ::com::sun::star::io;
+    namespace staruno	= ::com::sun::star::uno;
 
 /** implements handling for compatibly reading/writing data from/into an input/output stream.
     data written in a block secured by this class should be readable by older versions which
     use the same mechanism.
 
-    @author Frank Schoenheit
-    @since  00/26/05
+    @author	Frank Schoenheit
+    @since	00/26/05
 */
 
 class OStreamSection
 {
-    staruno::Reference< stario::XMarkableStream >       m_xMarkStream;
-    staruno::Reference< stario::XDataInputStream >      m_xInStream;
-    staruno::Reference< stario::XDataOutputStream >     m_xOutStream;
+    staruno::Reference< stario::XMarkableStream >		m_xMarkStream;
+    staruno::Reference< stario::XDataInputStream >		m_xInStream;
+    staruno::Reference< stario::XDataOutputStream >		m_xOutStream;
 
-    sal_Int32   m_nBlockStart;
-    sal_Int32   m_nBlockLen;
+    sal_Int32	m_nBlockStart;
+    sal_Int32	m_nBlockLen;
 
 public:
-    /** starts reading of a "skippable" section of data within the given input stream<BR>
-        @param      _rxInput    the stream to read from. Must support the
+    /**	starts reading of a "skippable" section of data within the given input stream<BR>
+        @param		_rxInput	the stream to read from. Must support the
                                 <type scope="com::sun::star::io">XMarkableStream</type> interface
     */
     OStreamSection(const staruno::Reference< stario::XDataInputStream >& _rxInput);
 
-    /** starts writing of a "skippable" section of data into the given output stream
-        @param      _rxOutput           the stream the stream to write to. Must support the
+    /**	starts writing of a "skippable" section of data into the given output stream
+        @param		_rxOutput			the stream the stream to write to. Must support the
                                         <type scope="com::sun::star::io">XMarkableStream</type> interface
-        @param      _nPresumedLength    estimation for the length of the upcoming section. If greater 0, this
+        @param		_nPresumedLength	estimation for the length of the upcoming section. If greater 0, this
                                         value will be written as section length and corrected (in the dtor) only if
                                         needed. If you know how much bytes you are about to write, you may
                                         want to use this param, saving some stream operations this way.
@@ -79,7 +79,7 @@ public:
     ~OStreamSection();
 };
 
-}   // namespace utl
+}	// namespace utl
 
 #endif // _UNOTOOLS_STREAMSECTION_HXX_
 

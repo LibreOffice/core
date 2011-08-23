@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include <helper/uiconfigelementwrapperbase.hxx>
 #include <general.h>
@@ -40,7 +40,7 @@
 #include <uielement/rootitemcontainer.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -48,7 +48,7 @@
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 #include <rtl/logfile.hxx>
@@ -83,16 +83,16 @@ namespace framework
 {
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider
+//	XInterface, XTypeProvider
 //*****************************************************************************************************************
 DEFINE_XINTERFACE_10    (   UIConfigElementWrapperBase                                               ,
                             OWeakObject                                                              ,
                             DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider                  ),
                             DIRECT_INTERFACE( ::com::sun::star::ui::XUIElement               ),
                             DIRECT_INTERFACE( ::com::sun::star::ui::XUIElementSettings       ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XMultiPropertySet             ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet              ),
-                            DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet                  ),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XMultiPropertySet		     ),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet		         ),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet				     ),
                             DIRECT_INTERFACE( ::com::sun::star::lang::XInitialization                ),
                             DIRECT_INTERFACE( ::com::sun::star::lang::XComponent                     ),
                             DIRECT_INTERFACE( ::com::sun::star::util::XUpdatable                     ),
@@ -219,8 +219,8 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
                                                                         sal_Int32  nHandle         ,
                                                                         const Any& aValue             ) throw( com::sun::star::lang::IllegalArgumentException )
 {
-    //  Initialize state with FALSE !!!
-    //  (Handle can be invalid)
+    //	Initialize state with FALSE !!!
+    //	(Handle can be invalid)
     sal_Bool bReturn = sal_False;
 
     switch( nHandle )
@@ -546,7 +546,7 @@ Reference< XIndexAccess > SAL_CALL UIConfigElementWrapperBase::getSettings( sal_
 
     if ( bWriteable )
         return Reference< XIndexAccess >( static_cast< OWeakObject * >( new RootItemContainer( m_xConfigData ) ), UNO_QUERY );
-
+    
     return m_xConfigData;
 }
 

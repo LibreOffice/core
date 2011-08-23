@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,12 +60,12 @@ class MasterPageDescriptor;
     master pages.  Each MasterPageContainer, however, has its own
     PreviewSize value and thus can independantly switch between large and
     small previews.
-
+    
     The container maintains its own document to store master page objects.
-
+    
     For each master page container stores its URL, preview bitmap, page
     name, and, if available, the page object.
-
+    
     Entries are accessed via a Token, which is mostly a numerical index but
     whose values do not neccessarily have to be consecutive.
 */
@@ -110,7 +110,7 @@ public:
     bool RequestPreview (Token aToken);
 
     /** Each entry of the container is either the first page of a template
-        document or is a master page of an Impress document.
+        document or is a master page of an Impress document. 
     */
     enum Origin {
         MASTERPAGE,  // Master page of a document.
@@ -137,8 +137,8 @@ public:
     /** Determine whether the container has a member for the given token.
     */
     bool HasToken (Token aToken) const;
-
-    /** Return a token for an index in the range
+    
+    /** Return a token for an index in the range 
         0 <= index < GetTokenCount().
     */
     Token GetTokenForIndex (int nIndex);
@@ -154,7 +154,7 @@ public:
     Origin GetOriginForToken (Token aToken);
     sal_Int32 GetTemplateIndexForToken (Token aToken);
     ::boost::shared_ptr<MasterPageDescriptor> GetDescriptorForToken (Token aToken);
-
+    
     void InvalidatePreview (Token aToken);
 
     /** Return a preview for the specified token.  When the preview is not

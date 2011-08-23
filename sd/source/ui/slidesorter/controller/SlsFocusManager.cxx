@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
                     SetFocusToToolBox();
                 }
                 break;
-
+                
             case FMD_RIGHT:
                 mnPageIndex += 1;
                 if (mnPageIndex >= mrSlideSorter.GetModel().GetPageCount())
@@ -108,7 +108,7 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
                     if (nCandidateColumn > nColumn)
                         mnPageIndex = nCandidate - (nCandidateColumn-nColumn);
                     else if (nCandidateColumn < nColumn)
-                        mnPageIndex = nCandidate
+                        mnPageIndex = nCandidate 
                             - nColumnCount
                             + (nColumn - nCandidateColumn);
                     else
@@ -330,9 +330,9 @@ void FocusManager::NotifyFocusChangeListeners (void) const
 {
     // Create a copy of the listener list to be safe when that is modified.
     ::std::vector<Link> aListeners (maFocusChangeListeners);
-
+    
     // Tell the slection change listeners that the selection has changed.
-    ::std::vector<Link>::iterator iListener (aListeners.begin());
+    ::std::vector<Link>::iterator iListener (aListeners.begin()); 
     ::std::vector<Link>::iterator iEnd (aListeners.end());
     for (; iListener!=iEnd; ++iListener)
     {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,13 +59,13 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, voi
         try
         {
             ::rtl::OUString aImplName( '/' );
-
+            
             aImplName += ScannerManager::getImplementationName_Static();
             aImplName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES/" ) );
             aImplName += ScannerManager::getImplementationName_Static();
 
             REF( XRegistryKey ) xNewKey1( static_cast< XRegistryKey* >( pRegistryKey )->createKey( aImplName ) );
-
+            
             bRet = sal_True;
         }
         catch( InvalidRegistryException& )
@@ -84,14 +84,14 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, voi
 extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
 {
     REF( ::com::sun::star::lang::XSingleServiceFactory ) xFactory;
-    void*                                                pRet = 0;
-
+    void*												 pRet = 0;
+    
     if( ::rtl::OUString::createFromAscii( pImplName ) == ScannerManager::getImplementationName_Static() )
     {
         xFactory = REF( ::com::sun::star::lang::XSingleServiceFactory )( ::cppu::createSingleFactory(
                         static_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager ),
                         ScannerManager::getImplementationName_Static(),
-                        ScannerManager_CreateInstance,
+                        ScannerManager_CreateInstance, 
                         ScannerManager::getSupportedServiceNames_Static() ) );
     }
 
@@ -100,7 +100,7 @@ extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void*
         xFactory->acquire();
         pRet = xFactory.get();
     }
-
+    
     return pRet;
 }
 

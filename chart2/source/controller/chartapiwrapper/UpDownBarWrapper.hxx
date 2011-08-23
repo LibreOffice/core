@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,10 +62,10 @@ class UpDownBarWrapper : public MutexContainer
                         , ::com::sun::star::beans::XPropertySet
                         , ::com::sun::star::beans::XMultiPropertySet
                         , ::com::sun::star::beans::XPropertyState
-                        , ::com::sun::star::beans::XMultiPropertyStates
-                        //  , ::com::sun::star::uno::XWeak          // implemented by WeakImplHelper(optional interface)
-                        //  , ::com::sun::star::uno::XInterface     // implemented by WeakImplHelper
-                        //  , ::com::sun::star::lang::XTypeProvider // implemented by WeakImplHelper
+                        , ::com::sun::star::beans::XMultiPropertyStates                      
+                        //	, ::com::sun::star::uno::XWeak			// implemented by WeakImplHelper(optional interface)
+                        //	, ::com::sun::star::uno::XInterface		// implemented by WeakImplHelper
+                        //	, ::com::sun::star::lang::XTypeProvider	// implemented by WeakImplHelper
                         >
 {
 public:
@@ -121,7 +121,7 @@ private: //methods
 
 private: //member
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
-    ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
+    ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;    
 
     rtl::OUString       m_aPropertySetName;
     ::com::sun::star::uno::Reference<

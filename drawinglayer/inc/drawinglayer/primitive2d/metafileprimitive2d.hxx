@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,21 +53,21 @@ namespace drawinglayer
             guaranteed that the Metafile is inside the geometric definition, it should
             be embedded to a MaskPrimitive2D.
 
-            This primitive has no decomposition yet, so when not supported by a renderer,
+            This primitive has no decomposition yet, so when not supported by a renderer, 
             it will not be visualized.
 
             In the future, a decomposition implementation would be appreciated and would
-            have many advantages; Metafile would no longer have to be rendered by
+            have many advantages; Metafile would no longer have to be rendered by 
             sub-systems and a standard way for converting Metafiles would exist.
          */
         class MetafilePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the geometry definition
-            basegfx::B2DHomMatrix                       maMetaFileTransform;
+            basegfx::B2DHomMatrix						maMetaFileTransform;
 
             /// the content definition
-            GDIMetaFile                                 maMetaFile;
+            GDIMetaFile									maMetaFile;
 
         protected:
             /// local decomposition.
@@ -75,7 +75,7 @@ namespace drawinglayer
         public:
             /// constructor
             MetafilePrimitive2D(
-                const basegfx::B2DHomMatrix& rMetaFileTransform,
+                const basegfx::B2DHomMatrix& rMetaFileTransform, 
                 const GDIMetaFile& rMetaFile);
 
             /// data read access

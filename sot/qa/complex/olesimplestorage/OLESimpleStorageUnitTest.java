@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,12 @@ import com.sun.star.uno.UnoRuntime;
 
 public class OLESimpleStorageUnitTest extends ComplexTestCase {
     private XMultiServiceFactory m_xMSF = null;
-
+    
     public String[] getTestMethodNames() {
         return new String[] {
             "ExecuteTest01"};
     }
-
+    
     public String getTestObjectName() {
         return "OLESimpleStorageUnitTest";
     }
@@ -55,11 +55,11 @@ public class OLESimpleStorageUnitTest extends ComplexTestCase {
             failed ( "Cannot create service factory!" );
         }
     }
-
+    
     public void after () {
         m_xMSF = null;
     }
-
+    
     public void ExecuteTest01() {
         OLESimpleStorageTest aTest = new Test01( m_xMSF, log );
         assure( "Test01 failed!", aTest.test() );

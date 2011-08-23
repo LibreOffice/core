@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,19 +79,19 @@ class SetOfByte;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class SVX_DLLPUBLIC SdrViewIter
+class SVX_DLLPUBLIC SdrViewIter 
 {
-    const SdrModel*                                     mpModel;
-    const SdrPage*                                      mpPage;
-    const SdrObject*                                    mpObject;
-    SdrView*                                            mpAktView;
+    const SdrModel*										mpModel;
+    const SdrPage*										mpPage;
+    const SdrObject*									mpObject;
+    SdrView*											mpAktView;
 
-    sal_uInt32                                          mnListenerNum;
-    sal_uInt32                                          mnPageViewNum;
-    sal_uInt32                                          mnOutDevNum;
+    sal_uInt32											mnListenerNum;
+    sal_uInt32											mnPageViewNum;
+    sal_uInt32											mnOutDevNum;
 
     // bitfield
-    unsigned                                            mbNoMasterPage : 1;
+    unsigned											mbNoMasterPage : 1;
 
 private:
     SVX_DLLPRIVATE void          ImpInitVars();
@@ -99,7 +99,7 @@ private:
     SVX_DLLPRIVATE SdrPageView*  ImpFindPageView();
     SVX_DLLPRIVATE OutputDevice* ImpFindOutDev();
     SVX_DLLPRIVATE Window*       ImpFindWindow();
-    SVX_DLLPRIVATE sal_Bool      ImpCheckPageView(SdrPageView* pPV) const;
+    SVX_DLLPRIVATE sal_Bool		 ImpCheckPageView(SdrPageView* pPV) const;
 
 public:
     SdrViewIter(const SdrModel* pModel);

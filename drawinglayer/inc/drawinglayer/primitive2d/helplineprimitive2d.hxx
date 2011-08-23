@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,9 +53,9 @@ namespace drawinglayer
         /** HelplinePrimitive2D class
 
             This primitive provides a view-dependent helpline definition. The Helpline
-            is defined by a line equation (Point and vector) and a style. When the style
-            is a line, dependent from Viewport the visible part of that Helpline is
-            constructed. For Point, a cross is constructed. This primitive is highly
+            is defined by a line equation (Point and vector) and a style. When the style 
+            is a line, dependent from Viewport the visible part of that Helpline is 
+            constructed. For Point, a cross is constructed. This primitive is highly 
             view-dependent.
 
             The visualisation uses the two given colors to create a dashed line with
@@ -65,20 +65,20 @@ namespace drawinglayer
         {
         private:
             /// Helpline geometry definition
-            basegfx::B2DPoint                               maPosition;
-            basegfx::B2DVector                              maDirection;
-            HelplineStyle2D                                 meStyle;
+            basegfx::B2DPoint								maPosition;
+            basegfx::B2DVector								maDirection;
+            HelplineStyle2D									meStyle;
 
             /// Helpline style definition
-            basegfx::BColor                                 maRGBColA;
-            basegfx::BColor                                 maRGBColB;
-            double                                          mfDiscreteDashLength;
+            basegfx::BColor									maRGBColA;
+            basegfx::BColor									maRGBColB;
+            double											mfDiscreteDashLength;
 
-            /** the last used object to view transformtion and the last Viewport,
+            /** the last used object to view transformtion and the last Viewport, 
                 used from getDecomposition for decide buffering
              */
-            basegfx::B2DHomMatrix                           maLastObjectToViewTransformation;
-            basegfx::B2DRange                               maLastViewport;
+            basegfx::B2DHomMatrix							maLastObjectToViewTransformation;
+            basegfx::B2DRange								maLastViewport;
 
         protected:
             /// create local decomposition
@@ -87,11 +87,11 @@ namespace drawinglayer
         public:
             /// constructor
             HelplinePrimitive2D(
-                const basegfx::B2DPoint& rPosition,
-                const basegfx::B2DVector& rDirection,
-                HelplineStyle2D eStyle,
-                const basegfx::BColor& rRGBColA,
-                const basegfx::BColor& aRGBColB,
+                const basegfx::B2DPoint& rPosition, 
+                const basegfx::B2DVector& rDirection, 
+                HelplineStyle2D eStyle, 
+                const basegfx::BColor& rRGBColA, 
+                const basegfx::BColor& aRGBColB, 
                 double fDiscreteDashLength);
 
             /// data read access

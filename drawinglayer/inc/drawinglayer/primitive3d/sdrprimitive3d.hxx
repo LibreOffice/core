@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,7 +41,7 @@
 namespace drawinglayer
 {
     /** SdrPrimitive3D class
-
+    
         Base class for the more complicated geometric primitives, so
         derive from buffered primitive to allow overloading of
         create3DDecomposition there.
@@ -52,10 +52,10 @@ namespace drawinglayer
         {
         private:
             /// object surface attributes
-            basegfx::B3DHomMatrix                       maTransform;
-            basegfx::B2DVector                          maTextureSize;
-            attribute::SdrLineFillShadowAttribute3D     maSdrLFSAttribute;
-            attribute::Sdr3DObjectAttribute             maSdr3DObjectAttribute;
+            basegfx::B3DHomMatrix						maTransform;
+            basegfx::B2DVector							maTextureSize;
+            attribute::SdrLineFillShadowAttribute3D		maSdrLFSAttribute;
+            attribute::Sdr3DObjectAttribute				maSdr3DObjectAttribute;
 
         protected:
             /** Standard implementation for primitive3D which
@@ -71,9 +71,9 @@ namespace drawinglayer
         public:
             /// constructor
             SdrPrimitive3D(
-                const basegfx::B3DHomMatrix& rTransform,
+                const basegfx::B3DHomMatrix& rTransform, 
                 const basegfx::B2DVector& rTextureSize,
-                const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
+                const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute, 
                 const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute);
 
             /// data read access

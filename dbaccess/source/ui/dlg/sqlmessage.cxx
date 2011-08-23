@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@
 #include "UITools.hxx"
 #include "moduledbu.hxx"
 
-#define BUTTONID_MORE   BUTTONID_RETRY + 1
+#define BUTTONID_MORE	BUTTONID_RETRY + 1
 
 #define DIALOG_WIDTH    220
 #define OUTER_MARGIN    6
@@ -126,7 +126,7 @@ namespace
             :m_label( ModuleRes( _labelResourceID ) )
         {
         }
-
+    
         virtual String  getLabel() const
         {
             return m_label;
@@ -327,11 +327,11 @@ namespace
 class OExceptionChainDialog : public ModalDialog
 {
     FixedLine       m_aFrame;
-    FixedText       m_aListLabel;
-    SvTreeListBox   m_aExceptionList;
-    FixedText       m_aDescLabel;
-    MultiLineEdit   m_aExceptionText;
-    OKButton        m_aOK;
+    FixedText		m_aListLabel;
+    SvTreeListBox	m_aExceptionList;
+    FixedText		m_aDescLabel;
+    MultiLineEdit	m_aExceptionText;
+    OKButton		m_aOK;
 
     String          m_sStatusLabel;
     String          m_sErrorCodeLabel;
@@ -350,12 +350,12 @@ DBG_NAME(OExceptionChainDialog)
 //------------------------------------------------------------------------------
 OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDisplayChain& _rExceptions )
     :ModalDialog(pParent, ModuleRes(DLG_SQLEXCEPTIONCHAIN))
-    ,m_aFrame           (this, ModuleRes(FL_DETAILS))
-    ,m_aListLabel       (this, ModuleRes(FT_ERRORLIST))
-    ,m_aExceptionList   (this, ModuleRes(CTL_ERRORLIST))
-    ,m_aDescLabel       (this, ModuleRes(FT_DESCRIPTION))
-    ,m_aExceptionText   (this, ModuleRes(ME_DESCRIPTION))
-    ,m_aOK              (this, ModuleRes(PB_OK))
+    ,m_aFrame			(this, ModuleRes(FL_DETAILS))
+    ,m_aListLabel		(this, ModuleRes(FT_ERRORLIST))
+    ,m_aExceptionList	(this, ModuleRes(CTL_ERRORLIST))
+    ,m_aDescLabel		(this, ModuleRes(FT_DESCRIPTION))
+    ,m_aExceptionText	(this, ModuleRes(ME_DESCRIPTION))
+    ,m_aOK				(this, ModuleRes(PB_OK))
     ,m_aExceptions( _rExceptions )
 {
     DBG_CTOR(OExceptionChainDialog,NULL);
@@ -505,11 +505,11 @@ void OSQLMessageBox::impl_positionControls()
 {
     OSL_PRECOND( !m_pImpl->aDisplayInfo.empty(), "OSQLMessageBox::impl_positionControls: nothing to display at all?" );
 
-
+    
     if ( m_pImpl->aDisplayInfo.empty() )
         return;
     const ExceptionDisplayInfo* pSecondInfo = NULL;
-
+    
     const ExceptionDisplayInfo& rFirstInfo = *m_pImpl->aDisplayInfo.begin();
     if ( m_pImpl->aDisplayInfo.size() > 1 )
         pSecondInfo = &m_pImpl->aDisplayInfo[1];
@@ -781,7 +781,7 @@ OSQLWarningBox::OSQLWarningBox( Window* _pParent, const UniString& _rMessage, Wi
 }
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,16 +40,16 @@ XMemoryStream::XMemoryStream ( com::sun::star::uno::Sequence < sal_Int8 > & rNew
 XMemoryStream::~XMemoryStream(void)
 {
 }
-::com::sun::star::uno::Any SAL_CALL XMemoryStream::queryInterface( const com::sun::star::uno::Type& rType )
+::com::sun::star::uno::Any SAL_CALL XMemoryStream::queryInterface( const com::sun::star::uno::Type& rType ) 
         throw(com::sun::star::uno::RuntimeException)
 {
-    return ::cppu::queryInterface ( rType                                       ,
+    return ::cppu::queryInterface ( rType										,
                                     // OWeakObject interfaces
-                                    reinterpret_cast< XInterface*       > ( this )  ,
-                                    static_cast< XWeak*         > ( this )  ,
+                                    reinterpret_cast< XInterface*		> ( this )	,
+                                    static_cast< XWeak*			> ( this )	,
                                     // my interfaces
-                                    static_cast< XInputStream*      > ( this )  ,
-                                    static_cast< XSeekable*     > ( this ) );
+                                    static_cast< XInputStream*		> ( this )	,
+                                    static_cast< XSeekable*		> ( this ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

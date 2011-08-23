@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,14 +39,14 @@ namespace connectivity
         typedef sdbcx::OGroup OGroup_ADO;
         class OCatalog;
 
-        class OAdoGroup :   public OGroup_ADO
+        class OAdoGroup :	public OGroup_ADO
         {
-            WpADOGroup      m_aGroup;
-            OCatalog*       m_pCatalog;
+            WpADOGroup		m_aGroup;
+            OCatalog*		m_pCatalog;
 
-            sal_Int32       MapRight(RightsEnum _eNum);
-            RightsEnum      Map2Right(sal_Int32 _eNum);
-            ObjectTypeEnum  MapObjectType(sal_Int32 _ObjType);
+            sal_Int32		MapRight(RightsEnum _eNum);
+            RightsEnum		Map2Right(sal_Int32 _eNum);
+            ObjectTypeEnum	MapObjectType(sal_Int32 _ObjType);
         protected:
             virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue)throw (::com::sun::star::uno::Exception);

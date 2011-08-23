@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,39 +53,39 @@ private:
 
 public:
                     ScDBFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
-    virtual         ~ScDBFunc();
+    virtual			~ScDBFunc();
 
-                    //  nur UISort wiederholt bei Bedarf die Teilergebnisse
+                    //	nur UISort wiederholt bei Bedarf die Teilergebnisse
 
-    void            UISort( const ScSortParam& rSortParam,
+    void			UISort( const ScSortParam& rSortParam,
                           BOOL bRecord = TRUE );
 
-    void            Sort( const ScSortParam& rSortParam,
+    void			Sort( const ScSortParam& rSortParam,
                           BOOL bRecord = TRUE, BOOL bPaint = TRUE );
-    SC_DLLPUBLIC void           Query( const ScQueryParam& rQueryParam,
+    SC_DLLPUBLIC void			Query( const ScQueryParam& rQueryParam,
                            const ScRange* pAdvSource, BOOL bRecord );
-    void            DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord = TRUE,
+    void			DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord = TRUE,
                             const ScSortParam* pForceNewSort = NULL );
 
-    void            ToggleAutoFilter();
-    void            HideAutoFilter();
+    void			ToggleAutoFilter();
+    void			HideAutoFilter();
 
-    void            RepeatDB( BOOL bRecord = TRUE );
+    void			RepeatDB( BOOL bRecord = TRUE );
 
-    BOOL            ImportData( const ScImportParam& rParam, BOOL bRecord = TRUE );
+    BOOL			ImportData( const ScImportParam& rParam, BOOL bRecord = TRUE );
 
-    void            GotoDBArea( const String& rDBName );
+    void			GotoDBArea( const String& rDBName );
 
                     // DB-Bereich vom Cursor
-    ScDBData*       GetDBData( BOOL bMarkArea = TRUE, ScGetDBMode eMode = SC_DB_MAKE, ScGetDBSelection eSel = SC_DBSEL_KEEP, bool bShrinkToData = false, bool bExpandRows = false );
+    ScDBData* 		GetDBData( BOOL bMarkArea = TRUE, ScGetDBMode eMode = SC_DB_MAKE, ScGetDBSelection eSel = SC_DBSEL_KEEP, bool bShrinkToData = false, bool bExpandRows = false );
 
-    void            NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List& rDelAreaList );
+    void			NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List& rDelAreaList );
 
-    void            Consolidate( const ScConsolidateParam& rParam, BOOL bRecord = TRUE );
+    void			Consolidate( const ScConsolidateParam& rParam, BOOL bRecord = TRUE );
 
     bool            MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, BOOL bNewTable,
                                     const ScDPObject& rSource, BOOL bApi = FALSE );
-    void            DeletePivotTable();
+    void			DeletePivotTable();
     // Wang Xu Ming -- 2009-6-17
     // DataPilot Migration
     ULONG   RecalcPivotTable();
@@ -107,25 +107,25 @@ public:
     void            ShowDataPilotSourceData( ScDPObject& rDPObj,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::DataPilotFieldFilter >& rFilters );
 
-    void            MakeOutline( BOOL bColumns, BOOL bRecord = TRUE );
-    void            RemoveOutline( BOOL bColumns, BOOL bRecord = TRUE );
-    void            RemoveAllOutlines( BOOL bRecord = TRUE );
-    void            TestRemoveOutline( BOOL& rCol, BOOL& rRow );
+    void			MakeOutline( BOOL bColumns, BOOL bRecord = TRUE );
+    void			RemoveOutline( BOOL bColumns, BOOL bRecord = TRUE );
+    void			RemoveAllOutlines( BOOL bRecord = TRUE );
+    void			TestRemoveOutline( BOOL& rCol, BOOL& rRow );
 
-    void            AutoOutline( BOOL bRecord = TRUE );
+    void			AutoOutline( BOOL bRecord = TRUE );
 
-    void            SelectLevel( BOOL bColumns, USHORT nLevel,
+    void			SelectLevel( BOOL bColumns, USHORT nLevel,
                                     BOOL bRecord = TRUE, BOOL bPaint = TRUE );
-    void            ShowOutline( BOOL bColumns, USHORT nLevel, USHORT nEntry,
+    void			ShowOutline( BOOL bColumns, USHORT nLevel, USHORT nEntry,
                                     BOOL bRecord = TRUE, BOOL bPaint = TRUE );
-    void            HideOutline( BOOL bColumns, USHORT nLevel, USHORT nEntry,
+    void			HideOutline( BOOL bColumns, USHORT nLevel, USHORT nEntry,
                                     BOOL bRecord = TRUE, BOOL bPaint = TRUE );
 
-    void            ShowMarkedOutlines( BOOL bRecord = TRUE );
-    void            HideMarkedOutlines( BOOL bRecord = TRUE );
-    BOOL            OutlinePossible(BOOL bHide);
+    void			ShowMarkedOutlines( BOOL bRecord = TRUE );
+    void			HideMarkedOutlines( BOOL bRecord = TRUE );
+    BOOL			OutlinePossible(BOOL bHide);
 
-    void            UpdateCharts(BOOL bAllCharts = FALSE);      // Default: am Cursor
+    void			UpdateCharts(BOOL bAllCharts = FALSE);		// Default: am Cursor
 
     static USHORT   DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, BOOL bAllCharts );
 };

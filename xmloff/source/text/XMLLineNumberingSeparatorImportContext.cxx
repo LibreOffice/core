@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ using ::xmloff::token::XML_INCREMENT;
 TYPEINIT1( XMLLineNumberingSeparatorImportContext, SvXMLImportContext );
 
 XMLLineNumberingSeparatorImportContext::XMLLineNumberingSeparatorImportContext(
-    SvXMLImport& rImport,
+    SvXMLImport& rImport, 
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     XMLLineNumberingImportContext& rLineNumbering) :
@@ -65,7 +65,7 @@ void XMLLineNumberingSeparatorImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
     sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 i=0; i<nLength; i++)
+    for(sal_Int16 i=0; i<nLength; i++) 
     {
         OUString sLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().

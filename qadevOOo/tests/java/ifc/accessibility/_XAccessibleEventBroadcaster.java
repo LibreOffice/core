@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,11 +81,11 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
             if (old instanceof com.sun.star.accessibility.XAccessible) {
                 System.out.println("Old: "+((XAccessible)old).getAccessibleContext().getAccessibleName());
             }
-
+            
             Object nev=ev.NewValue;
             if (nev instanceof com.sun.star.accessibility.XAccessible) {
                 System.out.println("New: "+((XAccessible)nev).getAccessibleContext().getAccessibleName());
-            }
+            }            
             notifiedEvent = ev;
         }
 
@@ -109,7 +109,7 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
     }
 
     EventProducer prod = null ;
-    EvListener list = new EvListener();
+    EvListener list = new EvListener();    
 
     /**
      * Adds two listeners and fires event by mean of object relation. <p>
@@ -117,19 +117,19 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
      */
     public void _addEventListener() {
         log.println("adding listener");
-        oObj.addEventListener(list);
+        oObj.addEventListener(list);        
         boolean isTransient = chkTransient(tEnv.getTestObject());
         log.println("fire event");
         prod.fireEvent() ;
 
-        try {
+        try {            
             Thread.sleep(3000);
         }
         catch (InterruptedException ex) {
-        }
-
+        }   
+        
         boolean works = true;
-
+        
         if (list.notifiedEvent == null) {
             if (!isTransient) {
                 log.println("listener wasn't called");
@@ -137,12 +137,12 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
             } else {
                 log.println("Object is Transient, listener isn't expected to be called");
             }
-            oObj.removeEventListener(list);
+            oObj.removeEventListener(list);                
         }
-
+        
         if (EventMsg != null) {
             log.println(EventMsg);
-            tRes.tested("addEventListener()", Status.skipped(true) );
+            tRes.tested("addEventListener()", Status.skipped(true) );  
             return;
         }
 
@@ -163,7 +163,7 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
     public void _removeEventListener() {
         requiredMethod("addEventListener()");
 
-        list.notifiedEvent = null;
+        list.notifiedEvent = null;        
 
         log.println("remove listener");
         oObj.removeEventListener(list);
@@ -183,11 +183,11 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
 
         tRes.tested("removeEventListener()", list.notifiedEvent == null);
 
-    }
-
+    }    
+    
     protected static boolean chkTransient(Object Testcase) {
         boolean ret = false;
-        XAccessibleContext accCon = (XAccessibleContext)
+        XAccessibleContext accCon = (XAccessibleContext) 
                     UnoRuntime.queryInterface(XAccessibleContext.class,Testcase);
         if (accCon.getAccessibleStateSet().contains(
             com.sun.star.accessibility.AccessibleStateType.TRANSIENT)){
@@ -196,17 +196,17 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
                 throw new lib.StatusException(lib.Status.failed("Parent doesn't manage descendents"));
             }
             ret=true;
-        }
+        }        
         return ret;
-    }
-
+    }    
+    
     /**
     * Forces environment recreation.
     */
     protected void after() {
         if (destroy) disposeEnvironment();
     }
-
-
+    
+    
 }
 

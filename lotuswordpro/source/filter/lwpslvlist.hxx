@@ -62,12 +62,12 @@
  * 2005-01-12 create and implement.
  ************************************************************************/
 
-#ifndef     _LWPSLVLIST_HXX
-#define     _LWPSLVLIST_HXX
+#ifndef		_LWPSLVLIST_HXX
+#define		_LWPSLVLIST_HXX
 
-#include    "lwpobjstrm.hxx"
-#include    "lwpfilehdr.hxx"
-#include    "lwpobjid.hxx"
+#include	"lwpobjstrm.hxx"
+#include	"lwpfilehdr.hxx"
+#include	"lwpobjid.hxx"
 
 class LwpSLVList
 {
@@ -84,7 +84,7 @@ public:
     LwpObjectID* GetNext(){return &m_NextID;}
 public:
 private:
-    LwpObjectID     m_NextID;
+    LwpObjectID		m_NextID;
 };
 
 #endif

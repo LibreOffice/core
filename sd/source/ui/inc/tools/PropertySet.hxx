@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ namespace {
     support constrained properties and thus does not support vetoable
     listeners.  It does not support the optional property set info.
 
-    In order to use it you have to derive from this class and implement the
+    In order to use it you have to derive from this class and implement the 
     GetPropertyValue() and SetPropertyValue() methods.
 */
 class PropertySet
@@ -68,7 +68,7 @@ public:
     virtual css::uno::Reference<css::beans::XPropertySetInfo>
         SAL_CALL getPropertySetInfo (void)
         throw(css::uno::RuntimeException);
-
+    
     virtual void SAL_CALL setPropertyValue (
         const rtl::OUString& rsPropertyName,
         const css::uno::Any& rsPropertyValue)
@@ -77,12 +77,12 @@ public:
             css::lang::IllegalArgumentException,
             css::lang::WrappedTargetException,
             css::uno::RuntimeException);
-
+    
     virtual css::uno::Any SAL_CALL getPropertyValue (const rtl::OUString& rsPropertyName)
         throw(css::beans::UnknownPropertyException,
             css::lang::WrappedTargetException,
             css::uno::RuntimeException);
-
+    
     virtual void SAL_CALL addPropertyChangeListener (
         const rtl::OUString& rsPropertyName,
         const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)

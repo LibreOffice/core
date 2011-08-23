@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 
 namespace ModelToViewHelper
 {
-
+    
 /** Converts a model position into a view position
 */
 sal_uInt32 ConvertToViewPosition( const ConversionMap* pMap, sal_uInt32 nModelPos )
@@ -59,7 +59,7 @@ sal_uInt32 ConvertToViewPosition( const ConversionMap* pMap, sal_uInt32 nModelPo
 
     return nRet;
 }
-
+    
 
 /** Converts a view position into a model position
 */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,11 +46,11 @@ namespace dbaui
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
-    //  using namespace ::com::sun::star::awt;
+    //	using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star;
 
     OConnectionLineAccess::OConnectionLineAccess(OTableConnection* _pLine)
-        : VCLXAccessibleComponent(_pLine->GetComponentInterface().is() ? _pLine->GetWindowPeer() : NULL)
+        : VCLXAccessibleComponent(_pLine->GetComponentInterface().is() ? _pLine->GetWindowPeer() : NULL) 
         ,m_pLine(_pLine)
     {
     }
@@ -206,7 +206,7 @@ namespace dbaui
             aSeq[0] = m_pLine->GetSourceWin()->GetAccessible();
             aSeq[1] = m_pLine->GetDestWin()->GetAccessible();
         }
-
+        
         return AccessibleRelation(AccessibleRelationType::CONTROLLED_BY,aSeq);
     }
     // -----------------------------------------------------------------------------
@@ -232,7 +232,7 @@ namespace dbaui
         DBG_DTOR(OTableConnection,NULL);
         //////////////////////////////////////////////////////////////////////
         // clear vector
-        clearLineData();
+        clearLineData();		
     }
     // -----------------------------------------------------------------------------
     sal_Bool OConnectionLineAccess::isEditable() const

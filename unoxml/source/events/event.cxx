@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "event.hxx"
 
-namespace DOM { namespace events
+namespace DOM { namespace events 
 {
 
     CEvent::~CEvent()
@@ -52,7 +52,7 @@ namespace DOM { namespace events
     {
     }
 
-    void SAL_CALL CEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg,
+    void SAL_CALL CEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg, 
         sal_Bool cancelableArg) throw (RuntimeException)
     {
         m_eventType = eventTypeArg;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,13 +39,13 @@
 
 
 namespace cppu
-{
+{    
 
 /** Deprecated.  Helper for implementing ::com::sun::star::lang::XComponent.
     Upon disposing objects of this class, sub-classes receive a disposing() call.  Objects of
     this class can be held weakly, i.e. by a ::com::sun::star::uno::WeakReference.  Object of
     this class can be aggregated, i.e. incoming queryInterface() calls are delegated.
-
+    
     @attention
     The life-cycle of the passed mutex reference has to be longer than objects of this class.
     @deprecated
@@ -57,7 +57,7 @@ class OComponentHelper
 {
 public:
     /** Constructor.
-
+        
         @param rMutex
         the mutex used to protect multi-threaded access;
         lifetime must be longer than the lifetime of this object.
@@ -66,7 +66,7 @@ public:
     /** Dewstructor. If this object was not disposed previously, object will be disposed manually.
     */
     virtual ~OComponentHelper() SAL_THROW( (::com::sun::star::uno::RuntimeException) );
-
+    
     // XAggregation
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
         ::com::sun::star::uno::Type const & rType )
@@ -78,7 +78,7 @@ public:
         throw ();
     virtual void SAL_CALL release()
         throw ();
-
+    
     /** @attention
         XTypeProvider::getImplementationId() has to be implemented separately!
     */
@@ -89,7 +89,7 @@ public:
     */
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
         throw (::com::sun::star::uno::RuntimeException);
-
+    
     // XComponent
     virtual void SAL_CALL dispose()
         throw(::com::sun::star::uno::RuntimeException);
@@ -99,14 +99,14 @@ public:
     virtual void SAL_CALL removeEventListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener )
         throw(::com::sun::star::uno::RuntimeException);
-
+    
 protected:
     /** Called in dispose method after the listeners were notified.
     */
     virtual void SAL_CALL disposing();
-
+    
     /** @internal */
-    OBroadcastHelper    rBHelper;
+    OBroadcastHelper	rBHelper;
 private:
     /** @internal */
     inline OComponentHelper( const OComponentHelper & ) SAL_THROW( () );
@@ -114,7 +114,7 @@ private:
     inline OComponentHelper & operator = ( const OComponentHelper & ) SAL_THROW( () );
 };
 
-}
+}     
 
 #endif
 

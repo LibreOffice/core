@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,10 +49,10 @@
 class ImplPageOriginOverlay
 {
     // The OverlayObjects
-    ::sdr::overlay::OverlayObjectList               maObjects;
+    ::sdr::overlay::OverlayObjectList				maObjects;
 
     // The current position in logical coodinates
-    basegfx::B2DPoint                               maPosition;
+    basegfx::B2DPoint								maPosition;
 
 public:
     ImplPageOriginOverlay(const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos);
@@ -62,7 +62,7 @@ public:
 };
 
 ImplPageOriginOverlay::ImplPageOriginOverlay(const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos)
-:   maPosition(rStartPos)
+:	maPosition(rStartPos)
 {
     for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
     {
@@ -93,7 +93,7 @@ void ImplPageOriginOverlay::SetPosition(const basegfx::B2DPoint& rNewPosition)
         // apply to OverlayObjects
         for(sal_uInt32 a(0); a < maObjects.count(); a++)
         {
-            sdr::overlay::OverlayCrosshairStriped* pCandidate =
+            sdr::overlay::OverlayCrosshairStriped* pCandidate = 
                 static_cast< sdr::overlay::OverlayCrosshairStriped* >(&maObjects.getOverlayObject(a));
 
             if(pCandidate)
@@ -112,18 +112,18 @@ void ImplPageOriginOverlay::SetPosition(const basegfx::B2DPoint& rNewPosition)
 class ImplHelpLineOverlay
 {
     // The OverlayObjects
-    ::sdr::overlay::OverlayObjectList               maObjects;
+    ::sdr::overlay::OverlayObjectList				maObjects;
 
     // The current position in logical coodinates
-    basegfx::B2DPoint                               maPosition;
+    basegfx::B2DPoint								maPosition;
 
     // HelpLine specific stuff
-    SdrPageView*                                    mpPageView;
-    sal_uInt16                                      mnHelpLineNumber;
-    SdrHelpLineKind                                 meHelpLineKind;
+    SdrPageView*									mpPageView;
+    sal_uInt16										mnHelpLineNumber;
+    SdrHelpLineKind									meHelpLineKind;
 
 public:
-    ImplHelpLineOverlay(const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos,
+    ImplHelpLineOverlay(const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos, 
         SdrPageView* pPageView, sal_uInt16 nHelpLineNumber, SdrHelpLineKind eKind);
     ~ImplHelpLineOverlay();
 
@@ -136,9 +136,9 @@ public:
 };
 
 ImplHelpLineOverlay::ImplHelpLineOverlay(
-    const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos,
+    const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos, 
     SdrPageView* pPageView, sal_uInt16 nHelpLineNumber, SdrHelpLineKind eKind)
-:   maPosition(rStartPos),
+:	maPosition(rStartPos),
     mpPageView(pPageView),
     mnHelpLineNumber(nHelpLineNumber),
     meHelpLineKind(eKind)
@@ -173,7 +173,7 @@ void ImplHelpLineOverlay::SetPosition(const basegfx::B2DPoint& rNewPosition)
         // apply to OverlayObjects
         for(sal_uInt32 a(0); a < maObjects.count(); a++)
         {
-            sdr::overlay::OverlayHelplineStriped* pCandidate =
+            sdr::overlay::OverlayHelplineStriped* pCandidate = 
                 static_cast< sdr::overlay::OverlayHelplineStriped* >(&maObjects.getOverlayObject(a));
 
             if(pCandidate)
@@ -335,7 +335,7 @@ USHORT SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
     long dx1,dy1;
     long mx=aMagnSiz.Width();
     long my=aMagnSiz.Height();
-    if (bHlplVisible && bHlplSnap && !IsDragHelpLine())
+    if (bHlplVisible && bHlplSnap && !IsDragHelpLine()) 
     {
         const SdrHelpLineList& rHLL=pPV->GetHelpLines();
         USHORT nAnz=rHLL.GetCount();
@@ -384,7 +384,7 @@ USHORT SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
     if (bOFrmSnap || bOPntSnap /*|| (bConnVisible && bOConSnap)*/) {
         ULONG nMaxPointSnapCount=200;
         ULONG nMaxFrameSnapCount=200;
-
+        
         // #97981# go back to IM_DEEPNOGROUPS runthrough for snap to object comparisons
         SdrObjListIter aIter(*pPV->GetPage(),/*IM_FLAT*/IM_DEEPNOGROUPS,TRUE);
 
@@ -396,10 +396,10 @@ USHORT SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
             aRect.Top   ()-=my;
             aRect.Bottom()+=my;
             if (aRect.IsInside(rPnt)) {
-                if (bOPntSnap && nMaxPointSnapCount>0)
+                if (bOPntSnap && nMaxPointSnapCount>0) 
                 {
                     sal_uInt32 nAnz(pO->GetSnapPointCount());
-                    for (sal_uInt32 i(0L); i < nAnz && nMaxPointSnapCount > 0L; i++)
+                    for (sal_uInt32 i(0L); i < nAnz && nMaxPointSnapCount > 0L; i++) 
                     {
                         Point aP(pO->GetSnapPoint(i));
                         dx1=x-aP.X();
@@ -527,13 +527,13 @@ sal_Bool SdrSnapView::BegSetPageOrg(const Point& rPnt)
     basegfx::B2DPoint aStartPos(rPnt.X(), rPnt.Y());
     mpPageOriginOverlay = new ImplPageOriginOverlay(*this, aStartPos);
     aDragStat.Reset(GetSnapPos(rPnt,NULL));
-
+    
     return sal_True;
 }
 
 void SdrSnapView::MovSetPageOrg(const Point& rPnt)
 {
-    if(IsSetPageOrg())
+    if(IsSetPageOrg()) 
     {
         aDragStat.NextMove(GetSnapPos(rPnt,NULL));
         DBG_ASSERT(mpPageOriginOverlay, "SdrSnapView::MovSetPageOrg: no ImplPageOriginOverlay (!)");
@@ -545,12 +545,12 @@ void SdrSnapView::MovSetPageOrg(const Point& rPnt)
 sal_Bool SdrSnapView::EndSetPageOrg()
 {
     sal_Bool bRet(sal_False);
-
-    if(IsSetPageOrg())
+    
+    if(IsSetPageOrg()) 
     {
         SdrPageView* pPV = GetSdrPageView();
 
-        if(pPV)
+        if(pPV) 
         {
             Point aPnt(aDragStat.GetNow());
             pPV->SetPageOrigin(aPnt);
@@ -560,13 +560,13 @@ sal_Bool SdrSnapView::EndSetPageOrg()
         // cleanup
         BrkSetPageOrg();
     }
-
+    
     return bRet;
 }
 
 void SdrSnapView::BrkSetPageOrg()
 {
-    if(IsSetPageOrg())
+    if(IsSetPageOrg()) 
     {
         DBG_ASSERT(mpPageOriginOverlay, "SdrSnapView::MovSetPageOrg: no ImplPageOriginOverlay (!)");
         delete mpPageOriginOverlay;
@@ -600,11 +600,11 @@ sal_Bool SdrSnapView::BegDragHelpLine(USHORT nHelpLineNum, SdrPageView* pPV)
 {
     sal_Bool bRet(sal_False);
 
-    if(!bHlplFixed)
+    if(!bHlplFixed) 
     {
         BrkAction();
-
-        if(pPV && nHelpLineNum < pPV->GetHelpLines().GetCount())
+        
+        if(pPV && nHelpLineNum < pPV->GetHelpLines().GetCount()) 
         {
             const SdrHelpLineList& rHelpLines = pPV->GetHelpLines();
             const SdrHelpLine& rHelpLine = rHelpLines[nHelpLineNum];
@@ -660,11 +660,11 @@ Pointer SdrSnapView::GetDraggedHelpLinePointer() const
 
 void SdrSnapView::MovDragHelpLine(const Point& rPnt)
 {
-    if(IsDragHelpLine() && aDragStat.CheckMinMoved(rPnt))
+    if(IsDragHelpLine() && aDragStat.CheckMinMoved(rPnt)) 
     {
         Point aPnt(GetSnapPos(rPnt, 0L));
 
-        if(aPnt != aDragStat.GetNow())
+        if(aPnt != aDragStat.GetNow()) 
         {
             aDragStat.NextMove(aPnt);
             DBG_ASSERT(mpHelpLineOverlay, "SdrSnapView::MovDragHelpLine: no ImplHelpLineOverlay (!)");
@@ -678,9 +678,9 @@ sal_Bool SdrSnapView::EndDragHelpLine()
 {
     sal_Bool bRet(sal_False);
 
-    if(IsDragHelpLine())
+    if(IsDragHelpLine()) 
     {
-        if(aDragStat.IsMinMoved())
+        if(aDragStat.IsMinMoved()) 
         {
             SdrPageView* pPageView = mpHelpLineOverlay->GetPageView();
 
@@ -700,16 +700,16 @@ sal_Bool SdrSnapView::EndDragHelpLine()
                 // create new one
                 pPageView = GetSdrPageView();
 
-                if(pPageView)
+                if(pPageView) 
                 {
                     Point aPnt(aDragStat.GetNow());
                     SdrHelpLine aNewHelpLine(mpHelpLineOverlay->GetHelpLineKind(), aPnt);
                     pPageView->InsertHelpLine(aNewHelpLine);
-
+        
                     bRet = sal_True;
                 }
             }
-        }
+        } 
 
         // cleanup
         BrkDragHelpLine();
@@ -720,7 +720,7 @@ sal_Bool SdrSnapView::EndDragHelpLine()
 
 void SdrSnapView::BrkDragHelpLine()
 {
-    if(IsDragHelpLine())
+    if(IsDragHelpLine()) 
     {
         DBG_ASSERT(mpHelpLineOverlay, "SdrSnapView::EndDragHelpLine: no ImplHelpLineOverlay (!)");
         delete mpHelpLineOverlay;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include "uno/environment.h"
 
 
-extern "C" void SAL_CALL uno_direct_getEnvironment(uno_Environment ** ppEnv,
+extern "C" void SAL_CALL uno_direct_getEnvironment(uno_Environment ** ppEnv, 
                                                    rtl_uString      * pEnvDcp,
                                                    void             * pContext)
     SAL_THROW_EXTERN_C();

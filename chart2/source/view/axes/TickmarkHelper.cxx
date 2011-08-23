@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -298,7 +298,7 @@ bool EquidistantTickIter::gotoIndex( sal_Int32 nTickIndex )
     if( nTickIndex < m_nCurrentPos )
         if( !gotoFirst() )
             return false;
-
+    
     while( nTickIndex > m_nCurrentPos )
         if( !gotoNext() )
             return false;
@@ -552,7 +552,7 @@ double* TickmarkHelper::getMinorTick( sal_Int32 nTick, sal_Int32 nDepth
     double fDistance = (fAdaptedNextParent - fAdaptedStartParent)/m_rIncrement.SubIncrements[nDepth-1].IntervalCount;
 
     m_pfCurrentValues[nDepth] = fAdaptedStartParent + nTick*fDistance;
-
+    
     //return always the value after scaling
     if(!bPostEquidistant && m_xInverseScaling.is() )
         m_pfCurrentValues[nDepth] = m_rScale.Scaling->doScaling( m_pfCurrentValues[nDepth] );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,9 +43,9 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
 
             /** calls XDatabaseMetaData::getTables.
-                @param  _sKindOfObject
+                @param	_sKindOfObject
                     The type of tables to be fetched.
-                @param  _rNames
+                @param	_rNames
                     The container for the names to be filled. <OUT/>
             */
             void refreshObjects(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _sKindOfObject,TStringVector& _rNames);
@@ -53,15 +53,15 @@ namespace connectivity
         public:
             // implementation of the pure virtual methods
             virtual void refreshTables();
-            virtual void refreshViews() ;
+            virtual void refreshViews()	;
             virtual void refreshGroups();
-            virtual void refreshUsers() ;
+            virtual void refreshUsers()	;
 
         public:
             OMySQLCatalog(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection);
 
-            inline sdbcx::OCollection*      getPrivateTables()  const { return m_pTables;}
-            inline sdbcx::OCollection*      getPrivateViews()   const { return m_pViews; }
+            inline sdbcx::OCollection*		getPrivateTables()	const { return m_pTables;}
+            inline sdbcx::OCollection*		getPrivateViews()	const { return m_pViews; }
             inline ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection() const { return m_xConnection; }
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

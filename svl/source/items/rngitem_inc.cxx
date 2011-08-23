@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,12 +83,12 @@ SfxXRangeItem::SfxXRangeItem( const SfxXRangeItem& rItem ) :
 
 SfxItemPresentation SfxXRangeItem::GetPresentation
 (
-    SfxItemPresentation     /*ePresentation*/,
-    SfxMapUnit              /*eCoreMetric*/,
-    SfxMapUnit              /*ePresentationMetric*/,
-    XubString&              rText,
+    SfxItemPresentation 	/*ePresentation*/,
+    SfxMapUnit				/*eCoreMetric*/,
+    SfxMapUnit				/*ePresentationMetric*/,
+    XubString& 				rText,
     const IntlWrapper *
-)   const
+)	const
 {
     rText = UniString::CreateFromInt64(nFrom);
     rText += ':';
@@ -118,7 +118,7 @@ SfxPoolItem* SfxXRangeItem::Clone(SfxItemPool *) const
 
 SfxPoolItem* SfxXRangeItem::Create(SvStream &rStream, USHORT) const
 {
-    NUMTYPE     nVon, nBis;
+    NUMTYPE		nVon, nBis;
     rStream >> nVon;
     rStream >> nBis;
     return new SfxXRangeItem( Which(), nVon, nBis );
@@ -136,14 +136,14 @@ SvStream& SfxXRangeItem::Store(SvStream &rStream, USHORT) const
 //=========================================================================
 
 SfxXRangesItem::SfxXRangesItem()
-:   _pRanges(0)
+:	_pRanges(0)
 {
 }
 
 //-------------------------------------------------------------------------
 
 SfxXRangesItem::SfxXRangesItem( USHORT nWID, const NUMTYPE *pRanges )
-:   SfxPoolItem( nWID )
+:	SfxPoolItem( nWID )
 {
     NUMTYPE nCount = Count_Impl(pRanges) + 1;
     _pRanges = new NUMTYPE[nCount];
@@ -153,7 +153,7 @@ SfxXRangesItem::SfxXRangesItem( USHORT nWID, const NUMTYPE *pRanges )
 //-------------------------------------------------------------------------
 
 SfxXRangesItem::SfxXRangesItem( USHORT nWID, SvStream &rStream )
-:   SfxPoolItem( nWID )
+:	SfxPoolItem( nWID )
 {
     NUMTYPE nCount;
     rStream >> nCount;
@@ -166,7 +166,7 @@ SfxXRangesItem::SfxXRangesItem( USHORT nWID, SvStream &rStream )
 //-------------------------------------------------------------------------
 
 SfxXRangesItem::SfxXRangesItem( const SfxXRangesItem& rItem )
-:   SfxPoolItem( rItem )
+:	SfxPoolItem( rItem )
 {
     NUMTYPE nCount = Count_Impl(rItem._pRanges) + 1;
     _pRanges = new NUMTYPE[nCount];

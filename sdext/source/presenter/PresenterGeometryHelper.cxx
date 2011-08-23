@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,7 +128,7 @@ geometry::RealRectangle2D PresenterGeometryHelper::ConvertRectangle (
 
 
 
-
+    
 awt::Rectangle PresenterGeometryHelper::TranslateRectangle (
     const css::awt::Rectangle& rBox,
     const sal_Int32 nXOffset,
@@ -136,7 +136,7 @@ awt::Rectangle PresenterGeometryHelper::TranslateRectangle (
 {
     return awt::Rectangle(rBox.X + nXOffset, rBox.Y + nYOffset, rBox.Width, rBox.Height);
 }
-
+    
 
 
 
@@ -208,7 +208,7 @@ awt::Rectangle PresenterGeometryHelper::Union (
         return rBox2;
     else if (rBox2.Width<=0 || rBox2.Height<=0)
         return rBox1;
-
+        
     const sal_Int32 nLeft (::std::min(rBox1.X, rBox2.X));
     const sal_Int32 nTop (::std::min(rBox1.Y, rBox2.Y));
     const sal_Int32 nRight (::std::max(Right(rBox1), Right(rBox2)));
@@ -320,7 +320,7 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
         aPoints[nIndex][2] = geometry::RealPoint2D(rBox.X+rBox.Width, rBox.Y+rBox.Height);
         aPoints[nIndex][3] = geometry::RealPoint2D(rBox.X+rBox.Width, rBox.Y);
     }
-
+    
     Reference<rendering::XLinePolyPolygon2D> xPolygon (
         rxDevice->createCompatibleLinePolyPolygon(aPoints));
     Reference<rendering::XPolyPolygon2D> xRectangle (xPolygon, UNO_QUERY);

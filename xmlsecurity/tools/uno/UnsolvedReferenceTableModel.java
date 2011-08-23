@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,39 +30,39 @@ package com.sun.star.xml.security.uno;
 import javax.swing.table.AbstractTableModel;
 
 /*
- * this class is used to maintain the unsolved reference
+ * this class is used to maintain the unsolved reference 
  * table.
  */
 class UnsolvedReferenceTableModel extends AbstractTableModel
 {
-    private String[] m_columnNames = {"id",
+    private String[] m_columnNames = {"id", 
                            "refNum",
                            "EC's id"};
-
+    
     private TestTool m_testTool;
-
+    
     UnsolvedReferenceTableModel(TestTool testTool)
     {
         m_testTool = testTool;
     }
-
-    public String getColumnName(int col)
-    {
-        return m_columnNames[col].toString();
+    
+    public String getColumnName(int col) 
+    { 
+        return m_columnNames[col].toString(); 
     }
-
-    public int getRowCount()
+    
+    public int getRowCount() 
     {
-        return m_testTool.getUnsolvedReferenceIds().size();
+        return m_testTool.getUnsolvedReferenceIds().size(); 
     }
-
-    public int getColumnCount()
+    
+    public int getColumnCount() 
     {
-        return m_columnNames.length;
+        return m_columnNames.length; 
     }
-
-    public Object getValueAt(int row, int col)
-    {
+    
+    public Object getValueAt(int row, int col) 
+    { 
             if (col == 0)
             {
                 return (String)m_testTool.getUnsolvedReferenceIds().elementAt(row);
@@ -80,10 +80,10 @@ class UnsolvedReferenceTableModel extends AbstractTableModel
             return null;
         }
     }
-
+    
     public boolean isCellEditable(int row, int col)
     {
-        return false;
+        return false; 
     }
 }
 

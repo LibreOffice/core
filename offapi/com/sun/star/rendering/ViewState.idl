@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@ struct ViewState
 
         This member is used to transform coordinates of draw
         operations from user space to screen space.<p>
-     */
-    ::com::sun::star::geometry::AffineMatrix2D  AffineTransform;
+     */	
+    ::com::sun::star::geometry::AffineMatrix2D	AffineTransform;
 
     //-------------------------------------------------------------------------
 
@@ -69,7 +69,7 @@ struct ViewState
         clip. That means, nothing rendered to the canvas will be
         visible.<p>
      */
-    XPolyPolygon2D                                      Clip;
+    XPolyPolygon2D										Clip;
 };
 
 }; }; }; };

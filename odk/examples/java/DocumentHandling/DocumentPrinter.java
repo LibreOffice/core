@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 import com.sun.star.uno.UnoRuntime;
@@ -56,10 +56,10 @@ public class DocumentPrinter {
             // get the remote office service manager
             com.sun.star.lang.XMultiComponentFactory xMCF =
                 xContext.getServiceManager();
-
+            
             Object oDesktop = xMCF.createInstanceWithContext(
                 "com.sun.star.frame.Desktop", xContext);
-
+        
             com.sun.star.frame.XComponentLoader xCompLoader =
                 (com.sun.star.frame.XComponentLoader)
                      UnoRuntime.queryInterface(
@@ -68,17 +68,17 @@ public class DocumentPrinter {
             java.io.File sourceFile = new java.io.File(args[1]);
             StringBuffer sUrl = new StringBuffer("file:///");
             sUrl.append(sourceFile.getCanonicalPath().replace('\\', '/'));
-
+      
             // Load a Writer document, which will be automaticly displayed
             com.sun.star.lang.XComponent xComp = xCompLoader.loadComponentFromURL(
                 sUrl.toString(), "_blank", 0,
                 new com.sun.star.beans.PropertyValue[0] );
-
+      
             // Querying for the interface XPrintable on the loaded document
             com.sun.star.view.XPrintable xPrintable =
                 (com.sun.star.view.XPrintable)UnoRuntime.queryInterface(
                     com.sun.star.view.XPrintable.class, xComp);
-
+      
             // Setting the property "Name" for the favoured printer (name of
             // IP address)
             com.sun.star.beans.PropertyValue propertyValue[] =
@@ -86,19 +86,19 @@ public class DocumentPrinter {
             propertyValue[0] = new com.sun.star.beans.PropertyValue();
             propertyValue[0].Name = "Name";
             propertyValue[0].Value = args[ 0 ];
-
+      
             // Setting the name of the printer
             xPrintable.setPrinter( propertyValue );
-
+      
             // Setting the property "Pages" so that only the desired pages
             // will be printed.
             propertyValue[0] = new com.sun.star.beans.PropertyValue();
             propertyValue[0].Name = "Pages";
             propertyValue[0].Value = args[ 2 ];
-
+      
             // Printing the loaded document
             xPrintable.print( propertyValue );
-
+      
             System.exit(0);
         }
         catch( Exception e ) {

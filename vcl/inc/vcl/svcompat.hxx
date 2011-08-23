@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@
 // -----------
 
 #define COMPAT_FORMAT( char1, char2, char3, char4 ) \
-    ((ULONG)((((ULONG)(char)(char1)))|              \
-    (((ULONG)(char)(char2))<<8UL)|                  \
-    (((ULONG)(char)(char3))<<16UL)|                 \
+    ((ULONG)((((ULONG)(char)(char1)))|				\
+    (((ULONG)(char)(char2))<<8UL)|					\
+    (((ULONG)(char)(char3))<<16UL)|					\
     ((ULONG)(char)(char4))<<24UL))
 
 

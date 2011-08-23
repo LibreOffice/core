@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ namespace connectivity
 {
     namespace mozab
     {
-        typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::mozilla::XMozillaBootstrap,
+        typedef ::cppu::WeakComponentImplHelper2<	::com::sun::star::mozilla::XMozillaBootstrap, 
                                                     ::com::sun::star::lang::XServiceInfo > OMozillaBootstrap_BASE;
         class ProfileAccess;
         class ProfileManager;
@@ -49,11 +49,11 @@ namespace connectivity
         protected:
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xMSFactory;
 
-            ::osl::Mutex                m_aMutex;       // mutex is need to control member access
+            ::osl::Mutex				m_aMutex;		// mutex is need to control member access
             virtual ~MozillaBootstrap();
         protected:
             ProfileAccess * m_ProfileAccess;
-            ProfileManager  * m_ProfileManager;
+            ProfileManager	* m_ProfileManager;
         public:
 
             void Init();

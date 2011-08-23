@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,19 +37,19 @@ import lib.MultiPropertyTest;
 */
 public class _ParagraphPropertiesComplex extends MultiPropertyTest {
 
-
+    
     protected PropertyTester WritingModeTester = new PropertyTester() {
         protected Object getNewValue(String propName, Object oldValue) {
             if ((oldValue != null) && (oldValue.equals(new Short(com.sun.star.text.WritingMode2.LR_TB))))
                 return new Short(com.sun.star.text.WritingMode2.PAGE); else
                 return new Short(com.sun.star.text.WritingMode2.LR_TB);
         }
-    } ;
-
+    } ; 
+    
     public void _WritingMode() {
         log.println("Testing with custom Property tester") ;
         testProperty("WritingMode", WritingModeTester) ;
-    }
+    }    
 
 }  // finish class _ParagraphPropertiesComplex
 

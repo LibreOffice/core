@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,8 +92,8 @@ void TextUndoManager::UndoRedoStart()
 {
     DBG_ASSERT( GetView(), "Undo/Redo: Active View?" );
 
-//  if ( GetView() )
-//      GetView()->HideSelection();
+//	if ( GetView() )
+//		GetView()->HideSelection();
 }
 
 void TextUndoManager::UndoRedoEnd()
@@ -129,7 +129,7 @@ USHORT __EXPORT TextUndo::GetId() const
 
 XubString __EXPORT TextUndo::GetComment() const
 {
-//  return mpTextEngine->GetUndoComment( this );
+//	return mpTextEngine->GetUndoComment( this );
     return String();
 }
 
@@ -157,7 +157,7 @@ TextUndoDelPara::~TextUndoDelPara()
 void __EXPORT TextUndoDelPara::Undo()
 {
     GetTextEngine()->InsertContent( mpNode, mnPara );
-    mbDelObject = FALSE;    // gehoert wieder der Engine
+    mbDelObject = FALSE;	// gehoert wieder der Engine
 
     if ( GetView() )
     {
@@ -179,7 +179,7 @@ void __EXPORT TextUndoDelPara::Redo()
     GetDoc()->GetNodes().Remove( mnPara );
     GetTextEngine()->ImpParagraphRemoved( mnPara );
 
-    mbDelObject = TRUE; // gehoert wieder dem Undo
+    mbDelObject = TRUE;	// gehoert wieder dem Undo
 
     ULONG nParas = GetDoc()->GetNodes().Count();
     ULONG n = mnPara < nParas ? mnPara : (nParas-1);
@@ -192,7 +192,7 @@ void __EXPORT TextUndoDelPara::Redo()
 // TextUndoConnectParas
 // ------------------------------------------------------------------------
 TextUndoConnectParas::TextUndoConnectParas( TextEngine* pTextEngine, ULONG nPara, USHORT nPos )
-                    :   TextUndo( TEXTUNDO_CONNECTPARAS, pTextEngine )
+                    : 	TextUndo( TEXTUNDO_CONNECTPARAS, pTextEngine )
 {
     mnPara = nPara;
     mnSepPos = nPos;
@@ -308,10 +308,10 @@ TextUndoSetAttribs::TextUndoSetAttribs( TextEngine* pTextEngine, const TextSelec
     : TextUndo( TEXTUNDO_ATTRIBS, pTextEngine ), maSelection( rSel )
 {
     maSelection.Justify();
-//  aNewAttribs.Set( rNewItems );
-//  mbSetIsRemove = FALSE;
-//  mnRemoveWhich = 0;
-//  mnSpecial = 0;
+// 	aNewAttribs.Set( rNewItems );
+//	mbSetIsRemove = FALSE;
+//	mnRemoveWhich = 0;
+//	mnSpecial = 0;
 }
 
 TextUndoSetAttribs::~TextUndoSetAttribs()
@@ -323,23 +323,23 @@ void __EXPORT TextUndoSetAttribs::Undo()
 {
     for ( ULONG nPara = maSelection.GetStart().GetPara(); nPara <= maSelection.GetEnd().GetPara(); nPara++ )
     {
-//      ContentAttribsInfo* pInf = aPrevAttribs[ (USHORT)(nPara-aESel.nStartPara) ];
-//      GetTextEngine()->RemoveCharAttribs( nPara );
-//      TextNode* pNode = GetTextEngine()->GetTextDoc().GetObject( nPara );
-//      for ( USHORT nAttr = 0; nAttr < pInf->GetPrevCharAttribs().Count(); nAttr++ )
-//      {
-//          GetTextEngine()->GetTextDoc().InsertAttrib( pNode, pX->GetStart(), pX->GetEnd(), *pX->GetItem() );
-//      }
+//		ContentAttribsInfo* pInf = aPrevAttribs[ (USHORT)(nPara-aESel.nStartPara) ];
+//		GetTextEngine()->RemoveCharAttribs( nPara );
+//		TextNode* pNode = GetTextEngine()->GetTextDoc().GetObject( nPara );
+//		for ( USHORT nAttr = 0; nAttr < pInf->GetPrevCharAttribs().Count(); nAttr++ )
+//		{
+//			GetTextEngine()->GetTextDoc().InsertAttrib( pNode, pX->GetStart(), pX->GetEnd(), *pX->GetItem() );
+//		}
     }
     SetSelection( maSelection );
 }
 
 void __EXPORT TextUndoSetAttribs::Redo()
 {
-//  if ( !bSetIsRemove )
-//      GetTextEngine()->SetAttribs( aSel, aNewAttribs, nSpecial );
-//  else
-//      GetTextEngine()->RemoveCharAttribs( aSel, bRemoveParaAttribs, nRemoveWhich );
+//	if ( !bSetIsRemove )
+//		GetTextEngine()->SetAttribs( aSel, aNewAttribs, nSpecial );
+//	else
+//		GetTextEngine()->RemoveCharAttribs( aSel, bRemoveParaAttribs, nRemoveWhich );
     SetSelection( maSelection );
 }
 

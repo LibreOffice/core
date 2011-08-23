@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,14 +34,14 @@
 extern int osl_isSingleCPU;
 
 /* For all Intel x86 above x486 we use a spezial inline assembler implementation.
-   The main reason is that WIN9? does not return the result of the operation.
-   Instead there is only returned a value greater than zero is the increment
-   result is greater than zero, but not the the result of the addition.
-   For Windows NT the native function could be used, because the correct result
+   The main reason is that WIN9? does not return the result of the operation. 
+   Instead there is only returned a value greater than zero is the increment 
+   result is greater than zero, but not the the result of the addition. 
+   For Windows NT the native function could be used, because the correct result 
    is returned. Beacuse of simpler code maintance and performace reasons we use
    on every x86-Windows-Platform the inline assembler implementation.
 */
-
+ 
 /*****************************************************************************/
 /* osl_incrementInterlockedCount */
 /*****************************************************************************/
@@ -51,22 +51,22 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
 {
     asm
     (
-     "  movl        %0, %%ecx\n"
-     "      movl        $1, %%eax\n"
-     "  movl        %1, %%edx\n"
-     "  cmpl        $0, %%edx\n"
-     "  je          1f\n"
-     "      xadd        %%eax, (%%ecx)\n"
-     "  jmp         2f\n"
+     "	movl        %0, %%ecx\n"
+     "  	movl        $1, %%eax\n"
+     "	movl        %1, %%edx\n"
+     "	cmpl        $0, %%edx\n"
+     "	je          1f\n"
+     "  	xadd        %%eax, (%%ecx)\n"
+     "	jmp         2f\n"
      "1:\n"
-     "      lock xadd   %%eax, (%%ecx)\n"
+     "  	lock xadd   %%eax, (%%ecx)\n"
      "2:\n"
-     "      incl        %%eax\n"
+     "  	incl        %%eax\n"
      ::"m"(pCount),"m"(osl_isSingleCPU)
     );
 }
 #else
-#pragma warning(disable: 4035)
+#pragma warning(disable: 4035) 
 {
     __asm
     {
@@ -83,10 +83,10 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
         inc         eax
     }
 }
-#pragma warning(default: 4035)
+#pragma warning(default: 4035) 
 #endif
 #else
-#pragma message("WARNING: Using system InterlockedIncrement")
+#pragma message("WARNING: Using system InterlockedIncrement") 
 {
     return (InterlockedIncrement(pCount));
 }
@@ -101,22 +101,22 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
 {
     asm
     (
-     "  movl        %0, %%ecx\n"
-     "      orl         $-1, %%eax\n"
-     "  movl        %1, %%edx\n"
-     "  cmpl        $0, %%edx\n"
-     "  je          1f\n"
-     "      xadd        %%eax, (%%ecx)\n"
-     "  jmp         2f\n"
+     "	movl        %0, %%ecx\n"
+     "  	orl         $-1, %%eax\n"
+     "	movl        %1, %%edx\n"
+     "	cmpl        $0, %%edx\n"
+     "	je          1f\n"
+     "  	xadd        %%eax, (%%ecx)\n"
+     "	jmp         2f\n"
      "1:\n"
-     "      lock xadd   %%eax, (%%ecx)\n"
+     "  	lock xadd   %%eax, (%%ecx)\n"
      "2:\n"
-     "      decl        %%eax\n"
+     "  	decl        %%eax\n"
      ::"m"(pCount),"m"(osl_isSingleCPU)
     );
 }
 #else
-#pragma warning(disable: 4035)
+#pragma warning(disable: 4035) 
 {
     __asm
     {
@@ -133,10 +133,10 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
         dec         eax
     }
 }
-#pragma warning(default: 4035)
+#pragma warning(default: 4035) 
 #endif
 #else
-#pragma message("WARNING: Using system InterlockedDecrement")
+#pragma message("WARNING: Using system InterlockedDecrement") 
 {
     return (InterlockedDecrement(pCount));
 }

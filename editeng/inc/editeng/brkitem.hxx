@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ namespace rtl
     Dieses Item beschreibt ein Umbruch-Attribut
     Automatisch?, Seiten- oder Spaltenumbruch, davor oder danach?
 */
-#define FMTBREAK_NOAUTO ((USHORT)0x0001)
+#define	FMTBREAK_NOAUTO	((USHORT)0x0001)
 
 class EDITENG_DLLPUBLIC SvxFmtBreakItem : public SfxEnumItem
 {
@@ -59,27 +59,27 @@ public:
     inline SvxFmtBreakItem& operator=( const SvxFmtBreakItem& rCpy );
 
     // "pure virtual Methoden" vom SfxPoolItem
-    virtual int              operator==( const SfxPoolItem& ) const;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual int 			 operator==( const SfxPoolItem& ) const;
+    virtual	bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual	bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
-    virtual String           GetValueTextByPos( USHORT nPos ) const;
+    virtual String			 GetValueTextByPos( USHORT nPos ) const;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SvStream&        Store( SvStream& , USHORT nItemVersion ) const;
-    virtual USHORT           GetVersion( USHORT nFileVersion ) const;
-    virtual SfxPoolItem*     Create( SvStream&, USHORT ) const;
-    virtual USHORT           GetValueCount() const;
+    virtual SfxPoolItem*	 Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SvStream&		 Store( SvStream& , USHORT nItemVersion ) const;
+    virtual USHORT			 GetVersion( USHORT nFileVersion ) const;
+    virtual SfxPoolItem*	 Create( SvStream&, USHORT ) const;
+    virtual USHORT			 GetValueCount() const;
 
     // MS VC4.0 kommt durcheinander
-    void             SetValue( USHORT nNewVal )
+    void			 SetValue( USHORT nNewVal )
                                 {SfxEnumItem::SetValue(nNewVal); }
-    SvxBreak             GetBreak() const { return SvxBreak( GetValue() ); }
-    void                     SetBreak( const SvxBreak eNew )
+    SvxBreak			 GetBreak() const { return SvxBreak( GetValue() ); }
+    void					 SetBreak( const SvxBreak eNew )
                                 { SetValue( (USHORT)eNew ); }
 };
 

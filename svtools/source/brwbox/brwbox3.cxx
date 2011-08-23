@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ namespace svt
     using namespace ::com::sun::star::lang;
     using namespace utl;
 
-    Reference< XAccessible > getHeaderCell( BrowseBoxImpl::THeaderCellMap& _raHeaderCells,
+    Reference< XAccessible > getHeaderCell(	BrowseBoxImpl::THeaderCellMap& _raHeaderCells,
                                             sal_Int32 _nPos,
                                             AccessibleBrowseBoxObjType _eType,
                                             const Reference< XAccessible >& _rParent,
@@ -107,7 +107,7 @@ Reference< XAccessible > BrowseBox::CreateAccessible()
         Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if( xAccParent.is() )
         {
-            m_pImpl->m_pAccessible = getAccessibleFactory().createAccessibleBrowseBox(
+            m_pImpl->m_pAccessible = getAccessibleFactory().createAccessibleBrowseBox( 
                 xAccParent, *this
             );
         }
@@ -193,7 +193,7 @@ sal_Bool BrowseBox::ConvertPointToCellAddress(
 sal_Bool BrowseBox::ConvertPointToRowHeader( sal_Int32& rnRow, const Point& rPoint )
 {
     rnRow = GetRowAtYPosPixel(rPoint.Y());
-    //  USHORT nColumnId = GetColumnAtXPosPixel(rPoint.X());
+    //	USHORT nColumnId = GetColumnAtXPosPixel(rPoint.X());
     return rnRow != BROWSER_INVALIDID;// && nColumnId == 0;
 }
 // -----------------------------------------------------------------------------
@@ -245,7 +245,7 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
             aRetText += OUString( RTL_CONSTASCII_USTRINGPARAM( "," ) );
             aRetText += OUString::valueOf(sal_Int32(GetCurColumnId()));
             aRetText += OUString( RTL_CONSTASCII_USTRINGPARAM( "]" ) );
-#endif
+#endif			
             break;
         case ::svt::BBTYPE_ROWHEADERCELL:
             aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "RowHeaderCell" ) );
@@ -283,22 +283,22 @@ OUString BrowseBox::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxOb
             aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BrowseBox description" ) );
             break;
         case ::svt::BBTYPE_TABLE:
-            //  aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TABLE description" ) );
+            //	aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TABLE description" ) );
             break;
         case ::svt::BBTYPE_ROWHEADERBAR:
-            //  aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ROWHEADERBAR description" ) );
+            //	aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ROWHEADERBAR description" ) );
             break;
         case ::svt::BBTYPE_COLUMNHEADERBAR:
-            //  aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "COLUMNHEADERBAR description" ) );
+            //	aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "COLUMNHEADERBAR description" ) );
             break;
         case ::svt::BBTYPE_TABLECELL:
-            //  aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TABLECELL description" ) );
+            //	aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TABLECELL description" ) );
             break;
         case ::svt::BBTYPE_ROWHEADERCELL:
-            //  aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ROWHEADERCELL description" ) );
+            //	aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ROWHEADERCELL description" ) );
             break;
         case ::svt::BBTYPE_COLUMNHEADERCELL:
-            //  aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "COLUMNHEADERCELL description" ) );
+            //	aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "COLUMNHEADERCELL description" ) );
             break;
         case ::svt::BBTYPE_CHECKBOXCELL:
             break;

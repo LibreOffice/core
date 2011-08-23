@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -270,7 +270,7 @@ public class _XWindow extends MultiMethodTest {
         log.println("set object invisible...");
         oObj.setVisible(false);
         shortWait();
-        res = wListener.hidden && !wListener.resized
+        res = wListener.hidden && !wListener.resized 
                         && !wListener.moved && !wListener.shown;
         result &= res;
         if (!res) {
@@ -288,7 +288,7 @@ public class _XWindow extends MultiMethodTest {
         log.println("set object visible...");
         oObj.setVisible(true) ;
         shortWait();
-        res = wListener.shown && !wListener.resized &&
+        res = wListener.shown && !wListener.resized && 
                 !wListener.hidden && !wListener.moved;
         result &= res;
         if (!res) {

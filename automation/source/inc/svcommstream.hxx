@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,19 +41,19 @@ public:
     SvCommStream( SvStream* pIO );
     ~SvCommStream();
 
-    ICommStream&        operator>>( comm_USHORT& rUShort );
-    ICommStream&        operator>>( comm_ULONG& rULong );
-    ICommStream&        operator>>( comm_BOOL& rChar );
+    ICommStream&		operator>>( comm_USHORT& rUShort );
+    ICommStream&		operator>>( comm_ULONG& rULong );
+    ICommStream&		operator>>( comm_BOOL& rChar );
 
-    ICommStream&        operator<<( comm_USHORT nUShort );
-    ICommStream&        operator<<( comm_ULONG nULong );
-    ICommStream&        operator<<( comm_BOOL nChar );
+    ICommStream&		operator<<( comm_USHORT nUShort );
+    ICommStream&		operator<<( comm_ULONG nULong );
+    ICommStream&		operator<<( comm_BOOL nChar );
 
-    comm_ULONG      Read( void* pData, comm_ULONG nSize );
-    comm_ULONG      Write( const void* pData, comm_ULONG nSize );
+    comm_ULONG		Read( void* pData, comm_ULONG nSize );
+    comm_ULONG		Write( const void* pData, comm_ULONG nSize );
 
-    comm_BOOL       IsEof() const;
-    comm_ULONG      SeekRel( long nPos );
+    comm_BOOL		IsEof() const;
+    comm_ULONG		SeekRel( long nPos );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,34 +51,34 @@ module com { module sun { module star { module system {
 //=============================================================================
 /** Specifies an interface for executing a system command.
 */
-
+ 
 
 published interface XSystemShellExecute: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** Executes an abitrary system command.
-
+    /**	Executes an abitrary system command. 
+        
         @param aCommand
         Specifies the command to execute. This may be an executable file or a
         document which is registered with an application on a specific platform,
         so that the platform knows what application to launch for that document.
-        If the command specifies a path to an executable, etc, this has to be
+        If the command specifies a path to an executable, etc, this has to be 
         a system specific path.
 
         @param aParameter
-        Specifies a list of space separated parameters. The method does not
+        Specifies a list of space separated parameters. The method does not 
         validate the given parameters, but only passes it as a parameter to the
         specified command.
 
         @param nFlags
         Specifies different flags to control the execution of this method, for example,
-        avoid showing system error messages, in case of failures, etc.
+        avoid showing system error messages, in case of failures, etc.		
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws com::sun::star::lang::IllegalArgumentException 
         when the specified flags are wrong or exclude each other.
-.
-        @throws com::sun::star::sys::SystemExecuteException
-        in the case of errors when trying to executed the specified command.
+.		
+        @throws com::sun::star::sys::SystemExecuteException 
+        in the case of errors when trying to executed the specified command.	
 
         @see com::sun::star::system::SystemShellExecuteFlags
     */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,16 +71,16 @@ friend class SwEnvFmtPage;
 friend class SwEnvPrtPage;
 friend class SwEnvPreview;
 
-    String          sInsert;
-    String          sChange;
-    SwEnvItem       aEnvItem;
-    SwWrtShell      *pSh;
-    Printer         *pPrinter;
-    SfxItemSet      *pAddresseeSet;
-    SfxItemSet      *pSenderSet;
+    String			sInsert;
+    String 			sChange;
+    SwEnvItem		aEnvItem;
+    SwWrtShell		*pSh;
+    Printer			*pPrinter;
+    SfxItemSet		*pAddresseeSet;
+    SfxItemSet		*pSenderSet;
 
-    virtual void    PageCreated( USHORT nId, SfxTabPage &rPage );
-    virtual short   Ok();
+    virtual void	PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual short	Ok();
 
 public:
      SwEnvDlg(Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, BOOL bInsert);
@@ -92,13 +92,13 @@ class SwEnvPage : public SfxTabPage
 {
     FixedText     aAddrText;
     MultiLineEdit aAddrEdit;
-    FixedText     aDatabaseFT;
-    ListBox       aDatabaseLB;
-    FixedText     aTableFT;
-    ListBox       aTableLB;
+    FixedText	  aDatabaseFT;
+    ListBox 	  aDatabaseLB;
+    FixedText	  aTableFT;
+    ListBox 	  aTableLB;
     ImageButton   aInsertBT;
-    FixedText     aDBFieldFT;
-    ListBox       aDBFieldLB;
+    FixedText	  aDBFieldFT;
+    ListBox 	  aDBFieldLB;
     CheckBox      aSenderBox;
     MultiLineEdit aSenderEdit;
     SwEnvPreview  aPreview;

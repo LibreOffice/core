@@ -2,7 +2,7 @@
 <!--***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
             <node oor:name="Classes">
                 <node oor:name="com.sun.star.text.TextDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">Text documents</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -41,7 +41,7 @@
                 </node>
                 <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">Spreadsheets</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -50,7 +50,7 @@
                 </node>
                 <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">Presentations</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -59,7 +59,7 @@
                 </node>
                 <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">Drawings</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -68,7 +68,7 @@
                 </node>
                 <node oor:name="com.sun.star.text.WebDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">Web pages</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -77,7 +77,7 @@
                 </node>
                 <node oor:name="com.sun.star.text.GlobalDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">Master documents</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -86,7 +86,7 @@
                 </node>
                 <node oor:name="com.sun.star.formula.FormularProperties" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">Formulas</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -95,7 +95,7 @@
                 </node>
                 <node oor:name="com.sun.star.sdb.OfficeDatabaseDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en">Database Documents</value>
                         <value xml:lang="en-US">Database documents</value>
                     </prop>
@@ -109,7 +109,7 @@
             <node oor:name="Classes">
                 <node oor:name="msword956" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">Microsoft Word 6.0 / 95</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -118,7 +118,7 @@
                 </node>
                 <node oor:name="sw3to5" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">StarWriter 3.0 - 5.0</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -127,7 +127,7 @@
                 </node>
                 <node oor:name="sw3to5templ" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">StarWriter 3.0 - 5.0 Templates</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -136,7 +136,7 @@
                 </node>
                 <node oor:name="excel456" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">Microsoft Excel 4.x - 5.0 / 95</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -145,7 +145,7 @@
                 </node>
                 <node oor:name="excel456templ" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -154,7 +154,7 @@
                 </node>
                 <node oor:name="sc345" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">StarCalc 3.0 - 5.0</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -163,7 +163,7 @@
                 </node>
                 <node oor:name="sc345templ" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">StarCalc 3.0 - 5.0 Templates</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -172,7 +172,7 @@
                 </node>
                 <node oor:name="sd35_i" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">StarDraw 3.0 / 5.0 (StarImpress)</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -181,7 +181,7 @@
                 </node>
                 <node oor:name="sd35_itempl" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">StarDraw 3.0 / 5.0 Templates (StarImpress)</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -190,7 +190,7 @@
                 </node>
                 <node oor:name="si45" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">StarImpress 4.0 / 5.0</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -199,7 +199,7 @@
                 </node>
                 <node oor:name="si45templ" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">StarImpress 4.0 / 5.0 Templates</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -208,7 +208,7 @@
                 </node>
                 <node oor:name="sd35" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">StarDraw 3.0 / 5.0</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -217,7 +217,7 @@
                 </node>
                 <node oor:name="sd35templ" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">StarDraw 3.0 / 5.0 Templates</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -226,7 +226,7 @@
                 </node>
                 <node oor:name="sww45templ" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">StarWriter/Web 4.0 / 5.0 Templates</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -235,7 +235,7 @@
                 </node>
                 <node oor:name="sww345" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">StarWriter/Web 3.0 - 5.0</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -244,7 +244,7 @@
                 </node>
                 <node oor:name="swwtext" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">Text (StarWriter/Web)</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -253,7 +253,7 @@
                 </node>
                 <node oor:name="sw45glob" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">StarWriter 4.0 / 5.0 Master Documents</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -262,7 +262,7 @@
                 </node>
                 <node oor:name="sm2to5" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">StarMath 2.0 - 5.0</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -271,7 +271,7 @@
                 </node>
                 <node oor:name="wpw67" oor:op="replace">
                     <prop oor:name="DisplayName">
-
+                        
                         <value xml:lang="en-US">WordPerfect (Win) 6.0 - 7.0</value>
                     </prop>
                     <prop oor:name="Filters">

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ namespace sdr
     namespace contact
     {
         drawinglayer::processor2d::BaseProcessor2D* createBaseProcessor2DFromOutputDevice(
-            OutputDevice& rTargetOutDev,
+            OutputDevice& rTargetOutDev, 
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
         {
             const GDIMetaFile* pMetaFile = rTargetOutDev.GetConnectMetaFile();
@@ -71,11 +71,11 @@ namespace sdr
                 // use canvas renderers in the future
 
                 //static SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-
+                
                 //if(false && aSvtOptionsDrawinglayer.IsAntiAliasing())
                 //{
-                //  // for WIN32 AA, create cairo canvas processor
-                //  return new drawinglayer::processor2d::canvasProcessor2D(rViewInformation2D, rTargetOutDev);
+                //	// for WIN32 AA, create cairo canvas processor
+                //	return new drawinglayer::processor2d::canvasProcessor2D(rViewInformation2D, rTargetOutDev);
                 //}
                 //else
                 //{

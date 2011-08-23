@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,13 +42,13 @@ class View;
 |* Bullet-Tab-Dialog
 |*
 \************************************************************************/
-class OutlineBulletDlg
+class OutlineBulletDlg 
     : public SfxTabDialog
 {
 public:
     OutlineBulletDlg (
-        ::Window* pParent,
-        const SfxItemSet* pAttr,
+        ::Window* pParent, 
+        const SfxItemSet* pAttr, 
         ::sd::View* pView );
     virtual ~OutlineBulletDlg (void);
 
@@ -60,10 +60,10 @@ protected:
 private:
     using SfxTabDialog::GetOutputItemSet;
 
-    SfxItemSet  aInputSet;
-    SfxItemSet  *pOutputSet;
-    BOOL        bTitle;
-    ::sd::View      *pSdView;
+    SfxItemSet	aInputSet;
+    SfxItemSet	*pOutputSet;
+    BOOL		bTitle;
+    ::sd::View		*pSdView;
 };
 
 } // end of namespace sd

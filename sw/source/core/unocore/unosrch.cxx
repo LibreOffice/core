@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,19 +49,19 @@ using ::rtl::OUString;
 
 class SwSearchProperties_Impl
 {
-    beans::PropertyValue**          pValueArr; //
+    beans::PropertyValue** 			pValueArr; //
     sal_uInt32                      nArrLen;
     const PropertyEntryVector_t     aPropertyEntries;
 public:
     SwSearchProperties_Impl();
     ~SwSearchProperties_Impl();
 
-    void    SetProperties(const uno::Sequence< beans::PropertyValue >& aSearchAttribs)
+    void	SetProperties(const uno::Sequence< beans::PropertyValue >& aSearchAttribs)
         throw( beans::UnknownPropertyException, lang::IllegalArgumentException, uno::RuntimeException );
     const uno::Sequence< beans::PropertyValue > GetProperties() const;
 
-    void    FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSearch) const;
-    sal_Bool    HasAttributes() const;
+    void	FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSearch) const;
+    sal_Bool 	HasAttributes() const;
 };
 
 SwSearchProperties_Impl::SwSearchProperties_Impl() :
@@ -81,7 +81,7 @@ SwSearchProperties_Impl::~SwSearchProperties_Impl()
     delete[] pValueArr;
 }
 
-void    SwSearchProperties_Impl::SetProperties(const uno::Sequence< beans::PropertyValue >& aSearchAttribs)
+void	SwSearchProperties_Impl::SetProperties(const uno::Sequence< beans::PropertyValue >& aSearchAttribs)
                 throw( beans::UnknownPropertyException, lang::IllegalArgumentException, uno::RuntimeException )
 {
     const beans::PropertyValue* pProps = aSearchAttribs.getConstArray();
@@ -138,7 +138,7 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSea
     SfxPoolItem* pBoxItem = 0,
     *pBreakItem = 0,
     *pAutoKernItem  = 0,
-    *pWLineItem   = 0,
+    *pWLineItem	  = 0,
     *pTabItem  = 0,
     *pSplitItem  = 0,
     *pRegItem  = 0,
@@ -405,7 +405,7 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSea
     delete pBrushItem  ;
 }
 
-sal_Bool    SwSearchProperties_Impl::HasAttributes() const
+sal_Bool 	SwSearchProperties_Impl::HasAttributes() const
 {
     for(sal_uInt32 i = 0; i < nArrLen; i++)
         if(pValueArr[i])
@@ -502,18 +502,18 @@ void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const uno::A
             bVal = *(sal_Bool*)aValue.getValue();
         switch(pEntry->nWID)
         {
-            case WID_SEARCH_ALL :           bAll        = bVal; break;
-            case WID_WORDS:                 bWord       = bVal; break;
-            case WID_BACKWARDS :            bBack       = bVal; break;
-            case WID_REGULAR_EXPRESSION :   bExpr       = bVal; break;
-            case WID_CASE_SENSITIVE  :      bCase       = bVal; break;
-            //case WID_IN_SELECTION  :      bInSel      = bVal; break;
-            case WID_STYLES          :      bStyles     = bVal; break;
+            case WID_SEARCH_ALL :			bAll 		= bVal; break;
+            case WID_WORDS:					bWord 		= bVal; break;
+            case WID_BACKWARDS :            bBack 		= bVal; break;
+            case WID_REGULAR_EXPRESSION :   bExpr 		= bVal; break;
+            case WID_CASE_SENSITIVE  :      bCase 		= bVal; break;
+            //case WID_IN_SELECTION  :      bInSel 		= bVal; break;
+            case WID_STYLES          :      bStyles 	= bVal; break;
             case WID_SIMILARITY      :      bSimilarity = bVal; break;
-            case WID_SIMILARITY_RELAX:      bLevRelax   = bVal; break;
-            case WID_SIMILARITY_EXCHANGE:   aValue >>= nLevExchange; break;
-            case WID_SIMILARITY_ADD:        aValue >>= nLevAdd; break;
-            case WID_SIMILARITY_REMOVE :    aValue >>= nLevRemove;break;
+            case WID_SIMILARITY_RELAX:      bLevRelax 	= bVal; break;
+            case WID_SIMILARITY_EXCHANGE:	aValue >>= nLevExchange; break;
+            case WID_SIMILARITY_ADD:		aValue >>= nLevAdd; break;
+            case WID_SIMILARITY_REMOVE :	aValue >>= nLevRemove;break;
         };
     }
     else
@@ -532,8 +532,8 @@ uno::Any SwXTextSearch::getPropertyValue(const OUString& rPropertyName) throw( b
     {
         switch(pEntry->nWID)
         {
-            case WID_SEARCH_ALL :           bSet = bAll; goto SET_BOOL;
-            case WID_WORDS:                 bSet = bWord; goto SET_BOOL;
+            case WID_SEARCH_ALL :			bSet = bAll; goto SET_BOOL;
+            case WID_WORDS:					bSet = bWord; goto SET_BOOL;
             case WID_BACKWARDS :            bSet = bBack; goto SET_BOOL;
             case WID_REGULAR_EXPRESSION :   bSet = bExpr; goto SET_BOOL;
             case WID_CASE_SENSITIVE  :      bSet = bCase; goto SET_BOOL;
@@ -544,9 +544,9 @@ uno::Any SwXTextSearch::getPropertyValue(const OUString& rPropertyName) throw( b
 SET_BOOL:
             aRet.setValue(&bSet, ::getBooleanCppuType());
             break;
-            case WID_SIMILARITY_EXCHANGE:   nSet = nLevExchange; goto SET_UINT16;
-            case WID_SIMILARITY_ADD:        nSet = nLevAdd; goto SET_UINT16;
-            case WID_SIMILARITY_REMOVE :    nSet = nLevRemove;
+            case WID_SIMILARITY_EXCHANGE:	nSet = nLevExchange; goto SET_UINT16;
+            case WID_SIMILARITY_ADD:		nSet = nLevAdd; goto SET_UINT16;
+            case WID_SIMILARITY_REMOVE :	nSet = nLevRemove;
 SET_UINT16:
             aRet <<= nSet;
             break;
@@ -591,7 +591,7 @@ void SwXTextSearch::setValueSearch(sal_Bool ValueSearch_) throw( uno::RuntimeExc
 
 uno::Sequence< beans::PropertyValue > SwXTextSearch::getSearchAttributes(void) throw( uno::RuntimeException )
 {
-    return  pSearchProperties->GetProperties();
+    return 	pSearchProperties->GetProperties();
 }
 
 void SwXTextSearch::setSearchAttributes(const uno::Sequence< beans::PropertyValue >& rSearchAttribs)
@@ -612,22 +612,22 @@ void SwXTextSearch::setReplaceAttributes(const uno::Sequence< beans::PropertyVal
     pReplaceProperties->SetProperties(rReplaceAttribs);
 }
 
-void    SwXTextSearch::FillSearchItemSet(SfxItemSet& rSet) const
+void	SwXTextSearch::FillSearchItemSet(SfxItemSet& rSet) const
 {
     pSearchProperties->FillItemSet(rSet, bIsValueSearch);
 }
 
-void    SwXTextSearch::FillReplaceItemSet(SfxItemSet& rSet) const
+void	SwXTextSearch::FillReplaceItemSet(SfxItemSet& rSet) const
 {
     pReplaceProperties->FillItemSet(rSet, bIsValueSearch);
 }
 
-sal_Bool    SwXTextSearch::HasSearchAttributes() const
+sal_Bool	SwXTextSearch::HasSearchAttributes() const
 {
     return pSearchProperties->HasAttributes();
 }
 
-sal_Bool    SwXTextSearch::HasReplaceAttributes() const
+sal_Bool	SwXTextSearch::HasReplaceAttributes() const
 {
     return pReplaceProperties->HasAttributes();
 }
@@ -677,10 +677,10 @@ void SwXTextSearch::FillSearchOptions( util::SearchOptions& rSearchOpt ) const
     if( bWord )
         rSearchOpt.searchFlag |= util::SearchFlags::NORM_WORD_ONLY;
 
-//  bInSel: 1;  // wie geht das?
-//  TODO: pSearch->bStyles!
-//      inSelection??
-//      aSrchParam.SetSrchInSelection(TypeConversion::toBOOL(aVal));
+//	bInSel: 1;  // wie geht	das?
+//	TODO: pSearch->bStyles!
+//		inSelection??
+//	 	aSrchParam.SetSrchInSelection(TypeConversion::toBOOL(aVal));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ namespace dbaui
                                             ,   ::com::sun::star::awt::XFocusListener
                                             ,   ::com::sun::star::container::XContainerListener
                                             ,   ::com::sun::star::beans::XPropertyChangeListener
-                                            ,   ::com::sun::star::frame::XModule
+                                            ,	::com::sun::star::frame::XModule
                                             >   SbaXDataBrowserController_Base;
 
     class SbaXDataBrowserController :public SbaXDataBrowserController_Base
@@ -93,47 +93,47 @@ namespace dbaui
         friend class FormControllerImpl;
         OModuleClient                                                            m_aModuleClient;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >             m_xRowSet;      // our rowset
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >   m_xColumnsSupplier; // queried from the rowset member
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >           m_xLoadable;        // queried from the rowset member as well
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >      m_xGridModel;   // the model of our grid
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >         m_xFormControllerImpl;
-        mutable ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >
-                                                                                        m_xParser;      // for sorting 'n filtering
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > 			m_xRowSet;		// our rowset
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >	m_xColumnsSupplier; // queried from the rowset member
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >			m_xLoadable;		// queried from the rowset member as well
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > 		m_xGridModel;	// the model of our grid
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > 	m_xFormatter;	// a number formatter working with the connection's NumberFormatsSupplier
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >			m_xFormControllerImpl;
+        mutable ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer > 	
+                                                                                        m_xParser;		// for sorting 'n filtering
 
         sal_Int32               m_nRowSetPrivileges;    // cached Privileges property of m_xRowSet
 
-        AutoTimer               m_aInvalidateClipboard;             // for testing the state of the CUT/COPY/PASTE-slots
+        AutoTimer				m_aInvalidateClipboard;				// for testing the state of the CUT/COPY/PASTE-slots
 
-        TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
+        TransferableDataHelper	m_aSystemClipboard;		// content of the clipboard
         TransferableClipboardListener*
-                                m_pClipbordNotifier;    // notifier for changes in the clipboard
+                                m_pClipbordNotifier;	// notifier for changes in the clipboard
 
-        ::osl::Mutex            m_aAsyncLoadSafety;     // for multi-thread access to our members
+        ::osl::Mutex			m_aAsyncLoadSafety;		// for multi-thread access to our members
 
-        OAsyncronousLink        m_aAsyncGetCellFocus;
+        OAsyncronousLink		m_aAsyncGetCellFocus;
         OAsyncronousLink        m_aAsyncDisplayError;
         ::dbtools::SQLExceptionInfo m_aCurrentError;
 
-        String                  m_sStateSaveRecord;
-        String                  m_sStateUndoRecord;
+        String					m_sStateSaveRecord;
+        String					m_sStateUndoRecord;
         ::rtl::OUString         m_sModuleIdentifier;
 
         // members for asynchronous load operations
-        FormControllerImpl*     m_pFormControllerImpl;  // implementing the XFormController
+        FormControllerImpl*		m_pFormControllerImpl;	// implementing the XFormController
 
-        ULONG                   m_nPendingLoadFinished;         // the event used to tell ourself that the load is finished
-        sal_uInt16              m_nFormActionNestingLevel;      // see enter-/leaveFormAction
+        ULONG					m_nPendingLoadFinished;			// the event used to tell ourself that the load is finished
+        sal_uInt16				m_nFormActionNestingLevel;		// see enter-/leaveFormAction
 
-        sal_Bool                m_bLoadCanceled : 1;            // the load was canceled somehow
-        sal_Bool                m_bClosingKillOpen : 1;         // are we killing the load thread because we are to be suspended ?
+        sal_Bool				m_bLoadCanceled : 1;			// the load was canceled somehow
+        sal_Bool				m_bClosingKillOpen : 1;			// are we killing the load thread because we are to be suspended ?
         bool                    m_bCannotSelectUnfiltered : 1;  // recieved an DATA_CANNOT_SELECT_UNFILTERED error
 
     protected:
         class FormErrorHelper
         {
-            SbaXDataBrowserController*  m_pOwner;
+            SbaXDataBrowserController*	m_pOwner;
         public:
             FormErrorHelper(SbaXDataBrowserController* pOwner) : m_pOwner(pOwner) { m_pOwner->enterFormAction(); }
             virtual ~FormErrorHelper() { m_pOwner->leaveFormAction(); }
@@ -143,20 +143,20 @@ namespace dbaui
     // ================
     // attribute access
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >             getRowSet()         const   { return m_xRowSet; }
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >   getColumnsSupplier()const   { return m_xColumnsSupplier; }
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >           getLoadable()       const   { return m_xLoadable; }
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > 			getRowSet()			const	{ return m_xRowSet; }
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >	getColumnsSupplier()const	{ return m_xColumnsSupplier; }
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >			getLoadable()		const	{ return m_xLoadable; }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >      getFormComponent()  const   { return m_xGridModel; }
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >        getControlModel()   const   { return ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > (m_xGridModel, ::com::sun::star::uno::UNO_QUERY); }
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    getNumberFormatter()const   { return m_xFormatter; }
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > 		getFormComponent()	const	{ return m_xGridModel; }
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > 		getControlModel()	const	{ return ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > (m_xGridModel, ::com::sun::star::uno::UNO_QUERY); }
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > 	getNumberFormatter()const	{ return m_xFormatter; }
 
-        sal_Bool    isValid() const         { return m_xRowSet.is() && m_xGridModel.is(); }
-        sal_Bool    isValidCursor() const;  // checks the ::com::sun::star::data::XDatabaseCursor-interface of m_xRowSet
-        sal_Bool    isLoaded() const;
-        sal_Bool    loadingCancelled() const { return m_bLoadCanceled; }
+        sal_Bool	isValid() const			{ return m_xRowSet.is() && m_xGridModel.is(); }
+        sal_Bool	isValidCursor() const;	// checks the ::com::sun::star::data::XDatabaseCursor-interface of m_xRowSet
+        sal_Bool	isLoaded() const;
+        sal_Bool	loadingCancelled() const { return m_bLoadCanceled; }
         void        onStartLoading( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxLoadable );
-        void        setLoadingCancelled()   { m_bLoadCanceled = sal_True; }
+        void		setLoadingCancelled()	{ m_bLoadCanceled = sal_True; }
 
         const TransferableDataHelper&
             getViewClipboard() const { return m_aSystemClipboard; }
@@ -169,7 +169,7 @@ namespace dbaui
         virtual sal_Bool Construct(Window* pParent);
 
         // UNO
-        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any	SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
 
         // XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -201,19 +201,19 @@ namespace dbaui
         virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
 
         // ::com::sun::star::lang::XComponent
-        virtual void        SAL_CALL disposing();
+        virtual void		SAL_CALL disposing();
 
         // ::com::sun::star::frame::XFrameActionListener
-        virtual void        SAL_CALL frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException );
+        virtual void		SAL_CALL frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException );
 
         // ::com::sun::star::sdb::XSQLErrorListener
-        virtual void        SAL_CALL errorOccured(const ::com::sun::star::sdb::SQLErrorEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException );
+        virtual void		SAL_CALL errorOccured(const ::com::sun::star::sdb::SQLErrorEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException );
 
         // ::com::sun::star::form::XDatabaseParameterListener
-        virtual sal_Bool    SAL_CALL approveParameter(const ::com::sun::star::form::DatabaseParameterEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException );
+        virtual sal_Bool	SAL_CALL approveParameter(const ::com::sun::star::form::DatabaseParameterEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException );
 
         // ::com::sun::star::form::XConfirmDeleteListener
-        virtual sal_Bool    SAL_CALL confirmDelete(const ::com::sun::star::sdb::RowChangeEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException );
+        virtual sal_Bool	SAL_CALL confirmDelete(const ::com::sun::star::sdb::RowChangeEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException );
 
         // ::com::sun::star::form::XLoadListener
         virtual void SAL_CALL loaded(const ::com::sun::star::lang::EventObject& aEvent) throw( ::com::sun::star::uno::RuntimeException );
@@ -241,11 +241,11 @@ namespace dbaui
         virtual ~SbaXDataBrowserController();
 
         // all the features which should be handled by this class
-        virtual void            describeSupportedFeatures();
+        virtual void			describeSupportedFeatures();
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
-        virtual FeatureState    GetState(sal_uInt16 nId) const;
+        virtual FeatureState	GetState(sal_uInt16 nId) const;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
+        virtual void			Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         virtual void    startFrameListening( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
         virtual void    stopFrameListening( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
@@ -268,8 +268,8 @@ namespace dbaui
             // you most probably don't want to override this behaviuor
 
         // the default implementation of disposing distributes the events to the following disposingXXX functions
-        virtual void disposingGridControl(const ::com::sun::star::lang::EventObject& Source);   // calls removeControlListeners
-        virtual void disposingGridModel(const ::com::sun::star::lang::EventObject& Source);     // calls removeModelListeners
+        virtual void disposingGridControl(const ::com::sun::star::lang::EventObject& Source);	// calls removeControlListeners
+        virtual void disposingGridModel(const ::com::sun::star::lang::EventObject& Source);		// calls removeModelListeners
         virtual void disposingFormModel(const ::com::sun::star::lang::EventObject& Source);
         virtual void disposingColumnModel(const ::com::sun::star::lang::EventObject& Source);
 
@@ -313,7 +313,7 @@ namespace dbaui
         virtual sal_Bool SaveModified(sal_Bool bAskFor = sal_True);
             // save the modified record
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   getBoundField(sal_uInt16 nViewPos = (sal_uInt16)-1) const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > 	getBoundField(sal_uInt16 nViewPos = (sal_uInt16)-1) const;
             // a PropertySet corresponding to the cursor field a column is bound to
             // if nViewPos is (sal_uInt16)-1 (the default) then the field for the current column will be retrieved
 
@@ -336,18 +336,18 @@ namespace dbaui
         void ExecuteFilterSortCrit(sal_Bool bFilter);
 
         // execute the search slot
-        void        ExecuteSearch();
+        void		ExecuteSearch();
 
         void        initializeParser() const; // changes the mutable member m_xParser
-        void        applyParserFilter(const ::rtl::OUString& _rOldFilter, sal_Bool _bOldFilterApplied,const ::rtl::OUString& _sOldHaving,const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >& _xParser);
-        void        applyParserOrder(const ::rtl::OUString& _rOldOrder,const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >& _xParser);
+        void		applyParserFilter(const ::rtl::OUString& _rOldFilter, sal_Bool _bOldFilterApplied,const ::rtl::OUString& _sOldHaving,const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >& _xParser);
+        void		applyParserOrder(const ::rtl::OUString& _rOldOrder,const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >& _xParser);
 
         sal_Int16   getCurrentColumnPosition();
-        void        setCurrentColumnPosition( sal_Int16 _nPos );
-        void        addColumnListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel);
+        void		setCurrentColumnPosition( sal_Int16 _nPos );
+        void		addColumnListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel);
 
         void        impl_checkForCannotSelectUnfiltered( const ::dbtools::SQLExceptionInfo& _rError );
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >   createParser_nothrow();
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer > 	createParser_nothrow();
 
         // time to check the CUT/COPY/PASTE-slot-states
         DECL_LINK( OnInvalidateClipboard, AutoTimer* );

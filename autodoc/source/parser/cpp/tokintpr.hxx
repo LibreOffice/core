@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,13 +42,13 @@ namespace cpp {
 
 
 #define DECL_TOK_HANDLER(token) \
-    void                Hdl_##token( \
+    void				Hdl_##token( \
                             const Tok_##token & i_rTok ) { Call_Handler(i_rTok); }
 
 class TokenInterpreter
 {
   public:
-    virtual             ~TokenInterpreter() {}
+    virtual				~TokenInterpreter() {}
 
                         DECL_TOK_HANDLER(Identifier)
                         DECL_TOK_HANDLER(Operator)
@@ -102,8 +102,8 @@ class TokenInterpreter
                         DECL_TOK_HANDLER(Constant)
 
   protected:
-    virtual void        Call_Handler(
-                            const cpp::Token &  i_rTok ) = 0;
+    virtual void		Call_Handler(
+                            const cpp::Token &	i_rTok ) = 0;
 };
 
 #undef DECL_TOK_HANDLER

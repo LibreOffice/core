@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -214,10 +214,10 @@ void XMLFilterSettingsDialog::updateStates()
     {
         filter_info_impl* pInfo = (filter_info_impl*)pSelectedEntry->GetUserData();
         bIsReadonly = 0 != pInfo->mbReadonly;
-
+    
         sal_Int32 nFact = SvtModuleOptions::E_WRITER;
         while(nFact <= SvtModuleOptions::E_BASIC)
-        {
+        {        
             ::rtl::OUString sDefault = maModuleOpt.GetFactoryDefaultFilter((SvtModuleOptions::EFactory)nFact);
             if( sDefault == pInfo->maFilterName )
             {
@@ -350,7 +350,7 @@ OUString XMLFilterSettingsDialog::createUniqueFilterName( const OUString& rFilte
 {
     OUString aFilterName( rFilterName );
     OUString aSpace( sal_Unicode( ' ' ) );
-
+    
     sal_Int32 nId = 2;
 
     while( mxFilterContainer->hasByName( aFilterName ) )
@@ -826,7 +826,7 @@ void XMLFilterSettingsDialog::onDelete()
         String aMessage(RESID(STR_WARN_DELETE));
         aMessage.SearchAndReplace( aPlaceHolder, pInfo->maFilterName );
 
-        WarningBox aWarnBox(this, (WinBits)(WB_YES_NO | WB_DEF_YES),    aMessage );
+        WarningBox aWarnBox(this, (WinBits)(WB_YES_NO | WB_DEF_YES),	aMessage );
         if( aWarnBox.Execute() == RET_YES )
         {
             try
@@ -995,7 +995,7 @@ void XMLFilterSettingsDialog::onOpen()
             filter_info_impl* pInfo = (*aIter++);
 
             if( insertOrEdit( pInfo ) )
-            {
+            {				
                 aFilterName = pInfo->maFilterName;
                 nFilters++;
             }
@@ -1018,7 +1018,7 @@ void XMLFilterSettingsDialog::onOpen()
         {
             aMsg = String( RESID( STR_FILTER_INSTALLED ) );
             aMsg.SearchAndReplace( sPlaceholder, aFilterName );
-
+        
         }
         else
         {
@@ -1144,9 +1144,9 @@ void XMLFilterSettingsDialog::initFilterList()
                         pValues->Value >>= pTempFilter->maImportTemplate;
                     }
                     else if(pValues->Name.equalsAscii( "Finalized" ))
-                    {
+                    {        
                         pValues->Value >>= pTempFilter->mbReadonly;
-                    }
+                    }            
                 }
 
                 // if this is not a XmlFilterAdaptor entry, skip it
@@ -1227,12 +1227,12 @@ void XMLFilterSettingsDialog::initFilterList()
                                     pValues2->Value >>= pTempFilter->mnDocumentIconID;
                                 }
                                 else if(pValues2->Name.equalsAscii( "Finalized" ))
-                                {
+                                {        
                                     // both the filter and the type may be finalized
                                     sal_Bool bTemp = sal_False;
                                     pValues2->Value >>= bTemp;
                                     pTempFilter->mbReadonly |= bTemp;
-                                }
+                                }            
                             }
                         }
                     }
@@ -1269,7 +1269,7 @@ void XMLFilterSettingsDialog::initFilterList()
 // -----------------------------------------------------------------------
 
 application_info_impl::application_info_impl( const sal_Char * pDocumentService, ResId& rUINameRes, const sal_Char * mpXMLImporter, const sal_Char * mpXMLExporter )
-:   maDocumentService( pDocumentService, strlen( pDocumentService ), RTL_TEXTENCODING_ASCII_US ),
+:	maDocumentService( pDocumentService, strlen( pDocumentService ), RTL_TEXTENCODING_ASCII_US ),
     maDocumentUIName( String( rUINameRes ) ),
     maXMLImporter( mpXMLImporter, strlen( mpXMLImporter ), RTL_TEXTENCODING_ASCII_US ),
     maXMLExporter( mpXMLExporter, strlen( mpXMLExporter ), RTL_TEXTENCODING_ASCII_US )
@@ -1406,11 +1406,11 @@ long SvxPathControl_Impl::Notify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-#define ITEMID_NAME     1
-#define ITEMID_TYPE     2
+#define ITEMID_NAME		1
+#define ITEMID_TYPE		2
 
 XMLFilterListBox::XMLFilterListBox( SvxPathControl_Impl * pParent )
-:   SvTabListBox( pParent, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ),
+:	SvTabListBox( pParent, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ),
     mbFirstPaint( true )
 {
     Size aBoxSize( pParent->GetOutputSizePixel() );
@@ -1435,15 +1435,15 @@ XMLFilterListBox::XMLFilterListBox( SvxPathControl_Impl * pParent )
     WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
     pParent->SetFocusControl( this );
     SetWindowBits( nBits );
-//  SetDoubleClickHdl( aLink );
-//  SetSelectHdl( LINK( this, SvxPathTabPage, PathSelect_Impl ) );
+//	SetDoubleClickHdl( aLink );
+//	SetSelectHdl( LINK( this, SvxPathTabPage, PathSelect_Impl ) );
     SetSelectionMode( MULTIPLE_SELECTION );
     SetPosSizePixel( Point( 0, aHeadSize.Height() ), Size( aBoxSize.Width(), aBoxSize.Height() - aHeadSize.Height() ) );
     SetTabs( &nTabs[0], MAP_PIXEL );
     SetScrolledHdl( LINK( this, XMLFilterListBox, TabBoxScrollHdl_Impl ) );
     SetHighlightRange();
-//  SetHelpId( HID_OPTPATH_CTL_PATH );
-//  mpHeaderBar->SetHelpId( HID_OPTPATH_HEADERBAR );
+//	SetHelpId( HID_OPTPATH_CTL_PATH );
+//	mpHeaderBar->SetHelpId( HID_OPTPATH_HEADERBAR );
     Show();
     mpHeaderBar->Show();
 }
@@ -1493,7 +1493,7 @@ IMPL_LINK( XMLFilterListBox, HeaderSelect_Impl, HeaderBar*, pBar )
     if ( pBar && pBar->GetCurItemId() != ITEMID_NAME )
         return 0;
 
-    HeaderBarItemBits nBits = mpHeaderBar->GetItemBits(ITEMID_TYPE);
+    HeaderBarItemBits nBits	= mpHeaderBar->GetItemBits(ITEMID_TYPE);
     BOOL bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     SvSortMode eMode = SortAscending;
 
@@ -1603,7 +1603,7 @@ String XMLFilterListBox::getEntryString( const filter_info_impl* pInfo ) const
     {
         aEntryStr += String( RESID( STR_EXPORT_ONLY ) );
     }
-    else
+    else 
     {
         aEntryStr += String( RESID( STR_UNDEFINED_FILTER ) );
     }
@@ -1616,7 +1616,7 @@ String XMLFilterListBox::getEntryString( const filter_info_impl* pInfo ) const
 // -----------------------------------------------------------------------
 
 filter_info_impl::filter_info_impl()
-:   maFlags(0x00080040),
+:	maFlags(0x00080040),
     maFileFormatVersion(0),
     mnDocumentIconID(0),
     mbReadonly(sal_False)
@@ -1699,7 +1699,7 @@ Sequence< OUString > filter_info_impl::getFilterUserData() const
 
 
 // -----------------------------------------------------------------------
-
+    
 OUString string_encode( const OUString & rText )
 {
 

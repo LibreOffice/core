@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -71,7 +71,7 @@ public class _XMultiPropertyStates extends MultiMethodTest {
         log.print("}");
         log.println("");
     }
-
+        
 
     /**
     * Test calls the method and checks return value.
@@ -120,14 +120,14 @@ public class _XMultiPropertyStates extends MultiMethodTest {
         // searching for property which currently don't have default value
         // and preferable has MAYBEDEFAULT attr
         // if no such properties are found then the first one is selected
-
+        
         String ro = (String) tEnv.getObjRelation("allReadOnly");
         if (ro != null) {
             log.println(ro);
             tRes.tested("setPropertiesToDefault()",Status.skipped(true));
             return;
         }
-
+        
         boolean mayBeDef = false;
         String propName = names[0];
 
@@ -140,7 +140,7 @@ public class _XMultiPropertyStates extends MultiMethodTest {
                 Property prop = null;
                 try {
                     prop = xPropSetInfo.getPropertyByName(names[i]);
-                }
+                } 
                 catch(com.sun.star.beans.UnknownPropertyException e) {
                     log.println("couldn't get property info: " + e.toString());
                     throw new StatusException(Status.failed
@@ -193,7 +193,7 @@ public class _XMultiPropertyStates extends MultiMethodTest {
             oObj.setAllPropertiesToDefault();
        } catch(RuntimeException e) {
            log.println("Ignore Runtime Exception: " + e.getMessage());
-       }
+       }     
         log.println("Checking that all properties are now in DEFAULT state" +
             " excepting may be those which 'cann't be default'");
 

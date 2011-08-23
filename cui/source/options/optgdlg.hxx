@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ class OfaMiscTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 private:
     FixedLine           aHelpFL;
-    CheckBox            aToolTipsCB;
+    CheckBox			aToolTipsCB;
     CheckBox            aExtHelpCB;
     CheckBox            aHelpAgentCB;
     PushButton          aHelpAgentResetBtn;
@@ -89,10 +89,10 @@ public:
     OfaMiscTabPage( Window* pParent, const SfxItemSet& rSet );
     ~OfaMiscTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 };
 
 // class OfaViewTabPage --------------------------------------------------
@@ -107,13 +107,13 @@ private:
     FixedText       aIconSizeStyleFT;
     ListBox         aIconSizeLB;
     ListBox         aIconStyleLB;
-    CheckBox        m_aSystemFont;
+    CheckBox   		m_aSystemFont;
 
 #if defined( UNX )
-    CheckBox        aFontAntiAliasing;
-    FixedText       aAAPointLimitLabel;
-    NumericField    aAAPointLimit;
-    FixedText       aAAPointLimitUnits;
+    CheckBox		aFontAntiAliasing;
+    FixedText		aAAPointLimitLabel;
+    NumericField	aAAPointLimit;
+    FixedText		aAAPointLimitUnits;
 #endif
 
     FixedLine       aMenuFL;
@@ -121,34 +121,34 @@ private:
     ListBox         aMenuIconsLB;
 
     FixedLine       aFontListsFL;
-    CheckBox        aFontShowCB;
+    CheckBox		aFontShowCB;
     CheckBox        aFontHistoryCB;
 
     FixedLine       aRenderingFL;
     CheckBox        aUseHardwareAccell;
     CheckBox        aUseAntiAliase;
 
-    FixedLine       aMouseFL;
-    FixedText       aMousePosFT;
-    ListBox         aMousePosLB;
-    FixedText       aMouseMiddleFT;
-    ListBox         aMouseMiddleLB;
+    FixedLine		aMouseFL;
+    FixedText		aMousePosFT;
+    ListBox			aMousePosLB;
+    FixedText		aMouseMiddleFT;
+    ListBox			aMouseMiddleLB;
 
     // #i97672#
     FixedLine       maSelectionFL;
     CheckBox        maSelectionCB;
     MetricField     maSelectionMF;
 
-    UINT16          nSizeLB_InitialSelection;
-    UINT16          nStyleLB_InitialSelection;
-    BOOL            bSfxSymbolsAuto;
+    UINT16			nSizeLB_InitialSelection;
+    UINT16			nStyleLB_InitialSelection;
+    BOOL			bSfxSymbolsAuto;
 
     // item ID for the given icon theme
     // might be zero when the theme is not installed and the item is removed
-    ULONG           aIconStyleItemId[STYLE_SYMBOLS_THEMES_MAX];
-    SvtTabAppearanceCfg*    pAppearanceCfg;
-    CanvasSettings*         pCanvasSettings;
-    SvtOptionsDrawinglayer* mpDrawinglayerOpt;
+    ULONG			aIconStyleItemId[STYLE_SYMBOLS_THEMES_MAX];
+    SvtTabAppearanceCfg*	pAppearanceCfg;
+    CanvasSettings*			pCanvasSettings;
+    SvtOptionsDrawinglayer*	mpDrawinglayerOpt;
 
 #if defined( UNX )
     DECL_LINK( OnAntialiasingToggled, void* );
@@ -160,10 +160,10 @@ public:
     OfaViewTabPage( Window* pParent, const SfxItemSet& rSet );
     ~OfaViewTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 };
 /* -----------------------------23.11.00 13:04--------------------------------
 
@@ -185,14 +185,14 @@ class OfaLanguagesTabPage : public SfxTabPage
 
     FixedLine       aLinguLanguageGB;
     ReadOnlyImage   aWesternLanguageFI;
-    FixedText       aWesternLanguageFT;
-    SvxLanguageBox  aWesternLanguageLB;
+    FixedText		aWesternLanguageFT;
+    SvxLanguageBox	aWesternLanguageLB;
     ReadOnlyImage   aAsianLanguageFI;
-    FixedText       aAsianLanguageFT;
-    SvxLanguageBox  aAsianLanguageLB;
+    FixedText		aAsianLanguageFT;
+    SvxLanguageBox	aAsianLanguageLB;
     ReadOnlyImage   aComplexLanguageFI;
-    FixedText       aComplexLanguageFT;
-    SvxLanguageBox  aComplexLanguageLB;
+    FixedText		aComplexLanguageFT;
+    SvxLanguageBox	aComplexLanguageLB;
     CheckBox        aCurrentDocCB;
     FixedLine       aEnhancedFL;
     ReadOnlyImage   aAsianSupportFI;
@@ -203,7 +203,7 @@ class OfaLanguagesTabPage : public SfxTabPage
     const String    sDecimalSeparatorLabel;
 
     sal_Bool        m_bOldAsian;
-    sal_Bool        m_bOldCtl;
+    sal_Bool		m_bOldCtl;
     LanguageConfig_Impl*    pLangConfig;
 
     rtl::OUString m_sUserLocaleValue;
@@ -215,10 +215,10 @@ public:
     OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSet );
     ~OfaLanguagesTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
+    virtual	BOOL 		FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
 };
 #endif // #ifndef _OFA_OPTGDLG_HXX
 

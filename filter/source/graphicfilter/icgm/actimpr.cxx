@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ using namespace ::com::sun::star;
 // ---------------------------------------------------------------
 
 CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XModel > & rModel ) :
-        CGMOutAct       ( rCGM ),
+        CGMOutAct		( rCGM ),
         nFinalTextCount ( 0 )
 {
     sal_Bool bStatRet = sal_False;
@@ -97,7 +97,7 @@ CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XMod
 
 sal_Bool CGMImpressOutAct::ImplInitPage()
 {
-    sal_Bool    bStatRet = sal_False;
+    sal_Bool	bStatRet = sal_False;
     if( maXDrawPage.is() )
     {
         maXShapes = uno::Reference< drawing::XShapes >( maXDrawPage, uno::UNO_QUERY );
@@ -141,12 +141,12 @@ void CGMImpressOutAct::ImplSetOrientation( FloatPoint& rRefPoint, double& rOrien
 
 void CGMImpressOutAct::ImplSetLineBundle()
 {
-    uno::Any            aAny;
-    drawing::LineStyle  eLS;
+    uno::Any			aAny;
+    drawing::LineStyle	eLS;
 
-    sal_uInt32          nLineColor;
-    LineType            eLineType;
-    double              fLineWidth;
+    sal_uInt32			nLineColor;
+    LineType			eLineType;
+    double				fLineWidth;
 
     if ( mpCGM->pElement->nAspectSourceFlags & ASF_LINECOLOR )
         nLineColor = mpCGM->pElement->pLineBundle->GetColor();
@@ -200,18 +200,18 @@ void CGMImpressOutAct::ImplSetLineBundle()
 void CGMImpressOutAct::ImplSetFillBundle()
 {
 
-    uno::Any                aAny;
-    drawing::LineStyle      eLS;
-    drawing::FillStyle      eFS;
+    uno::Any				aAny;
+    drawing::LineStyle		eLS;
+    drawing::FillStyle		eFS;
 
-    sal_uInt32              nEdgeColor = 0;
-    EdgeType                eEdgeType;
-    double                  fEdgeWidth = 0;
+    sal_uInt32				nEdgeColor = 0;
+    EdgeType				eEdgeType;
+    double					fEdgeWidth = 0;
 
-    sal_uInt32              nFillColor;
-    FillInteriorStyle       eFillStyle;
-    long                    nPatternIndex;
-    sal_uInt32              nHatchIndex;
+    sal_uInt32				nFillColor;
+    FillInteriorStyle		eFillStyle;
+    long					nPatternIndex;
+    sal_uInt32				nHatchIndex;
 
     if ( mpCGM->pElement->eEdgeVisibility == EV_ON )
     {
@@ -328,16 +328,16 @@ void CGMImpressOutAct::ImplSetFillBundle()
             case ET_DOTDOTSPACE :
             case ET_LONGDASH :
             case ET_DASHDASHDOT :
-//          {
-//              eLS = LineStyle_DASH;
-//              aAny.setValue( &eLS, ::getCppuType((const drawing::LineStyle*)0) );
-//              maXPropSet->setPropertyValue( L"LineStyle", aAny );
-//              drawing::LineDash   aLineDash( DashStyle_RECTRELATIVE, 1, 160, 1, 160, 190 );
-//              aAny.setValue( &aLineDash, ::getCppuType((const drawing::LineDash*)0) );
-//              maXPropSet->setPropertyValue( L"DashStyle", aAny );
-//          }
-//          break;
-            default:            // case ET_SOLID :
+//			{
+//				eLS = LineStyle_DASH;
+//				aAny.setValue( &eLS, ::getCppuType((const drawing::LineStyle*)0) );
+//				maXPropSet->setPropertyValue( L"LineStyle", aAny );
+//				drawing::LineDash	aLineDash( DashStyle_RECTRELATIVE, 1, 160, 1, 160, 190 );
+//				aAny.setValue( &aLineDash, ::getCppuType((const drawing::LineDash*)0) );
+//				maXPropSet->setPropertyValue( L"DashStyle", aAny );
+//			}
+//			break;
+            default:			// case ET_SOLID :
             {
                 eLS = drawing::LineStyle_SOLID;
             }
@@ -356,7 +356,7 @@ void CGMImpressOutAct::ImplSetFillBundle()
             aHatch.Color = nFillColor;
         else
             aHatch.Color = nFillColor;
-        HatchEntry*     pHatchEntry = (HatchEntry*)mpCGM->pElement->aHatchTable.Get( nHatchIndex );
+        HatchEntry*		pHatchEntry = (HatchEntry*)mpCGM->pElement->aHatchTable.Get( nHatchIndex );
         if ( pHatchEntry )
         {
             switch ( pHatchEntry->HatchStyle )
@@ -383,12 +383,12 @@ void CGMImpressOutAct::ImplSetFillBundle()
 
 void CGMImpressOutAct::ImplSetTextBundle( const uno::Reference< beans::XPropertySet > & rProperty )
 {
-    uno::Any        aAny;
-    TextPrecision   eTextPrecision;
-    sal_uInt32      nTextFontIndex;
-    sal_uInt32      nTextColor;
-    double          fCharacterExpansion;
-    double          fCharacterSpacing;
+    uno::Any		aAny;
+    TextPrecision	eTextPrecision;
+    sal_uInt32		nTextFontIndex;
+    sal_uInt32		nTextColor;
+    double			fCharacterExpansion;
+    double			fCharacterSpacing;
 
     if ( mpCGM->pElement->nAspectSourceFlags & ASF_TEXTFONTINDEX )
         nTextFontIndex = mpCGM->pElement->pTextBundle->nTextFontIndex;
@@ -442,7 +442,7 @@ void CGMImpressOutAct::ImplSetTextBundle( const uno::Reference< beans::XProperty
 
 void CGMImpressOutAct::InsertPage()
 {
-    if ( mnCurrentPage )    // eine seite ist immer vorhanden, deshalb wird die erste Seite ausgelassen
+    if ( mnCurrentPage )	// eine seite ist immer vorhanden, deshalb wird die erste Seite ausgelassen
     {
         uno::Reference< drawing::XDrawPage > xPage( maXDrawPages->insertNewByIndex( 0xffff ), uno::UNO_QUERY );
         maXDrawPage = xPage;
@@ -468,7 +468,7 @@ void CGMImpressOutAct::BeginGroup()
 
 void CGMImpressOutAct::EndGroup()
 {
-    if ( mnGroupLevel )     // preserve overflow
+    if ( mnGroupLevel )		// preserve overflow
         mnGroupLevel--;
     if ( mnGroupLevel < CGM_OUTACT_MAX_GROUP_LEVEL )
     {
@@ -483,7 +483,7 @@ void CGMImpressOutAct::EndGroup()
             if( aAny >>= aXShapeGrouper )
             {
                 uno::Reference< drawing::XShapes >  aXShapes;
-//              if ( maXServiceManagerSC->createInstance( L"stardiv.one.drawing.ShapeCollection" )->queryInterface( ::getCppuType((const Reference< drawing::XShapes >*)0), aXShapes ) )
+//				if ( maXServiceManagerSC->createInstance( L"stardiv.one.drawing.ShapeCollection" )->queryInterface( ::getCppuType((const Reference< drawing::XShapes >*)0), aXShapes ) )
 
                 uno::Reference< drawing::XShape >  aXShapeCollection( maXServiceManagerSC->createInstance( rtl::OUString::createFromAscii("com.sun.star.drawing.ShapeCollection") ), uno::UNO_QUERY );
                 if ( aXShapeCollection.is() )
@@ -521,7 +521,7 @@ void CGMImpressOutAct::EndGrouping()
 
 void CGMImpressOutAct::DrawRectangle( FloatRect& rFloatRect )
 {
-    if ( mnGroupActCount != ( mpCGM->mnActCount - 1 ) )         // POWERPOINT HACK !!!
+    if ( mnGroupActCount != ( mpCGM->mnActCount - 1 ) )			// POWERPOINT HACK !!!
     {
         if ( ImplCreateShape( rtl::OUString::createFromAscii("com.sun.star.drawing.RectangleShape") ) )
         {
@@ -543,7 +543,7 @@ void CGMImpressOutAct::DrawEllipse( FloatPoint& rCenter, FloatPoint& rSize, doub
         uno::Any aAny( &eCircleKind, ::getCppuType((const drawing::CircleKind*)0) );
         maXPropSet->setPropertyValue( rtl::OUString::createFromAscii("CircleKind"), aAny );
 
-        long nXSize = (long)( rSize.X * 2.0 );      // Merkwuerdigkes Verhalten bei einer awt::Size von 0
+        long nXSize = (long)( rSize.X * 2.0 );		// Merkwuerdigkes Verhalten bei einer awt::Size von 0
         long nYSize = (long)( rSize.Y * 2.0 );
         if ( nXSize < 1 )
             nXSize = 1;
@@ -571,7 +571,7 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint& rCenter, FloatPoint& rSize
         drawing::CircleKind eCircleKind;
 
 
-        long nXSize = (long)( rSize.X * 2.0 );      // Merkwuerdigkes Verhalten bei einer awt::Size von 0
+        long nXSize = (long)( rSize.X * 2.0 );		// Merkwuerdigkes Verhalten bei einer awt::Size von 0
         long nYSize = (long)( rSize.Y * 2.0 );
         if ( nXSize < 1 )
             nXSize = 1;
@@ -643,7 +643,7 @@ void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
         double fdx = pBmpDesc->mndx;
         double fdy = pBmpDesc->mndy;
 
-        sal_uInt32  nMirr = BMP_MIRROR_NONE;
+        sal_uInt32	nMirr = BMP_MIRROR_NONE;
         if ( pBmpDesc->mbVMirror )
             nMirr |= BMP_MIRROR_VERT;
         if ( pBmpDesc->mbHMirror )
@@ -825,9 +825,9 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
 {
     if ( ImplCreateShape( rtl::OUString::createFromAscii("com.sun.star.drawing.TextShape") ) )
     {
-        uno::Any    aAny;
-        long    nWidth = rTextSize.Width;
-        long    nHeight = rTextSize.Height;
+        uno::Any	aAny;
+        long	nWidth = rTextSize.Width;
+        long	nHeight = rTextSize.Height;
 
         awt::Point aTextPos( rTextPos );
         switch ( mpCGM->pElement->eTextAlignmentV )
@@ -930,7 +930,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
                     uno::Any aQuery( aCursorText->queryInterface( ::getCppuType((const uno::Reference< beans::XPropertySet >*)0) ));
                     if( aQuery >>= aCursorPropSet )
                     {
-                        if ( nWidth != -1 )     // paragraph adjusting in a valid textbox ?
+                        if ( nWidth != -1 )		// paragraph adjusting in a valid textbox ?
                         {
                             switch ( mpCGM->pElement->eTextAlignmentH )
                             {
@@ -948,7 +948,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
                             }
                             aCursorPropSet->setPropertyValue( rtl::OUString::createFromAscii("ParaAdjust"), aAny );
                         }
-                        if ( nWidth > 0 && nHeight > 0 )    // restricted text
+                        if ( nWidth > 0 && nHeight > 0 )	// restricted text
                         {
                             sal_Bool bTrue = sal_True;
                             aAny.setValue( &bTrue, ::getCppuType((const sal_Bool*)0));
@@ -1032,12 +1032,12 @@ return 0;
             uno::Reference< text::XTextCursor >  aXTextCursor = (text::XTextCursor*)xText->createTextCursor()->queryInterface( ::getCppuType((const Reference< text::XTextCursor >*)0) );
             if ( aXTextCursor.is() )
             {
-                uno::Any    aAny;
-                sal_uInt32  nTextOfs = 0;
+                uno::Any	aAny;
+                sal_uInt32	nTextOfs = 0;
                 TextAttribute* pTAttr = pTextEntry->pAttribute;
                 do
                 {
-                    if ( pTAttr->nTextAttribSize > 0.3 )    // is text readable
+                    if ( pTAttr->nTextAttribSize > 0.3 )	// is text readable
                     {
                         aXTextCursor->gotoEnd( sal_False );
                         char nPushedChar = pTextEntry->pText[ nTextOfs + pTAttr->nTextAttribCount ];

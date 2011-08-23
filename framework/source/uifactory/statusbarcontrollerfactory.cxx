@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 #include "uifactory/statusbarcontrollerfactory.hxx"
 #include "uifactory/factoryconfiguration.hxx"
@@ -38,7 +38,7 @@
 #include "services.h"
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -47,15 +47,15 @@
 #include <com/sun/star/container/XContainer.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
 
 //_________________________________________________________________________________________________________________
-//  Defines
+//	Defines
 //_________________________________________________________________________________________________________________
-//
+// 
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -64,18 +64,18 @@ using namespace com::sun::star::container;
 using namespace ::com::sun::star::frame;
 
 //_________________________________________________________________________________________________________________
-//  Namespace
+//	Namespace
 //_________________________________________________________________________________________________________________
-//
+// 
 
 namespace framework
 {
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
+//	XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   StatusbarControllerFactory                      ,
-                                            ::cppu::OWeakObject                             ,
-                                            SERVICENAME_STATUSBARCONTROLLERFACTORY          ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   StatusbarControllerFactory				        ,
+                                            ::cppu::OWeakObject							    ,
+                                            SERVICENAME_STATUSBARCONTROLLERFACTORY	        ,
                                             IMPLEMENTATIONNAME_STATUSBARCONTROLLERFACTORY
                                         )
 
@@ -86,7 +86,7 @@ StatusbarControllerFactory::StatusbarControllerFactory( const Reference< XMultiS
 {
     m_pConfigAccess = new ConfigurationAccess_ControllerFactory( m_xServiceManager,rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Controller/Registered/StatusBar" )),true );
     m_pConfigAccess->acquire();
-}
+}   
 
 
 } // namespace framework

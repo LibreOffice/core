@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,28 +33,28 @@
 
 namespace rtl
 {
-/**
-@descr  The intended use for class Logfile is to write time stamp information
-        for profiling purposes.
-
+/**	
+@descr	The intended use for class Logfile is to write time stamp information
+        for profiling purposes. 
+        
         Profiling output should only be generated for a special product version of OpenOffice
-        which is compiled with a defined preprocessor symbol 'TIMELOG'.
+        which is compiled with a defined preprocessor symbol 'TIMELOG'.  
         Therefore we have provided a set of macros that uses the class Logfile only if
         this symbol is defined.  If the macros are not sufficient, i.e. you need more
         then three arguments for a printf style message, then you have to insert an
         #ifdef TIMELOG/#endif brace yourself.
-
+    
         Additionally the environment variable RTL_LOGFILE has to be defined in order to generate
         logging information. If the variable is not empty, it creates a file with the name
         $(RTL_LOGFILE)_$(PID).log, where $(PID) is the process id of the running process.
         It can be used as a run time switch for enabling or disabling the logging.
         Note that this variable is evaluated only once at the first attempt to write a message.
-
+        
         The class LogFile collects runtime data within its constructor and destructor. It can be
-        used for timing whole functions.
+        used for timing whole functions. 
         If you want to write timing data without context you can use the RTL_LOGFILE_TRACE-macros
         which are defined inside <rtl/logfile.h>.
-
+        
         The class LogFile should not be used directly, instead use the RTL_LOGFILE_CONTEXT/
         RTL_LOGFILE_TRACE-macros.
 
@@ -70,30 +70,30 @@ namespace rtl
         RTL_LOGFILE_CONTEXT_TRACEn( instance, frmt, arg1, .., arg3 );
         These macros can be used to log information in a "instance" context. The "instance" object
         is used to log message informations. All macros with "frmt" uses printf notation to log timing infos.
-
+        
         Example: RTL_LOGFILE_CONTEXT_TRACE( aLog, "Now we call an expensive function" );
                  RTL_LOGFIlE_CONTEXT_TRACE1( aLog, "Config entries read: %u", (unsigned short)i );
 
         RTL_LOGFILE_TRACE( string );
         RTL_LOGFILE_TRACEn( frmt, arg1, .., arg3 );
-        These macros can be used to log information outside a context. The macro directly calls
-        rtl_logfile_trace to write the info to the log file. All macros with "frmt" uses printf
+        These macros can be used to log information outside a context. The macro directly calls 
+        rtl_logfile_trace to write the info to the log file. All macros with "frmt" uses printf 
         notation to log timing infos.
-
+        
         Example: RTL_LOGFILE_TRACE( "Timing for loading a file" );
                  RTL_LOGFILE_TRACE1( aLog, "Timing for loading file: %s", aFileName );
 
         The lines written to the log file consist of the following space separated elements:
-        1.  The time relative to the start of the global timer in milliseconds.  The times is
+        1.	The time relative to the start of the global timer in milliseconds.  The times is
             started typically for the first logged line.
-        2.  Thread id.  It's absolut value is probably of less interest than providing a way to
+        2.	Thread id.  It's absolut value is probably of less interest than providing a way to
             distinguish different threads.
-        3.  a.  An opening or closing curly brace indicating the start or end of a scope.
+        3.	a.	An opening or closing curly brace indicating the start or end of a scope.
                 4a. Function name or general scope identifier.
-            b.  A vertical line indicating an arbitrary message.
+            b.	A vertical line indicating an arbitrary message.
                 4b optional function name or general scope identifier.
                 5b A colon followed by a space and a free form message terminated by a newline.
-
+            
         There is a second version of creating a context. RTL_LOGFILE_CONTEXT_AUTHOR takes
         two more arguments, the name of the project and the author's sign who is responsible
         for the code in which the macro is used.
@@ -102,13 +102,13 @@ namespace rtl
     {
     public:
         inline Logfile( const sal_Char *name );
-        /** @descr  Create a log file context where the message field consists of a project
+        /**	@descr	Create a log file context where the message field consists of a project
                 name, the author's shortcut, and the actual message.  These three strings
                 are written in a format that is understood by script that later parses the
                 log file and that so can extract the three strings.
-            @param  project Short name of the project, like sw for writer or sc for calc.
-            @param  author  The sign of the person responsible for the code.
-            @param  name    The actual message, typically a method name.
+            @param	project	Short name of the project, like sw for writer or sc for calc.
+            @param	author	The sign of the person responsible for the code.
+            @param	name	The actual message, typically a method name.
         */
         inline Logfile( const sal_Char *project, const sal_Char *author, const sal_Char *name );
         inline ~Logfile();
@@ -166,7 +166,7 @@ namespace rtl
                            instance.getName() ); \
         rtl_logfile_trace( frmt , arg1 , arg2 , arg3 ); \
         rtl_logfile_trace( "\n" )
-
+                           
 #else
 #define RTL_LOGFILE_CONTEXT( instance, name )  ((void)0)
 #define RTL_LOGFILE_CONTEXT_AUTHOR( instance, project, author, name )  ((void)0)
@@ -176,7 +176,7 @@ namespace rtl
 #define RTL_LOGFILE_CONTEXT_TRACE3( instance, frmt, arg1, arg2 , arg3 ) ((void)0)
 #endif
 
-// Normal RTL_LOGFILE_* entries will not make it into release versions,
+// Normal RTL_LOGFILE_* entries will not make it into release versions, 
 // TIMELOG is disabled a few versions prior relase build.
 //
 // We need some logs also in these builds, eg. for making performance regression tests.
@@ -200,7 +200,7 @@ namespace rtl
              rtl_logfile_trace( "\n" )
 #define RTL_LOGFILE_HASLOGFILE() \
              rtl_logfile_hasLogFile()
-
+            
 
 #endif
 

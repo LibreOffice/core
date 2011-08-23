@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,18 +36,18 @@
   Grammar of format string (a try):
   -----------------------------------------------
 
-  format_string     := {\special_char} general_format | scientific_format {\special_char} {;format_string}
-  general_format    := {#[,]}{0[,]}[.{0}{#}]
+  format_string		:= {\special_char} general_format | scientific_format {\special_char} {;format_string}
+  general_format	:= {#[,]}{0[,]}[.{0}{#}]
   scientific_format := {0}[.{0}{#}](e | E)(+ | -){#}{0}
 
-  percent_char      := '%'
-  special_char      := \char | + | - | ( | ) | $ | space_char
-  char              := all_ascii_chars
-  space_char        := ' '
+  percent_char		:= '%'
+  special_char		:= \char | + | - | ( | ) | $ | space_char
+  char				:= all_ascii_chars
+  space_char		:= ' '
 
-  {}    repeated multiple times (incl. zero times)
-  []    exactly one or zero times
-  ()    parenthesis, e.g. (e | E) means e or E times
+  {}	repeated multiple times (incl. zero times)
+  []	exactly one or zero times
+  ()	parenthesis, e.g. (e | E) means e or E times
 
   Additional predefined formats for the format string:
     "General Number"
@@ -60,7 +60,7 @@
     "True/False"
     "On/Off"
 
- Note: invalid format string are ignored just as in VisualBasic, the output is
+ Note: invalid format string are ignored just as in VisualBasic, the output is 
        probably 'undefined'. ASCII letters are outputted directly.
 
  Constraints in VisualBasic:
@@ -82,7 +82,7 @@
         a) use sprintf()
         b) use log10() and pow() digit
 */
-#define _with_sprintf   // use a)
+#define _with_sprintf	// use a)
 
 #include <tools/string.hxx>
 
@@ -103,47 +103,47 @@ class SbxBasicFormater {
     /* Basic command: Format$( number,format-string )
 
        Parameter:
-        dNumber     : number to be formated
-        sFormatStrg : the Format-String, e.g. ###0.0###
+        dNumber		: number to be formated
+        sFormatStrg	: the Format-String, e.g. ###0.0###
 
        Return value:
         String containing the formatted output
     */
-    String  BasicFormat( double dNumber, String sFormatStrg );
+    String	BasicFormat( double dNumber, String sFormatStrg );
     String  BasicFormatNull( String sFormatStrg );
 
     static  BOOL isBasicFormat( String sFormatStrg );
 
   private:
     //*** some helper methods ***
-    //void  ShowError( char *sErrMsg );
-    inline void ShiftString( String& sStrg, USHORT nStartPos );
-    inline void StrAppendChar( String& sStrg, sal_Unicode ch );
-    void    AppendDigit( String& sStrg, short nDigit );
-    void    LeftShiftDecimalPoint( String& sStrg );
-    void    StrRoundDigit( String& sStrg, short nPos, BOOL& bOverflow );
-    void    StrRoundDigit( String& sStrg, short nPos );
-    void    ParseBack( String& sStrg, const String& sFormatStrg,
+    //void	ShowError( char *sErrMsg );
+    inline void	ShiftString( String& sStrg, USHORT nStartPos );
+    inline void	StrAppendChar( String& sStrg, sal_Unicode ch );
+    void	AppendDigit( String& sStrg, short nDigit );
+    void	LeftShiftDecimalPoint( String& sStrg );
+    void	StrRoundDigit( String& sStrg, short nPos, BOOL& bOverflow );
+    void	StrRoundDigit( String& sStrg, short nPos );
+    void	ParseBack( String& sStrg, const String& sFormatStrg,
                 short nFormatPos );
 #ifdef _with_sprintf
     // Methods for string conversion with sprintf():
-    void    InitScan( double _dNum );
-    void    InitExp( double _dNewExp );
-    short   GetDigitAtPosScan( short nPos, BOOL& bFoundFirstDigit );
-    short   GetDigitAtPosExpScan( double dNewExponent, short nPos,
+    void	InitScan( double _dNum );
+    void	InitExp( double _dNewExp );
+    short	GetDigitAtPosScan( short nPos, BOOL& bFoundFirstDigit );
+    short	GetDigitAtPosExpScan( double dNewExponent, short nPos,
                 BOOL& bFoundFirstDigit );
-    short   GetDigitAtPosExpScan( short nPos, BOOL& bFoundFirstDigit );
+    short	GetDigitAtPosExpScan( short nPos, BOOL& bFoundFirstDigit );
 #else
     // Methods for direct 'calculation' with log10() and pow():
-    short   GetDigitAtPos( double dNumber, short nPos, double& dNextNumber,
+    short	GetDigitAtPos( double dNumber, short nPos, double& dNextNumber,
                 BOOL& bFoundFirstDigit );
-    short   RoundDigit( double dNumber );
+    short	RoundDigit( double dNumber );
 #endif
-    String  GetPosFormatString( const String& sFormatStrg, BOOL & bFound );
-    String  GetNegFormatString( const String& sFormatStrg, BOOL & bFound );
-    String  Get0FormatString( const String& sFormatStrg, BOOL & bFound );
-    String  GetNullFormatString( const String& sFormatStrg, BOOL & bFound );
-    short   AnalyseFormatString( const String& sFormatStrg,
+    String	GetPosFormatString( const String& sFormatStrg, BOOL & bFound );
+    String	GetNegFormatString( const String& sFormatStrg, BOOL & bFound );
+    String	Get0FormatString( const String& sFormatStrg, BOOL & bFound );
+    String	GetNullFormatString( const String& sFormatStrg, BOOL & bFound );
+    short	AnalyseFormatString( const String& sFormatStrg,
                 short& nNoOfDigitsLeft, short& nNoOfDigitsRight,
                 short& nNoOfOptionalDigitsLeft,
                 short& nNoOfExponentDigits,
@@ -151,31 +151,31 @@ class SbxBasicFormater {
                 BOOL& bPercent, BOOL& bCurrency, BOOL& bScientific,
                 BOOL& bGenerateThousandSeparator,
                 short& nMultipleThousandSeparators );
-    void    ScanFormatString( double dNumber, const String& sFormatStrg,
+    void	ScanFormatString( double dNumber, const String& sFormatStrg,
                 String& sReturnStrg, BOOL bCreateSign );
 
     //*** Data ***
-    sal_Unicode cDecPoint;      // sign for the decimal point
-    sal_Unicode cThousandSep;   // sign for thousand delimiter
+    sal_Unicode cDecPoint;		// sign for the decimal point
+    sal_Unicode cThousandSep;	// sign for thousand delimiter
     // Text for output:
-    String  sOnStrg;
-    String  sOffStrg;
-    String  sYesStrg;
-    String  sNoStrg;
-    String  sTrueStrg;
-    String  sFalseStrg;
+    String 	sOnStrg;
+    String 	sOffStrg;
+    String	sYesStrg;
+    String 	sNoStrg;
+    String 	sTrueStrg;
+    String 	sFalseStrg;
     String  sCurrencyStrg;
     String  sCurrencyFormatStrg;
 
     //*** temporary data for scan loop ***
     //-----------------------------------------------
     // String containing the number in scientific format
-    String  sSciNumStrg;
+    String	sSciNumStrg;
     // String containing the exponent of the number
     String  sNumExpStrg;
-    double  dNum;           // the number that is scanned
-    short   nNumExp;        // the exponent of the number
-    short   nExpExp;        // the number of digits in the exponent
+    double	dNum;			// the number that is scanned
+    short	nNumExp;		// the exponent of the number
+    short	nExpExp;		// the number of digits in the exponent
 };
 
 #endif

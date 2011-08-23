@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,22 +50,22 @@ namespace utl
 
 class TextViewOutWin : public Window
 {
-    ExtTextView*    pTextView;
+    ExtTextView*	pTextView;
 
 protected:
-    virtual void    Paint( const Rectangle& );
-    virtual void    KeyInput( const KeyEvent& rKeyEvt );
-    virtual void    MouseMove( const MouseEvent& rMEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual void    DataChanged( const DataChangedEvent& );
+    virtual void	Paint( const Rectangle& );
+    virtual void	KeyInput( const KeyEvent& rKeyEvt );
+    virtual void	MouseMove( const MouseEvent& rMEvt );
+    virtual void	MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void	MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void	Command( const CommandEvent& rCEvt );
+    virtual void	DataChanged( const DataChangedEvent& );
 
 public:
         TextViewOutWin(Window* pParent, WinBits nBits) :
             Window(pParent, nBits), pTextView(0){}
 
-    void    SetTextView( ExtTextView* pView ) {pTextView = pView;}
+    void	SetTextView( ExtTextView* pView ) {pTextView = pView;}
 
 };
 
@@ -74,27 +74,27 @@ namespace svt{ class SourceViewConfig;}
 class SwSrcEditWindow : public Window, public SfxListener, public utl::ConfigurationListener
 {
 private:
-    ExtTextView*    pTextView;
-    ExtTextEngine*  pTextEngine;
+    ExtTextView*	pTextView;
+    ExtTextEngine*	pTextEngine;
 
-    TextViewOutWin* pOutWin;
-    ScrollBar       *pHScrollbar,
+    TextViewOutWin*	pOutWin;
+    ScrollBar	   	*pHScrollbar,
                     *pVScrollbar;
 
-    SwSrcView*      pSrcView;
+    SwSrcView* 		pSrcView;
     utl::SourceViewConfig* pSourceViewConfig;
 
-    long            nCurTextWidth;
-    USHORT          nStartLine;
+    long			nCurTextWidth;
+    USHORT			nStartLine;
     rtl_TextEncoding eSourceEncoding;
-    BOOL            bReadonly;
-    BOOL            bDoSyntaxHighlight;
-    BOOL            bHighlighting;
+    BOOL			bReadonly;
+    BOOL			bDoSyntaxHighlight;
+    BOOL			bHighlighting;
 
-    Timer           aSyntaxIdleTimer;
-    Table           aSyntaxLineTable;
+    Timer			aSyntaxIdleTimer;
+    Table			aSyntaxLineTable;
 
-    void            ImpDoHighlight( const String& rSource, USHORT nLineOff );
+    void			ImpDoHighlight( const String& rSource, USHORT nLineOff );
 
     using OutputDevice::SetFont;
     void            SetFont();
@@ -107,15 +107,15 @@ private:
 
 protected:
 
-    virtual void    Resize();
-    virtual void    DataChanged( const DataChangedEvent& );
-    virtual void    GetFocus();
-//  virtual void    LoseFocus();
+    virtual void	Resize();
+    virtual void	DataChanged( const DataChangedEvent& );
+    virtual void 	GetFocus();
+//	virtual void 	LoseFocus();
 
-    void            CreateTextEngine();
-    void            DoSyntaxHighlight( USHORT nPara );
+    void 			CreateTextEngine();
+    void			DoSyntaxHighlight( USHORT nPara );
 
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void	Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     virtual void    ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 
     DECL_LINK(ScrollHdl, ScrollBar*);
@@ -124,38 +124,38 @@ public:
                     SwSrcEditWindow( Window* pParent, SwSrcView* pParentView );
                     ~SwSrcEditWindow();
 
-    void            SetScrollBarRanges();
-    void            InitScrollBars();
-    ULONG           Read( SvStream& rInput)
+    void			SetScrollBarRanges();
+    void			InitScrollBars();
+    ULONG			Read( SvStream& rInput)
                         {return pTextEngine->Read(rInput);}
-    ULONG           Write( SvStream& rOutput)
+    ULONG			Write( SvStream& rOutput)
                         {return pTextEngine->Write(rOutput);}
 
-    ExtTextView*    GetTextView()
+    ExtTextView*	GetTextView()
                         {return pTextView;}
-    TextEngine*     GetTextEngine()
+    TextEngine*		GetTextEngine()
                         {return pTextEngine;}
-    SwSrcView*      GetSrcView() {return pSrcView;}
+    SwSrcView* 		GetSrcView() {return pSrcView;}
 
-    TextViewOutWin* GetOutWin() {return pOutWin;}
+    TextViewOutWin*	GetOutWin() {return pOutWin;}
 
     virtual void    Invalidate( USHORT nFlags = 0 );
 
-    void            ClearModifyFlag()
+    void			ClearModifyFlag()
                         { pTextEngine->SetModified(FALSE); }
-    BOOL            IsModified() const
+    BOOL			IsModified() const
                         { return pTextEngine->IsModified();}
-    void            CreateScrollbars();
+    void			CreateScrollbars();
 
-    void            SetReadonly(BOOL bSet){bReadonly = bSet;}
-    BOOL            IsReadonly(){return bReadonly;}
+    void			SetReadonly(BOOL bSet){bReadonly = bSet;}
+    BOOL			IsReadonly(){return bReadonly;}
 
-    void            DoDelayedSyntaxHighlight( USHORT nPara );
+    void			DoDelayedSyntaxHighlight( USHORT nPara );
 
-    void            SetStartLine(USHORT nLine){nStartLine = nLine;}
+    void			SetStartLine(USHORT nLine){nStartLine = nLine;}
 
-    virtual void    Command( const CommandEvent& rCEvt );
-    void            HandleWheelCommand( const CommandEvent& rCEvt );
+    virtual void	Command( const CommandEvent& rCEvt );
+    void 			HandleWheelCommand( const CommandEvent& rCEvt );
 
     void            SetTextEncoding(rtl_TextEncoding eEncoding);
 };

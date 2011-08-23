@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -282,7 +282,7 @@ void SAL_CALL StockChartTypeTemplate::applyStyle(
                     xProp->setPropertyValue( C2U("LineStyle"), uno::makeAny( drawing::LineStyle_SOLID ));
             }
         }
-
+        
     }
     catch( uno::Exception & ex )
     {
@@ -374,7 +374,7 @@ void StockChartTypeTemplate::createChartTypes(
                 xFact->createInstance(
                     CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ), uno::UNO_QUERY_THROW );
             aChartTypeVec.push_back( xCT );
-
+            
             if( aSeriesSeq.getLength() > nSeriesIndex &&
                 aSeriesSeq[nSeriesIndex].getLength() > 0 )
             {
@@ -396,7 +396,7 @@ void StockChartTypeTemplate::createChartTypes(
             xCTProp->setPropertyValue( C2U("ShowFirst"), uno::makeAny( bShowFirst ));
             xCTProp->setPropertyValue( C2U("ShowHighLow"), uno::makeAny( bShowHighLow ));
         }
-
+        
         if( aSeriesSeq.getLength() > nSeriesIndex &&
             aSeriesSeq[ nSeriesIndex ].getLength() > 0 )
         {

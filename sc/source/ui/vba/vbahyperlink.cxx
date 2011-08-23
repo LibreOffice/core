@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp> 
 #include <ooo/vba/office/MsoHyperlinkType.hpp>
 #include <ooo/vba/msforms/XShape.hpp>
 #include "vbarange.hxx"

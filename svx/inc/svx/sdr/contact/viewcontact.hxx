@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,12 +67,12 @@ namespace sdr
             // with this VC. Since the VOCs remember a reference to this VC, this list needs
             // to be kept and is used e.g. at destructor to destroy all VOCs.
             // Registering and de-registering is done in the VOC constructors/destructors.
-            std::vector< ViewObjectContact* >               maViewObjectContactVector;
+            std::vector< ViewObjectContact* >				maViewObjectContactVector;
 
             // Primitive2DSequence of the ViewContact. This contains all necessary information
             // for the graphical visualisation and needs to be supported by all VCs which
             // can be visualized.
-            drawinglayer::primitive2d::Primitive2DSequence  mxViewIndependentPrimitive2DSequence;
+            drawinglayer::primitive2d::Primitive2DSequence	mxViewIndependentPrimitive2DSequence;
 
             // A new ViewObjectContact was created and shall be remembered.
             void AddViewObjectContact(ViewObjectContact& rVOContact);
@@ -95,8 +95,8 @@ namespace sdr
 
             // This method is responsible for creating the graphical visualisation data derived ONLY from
             // the model data. It will be stored/buffered in mxViewIndependentPrimitive2DSequence. The default implementation
-            // creates a yellow replacement rectangle (1000, 1000, 5000, 3000) to visualize missing
-            // implementations. All implementations have to provide basic geometry here, this is the central
+            // creates a yellow replacement rectangle (1000, 1000, 5000, 3000) to visualize missing 
+            // implementations. All implementations have to provide basic geometry here, this is the central 
             // visualisation method and will also be used for BoundRect computations in the long run.
             // This means it's always an error when the default implementation is called and thus gets
             // asserted there
@@ -132,7 +132,7 @@ namespace sdr
             bool isAnimatedInAnyViewObjectContact() const;
 
             // Access to possible sub-hierarchy and parent. GetObjectCount() default is 0L
-            // and GetViewContact default pops up an assert since it's an error if
+            // and GetViewContact default pops up an assert since it's an error if 
             // GetObjectCount has a result != 0 and it's not overloaded.
             virtual sal_uInt32 GetObjectCount() const;
             virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const;

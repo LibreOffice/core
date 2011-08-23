@@ -208,7 +208,7 @@ namespace svt { namespace uno
     }
 
     //--------------------------------------------------------------------
-    Dialog* Wizard::createDialog( Window* i_pParent )
+    Dialog*	Wizard::createDialog( Window* i_pParent )
     {
         WizardShell* pDialog( new WizardShell( i_pParent, this, m_xController, m_aWizardSteps ) );
         pDialog->SetSmartHelpId( SmartId( m_sHelpURL ) );
@@ -230,7 +230,7 @@ namespace svt { namespace uno
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.uno.Wizard" ) );
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL Wizard::getSupportedServiceNames_static() throw(RuntimeException)
     {
@@ -244,7 +244,7 @@ namespace svt { namespace uno
     {
         return getImplementationName_static();
     }
-
+    
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL Wizard::getSupportedServiceNames() throw(RuntimeException)
     {
@@ -317,7 +317,7 @@ namespace svt { namespace uno
 
         pWizardImpl->enableButtons( lcl_convertWizardButtonToWZB( i_WizardButton ), i_Enable );
     }
-
+    
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL Wizard::setDefaultButton( ::sal_Int16 i_WizardButton ) throw (RuntimeException)
     {
@@ -329,7 +329,7 @@ namespace svt { namespace uno
 
         pWizardImpl->defaultButton( lcl_convertWizardButtonToWZB( i_WizardButton ) );
     }
-
+    
     //------------------------------------------------------------------------------------------------------------------
     sal_Bool SAL_CALL Wizard::travelNext(  ) throw (RuntimeException)
     {
@@ -341,7 +341,7 @@ namespace svt { namespace uno
 
         return pWizardImpl->travelNext();
     }
-
+    
     //------------------------------------------------------------------------------------------------------------------
     sal_Bool SAL_CALL Wizard::travelPrevious(  ) throw (RuntimeException)
     {
@@ -353,7 +353,7 @@ namespace svt { namespace uno
 
         return pWizardImpl->travelPrevious();
     }
-
+    
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL Wizard::enablePage( ::sal_Int16 i_PageID, ::sal_Bool i_Enable ) throw (NoSuchElementException, InvalidStateException, RuntimeException)
     {
@@ -395,7 +395,7 @@ namespace svt { namespace uno
 
         return pWizardImpl->advanceTo( i_PageId );
     }
-
+    
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Bool SAL_CALL Wizard::goBackTo( ::sal_Int16 i_PageId ) throw (RuntimeException)
     {
@@ -407,7 +407,7 @@ namespace svt { namespace uno
 
         return pWizardImpl->goBackTo( i_PageId );
     }
-
+    
     //------------------------------------------------------------------------------------------------------------------
     Reference< XWizardPage > SAL_CALL Wizard::getCurrentPage(  ) throw (RuntimeException)
     {
@@ -441,7 +441,7 @@ namespace svt { namespace uno
         // simply disambiguate
         Wizard_Base::OGenericUnoDialog::setTitle( i_Title );
     }
-
+    
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Int16 SAL_CALL Wizard::execute(  ) throw (RuntimeException)
     {

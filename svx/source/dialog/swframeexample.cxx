@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 using namespace ::com::sun::star::text;
 
 #define FLYINFLY_BORDER 3
-#define DEMOTEXT        "Ij"
+#define DEMOTEXT		"Ij"
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 
 
@@ -72,7 +72,7 @@ SvxSwFrameExample::~SvxSwFrameExample()
 void SvxSwFrameExample::InitColors_Impl( void )
 {
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
-    m_aBgCol = Color( rSettings.GetWindowColor() );                             // old: COL_WHITE
+    m_aBgCol = Color( rSettings.GetWindowColor() );								// old: COL_WHITE
 
     BOOL bHC = rSettings.GetHighContrastMode();
 
@@ -84,7 +84,7 @@ void SvxSwFrameExample::InitColors_Impl( void )
         svtools::ColorConfig().GetColorValue(svtools::FONTCOLOR).nColor :
         Color( COL_GRAY );      // old: COL_GRAY
     m_aPrintAreaCol = bHC? m_aTxtCol : Color( COL_GRAY );
-    m_aBorderCol = m_aTxtCol;                                                   // old: COL_BLACK;
+    m_aBorderCol = m_aTxtCol;													// old: COL_BLACK;
     m_aBlankCol = bHC? m_aTxtCol : Color( COL_LIGHTGRAY );
     m_aBlankFrameCol = bHC? m_aTxtCol : Color( COL_GRAY );
 }
@@ -149,8 +149,8 @@ void SvxSwFrameExample::InitAllRects_Impl()
     // Eine Textzeile
     aTextLine = aPagePrtArea;
     aTextLine.SetSize(Size(aTextLine.GetWidth(), 2));
-    aTextLine.Left()    += nLTxtBorder;
-    aTextLine.Right()   -= nRTxtBorder;
+    aTextLine.Left()	+= nLTxtBorder;
+    aTextLine.Right()	-= nRTxtBorder;
     aTextLine.Move(0, nTTxtBorder);
 
     // Rechteck um Absatz incl. Raender
@@ -162,10 +162,10 @@ void SvxSwFrameExample::InitAllRects_Impl()
 
     // Rechteck um Absatz ohne Raender
     aParaPrtArea = aPara;
-    aParaPrtArea.Left()     += nLTxtBorder;
-    aParaPrtArea.Right()    -= nRTxtBorder;
-    aParaPrtArea.Top()      += nTTxtBorder;
-    aParaPrtArea.Bottom()   -= nBTxtBorder;
+    aParaPrtArea.Left()		+= nLTxtBorder;
+    aParaPrtArea.Right()	-= nRTxtBorder;
+    aParaPrtArea.Top()		+= nTTxtBorder;
+    aParaPrtArea.Bottom()	-= nBTxtBorder;
 
     if (nAnchor == TextContentAnchorType_AS_CHARACTER || nAnchor == TextContentAnchorType_AT_CHARACTER)
     {
@@ -452,7 +452,7 @@ Rectangle SvxSwFrameExample::DrawInnerFrame_Impl(const Rectangle &rRect, const C
     DrawRect_Impl(rRect, rFillColor, rBorderColor);
 
     // Bereich, zu dem relativ positioniert wird, bestimmen
-    Rectangle aRect(rRect); // aPagePrtArea = Default
+    Rectangle aRect(rRect);	// aPagePrtArea = Default
     CalcBoundRect_Impl(aRect);
 
     if (nAnchor == TextContentAnchorType_AT_FRAME && &rRect == &aPagePrtArea)
@@ -492,8 +492,8 @@ void SvxSwFrameExample::Paint(const Rectangle&)
     if (nAnchor == TextContentAnchorType_AT_FRAME)
         aRect = DrawInnerFrame_Impl( aFrameAtFrame, m_aBgCol, m_aBorderCol );
 
-    long lXPos    = 0;
-    long lYPos    = 0;
+    long lXPos 	  = 0;
+    long lYPos 	  = 0;
 
     // Horizontale Ausrichtung
     //
@@ -661,7 +661,7 @@ void SvxSwFrameExample::Paint(const Rectangle&)
                 switch(nWrap)
                 {
                     case WrapTextMode_NONE:
-                        aTxt.Top()    = aFrmRect.Bottom() + nTxtLineHeight;
+                        aTxt.Top() 	  = aFrmRect.Bottom() + nTxtLineHeight;
                         aTxt.Bottom() = aTxt.Top() + nTxtLineHeight - 1;
                         break;
 

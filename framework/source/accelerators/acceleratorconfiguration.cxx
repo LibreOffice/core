@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,7 +97,7 @@ namespace framework
     {
         const sal_Int32 nBeginIndex = 4; // "KEY_" is the prefix of a identifier...
         ::rtl::OUStringBuffer sKeyBuffer((_rKeyMapping->mapCodeToIdentifier(aKeyEvent.KeyCode)).copy(nBeginIndex));
-
+        
         if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT )
             sKeyBuffer.appendAscii("_SHIFT");
         if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  )
@@ -110,8 +110,8 @@ namespace framework
         return sKeyBuffer.makeStringAndClear();
     }
 
-//-----------------------------------------------
-//  XInterface, XTypeProvider
+//-----------------------------------------------    
+//	XInterface, XTypeProvider
 DEFINE_XINTERFACE_6(XMLBasedAcceleratorConfiguration                       ,
                     OWeakObject                                            ,
                     DIRECT_INTERFACE(css::lang::XTypeProvider             ),
@@ -122,14 +122,14 @@ DEFINE_XINTERFACE_6(XMLBasedAcceleratorConfiguration                       ,
                     DIRECT_INTERFACE(css::ui::XUIConfiguration           ))
 
 DEFINE_XTYPEPROVIDER_6(XMLBasedAcceleratorConfiguration     ,
-                       css::lang::XTypeProvider             ,
+                       css::lang::XTypeProvider             ,					   
                        css::ui::XAcceleratorConfiguration  ,
                        css::form::XReset                    ,
                        css::ui::XUIConfigurationPersistence,
                        css::ui::XUIConfigurationStorage    ,
                        css::ui::XUIConfiguration           )
-
-//-----------------------------------------------
+                                    
+//-----------------------------------------------    
 XMLBasedAcceleratorConfiguration::XMLBasedAcceleratorConfiguration(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR)
     : ThreadHelpBase  (&Application::GetSolarMutex())
     , m_xSMGR         (xSMGR                        )
@@ -138,45 +138,45 @@ XMLBasedAcceleratorConfiguration::XMLBasedAcceleratorConfiguration(const css::un
 {
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 XMLBasedAcceleratorConfiguration::~XMLBasedAcceleratorConfiguration()
 {
     LOG_ASSERT(!m_pWriteCache, "XMLBasedAcceleratorConfiguration::~XMLBasedAcceleratorConfiguration()\nChanges not flushed. Ignore it ...")
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfiguration::getAllKeyEvents()
     throw(css::uno::RuntimeException)
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-
+    
     AcceleratorCache&          rCache = impl_getCFG();
     AcceleratorCache::TKeyList lKeys  = rCache.getAllKeys();
     return lKeys.getAsConstList();
-
+    
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 ::rtl::OUString SAL_CALL XMLBasedAcceleratorConfiguration::getCommandByKeyEvent(const css::awt::KeyEvent& aKeyEvent)
     throw(css::container::NoSuchElementException,
           css::uno::RuntimeException            )
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-
+    
     AcceleratorCache& rCache = impl_getCFG();
     if (!rCache.hasKey(aKeyEvent))
         throw css::container::NoSuchElementException(
                 ::rtl::OUString(),
                 static_cast< ::cppu::OWeakObject* >(this));
     return rCache.getCommandByKey(aKeyEvent);
-
+                
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void SAL_CALL XMLBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyEvent& aKeyEvent,
                                                     const ::rtl::OUString&    sCommand )
                                                     throw(css::lang::IllegalArgumentException,
@@ -209,7 +209,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void SAL_CALL XMLBasedAcceleratorConfiguration::removeKeyEvent(const css::awt::KeyEvent& aKeyEvent)
 throw(css::container::NoSuchElementException,
       css::uno::RuntimeException            )
@@ -222,12 +222,12 @@ throw(css::container::NoSuchElementException,
         throw css::container::NoSuchElementException(
         ::rtl::OUString(),
         static_cast< ::cppu::OWeakObject* >(this));
-    rCache.removeKey(aKeyEvent);
+    rCache.removeKey(aKeyEvent);                
 
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfiguration::getKeyEventsByCommand(const ::rtl::OUString& sCommand)
     throw(css::lang::IllegalArgumentException   ,
           css::container::NoSuchElementException,
@@ -238,35 +238,35 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfigurati
                 ::rtl::OUString::createFromAscii("Empty command strings are not allowed here."),
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
-
+                
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-
+    
     AcceleratorCache& rCache = impl_getCFG();
     if (!rCache.hasCommand(sCommand))
         throw css::container::NoSuchElementException(
                 ::rtl::OUString(),
                 static_cast< ::cppu::OWeakObject* >(this));
-
+                
     AcceleratorCache::TKeyList lKeys  = rCache.getKeysByCommand(sCommand);
     return lKeys.getAsConstList();
-
+    
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 css::uno::Sequence< css::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::getPreferredKeyEventsForCommandList(const css::uno::Sequence< ::rtl::OUString >& lCommandList)
     throw(css::lang::IllegalArgumentException   ,
           css::uno::RuntimeException            )
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-
+    
     sal_Int32                           i              = 0;
-    sal_Int32                           c              = lCommandList.getLength();
+    sal_Int32                           c              = lCommandList.getLength(); 
     css::uno::Sequence< css::uno::Any > lPreferredOnes (c); // dont pack list!
     AcceleratorCache&                   rCache         = impl_getCFG();
-
+    
     for (i=0; i<c; ++i)
     {
         const ::rtl::OUString& rCommand = lCommandList[i];
@@ -275,25 +275,25 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::g
                     ::rtl::OUString::createFromAscii("Empty command strings are not allowed here."),
                     static_cast< ::cppu::OWeakObject* >(this),
                     (sal_Int16)i);
-
+            
         if (!rCache.hasCommand(rCommand))
             continue;
-
+        
         AcceleratorCache::TKeyList lKeys = rCache.getKeysByCommand(rCommand);
         if ( lKeys.empty() )
             continue;
-
+        
         css::uno::Any& rAny = lPreferredOnes[i];
-        rAny <<= *(lKeys.begin());
+        rAny <<= *(lKeys.begin()); 
     }
-
+    
     aReadLock.unlock();
     // <- SAFE ----------------------------------
-
+    
     return lPreferredOnes;
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void SAL_CALL XMLBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(const ::rtl::OUString& sCommand)
     throw(css::lang::IllegalArgumentException   ,
           css::container::NoSuchElementException,
@@ -304,22 +304,22 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
                 ::rtl::OUString::createFromAscii("Empty command strings are not allowed here."),
                 static_cast< ::cppu::OWeakObject* >(this),
                 0);
-
+                
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
-
+    
     AcceleratorCache& rCache = impl_getCFG(sal_True); // TRUE => force getting of a writeable cache!
     if (!rCache.hasCommand(sCommand))
         throw css::container::NoSuchElementException(
                 ::rtl::OUString::createFromAscii("Command does not exists inside this container."),
                 static_cast< ::cppu::OWeakObject* >(this));
-    rCache.removeCommand(sCommand);
-
+    rCache.removeCommand(sCommand);                
+    
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void SAL_CALL XMLBasedAcceleratorConfiguration::reload()
     throw(css::uno::Exception       ,
         css::uno::RuntimeException)
@@ -334,13 +334,13 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::reload()
         xStreamNoLang = m_aPresetHandler.openPreset(PresetHandler::PRESET_DEFAULT(), sal_True);
     }
     catch(const css::io::IOException&) {} // does not have to exist
-    aReadLock.unlock();
+    aReadLock.unlock();    
     // <- SAFE ----------------------------------
 
     css::uno::Reference< css::io::XInputStream > xIn;
     if (xStream.is())
         xIn = xStream->getInputStream();
-    if (!xIn.is())
+    if (!xIn.is())                
         throw css::io::IOException(
         ::rtl::OUString::createFromAscii("Could not open accelerator configuration for reading."),
         static_cast< ::cppu::OWeakObject* >(this));
@@ -349,10 +349,10 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::reload()
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
     m_aReadCache = AcceleratorCache();
-    aWriteLock.unlock();
+    aWriteLock.unlock();    
     // <- SAFE ----------------------------------
 
-    impl_ts_load(xIn);
+    impl_ts_load(xIn);    
 
     // Load also the general language independent default accelerators
     // (ignoring the already defined accelerators)
@@ -363,8 +363,8 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::reload()
             impl_ts_load(xIn);
     }
 }
-
-//-----------------------------------------------
+          
+//-----------------------------------------------    
 void SAL_CALL XMLBasedAcceleratorConfiguration::store()
     throw(css::uno::Exception       ,
         css::uno::RuntimeException)
@@ -372,14 +372,14 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::store()
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::io::XStream > xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), sal_True); // TRUE => open or create!
-    aReadLock.unlock();
+    aReadLock.unlock();    
     // <- SAFE ----------------------------------
 
     css::uno::Reference< css::io::XOutputStream > xOut;
     if (xStream.is())
         xOut = xStream->getOutputStream();
 
-    if (!xOut.is())
+    if (!xOut.is())                
         throw css::io::IOException(
         ::rtl::OUString::createFromAscii("Could not open accelerator configuration for saving."),
         static_cast< ::cppu::OWeakObject* >(this));
@@ -391,8 +391,8 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::store()
 
     m_aPresetHandler.commitUserChanges();
 }
-
-//-----------------------------------------------
+          
+//-----------------------------------------------    
 void SAL_CALL XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
@@ -405,18 +405,18 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
     css::uno::Reference< css::io::XOutputStream > xOut;
     if (xStream.is())
         xOut = xStream->getOutputStream();
-
-    if (!xOut.is())
+    
+    if (!xOut.is())                
         throw css::io::IOException(
                 ::rtl::OUString::createFromAscii("Could not open accelerator configuration for saving."),
                 static_cast< ::cppu::OWeakObject* >(this));
-
+                
     impl_ts_save(xOut);
-
+    
     // TODO inform listener about success, so it can flush the root and sub storage of this stream!
 }
-
-//-----------------------------------------------
+          
+//-----------------------------------------------    
 ::sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::isModified()
     throw(css::uno::RuntimeException)
 {
@@ -425,8 +425,8 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
     return (m_pWriteCache != 0);
     // <- SAFE ----------------------------------
 }
-
-//-----------------------------------------------
+    
+//-----------------------------------------------    
 ::sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::isReadOnly()
     throw(css::uno::RuntimeException)
 {
@@ -439,39 +439,39 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
     css::uno::Reference< css::io::XOutputStream > xOut;
     if (xStream.is())
         xOut = xStream->getOutputStream();
-    return !(xOut.is());
+    return !(xOut.is()); 
 }
-
-//-----------------------------------------------
+    
+//-----------------------------------------------    
 void SAL_CALL XMLBasedAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& /*xStorage*/)
     throw(css::uno::RuntimeException)
 {
     LOG_WARNING("XMLBasedAcceleratorConfiguration::setStorage()", "TODO implement this HACK .-)")
 }
-
-//-----------------------------------------------
+    
+//-----------------------------------------------    
 ::sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::hasStorage()
     throw(css::uno::RuntimeException)
 {
     LOG_WARNING("XMLBasedAcceleratorConfiguration::hasStorage()", "TODO implement this HACK .-)")
     return sal_False;
 }
-
-//-----------------------------------------------
+    
+//-----------------------------------------------    
 void SAL_CALL XMLBasedAcceleratorConfiguration::addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
     LOG_WARNING("XMLBasedAcceleratorConfiguration::addConfigurationListener()", "TODO implement me")
 }
-
-//-----------------------------------------------
+    
+//-----------------------------------------------    
 void SAL_CALL XMLBasedAcceleratorConfiguration::removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
     LOG_WARNING("XMLBasedAcceleratorConfiguration::removeConfigurationListener()", "TODO implement me")
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void SAL_CALL XMLBasedAcceleratorConfiguration::reset()
 throw(css::uno::RuntimeException)
 {
@@ -483,15 +483,15 @@ throw(css::uno::RuntimeException)
 
     reload();
 }
-
-//-----------------------------------------------
+    
+//-----------------------------------------------    
 void SAL_CALL XMLBasedAcceleratorConfiguration::addResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
     LOG_WARNING("XMLBasedAcceleratorConfiguration::addResetListener()", "TODO implement me")
 }
-
-//-----------------------------------------------
+    
+//-----------------------------------------------    
 void SAL_CALL XMLBasedAcceleratorConfiguration::removeResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
@@ -505,12 +505,12 @@ void XMLBasedAcceleratorConfiguration::changesOccured(const ::rtl::OUString& /*s
     reload();
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void XMLBasedAcceleratorConfiguration::impl_ts_load(const css::uno::Reference< css::io::XInputStream >& xStream)
 {
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
-
+    
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
     if (m_pWriteCache)
     {
@@ -519,14 +519,14 @@ void XMLBasedAcceleratorConfiguration::impl_ts_load(const css::uno::Reference< c
         m_pWriteCache = 0;
         delete pTemp;
     }
-
+    
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 
     css::uno::Reference< css::io::XSeekable > xSeek(xStream, css::uno::UNO_QUERY);
     if (xSeek.is())
         xSeek->seek(0);
-
+    
     // add accelerators to the cache (the cache is not cleared)
     // SAFE -> ----------------------------------
     aWriteLock.lock();
@@ -537,29 +537,29 @@ void XMLBasedAcceleratorConfiguration::impl_ts_load(const css::uno::Reference< c
     // Use further a temp cache for reading!
     AcceleratorConfigurationReader*                        pReader = new AcceleratorConfigurationReader(m_aReadCache);
     css::uno::Reference< css::xml::sax::XDocumentHandler > xReader (static_cast< ::cppu::OWeakObject* >(pReader), css::uno::UNO_QUERY_THROW);
-    SaxNamespaceFilter*                                    pFilter = new SaxNamespaceFilter(xReader);
+    SaxNamespaceFilter*                                    pFilter = new SaxNamespaceFilter(xReader);  
     css::uno::Reference< css::xml::sax::XDocumentHandler > xFilter (static_cast< ::cppu::OWeakObject* >(pFilter), css::uno::UNO_QUERY_THROW);
 
     // connect parser, filter and stream
     css::uno::Reference< css::xml::sax::XParser > xParser(xSMGR->createInstance(SERVICENAME_SAXPARSER), css::uno::UNO_QUERY_THROW);
     xParser->setDocumentHandler(xFilter);
-
+    
     css::xml::sax::InputSource aSource;
     aSource.aInputStream = xStream;
 
     // TODO think about error handling
     xParser->parseStream(aSource);
-
+    
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< css::io::XOutputStream >& xStream)
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-
+    
     AcceleratorCache aCache;
     sal_Bool bChanged = (m_pWriteCache != 0);
     if (bChanged)
@@ -567,13 +567,13 @@ void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< c
     else
         aCache.takeOver(m_aReadCache);
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
-
+    
     aReadLock.unlock();
     // <- SAFE ----------------------------------
-
+    
     css::uno::Reference< css::io::XTruncate > xClearable(xStream, css::uno::UNO_QUERY_THROW);
     xClearable->truncate();
-
+    
     // TODO can be removed if seek(0) is done by truncate() automaticly!
     css::uno::Reference< css::io::XSeekable > xSeek(xStream, css::uno::UNO_QUERY);
     if (xSeek.is())
@@ -583,15 +583,15 @@ void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< c
     css::uno::Reference< css::xml::sax::XDocumentHandler > xWriter    (xSMGR->createInstance(SERVICENAME_SAXWRITER), css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::io::XActiveDataSource>       xDataSource(xWriter                                     , css::uno::UNO_QUERY_THROW);
     xDataSource->setOutputStream(xStream);
-
+    
     // write into the stream
     AcceleratorConfigurationWriter aWriter(aCache, xWriter);
     aWriter.flush();
-
+    
     // take over all changes into the original container
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
-
+    
     // take over all changes into the readonly cache ...
     // and forget the copy-on-write copied cache
     if (bChanged)
@@ -602,12 +602,12 @@ void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< c
         m_pWriteCache = 0;
         delete pTemp;
     }
-
+    
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bWriteAccessRequested)
 {
     // SAFE -> ----------------------------------
@@ -622,7 +622,7 @@ AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bWriteA
     {
         m_pWriteCache = new AcceleratorCache(m_aReadCache);
     }
-
+    
     // in case, we have a writeable cache, we use it for reading too!
     // Otherwhise the API user cant find its own changes ...
     if (m_pWriteCache)
@@ -632,37 +632,37 @@ AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bWriteA
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 ::comphelper::Locale XMLBasedAcceleratorConfiguration::impl_ts_getLocale() const
 {
     static ::rtl::OUString LOCALE_PACKAGE = ::rtl::OUString::createFromAscii("/org.openoffice.Setup");
     static ::rtl::OUString LOCALE_PATH    = ::rtl::OUString::createFromAscii("L10N"                 );
     static ::rtl::OUString LOCALE_KEY     = ::rtl::OUString::createFromAscii("ooLocale"             );
-
+    
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
-
+    
     css::uno::Reference< css::uno::XInterface >     xCFG      = fpc::ConfigurationHelper::openConfig(xSMGR, LOCALE_PACKAGE, LOCALE_PATH, fpc::ConfigurationHelper::E_READONLY);
     css::uno::Reference< css::beans::XPropertySet > xProp     (xCFG, css::uno::UNO_QUERY_THROW);
     ::rtl::OUString                                 sISOLocale;
     xProp->getPropertyValue(LOCALE_KEY) >>= sISOLocale;
-
+    
     if (!sISOLocale.getLength())
         return ::comphelper::Locale::EN_US();
     return ::comphelper::Locale(sISOLocale);
 }
 
 /*******************************************************************************
-*
+* 
 * XCU based accelerator configuration
-*
+* 
 *******************************************************************************/
 
-//-----------------------------------------------
-//  XInterface, XTypeProvider
+//-----------------------------------------------    
+//	XInterface, XTypeProvider
 DEFINE_XINTERFACE_7(XCUBasedAcceleratorConfiguration                       ,
                     OWeakObject                                            ,
                     DIRECT_INTERFACE(css::lang::XTypeProvider             ),
@@ -674,7 +674,7 @@ DEFINE_XINTERFACE_7(XCUBasedAcceleratorConfiguration                       ,
                     DIRECT_INTERFACE(css::ui::XUIConfiguration           ))
 
                     DEFINE_XTYPEPROVIDER_7(XCUBasedAcceleratorConfiguration ,
-                    css::lang::XTypeProvider             ,
+                    css::lang::XTypeProvider             ,					   
                     css::ui::XAcceleratorConfiguration  ,
                     css::util::XChangesListener          ,
                     css::form::XReset                    ,
@@ -682,7 +682,7 @@ DEFINE_XINTERFACE_7(XCUBasedAcceleratorConfiguration                       ,
                     css::ui::XUIConfigurationStorage    ,
                     css::ui::XUIConfiguration           )
 
-//-----------------------------------------------
+//-----------------------------------------------    
 XCUBasedAcceleratorConfiguration::XCUBasedAcceleratorConfiguration(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR)
                                 : ThreadHelpBase  (&Application::GetSolarMutex())
                                 , m_xSMGR         (xSMGR                        )
@@ -690,17 +690,17 @@ XCUBasedAcceleratorConfiguration::XCUBasedAcceleratorConfiguration(const css::un
                                 , m_pSecondaryWriteCache(0                      )
 {
     static const ::rtl::OUString CFG_ENTRY_ACCELERATORS(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Accelerators"));
-    m_xCfg = css::uno::Reference< css::container::XNameAccess > (
-             ::comphelper::ConfigurationHelper::openConfig( m_xSMGR, CFG_ENTRY_ACCELERATORS, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
+    m_xCfg = css::uno::Reference< css::container::XNameAccess > ( 
+             ::comphelper::ConfigurationHelper::openConfig( m_xSMGR, CFG_ENTRY_ACCELERATORS, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ), 
              css::uno::UNO_QUERY );
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 XCUBasedAcceleratorConfiguration::~XCUBasedAcceleratorConfiguration()
 {
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfiguration::getAllKeyEvents()
     throw(css::uno::RuntimeException)
 {
@@ -721,7 +721,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfigurati
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 ::rtl::OUString SAL_CALL XCUBasedAcceleratorConfiguration::getCommandByKeyEvent(const css::awt::KeyEvent& aKeyEvent)
     throw(css::container::NoSuchElementException,
           css::uno::RuntimeException            )
@@ -745,7 +745,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfigurati
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void SAL_CALL XCUBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyEvent& aKeyEvent,
                                                     const ::rtl::OUString&    sCommand )
                                                     throw(css::lang::IllegalArgumentException,
@@ -815,7 +815,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
             rPrimaryCache.setKeyCommandPair(aKeyEvent, sCommand);
         }
     }
-
+    
     else
     {
         if (rPrimaryCache.hasCommand(sCommand))
@@ -832,7 +832,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void SAL_CALL XCUBasedAcceleratorConfiguration::removeKeyEvent(const css::awt::KeyEvent& aKeyEvent)
     throw(css::container::NoSuchElementException,
           css::uno::RuntimeException            )
@@ -875,7 +875,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeKeyEvent(const css::awt::K
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfiguration::getKeyEventsByCommand(const ::rtl::OUString& sCommand)
     throw(css::lang::IllegalArgumentException   ,
         css::container::NoSuchElementException,
@@ -921,7 +921,7 @@ AcceleratorCache::TKeyList::const_iterator lcl_getPreferredKey(const Accelerator
         const css::awt::KeyEvent& rAWTKey = *pIt;
         const KeyCode             aVCLKey = ::svt::AcceleratorExecute::st_AWTKey2VCLKey(rAWTKey);
         const String              sName   = aVCLKey.GetName();
-
+    
         if (sName.Len () > 0)
             return pIt;
     }
@@ -938,7 +938,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::g
     ReadGuard aReadLock(m_aLock);
 
     sal_Int32                           i              = 0;
-    sal_Int32                           c              = lCommandList.getLength();
+    sal_Int32                           c              = lCommandList.getLength(); 
     css::uno::Sequence< css::uno::Any > lPreferredOnes (c); // dont pack list!
     AcceleratorCache&                   rCache         = impl_getCFG(sal_True);
 
@@ -972,7 +972,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::g
     return lPreferredOnes;
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void SAL_CALL XCUBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(const ::rtl::OUString& sCommand)
     throw(css::lang::IllegalArgumentException   ,
         css::container::NoSuchElementException,
@@ -996,15 +996,15 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
                 static_cast< ::cppu::OWeakObject* >(this));
 
     if (rPrimaryCache.hasCommand(sCommand))
-        rPrimaryCache.removeCommand(sCommand);
+        rPrimaryCache.removeCommand(sCommand); 
     if (rSecondaryCache.hasCommand(sCommand))
-        rSecondaryCache.removeCommand(sCommand);
+        rSecondaryCache.removeCommand(sCommand);               
 
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void SAL_CALL XCUBasedAcceleratorConfiguration::reload()
     throw(css::uno::Exception       ,
         css::uno::RuntimeException)
@@ -1025,8 +1025,8 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reload()
         AcceleratorCache* pTemp = m_pPrimaryWriteCache;
         m_pPrimaryWriteCache = 0;
         delete pTemp;
-    }
-    m_xCfg->getByName(CFG_ENTRY_PRIMARY) >>= xAccess;
+    }    
+    m_xCfg->getByName(CFG_ENTRY_PRIMARY) >>= xAccess;    
     impl_ts_load(bPreferred, xAccess); // load the preferred keys
 
     bPreferred = sal_False;
@@ -1038,14 +1038,14 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reload()
         m_pSecondaryWriteCache = 0;
         delete pTemp;
     }
-    m_xCfg->getByName(CFG_ENTRY_SECONDARY) >>= xAccess;
+    m_xCfg->getByName(CFG_ENTRY_SECONDARY) >>= xAccess;    
     impl_ts_load(bPreferred, xAccess); // load the secondary keys
 
-    aWriteLock.unlock();
+    aWriteLock.unlock();  
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void SAL_CALL XCUBasedAcceleratorConfiguration::store()
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
@@ -1054,32 +1054,32 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::store()
 
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-
+    
     sal_Bool bPreferred;
     css::uno::Reference< css::container::XNameAccess > xAccess;
 
     bPreferred = sal_True;
     // on-demand creation of the primary write cache
     impl_getCFG(bPreferred, sal_True);
-    m_xCfg->getByName(CFG_ENTRY_PRIMARY) >>= xAccess;
+    m_xCfg->getByName(CFG_ENTRY_PRIMARY) >>= xAccess;    
     impl_ts_save(bPreferred, xAccess);
 
     bPreferred = sal_False;
     // on-demand creation of the secondary write cache
     impl_getCFG(bPreferred, sal_True);
-    m_xCfg->getByName(CFG_ENTRY_SECONDARY) >>= xAccess;
+    m_xCfg->getByName(CFG_ENTRY_SECONDARY) >>= xAccess;    
     impl_ts_save(bPreferred, xAccess);
 
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
     throw(css::uno::Exception       ,
       css::uno::RuntimeException)
 {
-    // use m_aCache + old AcceleratorXMLWriter to store data directly on storage given as parameter ...
+    // use m_aCache + old AcceleratorXMLWriter to store data directly on storage given as parameter ...  
     if (!xStorage.is())
         return;
 
@@ -1141,28 +1141,28 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
     aWriter.flush();
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 ::sal_Bool SAL_CALL XCUBasedAcceleratorConfiguration::isModified()
     throw(css::uno::RuntimeException)
 {
     return sal_False;
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 ::sal_Bool SAL_CALL XCUBasedAcceleratorConfiguration::isReadOnly()
     throw(css::uno::RuntimeException)
 {
     return sal_False;
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void SAL_CALL XCUBasedAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& /*xStorage*/)
     throw(css::uno::RuntimeException)
 {
     LOG_WARNING("XCUBasedAcceleratorConfiguration::setStorage()", "TODO implement this HACK .-)")
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 ::sal_Bool SAL_CALL XCUBasedAcceleratorConfiguration::hasStorage()
     throw(css::uno::RuntimeException)
 {
@@ -1170,21 +1170,21 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setStorage(const css::uno::Refer
         return sal_False;
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void SAL_CALL XCUBasedAcceleratorConfiguration::addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
     LOG_WARNING("XCUBasedAcceleratorConfiguration::addConfigurationListener()", "TODO implement me")
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void SAL_CALL XCUBasedAcceleratorConfiguration::removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
     LOG_WARNING("XCUBasedAcceleratorConfiguration::removeConfigurationListener()", "TODO implement me")
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void SAL_CALL XCUBasedAcceleratorConfiguration::reset()
     throw(css::uno::RuntimeException)
 {
@@ -1192,35 +1192,35 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reset()
     ::rtl::OUString sConfig = xNamed->getName();
     if ( sConfig.equalsAscii("Global") )
     {
-        m_xCfg = css::uno::Reference< css::container::XNameAccess > (
-            ::comphelper::ConfigurationHelper::openConfig( m_xSMGR, CFG_ENTRY_GLOBAL, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
-            css::uno::UNO_QUERY );
+        m_xCfg = css::uno::Reference< css::container::XNameAccess > ( 
+            ::comphelper::ConfigurationHelper::openConfig( m_xSMGR, CFG_ENTRY_GLOBAL, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ), 
+            css::uno::UNO_QUERY );		
         XCUBasedAcceleratorConfiguration::reload();
     }
     else if ( sConfig.equalsAscii("Modules") )
     {
-        m_xCfg = css::uno::Reference< css::container::XNameAccess > (
-            ::comphelper::ConfigurationHelper::openConfig( m_xSMGR, CFG_ENTRY_MODULES, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
+        m_xCfg = css::uno::Reference< css::container::XNameAccess > ( 
+            ::comphelper::ConfigurationHelper::openConfig( m_xSMGR, CFG_ENTRY_MODULES, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ), 
             css::uno::UNO_QUERY );
         XCUBasedAcceleratorConfiguration::reload();
     }
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void SAL_CALL XCUBasedAcceleratorConfiguration::addResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
     LOG_WARNING("XCUBasedAcceleratorConfiguration::addResetListener()", "TODO implement me")
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 void SAL_CALL XCUBasedAcceleratorConfiguration::removeResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
     LOG_WARNING("XCUBasedAcceleratorConfiguration::removeResetListener()", "TODO implement me")
 }
 
-//-----------------------------------------------
+//----------------------------------------------- 
 void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util::ChangesEvent& aEvent)
     throw(css::uno::RuntimeException)
 {
@@ -1242,7 +1242,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
         // be interesting for use. Sometimes short path values are given also by the broadcaster ... but they must be ignored :-)
         // So we try to split the path into 3 parts (module isnt important here, because we already know it ... because
         // these instance is bound to a specific module configuration ... or it''s the global configuration where no module is given at all.
-
+    
         ::rtl::OUString sOrgPath ;
         ::rtl::OUString sPath    ;
         ::rtl::OUString sKey;
@@ -1251,7 +1251,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
         sPath              = sOrgPath;
         ::rtl::OUString sPrimarySecondary = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
         ::rtl::OUString sGlobalModules = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
-
+        
         if ( sGlobalModules.equals(CFG_ENTRY_GLOBAL) )
         {
             ::rtl::OUString sModule;
@@ -1263,7 +1263,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
         {
             ::rtl::OUString sModule = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
             sKey = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
-
+            
             if (( sKey.getLength() > 0 ) && ( sPath.getLength() > 0 ))
             {
                 reloadChanged(sPrimarySecondary, sGlobalModules, sModule, sKey);
@@ -1272,13 +1272,13 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
     }
 }
 
-//-----------------------------------------------
+//----------------------------------------------- 
 void SAL_CALL XCUBasedAcceleratorConfiguration::disposing(const css::lang::EventObject& /*aSource*/)
     throw(css::uno::RuntimeException)
 {
 }
 
-//-----------------------------------------------
+//----------------------------------------------- 
 void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& xCfg )
 {
     AcceleratorCache aReadCache = AcceleratorCache();
@@ -1304,7 +1304,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
         for ( sal_Int32 i=0; i<nKeys; ++i )
         {
             ::rtl::OUString sKey = lKeys[i];
-            xAccess->getByName(sKey) >>= xKey;
+            xAccess->getByName(sKey) >>= xKey;			
             xKey->getByName(CFG_PROP_COMMAND) >>= xCommand;
 
             css::uno::Sequence< ::rtl::OUString > lLocales = xCommand->getElementNames();
@@ -1388,7 +1388,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
         m_aSecondaryReadCache.takeOver(aReadCache);
 }
 
-//-----------------------------------------------
+//----------------------------------------------- 
 void XCUBasedAcceleratorConfiguration::impl_ts_save(sal_Bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& /*xCfg*/)
 {
     if (bPreferred)
@@ -1438,7 +1438,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(sal_Bool bPreferred, const c
     {
         AcceleratorCache::TKeyList::const_iterator pIt;
         AcceleratorCache::TKeyList lSecondaryReadKeys  = m_aSecondaryReadCache.getAllKeys();
-        AcceleratorCache::TKeyList lSecondaryWriteKeys = m_pSecondaryWriteCache->getAllKeys();
+        AcceleratorCache::TKeyList lSecondaryWriteKeys = m_pSecondaryWriteCache->getAllKeys(); 
 
         for ( pIt  = lSecondaryReadKeys.begin(); pIt != lSecondaryReadKeys.end(); ++pIt)
         {
@@ -1481,7 +1481,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(sal_Bool bPreferred, const c
     ::comphelper::ConfigurationHelper::flush(m_xCfg);
 }
 
-//-----------------------------------------------
+//----------------------------------------------- 
 void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt::KeyEvent& aKeyEvent, const ::rtl::OUString& sCommand, const sal_Bool bPreferred )
 {
     css::uno::Reference< css::container::XNameAccess > xAccess;
@@ -1502,8 +1502,8 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
         xAccess->getByName(CFG_ENTRY_MODULES) >>= xModules;
         if ( !xModules->hasByName(m_sModuleCFG) )
         {
-            xFac = css::uno::Reference< css::lang::XSingleServiceFactory >(xModules, css::uno::UNO_QUERY);
-            xInst = xFac->createInstance();
+            xFac = css::uno::Reference< css::lang::XSingleServiceFactory >(xModules, css::uno::UNO_QUERY);		
+            xInst = xFac->createInstance();		
             xModules->insertByName(m_sModuleCFG, css::uno::makeAny(xInst));
         }
         xModules->getByName(m_sModuleCFG) >>= xContainer;
@@ -1528,7 +1528,7 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
         xCommand->replaceByName(sLocale, css::uno::makeAny(sCommand));
 }
 
-//-----------------------------------------------
+//----------------------------------------------- 
 void XCUBasedAcceleratorConfiguration::removeKeyFromConfiguration( const css::awt::KeyEvent& aKeyEvent, const sal_Bool bPreferred )
 {
     css::uno::Reference< css::container::XNameAccess > xAccess;
@@ -1554,7 +1554,7 @@ void XCUBasedAcceleratorConfiguration::removeKeyFromConfiguration( const css::aw
     xContainer->removeByName(sKey);
 }
 
-//-----------------------------------------------
+//----------------------------------------------- 
 void XCUBasedAcceleratorConfiguration::reloadChanged( const ::rtl::OUString& sPrimarySecondary, const ::rtl::OUString& sGlobalModules, const ::rtl::OUString& sModule, const ::rtl::OUString& sKey )
 {
     css::uno::Reference< css::container::XNameAccess > xAccess;
@@ -1605,7 +1605,7 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const ::rtl::OUString& sPr
     {
         ::rtl::OUString sLocale = impl_ts_getLocale().toISO();
         xContainer->getByName(sKey)    >>= xKey;
-        xKey->getByName(CFG_PROP_COMMAND)  >>= xCommand;
+        xKey->getByName(CFG_PROP_COMMAND)  >>= xCommand;		
         xCommand->getByName(sLocale)       >>= sCommand;
     }
 
@@ -1625,7 +1625,7 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const ::rtl::OUString& sPr
     }
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bPreferred, sal_Bool bWriteAccessRequested)
 {
     // SAFE -> ----------------------------------
@@ -1674,7 +1674,7 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bPrefer
     // <- SAFE ----------------------------------
 }
 
-//-----------------------------------------------
+//-----------------------------------------------    
 ::comphelper::Locale XCUBasedAcceleratorConfiguration::impl_ts_getLocale() const
 {
     static ::rtl::OUString LOCALE_PACKAGE = ::rtl::OUString::createFromAscii("/org.openoffice.Setup");

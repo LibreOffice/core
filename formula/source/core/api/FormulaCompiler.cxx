@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -345,7 +345,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
             { FormulaMapGroupSpecialOffset::MAT_REF           , ocMatRef }         ,
             { FormulaMapGroupSpecialOffset::DB_AREA           , ocDBArea }         ,
             { FormulaMapGroupSpecialOffset::MACRO             , ocMacro }          ,
-            { FormulaMapGroupSpecialOffset::COL_ROW_NAME      , ocColRowName }
+            { FormulaMapGroupSpecialOffset::COL_ROW_NAME      , ocColRowName }     
         };
         const size_t nCount = SAL_N_ELEMENTS(aMap);
         // Preallocate vector elements.
@@ -486,7 +486,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
         }
     }
     const FormulaOpCodeMapEntry* pRet = aVec.empty() ? 0 : &aVec[0];
-    return uno::Sequence< FormulaOpCodeMapEntry >(pRet, aVec.size());
+    return uno::Sequence< FormulaOpCodeMapEntry >(pRet, aVec.size()); 
 }
 //-----------------------------------------------------------------------------
 
@@ -1590,7 +1590,7 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuff
         DBG_ERRORFILE("unknown OpCode");
         rBuffer.append(GetNativeSymbol( ocErrName ));
     }
-    if( bNext )
+    if( bNext ) 
     {
         if (t->IsExternalRef())
         {

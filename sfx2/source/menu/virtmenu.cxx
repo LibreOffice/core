@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -155,7 +155,7 @@ static Image RetrieveAddOnImage( Reference< com::sun::star::frame::XFrame >& rFr
 
 //=========================================================================
 
-/*  Diese Hilfsfunktion pr"uft, ob eine Slot-Id im aktuellen Applikations-
+/*	Diese Hilfsfunktion pr"uft, ob eine Slot-Id im aktuellen Applikations-
     Status sichtbar ist oder nicht. Dabei bezieht sich der Applikations-Status
     darauf, ob die Applikation OLE-Server ist oder nicht.
 */
@@ -347,8 +347,8 @@ void SfxVirtualMenu::CreateFromSVMenu()
         if ( nPos != MENU_ITEM_NOTFOUND && xFrame.is() )
         {
             // Retrieve addon popup menus and add them to our menu bar
-            Reference< com::sun::star::frame::XModel >      xModel;
-            Reference< com::sun::star::frame::XController > xController( xFrame->getController(), UNO_QUERY );
+            Reference< com::sun::star::frame::XModel >		xModel;
+            Reference< com::sun::star::frame::XController >	xController( xFrame->getController(), UNO_QUERY );
             if ( xController.is() )
                 xModel = Reference< com::sun::star::frame::XModel >( xController->getModel(), UNO_QUERY );
             framework::AddonMenuManager::MergeAddonPopupMenus( xFrame, xModel, nPos, (MenuBar *)pSVMenu );
@@ -413,7 +413,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
         if ( pPopup )
         {
-
+            
             SfxMenuControl *pMnuCtrl =
                 SfxMenuControl::CreateControl(nSlotId, *pPopup, *pBindings);
 
@@ -673,9 +673,9 @@ void SfxVirtualMenu::UpdateImages()
 
     if ( bIcons )
     {
-        BOOL            bIsHiContrastMode   = IsHiContrastMode();
-        USHORT          nItemCount          = pSVMenu->GetItemCount();
-        SfxViewFrame *  pViewFrame          = pBindings->GetDispatcher()->GetFrame();
+        BOOL			bIsHiContrastMode   = IsHiContrastMode();
+        USHORT			nItemCount          = pSVMenu->GetItemCount();
+        SfxViewFrame *	pViewFrame          = pBindings->GetDispatcher()->GetFrame();
         Reference<com::sun::star::frame::XFrame> xFrame( pViewFrame->GetFrame().GetFrameInterface() );
 
         for ( USHORT nSVPos=0; nSVPos < nItemCount; ++nSVPos )
@@ -718,13 +718,13 @@ void SfxVirtualMenu::UpdateImages( Menu* pMenu )
     if ( !pMenu )
         return;
 
-    framework::AddonsOptions    aAddonOptions;
+    framework::AddonsOptions	aAddonOptions;
 
     BOOL bIcons = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
     if ( bIcons )
     {
-        BOOL            bIsHiContrastMode   = IsHiContrastMode();
-        USHORT          nItemCount          = pMenu->GetItemCount();
+        BOOL			bIsHiContrastMode	= IsHiContrastMode();
+        USHORT			nItemCount			= pMenu->GetItemCount();
         Reference<com::sun::star::frame::XFrame> aXFrame( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame().GetFrameInterface() );
 
         for ( USHORT nPos=0; nPos < nItemCount; ++nPos )
@@ -938,8 +938,8 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
 
     // MI: wozu war der noch gut?
     // MBA: scheint ein alter QAP-Hack gewesen zu sein ( in rev.1.41 eingecheckt ! )
-//  if ( Application::IsInModalMode() )
-//      return TRUE; // abw"urgen
+//	if ( Application::IsInModalMode() )
+//		return TRUE; // abw"urgen
 
     if ( pMenu )
     {
@@ -974,8 +974,8 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
             Reference< XDesktop > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
                                             DEFINE_CONST_OUSTRING( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
 
-            USHORT  nActiveItemId = 0;
-            USHORT  nItemId = START_ITEMID_WINDOWLIST;
+            USHORT	nActiveItemId = 0;
+            USHORT	nItemId = START_ITEMID_WINDOWLIST;
 
             if ( xDesktop.is() )
             {
@@ -1002,7 +1002,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
                 }
             }
 
-            int nItemCount       = pMenu->GetItemCount();
+            int	nItemCount		 = pMenu->GetItemCount();
 
             if ( nItemCount > 0 )
             {
@@ -1035,7 +1035,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
         if ( !pParent && pSVMenu->IsMenuBar() && !pAddonsMenu )
         {
             // Store Add-Ons parents of our runtime menu items
-            pAddonsMenu = pSVMenu->GetPopupMenu( SID_ADDONLIST );
+            pAddonsMenu	= pSVMenu->GetPopupMenu( SID_ADDONLIST );
         }
 
         // f"ur konstistenten Status sorgen

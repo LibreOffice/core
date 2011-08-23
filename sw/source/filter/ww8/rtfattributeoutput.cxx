@@ -2672,7 +2672,7 @@ void RtfAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
     {
         if( m_rExport.bOutPageDescs )
         {
-
+            
             OSL_ENSURE( m_rExport.GetCurItemSet(), "Impossible" );
             if ( !m_rExport.GetCurItemSet() )
                 return;
@@ -3201,15 +3201,15 @@ static OString WriteHex(OString sString)
 }
 
 void lcl_AppendSP( OStringBuffer& rBuffer,
-    const char cName[],
-    const ::rtl::OUString& rValue,
+    const char cName[], 
+    const ::rtl::OUString& rValue, 
     const RtfExport& rExport )
 {
     rBuffer.append( "{" OOO_STRING_SVTOOLS_RTF_SP "{" ); // "{\sp{"
     rBuffer.append( OOO_STRING_SVTOOLS_RTF_SN " " );//" \sn "
-    rBuffer.append( cName ); //"PropName"
+    rBuffer.append( cName ); //"PropName" 
     rBuffer.append( "}{" OOO_STRING_SVTOOLS_RTF_SV " " );
-// "}{ \sv "
+// "}{ \sv " 
     rBuffer.append( rExport.OutString( rValue, rExport.eCurrentEncoding ) );
     rBuffer.append( "}}" );
 }

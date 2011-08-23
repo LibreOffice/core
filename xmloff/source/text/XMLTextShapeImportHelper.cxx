@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,8 +87,8 @@ void XMLTextShapeImportHelper::addShape(
     }
 
     TextContentAnchorType eAnchorType = TextContentAnchorType_AT_PARAGRAPH;
-    sal_Int16   nPage = 0;
-    sal_Int32   nY = 0;
+    sal_Int16	nPage = 0;
+    sal_Int32	nY = 0;
 
     UniReference < XMLTextImportHelper > xTxtImport =
         rImport.GetTextImport();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,11 +52,11 @@ class EStack : private std::slist<ELEM>
     typedef typename std::slist<ELEM>::size_type    size_type;
 
     // LIFECYCLE
-                        EStack()                {}
+                        EStack() 				{}
                         EStack(
                             const EStack &      i_rStack )
-                                                :   base( (const base &)(i_rStack) ) {}
-                        ~EStack()               {}
+                                                : 	base( (const base &)(i_rStack) ) {}
+                        ~EStack() 				{}
     // OPERATORS
     EStack &            operator=(
                             const EStack &      i_rStack )

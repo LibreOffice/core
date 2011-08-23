@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@
 #include "sc.hrc"
 #include "drawview.hxx"
 
-//  Maximal erlaubte Mausbewegung um noch Drag&Drop zu starten
-//! fusel,fuconstr,futext - zusammenfassen!
-#define SC_MAXDRAGMOVE  3
+//	Maximal erlaubte Mausbewegung um noch Drag&Drop zu starten
+//!	fusel,fuconstr,futext - zusammenfassen!
+#define SC_MAXDRAGMOVE	3
 
 //------------------------------------------------------------------------
 
@@ -72,7 +72,7 @@ FuConstruct::~FuConstruct()
 
 BYTE FuConstruct::Command(const CommandEvent& rCEvt)
 {
-    //  special code for non-VCL OS2/UNX removed
+    //	special code for non-VCL OS2/UNX removed
 
     return FuDraw::Command( rCEvt );
 }
@@ -184,7 +184,7 @@ BOOL __EXPORT FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 
     BOOL bReturn = SimpleMouseButtonUp( rMEvt );
 
-    //      Doppelklick auf Textobjekt? (->fusel)
+    //		Doppelklick auf Textobjekt? (->fusel)
 
     USHORT nClicks = rMEvt.GetClicks();
     if ( nClicks == 2 && rMEvt.IsLeft() )
@@ -197,7 +197,7 @@ BOOL __EXPORT FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                 SdrMark* pMark = rMarkList.GetMark(0);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-                //  #49458# bei Uno-Controls nicht in Textmodus
+                //	#49458# bei Uno-Controls nicht in Textmodus
                 if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) )
                 {
                     OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
@@ -209,7 +209,7 @@ BOOL __EXPORT FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 
                     // jetzt den erzeugten FuText holen und in den EditModus setzen
                     FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
-                    if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // hat keine RTTI
+                    if ( pPoor && pPoor->GetSlotID() == nTextSlotId )	 //	hat keine RTTI
                     {
                         FuText* pText = (FuText*)pPoor;
                         Point aMousePixel = rMEvt.GetPosPixel();
@@ -226,18 +226,18 @@ BOOL __EXPORT FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-//      SimpleMouseButtonUp - ohne Test auf Doppelklick
+//		SimpleMouseButtonUp - ohne Test auf Doppelklick
 
 BOOL FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
 {
-    BOOL    bReturn = TRUE;
+    BOOL	bReturn = TRUE;
 
     if (aDragTimer.IsActive() )
     {
         aDragTimer.Stop();
     }
 
-    Point   aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+    Point	aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
     if ( pView->IsDragObj() )
          pView->EndDragObj( rMEvt.IsMod1() );
@@ -288,7 +288,7 @@ BOOL __EXPORT FuConstruct::KeyInput(const KeyEvent& rKEvt)
                 pWindow->ReleaseMouse();
                 bReturn = TRUE;
             }
-            else                            // Zeichenmodus beenden
+            else							// Zeichenmodus beenden
             {
                 pViewShell->GetViewData()->GetDispatcher().
                     Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);

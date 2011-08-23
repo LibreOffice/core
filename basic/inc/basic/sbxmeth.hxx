@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ class SbxMethodImpl;
 
 class SbxMethod : public SbxVariable
 {
-    SbxMethodImpl* mpSbxMethodImpl; // Impl data
+    SbxMethodImpl* mpSbxMethodImpl;	// Impl data
 
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_METHOD,1);

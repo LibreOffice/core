@@ -43,11 +43,11 @@ import org.openoffice.xmerge.util.XmlUtil;
  */
 public class NameDefinition implements OfficeConstants {
 
-    private String name;                        // name which identifies the definition
-    private String definition;                  // the definition itself
-    private String baseCellAddress;             // the basecelladdress
-    private boolean rangeType = false;          // true if definition of type range
-    private boolean expressionType = false;     // true if definition of type expression
+    private String name; 						// name which identifies the definition
+    private String definition;					// the definition itself
+    private String baseCellAddress;				// the basecelladdress
+    private boolean rangeType = false;			// true if definition of type range
+    private boolean expressionType = false;		// true if definition of type expression
 
     /**
      * Default Constructor for a <code>NameDefinition</code>

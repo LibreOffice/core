@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -367,7 +367,7 @@ typedef struct _XDEBUGINFO
     char            szNrLine[300];      // receives line number
     //YD 17/07/06 c++ namespace can generate really long
     //YD names, use a large buffer!
-    char            szNrPub[16*1024];   // receives function name
+    char            szNrPub[16*1024]; 	// receives function name
 
     struct new_seg  *pseg;
     struct o32_obj  *pobj;              // flat .EXE object table entry
@@ -1608,7 +1608,7 @@ int dbgPrintSYMInfo(FILE *LogFile,      // in: text log file to write to
     Buffer[MapDef.cbModName] = 0x00;
     fprintf(LogFile,"Module name '%s'\n",Buffer);
 #endif
-
+   
     SegOffset = SEGDEFOFFSET(MapDef);
 #ifdef DEBUG_SYMDUMP
     fprintf(LogFile,"SegOffset %0x\n",SegOffset);

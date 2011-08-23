@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -158,7 +158,7 @@ public class _XChangeBroadcaster extends MultiMethodTest {
         requiredMethod("addChangeListener()");
         changed = false;
         log.println("Testing removeChangeListener ...");
-        oObj.addChangeListener( listener );
+        oObj.addChangeListener( listener );        
         XWindow win2 = (XWindow) tEnv.getObjRelation("Win2");
         win2.setFocus();
 

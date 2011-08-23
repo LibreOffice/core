@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -316,11 +316,11 @@ sal_Bool OComboBoxModel::convertFastPropertyValue(
 void OComboBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 6, OBoundControlModel )
-        DECL_PROP1(TABINDEX,            sal_Int16,                  BOUND);
-        DECL_PROP1(LISTSOURCETYPE,      ListSourceType, BOUND);
-        DECL_PROP1(LISTSOURCE,          ::rtl::OUString,            BOUND);
-        DECL_BOOL_PROP1(EMPTY_IS_NULL,                              BOUND);
-        DECL_PROP1(DEFAULT_TEXT,        ::rtl::OUString,            BOUND);
+        DECL_PROP1(TABINDEX,			sal_Int16,					BOUND);
+        DECL_PROP1(LISTSOURCETYPE,		ListSourceType, BOUND);
+        DECL_PROP1(LISTSOURCE,			::rtl::OUString,			BOUND);
+        DECL_BOOL_PROP1(EMPTY_IS_NULL,								BOUND);
+        DECL_PROP1(DEFAULT_TEXT,		::rtl::OUString,			BOUND);
         DECL_PROP1(STRINGITEMLIST,      Sequence< ::rtl::OUString >,BOUND);
     END_DESCRIBE_PROPERTIES();
 }
@@ -337,7 +337,7 @@ void OComboBoxModel::describeAggregateProperties( Sequence< Property >& _rAggreg
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OComboBoxModel::getServiceName() throw(RuntimeException)
 {
-    return FRM_COMPONENT_COMBOBOX;  // old (non-sun) name for compatibility !
+    return FRM_COMPONENT_COMBOBOX;	// old (non-sun) name for compatibility !
 }
 
 //------------------------------------------------------------------------------
@@ -347,10 +347,10 @@ void SAL_CALL OComboBoxModel::write(const Reference<stario::XObjectOutputStream>
     OBoundControlModel::write(_rxOutStream);
 
     // Version
-    // Version 0x0002:  EmptyIsNull
-    // Version 0x0003:  ListSource->Seq
-    // Version 0x0004:  DefaultText
-    // Version 0x0005:  HelpText
+    // Version 0x0002:	EmptyIsNull
+    // Version 0x0003:	ListSource->Seq
+    // Version 0x0004:	DefaultText
+    // Version 0x0005:	HelpText
     _rxOutStream->writeShort(0x0006);
 
     // Maskierung fuer any
@@ -452,7 +452,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
         m_bEmptyIsNull = bNull;
     }
 
-    if (nVersion > 0x0003)  // nVersion == 4
+    if (nVersion > 0x0003)	// nVersion == 4
         _rxInStream >> m_aDefaultText;
 
     // Stringliste muss geleert werden, wenn eine Listenquelle gesetzt ist
@@ -572,7 +572,7 @@ void OComboBoxModel::loadData( bool _bForce )
                     m_aListRowSet.setCommand( aStatement.makeStringAndClear() );
                     bExecuteRowSet = true;
                 }
-            }   break;
+            }	break;
             case ListSourceType_QUERY:
             {
                 m_aListRowSet.setCommandFromQuery( m_aListSource );
@@ -611,7 +611,7 @@ void OComboBoxModel::loadData( bool _bForce )
         return;
     }
 
-    ::std::vector< ::rtl::OUString >    aStringList;
+    ::std::vector< ::rtl::OUString >	aStringList;
     aStringList.reserve(16);
     try
     {

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -119,7 +119,7 @@ struct AxFontData
     sal_Int16           getHeightPoints() const;
     /** Converts the passed font height from points to the internal representation. */
     void                setHeightPoints( sal_Int16 nPoints );
-
+    
     /** Reads the font data settings from the passed input stream. */
     bool                importBinaryModel( BinaryInputStream& rInStrm );
     /** Reads the font data settings from the passed input stream that contains

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -127,14 +127,14 @@ void SvxRulerItem::StateChanged( USHORT nSID, SfxItemState eState,
             break;
         }
         case SID_RULER_PAGE_POS:
-        {   // Position Seite, Seitenbreite
+        {	// Position Seite, Seitenbreite
             const SvxPagePosSizeItem *pItem = PTR_CAST(SvxPagePosSizeItem, pState);
             DBG_ASSERT(pState?  0 != pItem: TRUE, "SvxPagePosSizeItem erwartet");
             rRuler.Update(pItem);
             break;
         }
         case SID_RULER_OBJECT:
-        {   // Object-Selektion
+        {	// Object-Selektion
             const SvxObjectItem *pItem = PTR_CAST(SvxObjectItem, pState);
             DBG_ASSERT(pState?  0 != pItem: TRUE, "SvxObjectItem erwartet");
             rRuler.Update(pItem);

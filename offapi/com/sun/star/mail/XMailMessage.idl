@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #ifndef __com_sun_star_mail_XMailMessage_idl__
 #define __com_sun_star_mail_XMailMessage_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
+#ifndef __com_sun_star_uno_XInterface_idl__ 
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
@@ -43,37 +43,37 @@
 module com { module sun { module star { module mail {
 
 /**
-   Represents a mail message.
-
+   Represents a mail message. 
+   
    @see com::sun::star::mail::XMailServer
-
+   
    @since OOo 2.0.0
  */
 interface XMailMessage: ::com::sun::star::uno::XInterface {
-
-     /**
-        The display name of the sender of this mail message.
-    */
+    
+     /** 
+        The display name of the sender of this mail message. 
+    */    
     [attribute, readonly] string SenderName;
-    /**
+    /** 
         The e-mail address of the sender of this mail message.
         The e-mail address has to conform to <a href="http://www.ietf.org/rfc/rfc822.txt">RFC&nbsp;822</a>.
-    */
+    */    
     [attribute, readonly] string SenderAddress;
-
-    /**
+    
+    /** 
         The e-mail address where replies on this mail message should be sent to.
         If the e-mail address doesn't conform to <a href="http://www.ietf.org/rfc/rfc822.txt">RFC&nbsp;822</a>
         sending the mail message later will fail.
-        If no ReplyToAddress is set replies go to the SenderAddress.
+        If no ReplyToAddress is set replies go to the SenderAddress.               
     */
     [attribute] string ReplyToAddress;
-
+    
     /**
         Add an recipients e-mail address to the list of recipients of this mail message.
         If the e-mail address doesn't conform to <a href="http://www.ietf.org/rfc/rfc822.txt">RFC&nbsp;822</a>
         sending the mail message will fail.
-
+        
         @param sRecipientAddress
         [in] the e-mail address of the recipient.
     */
@@ -83,74 +83,74 @@ interface XMailMessage: ::com::sun::star::uno::XInterface {
         Add an Cc recipients e-mail address to the list of recipients of this mail message.
         If the e-mail address doesn't conform to <a href="http://www.ietf.org/rfc/rfc822.txt">RFC&nbsp;822</a>
         sending the mail message will fail.
-
+        
         @param sRecipientAddress
         [in] the e-mail address of the Cc recipient.
     */
     void addCcRecipient([in] string sRecipientAddress);
-
+    
     /**
         Add an Bcc recipients e-mail address to the list of recipients of this mail message.
         If the e-mail address doesn't conform to <a href="http://www.ietf.org/rfc/rfc822.txt">RFC&nbsp;822</a>
-        sending the mail message will fail.
-
+        sending the mail message will fail. 
+        
         @param sRecipientAddress
         [in] the e-mail address of the Bcc recipient.
     */
     void addBccRecipient([in] string sRecipientAddress);
-
+                
     /**
-        Return a sequence of the e-mail addresses of all recipients of
+        Return a sequence of the e-mail addresses of all recipients of 
         this mail message.
     */
     sequence<string> getRecipients();
-
+    
     /**
         Return a sequence of the e-mail addresses of all the Cc recipients
         of this mail message.
     */
     sequence<string> getCcRecipients();
-
+    
     /**
         Return a sequence of the e-mail addresses of all the Bcc recipients
-        of this mail message.
+        of this mail message. 
     */
     sequence<string> getBccRecipients();
-
+    
     /**
         The subject of a mail message.
     */
     [attribute] string Subject;
-
+    
     /**
-        The body of the mail message.
-        It is expected that the transferable delivers the data as
-        a string. Although a transferable may support multiple
-        data flavors only the first data flavor supplied will be
-        used to retrieve the data and it is expected that the data
+        The body of the mail message. 
+        It is expected that the transferable delivers the data as 
+        a string. Although a transferable may support multiple 
+        data flavors only the first data flavor supplied will be 
+        used to retrieve the data and it is expected that the data 
         will be provided as a string.
-
+        
         @see com::sun::star::datatransfer::XTransferable
     */
-    [attribute] com::sun::star::datatransfer::XTransferable Body;
-
+    [attribute] com::sun::star::datatransfer::XTransferable Body;        
+        
     /**
         Add a file attachment to a mail message.
-
+        
         param aMailAttachment
         [in] specifies a file which should be attached to this mail message.
-
+                                       
         @see com::sun::star::mail::MailAttachment
     */
     void addAttachment([in] MailAttachment aMailAttachment);
-
+        
     /**
-        Return a sequence of <type>MailAttachment</type>'s that will
+        Return a sequence of <type>MailAttachment</type>'s that will 
         be attached to this mail message.
-
+        
         @see com::sun::star::mail::MailAttachment
     */
-    sequence<MailAttachment> getAttachments();
+    sequence<MailAttachment> getAttachments();        
 };
 
 }; }; }; };

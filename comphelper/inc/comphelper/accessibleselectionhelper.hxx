@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,22 +59,22 @@ namespace comphelper
     protected:
 
         // access to context - still waiting to be overwritten
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-            implGetAccessibleContext()
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > 
+            implGetAccessibleContext() 
             throw ( ::com::sun::star::uno::RuntimeException ) = 0;
 
         // return if the specified child is visible => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
-        virtual sal_Bool
-            implIsSelected( sal_Int32 nAccessibleChildIndex )
+        virtual sal_Bool 
+            implIsSelected( sal_Int32 nAccessibleChildIndex ) 
             throw (::com::sun::star::uno::RuntimeException) = 0;
 
         // select the specified child => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
         virtual void
-            implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect )
+            implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect ) 
             throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) = 0;
 
     protected:
-
+        
         /** non-virtual versions of the methods which can be implemented using <method>implIsSelected</method> and <method>implSelect</method>
         */
         void SAL_CALL selectAccessibleChild( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
@@ -90,7 +90,7 @@ namespace comphelper
     //= OAccessibleSelectionHelper
     //=====================================================================
 
-    typedef ::cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleSelection > OAccessibleSelectionHelper_Base;
+    typedef	::cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleSelection > OAccessibleSelectionHelper_Base;
 
     /** a helper class for implementing an AccessibleSelection which at the same time
         supports an XAccessibleSelection interface.
@@ -100,7 +100,7 @@ namespace comphelper
                                        public OAccessibleSelectionHelper_Base
     {
     protected:
-
+        
         OAccessibleSelectionHelper( );
 
         /// see the respective base class ctor for an extensive comment on this, please
@@ -110,7 +110,7 @@ namespace comphelper
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > implGetAccessibleContext() throw ( ::com::sun::star::uno::RuntimeException );
 
     public:
-
+        
         // XInterface
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )
@@ -126,7 +126,7 @@ namespace comphelper
     };
 
 //.........................................................................
-}   // namespace comphelper
+}	// namespace comphelper
 //.........................................................................
 
 #endif // COMPHELPER_ACCESSIBLE_SELECTION_HELPER_HXX

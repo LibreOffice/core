@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,7 +68,7 @@ using namespace ::com::sun::star;
 
 namespace slideshow
 {
-namespace internal
+namespace internal 
 {
 // TODO(E2): Detect the case when svx/drawing layer is not
 // in-process, or even not on the same machine, and
@@ -87,8 +87,8 @@ bool hasUnsupportedActions( const GDIMetaFile& rMtf )
     MetaAction* pCurrAct;
 
     // TODO(Q3): avoid const-cast
-    for( pCurrAct = const_cast<GDIMetaFile&>(rMtf).FirstAction();
-         pCurrAct;
+    for( pCurrAct = const_cast<GDIMetaFile&>(rMtf).FirstAction(); 
+         pCurrAct; 
          pCurrAct = const_cast<GDIMetaFile&>(rMtf).NextAction() )
     {
         switch( pCurrAct->GetType() )
@@ -118,12 +118,12 @@ namespace {
 
 typedef ::cppu::WeakComponentImplHelper1< graphic::XGraphicRenderer > DummyRenderer_Base;
 
-class DummyRenderer :
+class DummyRenderer : 
         public DummyRenderer_Base,
         public cppu::BaseMutex
 {
 public:
-    DummyRenderer() :
+    DummyRenderer() : 
         DummyRenderer_Base( m_aMutex ),
         mxGraphic()
         {
@@ -147,18 +147,18 @@ public:
     GDIMetaFile getMtf( bool bForeignSource ) const
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-
+                    
         Graphic aGraphic( mxGraphic );
 
         if( aGraphic.GetType() == GRAPHIC_BITMAP ||
-            (bForeignSource &&
+            (bForeignSource && 
              hasUnsupportedActions(aGraphic.GetGDIMetaFile()) ) )
         {
             // wrap bitmap into GDIMetafile
-            GDIMetaFile     aMtf;
-            ::Point         aEmptyPoint;
+            GDIMetaFile 	aMtf;
+            ::Point			aEmptyPoint;
 
-            ::BitmapEx      aBmpEx( aGraphic.GetBitmapEx() );
+            ::BitmapEx		aBmpEx( aGraphic.GetBitmapEx() );
 
             aMtf.AddAction( new MetaBmpExAction( aEmptyPoint,
                                                  aBmpEx ) );
@@ -174,14 +174,14 @@ public:
     }
 
 private:
-    uno::Reference< graphic::XGraphic > mxGraphic;
+    uno::Reference< graphic::XGraphic >	mxGraphic;
 };
 
 } // anon namespace
-
+    
 // Quick'n'dirty way: tunnel Graphic (only works for
 // in-process slideshow, of course)
-bool getMetaFile( const uno::Reference< lang::XComponent >&       xSource,
+bool getMetaFile( const uno::Reference< lang::XComponent >& 	  xSource, 
                   const uno::Reference< drawing::XDrawPage >&     xContainingPage,
                   GDIMetaFile&                                    rMtf,
                   int                                             mtfLoadFlags,
@@ -196,11 +196,11 @@ bool getMetaFile( const uno::Reference< lang::XComponent >&       xSource,
     // TODO(P3): Move creation of DummyRenderer out of the
     // loop! Either by making it static, or transforming
     // the whole thing here into a class.
-    DummyRenderer*                              pRenderer( new DummyRenderer() );
+    DummyRenderer*						 		pRenderer( new DummyRenderer() );
     uno::Reference< graphic::XGraphicRenderer > xRenderer( pRenderer );
 
     // -> stuff that into UnoGraphicExporter.
-    uno::Reference<lang::XMultiComponentFactory> xFactory(
+    uno::Reference<lang::XMultiComponentFactory> xFactory( 
         rxContext->getServiceManager() );
 
     OSL_ENSURE( xFactory.is(), "### no UNO?!" );
@@ -209,7 +209,7 @@ bool getMetaFile( const uno::Reference< lang::XComponent >&       xSource,
 
     // creating the graphic exporter
     uno::Reference< document::XExporter > xExporter(
-        xFactory->createInstanceWithContext(
+        xFactory->createInstanceWithContext( 
             OUSTR("com.sun.star.drawing.GraphicExportFilter"),
             rxContext),
         uno::UNO_QUERY );
@@ -232,7 +232,7 @@ bool getMetaFile( const uno::Reference< lang::XComponent >&       xSource,
 
     aFilterData[1].Name = OUSTR("ScrollText");
     aFilterData[1].Value <<= ((mtfLoadFlags & MTF_LOAD_SCROLL_TEXT_MTF) != 0);
-
+                    
     aFilterData[2].Name = OUSTR("ExportOnlyBackground");
     aFilterData[2].Value <<= ((mtfLoadFlags & MTF_LOAD_BACKGROUND_ONLY) != 0);
 
@@ -267,7 +267,7 @@ void removeTextActions( GDIMetaFile& rMtf )
     MetaAction* pCurrAct;
 
     int nActionIndex(0);
-    pCurrAct = rMtf.FirstAction();
+    pCurrAct = rMtf.FirstAction(); 
     while( pCurrAct )
     {
         switch( pCurrAct->GetType() )
@@ -304,7 +304,7 @@ sal_Int32 getNextActionOffset( MetaAction * pCurrAct )
     // Special handling for actions that represent
     // more than one indexable action
     // ===========================================
-
+    
     switch (pCurrAct->GetType()) {
     case META_TEXT_ACTION: {
         MetaTextAction * pAct = static_cast<MetaTextAction *>(pCurrAct);
@@ -348,9 +348,9 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
         return false;
 
     // some loop invariants
-    Animation   aAnimation( rGraphic.GetAnimation() );
+    Animation 	aAnimation( rGraphic.GetAnimation() );
     const Point aEmptyPoint;
-    const Size  aAnimSize( aAnimation.GetDisplaySizePixel() );
+    const Size  aAnimSize( aAnimation.GetDisplaySizePixel() );              
 
     // setup VDev, into which all bitmaps are painted (want to
     // normalize animations to n bitmaps of same size. An Animation,
@@ -399,24 +399,24 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
         {
             case DISPOSE_NOT:
             {
-                aVDev.DrawBitmapEx(rAnimBmp.aPosPix,
+                aVDev.DrawBitmapEx(rAnimBmp.aPosPix, 
                                    rAnimBmp.aBmpEx);
                 Bitmap aMask = rAnimBmp.aBmpEx.GetMask();
 
                 if( aMask.IsEmpty() )
                 {
                     const Point aEmpty;
-                    const Rectangle aRect(aEmptyPoint,
+                    const Rectangle aRect(aEmptyPoint, 
                                           aVDevMask.GetOutputSizePixel());
                     const Wallpaper aWallpaper(COL_BLACK);
-                    aVDevMask.DrawWallpaper(aRect,
+                    aVDevMask.DrawWallpaper(aRect, 
                                             aWallpaper);
                 }
                 else
                 {
-                    BitmapEx aTmpMask = BitmapEx(aMask,
+                    BitmapEx aTmpMask = BitmapEx(aMask, 
                                                  aMask);
-                    aVDevMask.DrawBitmapEx(rAnimBmp.aPosPix,
+                    aVDevMask.DrawBitmapEx(rAnimBmp.aPosPix, 
                                            aTmpMask );
                 }
                 break;
@@ -447,16 +447,16 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
 
             case DISPOSE_FULL:
             {
-                aVDev.DrawBitmapEx(rAnimBmp.aPosPix,
+                aVDev.DrawBitmapEx(rAnimBmp.aPosPix, 
                                    rAnimBmp.aBmpEx);
                 break;
             }
 
             case DISPOSE_PREVIOUS :
             {
-                aVDev.DrawBitmapEx(rAnimBmp.aPosPix,
+                aVDev.DrawBitmapEx(rAnimBmp.aPosPix, 
                                    rAnimBmp.aBmpEx);
-                aVDevMask.DrawBitmap(rAnimBmp.aPosPix,
+                aVDevMask.DrawBitmap(rAnimBmp.aPosPix, 
                                      rAnimBmp.aBmpEx.GetMask());
                 break;
             }
@@ -465,7 +465,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
         // extract current aVDev content into a new animation
         // frame
         GDIMetaFileSharedPtr pMtf( new GDIMetaFile() );
-        pMtf->AddAction(
+        pMtf->AddAction( 
             new MetaBmpExAction( aEmptyPoint,
                                  BitmapEx(
                                      aVDev.GetBitmap(
@@ -491,12 +491,12 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
             // time to show first page (whole day)
             nWaitTime100thSeconds = 100 * 60 * 60 * 24;
         }
-
+        
         // There are animated GIFs with no WaitTime set. Take 1 sec, then.
         if( nWaitTime100thSeconds == 0 )
             nWaitTime100thSeconds = 100;
 
-        o_rFrames.push_back( MtfAnimationFrame( pMtf,
+        o_rFrames.push_back( MtfAnimationFrame( pMtf, 
                                                 nWaitTime100thSeconds / 100.0 ) );
     }
 
@@ -506,7 +506,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
 bool getRectanglesFromScrollMtf( ::basegfx::B2DRectangle&       o_rScrollRect,
                                  ::basegfx::B2DRectangle&       o_rPaintRect,
                                  const GDIMetaFileSharedPtr&    rMtf )
-{
+{ 
     // extract bounds: scroll rect, paint rect
     bool bScrollRectSet(false);
     bool bPaintRectSet(false);

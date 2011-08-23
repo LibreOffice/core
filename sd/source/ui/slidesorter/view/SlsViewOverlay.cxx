@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -135,7 +135,7 @@ SlideSorter& ViewOverlay::GetSlideSorter (void) const
 OverlayManager* ViewOverlay::GetOverlayManager (void) const
 {
     OverlayManager* pOverlayManager = NULL;
-
+    
     SlideSorterView& rView (mrSlideSorter.GetView());
     SdrPageView* pPageView = rView.GetSdrPageView();
     if (pPageView != NULL && pPageView->PageWindowCount()>0)
@@ -222,7 +222,7 @@ void SubstitutionOverlay::Create (
     EnsureRegistration();
 
     maPosition = rPosition;
-
+    
     maShapes.clear();
     while (rSelection.HasMoreElements())
     {
@@ -259,7 +259,7 @@ void SubstitutionOverlay::Move (const Point& rOffset)
 
     maShapes.transform(aTranslation);
     maPosition += rOffset;
-
+    
     objectChange();
 }
 
@@ -432,10 +432,10 @@ void InsertionIndicatorOverlay::SetPosition (const Point& rPoint)
 {
     static const bool bAllowHorizontalInsertMarker = true;
     Layouter& rLayouter (mrViewOverlay.GetSlideSorter().GetView().GetLayouter());
-    USHORT nPageCount
+    USHORT nPageCount 
         = (USHORT)mrViewOverlay.GetSlideSorter().GetModel().GetPageCount();
 
-    sal_Int32 nInsertionIndex = rLayouter.GetInsertionIndex (rPoint,
+    sal_Int32 nInsertionIndex = rLayouter.GetInsertionIndex (rPoint, 
         bAllowHorizontalInsertMarker);
     if (nInsertionIndex >= nPageCount)
         nInsertionIndex = nPageCount-1;
@@ -452,13 +452,13 @@ void InsertionIndicatorOverlay::SetPosition (const Point& rPoint)
         //    column.
         // 2. The vertical (standard) insert marker may be painted left to
         //    the insert page or right of the previous one.  When both pages
-        //    are in the same row this makes no difference.  Otherwise the
+        //    are in the same row this makes no difference.  Otherwise the 
         //    posiotions are at the left and right ends of two rows.
 
         Point aPageCenter (rLayouter.GetPageObjectBox (
             nInsertionIndex).Center());
 
-        if (bAllowHorizontalInsertMarker
+        if (bAllowHorizontalInsertMarker 
             && rLayouter.GetColumnCount() == 1)
         {
             bVertical = false;
@@ -481,7 +481,7 @@ void InsertionIndicatorOverlay::SetPosition (const Point& rPoint)
     Rectangle aBox;
     if (mnInsertionIndex >= 0)
         aBox = rLayouter.GetInsertionMarkerBox (
-            nDrawIndex,
+            nDrawIndex, 
             bVertical,
             bLeftOrTop);
     SetPositionAndSize (aBox);
@@ -556,7 +556,7 @@ void MouseOverIndicatorOverlay::SetSlideUnderMouse (
             {
             }
         }
-
+        
          if (pDescriptor != rpDescriptor)
         {
             // Switch to the new (possibly empty) descriptor.

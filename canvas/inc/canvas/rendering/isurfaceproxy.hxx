@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ namespace canvas
     {
         virtual ~ISurfaceProxy() {}
 
-        /** Notify the proxy that the color buffer has changed
+        /** Notify the proxy that the color buffer has changed   
          */
         virtual void setColorBufferDirty() = 0;
 
@@ -58,7 +58,7 @@ namespace canvas
 
             @param rPos
             Output position
-
+            
             @param rTransform
             Output transformation (does not affect output position)
          */
@@ -73,12 +73,12 @@ namespace canvas
 
             @param rPos
             Output position
-
+            
             @param rArea
             Subset of the surface to render. Coordinate system are
             surface area pixel, given area will be clipped to the
             surface bounds.
-
+            
             @param rTransform
             Output transformation (does not affect output position)
          */
@@ -86,7 +86,7 @@ namespace canvas
                            const ::basegfx::B2DPoint&     rPos,
                            const ::basegfx::B2DRange&     rArea,
                            const ::basegfx::B2DHomMatrix& rTransform ) = 0;
-
+        
         /** Render the surface content to screen.
 
             @param fAlpha
@@ -94,11 +94,11 @@ namespace canvas
 
             @param rPos
             Output position
-
+            
             @param rClipPoly
             Clip polygon for the surface. The clip polygon is also
             subject to the output transformation.
-
+            
             @param rTransform
             Output transformation (does not affect output position)
          */

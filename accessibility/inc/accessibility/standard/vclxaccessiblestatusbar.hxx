@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,30 +35,30 @@
 
 class StatusBar;
 
-//  ----------------------------------------------------
-//  class VCLXAccessibleStatusBar
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class VCLXAccessibleStatusBar
+//	----------------------------------------------------
 
-class VCLXAccessibleStatusBar : public VCLXAccessibleComponent
+class VCLXAccessibleStatusBar :	public VCLXAccessibleComponent
 {
 private:
-    typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > > AccessibleChildren;
+    typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >	> AccessibleChildren;
 
-    AccessibleChildren      m_aAccessibleChildren;
-    StatusBar*              m_pStatusBar;
+    AccessibleChildren		m_aAccessibleChildren;
+    StatusBar*				m_pStatusBar;
 
 protected:
-    void                    UpdateShowing( sal_Int32 i, sal_Bool bShowing );
-    void                    UpdateItemName( sal_Int32 i );
-    void                    UpdateItemText( sal_Int32 i );
+    void					UpdateShowing( sal_Int32 i, sal_Bool bShowing );
+    void					UpdateItemName( sal_Int32 i );
+    void					UpdateItemText( sal_Int32 i );
 
-    void                    InsertChild( sal_Int32 i );
-    void                    RemoveChild( sal_Int32 i );
+    void					InsertChild( sal_Int32 i );
+    void					RemoveChild( sal_Int32 i );
 
-    virtual void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual void			ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
 
     // XComponent
-    virtual void SAL_CALL   disposing();
+    virtual void SAL_CALL	disposing();
 
 public:
     VCLXAccessibleStatusBar( VCLXWindow* pVCLXWindow );

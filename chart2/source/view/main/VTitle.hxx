@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ private:
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShapes >            m_xTarget;
     ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory>   m_xShapeFactory;
+                    ::com::sun::star::lang::XMultiServiceFactory>	m_xShapeFactory;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XTitle >                  m_xTitle;
     ::com::sun::star::uno::Reference<

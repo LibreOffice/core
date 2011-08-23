@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ using namespace com::sun::star::container;
 const Type CPPUTYPE_SEQINT8  = getCppuType((Sequence<sal_Int8>*)0);
 const Type CPPUTYPE_OUSTRING = getCppuType((OUString*)0);
 
-namespace // private
+namespace // private 
 {
     bool isValidFlavor( const DataFlavor& aFlavor )
     {
@@ -60,12 +60,12 @@ namespace // private
 
 
 OSXTransferable::OSXTransferable(const Reference<XMimeContentTypeFactory> rXMimeCntFactory,
-                                 DataFlavorMapperPtr_t pDataFlavorMapper,
+                                 DataFlavorMapperPtr_t pDataFlavorMapper,		  
                                  NSPasteboard* pasteboard) :
   mrXMimeCntFactory(rXMimeCntFactory),
   mDataFlavorMapper(pDataFlavorMapper),
   mPasteboard(pasteboard)
-{
+{		
   [mPasteboard retain];
 
   initClipboardItemList();
@@ -78,7 +78,7 @@ OSXTransferable::~OSXTransferable()
 }
 
 
-Any SAL_CALL OSXTransferable::getTransferData( const DataFlavor& aFlavor )
+Any SAL_CALL OSXTransferable::getTransferData( const DataFlavor& aFlavor ) 
   throw( UnsupportedFlavorException, IOException, RuntimeException )
 {
   if (!isValidFlavor(aFlavor) || !isDataFlavorSupported(aFlavor))
@@ -87,7 +87,7 @@ Any SAL_CALL OSXTransferable::getTransferData( const DataFlavor& aFlavor )
                                        static_cast<XTransferable*>(this));
     }
 
-  NSString* sysFormat =
+  NSString* sysFormat = 
       (aFlavor.MimeType.compareToAscii( "image/bmp", 9 ) == 0)
       ? mDataFlavorMapper->openOfficeImageToSystemFlavor( mPasteboard )
       : mDataFlavorMapper->openOfficeToSystemFlavor(aFlavor);
@@ -120,14 +120,14 @@ bool OSXTransferable::isUnicodeText(const DataFlavor& flavor)
 }
 
 
-Sequence< DataFlavor > SAL_CALL OSXTransferable::getTransferDataFlavors(  )
+Sequence< DataFlavor > SAL_CALL OSXTransferable::getTransferDataFlavors(  ) 
     throw( RuntimeException )
-{
+{	
   return mFlavorList;
 }
 
 
-sal_Bool SAL_CALL OSXTransferable::isDataFlavorSupported(const DataFlavor& aFlavor)
+sal_Bool SAL_CALL OSXTransferable::isDataFlavorSupported(const DataFlavor& aFlavor) 
     throw( RuntimeException )
 {
     for (sal_Int32 i = 0; i < mFlavorList.getLength(); i++)
@@ -141,13 +141,13 @@ sal_Bool SAL_CALL OSXTransferable::isDataFlavorSupported(const DataFlavor& aFlav
 void OSXTransferable::initClipboardItemList()
 {
   NSArray* pboardFormats = [mPasteboard types];
-
+  
   if (pboardFormats == NULL)
     {
-      throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("AquaClipboard: Cannot get clipboard data")),
+      throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("AquaClipboard: Cannot get clipboard data")), 
                              static_cast<XTransferable*>(this));
     }
-
+  
   mFlavorList = mDataFlavorMapper->typesArrayToFlavorSequence(pboardFormats);
 }
 
@@ -179,7 +179,7 @@ bool OSXTransferable::compareDataFlavors(const DataFlavor& lhs, const DataFlavor
 }
 
 
-bool OSXTransferable::cmpAllContentTypeParameter(const Reference<XMimeContentType> xLhs,
+bool OSXTransferable::cmpAllContentTypeParameter(const Reference<XMimeContentType> xLhs, 
                                                const Reference<XMimeContentType> xRhs) const
 {
   Sequence<OUString> xLhsFlavors = xLhs->getParameters();
@@ -190,12 +190,12 @@ bool OSXTransferable::cmpAllContentTypeParameter(const Reference<XMimeContentTyp
     return false;
 
   try
-    {
+    {	  
       OUString pLhs;
       OUString pRhs;
 
       for (sal_Int32 i = 0; i < xLhsFlavors.getLength(); i++)
-        {
+        {	
           pLhs = xLhs->getParameterValue(xLhsFlavors[i]);
           pRhs = xRhs->getParameterValue(xLhsFlavors[i]);
 

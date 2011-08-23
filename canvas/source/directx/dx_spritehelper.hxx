@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,9 +76,9 @@ namespace dxcanvas
             @param bShowSpriteBounds
             When true, little debug bound rects for sprites are shown
          */
-        void init( const ::com::sun::star::geometry::RealSize2D&    rSpriteSize,
-                   const SpriteCanvasRef&                           rSpriteCanvas,
-                   const IDXRenderModuleSharedPtr&                  rRenderModule,
+        void init( const ::com::sun::star::geometry::RealSize2D&	rSpriteSize,
+                   const SpriteCanvasRef&							rSpriteCanvas,
+                   const IDXRenderModuleSharedPtr&					rRenderModule,
                    const DXSurfaceBitmapSharedPtr                   rBitmap,
                    bool                                             bShowSpriteBounds );
 
@@ -95,13 +95,13 @@ namespace dxcanvas
         void redraw( bool& io_bSurfaceDirty ) const;
 
     private:
-        virtual ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D(
+        virtual ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D( 
             ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPoly ) const;
 
         /// Returns true, if the sprite _really_ needs redraw
         bool needRedraw() const;
 
-        SpriteCanvasRef             mpSpriteCanvas;
+        SpriteCanvasRef				mpSpriteCanvas;
 
         DXSurfaceBitmapSharedPtr    mpBitmap;
         mutable bool                mbTextureDirty;  // when true, texture needs update

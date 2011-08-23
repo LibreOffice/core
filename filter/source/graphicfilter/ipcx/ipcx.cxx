@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,40 +39,40 @@ class PCXReader {
 
 private:
 
-    SvStream*           pPCX;               // Die einzulesende PCX-Datei
+    SvStream*			pPCX;				// Die einzulesende PCX-Datei
 
-    Bitmap              aBmp;
-    BitmapWriteAccess*  pAcc;
-    BYTE                nVersion;           // PCX-Version
-    BYTE                nEncoding;          // Art der Komprimierung
-    ULONG               nBitsPerPlanePix;   // Bits Pro Ebene pro Pixel
-    ULONG               nPlanes;            // Anzahl Ebenen
-    ULONG               nBytesPerPlaneLin;  // Bytes in einer Ebenen pro Zeile
-    USHORT              nPaletteInfo;
+    Bitmap				aBmp;
+    BitmapWriteAccess*	pAcc;
+    BYTE				nVersion;			// PCX-Version
+    BYTE				nEncoding;			// Art der Komprimierung
+    ULONG				nBitsPerPlanePix;	// Bits Pro Ebene pro Pixel
+    ULONG				nPlanes;			// Anzahl Ebenen
+    ULONG				nBytesPerPlaneLin;	// Bytes in einer Ebenen pro Zeile
+    USHORT				nPaletteInfo;
 
-    ULONG               nWidth, nHeight;    // Bildausmass in Pixeln
-    USHORT              nResX, nResY;       // Aufloesung in Pixel pro Inch oder 0,0
-    USHORT              nDestBitsPerPixel;  // Bits pro Pixel der Zielbitmap 1,4,8 oder 24
-    BYTE*               pPalette;           //
-    BOOL                nStatus;            // status nun nicht mehr am stream abfragen ( SJ )
+    ULONG				nWidth, nHeight;	// Bildausmass in Pixeln
+    USHORT				nResX, nResY;		// Aufloesung in Pixel pro Inch oder 0,0
+    USHORT				nDestBitsPerPixel;	// Bits pro Pixel der Zielbitmap 1,4,8 oder 24
+    BYTE*				pPalette;			//
+    BOOL				nStatus;			// status nun nicht mehr am stream abfragen ( SJ )
 
 
-    BOOL                Callback( USHORT nPercent );
-    void                ImplReadBody();
-    void                ImplReadPalette( ULONG nCol );
-    void                ImplReadHeader();
+    BOOL				Callback( USHORT nPercent );
+    void				ImplReadBody();
+    void				ImplReadPalette( ULONG nCol );
+    void				ImplReadHeader();
 
 public:
                         PCXReader();
                         ~PCXReader();
-    BOOL                ReadPCX( SvStream & rPCX, Graphic & rGraphic );
+    BOOL				ReadPCX( SvStream & rPCX, Graphic & rGraphic );
                         // Liesst aus dem Stream eine PCX-Datei und fuellt das GDIMetaFile
 };
 
 //=================== Methoden von PCXReader ==============================
 
 PCXReader::PCXReader() :
-    pAcc        ( NULL )
+    pAcc		( NULL )
 {
     pPalette = new BYTE[ 768 ];
 }
@@ -100,7 +100,7 @@ BOOL PCXReader::ReadPCX( SvStream & rPCX, Graphic & rGraphic )
     if ( rPCX.GetError() )
         return FALSE;
 
-    ULONG*  pDummy = new ULONG; delete pDummy; // damit unter OS/2
+    ULONG*	pDummy = new ULONG; delete pDummy; // damit unter OS/2
                                                // das richtige (Tools-)new
                                                // verwendet wird, da es sonst
                                                // in dieser DLL nur Vector-news
@@ -155,7 +155,7 @@ BOOL PCXReader::ReadPCX( SvStream & rPCX, Graphic & rGraphic )
             rBitmap.SetPrefMapMode(aMapMode);
             rBitmap.SetPrefSize(Size(nWidth,nHeight));
         }
-    */  if ( nStatus && pAcc )
+    */	if ( nStatus && pAcc )
         {
             aBmp.ReleaseAccess( pAcc ), pAcc = NULL;
             rGraphic = aBmp;
@@ -225,10 +225,10 @@ void PCXReader::ImplReadHeader()
 
 void PCXReader::ImplReadBody()
 {
-    BYTE    *pPlane[ 4 ], * pDest, * pSource1, * pSource2, * pSource3, *pSource4;
-    ULONG   i, nx, ny, np, nCount, nUsedLineSize, nLineSize, nPercent;
+    BYTE	*pPlane[ 4 ], * pDest, * pSource1, * pSource2, * pSource3, *pSource4;
+    ULONG	i, nx, ny, np, nCount, nUsedLineSize, nLineSize, nPercent;
     ULONG   nLastPercent = 0;
-    BYTE    nDat = 0, nCol = 0;
+    BYTE	nDat = 0, nCol = 0;
 
     nUsedLineSize = (ULONG)( ( ( nWidth * (ULONG)nDestBitsPerPixel ) + 7 ) >> 3 );
     nLineSize = ( nUsedLineSize + 3 ) & 0xfffc;
@@ -408,8 +408,8 @@ void PCXReader::ImplReadBody()
 
 void PCXReader::ImplReadPalette( ULONG nCol )
 {
-    BYTE    r, g, b;
-    BYTE*   pPtr = pPalette;
+    BYTE	r, g, b;
+    BYTE*	pPtr = pPalette;
     for ( ULONG i = 0; i < nCol; i++ )
     {
         *pPCX >> r >> g >> b;

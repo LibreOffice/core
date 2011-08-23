@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,9 +33,9 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//  ----------------------------------------------------
-//  class BreakIterator_CTL
-//  ----------------------------------------------------
+//	----------------------------------------------------
+//	class BreakIterator_CTL
+//	----------------------------------------------------
 class BreakIterator_CTL : public BreakIterator_Unicode
 {
 public:
@@ -47,20 +47,20 @@ public:
     virtual sal_Int32 SAL_CALL nextCharacters(const rtl::OUString& text, sal_Int32 start,
         const lang::Locale& rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 count,
         sal_Int32& nDone) throw(com::sun::star::uno::RuntimeException);
-    virtual LineBreakResults SAL_CALL getLineBreak( const rtl::OUString& Text, sal_Int32 nStartPos,
-        const com::sun::star::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
-        const LineBreakHyphenationOptions& hOptions, const LineBreakUserOptions& bOptions )
+    virtual LineBreakResults SAL_CALL getLineBreak( const rtl::OUString& Text, sal_Int32 nStartPos, 
+        const com::sun::star::lang::Locale& nLocale, sal_Int32 nMinBreakPos, 
+        const LineBreakHyphenationOptions& hOptions, const LineBreakUserOptions& bOptions ) 
         throw(com::sun::star::uno::RuntimeException);
 protected:
     rtl::OUString cachedText; // for cell index
     sal_Int32* nextCellIndex;
     sal_Int32* previousCellIndex;
     sal_Int32 cellIndexSize;
-
+    
     virtual void SAL_CALL makeIndex(const rtl::OUString& text, sal_Int32 pos) throw(com::sun::star::uno::RuntimeException);
 };
 
-} } } }
+} } } } 
 
 #endif
 

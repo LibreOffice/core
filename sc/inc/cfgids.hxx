@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,9 +33,9 @@
 #define SCCFG_APP               (SFX_ITEMTYPE_SC_BEGIN + 2)
 #define SCCFG_SPELLCHECK        (SFX_ITEMTYPE_SC_BEGIN + 3)
 #define SCCFG_PRINT             (SFX_ITEMTYPE_SC_BEGIN + 4)
-#define SCCFG_STATUSBAR         (SFX_ITEMTYPE_SC_BEGIN + 5)
-#define SCCFG_INPUT             (SFX_ITEMTYPE_SC_BEGIN + 8)
-#define SCCFG_NAVIPI            (SFX_ITEMTYPE_SC_BEGIN + 9)
+#define SCCFG_STATUSBAR			(SFX_ITEMTYPE_SC_BEGIN + 5)
+#define SCCFG_INPUT				(SFX_ITEMTYPE_SC_BEGIN + 8)
+#define SCCFG_NAVIPI			(SFX_ITEMTYPE_SC_BEGIN + 9)
 
 
 #endif

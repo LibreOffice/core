@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,18 +69,18 @@ class TokBuiltInType : public TokKeyword
     typedef lux::Enum<E_TokenId> EV_TokenId;
 
                         TokBuiltInType(
-                            EV_TokenId          i_eTag )
-                                                :   eTag(i_eTag) {}
+                            EV_TokenId			i_eTag )
+                                                :	eTag(i_eTag) {}
 
-    virtual void        Trigger(
-                            TokenInterpreter &  io_rInterpreter ) const;
+    virtual void       	Trigger(
+                            TokenInterpreter &	io_rInterpreter ) const;
     virtual const char *
                         Text() const;
-    E_TokenId           Id() const              { return eTag; }
+    E_TokenId			Id() const				{ return eTag; }
 
   private:
     // DATA
-    EV_TokenId          eTag;
+    EV_TokenId   		eTag;
 };
 
 
@@ -96,17 +96,17 @@ class TokTypeModifier : public TokKeyword
     typedef lux::Enum<E_TokenId> EV_TokenId;
 
                         TokTypeModifier(
-                            EV_TokenId          i_eTag )
-                                                :   eTag(i_eTag) {}
-    virtual void        Trigger(
-                            TokenInterpreter &  io_rInterpreter ) const;
+                            EV_TokenId			i_eTag )
+                                                :	eTag(i_eTag) {}
+    virtual void		Trigger(
+                            TokenInterpreter &	io_rInterpreter ) const;
     virtual const char *
                         Text() const;
-    E_TokenId           Id() const              { return eTag; }
+    E_TokenId			Id() const				{ return eTag; }
 
   private:
     // DATA
-    EV_TokenId          eTag;
+    EV_TokenId   		eTag;
 };
 
 class TokMetaType : public TokKeyword
@@ -132,19 +132,19 @@ class TokMetaType : public TokKeyword
     typedef lux::Enum<E_TokenId> EV_TokenId;
 
                         TokMetaType(
-                            EV_TokenId          i_eTag )
-                                                :   eTag(i_eTag) {}
+                            EV_TokenId			i_eTag )
+                                                :	eTag(i_eTag) {}
 
-    virtual void        Trigger(
-                            TokenInterpreter &  io_rInterpreter ) const;
+    virtual void		Trigger(
+                            TokenInterpreter &	io_rInterpreter ) const;
     virtual const char *
                         Text() const;
-    E_TokenId           Id() const              { return eTag; }
+    E_TokenId			Id() const				{ return eTag; }
 
 
   private:
     // DATA
-    EV_TokenId          eTag;
+    EV_TokenId   		eTag;
 };
 
 class TokStereotype : public TokKeyword
@@ -172,19 +172,19 @@ class TokStereotype : public TokKeyword
     typedef lux::Enum<E_TokenId> EV_TokenId;
 
                         TokStereotype(
-                            EV_TokenId          i_eTag )
-                                                :   eTag(i_eTag) {}
+                            EV_TokenId			i_eTag )
+                                                :	eTag(i_eTag) {}
     // OPERATIONS
-    virtual void        Trigger(
-                            TokenInterpreter &  io_rInterpreter ) const;
+    virtual void		Trigger(
+                            TokenInterpreter &	io_rInterpreter ) const;
     // INQUIRY
     virtual const char *
                         Text() const;
-    E_TokenId           Id() const              { return eTag; }
+    E_TokenId			Id() const				{ return eTag; }
 
   private:
     // DATA
-    EV_TokenId          eTag;
+    EV_TokenId   		eTag;
 };
 
 class TokParameterHandling : public TokKeyword
@@ -201,26 +201,26 @@ class TokParameterHandling : public TokKeyword
     typedef lux::Enum<E_TokenId> EV_TokenId;
 
                         TokParameterHandling(
-                            EV_TokenId          i_eTag )
-                                                :   eTag(i_eTag) {}
+                            EV_TokenId			i_eTag )
+                                                :	eTag(i_eTag) {}
     // OPERATIONS
-    virtual void        Trigger(
-                            TokenInterpreter &  io_rInterpreter ) const;
+    virtual void		Trigger(
+                            TokenInterpreter &	io_rInterpreter ) const;
     // INQUIRY
     virtual const char *
                         Text() const;
-    E_TokenId           Id() const              { return eTag; }
+    E_TokenId			Id() const				{ return eTag; }
 
   private:
     // DATA
-    EV_TokenId          eTag;
+    EV_TokenId   		eTag;
 };
 
 class TokRaises : public TokKeyword
 {
   public:
-    virtual void        Trigger(
-                            TokenInterpreter &  io_rInterpreter ) const;
+    virtual void		Trigger(
+                            TokenInterpreter &	io_rInterpreter ) const;
     virtual const char *
                         Text() const;
 };
@@ -228,8 +228,8 @@ class TokRaises : public TokKeyword
 class TokNeeds : public TokKeyword
 {
   public:
-    virtual void        Trigger(
-                            TokenInterpreter &  io_rInterpreter ) const;
+    virtual void		Trigger(
+                            TokenInterpreter &	io_rInterpreter ) const;
     virtual const char *
                         Text() const;
 };
@@ -237,8 +237,8 @@ class TokNeeds : public TokKeyword
 class TokObserves : public TokKeyword
 {
   public:
-    virtual void        Trigger(
-                            TokenInterpreter &  io_rInterpreter ) const;
+    virtual void		Trigger(
+                            TokenInterpreter &	io_rInterpreter ) const;
     virtual const char *
                         Text() const;
 };

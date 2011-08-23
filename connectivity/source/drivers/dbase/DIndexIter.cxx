@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,7 +102,7 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
     // wird immer die aktuelle Seite und die Knotenposition vermerkt
     // auf die die Bedingung <= zutrifft
     // dieses findet beim Insert besondere Beachtung
-    //  ONDXIndex* m_pIndex = GetNDXIndex();
+    //	ONDXIndex* m_pIndex = GetNDXIndex();
     OOp_COMPARE aTempOp(SQLFilterOperator::GREATER);
     USHORT i = 0;
 
@@ -286,7 +286,7 @@ ONDXKey* OIndexIterator::GetNextKey()
             {
                 USHORT nPos = pParentPage->Search(pPage);
                 if (nPos != pParentPage->Count() - 1)
-                {   // Seite gefunden
+                {	// Seite gefunden
                     pPage = (*pParentPage)[nPos+1].GetChild(m_pIndex,pParentPage);
                     break;
                 }

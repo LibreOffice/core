@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace dbaui
             ,protected SvxTextEncodingTable
     {
     protected:
-        ::rtl::OUString m_aSystemDisplayName;
+        ::rtl::OUString	m_aSystemDisplayName;
 
     public:
         class ExtendedCharsetIterator;
@@ -65,14 +65,14 @@ namespace dbaui
         const_iterator findDisplayName(const ::rtl::OUString& _rDisplayName) const;
 
         /// get access to the first element of the charset collection
-        const_iterator  begin() const;
+        const_iterator	begin() const;
         /// get access to the (last + 1st) element of the charset collection
-        const_iterator  end() const;
+        const_iterator	end() const;
         // size of the map
-        sal_Int32   size() const { return OCharsetDisplay_Base::size(); }
+        sal_Int32	size() const { return OCharsetDisplay_Base::size(); }
 
     protected:
-        virtual sal_Bool approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const;
+        virtual	sal_Bool approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const;
 
     private:
         using OCharsetDisplay_Base::find;
@@ -86,14 +86,14 @@ namespace dbaui
     {
         friend class OCharsetDisplay::ExtendedCharsetIterator;
 
-        ::rtl::OUString                         m_sDisplayName;
+        ::rtl::OUString							m_sDisplayName;
 
     public:
         CharsetDisplayDerefHelper(const CharsetDisplayDerefHelper& _rSource);
 
-        rtl_TextEncoding    getEncoding() const         { return CharsetDisplayDerefHelper_Base::getEncoding(); }
-        ::rtl::OUString     getIanaName() const         { return CharsetDisplayDerefHelper_Base::getIanaName(); }
-        ::rtl::OUString     getDisplayName() const      { return m_sDisplayName; }
+        rtl_TextEncoding	getEncoding() const			{ return CharsetDisplayDerefHelper_Base::getEncoding(); }
+        ::rtl::OUString		getIanaName() const			{ return CharsetDisplayDerefHelper_Base::getIanaName(); }
+        ::rtl::OUString		getDisplayName() const		{ return m_sDisplayName; }
 
     protected:
         CharsetDisplayDerefHelper(const ::dbtools::CharsetIteratorDerefHelper& _rBase, const ::rtl::OUString& _rDisplayName);
@@ -109,12 +109,12 @@ namespace dbaui
         friend bool operator==(const ExtendedCharsetIterator& lhs, const ExtendedCharsetIterator& rhs);
         friend bool operator!=(const ExtendedCharsetIterator& lhs, const ExtendedCharsetIterator& rhs) { return !(lhs == rhs); }
 
-        typedef ::dbtools::OCharsetMap      container;
-        typedef container::CharsetIterator  base_iterator;
+        typedef ::dbtools::OCharsetMap		container;
+        typedef container::CharsetIterator	base_iterator;
 
     protected:
-        const OCharsetDisplay*      m_pContainer;
-        base_iterator               m_aPosition;
+        const OCharsetDisplay*		m_pContainer;
+        base_iterator				m_aPosition;
 
     public:
         ExtendedCharsetIterator(const ExtendedCharsetIterator& _rSource);
@@ -122,21 +122,21 @@ namespace dbaui
         CharsetDisplayDerefHelper operator*() const;
 
         /// prefix increment
-        const ExtendedCharsetIterator&  operator++();
+        const ExtendedCharsetIterator&	operator++();
         /// postfix increment
-        const ExtendedCharsetIterator   operator++(int) { ExtendedCharsetIterator hold(*this); ++*this; return hold; }
+        const ExtendedCharsetIterator	operator++(int) { ExtendedCharsetIterator hold(*this); ++*this; return hold; }
 
         /// prefix decrement
-        const ExtendedCharsetIterator&  operator--();
+        const ExtendedCharsetIterator&	operator--();
         /// postfix decrement
-        const ExtendedCharsetIterator   operator--(int) { ExtendedCharsetIterator hold(*this); --*this; return hold; }
+        const ExtendedCharsetIterator	operator--(int) { ExtendedCharsetIterator hold(*this); --*this; return hold; }
 
     protected:
         ExtendedCharsetIterator( const OCharsetDisplay* _pContainer, const base_iterator& _rPosition );
     };
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_CHARSETS_HXX_

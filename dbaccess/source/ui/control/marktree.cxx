@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,13 +39,13 @@ namespace dbaui
     using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 //.........................................................................
-#define SPACEBETWEENENTRIES     4
+#define SPACEBETWEENENTRIES		4
 //========================================================================
 //= OMarkableTreeListBox
 //========================================================================
 DBG_NAME(OMarkableTreeListBox)
 //------------------------------------------------------------------------
-OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, WinBits nWinStyle )
+OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, WinBits nWinStyle ) 
     : DBTreeListBox(pParent,_rxORB,nWinStyle)
 {
     DBG_CTOR(OMarkableTreeListBox,NULL);
@@ -53,7 +53,7 @@ OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const Reference< XM
     InitButtonData();
 }
 //------------------------------------------------------------------------
-OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, const ResId& rResId)
+OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, const ResId& rResId) 
     : DBTreeListBox(pParent,_rxORB,rResId)
 {
     DBG_CTOR(OMarkableTreeListBox,NULL);
@@ -205,7 +205,7 @@ void OMarkableTreeListBox::CheckButtonHdl()
 void OMarkableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
 {
     SvButtonState eState = GetCheckButtonState( _pEntry);
-    if (GetModel()->HasChilds(_pEntry)) // Falls Kinder, dann diese auch checken
+    if (GetModel()->HasChilds(_pEntry))	// Falls Kinder, dann diese auch checken
     {
         SvLBoxEntry* pChildEntry = GetModel()->Next(_pEntry);
         SvLBoxEntry* pSiblingEntry = GetModel()->NextSibling(_pEntry);
@@ -220,7 +220,7 @@ void OMarkableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
     while(pEntry)
     {
         SetCheckButtonState(pEntry,eState);
-        if(GetModel()->HasChilds(pEntry))   // Falls Kinder, dann diese auch checken
+        if(GetModel()->HasChilds(pEntry))	// Falls Kinder, dann diese auch checken
         {
             SvLBoxEntry* pChildEntry = GetModel()->Next(pEntry);
             SvLBoxEntry* pSiblingEntry = GetModel()->NextSibling(pEntry);
@@ -237,7 +237,7 @@ void OMarkableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
 
 //------------------------------------------------------------------------
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

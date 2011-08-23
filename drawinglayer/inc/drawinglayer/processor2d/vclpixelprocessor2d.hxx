@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ namespace drawinglayer
             /*  The Pixel renderer resets the original MapMode from the OutputDevice.
                 For some situations it is necessary to get it again, so it is rescued here
              */
-            MapMode                             maOriginalMapMode;
+            MapMode								maOriginalMapMode;
 
         protected:
             /*  the local processor for BasePrinitive2D-Implementation based primitives,
@@ -61,7 +61,7 @@ namespace drawinglayer
         public:
             /// constructor/destructor
             VclPixelProcessor2D(
-                const geometry::ViewInformation2D& rViewInformation,
+                const geometry::ViewInformation2D& rViewInformation, 
                 OutputDevice& rOutDev);
             virtual ~VclPixelProcessor2D();
 

@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 // __________ Imports __________
@@ -72,14 +72,14 @@ import com.sun.star.lang.IndexOutOfBoundsException;
 
 // __________ Implementation __________
 
-/** Helper for creating a calc document adding cell values and charts
+/** Helper for creating a calc document adding cell values and charts 
     @author Bj&ouml;rn Milcke
  */
 public class Helper
 {
     public Helper( String[] args )
     {
-        // connect to a running office and get the ServiceManager
+        // connect to a running office and get the ServiceManager           
         try {
             // get the remote office component context
             maContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
@@ -152,10 +152,10 @@ public class Helper
 
         return aResult;
     }
-
+    
     public XComponentContext getComponentContext(){
         return maContext;
-
+        
     }
 
     // __________ private members and methods __________

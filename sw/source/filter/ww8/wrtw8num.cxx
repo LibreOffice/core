@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -234,7 +234,7 @@ void WW8AttributeOutput::NumberingLevel( BYTE /*nLevel*/,
         default:                nAlign = 0; break;
     }
     *m_rWW8Export.pTableStrm << nAlign;
-
+    
     // Write the rgbxchNums[9], positions of placeholders for paragraph
     // numbers in the text
     m_rWW8Export.pTableStrm->Write( pNumLvlPos, WW8ListManager::nMaxLevel );

@@ -55,7 +55,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
-Mar 2005            Created
+Mar 2005			Created
  ************************************************************************/
 #include "lwppagelayout.hxx"
 #include "lwplaypiece.hxx"
@@ -125,7 +125,7 @@ void LwpPageLayout::Parse(IXFStream* pOutputStream)
     if(pStory)
     {
         pStory->SetFoundry(m_pFoundry);
-        pStory->Parse(pOutputStream);   //Do not parse the next story
+        pStory->Parse(pOutputStream);	//Do not parse the next story
     }
 }
 
@@ -135,10 +135,10 @@ void LwpPageLayout::Parse(IXFStream* pOutputStream)
 */
 void LwpPageLayout::ParseMargins(XFPageMaster* pm1)
 {
-    double fLeft    = GetMarginsValue(MARGIN_LEFT);
-    double fRight   = GetMarginsValue(MARGIN_RIGHT);
-    double fTop = GetMarginsValue(MARGIN_TOP);
-    double fBottom  = GetMarginsValue(MARGIN_BOTTOM);
+    double fLeft	= GetMarginsValue(MARGIN_LEFT);
+    double fRight	= GetMarginsValue(MARGIN_RIGHT);
+    double fTop	= GetMarginsValue(MARGIN_TOP);
+    double fBottom	= GetMarginsValue(MARGIN_BOTTOM);
 
     pm1->SetMargins( fLeft, fRight, fTop, fBottom );
 
@@ -322,7 +322,7 @@ void LwpPageLayout::RegisterStyle()
     ParseColumns(pm1);
     ParseBorders(pm1);
     ParseShadow(pm1);
-//  ParseBackColor(pm1);
+//	ParseBackColor(pm1);
     ParseBackGround(pm1);
     ParseFootNoteSeparator(pm1);
     pm1->SetTextDir(GetTextDirection());
@@ -379,7 +379,7 @@ OUString LwpPageLayout::RegisterEndnoteStyle()
     ParseColumns(pm1);
     ParseBorders(pm1);
     ParseShadow(pm1);
-//  ParseBackColor(pm1);
+//	ParseBackColor(pm1);
     ParseBackGround(pm1);
     //ParseFootNoteSeparator(pm1);
     pm1->SetTextDir(GetTextDirection());
@@ -640,7 +640,7 @@ void LwpPageLayout::GetWidthAndHeight(double& fWidth, double& fHeight)
         {
             Size aPaperSize = aPrinter.GetPaperSize();
             aPaperSize = aPrinter.PixelToLogic( aPaperSize, MapMode( MAP_10TH_MM ) );
-            fWidth = static_cast<double>(aPaperSize.Width())/100;   //cm unit
+            fWidth = static_cast<double>(aPaperSize.Width())/100;	//cm unit
             fHeight = static_cast<double>(aPaperSize.Height())/100;
         }
     }
@@ -761,7 +761,7 @@ void LwpHeaderLayout::RegisterStyle(XFPageMaster* pm1)
     ParseMargins(pHeaderStyle);
     ParseBorder(pHeaderStyle);
     ParseShadow(pHeaderStyle);
-//  ParseBackColor(pHeaderStyle);
+//	ParseBackColor(pHeaderStyle);
     ParseBackGround(pHeaderStyle);
 
     ParseWaterMark(pHeaderStyle);
@@ -787,7 +787,7 @@ void LwpHeaderLayout::ParseMargins(XFHeaderStyle* ph1)
     LwpMiddleLayout* parent = static_cast<LwpMiddleLayout*> (GetParent()->obj());
     //left margin in SODC: the space from the left edge of body to the left edge of header
     double left = GetMarginsValue(MARGIN_LEFT) - parent->GetMarginsValue(MARGIN_LEFT);
-    if(left<=0) //The left margin in SODC can not be minus value
+    if(left<=0)	//The left margin in SODC can not be minus value
     {
         left = -1;
     }
@@ -929,7 +929,7 @@ void LwpFooterLayout::RegisterStyle(XFPageMaster* pm1)
     ParseBorder(pFooterStyle);
     ParseShadow(pFooterStyle);
     ParseBackGround(pFooterStyle);
-//  ParseBackColor(pFooterStyle);
+//	ParseBackColor(pFooterStyle);
 
     ParseWaterMark(pFooterStyle);
     //End by
@@ -954,7 +954,7 @@ void LwpFooterLayout::ParseMargins(XFFooterStyle* pFooterStyle)
     //Set left,right,top margins
     LwpMiddleLayout* parent = static_cast<LwpMiddleLayout*> (GetParent()->obj());
     double left = GetMarginsValue(MARGIN_LEFT) - parent->GetMarginsValue(MARGIN_LEFT);
-    if(left<=0) //The left margin in SODC can not be minus value
+    if(left<=0)	//The left margin in SODC can not be minus value
     {
         left = -1;
     }

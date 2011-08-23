@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,24 +31,24 @@
 
 #include <svx/svxids.hrc>
 
-//  EditEngine darf nicht ihre eigenen ITEMID's definieren
+//	EditEngine darf nicht ihre eigenen ITEMID's definieren
 #define _EEITEMID_HXX
 
 //--------------------------
 // Item-IDs fuer UI-MsgPool:
 //--------------------------
 
-//! sollten auch nach unter 1000 verschoben werden!
+//!	sollten auch nach unter 1000 verschoben werden!
 
-#define MSGPOOL_START               1100
+#define MSGPOOL_START				1100
 //--------------------------------------
-#define SCITEM_STRING               1100
-#define SCITEM_SEARCHDATA           1101
-#define SCITEM_SORTDATA             1102
-#define SCITEM_QUERYDATA            1103
-#define SCITEM_SUBTDATA             1104
+#define SCITEM_STRING       		1100
+#define SCITEM_SEARCHDATA			1101
+#define SCITEM_SORTDATA				1102
+#define SCITEM_QUERYDATA			1103
+#define SCITEM_SUBTDATA     		1104
 #define SCITEM_CONSOLIDATEDATA      1105
-#define SCITEM_PIVOTDATA            1106
+#define SCITEM_PIVOTDATA		    1106
 #define SCITEM_SOLVEDATA            1107
 #define SCITEM_USERLIST             1108
 #define SCITEM_PRINTWARN            1109
@@ -58,50 +58,50 @@
 //-------------------------
 // Item-IDs fuer Attribute:
 //-------------------------
-#define ATTR_STARTINDEX         100     // Anfang Attribute
+#define ATTR_STARTINDEX			100		// Anfang Attribute
 
-#define ATTR_PATTERN_START      100     // Anfang Zellattribut-Pattern
+#define ATTR_PATTERN_START		100		// Anfang Zellattribut-Pattern
 
-#define ATTR_FONT               100     // Anfang Zellattribute
-#define ATTR_FONT_HEIGHT        101
-#define ATTR_FONT_WEIGHT        102
-#define ATTR_FONT_POSTURE       103
-#define ATTR_FONT_UNDERLINE     104
-#define ATTR_FONT_OVERLINE      105
-#define ATTR_FONT_CROSSEDOUT    106
-#define ATTR_FONT_CONTOUR       107
-#define ATTR_FONT_SHADOWED      108
-#define ATTR_FONT_COLOR         109
-#define ATTR_FONT_LANGUAGE      110
-#define ATTR_CJK_FONT           111
-#define ATTR_CJK_FONT_HEIGHT    112
-#define ATTR_CJK_FONT_WEIGHT    113
-#define ATTR_CJK_FONT_POSTURE   114
-#define ATTR_CJK_FONT_LANGUAGE  115
-#define ATTR_CTL_FONT           116
-#define ATTR_CTL_FONT_HEIGHT    117
-#define ATTR_CTL_FONT_WEIGHT    118
-#define ATTR_CTL_FONT_POSTURE   119
-#define ATTR_CTL_FONT_LANGUAGE  120
-#define ATTR_FONT_EMPHASISMARK  121
-#define ATTR_USERDEF            122     // not saved in binary files
-#define ATTR_FONT_WORDLINE      123
-#define ATTR_FONT_RELIEF        124
-#define ATTR_HYPHENATE          125
-#define ATTR_SCRIPTSPACE        126
-#define ATTR_HANGPUNCTUATION    127
-#define ATTR_FORBIDDEN_RULES    128
-#define ATTR_HOR_JUSTIFY        129
+#define ATTR_FONT				100		// Anfang Zellattribute
+#define ATTR_FONT_HEIGHT 		101
+#define ATTR_FONT_WEIGHT		102
+#define	ATTR_FONT_POSTURE		103
+#define	ATTR_FONT_UNDERLINE		104
+#define	ATTR_FONT_OVERLINE		105
+#define	ATTR_FONT_CROSSEDOUT	106
+#define ATTR_FONT_CONTOUR		107
+#define ATTR_FONT_SHADOWED		108
+#define ATTR_FONT_COLOR			109
+#define ATTR_FONT_LANGUAGE		110
+#define ATTR_CJK_FONT			111
+#define ATTR_CJK_FONT_HEIGHT 	112
+#define ATTR_CJK_FONT_WEIGHT	113
+#define	ATTR_CJK_FONT_POSTURE	114
+#define ATTR_CJK_FONT_LANGUAGE	115
+#define ATTR_CTL_FONT			116
+#define ATTR_CTL_FONT_HEIGHT 	117
+#define ATTR_CTL_FONT_WEIGHT	118
+#define	ATTR_CTL_FONT_POSTURE	119
+#define ATTR_CTL_FONT_LANGUAGE	120
+#define ATTR_FONT_EMPHASISMARK	121
+#define ATTR_USERDEF			122		// not saved in binary files
+#define ATTR_FONT_WORDLINE		123
+#define ATTR_FONT_RELIEF		124
+#define ATTR_HYPHENATE			125
+#define ATTR_SCRIPTSPACE		126
+#define ATTR_HANGPUNCTUATION	127
+#define ATTR_FORBIDDEN_RULES	128
+#define	ATTR_HOR_JUSTIFY		129
 #define ATTR_HOR_JUSTIFY_METHOD 130
-#define ATTR_INDENT             131
-#define ATTR_VER_JUSTIFY        132
+#define ATTR_INDENT				131
+#define	ATTR_VER_JUSTIFY		132
 #define ATTR_VER_JUSTIFY_METHOD 133
 #define ATTR_STACKED            134
-#define ATTR_ROTATE_VALUE       135
-#define ATTR_ROTATE_MODE        136
-#define ATTR_VERTICAL_ASIAN     137
-#define ATTR_WRITINGDIR         138
-#define ATTR_LINEBREAK          139
+#define ATTR_ROTATE_VALUE		135
+#define ATTR_ROTATE_MODE		136
+#define ATTR_VERTICAL_ASIAN		137
+#define ATTR_WRITINGDIR			138
+#define ATTR_LINEBREAK			139
 #define ATTR_SHRINKTOFIT        140
 #define ATTR_BORDER_TLBR        141
 #define ATTR_BORDER_BLTR        142
@@ -169,26 +169,26 @@
 //--------------------------------
 // Dummy Slot-IDs fuer Dialoge
 //--------------------------------
-#define SID_SCATTR_PAGE_NOTES           ATTR_PAGE_NOTES
-#define SID_SCATTR_PAGE_GRID            ATTR_PAGE_GRID
-#define SID_SCATTR_PAGE_HEADERS         ATTR_PAGE_HEADERS
-#define SID_SCATTR_PAGE_CHARTS          ATTR_PAGE_CHARTS
-#define SID_SCATTR_PAGE_OBJECTS         ATTR_PAGE_OBJECTS
-#define SID_SCATTR_PAGE_DRAWINGS        ATTR_PAGE_DRAWINGS
-#define SID_SCATTR_PAGE_TOPDOWN         ATTR_PAGE_TOPDOWN
-#define SID_SCATTR_PAGE_SCALE           ATTR_PAGE_SCALE
-#define SID_SCATTR_PAGE_SCALETOPAGES    ATTR_PAGE_SCALETOPAGES
-#define SID_SCATTR_PAGE_FIRSTPAGENO     ATTR_PAGE_FIRSTPAGENO
-#define SID_SCATTR_PAGE_PRINTAREA       ATTR_PAGE_PRINTAREA
-#define SID_SCATTR_PAGE_REPEATROW       ATTR_PAGE_REPEATROW
-#define SID_SCATTR_PAGE_REPEATCOL       ATTR_PAGE_REPEATCOL
-#define SID_SCATTR_PAGE_PRINTTABLES     ATTR_PAGE_PRINTTABLES
-#define SID_SCATTR_PAGE_HEADERLEFT      ATTR_PAGE_HEADERLEFT
-#define SID_SCATTR_PAGE_FOOTERLEFT      ATTR_PAGE_FOOTERLEFT
-#define SID_SCATTR_PAGE_HEADERRIGHT     ATTR_PAGE_HEADERRIGHT
-#define SID_SCATTR_PAGE_FOOTERRIGHT     ATTR_PAGE_FOOTERRIGHT
-#define SID_SCATTR_PAGE_FORMULAS        ATTR_PAGE_FORMULAS
-#define SID_SCATTR_PAGE_NULLVALS        ATTR_PAGE_NULLVALS
+#define SID_SCATTR_PAGE_NOTES			ATTR_PAGE_NOTES
+#define SID_SCATTR_PAGE_GRID			ATTR_PAGE_GRID
+#define SID_SCATTR_PAGE_HEADERS			ATTR_PAGE_HEADERS
+#define SID_SCATTR_PAGE_CHARTS			ATTR_PAGE_CHARTS
+#define SID_SCATTR_PAGE_OBJECTS			ATTR_PAGE_OBJECTS
+#define SID_SCATTR_PAGE_DRAWINGS		ATTR_PAGE_DRAWINGS
+#define SID_SCATTR_PAGE_TOPDOWN			ATTR_PAGE_TOPDOWN
+#define SID_SCATTR_PAGE_SCALE			ATTR_PAGE_SCALE
+#define SID_SCATTR_PAGE_SCALETOPAGES	ATTR_PAGE_SCALETOPAGES
+#define SID_SCATTR_PAGE_FIRSTPAGENO		ATTR_PAGE_FIRSTPAGENO
+#define SID_SCATTR_PAGE_PRINTAREA		ATTR_PAGE_PRINTAREA
+#define SID_SCATTR_PAGE_REPEATROW		ATTR_PAGE_REPEATROW
+#define SID_SCATTR_PAGE_REPEATCOL		ATTR_PAGE_REPEATCOL
+#define SID_SCATTR_PAGE_PRINTTABLES		ATTR_PAGE_PRINTTABLES
+#define SID_SCATTR_PAGE_HEADERLEFT		ATTR_PAGE_HEADERLEFT
+#define SID_SCATTR_PAGE_FOOTERLEFT		ATTR_PAGE_FOOTERLEFT
+#define SID_SCATTR_PAGE_HEADERRIGHT		ATTR_PAGE_HEADERRIGHT
+#define SID_SCATTR_PAGE_FOOTERRIGHT		ATTR_PAGE_FOOTERRIGHT
+#define	SID_SCATTR_PAGE_FORMULAS		ATTR_PAGE_FORMULAS
+#define SID_SCATTR_PAGE_NULLVALS	 	ATTR_PAGE_NULLVALS
 #define SID_SCATTR_PAGE_SCALETO         ATTR_PAGE_SCALETO
 
 #endif

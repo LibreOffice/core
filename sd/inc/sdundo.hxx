@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,9 +40,9 @@ public:
     TYPEINFO();
                             SdUndoAction(SdDrawDocument* pSdDrawDocument)
                                 : mpDoc(pSdDrawDocument)  {}
-    virtual                 ~SdUndoAction() {}
+    virtual 	            ~SdUndoAction() {}
 
-    void                    SetComment(String& rStr) { maComment = rStr; }
+    void		            SetComment(String& rStr) { maComment = rStr; }
     virtual String          GetComment() const { return maComment; }
     virtual SdUndoAction*   Clone() const { return NULL; }
 
@@ -51,6 +51,6 @@ protected:
     String maComment;
 };
 
-#endif     // _SD_SDUNDO_HXX
+#endif	   // _SD_SDUNDO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

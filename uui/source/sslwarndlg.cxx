@@ -2,7 +2,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,7 +50,7 @@ IMPL_LINK( SSLWarnDialog, ViewCertHdl_Impl, PushButton *, EMPTYARG )
 
     xDocumentDigitalSignatures = uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures >(
                     getServiceFactory().get()->createInstance( rtl::OUString::createFromAscii( "com.sun.star.security.DocumentDigitalSignatures" )), uno::UNO_QUERY );
-
+    
     xDocumentDigitalSignatures.get()->showCertificate(getCert());
 
     return 0;
@@ -60,10 +60,10 @@ IMPL_LINK( SSLWarnDialog, ViewCertHdl_Impl, PushButton *, EMPTYARG )
 
 SSLWarnDialog::SSLWarnDialog
 (
-    Window*                                     pParent,
+    Window*										pParent,
     const cssu::Reference< dcss::security::XCertificate >& rXCert,
-    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    ResMgr*                                     pResMgr
+    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceFactory, 
+    ResMgr*										pResMgr
 ) :
 
     ModalDialog( pParent, ResId( DLG_UUI_SSLWARN, *pResMgr ) ),
@@ -75,7 +75,7 @@ SSLWarnDialog::SSLWarnDialog
     m_aWarnImage ( this, ResId( IMG_WARN, *pResMgr ) ),
     m_xServiceFactory ( xServiceFactory ),
     m_rXCert ( rXCert ),
-    pResourceMgr    ( pResMgr )
+    pResourceMgr	( pResMgr )
 {
     FreeResource();
     m_aWarnImage.SetImage( WarningBox::GetStandardImage() );

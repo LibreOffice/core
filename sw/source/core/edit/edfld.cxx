@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 #include <unotools/charclass.hxx>
 #include <editsh.hxx>
 #include <fldbas.hxx>
-#include <ndtxt.hxx>        // GetCurFld
+#include <ndtxt.hxx>		// GetCurFld
 #include <doc.hxx>
 #include <docary.hxx>
 #include <fmtfld.hxx>
@@ -206,7 +206,7 @@ void SwEditShell::FieldToText( SwFieldType* pType )
     SwClientIter aIter( *pType );
     SwClient * pLast = aIter.GoStart();
 
-    if( pLast )     // konnte zum Anfang gesprungen werden ??
+    if( pLast ) 	// konnte zum Anfang gesprungen werden ??
         do {
             pPaM->DeleteMark();
             const SwFmtFld* pFmtFld = bDDEFld
@@ -249,10 +249,10 @@ void SwEditShell::FieldToText( SwFieldType* pType )
 
 /*************************************************************************
 |*
-|*                  SwEditShell::Insert( SwField )
+|*					SwEditShell::Insert( SwField )
 |*
-|*    Beschreibung  an der Cursorposition ein Feld einfuegen
-|*    Quelle:       vgl. SwEditShell::Insert( String )
+|*	  Beschreibung	an der Cursorposition ein Feld einfuegen
+|*	  Quelle:		vgl. SwEditShell::Insert( String )
 |*
 *************************************************************************/
 void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
@@ -265,21 +265,21 @@ void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
         ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
         : nsSetAttrMode::SETATTR_DEFAULT;
 
-    FOREACHPAM_START(this)                      // fuer jeden PaM
+    FOREACHPAM_START(this)						// fuer jeden PaM
         bool bSuccess(GetDoc()->InsertPoolItem(*PCURCRSR, aFld, nInsertFlags));
         OSL_ENSURE( bSuccess, "Doc->Insert(Field) failed");
         (void) bSuccess;
-    FOREACHPAM_END()                      // fuer jeden PaM
+    FOREACHPAM_END()					  // fuer jeden PaM
 
     EndAllAction();
 }
 
 /*************************************************************************
 |*
-|*                  SwEditShell::GetCurFld()
+|*					SwEditShell::GetCurFld()
 |*
-|*    Beschreibung  Stehen die PaMs auf Feldern ?
-|*    Quelle:       edtfrm.cxx:
+|*	  Beschreibung	Stehen die PaMs auf Feldern ?
+|*	  Quelle:		edtfrm.cxx:
 |*
 *************************************************************************/
 
@@ -328,10 +328,10 @@ SwField* SwEditShell::GetCurFld() const
 
 /*************************************************************************
 |*
-|*                  SwEditShell::UpdateFlds()
+|*					SwEditShell::UpdateFlds()
 |*
-|*    Beschreibung  Stehen die PaMs auf Feldern ?
-|*                  BP 12.05.92
+|*	  Beschreibung	Stehen die PaMs auf Feldern ?
+|*					BP 12.05.92
 |*
 *************************************************************************/
 SwTxtFld* lcl_FindInputFld( SwDoc* pDoc, SwField& rFld )
@@ -376,11 +376,11 @@ void SwEditShell::UpdateFlds( SwField &rFld )
         SwTxtFld *pTxtFld;
         SwFmtFld *pFmtFld;
 
-//      if( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() &&
-//          ( 0 != ( pTxtFld = GetDocTxtFld( pCrsr->Start() ) ) ||
-//            0 != ( pTxtFld = lcl_FindInputFld( GetDoc(), rFld ) ) ) &&
-//          ( pFmtFld = (SwFmtFld*)&pTxtFld->GetFld())->GetFld()
-//              ->GetTyp()->Which() == rFld.GetTyp()->Which() )
+// 		if( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() &&
+// 			( 0 != ( pTxtFld = GetDocTxtFld( pCrsr->Start() ) ) ||
+// 			  0 != ( pTxtFld = lcl_FindInputFld( GetDoc(), rFld ) ) ) &&
+// 			( pFmtFld = (SwFmtFld*)&pTxtFld->GetFld())->GetFld()
+// 				->GetTyp()->Which() == rFld.GetTyp()->Which() )
         if ( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark())
         {
             pTxtFld = GetDocTxtFld(pCrsr->Start());
@@ -399,8 +399,8 @@ void SwEditShell::UpdateFlds( SwField &rFld )
         BOOL bTblSelBreak = FALSE;
 
         SwMsgPoolItem aHint( RES_TXTATR_FIELD );  // Such-Hint
-        FOREACHPAM_START(this)                      // fuer jeden PaM
-            if( PCURCRSR->HasMark() && bOkay )      // ... mit Selektion
+        FOREACHPAM_START(this)						// fuer jeden PaM
+            if( PCURCRSR->HasMark() && bOkay )		// ... mit Selektion
             {
                 // Kopie des PaM
                 SwPaM aCurPam( *PCURCRSR->GetMark(), *PCURCRSR->GetPoint() );
@@ -417,11 +417,11 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                  */
 
                 // Suche nach SwTxtFld ...
-                while(  bOkay
+                while(	bOkay
                      && pCurStt->nContent != pCurEnd->nContent
                      && aPam.Find( aHint, FALSE, fnMoveForward, &aCurPam ) )
                 {
-                    //  wenn nur ein Pam mehr als ein Feld enthaelt ...
+                    //	wenn nur ein Pam mehr als ein Feld enthaelt ...
                     if( aPam.Start()->nContent != pCurStt->nContent )
                         bOkay = FALSE;
 
@@ -444,10 +444,10 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                 }
             }
 
-            if( bTblSelBreak )      // wenn Tabellen Selektion und Tabellen-
-                break;              // Formel aktualisiert wurde -> beenden
+            if( bTblSelBreak )		// wenn Tabellen Selektion und Tabellen-
+                break;				// Formel aktualisiert wurde -> beenden
 
-        FOREACHPAM_END()                      // fuer jeden PaM
+        FOREACHPAM_END()					  // fuer jeden PaM
     }
     GetDoc()->SetModified();
     EndAllAction();
@@ -493,7 +493,7 @@ void SwEditShell::UpdateExpFlds(BOOL bCloseDB)
     StartAllAction();
     GetDoc()->UpdateExpFlds(NULL, true);
     if (bCloseDB)
-        GetDoc()->GetNewDBMgr()->CloseAll();    // Alle Datenbankverbindungen dichtmachen
+        GetDoc()->GetNewDBMgr()->CloseAll();	// Alle Datenbankverbindungen dichtmachen
     EndAllAction();
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star::accessibility;
 
 namespace accessibility {
 
@@ -61,8 +61,8 @@ AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape (void)
 
 
 //=====  XServiceInfo  ========================================================
-
-::rtl::OUString SAL_CALL
+    
+::rtl::OUString SAL_CALL 
     AccessiblePresentationOLEShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -72,7 +72,7 @@ AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape (void)
 
 
 
-/// Set this object's name if it is different to the current name.
+///	Set this object's name if it is different to the current name.
 ::rtl::OUString
     AccessiblePresentationOLEShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -118,19 +118,19 @@ AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape (void)
         case PRESENTATION_OLE:
             aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationOLEShape"));
             //SVX_RESSTR(RID_SVXSTR_A11Y_ST_RECTANGLE));
-            aDG.AddProperty (OUString::createFromAscii ("CLSID"),
+            aDG.AddProperty (OUString::createFromAscii ("CLSID"), 
                 DescriptionGenerator::STRING);
             break;
         case PRESENTATION_CHART:
             aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationChartShape"));
             //SVX_RESSTR(RID_SVXSTR_A11Y_ST_RECTANGLE));
-            aDG.AddProperty (OUString::createFromAscii ("CLSID"),
+            aDG.AddProperty (OUString::createFromAscii ("CLSID"), 
                 DescriptionGenerator::STRING);
             break;
         case PRESENTATION_TABLE:
             aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationTableShape"));
             //SVX_RESSTR(RID_SVXSTR_A11Y_ST_RECTANGLE));
-            aDG.AddProperty (OUString::createFromAscii ("CLSID"),
+            aDG.AddProperty (OUString::createFromAscii ("CLSID"), 
                 DescriptionGenerator::STRING);
             break;
         default:

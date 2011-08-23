@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,14 +50,14 @@
 
 //=============================================================================
 
-module com { module sun { module star { module registry {
+module com { module sun { module star { module registry { 
 
 //=============================================================================
 /** makes structural information (except regarding tree structures)
     of a single registry key accessible.
-
+    
     <p>This is the main interface for registry keys.<p>
-
+    
     @see XSimpleRegistry
 */
 published interface XRegistryKey: com::sun::star::uno::XInterface
@@ -71,12 +71,12 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
         are represented as hexadecimals preceded with a "%" like in
         URL syntax.
      */
-    [readonly, attribute] string    KeyName;
+    [readonly, attribute] string	KeyName;
 
     //-------------------------------------------------------------------------
     /** checks if the key can be overwritten.
-
-        @throws InvalidRegistryException
+        
+        @throws InvalidRegistryException	 
         if the registry is not open.
     */
     boolean isReadOnly()
@@ -90,36 +90,36 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** @returns
         the type of the specified key.
-
+        
         @param rKeyName
         specifies the relative path from the current key to
-        the key of the type which will be returned.
-
-        @throws InvalidRegistryException
+        the key of the type which will be returned. 
+        
+        @throws InvalidRegistryException	 
         if the registry is not open.
     */
     com::sun::star::registry::RegistryKeyType getKeyType( [in] string rKeyName )
             raises( com::sun::star::registry::InvalidRegistryException );
 
     //-------------------------------------------------------------------------
-    /** @returns
+    /** @returns 
         the type of the key value or NOT_DEFINED if the key has no value.
-
-        @throws InvalidRegistryException
+        
+        @throws InvalidRegistryException	 
         if the registry is not open.
     */
     com::sun::star::registry::RegistryValueType getValueType()
             raises( com::sun::star::registry::InvalidRegistryException );
 
     //-------------------------------------------------------------------------
-    /** @returns
+    /** @returns 
         a long value if the key contains one.
-
-        @throws InvalidRegistryException
+        
+        @throws InvalidRegistryException	 
         if the registry is not open.
-
-        @throws InvalidValueException
-        if the value is not of type long.
+        
+        @throws InvalidValueException	 
+        if the value is not of type long.  
     */
     long getLongValue()
             raises( com::sun::star::registry::InvalidRegistryException,
@@ -127,11 +127,11 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** sets a long value to the key.
-
+        
         <p>If the key already has a value, the value will be
-        overridden.
-
-        @throws InvalidRegistryException
+        overridden. 
+        
+        @throws InvalidRegistryException	 
         if the registry is not open.
     */
     void setLongValue( [in] long value )
@@ -141,10 +141,10 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     // DOCUMENTATION CHANGED FOR XRegistryKey::getLongListValue
     /** @returns
         a sequence of longs if the key contains a long list value.
-
+          
          @throws InvalidRegistryException
          if the registry is not open.
-
+         
          @throws InvalidValueException
          if the actual value is not of type long list.
     */
@@ -154,11 +154,11 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** sets a long list value to the key.
-
+        
         <p>If the key already has a value, the value will be
-        overridden.
-
-        @throws InvalidRegistryException
+        overridden. 
+        
+        @throws InvalidRegistryException	 
         if the registry is not open.
     */
     void setLongListValue( [in] sequence<long> seqValue )
@@ -168,7 +168,7 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     // DOCUMENTATION CHANGED FOR XRegistryKey::getAsciiValue
     /** @returns
         an ascii string value if the key contains one.
-
+     
          @throws InvalidRegistryException
          if the registry is not open.
 
@@ -181,12 +181,12 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** sets an ASCII string value to the key.
-
+        
         <p>The high byte of the string should be NULL.  If not, there
         is no guarantee that the string will be correctly transported.
-        If the key already has a value, the value will be overridden.
-
-        @throws InvalidRegistryException
+        If the key already has a value, the value will be overridden. 
+        
+        @throws InvalidRegistryException	 
         if the registry is not open.
     */
     void setAsciiValue( [in] string value )
@@ -196,10 +196,10 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     // DOCUMENTATION CHANGED FOR XRegistryKey::getAsciiListValue
     /** @returns
         a sequence of ascii strings if the key contains an asci list value.
-
+     
          @throws InvalidRegistryException
          if the registry is not open.
-
+         
          @throws InvalidValueException
          if the actual value is not of type ascii list.
     */
@@ -209,12 +209,12 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** sets an ASCII string list value to the key.
-
+        
         <p>The high byte of the string should be NULL. If not, there
         is no guarantee that the string will be correctly transported.
-        If the key already has a value, the value will be overridden.
-
-        @throws InvalidRegistryException
+        If the key already has a value, the value will be overridden. 
+        
+        @throws InvalidRegistryException	 
         if the registry is not open.
     */
     void setAsciiListValue( [in] sequence<string> seqValue )
@@ -224,10 +224,10 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     // DOCUMENTATION CHANGED FOR XRegistryKey::getStringValue
     /** @returns
         a unicode string value if the key contains one.
-
+     
          @throws InvalidRegistryException
          if the registry is not open.
-
+         
          @throws InvalidValueException
          if the actual value is not of type string.
     */
@@ -237,11 +237,11 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** sets a unicode string value to the key.
-
+        
         <p> If the key already has a value, the value will be
-        overridden.
-
-        @throws InvalidRegistryException
+        overridden. 
+        
+        @throws InvalidRegistryException	 
         if the registry is not open.
     */
     void setStringValue( [in] string value )
@@ -249,12 +249,12 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XRegistryKey::getStringListValue
-    /** @returns
+    /** @returns 
         a sequence of unicode strings if the key contains an unicode string list value.
-
+     
          @throws InvalidRegistryException
          if the registry is not open.
-
+         
          @throws InvalidValueException
          if the actual value is not of type string list.
     */
@@ -264,9 +264,9 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** sets a unicode string value to the key.
-
-        <p>If the key already has a value, the value will be overridden.
-
+        
+        <p>If the key already has a value, the value will be overridden. 
+        
         @throws InvalidRegistryException
         if the registry is not open.
     */
@@ -275,12 +275,12 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XRegistryKey::getBinaryValue
-    /** @returns
+    /** @returns 
         a binary value if the key contains one.
-
+     
          @throws InvalidRegistryException
          if the registry is not open.
-
+         
          @throws InvalidValueException
          if the actual value is not of type binary.
     */
@@ -290,11 +290,11 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** sets a binary value to the key.
-
+        
         <p>If the key already has a value, the value will be
-        overridden.
-
-        @throws InvalidRegistryException
+        overridden. 
+        
+        @throws InvalidRegistryException	 
         if the registry is not open.
     */
     void setBinaryValue( [in] sequence<byte> value )
@@ -302,17 +302,17 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** opens a sub key of the key.
-
+        
         <p>If the sub key does not exist, the function returns a
-        NULL-interface.
-
+        NULL-interface. 
+        
         @param aKeyName
         the relative path from the current key to the key
-        which will be created.
-
-        @returns
-        a NULL interface if the key does not exist.
-
+        which will be created. 
+        
+        @returns 
+        a NULL interface if the key does not exist. 
+        
         @throws InvalidRegistryException
         if the registry is not open.
     */
@@ -321,17 +321,17 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** creates a new key in the registry.<p>
-
+        
         <p>If the key already exists, the function will open the key.
-
+        
         @param aKeyName
         specifies the relative path from the current key to
-        the key which will be created.
-
-        @returns
-        a NULL interface if the key could not be created.
-
-        @throws InvalidRegistryException
+        the key which will be created. 
+        
+        @returns 
+        a NULL interface if the key could not be created. 
+        
+        @throws InvalidRegistryException	 
         if the registry is not open, the registry is readonly
         or if the key exists and is of type LINK.
     */
@@ -340,8 +340,8 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** closes a key in the registry.
-
-        @throws InvalidRegistryException
+        
+        @throws InvalidRegistryException	 
         if the registry is not open.
     */
     void closeKey()
@@ -349,12 +349,12 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** deletes a key from the registry.
-
+        
         @param aKeyName
         specifies the relative path from the current key to
-        the key which will be deleted.
-
-        @throws InvalidRegistryException
+        the key which will be deleted. 
+        
+        @throws InvalidRegistryException	 
         if the registry is not open, the registry is readonly,
         the key does not exists or if the key is of type LINK.
     */
@@ -363,12 +363,12 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XRegistryKey::openKeys
-    /** opens all subkeys of the key. If a subkey is a link, the link will be
+    /** opens all subkeys of the key. If a subkey is a link, the link will be 
         resolved and the appropriate key will be opened.
-
+     
            @returns
-           an empty sequence if the key has no subkeys.
-
+           an empty sequence if the key has no subkeys. 
+     
            @throws InvalidRegistryException
            if the registry is not open.
     */
@@ -378,9 +378,9 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XRegistryKey::getKeyNames
     /** @returns a sequence with the names of all subkeys of the key.
-          If the key has no subkeys, the function returns an empty sequence. If a subkey is
+          If the key has no subkeys, the function returns an empty sequence. If a subkey is 
            a link, the name of the link will be returned.
-
+     
          @throws InvalidRegistryException
          if the registry is not open.
      */
@@ -389,24 +389,24 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** creates a new link in the registry.
-
-        @returns
+        
+        @returns 
         <TRUE/> if the link was created. If the link already
         exists or the link target does not exist, the
         function returns <FALSE/>.
-
+        
         @param aLinkName
         specifies the relative path from the current key to
-        the link which will be created.
-
+        the link which will be created. 
+        
         @param aLinkTarget
         specifies the full path of the key which will be
-        referenced by the link.
-
-        @throws InvalidRegistryException
+        referenced by the link. 
+        
+        @throws InvalidRegistryException	 
         if the registry is not open or the registry is
         readonly.
-
+        
     */
     boolean createLink( [in] string aLinkName,
              [in] string aLinkTarget )
@@ -414,12 +414,12 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** deletes a link from the registry.
-
+        
         @param aLinkName
         specifies the relative path from the current key to
-        the link which will be deleted.
-
-        @throws InvalidRegistryException
+        the link which will be deleted. 
+        
+        @throws InvalidRegistryException	
         if the registry is not open, the registry is readonly,
         or if the link does not exist.
     */
@@ -430,11 +430,11 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     // DOCUMENTATION CHANGED FOR XRegistryKey::getLinkTarget
     /** @returns
         the target (complete path of a key) of the link specified by rLinkName.
-
+     
          @param rLinKName
-        specifies the relative path from the current key to
-        the link which target will be returned.
-
+        specifies the relative path from the current key to 
+        the link which target will be returned. 
+     
          @throws InvalidRegistryException
          if the registry is not open or the link does not exists.
     */
@@ -443,16 +443,16 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XRegistryKey::getResolvedName
-    /** @returns
-        the resolved name of a key. The function resolve the complete name of the key.
-        If a link could not be resolved, the linktarget concatenated with the unresolved rest
-        of the name, will be returned.
-
+    /** @returns 
+        the resolved name of a key. The function resolve the complete name of the key. 
+        If a link could not be resolved, the linktarget concatenated with the unresolved rest 
+        of the name, will be returned. 
+     
          @param rKeyName
-         specifies a relative path from the current key which will be resolved from all links.
-
+         specifies a relative path from the current key which will be resolved from all links. 
+     
          @throws InvalidRegistryException
-         if the registry is not open or a recursion was detected.
+         if the registry is not open or a recursion was detected. 
     */
     string getResolvedName( [in] string aKeyName )
             raises( com::sun::star::registry::InvalidRegistryException );
@@ -461,6 +461,6 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 #endif

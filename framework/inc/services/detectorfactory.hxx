@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,15 +92,15 @@ namespace framework{
 /// @NOHTML
 
 class DetectorFactory : // interfaces
-                        public  css::lang::XTypeProvider            ,
-                        public  css::lang::XServiceInfo             ,
-                        public  css::lang::XMultiServiceFactory     ,
-                        public  css::container::XNameContainer      ,       // => XNameReplace => XNameAccess => XElementAccess
-                        public  css::util::XFlushable               ,
+                        public	css::lang::XTypeProvider			,
+                        public	css::lang::XServiceInfo				,
+                        public	css::lang::XMultiServiceFactory		,
+                        public	css::container::XNameContainer		,		// => XNameReplace => XNameAccess => XElementAccess
+                        public	css::util::XFlushable				,
                         // base classes
                         // Order is neccessary for right initialization of it!
                         private ThreadHelpBase                      ,
-                        public  ::cppu::OWeakObject
+                        public	::cppu::OWeakObject
 {
     //-------------------------------------------
     // member

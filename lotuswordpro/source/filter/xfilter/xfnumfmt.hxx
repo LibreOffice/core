@@ -62,11 +62,11 @@
  * 2005-01-17 create this file.
  ************************************************************************/
 
-#ifndef     _XFNUMFMT_HXX
-#define     _XFNUMFMT_HXX
+#ifndef		_XFNUMFMT_HXX
+#define		_XFNUMFMT_HXX
 
-#include    "xfglobal.hxx"
-#include    "ixfproperty.hxx"
+#include	"xfglobal.hxx"
+#include	"ixfproperty.hxx"
 
 /**
  * @brief
@@ -82,29 +82,29 @@ public:
 
 public:
     /**********************************************************************
-     * @descr:      set the prefix of the number format,that the '(' of output
+     * @descr:		set the prefix of the number format,that the '(' of output
                     (1 item1
                     (2 item2
-     * @param:      prefix
+     * @param:		prefix
      *********************************************************************/
-    void    SetPrefix(rtl::OUString prefix)
+    void	SetPrefix(rtl::OUString prefix)
     {
         m_strPrefix = prefix;
     }
 
     /**********************************************************************
-     * @descr:      set the suffix of the number format,that the ')' of output
+     * @descr:		set the suffix of the number format,that the ')' of output
                     1) item1
                     2) item2
-     * @param:      prefix
+     * @param:		prefix
      *********************************************************************/
-    void    SetSuffix(rtl::OUString suffix)
+    void	SetSuffix(rtl::OUString suffix)
     {
         m_strSuffix = suffix;
     }
 
     /**********************************************************************
-     * @descr:      set the display value. ie. if you set format to '1',then
+     * @descr:		set the display value. ie. if you set format to '1',then
                     the ouput would be:
                         1 item1
                         2 item2
@@ -120,14 +120,14 @@ public:
                     Of cource, for unordered-list, you can also set the format to
                     be a bullet char,ie:
                         '','','','','',
-     * @param:      prefix
+     * @param:		prefix
      *********************************************************************/
-    void    SetFormat(rtl::OUString format)
+    void	SetFormat(rtl::OUString format)
     {
         m_strFormat = format;
     }
 
-    void    SetStartValue(sal_Int16 start)
+    void	SetStartValue(sal_Int16 start)
     {
         m_nStartValue = start;
     }
@@ -145,10 +145,10 @@ public:
             pAttrList->AddAttribute( A2OUSTR("text:start-value"), Int16ToOUString(m_nStartValue) );
     }
 private:
-    rtl::OUString   m_strPrefix;
-    rtl::OUString   m_strSuffix;
-    rtl::OUString   m_strFormat;
-    sal_Int16   m_nStartValue;
+    rtl::OUString	m_strPrefix;
+    rtl::OUString	m_strSuffix;
+    rtl::OUString	m_strFormat;
+    sal_Int16	m_nStartValue;
 };
 
 #endif

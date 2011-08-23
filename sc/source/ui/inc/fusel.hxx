@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,18 +59,18 @@ public:
     virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
     virtual BYTE Command(const CommandEvent& rCEvt);
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();		   // Function aktivieren
+    virtual void Deactivate();		   // Function deaktivieren
 
     void    ActivateNoteHandles(SdrObject* pObj);
 
 protected:
-//  Outliner*       pOutliner;
-//  OutlinerView*   pOutlinerView;
-    BOOL            bVCAction;
+//	Outliner*		pOutliner;
+//	OutlinerView*	pOutlinerView;
+    BOOL			bVCAction;
 
 private:
-    BOOL TestDetective( SdrPageView* pPV, const Point& rPos );  // -> fusel2
+    BOOL TestDetective( SdrPageView* pPV, const Point& rPos );	// -> fusel2
 
     bool                IsNoteCaptionMarked() const;
     bool                IsNoteCaptionClicked( const Point& rPos ) const;
@@ -78,6 +78,6 @@ private:
 
 
 
-#endif      // _SD_FUSEL_HXX
+#endif		// _SD_FUSEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

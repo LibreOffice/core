@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ public:
             with lowest priority.
     */
     void AddRequest (
-        CacheKey aKey,
+        CacheKey aKey, 
         RequestPriorityClass eRequestClass,
         bool bInsertWithHighestPriority = false);
 

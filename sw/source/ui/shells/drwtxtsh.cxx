@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,8 +110,8 @@ void SwDrawTextShell::Init()
     SwWrtShell &rSh = GetShell();
     pSdrView = rSh.GetDrawView();
     SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
-    //#97471# mouse click _and_ key input at the same time
-    if( !pOutliner )
+    //#97471# mouse click _and_ key input at the same time 
+    if( !pOutliner ) 
         return ;
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
     ULONG nCtrl = pOutliner->GetControlWord();
@@ -160,7 +160,7 @@ __EXPORT SwDrawTextShell::~SwDrawTextShell()
     //DrawTextShell zerstoert.
 // OSL_ENSURE( !pSdrView->IsTextEdit(), "TextEdit in DTor DrwTxtSh?" );
 //    if (pSdrView->IsTextEdit())
-//      GetShell().EndTextEdit();   // Danebengeklickt, Ende mit Edit
+//		GetShell().EndTextEdit();	// Danebengeklickt, Ende mit Edit
 
 //    GetShell().Edit();
 }
@@ -171,7 +171,7 @@ SwWrtShell& SwDrawTextShell::GetShell()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Slots mit dieser Statusmethode disablen
+    Beschreibung:	Slots mit dieser Statusmethode disablen
  --------------------------------------------------------------------*/
 void SwDrawTextShell::StateDisableItems( SfxItemSet &rSet )
 {
@@ -199,7 +199,7 @@ void SwDrawTextShell::SetAttrToMarked(const SfxItemSet& rAttr)
     if (aNullRect != aOutRect)
     {
         GetShell().GetDrawView()->SetAttributes(rAttr);
-//      Init();
+//		Init();
     }
 }
 
@@ -306,9 +306,9 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
     if ( pObj == NULL || !pObj->ISA(SdrTextObj) ||
         !((SdrTextObj*) pObj)->HasText() )
     {
-#define XATTR_ANZ 12
+#define	XATTR_ANZ 12
         static const USHORT nXAttr[ XATTR_ANZ ] =
-        {   XATTR_FORMTXTSTYLE, XATTR_FORMTXTADJUST, XATTR_FORMTXTDISTANCE,
+        { 	XATTR_FORMTXTSTYLE, XATTR_FORMTXTADJUST, XATTR_FORMTXTDISTANCE,
             XATTR_FORMTXTSTART, XATTR_FORMTXTMIRROR, XATTR_FORMTXTSTDFORM,
             XATTR_FORMTXTHIDEFORM, XATTR_FORMTXTOUTLINE, XATTR_FORMTXTSHADOW,
             XATTR_FORMTXTSHDWCOLOR, XATTR_FORMTXTSHDWXVAL, XATTR_FORMTXTSHDWYVAL
@@ -479,7 +479,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
         }
         break;
 
-        case FN_FORMAT_RESET:   // delete hard text attributes
+        case FN_FORMAT_RESET:	// delete hard text attributes
         {
             pOLV->RemoveAttribsKeepLanguages( true );
             pOLV->GetEditView().GetEditEngine()->RemoveFields(TRUE);
@@ -537,7 +537,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Undo ausfuehren
+    Beschreibung:	Undo ausfuehren
  --------------------------------------------------------------------*/
 void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
 {
@@ -582,7 +582,7 @@ void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Zustand Undo
+    Beschreibung:	Zustand Undo
  --------------------------------------------------------------------*/
 void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
 {
@@ -692,7 +692,7 @@ void SwDrawTextShell::ExecTransliteration( SfxRequest & rReq )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Sonderzeichen einfuegen (siehe SDraw: FUBULLET.CXX)
+    Beschreibung:	Sonderzeichen einfuegen (siehe SDraw: FUBULLET.CXX)
  --------------------------------------------------------------------*/
 void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 {
@@ -794,7 +794,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 
         // attributieren (Font setzen)
         SfxItemSet aFontAttribSet( *aFontSet.GetPool(), aFontSet.GetRanges() );
-        SvxFontItem aFontItem (aFont.GetFamily(),    aFont.GetName(),
+        SvxFontItem aFontItem (aFont.GetFamily(),	 aFont.GetName(),
                                 aFont.GetStyleName(), aFont.GetPitch(),
                                 aFont.GetCharSet(),
                                 EE_CHAR_FONTINFO );

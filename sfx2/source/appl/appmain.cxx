@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,8 +79,8 @@ DBG_NAME(SfxAppMainCHAOSReg)
 
 //===================================================================
 
-#define SFX_TEMPNAMEBASE_DIR    "soffice.tmp"
-#define SFX_KEY_TEMPNAMEBASE    "Temp-Dir"
+#define SFX_TEMPNAMEBASE_DIR	"soffice.tmp"
+#define SFX_KEY_TEMPNAMEBASE	"Temp-Dir"
 
 //===================================================================
 
@@ -100,7 +100,7 @@ void SfxApplication::Init
 (
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese virtuelle Methode wird vom SFx aus Application:a:Main() gerufen,
     bevor Execute() ausgef"uhrt wird und
@@ -137,7 +137,7 @@ void SfxApplication::Init
 
 void SfxApplication::Exit()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese virtuelle Methode wird vom SFx aus Application::Main() gerufen,
     nachdem Execute() beendet ist und

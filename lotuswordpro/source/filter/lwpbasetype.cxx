@@ -55,7 +55,7 @@
  ************************************************************************/
 #include "lwpbasetype.hxx"
 /**
- * @descr       read PonoseNumber from object stream
+ * @descr		read PonoseNumber from object stream
 */
 void LwpPanoseNumber::Read(LwpObjectStream *pStrm)
 {
@@ -76,7 +76,7 @@ LwpPoint::LwpPoint()
     Reset();
 }
 /**
- * @descr       read point from object stream
+ * @descr		read point from object stream
 */
 void LwpPoint::Read(LwpObjectStream *pStrm)
 {
@@ -84,7 +84,7 @@ void LwpPoint::Read(LwpObjectStream *pStrm)
     pStrm->QuickRead(&m_nY, sizeof(m_nY));
 }
 /**
- * @descr       reset to zero
+ * @descr		reset to zero
 */
 void LwpPoint::Reset()
 {

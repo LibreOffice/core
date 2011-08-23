@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,7 +28,7 @@
 #include <svx/dialogs.hrc>
 #include "extrusioncontrols.hrc"
 
-#define MASKCOLOR   MaskColor = Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; };
+#define MASKCOLOR	MaskColor = Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; };
 
 DockingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
 {
@@ -152,12 +152,12 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
         ImageBitmap = Bitmap { File = "parallel_16_h.bmp"; };
         MASKCOLOR
     };
-
+    
     String STR_PERSPECTIVE
     {
         Text [ en-US ] = "~Perspective" ;
     };
-
+    
     String STR_PARALLEL
     {
         Text [ en-US ] = "P~arallel" ;
@@ -199,7 +199,7 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
         Text [ en-US ] = "Extrusion South-East";
     };
 };
-
+    
 DockingWindow RID_SVXFLOAT_EXTRUSION_DEPTH
 {
     Border = FALSE ;
@@ -211,12 +211,12 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_DEPTH
     Zoomable = TRUE ;
 
     Text [ en-US ] = "Extrusion Depth" ;
-
+    
     String STR_CUSTOM
     {
         Text [ en-US ] = "~Custom...";
     };
-
+    
     String STR_INFINITY
     {
         Text [ en-US ] = "~Infinity";
@@ -281,7 +281,7 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_DEPTH
     {
         ImageBitmap = Bitmap { File = "extrusioninfinity_16.bmp"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_DEPTH_INFINITY_H
     {
         ImageBitmap = Bitmap { File = "extrusioninfinity_16_h.bmp"; };
@@ -301,7 +301,7 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING
     Zoomable = TRUE ;
 
     Text [ en-US ] = "Extrusion Lighting" ;
-
+    
     Image IMG_LIGHT_OFF + FROM_TOP_LEFT
     {
         ImageBitmap = Bitmap { File = "lightofffromtopleft_22.bmp"; };
@@ -617,7 +617,7 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_SURFACE
     Zoomable = TRUE ;
 
     Text [ en-US ] = "Extrusion Surface" ;
-
+    
     String STR_WIREFRAME
     {
         Text [ en-US ] = "~Wire Frame";
@@ -642,47 +642,47 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_SURFACE
     {
         ImageBitmap = Bitmap { File = "wireframe_16.bmp"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_WIRE_FRAME_H
     {
         ImageBitmap = Bitmap { File = "wireframe_16_h.bmp"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_MATTE
     {
         ImageBitmap = Bitmap { File = "matte_16.bmp"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_MATTE_H
     {
         ImageBitmap = Bitmap { File = "matte_16_h.bmp"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_PLASTIC
     {
         ImageBitmap = Bitmap { File = "plastic_16.bmp"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_PLASTIC_H
     {
         ImageBitmap = Bitmap { File = "plastic_16_h.bmp"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_METAL
     {
         ImageBitmap = Bitmap { File = "metal_16.bmp"; };
         MASKCOLOR
-    };
+    };	
     Image IMG_METAL_H
     {
         ImageBitmap = Bitmap { File = "metal_16_h.bmp"; };
         MASKCOLOR
-    };
-
+    };	
+    
 };
 
-#define WIDTH                       140
-#define HEIGHT                      (4 * 3 + 3 * 14)
+#define WIDTH 						140
+#define HEIGHT 						(4 * 3 + 3 * 14)
 
 ModalDialog RID_SVX_MDLG_EXTRUSION_DEPTH
 {

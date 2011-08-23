@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,8 +34,8 @@
 #include <set>
 
 #include <stdio.h>
-#include <rtl/ustring.hxx>
-#include <rtl/strbuf.hxx>
+#include <rtl/ustring.hxx>	
+#include <rtl/strbuf.hxx>	
 
 struct EqualString
 {
@@ -66,9 +66,9 @@ typedef ::std::new_alloc NewAlloc;
 #endif
 
 
-typedef ::std::list< ::rtl::OString >               StringList;
-typedef ::std::vector< ::rtl::OString >             StringVector;
-typedef ::std::set< ::rtl::OString, LessString >    StringSet;
+typedef ::std::list< ::rtl::OString > 				StringList;
+typedef ::std::vector< ::rtl::OString > 			StringVector;
+typedef ::std::set< ::rtl::OString, LessString > 	StringSet;
 
 ::rtl::OString makeTempName();
 
@@ -92,15 +92,15 @@ enum FileAccessMode
 class FileStream //: public ofstream
 {
 public:
-    FileStream();
+    FileStream();	
     virtual ~FileStream();
-
+    
     sal_Bool isValid();
 
     void open(const ::rtl::OString& name, FileAccessMode nMode = FAM_READWRITE);
     void close();
 
-    ::rtl::OString  getName() { return m_name; }
+    ::rtl::OString 	getName() { return m_name; }
 
     // friend functions
     friend FileStream &operator<<(FileStream& o, sal_uInt32 i)
@@ -130,7 +130,7 @@ public:
 
 protected:
     const sal_Char* checkAccessMode(FileAccessMode mode);
-
+    
     FILE*               m_pFile;
     ::rtl::OString      m_name;
 };

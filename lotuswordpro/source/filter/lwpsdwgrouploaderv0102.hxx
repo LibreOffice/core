@@ -55,8 +55,8 @@
  ************************************************************************/
 /*****************************************************************************
  * Change History
- * Mar 2005         revised for new processing procedure.
- * Jan 2005         created
+ * Mar 2005			revised for new processing procedure.
+ * Jan 2005			created
  ****************************************************************************/
 #include <tools/stream.hxx>
 #include "lwpheader.hxx"
@@ -82,10 +82,10 @@ public:
         IXFStream* pOutputStream);
     ~LwpSdwGroupLoaderV0102(void);
 public:
-//  void LoadDrawGroupObject(void);
-//  void LoadDrawObject(void);
-//  void RegisterGroupStyle(void);
-//  void RegisterStyle(void);
+//	void LoadDrawGroupObject(void);
+//	void LoadDrawObject(void);
+//	void RegisterGroupStyle(void);
+//	void RegisterStyle(void);
 
     // add by  ,03/25/2005
     void BeginDrawObjects(std::vector <XFFrame*>* pDrawObjVector);

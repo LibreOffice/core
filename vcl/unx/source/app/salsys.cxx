@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -90,7 +90,7 @@ Rectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
         const SalDisplay::ScreenData& rScreen = pSalDisp->getDataForScreen( nScreen );
         aRet = Rectangle( Point( 0, 0 ), rScreen.m_aSize );
     }
-
+    
     return aRet;
 }
 
@@ -160,7 +160,7 @@ int X11SalSystem::ShowNativeDialog( const String& rTitle, const String& rMessage
             nButton++;
     }
     aWarn.SetFocusButton( (USHORT)nDefButton+1 );
-
+    
     nRet = ((int)aWarn.Execute()) - 1;
 
     // normalize behaviour, actually this should never happen

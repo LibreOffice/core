@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,14 +41,14 @@ namespace psp {
 class PrinterGfx;
 
 
-class PrinterJob
+class PrinterJob 
 {
 private:            // private data
 
     rtl::OUString           maSpoolDirName;
     rtl::OUString           maFileName; // empty: spool to command, else spool to named file
-    rtl::OUString           maJobTitle;
-    int                     mnFileMode;
+    rtl::OUString			maJobTitle;
+    int						mnFileMode;
 
     osl::File*              mpJobHeader;
     osl::File*              mpJobTrailer;
@@ -80,21 +80,21 @@ private:            // private data
 
     sal_Int32       mnErrorCode;
     bool            m_bQuickJob;
-
+        
 private:            // private methods
 
-    osl::File*      CreateSpoolFile (const rtl::OUString& rName,
+    osl::File*      CreateSpoolFile (const rtl::OUString& rName, 
                                      const rtl::OUString& rExtension);
     void            InitPaperSize (const JobData& rJobSetup);
 
-    bool            writeFeatureList( osl::File* pFile, const JobData&, bool bDocumentSetup );
+    bool			writeFeatureList( osl::File* pFile, const JobData&, bool bDocumentSetup );
     bool            writeSetup( osl::File* pFile, const JobData& );
     bool            writePageSetup( osl::File* pFile, const JobData&, bool bWriteFeatures = true );
-    void            writeJobPatch( osl::File* File, const JobData& );
+    void			writeJobPatch( osl::File* File, const JobData& );
     bool            writeProlog (osl::File* pFile, const JobData& );
 
 public:             // for usage in PrinterGfx
-
+            
     sal_uInt32      GetResolution () const { return mnResolution; }
     void            GetScale (double &rXScale, double &rYScale) const;
     sal_uInt16      GetDepth () const;
@@ -138,7 +138,7 @@ public:
 
     sal_Bool        AbortJob ();
 
-    sal_Bool        StartPage (const JobData& rJobSetup);
+    sal_Bool		StartPage (const JobData& rJobSetup);
     sal_Bool        EndPage ();
 
     sal_uInt32      GetErrorCode ();

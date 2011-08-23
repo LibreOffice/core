@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ namespace cssxcsax = com::sun::star::xml::csax;
  * The return value is NULL terminated. The application has the responsibilty to
  * deallocte the return value.
  */
-xmlChar* ous_to_xmlstr( const rtl::OUString& oustr )
+xmlChar* ous_to_xmlstr( const rtl::OUString& oustr ) 
 {
     rtl::OString ostr = rtl::OUStringToOString( oustr , RTL_TEXTENCODING_UTF8 ) ;
     return xmlStrndup( ( xmlChar* )ostr.getStr(), ( int )ostr.getLength() ) ;
@@ -56,7 +56,7 @@ xmlChar* ous_to_xmlstr( const rtl::OUString& oustr )
  * The return value is NULL terminated. The application has the responsibilty to
  * deallocte the return value.
  */
-xmlChar* ous_to_nxmlstr( const rtl::OUString& oustr, int& length )
+xmlChar* ous_to_nxmlstr( const rtl::OUString& oustr, int& length ) 
 {
     rtl::OString ostr = rtl::OUStringToOString( oustr , RTL_TEXTENCODING_UTF8 ) ;
     length = ostr.getLength();
@@ -67,7 +67,7 @@ xmlChar* ous_to_nxmlstr( const rtl::OUString& oustr, int& length )
 /**
  * The input parameter isn't necessaryly NULL terminated.
  */
-rtl::OUString xmlchar_to_ous( const xmlChar* pChar, int length )
+rtl::OUString xmlchar_to_ous( const xmlChar* pChar, int length ) 
 {
     if( pChar != NULL )
     {
@@ -82,9 +82,9 @@ rtl::OUString xmlchar_to_ous( const xmlChar* pChar, int length )
 /**
  * The input parameter is NULL terminated
  */
-rtl::OUString xmlstr_to_ous( const xmlChar* pStr )
+rtl::OUString xmlstr_to_ous( const xmlChar* pStr ) 
 {
-    if( pStr != NULL )
+    if( pStr != NULL ) 
     {
         return xmlchar_to_ous( pStr , xmlStrlen( pStr ) ) ;
     }
@@ -98,16 +98,16 @@ rtl::OUString xmlstr_to_ous( const xmlChar* pStr )
  * The return value and the referenced value must be NULL terminated.
  * The application has the responsibilty to deallocte the return value.
  */
-const xmlChar** attrlist_to_nxmlstr( const cssu::Sequence< cssxcsax::XMLAttribute >& aAttributes )
+const xmlChar** attrlist_to_nxmlstr( const cssu::Sequence< cssxcsax::XMLAttribute >& aAttributes ) 
 {
     xmlChar* attname = NULL ;
     xmlChar* attvalue = NULL ;
     const xmlChar** attrs = NULL ;
     rtl::OUString oustr ;
-
+    
     sal_Int32 nLength = aAttributes.getLength();;
 
-    if( nLength != 0 )
+    if( nLength != 0 ) 
     {
         attrs = ( const xmlChar** )xmlMalloc( ( nLength * 2 + 2 ) * sizeof( xmlChar* ) ) ;
     }
@@ -116,12 +116,12 @@ const xmlChar** attrlist_to_nxmlstr( const cssu::Sequence< cssxcsax::XMLAttribut
         return NULL ;
     }
 
-    for( int i = 0 , j = 0 ; j < nLength ; ++j )
+    for( int i = 0 , j = 0 ; j < nLength ; ++j ) 
     {
         attname = ous_to_xmlstr( aAttributes[j].sName ) ;
         attvalue = ous_to_xmlstr( aAttributes[j].sValue ) ;
 
-        if( attname != NULL && attvalue != NULL )
+        if( attname != NULL && attvalue != NULL ) 
         {
             attrs[i++] = attname ;
             attrs[i++] = attvalue ;
@@ -152,7 +152,7 @@ SAXHelper::SAXHelper( )
 {
     xmlInitParser() ;
     LIBXML_TEST_VERSION ;
-
+    
     /*
      * compile error:
      * xmlLoadExtDtdDefaultValue = XML_DETECT_IDS | XML_COMPLETE_ATTRS ;
@@ -170,27 +170,27 @@ SAXHelper::SAXHelper( )
      *
      * mmi : re-initialize the SAX handler to version 1
      */
-
+    
     xmlSAXVersion(m_pParserCtxt->sax, 1);
 
     /* end */
 
-    if( m_pParserCtxt->inputTab[0] != NULL )
+    if( m_pParserCtxt->inputTab[0] != NULL ) 
     {
         m_pParserCtxt->inputTab[0] = NULL ;
     }
-
-    if( m_pParserCtxt == NULL )
+    
+    if( m_pParserCtxt == NULL ) 
     {
 #ifndef XMLSEC_NO_XSLT
-        xsltCleanupGlobals() ;
+        xsltCleanupGlobals() ;            
 #endif
 //      see issue i74334, we cannot call xmlCleanupParser when libxml is still used
-//      in other parts of the office.
-//      xmlCleanupParser() ;
+//		in other parts of the office.
+//		xmlCleanupParser() ;
         throw cssu::RuntimeException() ;
     }
-    else if( m_pParserCtxt->sax == NULL )
+    else if( m_pParserCtxt->sax == NULL ) 
     {
         xmlFreeParserCtxt( m_pParserCtxt ) ;
 
@@ -198,8 +198,8 @@ SAXHelper::SAXHelper( )
         xsltCleanupGlobals() ;
 #endif
 //      see issue i74334, we cannot call xmlCleanupParser when libxml is still used
-//      in other parts of the office.
-//      xmlCleanupParser() ;
+//		in other parts of the office.
+//		xmlCleanupParser() ;
         m_pParserCtxt = NULL ;
         throw cssu::RuntimeException() ;
     }
@@ -221,7 +221,7 @@ SAXHelper::SAXHelper( )
  * destruct the xml tree.
  */
 SAXHelper::~SAXHelper() {
-    if( m_pParserCtxt != NULL )
+    if( m_pParserCtxt != NULL ) 
     {
         /*
          * In the situation that no object refer the Document, this destructor
@@ -236,14 +236,14 @@ SAXHelper::~SAXHelper() {
         m_pParserCtxt = NULL ;
     }
 
-    if( m_pSaxHandler != NULL )
+    if( m_pSaxHandler != NULL ) 
     {
         xmlFree( m_pSaxHandler ) ;
         m_pSaxHandler = NULL ;
     }
 //      see issue i74334, we cannot call xmlCleanupParser when libxml is still used
-//      in other parts of the office.
-//  xmlCleanupParser() ;
+//		in other parts of the office.
+//	xmlCleanupParser() ;
 }
 
 xmlNodePtr SAXHelper::getCurrentNode()
@@ -260,7 +260,7 @@ void SAXHelper::setCurrentNode(const xmlNodePtr pNode)
      * node, in order to make compatibility.
      */
     m_pParserCtxt->nodeTab[m_pParserCtxt->nodeNr - 1]
-        = m_pParserCtxt->node
+        = m_pParserCtxt->node 
             = pNode;
 }
 
@@ -273,14 +273,14 @@ xmlDocPtr SAXHelper::getDocument()
  * XDocumentHandler -- start an xml document
  */
 void SAXHelper::startDocument( void )
-    throw( cssxs::SAXException , cssu::RuntimeException )
+    throw( cssxs::SAXException , cssu::RuntimeException ) 
 {
     /*
      * Adjust inputTab
      */
     xmlParserInputPtr pInput = xmlNewInputStream( m_pParserCtxt ) ;
 
-    if( m_pParserCtxt->inputTab != NULL && m_pParserCtxt->inputMax != 0 )
+    if( m_pParserCtxt->inputTab != NULL && m_pParserCtxt->inputMax != 0 ) 
     {
         m_pParserCtxt->inputTab[0] = pInput ;
         m_pParserCtxt->input = pInput ;
@@ -288,7 +288,7 @@ void SAXHelper::startDocument( void )
 
     m_pSaxHandler->startDocument( m_pParserCtxt ) ;
 
-    if( m_pParserCtxt == NULL || m_pParserCtxt->myDoc == NULL )
+    if( m_pParserCtxt == NULL || m_pParserCtxt->myDoc == NULL ) 
     {
         throw cssu::RuntimeException() ;
     }
@@ -297,8 +297,8 @@ void SAXHelper::startDocument( void )
 /**
  * XDocumentHandler -- end an xml document
  */
-void SAXHelper::endDocument( void )
-    throw( cssxs::SAXException , cssu::RuntimeException )
+void SAXHelper::endDocument( void ) 
+    throw( cssxs::SAXException , cssu::RuntimeException ) 
 {
     m_pSaxHandler->endDocument( m_pParserCtxt ) ;
 }
@@ -309,33 +309,33 @@ void SAXHelper::endDocument( void )
 void SAXHelper::startElement(
     const rtl::OUString& aName,
     const cssu::Sequence< cssxcsax::XMLAttribute >& aAttributes )
-    throw( cssxs::SAXException , cssu::RuntimeException )
+    throw( cssxs::SAXException , cssu::RuntimeException ) 
 {
     const xmlChar* fullName = NULL ;
     const xmlChar** attrs = NULL ;
 
     fullName = ous_to_xmlstr( aName ) ;
     attrs = attrlist_to_nxmlstr( aAttributes ) ;
-
+    
     if( fullName != NULL || attrs != NULL )
     {
         m_pSaxHandler->startElement( m_pParserCtxt , fullName , attrs ) ;
     }
 
-    if( fullName != NULL )
+    if( fullName != NULL ) 
     {
         xmlFree( ( xmlChar* )fullName ) ;
         fullName = NULL ;
     }
-
-    if( attrs != NULL )
+    
+    if( attrs != NULL ) 
     {
-        for( int i = 0 ; attrs[i] != NULL ; ++i )
+        for( int i = 0 ; attrs[i] != NULL ; ++i ) 
         {
             xmlFree( ( xmlChar* )attrs[i] ) ;
             attrs[i] = NULL ;
         }
-
+        
         xmlFree( ( void* ) attrs ) ;
         attrs = NULL ;
     }
@@ -345,14 +345,14 @@ void SAXHelper::startElement(
  * XDocumentHandler -- end an xml element
  */
 void SAXHelper::endElement( const rtl::OUString& aName )
-    throw( cssxs::SAXException , cssu::RuntimeException )
+    throw( cssxs::SAXException , cssu::RuntimeException ) 
 {
     xmlChar* fullname = NULL ;
 
     fullname = ous_to_xmlstr( aName ) ;
     m_pSaxHandler->endElement( m_pParserCtxt , fullname ) ;
 
-    if( fullname != NULL )
+    if( fullname != NULL ) 
     {
         xmlFree( ( xmlChar* )fullname ) ;
         fullname = NULL ;
@@ -363,7 +363,7 @@ void SAXHelper::endElement( const rtl::OUString& aName )
  * XDocumentHandler -- an xml element or cdata characters
  */
 void SAXHelper::characters( const rtl::OUString& aChars )
-    throw( cssxs::SAXException , cssu::RuntimeException )
+    throw( cssxs::SAXException , cssu::RuntimeException ) 
 {
     const xmlChar* chars = NULL ;
     int length = 0 ;
@@ -371,7 +371,7 @@ void SAXHelper::characters( const rtl::OUString& aChars )
     chars = ous_to_nxmlstr( aChars, length ) ;
     m_pSaxHandler->characters( m_pParserCtxt , chars , length ) ;
 
-    if( chars != NULL )
+    if( chars != NULL ) 
     {
         xmlFree( ( xmlChar* )chars ) ;
     }
@@ -380,8 +380,8 @@ void SAXHelper::characters( const rtl::OUString& aChars )
 /**
  * XDocumentHandler -- ignorable xml white space
  */
-void SAXHelper::ignorableWhitespace( const rtl::OUString& aWhitespaces )
-    throw( cssxs::SAXException , cssu::RuntimeException )
+void SAXHelper::ignorableWhitespace( const rtl::OUString& aWhitespaces ) 
+    throw( cssxs::SAXException , cssu::RuntimeException ) 
 {
     const xmlChar* chars = NULL ;
     int length = 0 ;
@@ -389,7 +389,7 @@ void SAXHelper::ignorableWhitespace( const rtl::OUString& aWhitespaces )
     chars = ous_to_nxmlstr( aWhitespaces, length ) ;
     m_pSaxHandler->ignorableWhitespace( m_pParserCtxt , chars , length ) ;
 
-    if( chars != NULL )
+    if( chars != NULL ) 
     {
         xmlFree( ( xmlChar* )chars ) ;
     }
@@ -401,7 +401,7 @@ void SAXHelper::ignorableWhitespace( const rtl::OUString& aWhitespaces )
 void SAXHelper::processingInstruction(
     const rtl::OUString& aTarget,
     const rtl::OUString& aData )
-    throw( cssxs::SAXException , cssu::RuntimeException )
+    throw( cssxs::SAXException , cssu::RuntimeException ) 
 {
     xmlChar* target = NULL ;
     xmlChar* data = NULL ;
@@ -411,13 +411,13 @@ void SAXHelper::processingInstruction(
 
     m_pSaxHandler->processingInstruction( m_pParserCtxt , target , data ) ;
 
-    if( target != NULL )
+    if( target != NULL ) 
     {
         xmlFree( ( xmlChar* )target ) ;
         target = NULL ;
     }
-
-    if( data != NULL )
+    
+    if( data != NULL ) 
     {
         xmlFree( ( xmlChar* )data ) ;
         data = NULL ;
@@ -430,17 +430,17 @@ void SAXHelper::processingInstruction(
  */
 void SAXHelper::setDocumentLocator(
     const cssu::Reference< cssxs::XLocator > &)
-    throw( cssxs::SAXException , cssu::RuntimeException )
+    throw( cssxs::SAXException , cssu::RuntimeException ) 
 {
     //--Pseudo code if necessary
     //--m_pSaxLocator is a member defined as xmlSAXHabdlerPtr
     //--m_pSaxLocatorHdl is a member defined as Sax_Locator
 
     //if( m_pSaxLocator != NULL ) {
-    //  //Deallocate the memory
+    //	//Deallocate the memory
     //}
     //if( m_pSaxLocatorHdl != NULL ) {
-    //  //Deallocate the memory
+    //	//Deallocate the memory
     //}
 
     //m_pSaxLocatorHdl = new Sax_Locator( xLocator ) ;

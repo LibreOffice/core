@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -244,7 +244,7 @@ void ModuleController::InstantiateStartupServices (void)
 void ModuleController::ProcessStartupService (const ::std::vector<Any>& rValues)
 {
     OSL_ASSERT(rValues.size() == snStartupPropertyCount);
-
+    
     try
     {
         // Get the service name of the startup service.
@@ -320,7 +320,7 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
 
 
 //----- XInitialization -------------------------------------------------------
-
+    
 void SAL_CALL ModuleController::initialize (const Sequence<Any>& aArguments)
     throw (Exception, RuntimeException)
 {

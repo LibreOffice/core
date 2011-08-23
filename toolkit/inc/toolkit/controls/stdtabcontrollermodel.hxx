@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,72 +51,72 @@ DECLARE_LIST( UnoControlModelEntryListBase, UnoControlModelEntry* )
 class UnoControlModelEntryList : public UnoControlModelEntryListBase
 {
 private:
-    ::rtl::OUString maGroupName;
+    ::rtl::OUString	maGroupName;
 
 public:
                     UnoControlModelEntryList();
                     ~UnoControlModelEntryList();
 
-    const ::rtl::OUString&      GetName() const                         { return maGroupName; }
-    void                        SetName( const ::rtl::OUString& rName ) { maGroupName = rName; }
+    const ::rtl::OUString&		GetName() const 						{ return maGroupName; }
+    void						SetName( const ::rtl::OUString& rName )	{ maGroupName = rName; }
 
-    void    Reset();
-    void    DestroyEntry( sal_uInt32 nEntry );
+    void	Reset();
+    void	DestroyEntry( sal_uInt32 nEntry );
 };
 
 struct UnoControlModelEntry
 {
-    sal_Bool        bGroup;
+    sal_Bool 		bGroup;
     union
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >* pxControl;
-        UnoControlModelEntryList*   pGroup;
+        UnoControlModelEntryList*	pGroup;
     };
 };
 
 // Keine Referenz halten, nur temporaer fuer AutoTabOrder
 struct ComponentEntry
 {
-    ::com::sun::star::awt::XWindow*     pComponent;
-    Point                               aPos;
+    ::com::sun::star::awt::XWindow*		pComponent;
+    Point								aPos;
 };
 
 DECLARE_LIST( ComponentEntryList, ComponentEntry* )
 
-#define CONTROLPOS_NOTFOUND 0xFFFFFFFF
+#define CONTROLPOS_NOTFOUND	0xFFFFFFFF
 
-class StdTabControllerModel :   public ::com::sun::star::awt::XTabControllerModel,
+class StdTabControllerModel : 	public ::com::sun::star::awt::XTabControllerModel, 
                                 public ::com::sun::star::lang::XServiceInfo,
-                                public ::com::sun::star::io::XPersistObject,
+                                public ::com::sun::star::io::XPersistObject, 
                                 public ::com::sun::star::lang::XTypeProvider,
                                 public ::cppu::OWeakAggObject
 {
 private:
-    ::osl::Mutex                maMutex;
-    UnoControlModelEntryList    maControls;
-    sal_Bool                    mbGroupControl;
+    ::osl::Mutex				maMutex;
+    UnoControlModelEntryList	maControls;
+    sal_Bool					mbGroupControl;
 
 protected:
-    ::osl::Mutex&           GetMutex() { return maMutex; }
-    sal_uInt32              ImplGetControlCount( const UnoControlModelEntryList& rList ) const;
-    void                    ImplGetControlModels( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > ** pRefs, const UnoControlModelEntryList& rList ) const;
-    void                    ImplSetControlModels( UnoControlModelEntryList& rList, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& Controls ) const;
-    sal_uInt32              ImplGetControlPos( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >  xCtrl, const UnoControlModelEntryList& rList ) const;
+    ::osl::Mutex&			GetMutex() { return maMutex; }
+    sal_uInt32				ImplGetControlCount( const UnoControlModelEntryList& rList ) const;
+    void 					ImplGetControlModels( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > ** pRefs, const UnoControlModelEntryList& rList ) const;
+    void 					ImplSetControlModels( UnoControlModelEntryList& rList, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& Controls ) const;
+    sal_uInt32				ImplGetControlPos( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >  xCtrl, const UnoControlModelEntryList& rList ) const;
 
 public:
                             StdTabControllerModel();
                             ~StdTabControllerModel();
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return OWeakAggObject::queryInterface(rType); }
-    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
+    ::com::sun::star::uno::Any	SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return OWeakAggObject::queryInterface(rType); }
+    void						SAL_CALL acquire() throw()	{ OWeakAggObject::acquire(); }
+    void						SAL_CALL release() throw()	{ OWeakAggObject::release(); }
 
-    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Any	SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >	SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >						SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XTabControllerModel
     sal_Bool SAL_CALL getGroupControl(  ) throw(::com::sun::star::uno::RuntimeException);

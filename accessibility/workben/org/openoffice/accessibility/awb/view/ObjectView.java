@@ -80,7 +80,7 @@ abstract public class ObjectView
 
     /** Implement this method if you are interested in accessible events.
     */
-    public void notifyEvent (AccessibleEventObject aEvent)
+    public void notifyEvent (AccessibleEventObject aEvent) 
     {}
 
     /// Reference to the current object to display information about.

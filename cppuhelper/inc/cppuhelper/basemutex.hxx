@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ namespace cppu
 {
     /** base class for all classes who want derive from
      ::cppu::WeakComponentImplHelperXX.
-
+     
      Implmentation classes have first to derive from BaseMutex and then from
      ::cppu::WeakComponentImplHelperXX to ensure that the BaseMutex is completely
      initialized when the mutex is used to intialize the

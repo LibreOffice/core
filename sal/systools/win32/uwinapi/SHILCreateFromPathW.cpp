@@ -21,7 +21,7 @@ EXTERN_C void WINAPI ResolveThunk_SHSimpleIDListFromPathW( FARPROC *lppfn, LPCST
         *lppfn = (FARPROC)SHSimpleIDListFromPathW_WINDOWS;
     else
     {
-        FARPROC lpfnResult = GetProcAddress( LoadLibraryA( lpLibFileName ), MAKEINTRESOURCE(162) );
+        FARPROC	lpfnResult = GetProcAddress( LoadLibraryA( lpLibFileName ), MAKEINTRESOURCE(162) );
         if ( !lpfnResult )
             lpfnResult = (FARPROC)SHSimpleIDListFromPathW_Failure;
 

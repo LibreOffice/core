@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -148,7 +148,7 @@ namespace drawinglayer
             attribute::MaterialAttribute3D aMaterial(aObjectColor, aSpecular, aEmission, nSpecularIntensity);
 
             return new attribute::Sdr3DObjectAttribute(
-                aNormalsKind, aTextureProjectionX, aTextureProjectionY,
+                aNormalsKind, aTextureProjectionX, aTextureProjectionY, 
                 aTextureKind, aTextureMode, aMaterial,
                 bInvertNormals, bDoubleSided, bShadow3D, bTextureFilter, bReducedLineGeometry);
         }

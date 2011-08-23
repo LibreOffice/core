@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -79,7 +79,7 @@ class ShellJob : private ThreadHelpBase
         //.......................................
         /** @short  reference to an uno service manager. */
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
-
+    
     //-------------------------------------------
     // native interface
     public:
@@ -109,7 +109,7 @@ class ShellJob : private ThreadHelpBase
         //---------------------------------------
         // css.lang.XServiceInfo
         DECLARE_XSERVICEINFO
-
+    
         // css.task.XJob
         virtual css::uno::Any SAL_CALL execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
             throw(css::lang::IllegalArgumentException,
@@ -119,45 +119,45 @@ class ShellJob : private ThreadHelpBase
     //-------------------------------------------
     // helper
     private:
-
+        
         //---------------------------------------
         /** generate a return value for method execute()
             which will force deactivation of this job for further requests.
-
+    
             @return an Any following the job protocol for deactivation.
          */
         static css::uno::Any impl_generateAnswer4Deactivation();
-
+    
         //---------------------------------------
         /** substitute all might existing placeholder variables
             within the configured command.
-
+    
             The command is part of the job configuration.
             These will make changes more easy (no code changes required).
             Further the command can use placeholder as they are supported
             by the global substitution service (e.g. $(prog) etcpp)
-
+    
             @param  sCommand
                     the command containing placeholder variables.
-
+    
             @return the substituted command.
          */
         ::rtl::OUString impl_substituteCommandVariables(const ::rtl::OUString& sCommand);
 
         //---------------------------------------
         /** executes the command.
-
+        
             @param  sCommand
                     the absolute command as URL or system path (without any argument !).
-
+                    
             @param  lArguments
                     the complete list of arguments configured for these job.
-
+                    
             @param  bCheckExitCode
                     bind the execution result to the exit code of the started process.
                     If it's set to false we return false only in case executable couldnt be found
                     or couldnt be started.
-
+                    
             @return TRUE if command was executed successfully; FALSE otherwise.
          */
         ::sal_Bool impl_execute(const ::rtl::OUString&                       sCommand      ,

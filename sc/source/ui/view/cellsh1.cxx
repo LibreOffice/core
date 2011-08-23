@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,13 +118,13 @@ using namespace ::com::sun::star::uno;
 //------------------------------------------------------------------
 void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 {
-    ScModule*           pScMod      = SC_MOD();
-    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
-    SfxBindings&        rBindings   = pTabViewShell->GetViewFrame()->GetBindings();
-    const SfxItemSet*   pReqArgs    = rReq.GetArgs();
-    USHORT              nSlot       = rReq.GetSlot();
+    ScModule*			pScMod		= SC_MOD();
+    ScTabViewShell*	pTabViewShell  	= GetViewData()->GetViewShell();
+    SfxBindings&		rBindings	= pTabViewShell->GetViewFrame()->GetBindings();
+    const SfxItemSet*	pReqArgs	= rReq.GetArgs();
+    USHORT				nSlot		= rReq.GetSlot();
 
-    pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
+    pTabViewShell->HideListBox();					// Autofilter-DropDown-Listbox
 
                                     // Eingabe beenden
     if ( GetViewData()->HasEditView( GetViewData()->GetActivePart() ) )
@@ -149,7 +149,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
     switch ( nSlot )
     {
         //
-        //  Einfuegen / Loeschen von Zellen / Zeilen / Spalten
+        //	Einfuegen / Loeschen von Zellen / Zeilen / Spalten
         //
 
         case FID_INS_ROW:
@@ -327,7 +327,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
 
         //
-        //  Inhalte von Zellen loeschen
+        //	Inhalte von Zellen loeschen
         //
 
         case SID_DELETE_CONTENTS:
@@ -337,18 +337,18 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_DELETE:
             {
-                USHORT  nFlags = IDF_NONE;
+                USHORT	nFlags = IDF_NONE;
 
                 if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                 {
-                    const   SfxPoolItem* pItem;
-                    String  aFlags = 'A';
+                    const	SfxPoolItem* pItem;
+                    String	aFlags = 'A';
 
                     if( IS_AVAILABLE( SID_DELETE, &pItem ) )
                         aFlags = ((const SfxStringItem*)pItem)->GetValue();
 
                     aFlags.ToUpperAscii();
-                    BOOL    bCont = TRUE;
+                    BOOL	bCont = TRUE;
 
                     for( xub_StrLen i=0 ; bCont && i<aFlags.Len() ; i++ )
                     {
@@ -358,7 +358,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             nFlags |= IDF_ALL;
                             bCont = FALSE; // nicht mehr weitermachen!
                             break;
-                            case 'S': nFlags |= IDF_STRING; break;
+                            case 'S': nFlags |= IDF_STRING;	break;
                             case 'V': nFlags |= IDF_VALUE; break;
                             case 'D': nFlags |= IDF_DATETIME; break;
                             case 'F': nFlags |= IDF_FORMULA; break;
@@ -398,7 +398,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if( ! rReq.IsAPI() )
                     {
-                        String  aFlags;
+                        String	aFlags;
 
                         if( nFlags == IDF_ALL )
                         {
@@ -423,7 +423,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
 
         //
-        //  Ausfuellen...
+        //	Ausfuellen...
         //
 
         case FID_FILL_TO_BOTTOM:
@@ -451,18 +451,18 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 USHORT nFlags = IDF_NONE;
                 USHORT nFunction = PASTE_NOFUNC;
                 BOOL bSkipEmpty = FALSE;
-                BOOL bAsLink    = FALSE;
+                BOOL bAsLink	= FALSE;
 
                 if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                 {
-                    const   SfxPoolItem* pItem;
-                    String  aFlags = 'A';
+                    const	SfxPoolItem* pItem;
+                    String	aFlags = 'A';
 
                     if( IS_AVAILABLE( FID_FILL_TAB, &pItem ) )
                         aFlags = ((const SfxStringItem*)pItem)->GetValue();
 
                     aFlags.ToUpperAscii();
-                    BOOL    bCont = TRUE;
+                    BOOL	bCont = TRUE;
 
                     for( xub_StrLen i=0 ; bCont && i<aFlags.Len() ; i++ )
                     {
@@ -472,7 +472,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             nFlags |= IDF_ALL;
                             bCont = FALSE; // nicht mehr weitermachen!
                             break;
-                            case 'S': nFlags |= IDF_STRING; break;
+                            case 'S': nFlags |= IDF_STRING;	break;
                             case 'V': nFlags |= IDF_VALUE; break;
                             case 'D': nFlags |= IDF_DATETIME; break;
                             case 'F': nFlags |= IDF_FORMULA; break;
@@ -494,11 +494,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if (pDlg->Execute() == RET_OK)
                     {
-                        nFlags     = pDlg->GetInsContentsCmdBits();
+                        nFlags	   = pDlg->GetInsContentsCmdBits();
                         nFunction  = pDlg->GetFormulaCmdBits();
                         bSkipEmpty = pDlg->IsSkipEmptyCells();
-                        bAsLink    = pDlg->IsLink();
-                        //  MoveMode gibt's bei Tabelle fuellen nicht
+                        bAsLink	   = pDlg->IsLink();
+                        //	MoveMode gibt's bei Tabelle fuellen nicht
                     }
                     delete pDlg;
                 }
@@ -509,7 +509,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if( ! rReq.IsAPI() )
                     {
-                        String  aFlags;
+                        String	aFlags;
 
                         if( nFlags == IDF_ALL )
                         {
@@ -541,13 +541,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SCROW nEndRow;
                 SCTAB nEndTab;
                 USHORT nPossDir = FDS_OPT_NONE;
-                FillDir     eFillDir     = FILL_TO_BOTTOM;
-                FillCmd     eFillCmd     = FILL_LINEAR;
-                FillDateCmd eFillDateCmd = FILL_DAY;
+                FillDir		eFillDir	 = FILL_TO_BOTTOM;
+                FillCmd		eFillCmd	 = FILL_LINEAR;
+                FillDateCmd	eFillDateCmd = FILL_DAY;
                 double fStartVal = MAXDOUBLE;
-                double fIncVal   = 1;
-                double fMaxVal   = MAXDOUBLE;
-                BOOL   bDoIt     = FALSE;
+                double fIncVal	 = 1;
+                double fMaxVal	 = MAXDOUBLE;
+                BOOL   bDoIt	 = FALSE;
 
                 GetViewData()->GetSimpleArea( nStartCol, nStartRow, nStartTab,
                                               nEndCol, nEndRow, nEndTab );
@@ -564,16 +564,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     eFillDir=FILL_TO_BOTTOM;
                 }
 
-                ScDocument*      pDoc = GetViewData()->GetDocument();
+                ScDocument* 	 pDoc = GetViewData()->GetDocument();
                 SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
 
                 if( pReqArgs )
                 {
                     const SfxPoolItem* pItem;
-                    String  aFillDir, aFillCmd, aFillDateCmd;
-                    String  aFillStep, aFillStart, aFillMax;
+                    String	aFillDir, aFillCmd, aFillDateCmd;
+                    String	aFillStep, aFillStart, aFillMax;
                     sal_uInt32 nKey;
-                    double  fTmpVal;
+                    double	fTmpVal;
 
                     bDoIt=FALSE;
 
@@ -630,7 +630,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if( pFormatter->IsNumberFormat( aFillMax, nKey, fTmpVal ))
                         fMaxVal = fTmpVal;
 
-                    bDoIt   = TRUE;
+                    bDoIt	= TRUE;
 
                 }
                 else // (pReqArgs == NULL) => Dialog hochziehen
@@ -661,7 +661,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     //
                     String aStartStr;
 
-                    //  Startwert nur vorbelegen, wenn nur 1 Zeile oder Spalte:
+                    //	Startwert nur vorbelegen, wenn nur 1 Zeile oder Spalte:
                     if ( nStartCol == nEndCol || nStartRow == nEndRow )
                     {
                         double fInputEndVal = 0.0;
@@ -735,9 +735,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if ( pDlg->Execute() == RET_OK )
                     {
-                        eFillDir        = pDlg->GetFillDir();
-                        eFillCmd        = pDlg->GetFillCmd();
-                        eFillDateCmd    = pDlg->GetFillDateCmd();
+                        eFillDir		= pDlg->GetFillDir();
+                        eFillCmd		= pDlg->GetFillCmd();
+                        eFillDateCmd	= pDlg->GetFillDateCmd();
 
                         if(eFillCmd==FILL_AUTO)
                         {
@@ -745,51 +745,51 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             if(aStr.Len()>0)
                                 pTabViewShell->EnterData( nStartCol, nStartRow, nStartTab, aStr );
                         }
-                        fStartVal       = pDlg->GetStart();
-                        fIncVal         = pDlg->GetStep();
-                        fMaxVal         = pDlg->GetMax();
-                        bDoIt           = TRUE;
+                        fStartVal		= pDlg->GetStart();
+                        fIncVal			= pDlg->GetStep();
+                        fMaxVal			= pDlg->GetMax();
+                        bDoIt			= TRUE;
                     }
                     delete pDlg;
                 }
 
                 if( bDoIt )
                 {
-                    //nScFillModeMouseModifier = 0; // kein Ctrl/Copy
+                    //nScFillModeMouseModifier = 0;	// kein Ctrl/Copy
                     pTabViewShell->FillSeries( eFillDir, eFillCmd, eFillDateCmd, fStartVal, fIncVal, fMaxVal );
 
                     if( ! rReq.IsAPI() )
                     {
-                        String  aPara;
-                        Color*  pColor=0;
+                        String	aPara;
+                        Color*	pColor=0;
 
                         switch( eFillDir )
                         {
-                            case FILL_TO_BOTTOM:    aPara = 'B'; break;
-                            case FILL_TO_RIGHT:     aPara = 'R'; break;
-                            case FILL_TO_TOP:       aPara = 'T'; break;
-                            case FILL_TO_LEFT:      aPara = 'L'; break;
+                            case FILL_TO_BOTTOM:	aPara = 'B'; break;
+                            case FILL_TO_RIGHT:		aPara = 'R'; break;
+                            case FILL_TO_TOP:		aPara = 'T'; break;
+                            case FILL_TO_LEFT:		aPara = 'L'; break;
                             default: aPara.Erase(); break;
                         }
                         rReq.AppendItem( SfxStringItem( FID_FILL_SERIES, aPara ) );
 
                         switch( eFillCmd )
                         {
-                            case FILL_SIMPLE:       aPara = 'S'; break;
-                            case FILL_LINEAR:       aPara = 'L'; break;
-                            case FILL_GROWTH:       aPara = 'G'; break;
-                            case FILL_DATE:         aPara = 'D'; break;
-                            case FILL_AUTO:         aPara = 'A'; break;
+                            case FILL_SIMPLE:		aPara = 'S'; break;
+                            case FILL_LINEAR:		aPara = 'L'; break;
+                            case FILL_GROWTH:		aPara = 'G'; break;
+                            case FILL_DATE:			aPara = 'D'; break;
+                            case FILL_AUTO:			aPara = 'A'; break;
                             default: aPara.Erase(); break;
                         }
                         rReq.AppendItem( SfxStringItem( FN_PARAM_1, aPara ) );
 
                         switch( eFillDateCmd )
                         {
-                            case FILL_DAY:          aPara = 'D'; break;
-                            case FILL_WEEKDAY:      aPara = 'W'; break;
-                            case FILL_MONTH:        aPara = 'M'; break;
-                            case FILL_YEAR:         aPara = 'Y'; break;
+                            case FILL_DAY:			aPara = 'D'; break;
+                            case FILL_WEEKDAY:		aPara = 'W'; break;
+                            case FILL_MONTH:		aPara = 'M'; break;
+                            case FILL_YEAR:			aPara = 'Y'; break;
                             default: aPara.Erase(); break;
                         }
                         rReq.AppendItem( SfxStringItem( FN_PARAM_2, aPara ) );
@@ -844,9 +844,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     GetViewData()->GetSimpleArea( nStartCol,nStartRow,nStartTab,
                                               nEndCol,nEndRow,nEndTab );
                 }
-                else    // Aufruf per Maus
+                else	// Aufruf per Maus
                 {
-                    //  #55284# nicht innerhalb einer zusammengefassten Zelle
+                    //	#55284# nicht innerhalb einer zusammengefassten Zelle
 
                     if ( nStartCol == nEndCol && nStartRow == nEndRow )
                     {
@@ -904,7 +904,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                             if( ! rReq.IsAPI() )
                             {
-                                String  aAdrStr;
+                                String	aAdrStr;
                                 ScAddress aAdr( nFillCol, nFillRow, 0 );
                                 aAdr.Format( aAdrStr, SCR_ABS, pDoc, pDoc->GetAddressConvention() );
 
@@ -923,8 +923,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
 
         //
-        //  Gliederung (Outlines)
-        //  SID_AUTO_OUTLINE, SID_OUTLINE_DELETEALL in Execute (in docsh.idl)
+        //	Gliederung (Outlines)
+        //	SID_AUTO_OUTLINE, SID_OUTLINE_DELETEALL in Execute (in docsh.idl)
         //
 
         case SID_OUTLINE_HIDE:
@@ -1032,7 +1032,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         }
                     }
                 }
-                else            // Dialog, wenn nicht ganze Zeilen/Spalten markiert
+                else			// Dialog, wenn nicht ganze Zeilen/Spalten markiert
                 {
                     if ( GetViewData()->SimpleColMarked() && !GetViewData()->SimpleRowMarked() )
                         bColumns = TRUE;
@@ -1094,7 +1094,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         }
                     }
                 }
-                else            // Dialog nur, wenn Aufheben fuer Zeilen und Spalten moeglich
+                else			// Dialog nur, wenn Aufheben fuer Zeilen und Spalten moeglich
                 {
                     BOOL bColPoss, bRowPoss;
                     pTabViewShell->TestRemoveOutline( bColPoss, bRowPoss );
@@ -1133,11 +1133,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
 
         //
-        //  Clipboard
+        //	Clipboard
         //
 
 
-        case SID_COPY:              // fuer Grafiken in DrawShell
+        case SID_COPY:				// fuer Grafiken in DrawShell
             {
                 WaitObject aWait( GetViewData()->GetDialogParent() );
                 pTabViewShell->CopyToClip( NULL, FALSE, FALSE, TRUE );
@@ -1148,7 +1148,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
-        case SID_CUT:               // fuer Grafiken in DrawShell
+        case SID_CUT:				// fuer Grafiken in DrawShell
             {
                 WaitObject aWait( GetViewData()->GetDialogParent() );
                 pTabViewShell->CutToClip( NULL, TRUE );
@@ -1193,7 +1193,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         pTabViewShell->PasteFromSystem(nFormat);
                 }
                 //?else
-                //? pTabViewShell->PasteFromSystem();
+                //?	pTabViewShell->PasteFromSystem();
 
                 rReq.Done();
             }
@@ -1206,7 +1206,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 USHORT nFunction = PASTE_NOFUNC;
                 BOOL bSkipEmpty = FALSE;
                 BOOL bTranspose = FALSE;
-                BOOL bAsLink    = FALSE;
+                BOOL bAsLink	= FALSE;
                 InsCellCmd eMoveMode = INS_NONE;
 
                 Window* pWin = GetViewData()->GetActiveWin();
@@ -1219,14 +1219,14 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
                     if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                     {
-                        const   SfxPoolItem* pItem;
-                        String  aFlags = 'A';
+                        const	SfxPoolItem* pItem;
+                        String	aFlags = 'A';
 
                         if( IS_AVAILABLE( FID_INS_CELL_CONTENTS, &pItem ) )
                             aFlags = ((const SfxStringItem*)pItem)->GetValue();
 
                         aFlags.ToUpperAscii();
-                        BOOL    bCont = TRUE;
+                        BOOL	bCont = TRUE;
 
                         for( xub_StrLen i=0 ; bCont && i<aFlags.Len() ; i++ )
                         {
@@ -1236,7 +1236,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 nFlags |= IDF_ALL;
                                 bCont = FALSE; // nicht mehr weitermachen!
                                 break;
-                                case 'S': nFlags |= IDF_STRING; break;
+                                case 'S': nFlags |= IDF_STRING;	break;
                                 case 'V': nFlags |= IDF_VALUE; break;
                                 case 'D': nFlags |= IDF_DATETIME; break;
                                 case 'F': nFlags |= IDF_FORMULA; break;
@@ -1306,11 +1306,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             }
                             if (pDlg->Execute() == RET_OK)
                             {
-                                nFlags     = pDlg->GetInsContentsCmdBits();
+                                nFlags	   = pDlg->GetInsContentsCmdBits();
                                 nFunction  = pDlg->GetFormulaCmdBits();
                                 bSkipEmpty = pDlg->IsSkipEmptyCells();
                                 bTranspose = pDlg->IsTranspose();
-                                bAsLink    = pDlg->IsLink();
+                                bAsLink	   = pDlg->IsLink();
                                 eMoveMode  = pDlg->GetMoveMode();
                             }
                             delete pDlg;
@@ -1324,16 +1324,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         {
                             WaitObject aWait( GetViewData()->GetDialogParent() );
                             if ( bAsLink && bOtherDoc )
-                                pTabViewShell->PasteFromSystem(SOT_FORMATSTR_ID_LINK);  // DDE einfuegen
+                                pTabViewShell->PasteFromSystem(SOT_FORMATSTR_ID_LINK);	// DDE einfuegen
                             else
                                 pTabViewShell->PasteFromClip( nFlags, pOwnClip->GetDocument(),
                                     nFunction, bSkipEmpty, bTranspose, bAsLink,
-                                    eMoveMode, IDF_NONE, TRUE );    // allow warning dialog
+                                    eMoveMode, IDF_NONE, TRUE );	// allow warning dialog
                         }
 
                         if( !pReqArgs )
                         {
-                            String  aFlags;
+                            String	aFlags;
 
                             if( nFlags == IDF_ALL )
                             {
@@ -1360,7 +1360,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                 }
             }
-            pTabViewShell->CellContentChanged();        // => PasteFromXXX ???
+            pTabViewShell->CellContentChanged();		// => PasteFromXXX ???
             break;
 
         case SID_PASTE_SPECIAL:
@@ -1369,7 +1369,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 Window* pWin = GetViewData()->GetActiveWin();
 
-                //  Clipboard-ID als Parameter angegeben? Basic "PasteSpecial(Format)"
+                //	Clipboard-ID als Parameter angegeben? Basic "PasteSpecial(Format)"
                 const SfxPoolItem* pItem=NULL;
                 if ( pReqArgs &&
                      pReqArgs->GetItemState(nSlot, TRUE, &pItem) == SFX_ITEM_SET &&
@@ -1458,11 +1458,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                 }
             }
-            pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
+            pTabViewShell->CellContentChanged();		// => PasteFromSystem() ???
             break;
 
         //
-        //  sonstiges
+        //	sonstiges
         //
 
         case FID_INS_ROWBRK:
@@ -1685,22 +1685,22 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 const SfxBoolItem* pOkItem = (const SfxBoolItem*)&pReqArgs->Get( SID_DLG_RETOK );
 
-//              pScMod->SetFunctionDlg( NULL );
+//				pScMod->SetFunctionDlg( NULL );
 
-                if ( pOkItem->GetValue() )      // OK
+                if ( pOkItem->GetValue() )		// OK
                 {
-                    String               aFormula;
-                    const SfxStringItem* pSItem      = (const SfxStringItem*)&pReqArgs->Get( SCITEM_STRING );
-                    const SfxBoolItem*   pMatrixItem = (const SfxBoolItem*)  &pReqArgs->Get( SID_DLG_MATRIX );
+                    String				 aFormula;
+                    const SfxStringItem* pSItem 	 = (const SfxStringItem*)&pReqArgs->Get( SCITEM_STRING );
+                    const SfxBoolItem* 	 pMatrixItem = (const SfxBoolItem*)  &pReqArgs->Get( SID_DLG_MATRIX );
 
                     aFormula += pSItem->GetValue();
                     pScMod->ActivateInputWindow( &aFormula, pMatrixItem->GetValue() );
                 }
-                else                            // CANCEL
+                else							// CANCEL
                 {
                     pScMod->ActivateInputWindow( NULL );
                 }
-                rReq.Ignore();      // only SID_ENTER_STRING is recorded
+                rReq.Ignore();		// only SID_ENTER_STRING is recorded
             }
             break;
 
@@ -1708,7 +1708,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             if ( pReqArgs )
             {
                 const SfxPoolItem* pItem;
-                String  aName, aSymbol, aAttrib;
+                String	aName, aSymbol, aAttrib;
 
                 if( IS_AVAILABLE( FID_DEFINE_NAME, &pItem ) )
                     aName = ((const SfxStringItem*)pItem)->GetValue();
@@ -1724,12 +1724,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if (pTabViewShell->InsertName( aName, aSymbol, aAttrib ))
                         rReq.Done();
                     else
-                        SbxBase::SetError( SbxERR_BAD_PARAMETER );  // Basic-Fehler
+                        SbxBase::SetError( SbxERR_BAD_PARAMETER );	// Basic-Fehler
                 }
             }
             else
             {
-                USHORT          nId  = ScNameDlgWrapper::GetChildWindowId();
+                USHORT			nId  = ScNameDlgWrapper::GetChildWindowId();
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
@@ -1740,7 +1740,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_DEFINE_COLROWNAMERANGES:
             {
 
-                USHORT          nId  = ScColRowNameRangesDlgWrapper::GetChildWindowId();
+                USHORT			nId  = ScColRowNameRangesDlgWrapper::GetChildWindowId();
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
@@ -1800,7 +1800,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case FID_INSERT_NAME:
             {
-                ScDocument*     pDoc = GetViewData()->GetDocument();
+                ScDocument*		pDoc = GetViewData()->GetDocument();
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
@@ -1816,11 +1816,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             ScInputHandler* pHdl = pScMod->GetInputHdl( pTabViewShell );
                             if (pHdl)
                             {
-                                //  das "=" per Key-Event, schaltet in den Eingabe-Modus
+                                //	das "=" per Key-Event, schaltet in den Eingabe-Modus
                                 pScMod->InputKeyEvent( KeyEvent('=',KeyCode()) );
 
                                 String aName = pDlg->GetSelectedName();
-                                pHdl->InsertFunction( aName, FALSE );       // ohne "()"
+                                pHdl->InsertFunction( aName, FALSE );		// ohne "()"
                             }
                         }
                         break;
@@ -1834,7 +1834,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 const SfxStringItem& rTextItem = (const SfxStringItem&)pReqArgs->Get( SID_RANGE_NOTETEXT );
 
-                //  #43343# immer Cursorposition
+                //	#43343# immer Cursorposition
                 ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
                 pTabViewShell->SetNoteText( aPos, rTextItem.GetValue() );
                 rReq.Done();
@@ -1926,7 +1926,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
 
                 // font color doesn't matter here
-                Font             aCurFont;
+                Font			 aCurFont;
                 pTabViewShell->GetSelectionPattern()->GetFont( aCurFont, SC_AUTOCOL_BLACK, NULL, NULL, NULL,
                                                                 pTabViewShell->GetSelectionScriptType() );
 
@@ -1969,7 +1969,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if( pItem )
                     {
                         pTabViewShell->UseScenario( pItem->GetValue() );
-                        //! wofuer soll der Return-Wert gut sein?!?!
+                        //!	wofuer soll der Return-Wert gut sein?!?!
                         rReq.SetReturnValue( SfxStringItem( SID_SELECT_SCENARIO, pItem->GetValue() ) );
                         rReq.Done();
                     }
@@ -1988,8 +1988,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if( IS_AVAILABLE( SID_HYPERLINK_SETLINK, &pItem ) )
                 {
                     const SvxHyperlinkItem* pHyper = (const SvxHyperlinkItem*) pItem;
-                    const String& rName   = pHyper->GetName();
-                    const String& rURL    = pHyper->GetURL();
+                    const String& rName	  = pHyper->GetName();
+                    const String& rURL	  = pHyper->GetURL();
                     const String& rTarget = pHyper->GetTargetFrame();
                     USHORT nType = (USHORT) pHyper->GetInsertMode();
 
@@ -2189,10 +2189,10 @@ void ScCellShell::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTa
 
             pTabViewShell->PasteFromClip( nFlags, pClipDoc,
                     PASTE_NOFUNC, FALSE, FALSE, FALSE, INS_NONE, IDF_NONE,
-                    bShowDialog );      // allow warning dialog
+                    bShowDialog );		// allow warning dialog
         }
     }
-    pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
+    pTabViewShell->CellContentChanged();		// => PasteFromSystem() ???
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 
 #include <svx/dialogs.hrc>
 
-#define PAINT_OFFSET    5
+#define PAINT_OFFSET	5
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxSelectionModeControl, SfxUInt16Item);
 
@@ -84,14 +84,14 @@ void SvxSelectionModeControl::Click()
         nState = 0;
 
     ::com::sun::star::uno::Any a;
-    SfxUInt16Item aState( GetSlotId(), nState );
+    SfxUInt16Item aState( GetSlotId(), nState );    
     INetURLObject aObj( m_aCommandURL );
-
+    
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
     aArgs[0].Name  = aObj.GetURLPath();
     aState.QueryValue( a );
     aArgs[0].Value = a;
-
+    
     execute( aArgs );
 }
 

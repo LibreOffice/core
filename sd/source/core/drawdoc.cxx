@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -111,7 +111,7 @@ SdDrawDocument* SdDrawDocument::pDocLockedInsertingLinks = NULL;
 //////////////////////////////////////////////////////////////////////////////
 
 PresentationSettings::PresentationSettings()
-:   mbAll( true ),
+:	mbAll( true ),
     mbEndless( false ),
     mbCustomShow(false),
     mbManual( false ),
@@ -130,7 +130,7 @@ PresentationSettings::PresentationSettings()
 // ---------------------------------------------------------------------------
 
 PresentationSettings::PresentationSettings( const PresentationSettings& r )
-:   maPresPage( r.maPresPage ),
+:	maPresPage( r.maPresPage ),
     mbAll( r.mbAll ),
     mbEndless( r.mbEndless ),
     mbCustomShow( r.mbCustomShow ),
@@ -182,7 +182,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     mpMasterPageListWatcher = ::std::auto_ptr<ImpMasterPageListWatcher>(
         new ImpMasterPageListWatcher(*this));
 
-    SetObjectShell(pDrDocSh);       // fuer das VCDrawModel
+    SetObjectShell(pDrDocSh);		// fuer das VCDrawModel
 
     if (mpDocSh)
     {
@@ -196,9 +196,9 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     // #92067# Allow UI scale only for draw documents.
     if( eType == DOCUMENT_TYPE_DRAW )
-        SetUIUnit( (FieldUnit)pOptions->GetMetric(), Fraction( nX, nY ) );  // user-defined
+        SetUIUnit( (FieldUnit)pOptions->GetMetric(), Fraction( nX, nY ) );	// user-defined
     else
-        SetUIUnit( (FieldUnit)pOptions->GetMetric(), Fraction( 1, 1 ) );    // default
+        SetUIUnit( (FieldUnit)pOptions->GetMetric(), Fraction( 1, 1 ) );	// default
 
     SetScaleUnit(MAP_100TH_MM);
     SetScaleFraction(Fraction(1, 1));
@@ -222,7 +222,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     // set linguistic options
     {
         const SvtLinguConfig    aLinguConfig;
-        SvtLinguOptions         aOptions;
+        SvtLinguOptions			aOptions;
         aLinguConfig.GetOptions( aOptions );
 
         SetLanguage( MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage,
@@ -347,13 +347,13 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     *
     * Es werden auf Pages und MasterPages folgende Default-Layer angelegt:
     *
-    * Layer STR_LAYOUT    : Standardlayer fr alle Zeichenobjekte
+    * Layer STR_LAYOUT	  : Standardlayer fr alle Zeichenobjekte
     *
     * Layer STR_BCKGRND   : Hintergrund der MasterPage
-    *                       (auf normalen Pages z.Z. keine Verwendung)
+    *						(auf normalen Pages z.Z. keine Verwendung)
     *
     * Layer STR_BCKGRNDOBJ: Objekte auf dem Hintergrund der MasterPage
-    *                       (auf normalen Pages z.Z. keine Verwendung)
+    *						(auf normalen Pages z.Z. keine Verwendung)
     *
     * Layer STR_CONTROLS  : Standardlayer fr Controls
     *
@@ -472,7 +472,7 @@ SdrModel* SdDrawDocument::AllocModel() const
     {
         // Dokument wird fuer Drag&Drop/Clipboard erzeugt, dafuer muss dem Dokument eine DocShell (SvPersist) bekannt sein
         SfxObjectShell*   pObj = NULL;
-        ::sd::DrawDocShell*     pNewDocSh = NULL;
+        ::sd::DrawDocShell*		pNewDocSh = NULL;
 
         if( meDocType == DOCUMENT_TYPE_IMPRESS )
             mpCreatingTransferable->SetDocShell( new ::sd::DrawDocShell(
@@ -682,7 +682,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         USHORT nPage, nPageCount;
 
         // #96323# create missing layout style sheets for broken documents
-        //         that where created with the 5.2
+        //		   that where created with the 5.2
         nPageCount = GetMasterSdPageCount( PK_STANDARD );
         for (nPage = 0; nPage < nPageCount; nPage++)
         {

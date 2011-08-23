@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -91,15 +91,15 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
 
     // ST_TextAnchoringType
     if( xAttributes->hasAttribute( XML_anchor ) ) {
-        drawing::TextVerticalAdjust eVA( drawing::TextVerticalAdjust_TOP );
+        drawing::TextVerticalAdjust	eVA( drawing::TextVerticalAdjust_TOP );
         switch( xAttributes->getOptionalValueToken( XML_anchor, XML_t ) )
         {
-            case XML_b :    eVA = drawing::TextVerticalAdjust_BOTTOM; break;
+            case XML_b :	eVA = drawing::TextVerticalAdjust_BOTTOM; break;
             case XML_dist :
             case XML_just :
-            case XML_ctr :  eVA = drawing::TextVerticalAdjust_CENTER; break;
+            case XML_ctr :	eVA = drawing::TextVerticalAdjust_CENTER; break;
             default:
-            case XML_t :    eVA = drawing::TextVerticalAdjust_TOP; break;
+            case XML_t :	eVA = drawing::TextVerticalAdjust_TOP; break;
         }
         mrTextBodyProp.maPropertyMap[ PROP_TextVerticalAdjust ] <<= eVA;
     }
@@ -163,15 +163,15 @@ Reference< XFastContextHandler > TextBodyPropertiesContext::createFastChildConte
     switch( aElementToken )
     {
             // Sequence
-            case NMSP_DRAWINGML|XML_prstTxWarp:     // CT_PresetTextShape
-            case NMSP_DRAWINGML|XML_prot:           // CT_TextProtectionProperty
+            case NMSP_DRAWINGML|XML_prstTxWarp:		// CT_PresetTextShape
+            case NMSP_DRAWINGML|XML_prot:			// CT_TextProtectionProperty
                 break;
 
             // EG_TextAutofit
             case NMSP_DRAWINGML|XML_noAutofit:
                 mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;   // CT_TextNoAutofit
                 break;
-            case NMSP_DRAWINGML|XML_normAutofit:    // CT_TextNormalAutofit
+            case NMSP_DRAWINGML|XML_normAutofit:	// CT_TextNormalAutofit
                 mrTextBodyProp.maPropertyMap[ PROP_TextFitToSize ] <<= TextFitToSizeType_AUTOFIT;
                 mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;
                 break;
@@ -179,11 +179,11 @@ Reference< XFastContextHandler > TextBodyPropertiesContext::createFastChildConte
                 mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= true;
                 break;
 
-            case NMSP_DRAWINGML|XML_scene3d:        // CT_Scene3D
+            case NMSP_DRAWINGML|XML_scene3d:		// CT_Scene3D
 
             // EG_Text3D
-            case NMSP_DRAWINGML|XML_sp3d:           // CT_Shape3D
-            case NMSP_DRAWINGML|XML_flatTx:         // CT_FlatText
+            case NMSP_DRAWINGML|XML_sp3d:			// CT_Shape3D
+            case NMSP_DRAWINGML|XML_flatTx:			// CT_FlatText
 
                 break;
     }

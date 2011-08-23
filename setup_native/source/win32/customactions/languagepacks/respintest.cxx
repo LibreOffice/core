@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@
 
 using namespace std;
 
-namespace
+namespace 
 {
     string GetMsiProperty(MSIHANDLE handle, const string& sProperty)
     {
@@ -86,7 +86,7 @@ namespace
     {
         MsiSetProperty(handle, sProperty.c_str(), TEXT("1"));
     }
-} // namespace
+} // namespace 
 
 extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
 {
@@ -104,16 +104,16 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
     // 1. Searching for "ProductCode" in setup.ini
 
     string sSetupiniPath = sOfficeInstallPath + TEXT("program\\setup.ini");
-
+    
     TCHAR szValue[32767];
 
-    GetPrivateProfileString(
-        TEXT("Bootstrap"),
+    GetPrivateProfileString( 
+        TEXT("Bootstrap"), 
         TEXT("ProductCode"),
         TEXT("INVALIDDIRECTORY"),
         szValue,
         SAL_N_ELEMENTS(szValue),
-        sSetupiniPath.c_str()
+        sSetupiniPath.c_str() 
         );
 
     if ( !_tcsicmp( szValue, TEXT("INVALIDDIRECTORY") ) )
@@ -129,13 +129,13 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
 
     szValue[0] = '\0';
 
-    GetPrivateProfileString(
-        TEXT("Bootstrap"),
+    GetPrivateProfileString( 
+        TEXT("Bootstrap"), 
         TEXT("buildid"),
         TEXT("ISWRONGPRODUCT"),
         szValue,
         SAL_N_ELEMENTS(szValue),
-        sSetupiniPath.c_str()
+        sSetupiniPath.c_str() 
         );
 
     if ( !_tcsicmp( szValue, TEXT("ISWRONGPRODUCT") ) )
@@ -156,7 +156,7 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
         SetMsiProperty( handle, TEXT("ISWRONGPRODUCT"), TEXT("YES") );
         // MessageBox(NULL, "ISWRONGPRODUCT 2 set after searching PRODUCTMAJOR", "DEBUG", MB_OK);
         SetMsiErrorCode( MSI_ERROR_ISWRONGPRODUCT );
-        return ERROR_SUCCESS;
+        return ERROR_SUCCESS;		
     }
 
     // 3. Only for patch: Comparing "PRODUCTMINOR from property table and "ProductMinor" from InfoFile
@@ -170,15 +170,15 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
 
         szValue[0] = '\0';
 
-        GetPrivateProfileString(
-            TEXT("Bootstrap"),
+        GetPrivateProfileString( 
+            TEXT("Bootstrap"), 
             TEXT("ProductBuildid"),
             TEXT("8918"),
             szValue,
             SAL_N_ELEMENTS(szValue),
-            sSetupiniPath.c_str()
+            sSetupiniPath.c_str() 
             );
-
+            
         int InstalledProductMinor = atoi(szValue);
 
         if ( InstalledProductMinor >= PatchProductMinor )
@@ -186,7 +186,7 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
             SetMsiProperty( handle, TEXT("PATCHISOLDER"), TEXT("YES") );
             // MessageBox(NULL, "PATCHISOLDER set", "DEBUG", MB_OK);
             SetMsiErrorCode( MSI_ERROR_PATCHISOLDER );
-            return ERROR_SUCCESS;
+            return ERROR_SUCCESS;    
         }
     }
 
@@ -194,13 +194,13 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
 
     szValue[0] = '\0';
 
-    GetPrivateProfileString(
-        TEXT("Bootstrap"),
+    GetPrivateProfileString( 
+        TEXT("Bootstrap"), 
         TEXT("ALLUSERS"),
         TEXT(""),
         szValue,
         SAL_N_ELEMENTS(szValue),
-        sSetupiniPath.c_str()
+        sSetupiniPath.c_str() 
         );
 
     if ( szValue[0] )
@@ -208,7 +208,7 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
         SetMsiProperty( handle, TEXT("ALLUSERS"), szValue );
         // MessageBox(NULL, "ALLUSERS set", "DEBUG", MB_OK);
     }
-
+    
     return ERROR_SUCCESS;
 }
 

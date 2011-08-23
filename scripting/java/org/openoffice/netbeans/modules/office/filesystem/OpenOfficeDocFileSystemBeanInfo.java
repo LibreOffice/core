@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@ import org.openide.filesystems.FileSystem;
 import org.openide.util.NbBundle;
 import org.openide.util.Utilities;
 
-/**
+/** 
  * Description of the OpenOffice.org Document filesystem.
  *
  * @author misha <misha@openoffice.org>
@@ -46,9 +46,9 @@ public class OpenOfficeDocFileSystemBeanInfo
 {
     private static String ICONLOCATION =
         "org/openoffice/netbeans/modules/office/resources";
-    private static String COLORICON16NAME =
+    private static String COLORICON16NAME = 
         ICONLOCATION + File.separator + "OpenOfficeDocFileSystemIcon.png";
-    private static String COLORICON32NAME =
+    private static String COLORICON32NAME = 
         ICONLOCATION + File.separator + "OpenOfficeDocFileSystemIcon32.png";
 
     /**
@@ -65,12 +65,12 @@ public class OpenOfficeDocFileSystemBeanInfo
             return null;
         }
     }
-/*
-    // If you have a visual dialog to customize configuration of the
+/*    
+    // If you have a visual dialog to customize configuration of the 
     // filesystem:
     public BeanDescriptor getBeanDescriptor()
     {
-        return new BeanDescriptor(OpenOfficeDocFileSystem.class,
+        return new BeanDescriptor(OpenOfficeDocFileSystem.class, 
             OpenOfficeDocFileSystemCustomizer.class);
     }
 */
@@ -80,7 +80,7 @@ public class OpenOfficeDocFileSystemBeanInfo
     public PropertyDescriptor[] getPropertyDescriptors()
     {
         try {
-            // Included only to make it a writable property (it is read-only
+            // Included only to make it a writable property (it is read-only 
             // in FileSystem):
             PropertyDescriptor readOnly = new PropertyDescriptor(
                 "readOnly", OpenOfficeDocFileSystem.class);
@@ -89,7 +89,7 @@ public class OpenOfficeDocFileSystemBeanInfo
             readOnly.setShortDescription(NbBundle.getMessage(
                 OpenOfficeDocFileSystemBeanInfo.class, "HINT_readOnly"));
 
-            // This could be whatever properties you use to configure the
+            // This could be whatever properties you use to configure the 
             // filesystem:
             PropertyDescriptor document = new PropertyDescriptor(
                 "Document", OpenOfficeDocFileSystem.class);
@@ -97,7 +97,7 @@ public class OpenOfficeDocFileSystemBeanInfo
                 OpenOfficeDocFileSystemBeanInfo.class, "PROP_document"));
             document.setShortDescription(NbBundle.getMessage(
                 OpenOfficeDocFileSystemBeanInfo.class, "HINT_document"));
-            // Request to the property editor that it be permitted only to
+            // Request to the property editor that it be permitted only to 
             // choose directories:
             document.setValue("directories", Boolean.FALSE);    // NOI18N
             document.setValue("files", Boolean.TRUE);           // NOI18N
@@ -108,7 +108,7 @@ public class OpenOfficeDocFileSystemBeanInfo
             return null;
         }
     }
-
+    
     /**
      * Retrives an icon by the icon type.
      */
@@ -121,5 +121,5 @@ public class OpenOfficeDocFileSystemBeanInfo
             return Utilities.loadImage(COLORICON32NAME);
         }
     }
-
+    
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,12 +45,12 @@ module com { module sun { module star { module linguistic2 {
     the sentence end and report all errors found.</p>
 
     <p>An implementation of this service is not limited to grammar checking at all.
-    It might also check style, used terms etc. Basically it can check every
+    It might also check style, used terms etc. Basically it can check every 
     aspect of a single sentence. Since the text provided is always the complete
     paragraph it can also choose to analyze the context of the sentence currently
     required to be checked. However error reports need to be limited to the
     current sentence.</p>
-
+ 
     @since OOo 3.0.1
  */
 

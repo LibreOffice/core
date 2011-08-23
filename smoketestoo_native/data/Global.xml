@@ -131,11 +131,11 @@ Sub Main
     if bShowTable then
         call ClearDoc (gOutPutDoc)
     end If
-
+        
     call ClearStatus
-
+    
     Call Test_10er.Main
-
+        
     if bShowTable then
         call CreateStatusTable2
         call CreateStatusTable
@@ -155,7 +155,7 @@ Sub CreateStatusTable
     tableHeaders(cStMath) = &quot;Math&quot;
     tableHeaders(cStHTML) = &quot;HTML&quot;
     tableHeaders(cStJava) = &quot;Java&quot;
-
+    
     dim tableColums(5) as string
     tableColums(cDocNew) = &quot;new&quot;
     tableColums(cDocCut) = &quot;cut&quot;
@@ -163,60 +163,60 @@ Sub CreateStatusTable
     tableColums(cDocSaveOpen8) = &quot;V8.0&quot;
     tableColums(cDocSaveOpenXML) = &quot;XML&quot;
     tableColums(cDocSaveOpen50) = &quot;V5.0&quot;
-&apos;  tableColums(cDocClose) = &quot;close&quot;
-
+&apos;	tableColums(cDocClose) = &quot;close&quot;
+    
     aDoc = gOutPutDoc
-
+    
     xText = aDoc.Text
     xCursor = xText.createTextCursor()
-
-&apos;  xCursor.gotoStart(FALSE)
-&apos;  xCursor.GoRight (2, False)
-&apos;  SetParagraphBreak (xCursor)
-&apos;  SetParagraphBreak (xCursor)
+    
+&apos;	xCursor.gotoStart(FALSE)
+&apos;	xCursor.GoRight (2, False)
+&apos;	SetParagraphBreak (xCursor)
+&apos;	SetParagraphBreak (xCursor)
     xCursor.gotoStart(FALSE)
     xCursor.GoRight (4, False)
     SetParagraphBreak (xCursor)
     xCursor.GoRight (1, False)
     SetParagraphBreak (xCursor)
     xCursor.GoRight (1, False)
-
+    
     table = aDoc.createInstance(&quot;com.sun.star.text.TextTable&quot;)
     table.initialize(7,9)
     table.Name = &quot;StTab1&quot;
     xText.insertTextContent(xCursor, table, FALSE)
-
+    
     tableCursor = table.createCursorByCellName(table.CellNames(0))
     tableCursor.gotoStart(FALSE)
     tableCursor.goRight(1,FALSE)
-
+    
     for i% = 0 to 7
       cName = tableCursor.getRangeName()
       xCell = table.getCellByName(cName)
       xCell.String=tableHeaders(i%)
-
+      
       xCell.BackTransparent = False
       xCell.BackColor = cCoGrey
-
+             
       tableCursor.goRight(1,FALSE)
     next i%
-
+    
     xCursor.gotoStart(FALSE)
-&apos;  SetParagraphBreak (xCursor)
-&apos;  SetParagraphBreak (xCursor)
-
-    tableCursor.gotoStart(FALSE)
+&apos;	SetParagraphBreak (xCursor)
+&apos;	SetParagraphBreak (xCursor)
+        
+    tableCursor.gotoStart(FALSE)	
     cName = tableCursor.getRangeName()
       xCell = table.getCellByName(cName)
       xCell.BackTransparent = False
       xCell.BackColor = cCoGrey
-
+      
     for i% = 0 to 5
         tableCursor.goDown(1,FALSE)
          cName = tableCursor.getRangeName()
           xCell = table.getCellByName(cName)
           xCell.String=tableColums(i%)
-
+          
           xCell.BackTransparent = False
           xCell.BackColor = cCoGrey
     next i%
@@ -229,7 +229,7 @@ Sub CreateStatusTable2
     tableHeaders(cStExtension-9) = &quot;Extension&quot;
     tableHeaders(3) = &quot;&quot;
     tableHeaders(4) = &quot;&quot;
-
+    
     dim tableColums(5) as string
     tableColums(cDBService ) = &quot;services&quot;
     tableColums(cDBOpen ) = &quot;open&quot;
@@ -237,47 +237,47 @@ Sub CreateStatusTable2
     tableColums(cDBDelete  ) = &quot;delete&quot;
     tableColums(cDBSeek ) = &quot;seek&quot;
     tableColums(cDBClose ) = &quot;close&quot;
-
+    
     dim tableColums2(3) as string
     tableColums2(cEXTService ) = &quot;services&quot;
     tableColums2(cEXTInstall ) = &quot;install&quot;
     tableColums2(cEXTUninstall ) = &quot;uninstall&quot;
-
+    
     aDoc = gOutPutDoc
-
+    
     xText = aDoc.Text
     xCursor = xText.createTextCursor()
-
+    
     xCursor.gotoStart(FALSE)
     xCursor.GoRight (4, False)
     SetParagraphBreak (xCursor)
     SetParagraphBreak (xCursor)
     xCursor.gotoEnd(FALSE)
-
+    
     table = aDoc.createInstance(&quot;com.sun.star.text.TextTable&quot;)
     table.initialize(7,6)
     table.Name = &quot;StTab2&quot;
     &apos;table.RelativeWidth =500
-
+    
     xText.insertTextContent(xCursor, table, FALSE)
-
+    
     tableCursor = table.createCursorByCellName(table.CellNames(0))
     tableCursor.gotoStart(FALSE)
     tableCursor.goRight(1,FALSE)
-
+    
     for i% = 0 to 5
       cName = tableCursor.getRangeName()
       xCell = table.getCellByName(cName)
       xCell.String=tableHeaders(i%)
-
+      
       xCell.BackTransparent = False
       xCell.BackColor = cCoGrey
-
+             
       tableCursor.goRight(1,FALSE)
     next i%
-
+    
     tableCursor.gotoStart(FALSE)
-
+    
     cName = tableCursor.getRangeName()
       xCell = table.getCellByName(cName)
       xCell.BackTransparent = False
@@ -288,20 +288,20 @@ Sub CreateStatusTable2
          cName = tableCursor.getRangeName()
           xCell = table.getCellByName(cName)
           xCell.String=tableColums(i%)
-
+          
           xCell.BackTransparent = False
           xCell.BackColor = cCoGrey
     next i%
-
+    
     tableCursor.gotoStart(FALSE)
     tableCursor.goRight(2,FALSE)
-
+    
     for i% = 0 to 3
         tableCursor.goDown(1,FALSE)
          cName = tableCursor.getRangeName()
           xCell = table.getCellByName(cName)
           xCell.String=tableColums2(i%)
-
+          
           xCell.BackTransparent = False
           xCell.BackColor = cCoGrey
     next i%
@@ -312,27 +312,27 @@ Sub CreateDocState
     aDoc = gOutPutDoc
     table = aDoc.TextTables.GetByIndex (1)
     &apos;table = aDoc.TextTables.GetByName (&quot;StTab1&quot;)
-
+    
     for j% = 0 to 7
         for i% = 0 to 5
             sRangeName = GetRangeName(j%, i%+1)
-
+            
             tableCursor = table.createCursorByCellName(sRangeName)
-
+            
              cName = tableCursor.getRangeName()
               xCell = table.getCellByName(cName)
-
+                        
               xCell.BackTransparent = False
-
+              
                if gErrorState (j%, i%) = cLogTrue then
                       xCell.BackColor = cCoGreen
               else if gErrorState (j%, i%) = cLogFalse then
                       xCell.BackColor = cCoRed
               else
-                  xCell.BackColor = cCoGrey
+                  xCell.BackColor = cCoGrey	
+              end If	
               end If
-              end If
-
+              
         next i%
     next j%
 end Sub
@@ -341,27 +341,27 @@ Sub CreateSecondState
     aDoc = gOutPutDoc
     table = aDoc.TextTables.GetByIndex (0)
     &apos;table = aDoc.TextTables.GetByName (&quot;StTab2&quot;)
-
+    
     for j% = 0 to cMaxErrorStates-9
         for i% = 0 to 5
             sRangeName = GetRangeName(j%, i%+1)
-
+            
             tableCursor = table.createCursorByCellName(sRangeName)
-
+            
              cName = tableCursor.getRangeName()
               xCell = table.getCellByName(cName)
-
+                        
               xCell.BackTransparent = False
-
+              
                if gErrorState (j%+9, i%) = cLogTrue then
                       xCell.BackColor = cCoGreen
               else if gErrorState (j%+9, i%) = cLogFalse then
                       xCell.BackColor = cCoRed
               else
-                  xCell.BackColor = cCoGrey
+                  xCell.BackColor = cCoGrey	
+              end If	
               end If
-              end If
-
+              
         next i%
     next j%
 end Sub
@@ -375,45 +375,45 @@ Sub SetStatus (nDocType as Integer, nAction as Integer, bState as Boolean)
     Dim nState as integer
     nStatusType = GetStatusType (nDocType)
     If nStatusType = cStNone then Exit Sub
-
-    if bState then
+    
+    if bState then 
         nState = cLogTrue
     else
         nState = cLogFalse
     end If
-
+    
     gErrorState (nStatusType, nAction) = nState
 end Sub
 
 Function GetStatusType (nDocType as Integer) as Integer
     Select Case ( nDocType )
-        case frmWriter
-            GetStatusType = cStWriter &apos; Textdokument
+        case frmWriter 
+            GetStatusType = cStWriter &apos; Textdokument 
         case frmCalc
-            GetStatusType = cStCalc &apos;Tabellendokument
+            GetStatusType = cStCalc &apos;Tabellendokument 
         case frmMessage
-            GetStatusType = cStMessage &apos;Nachricht
+            GetStatusType = cStMessage &apos;Nachricht 
         case frmImpress
-            GetStatusType = cStPraesentation &apos;Präsentation
+            GetStatusType = cStPraesentation &apos;Präsentation 
         case frmDraw
             GetStatusType = cStZeichnen &apos;Zeichnen
         case frmMath
-            GetStatusType = cStMath &apos;Formel
+            GetStatusType = cStMath &apos;Formel 
         case frmImage
-            GetStatusType = cStBild &apos;Bild
+            GetStatusType = cStBild &apos;Bild 
         case frmHyperText
-            GetStatusType = cStHTML &apos;Hypertext-Dokument
+            GetStatusType = cStHTML &apos;Hypertext-Dokument 
         case frmChart
-            GetStatusType = cStChart &apos;Diagramm
+            GetStatusType = cStChart &apos;Diagramm 
         case frmJava
             GetStatusType = cStJava &apos;Java
         case frmDataBase
-            GetStatusType = cStDataBase &apos;DataBase
+            GetStatusType = cStDataBase	&apos;DataBase
         case frmExtension
             GetStatusType = cStExtension &apos;Extension
         case else
             GetStatusType = cStNone
-    end Select
+    end Select		
 end Function
 
 Sub SetParagraphBreak (aCursor as Object)
@@ -456,13 +456,13 @@ Sub SetGlobalOptionsDialog ()
 
     Const sLibName = cTest10Modul
     Const sDialogName = cOptionsDialogName
-
+    
     REM get library and input stream provider
     oLibContainer = DialogLibraries
-
+    
     REM load the library
     oLibContainer.loadLibrary( sLibName )
-
+    
     oLib = oLibContainer.getByName( sLibName )
     oInputStreamProvider = oLib.getByName( sDialogName )
 
@@ -479,9 +479,9 @@ Sub ShowOptionsDlg
 
     REM show the dialog
     gOptionsDialog.execute()
-
+    
        &apos; jetzt läuft der Dialog, bis ein Button gedrückt wird
-
+       
        Select Case (gDlgState)
            case cDlgOk
                call SetOptions ()
@@ -489,7 +489,7 @@ Sub ShowOptionsDlg
                call SetOptions ()
                call StartTestByOptions ()
     end Select
-
+       
     gOptionsDialog.dispose()
 
 end Sub
@@ -503,9 +503,9 @@ Sub SetOptions
     SetUserFieldState (cUserFieldTestHTML, -(gOptionsDialog.getControl(&quot;cbHTMLTest&quot;).getState), gOutPutDoc)
     SetUserFieldState (cUserFieldTestMath, -(gOptionsDialog.getControl(&quot;cbMathTest&quot;).getState), gOutPutDoc)
     SetUserFieldState (cUserFieldTestChart, -(gOptionsDialog.getControl(&quot;cbChartTest&quot;).getState), gOutPutDoc)
-    SetUserFieldState (cUserFieldTestJava, -(gOptionsDialog.getControl(&quot;cbJavaTest&quot;).getState), gOutPutDoc)
-    SetUserFieldState (cUserFieldTestDatabase, -(gOptionsDialog.getControl(&quot;cbDatabaseTest&quot;).getState), gOutPutDoc)
-    SetUserFieldState (cUserFieldTestExtension, -(gOptionsDialog.getControl(&quot;cbExtensionTest&quot;).getState), gOutPutDoc)
+    SetUserFieldState (cUserFieldTestJava, -(gOptionsDialog.getControl(&quot;cbJavaTest&quot;).getState), gOutPutDoc)	
+    SetUserFieldState (cUserFieldTestDatabase, -(gOptionsDialog.getControl(&quot;cbDatabaseTest&quot;).getState), gOutPutDoc)	
+    SetUserFieldState (cUserFieldTestExtension, -(gOptionsDialog.getControl(&quot;cbExtensionTest&quot;).getState), gOutPutDoc)	
     SetUserFieldState (cUserFieldTestOpenSaveXML, -(gOptionsDialog.getControl(&quot;cbSaveOpenXMLTest&quot;).getState), gOutPutDoc)
     SetUserFieldState (cUserFieldTestOpenSave50, -(gOptionsDialog.getControl(&quot;cbSaveOpen50Test&quot;).getState), gOutPutDoc)
     SetUserFieldState (cUserFieldTestOpenSave8, -(gOptionsDialog.getControl(&quot;cbSaveOpen8Test&quot;).getState), gOutPutDoc)
@@ -592,7 +592,7 @@ Sub StartTestByOptions
         ClearDocFull (gOutPutDoc)
         gOutPutDoc.dispose
         &apos;StarDesktop.Terminate
-
+        
         &apos;EnableReschedule( false )
         &apos;DispatchSlot( 5300 )
         stop
@@ -661,18 +661,18 @@ Sub DispatchSlot(SlotID as Integer)
     oUrl.Complete = &quot;slot:&quot; &amp; CStr(SlotID)
     oTrans.parsestrict(oUrl)
 
-    oDisp = StarDesktop.queryDispatch(oUrl, &quot;_self&quot;, 0)
+    oDisp = StarDesktop.queryDispatch(oUrl, &quot;_self&quot;, 0)	
     oDisp.dispatch(oUrl, oArg())
 End Sub
 
 Sub LoadLibrary( LibName As String )
-
+    
     dim args(1)
     dim arg as new com.sun.star.beans.PropertyValue
     arg.Name = &quot;LibraryName&quot;
     arg.Value = LibName
     args(0) = arg
-
+    
     dim url as new com.sun.star.util.URL
     dim trans as object
     trans = createUnoService(&quot;com.sun.star.util.URLTransformer&quot; )
@@ -682,7 +682,7 @@ Sub LoadLibrary( LibName As String )
     dim disp as object
     disp = StarDesktop.currentFrame.queryDispatch( url, &quot;&quot;, 0 )
     disp.dispatch( url, args() )
-
+    
 End Sub
 
 Sub ExecuteSlot( SlotNr As String, oDoc as Object )
@@ -690,14 +690,14 @@ Sub ExecuteSlot( SlotNr As String, oDoc as Object )
     dim url as new com.sun.star.util.URL
     dim trans as object
     dim disp as object
-
+    
     trans = createUnoService(&quot;com.sun.star.util.URLTransformer&quot; )
     url.Complete = &quot;slot:&quot; + SlotNr
     trans.parsestrict( url )
-
+    
     disp = oDoc.CurrentController.Frame.queryDispatch( url, &quot;&quot;, 0 )
     disp.dispatch( url, args() )
-
+    
 End Sub
 
 Sub CutText (oDoc as Object)
@@ -713,7 +713,7 @@ Sub DelAllUserFields (aDoc as Object)
     Dim aElements as Variant
     Dim i%
     Dim aFieldMasters, aFieldMaster as Object
-    Dim sElement$
+    Dim sElement$ 
     aFieldMasters = aDoc.TextFieldMasters
     aElements = aFieldMasters.ElementNames
     for i = 0 to UBound(aElements)
@@ -722,7 +722,7 @@ Sub DelAllUserFields (aDoc as Object)
             aFieldMaster = aFieldMasters.GetByName(sElement$)
             aFieldMaster.Dispose
         endif
-    next
+    next	
 end Sub
 
 Function GetUserFieldState (sName as String, aDoc as Object) as boolean
@@ -761,7 +761,7 @@ Function ReadUserField(sFieldName as String, aDoc as Object) as String
         ReadUserField = aMasters.GetByName (cUnoUserField+cUnoSeparator+sFieldName).Content
     else
         ReadUserField = &quot;&quot;
-    end If
+    end If	
 End Function
 
 Sub WriteUserField(sValue as String, sFieldName as String, aDoc as Object, optional aCursor as Object)
@@ -769,10 +769,10 @@ Sub WriteUserField(sValue as String, sFieldName as String, aDoc as Object, optio
     aMasters = aDoc.TextFieldMasters
     if aMasters.HasByName (cUnoUserField+cUnoSeparator+sFieldName) then
         aUserField = aMasters.GetByName (cUnoUserField+cUnoSeparator+sFieldName)
-    else
+    else	
         aUserField = aDoc.CreateInstance (cUnoUserField)
         aUserField.Name = sFieldName
-    end if
+    end if	
     aUserField.Content = sValue
 End Sub
 

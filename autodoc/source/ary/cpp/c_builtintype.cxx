@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,15 +52,15 @@ Type::inq_RelatedCe() const
 
 //**********************        BuiltInType        **************************//
 
-BuiltInType::BuiltInType( const String  &       i_sName,
-                          E_TypeSpecialisation  i_eSpecialisation )
-    :   sName( i_sName ),
+BuiltInType::BuiltInType( const String  &		i_sName,
+                          E_TypeSpecialisation	i_eSpecialisation )
+    :	sName( i_sName ),
         eSpecialisation( i_eSpecialisation )
 {
 }
 
 String
-BuiltInType::SpecializedName_( const char *         i_sName,
+BuiltInType::SpecializedName_( const char *		    i_sName,
                                E_TypeSpecialisation i_eTypeSpecialisation )
 {
     StreamLock
@@ -80,7 +80,7 @@ BuiltInType::SpecializedName_( const char *         i_sName,
         default:
                     ;
 
-    }   // end switch
+    }	// end switch
 
     ret << i_sName;
     return String(ret.c_str());
@@ -112,7 +112,7 @@ BuiltInType::inq_Get_Text( StreamStr &      ,               // o_rPreName
 {
     switch (eSpecialisation)
     {
-        case TYSP_unsigned: o_rName << "unsigned "; break;
+        case TYSP_unsigned:	o_rName << "unsigned "; break;
         case TYSP_signed:   o_rName << "signed ";   break;
 
         default:            // Does nothing.

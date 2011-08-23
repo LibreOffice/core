@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@ class XMLPageMasterPropHdlFactory : public XMLPropertyHandlerFactory
 {
 public:
                         XMLPageMasterPropHdlFactory();
-    virtual             ~XMLPageMasterPropHdlFactory();
+    virtual				~XMLPageMasterPropHdlFactory();
 
     virtual const XMLPropertyHandler*
                         GetPropertyHandler( sal_Int32 nType ) const;

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define INCLUDED_unotools_COMPATIBILITY_HXX
 
 //_________________________________________________________________________________________________________________
-//  includes
+//	includes
 //_________________________________________________________________________________________________________________
 
 #include "unotools/unotoolsdllapi.h"
@@ -40,7 +40,7 @@
 #include <unotools/options.hxx>
 
 //_________________________________________________________________________________________________________________
-//  types, enums, ...
+//	types, enums, ...
 //_________________________________________________________________________________________________________________
 
 enum CompatibilityOptions
@@ -59,7 +59,7 @@ enum CompatibilityOptions
 };
 
 /*-************************************************************************************************************//**
-    @descr          The method GetList() returns a list of property values.
+    @descr			The method GetList() returns a list of property values.
                     Use follow defines to seperate values by names.
 *//*-*************************************************************************************************************/
 #define COMPATIBILITY_PROPERTYNAME_NAME                     OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) )
@@ -79,12 +79,12 @@ enum CompatibilityOptions
 #define COMPATIBILITY_DEFAULT_NAME                          OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) )
 
 //_________________________________________________________________________________________________________________
-//  forward declarations
+//	forward declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short          forward declaration to our private date container implementation
-    @descr          We use these class as internal member to support small memory requirements.
+    @short			forward declaration to our private date container implementation
+    @descr			We use these class as internal member to support small memory requirements.
                     You can create the container if it is neccessary. The class which use these mechanism
                     is faster and smaller then a complete implementation!
 *//*-*************************************************************************************************************/
@@ -92,64 +92,64 @@ enum CompatibilityOptions
 class SvtCompatibilityOptions_Impl;
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          collect informations about dynamic menus
     @descr          Make it possible to configure dynamic menu structures of menus like "new" or "wizard".
 
-    @implements     -
-    @base           -
+    @implements		-
+    @base			-
 
-    @devstatus      ready to use
+    @devstatus		ready to use
 *//*-*************************************************************************************************************/
 
 class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
+        //	constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      standard constructor and destructor
-            @descr      This will initialize an instance with default values.
+            @short		standard constructor and destructor
+            @descr		This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
                         at create and decrease it at delete time - but all instances use the same data container!
                         He is implemented as a static member ...
 
-            @seealso    member m_nRefCount
-            @seealso    member m_pDataContainer
+            @seealso	member m_nRefCount
+            @seealso	member m_pDataContainer
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
          SvtCompatibilityOptions();
         virtual ~SvtCompatibilityOptions();
 
         //---------------------------------------------------------------------------------------------------------
-        //  interface
+        //	interface
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      clear complete specified list
+            @short		clear complete specified list
             @descr      Call this methods to clear the whole list.
 
-            @seealso    -
+            @seealso	-
 
             @param      -
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         void Clear();
@@ -161,7 +161,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
             @descr      Call it to get all entries of compatibility options.
                         We return a list of all nodes with its names and properties.
 
-            @seealso    -
+            @seealso	-
 
             @param      -
             @return     A list of compatibility options is returned.
@@ -175,14 +175,14 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
             @short      append a new item
             @descr
 
-            @seealso    method Clear()
+            @seealso	method Clear()
 
             @param      "sName"             Name
             @param      "sModule"           Module
 
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         void AppendItem( const ::rtl::OUString& sName,
@@ -199,42 +199,42 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
                          bool bConsiderWrappingStyle,
                          bool bExpandWordSpace );
 
-        bool        IsUsePrtDevice() const;
-        bool        IsAddSpacing() const;
-        bool        IsAddSpacingAtPages() const;
-        bool        IsUseOurTabStops() const;
-        bool        IsNoExtLeading() const;
-        bool        IsUseLineSpacing() const;
-        bool        IsAddTableSpacing() const;
-        bool        IsUseObjectPositioning() const;
-        bool        IsUseOurTextWrapping() const;
+        bool		IsUsePrtDevice() const;
+        bool		IsAddSpacing() const;
+        bool		IsAddSpacingAtPages() const;
+        bool		IsUseOurTabStops() const;
+        bool		IsNoExtLeading() const;
+        bool		IsUseLineSpacing() const;
+        bool		IsAddTableSpacing() const;
+        bool		IsUseObjectPositioning() const;
+        bool		IsUseOurTextWrapping() const;
         bool        IsConsiderWrappingStyle() const;
         bool        IsExpandWordSpace() const;
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
         /*-****************************************************************************************************//**
-            @short      return a reference to a static mutex
-            @descr      These class is partially threadsafe (for de-/initialization only).
+            @short		return a reference to a static mutex
+            @descr		These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
                         We create a static mutex only for one ime and use at different times.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     A reference to a static mutex member.
+            @param		-
+            @return		A reference to a static mutex member.
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private member
+    //	private member
     //-------------------------------------------------------------------------------------------------------------
 
     private:
@@ -247,8 +247,8 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
             Do it in your source only.
          */
 
-        static SvtCompatibilityOptions_Impl*    m_pDataContainer;   /// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32                        m_nRefCount     ;   /// internal ref count mechanism
+        static SvtCompatibilityOptions_Impl*	m_pDataContainer;	/// impl. data container as dynamic pointer for smaller memory requirements!
+        static sal_Int32						m_nRefCount		;	/// internal ref count mechanism
 
 };      // class SvtCompatibilityOptions
 

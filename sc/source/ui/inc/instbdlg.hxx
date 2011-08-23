@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,35 +60,35 @@ public:
             ScInsertTableDlg( Window* pParent, ScViewData& rViewData, SCTAB nTabCount, bool bFromFile );
             ~ScInsertTableDlg();
 
-    virtual short   Execute();      // ueberladen, um Dialog-Parent zu setzen
+    virtual short	Execute();		// ueberladen, um Dialog-Parent zu setzen
 
-    BOOL            GetTablesFromFile() { return aBtnFromFile.IsChecked(); }
-    BOOL            GetTablesAsLink()   { return aBtnLink.IsChecked(); }
+    BOOL			GetTablesFromFile()	{ return aBtnFromFile.IsChecked(); }
+    BOOL			GetTablesAsLink()	{ return aBtnLink.IsChecked(); }
 
-    const String*   GetFirstTable( USHORT* pN = NULL );
-    const String*   GetNextTable( USHORT* pN = NULL );
-    ScDocShell*     GetDocShellTables() { return pDocShTables; }
-    BOOL            IsTableBefore() { return aBtnBefore.IsChecked(); }
-    SCTAB           GetTableCount() { return nTableCount;}
+    const String*	GetFirstTable( USHORT* pN = NULL );
+    const String*	GetNextTable( USHORT* pN = NULL );
+    ScDocShell*		GetDocShellTables()	{ return pDocShTables; }
+    BOOL			IsTableBefore() { return aBtnBefore.IsChecked(); }
+    SCTAB			GetTableCount() { return nTableCount;}
 
 private:
-    RadioButton             aBtnBefore;
-    RadioButton             aBtnBehind;
-    FixedLine               aFlPos;
-    RadioButton             aBtnNew;
-    RadioButton             aBtnFromFile;
-    FixedText               aFtCount;
-    NumericField            aNfCount;
-    FixedText               aFtName;
-    Edit                    aEdName;
-    MultiListBox            aLbTables;
-    ScExpandedFixedText     aFtPath;
-    PushButton              aBtnBrowse;
-    CheckBox                aBtnLink;
-    FixedLine               aFlTable;
-    OKButton                aBtnOk;
-    CancelButton            aBtnCancel;
-    HelpButton              aBtnHelp;
+    RadioButton				aBtnBefore;
+    RadioButton				aBtnBehind;
+    FixedLine				aFlPos;
+    RadioButton				aBtnNew;
+    RadioButton				aBtnFromFile;
+    FixedText				aFtCount;
+    NumericField			aNfCount;
+    FixedText				aFtName;
+    Edit					aEdName;
+    MultiListBox			aLbTables;
+    ScExpandedFixedText		aFtPath;
+    PushButton				aBtnBrowse;
+    CheckBox				aBtnLink;
+    FixedLine				aFlTable;
+    OKButton				aBtnOk;
+    CancelButton			aBtnCancel;
+    HelpButton				aBtnHelp;
 
     Timer                   aBrowseTimer;
     ScViewData&             rViewData;
@@ -98,16 +98,16 @@ private:
     SfxObjectShellRef       aDocShTablesRef;
 
     bool                bMustClose;
-    USHORT              nSelTabIndex;   // fuer GetFirstTable() / GetNextTable()
-    String              aStrCurSelTable;
-    SCTAB               nTableCount;
+    USHORT				nSelTabIndex;	// fuer GetFirstTable() / GetNextTable()
+    String				aStrCurSelTable;
+    SCTAB				nTableCount;
 
 #ifdef SC_INSTBDLG_CXX
     void    Init_Impl( bool bFromFile );
-    void    SetNewTable_Impl();
-    void    SetFromTo_Impl();
-    void    FillTables_Impl( ScDocument* pSrcDoc );
-    void    DoEnable_Impl();
+    void	SetNewTable_Impl();
+    void	SetFromTo_Impl();
+    void	FillTables_Impl( ScDocument* pSrcDoc );
+    void	DoEnable_Impl();
 
     DECL_LINK( BrowseHdl_Impl, PushButton* );
     DECL_LINK( ChoiceHdl_Impl, RadioButton* );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,13 +43,13 @@ public:
 
     XMLTextStyleExport(
         SvXMLExport& rExp,
-//      const ::com::sun::star::uno::Reference<
-//              ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-//      const ::com::sun::star::uno::Reference<
-//              ::com::sun::star::frame::XModel > & rModel,
+//		const ::com::sun::star::uno::Reference<
+//				::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+//		const ::com::sun::star::uno::Reference<
+//				::com::sun::star::frame::XModel > & rModel,
         const ::rtl::OUString& rPoolStyleName,
-//      const SvXMLNamespaceMap &rNamespaceMap,
-//      MapUnit eDUnit,
+//		const SvXMLNamespaceMap &rNamespaceMap,
+//	 	MapUnit eDUnit,
         SvXMLAutoStylePoolP *pAutoStyleP=0 );
     virtual ~XMLTextStyleExport();
 

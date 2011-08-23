@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ using namespace dbaui;
 //========================================================================
 DBG_NAME(ORelationTableConnection)
 //------------------------------------------------------------------------
-ORelationTableConnection::ORelationTableConnection( ORelationTableView* pContainer,
+ORelationTableConnection::ORelationTableConnection( ORelationTableView* pContainer, 
                                                    const TTableConnectionData::value_type& pTabConnData )
     :OTableConnection( pContainer, pTabConnData )
 {
@@ -91,8 +91,8 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
 
     const OConnectionLine* pTopLine = NULL;
     const ::std::vector<OConnectionLine*>* pConnLineList = GetConnLineList();
-    ::std::vector<OConnectionLine*>::const_iterator aIter = pConnLineList->begin();
-    ::std::vector<OConnectionLine*>::const_iterator aEnd = pConnLineList->end();
+    ::std::vector<OConnectionLine*>::const_iterator aIter = pConnLineList->begin();	
+    ::std::vector<OConnectionLine*>::const_iterator aEnd = pConnLineList->end();	
     for(;aIter != aEnd;++aIter)
     {
         if( (*aIter)->IsValid() )

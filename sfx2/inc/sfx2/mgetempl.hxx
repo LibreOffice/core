@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,8 @@
 #include <sfx2/tabdlg.hxx>
 
 /* erwartet:
-    SID_TEMPLATE_NAME   :   In: StringItem, Name der Vorlage
-    SID_TEMPLATE_FAMILY :   In: Familie der Vorlage
+    SID_TEMPLATE_NAME   : 	In: StringItem, Name der Vorlage
+    SID_TEMPLATE_FAMILY :	In: Familie der Vorlage
 */
 
 class SfxStyleFamilies;
@@ -53,7 +53,7 @@ class SfxManageStyleSheetPage : public SfxTabPage
 {
     FixedText aNameFt;
     Edit aNameEd;
-    CheckBox    aAutoCB;
+    CheckBox	aAutoCB;
 
     FixedText aFollowFt;
     ListBox aFollowLb;
@@ -86,22 +86,22 @@ friend class SfxStyleDialog;
     DECL_LINK( GetFocusHdl, Edit * );
     DECL_LINK( LoseFocusHdl, Edit * );
 
-    void    UpdateName_Impl(ListBox *, const String &rNew);
-    void    SetDescriptionText_Impl();
+    void	UpdateName_Impl(ListBox *, const String &rNew);
+    void	SetDescriptionText_Impl();
 
     SfxManageStyleSheetPage(Window *pParent, const SfxItemSet &rAttrSet );
     ~SfxManageStyleSheetPage();
 
-    static SfxTabPage*  Create(Window *pParent, const SfxItemSet &rAttrSet );
+    static SfxTabPage*	Create(Window *pParent, const SfxItemSet &rAttrSet );
 
 protected:
-    virtual BOOL        FillItemSet(SfxItemSet &);
-    virtual void        Reset(const SfxItemSet &);
+    virtual BOOL		FillItemSet(SfxItemSet &);
+    virtual void		Reset(const SfxItemSet &);
 
     using TabPage::ActivatePage;
-        virtual void        ActivatePage(const SfxItemSet &);
+        virtual void		ActivatePage(const SfxItemSet &);
         using TabPage::DeactivatePage;
-    virtual int     DeactivatePage(SfxItemSet * = 0);
+    virtual int		DeactivatePage(SfxItemSet * = 0);
 };
 
 #ifdef FixedInfo

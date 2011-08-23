@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,8 +45,8 @@ public:
     ObjectPropertiesDialogParameter( const rtl::OUString& rObjectCID );
     virtual ~ObjectPropertiesDialogParameter();
 
-    void            init( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
-    ObjectType      getObjectType() const;
+    void	    	init( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+    ObjectType	    getObjectType() const;
     rtl::OUString   getLocalizedName() const;
 
     bool HasGeometryProperties() const;
@@ -66,16 +66,16 @@ public:
     bool ShowAxisOrigin() const;
     bool IsCrossingAxisIsCategoryAxis() const;
     const ::com::sun::star::uno::Sequence< rtl::OUString >& GetCategories() const;
-
+    
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
         getDocument() const;
 
 private:
-    rtl::OUString   m_aObjectCID;
-    ObjectType      m_eObjectType;
+    rtl::OUString	m_aObjectCID;
+    ObjectType		m_eObjectType;
     bool m_bAffectsMultipleObjects;//is true if more than one object of the given type will be changed (e.g. all axes or all titles)
 
-    rtl::OUString   m_aLocalizedName;
+    rtl::OUString	m_aLocalizedName;
 
     bool m_bHasGeometryProperties;
     bool m_bHasStatisticProperties;
@@ -112,15 +112,15 @@ class SchAttribTabDlg : public SfxTabDialog
 private:
     ObjectType               eObjectType;
     bool                     bAffectsMultipleObjects;//is true if more than one object of the given type will be changed (e.g. all axes or all titles)
-    USHORT                   nDlgType;
-    USHORT                   nPageType;
+    USHORT		  	         nDlgType;
+    USHORT		  	         nPageType;
 
     const ObjectPropertiesDialogParameter * const        m_pParameter;
-    const ViewElementListProvider* const                 m_pViewElementListProvider;
+    const ViewElementListProvider* const				 m_pViewElementListProvider;
     SvNumberFormatter* m_pNumberFormatter;
 
     SfxItemSet*     m_pSymbolShapeProperties;
-    Graphic*        m_pAutoSymbolGraphic;
+    Graphic*		m_pAutoSymbolGraphic;
 
     double          m_fAxisMinorStepWidthForErrorBarDecimals;
     bool            m_bOKPressed;

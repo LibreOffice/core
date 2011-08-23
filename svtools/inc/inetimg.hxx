@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,21 +39,21 @@ class SotDataMemberObject;
 
 class INetImage
 {
-    String          aImageURL;
-    String          aTargetURL;
-    String          aTargetFrame;
-    String          aAlternateText;
-    Size            aSizePixel;
+    String			aImageURL;
+    String			aTargetURL;
+    String			aTargetFrame;
+    String			aAlternateText;
+    Size			aSizePixel;
 
 protected:
-    String          CopyExchange() const;
-    void            PasteExchange( const String& rString );
+    String			CopyExchange() const;
+    void			PasteExchange( const String& rString );
 
-    void            SetImageURL( const String& rS )     { aImageURL = rS; }
-    void            SetTargetURL( const String& rS )    { aTargetURL = rS; }
-    void            SetTargetFrame( const String& rS )  { aTargetFrame = rS; }
-    void            SetAlternateText( const String& rS ){ aAlternateText = rS; }
-    void            SetSizePixel( const Size& rSize )   { aSizePixel = rSize; }
+    void 			SetImageURL( const String& rS )		{ aImageURL = rS; }
+    void 			SetTargetURL( const String& rS )	{ aTargetURL = rS; }
+    void 			SetTargetFrame( const String& rS )	{ aTargetFrame = rS; }
+    void 			SetAlternateText( const String& rS ){ aAlternateText = rS; }
+    void			SetSizePixel( const Size& rSize ) 	{ aSizePixel = rSize; }
 
 public:
                     INetImage(
@@ -62,7 +62,7 @@ public:
                         const String& rTargetFrame,
                         const String& rAlternateText,
                         const Size& rSizePixel )
-                    :   aImageURL( rImageURL ),
+                    :	aImageURL( rImageURL ),
                         aTargetURL( rTargetURL ),
                         aTargetFrame( rTargetFrame ),
                         aAlternateText( rAlternateText ),
@@ -71,11 +71,11 @@ public:
                     INetImage()
                     {}
 
-    const String&   GetImageURL() const { return aImageURL; }
-    const String&   GetTargetURL() const { return aTargetURL; }
-    const String&   GetTargetFrame() const { return aTargetFrame; }
-    const String&   GetAlternateText() const { return aAlternateText; }
-    const Size&     GetSizePixel() const { return aSizePixel; }
+    const String&	GetImageURL() const { return aImageURL; }
+    const String&	GetTargetURL() const { return aTargetURL; }
+    const String&	GetTargetFrame() const { return aTargetFrame; }
+    const String&	GetAlternateText() const { return aAlternateText; }
+    const Size&		GetSizePixel() const { return aSizePixel; }
 
     // Im-/Export
     sal_Bool Write( SvStream& rOStm, ULONG nFormat ) const;

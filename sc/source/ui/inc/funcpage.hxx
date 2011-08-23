@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define SC_FUNCPAGE_HXX
 
 #include "funcutl.hxx"
-#include "global.hxx"       // ScAddress
+#include "global.hxx"		// ScAddress
 #include <svtools/stdctrl.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/group.hxx>
@@ -64,8 +64,8 @@ class ScListBox : public ListBox
 {
 protected:
 
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual long    PreNotify( NotifyEvent& rNEvt );
+    virtual void	KeyInput( const KeyEvent& rKEvt );
+    virtual long	PreNotify( NotifyEvent& rNEvt );
 
 public:
                     ScListBox( Window* pParent, const ResId& rResId );
@@ -79,15 +79,15 @@ class ScFuncPage : public TabPage
 {
 private:
 
-    Link            aDoubleClickLink;
-    Link            aSelectionLink;
-    FixedText       aFtCategory;
-    ListBox         aLbCategory;
-    FixedText       aFtFunction;
-    ScListBox       aLbFunction;
-    ImageButton     aIBFunction;
+    Link			aDoubleClickLink;
+    Link			aSelectionLink;
+    FixedText		aFtCategory;
+    ListBox			aLbCategory;
+    FixedText		aFtFunction;
+    ScListBox		aLbFunction;
+    ImageButton		aIBFunction;
 
-    const ScFuncDesc*   aLRUList[LRU_MAX];
+    const ScFuncDesc*	aLRUList[LRU_MAX];
 
 
                     DECL_LINK( SelHdl, ListBox* );
@@ -95,24 +95,24 @@ private:
 
 protected:
 
-    void            UpdateFunctionList();
-    void            InitLRUList();
+    void			UpdateFunctionList();
+    void			InitLRUList();
 
 
 public:
 
                     ScFuncPage( Window* pParent);
 
-    void            SetCategory(USHORT nCat);
-    void            SetFunction(USHORT nFunc);
-    void            SetFocus();
-    USHORT          GetCategory();
-    USHORT          GetFunction();
-    USHORT          GetFunctionEntryCount();
+    void			SetCategory(USHORT nCat);
+    void			SetFunction(USHORT nFunc);
+    void			SetFocus();
+    USHORT			GetCategory();
+    USHORT			GetFunction();
+    USHORT			GetFunctionEntryCount();
 
-    USHORT          GetFuncPos(const ScFuncDesc*);
-    const ScFuncDesc*   GetFuncDesc( USHORT nPos ) const;
-    String          GetSelFunctionName() const;
+    USHORT			GetFuncPos(const ScFuncDesc*);
+    const ScFuncDesc*	GetFuncDesc( USHORT nPos ) const;
+    String			GetSelFunctionName() const;
 
     void            SetDoubleClickHdl( const Link& rLink ) { aDoubleClickLink = rLink; }
     const Link&     GetDoubleClickHdl() const { return aDoubleClickLink; }

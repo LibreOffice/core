@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -32,19 +32,19 @@ my $zipName = shift || die 'must provide a ext name';
 my $rdbName = shift || die 'must provide a types library';
 my $libName = shift || die 'must provide a component library';
 
-die "can't access type library $rdbName" unless -f $rdbName;
-die "can't access component library $libName" unless -f $libName;
+die "can't access type library $rdbName" unless -f $rdbName; 
+die "can't access component library $libName" unless -f $libName; 
 
 # Read the zip
 my $zip = Archive::Zip->new();
 
 if ( -f $zipName )
 {
-    # be stupid and recreate zip every time
+    # be stupid and recreate zip every time 
     # in another iteration lets try to overwrite it instead
     my $result = 0;
     $result = unlink($zipName);
-    if ( result != 0 )
+    if ( result != 0 ) 
     {
         die 'can not delete old extension';
     }

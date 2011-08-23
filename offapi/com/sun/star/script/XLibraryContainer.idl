@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,61 +24,61 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_script_XLibraryContainer_idl__
-#define __com_sun_star_script_XLibraryContainer_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_container_XNameContainer_idl__
-#include <com/sun/star/container/XNameContainer.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
-#include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-
-#ifndef __com_sun_star_container_ElementExistException_idl__
-#include <com/sun/star/container/ElementExistException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_WrappedTargetException_idl__
-#include <com/sun/star/lang/WrappedTargetException.idl>
-#endif
-
-#ifndef __com_sun_star_container_ElementExistException_idl__
-#include <com/sun/star/container/ElementExistException.idl>
-#endif
-#ifndef __com_sun_star_lang_WrappedTargetException_idl__
-#include <com/sun/star/lang/WrappedTargetException.idl>
-#endif
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module script {
-
-//=============================================================================
-
-/**
-    Provides access to a library system.
+#ifndef __com_sun_star_script_XLibraryContainer_idl__ 
+#define __com_sun_star_script_XLibraryContainer_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_container_XNameContainer_idl__ 
+#include <com/sun/star/container/XNameContainer.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__ 
+#include <com/sun/star/lang/IllegalArgumentException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_container_NoSuchElementException_idl__ 
+#include <com/sun/star/container/NoSuchElementException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_container_ElementExistException_idl__ 
+#include <com/sun/star/container/ElementExistException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_WrappedTargetException_idl__ 
+#include <com/sun/star/lang/WrappedTargetException.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_container_ElementExistException_idl__ 
+#include <com/sun/star/container/ElementExistException.idl> 
+#endif 
+#ifndef __com_sun_star_lang_WrappedTargetException_idl__ 
+#include <com/sun/star/lang/WrappedTargetException.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module script {  
+ 
+//============================================================================= 
+ 
+/** 
+    Provides access to a library system. 
  */
 published interface XLibraryContainer: com::sun::star::container::XNameAccess
-{
-    /**
+{ 
+    /** 
         Creates a new library
      */
-    com::sun::star::container::XNameContainer createLibrary( [in] string Name )
-        raises( com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::container::ElementExistException );
+    com::sun::star::container::XNameContainer createLibrary( [in] string Name ) 
+        raises( com::sun::star::lang::IllegalArgumentException, 
+                com::sun::star::container::ElementExistException ); 
 
-    /**
-        Creates a link to an "external" library that then can be
+    /** 
+        Creates a link to an "external" library that then can be 
         accessed using this library manager. The format of the
         StorageURL is a matter of the implementation. If the read
         only flag is set, the linked library cannot be modified.
@@ -87,37 +87,37 @@ published interface XLibraryContainer: com::sun::star::container::XNameAccess
         storage allows write access) the returned interface also
         can be a <type scope="com::sun::star::container">XNameContainer</type>.
      */
-    com::sun::star::container::XNameAccess createLibraryLink( [in] string Name, [in] string StorageURL, [in] boolean ReadOnly )
-        raises( com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::container::ElementExistException );
+    com::sun::star::container::XNameAccess createLibraryLink( [in] string Name, [in] string StorageURL, [in] boolean ReadOnly ) 
+        raises( com::sun::star::lang::IllegalArgumentException, 
+                com::sun::star::container::ElementExistException ); 
 
-    /** removes the library item with the specified name. If the accessed
+    /** removes the library item with the specified name. If the accessed 
         library item is a link only the link is removed, not the target library.
      */
-    void removeLibrary( [in] string Name )
-            raises( com::sun::star::container::NoSuchElementException,
-                    com::sun::star::lang::WrappedTargetException );
+    void removeLibrary( [in] string Name ) 
+            raises( com::sun::star::container::NoSuchElementException, 
+                    com::sun::star::lang::WrappedTargetException ); 
 
-    /**
+    /** 
         returns true if the accessed library is already loaded from
         the storage, otherwise false.
      */
     boolean isLibraryLoaded( [in] string Name )
-            raises( com::sun::star::container::NoSuchElementException );
+            raises( com::sun::star::container::NoSuchElementException ); 
 
-    /**
+    /** 
         Causes the accessed library to be loaded from its storage
         if it hasn't already been loaded.
      */
     void loadLibrary( [in] string Name )
-            raises( com::sun::star::container::NoSuchElementException,
-                    com::sun::star::lang::WrappedTargetException );
+            raises( com::sun::star::container::NoSuchElementException, 
+                    com::sun::star::lang::WrappedTargetException ); 
 
 };
 
-//=============================================================================
-
-
-}; }; }; };
-
-#endif
+//============================================================================= 
+ 
+ 
+}; }; }; };  
+ 
+#endif 

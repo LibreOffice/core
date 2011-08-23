@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ public class _XHierarchicalName extends MultiMethodTest {
             res = hn.startsWith(expName);
 
             if (!res) {
-                log.println("Getting : " + hn +
+                log.println("Getting : " + hn + 
                             " but expected it to start with " + expName);
             }
         } catch (com.sun.star.lang.IllegalArgumentException e) {

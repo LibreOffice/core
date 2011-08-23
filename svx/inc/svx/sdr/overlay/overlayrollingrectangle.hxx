@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,14 +41,14 @@ namespace sdr
         {
         protected:
             // second position in pixel
-            basegfx::B2DPoint                       maSecondPosition;
+            basegfx::B2DPoint						maSecondPosition;
 
             // bitfield
             // Flag to switch on/off long lines to the OutputDevice bounds
-            unsigned                                mbExtendedLines : 1;
+            unsigned								mbExtendedLines : 1;
 
             // Flag to switch on/off the bounds itself
-            unsigned                                mbShowBounds : 1;
+            unsigned								mbShowBounds : 1;
 
             // geometry creation for OverlayObject
             virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();

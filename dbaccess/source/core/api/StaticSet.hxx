@@ -37,9 +37,9 @@ namespace dbaccess
     // we use a snapshot
     class OStaticSet : public OCacheSet
     {
-        ORowSetMatrix           m_aSet;
+        ORowSetMatrix			m_aSet;
         ORowSetMatrix::iterator m_aSetIter;
-        sal_Bool                m_bEnd;
+        sal_Bool				m_bEnd;
         sal_Bool fetchRow();
         void fillAllRows();
     public:

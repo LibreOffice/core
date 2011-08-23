@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,26 +52,26 @@ class SVX_DLLPUBLIC SvxParaPrevWindow : public Window
 {
     using Window::Draw;
 private:
-    Size                aWinSize;
-    Size                aSize;
+    Size				aWinSize;
+    Size				aSize;
 
     // indentation
-    long                nLeftMargin;
-    long                nRightMargin;
-    short               nFirstLineOfst;
+    long				nLeftMargin;
+    long				nRightMargin;
+    short	   			nFirstLineOfst;
     // distances
-    USHORT              nUpper;
-    USHORT              nLower;
+    USHORT				nUpper;
+    USHORT				nLower;
     // adjustment
-    SvxAdjust           eAdjust;
+    SvxAdjust			eAdjust;
     // last line in justification
-    SvxAdjust           eLastLine;
+    SvxAdjust			eLastLine;
     // line distance
-    SvxPrevLineSpace    eLine;
-    USHORT              nLineVal;
+    SvxPrevLineSpace	eLine;
+    USHORT				nLineVal;
 
-    String              aText;
-    Rectangle           Lines[9];
+    String				aText;
+    Rectangle			Lines[9];
 
 protected:
     virtual void Paint( const Rectangle& rRect );
@@ -81,33 +81,33 @@ protected:
 public:
     SvxParaPrevWindow( Window* pParent, const ResId& rId );
 
-    void        SetFirstLineOfst( short nNew ) { nFirstLineOfst = nNew; }
-    void        SetLeftMargin( long nNew )  { nLeftMargin = nNew; }
-    void        SetRightMargin( long nNew ) { nRightMargin = nNew; }
-    void        SetUpper( USHORT nNew )         { nUpper = nNew; }
-    void        SetLower( USHORT nNew )         { nLower = nNew; }
-    void        SetAdjust( SvxAdjust eNew )     { eAdjust = eNew; }
-    void        SetLastLine( SvxAdjust eNew )   { eLastLine = eNew; }
-    void        SetLineSpace( SvxPrevLineSpace eNew, USHORT nNew = 0 )
+    void		SetFirstLineOfst( short nNew ) { nFirstLineOfst = nNew; }
+    void		SetLeftMargin( long nNew ) 	{ nLeftMargin = nNew; }
+    void		SetRightMargin( long nNew )	{ nRightMargin = nNew; }
+    void		SetUpper( USHORT nNew )			{ nUpper = nNew; }
+    void		SetLower( USHORT nNew )			{ nLower = nNew; }
+    void		SetAdjust( SvxAdjust eNew )		{ eAdjust = eNew; }
+    void		SetLastLine( SvxAdjust eNew )	{ eLastLine = eNew; }
+    void		SetLineSpace( SvxPrevLineSpace eNew, USHORT nNew = 0 )
                     {   eLine = eNew; nLineVal = nNew; }
-    void        SetText( const String& rStr )   { aText = rStr; }
-    void        SetSize( Size aNew )            { aSize = aNew; }
+    void        SetText( const String& rStr )	{ aText = rStr; }
+    void		SetSize( Size aNew )			{ aSize = aNew; }
 
-    short       GetFirstLineOfst() const        { return nFirstLineOfst; }
-    long        GetLeftMargin() const           { return nLeftMargin; }
-    long        GetRightMargin() const          { return nRightMargin; }
-    USHORT      GetUpper() const                { return nUpper; }
-    USHORT      GetLower() const                { return nLower; }
-    SvxAdjust   GetAdjust() const               { return eAdjust; }
+    short		GetFirstLineOfst() const 		{ return nFirstLineOfst; }
+    long		GetLeftMargin() const			{ return nLeftMargin; }
+    long		GetRightMargin() const			{ return nRightMargin; }
+    USHORT		GetUpper() const				{ return nUpper; }
+    USHORT		GetLower() const				{ return nLower; }
+    SvxAdjust	GetAdjust() const				{ return eAdjust; }
 
-    SvxPrevLineSpace    GetLineEnum() const     { return eLine; }
-    USHORT              GetLineValue() const    { return nLineVal; }
-    String              GetText() const         { return aText; }
-    Size                GetSize() const         { return aSize; }
+    SvxPrevLineSpace	GetLineEnum() const 	{ return eLine; }
+    USHORT				GetLineValue() const	{ return nLineVal; }
+    String				GetText() const			{ return aText; }
+    Size				GetSize() const			{ return aSize; }
 
-    void        OutputSizeChanged();
+    void		OutputSizeChanged();
 
-    void        Draw( BOOL bAll )               { DrawParagraph( bAll ); }
+    void 		Draw( BOOL bAll ) 				{ DrawParagraph( bAll ); }
 };
 
 #endif

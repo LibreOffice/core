@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,7 +32,7 @@
 
 #include <iostream>
 #include <stdlib.h>
-#define AssertionOf(x)  {if (!(x)) {std::cerr << "Assertion failed: " << #x << __FILE__ << __LINE__ << std::endl; exit(3); }}
+#define AssertionOf(x)	{if (!(x)) {std::cerr << "Assertion failed: " << #x << __FILE__ << __LINE__ << std::endl; exit(3); }}
 
 #ifdef UNX
 #define stricmp strcasecmp
@@ -40,8 +40,8 @@
 
 
 
-Heap::Heap(unsigned i_nWidth)
-    :   dpColumnsArray(new Column[i_nWidth]),
+Heap::Heap(unsigned	i_nWidth)
+    :	dpColumnsArray(new Column[i_nWidth]),
         nColumnsArraySize(i_nWidth),
         nActiveColumn(nColumnsArraySize-1)
 {
@@ -67,8 +67,8 @@ Heap::~Heap()
 }
 
 void
-Heap::InsertValue( const char *     i_sKey,
-                   const char *     i_sValue )
+Heap::InsertValue( const char *		i_sKey,
+                   const char *	   	i_sValue )
 {
     HeapItem * pSearch1 = 0;
     HeapItem * pSearch2 = 0;
@@ -138,7 +138,7 @@ Heap::ReleaseTop()
                 nRetColumn = i;
             }
         }
-    }   // for
+    }	// for
 
     if (ret != 0)
     {
@@ -156,9 +156,9 @@ Heap::IncColumn()
 
 
 
-HeapItem::HeapItem( const char *        i_sKey,
-                    const char *        i_sValue )
-    :   sValue(i_sValue),
+HeapItem::HeapItem( const char *		i_sKey,
+                    const char *	   	i_sValue )
+    :	sValue(i_sValue),
         sKey(i_sKey),
         pNext(0)
 {

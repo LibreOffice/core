@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@
 #include <svl/cjkoptions.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <comphelper/processfactory.hxx>
-#include <svx/svxdlg.hxx>
+#include <svx/svxdlg.hxx> 
 #include <sal/macros.h>
 
 using namespace ::com::sun::star::uno;
@@ -56,7 +56,7 @@ using namespace ::svxform;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::util;
 
-#define MAX_HISTORY_ENTRIES     50
+#define MAX_HISTORY_ENTRIES		50
 
 //------------------------------------------------------------------------
 void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
@@ -132,9 +132,9 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const UniString& sInitialText, c
     ,m_pbHelp                   (this, CUI_RES(1))
     ,m_sSearch                  ( m_pbSearchAgain.GetText() )
     ,m_sCancel                  ( Button::GetStandardText( BUTTON_CANCEL ) )
-    ,m_pPreSearchFocus( NULL )
+    ,m_pPreSearchFocus( NULL )                                      
     ,m_lnkContextSupplier(lnkContextSupplier)
-    ,m_pConfig( NULL )
+    ,m_pConfig( NULL )                                              
 {
     DBG_ASSERT(m_lnkContextSupplier.IsSet(), "FmSearchDialog::FmSearchDialog : have no ContextSupplier !");
 
@@ -163,7 +163,7 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const UniString& sInitialText, c
     m_lbForm.SetSelectHdl(LINK(this, FmSearchDialog, OnContextSelection));
 
     if (m_arrContextFields.size() == 1)
-    {   // remove the context selection listbox and rearrange the controls accordingly
+    {	// remove the context selection listbox and rearrange the controls accordingly
         sal_Int32 nUpper = m_lbForm.GetPosPixel().Y();
         sal_Int32 nDifference = m_rbAllFields.GetPosPixel().Y() - nUpper;
 
@@ -192,7 +192,7 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const UniString& sInitialText, c
     initCommon( fmscInitial.xCursor );
 
     if (fmscInitial.sFieldDisplayNames.Len() != 0)
-    {   // use the display names if supplied
+    {	// use the display names if supplied
         DBG_ASSERT(fmscInitial.sFieldDisplayNames.GetTokenCount() == fmscInitial.strUsedFields.GetTokenCount(),
             "FmSearchDialog::FmSearchDialog : invalid initial context description !");
         Init(fmscInitial.sFieldDisplayNames, sInitialText);
@@ -203,9 +203,9 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const UniString& sInitialText, c
 
 //------------------------------------------------------------------------
 void FmSearchDialog::implMoveControls(
-            Control** _ppControls,
-            sal_Int32 _nControls,
-            sal_Int32 _nUp,
+            Control** _ppControls, 
+            sal_Int32 _nControls, 
+            sal_Int32 _nUp, 
             Control* /*_pToResize*/)
 {
     for (sal_Int32 i=0; i<_nControls; ++i)
@@ -345,7 +345,7 @@ IMPL_LINK(FmSearchDialog, OnClickedFieldRadios, Button*, pButton)
 IMPL_LINK(FmSearchDialog, OnClickedSearchAgain, Button*, EMPTYARG)
 {
     if (m_pbClose.IsEnabled())
-    {   // der Button hat die Funktion 'Suchen'
+    {	// der Button hat die Funktion 'Suchen'
         UniString strThisRoundText = m_cmbSearchText.GetText();
         // zur History dazu
         m_cmbSearchText.RemoveEntry(strThisRoundText);
@@ -379,7 +379,7 @@ IMPL_LINK(FmSearchDialog, OnClickedSearchAgain, Button*, EMPTYARG)
         }
     }
     else
-    {   // der Button hat die Fukntion 'Abbrechen'
+    {	// der Button hat die Fukntion 'Abbrechen'
         DBG_ASSERT(m_pSearchEngine->GetSearchMode() != SM_BRUTE, "FmSearchDialog, OnClickedSearchAgain : falscher Modus !");
             // der CancelButton wird normalerweise nur disabled, wenn ich in einem Thread oder mit Reschedule arbeite
         m_pSearchEngine->CancelSearch();
@@ -544,10 +544,10 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
         m_aSoundsLikeCJKSettings.Enable(bChecked);
 
         // two other buttons which depend on this one
-        sal_Bool bEnable =  (   m_rbSearchForText.IsChecked()
-                            &&  !m_aSoundsLikeCJK.IsChecked()
+        sal_Bool bEnable =	(	m_rbSearchForText.IsChecked()
+                            &&	!m_aSoundsLikeCJK.IsChecked()
                             )
-                         || !SvtCJKOptions().IsJapaneseFindEnabled();
+                         ||	!SvtCJKOptions().IsJapaneseFindEnabled();
         m_cbCase.Enable(bEnable);
         m_aHalfFullFormsCJK.Enable(bEnable);
 
@@ -565,7 +565,7 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
     fmscContext.nContext = nContext;
 
 #ifdef DBG_UTIL
-    sal_uInt32 nResult =
+    sal_uInt32 nResult = 
 #endif
     m_lnkContextSupplier.Call(&fmscContext);
     DBG_ASSERT(nResult > 0, "FmSearchDialog::InitContext : ContextSupplier didn't give me any controls !");
@@ -619,7 +619,7 @@ void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
     if (!bEnable)
         EnableControlPaint(sal_False);
     else
-    {   // beim Enablen teste ich, ob der Timer fuer das delayed paint aktiv ist und stoppe ihn wenn noetig
+    {	// beim Enablen teste ich, ob der Timer fuer das delayed paint aktiv ist und stoppe ihn wenn noetig
         if (m_aDelayedPaint.IsActive())
             m_aDelayedPaint.Stop();
     }
@@ -629,7 +629,7 @@ void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
 
     if ( !bEnable )
     {
-        // if one of my children has the focus, remember it
+        // if one of my children has the focus, remember it 
         // 104332 - 2002-10-17 - fs@openoffice.org
         Window* pFocusWindow = Application::GetFocusWindow( );
         if ( pFocusWindow && IsChild( pFocusWindow ) )
@@ -646,23 +646,23 @@ void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
     if (m_pSearchEngine->GetSearchMode() != SM_BRUTE)
     {
         m_flSearchFor.Enable        (bEnable);
-        m_rbSearchForText.Enable    (bEnable);
-        m_rbSearchForNull.Enable    (bEnable);
-        m_rbSearchForNotNull.Enable (bEnable);
+        m_rbSearchForText.Enable	(bEnable);
+        m_rbSearchForNull.Enable	(bEnable);
+        m_rbSearchForNotNull.Enable	(bEnable);
         m_flWhere.Enable            (bEnable);
-        m_ftForm.Enable             (bEnable);
-        m_lbForm.Enable             (bEnable);
-        m_rbAllFields.Enable        (bEnable);
-        m_rbSingleField.Enable      (bEnable);
-        m_lbField.Enable            (bEnable && m_rbSingleField.IsChecked());
+        m_ftForm.Enable				(bEnable);
+        m_lbForm.Enable				(bEnable);
+        m_rbAllFields.Enable		(bEnable);
+        m_rbSingleField.Enable		(bEnable);
+        m_lbField.Enable			(bEnable && m_rbSingleField.IsChecked());
         m_flOptions.Enable          (bEnable);
-        m_cbBackwards.Enable        (bEnable);
-        m_cbStartOver.Enable        (bEnable);
-        m_pbClose.Enable            (bEnable);
-        EnableSearchForDependees    (bEnable);
+        m_cbBackwards.Enable		(bEnable);
+        m_cbStartOver.Enable		(bEnable);
+        m_pbClose.Enable			(bEnable);
+        EnableSearchForDependees	(bEnable);
 
         if ( !bEnable )
-        {   // this means we're preparing for starting a search
+        {	// this means we're preparing for starting a search
             // In this case, EnableSearchForDependees disabled the search button
             // But as we're about to use it for cancelling the search, we really need to enable it, again
             // 07.12.2001 - 95246 - fs@openoffice.org
@@ -677,7 +677,7 @@ void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
         EnableControlPaint(sal_True);
 
     if ( bEnable )
-    {   // restore focus
+    {	// restore focus
         // 104332 - 2002-10-17 - fs@openoffice.org
         if ( m_pPreSearchFocus )
         {
@@ -703,18 +703,18 @@ void FmSearchDialog::EnableSearchForDependees(sal_Bool bEnable)
 
     sal_Bool bEnableRedundants = !m_aSoundsLikeCJK.IsChecked() || !SvtCJKOptions().IsJapaneseFindEnabled();
 
-    m_cmbSearchText.Enable          (bEnable);
-    m_ftPosition.Enable             (bEnable && !m_cbWildCard.IsChecked());
-    m_cbWildCard.Enable             (bEnable && !m_cbRegular.IsChecked() && !m_cbApprox.IsChecked());
-    m_cbRegular.Enable              (bEnable && !m_cbWildCard.IsChecked() && !m_cbApprox.IsChecked());
-    m_cbApprox.Enable               (bEnable && !m_cbWildCard.IsChecked() && !m_cbRegular.IsChecked());
-    m_pbApproxSettings.Enable       (bEnable && m_cbApprox.IsChecked());
-    m_aHalfFullFormsCJK.Enable      (bEnable && bEnableRedundants);
-    m_aSoundsLikeCJK.Enable         (bEnable);
-    m_aSoundsLikeCJKSettings.Enable (bEnable && m_aSoundsLikeCJK.IsChecked());
-    m_lbPosition.Enable             (bEnable && !m_cbWildCard.IsChecked());
-    m_cbUseFormat.Enable            (bEnable);
-    m_cbCase.Enable                 (bEnable && bEnableRedundants);
+    m_cmbSearchText.Enable			(bEnable);
+    m_ftPosition.Enable				(bEnable && !m_cbWildCard.IsChecked());
+    m_cbWildCard.Enable				(bEnable && !m_cbRegular.IsChecked() && !m_cbApprox.IsChecked());
+    m_cbRegular.Enable				(bEnable && !m_cbWildCard.IsChecked() && !m_cbApprox.IsChecked());
+    m_cbApprox.Enable				(bEnable && !m_cbWildCard.IsChecked() && !m_cbRegular.IsChecked());
+    m_pbApproxSettings.Enable		(bEnable && m_cbApprox.IsChecked());
+    m_aHalfFullFormsCJK.Enable		(bEnable && bEnableRedundants);
+    m_aSoundsLikeCJK.Enable			(bEnable);
+    m_aSoundsLikeCJKSettings.Enable	(bEnable && m_aSoundsLikeCJK.IsChecked());
+    m_lbPosition.Enable				(bEnable && !m_cbWildCard.IsChecked());
+    m_cbUseFormat.Enable			(bEnable);
+    m_cbCase.Enable					(bEnable && bEnableRedundants);
 }
 
 //------------------------------------------------------------------------
@@ -833,8 +833,8 @@ void FmSearchDialog::LoadParams()
 {
     FmSearchParams aParams(m_pConfig->getParams());
 
-    const ::rtl::OUString* pHistory     =                   aParams.aHistory.getConstArray();
-    const ::rtl::OUString* pHistoryEnd  =   pHistory    +   aParams.aHistory.getLength();
+    const ::rtl::OUString* pHistory		=					aParams.aHistory.getConstArray();
+    const ::rtl::OUString* pHistoryEnd	=	pHistory	+	aParams.aHistory.getLength();
     for (; pHistory != pHistoryEnd; ++pHistory)
         m_cmbSearchText.InsertEntry( *pHistory );
 
@@ -874,7 +874,7 @@ void FmSearchDialog::LoadParams()
     LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(&m_cbCase);
     LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(&m_cbBackwards);
 
-    m_aHalfFullFormsCJK.Check( !aParams.isIgnoreWidthCJK( ) );  // BEWARE: this checkbox has a inverse semantics!
+    m_aHalfFullFormsCJK.Check( !aParams.isIgnoreWidthCJK( ) );	// BEWARE: this checkbox has a inverse semantics!
     m_aSoundsLikeCJK.Check( aParams.bSoundsLikeCJK );
     LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(&m_aHalfFullFormsCJK);
     LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(&m_aSoundsLikeCJK);
@@ -937,22 +937,22 @@ void FmSearchDialog::SaveParams() const
     for (sal_uInt16 i=0; i<m_cmbSearchText.GetEntryCount(); ++i, ++pHistory)
         *pHistory = m_cmbSearchText.GetEntry(i);
 
-    aCurrentSettings.sSingleSearchField         = m_lbField.GetSelectEntry();
-    aCurrentSettings.bAllFields                 = m_rbAllFields.IsChecked();
-    aCurrentSettings.nPosition                  = m_pSearchEngine->GetPosition();
-    aCurrentSettings.bUseFormatter              = m_pSearchEngine->GetFormatterUsing();
-    aCurrentSettings.setCaseSensitive           ( m_pSearchEngine->GetCaseSensitive() );
-    aCurrentSettings.bBackwards                 = !m_pSearchEngine->GetDirection();
-    aCurrentSettings.bWildcard                  = m_pSearchEngine->GetWildcard();
-    aCurrentSettings.bRegular                   = m_pSearchEngine->GetRegular();
-    aCurrentSettings.bApproxSearch              = m_pSearchEngine->GetLevenshtein();
-    aCurrentSettings.bLevRelaxed                = m_pSearchEngine->GetLevRelaxed();
-    aCurrentSettings.nLevOther                  = m_pSearchEngine->GetLevOther();
-    aCurrentSettings.nLevShorter                = m_pSearchEngine->GetLevShorter();
-    aCurrentSettings.nLevLonger                 = m_pSearchEngine->GetLevLonger();
+    aCurrentSettings.sSingleSearchField			= m_lbField.GetSelectEntry();
+    aCurrentSettings.bAllFields					= m_rbAllFields.IsChecked();
+    aCurrentSettings.nPosition					= m_pSearchEngine->GetPosition();
+    aCurrentSettings.bUseFormatter				= m_pSearchEngine->GetFormatterUsing();
+    aCurrentSettings.setCaseSensitive			( m_pSearchEngine->GetCaseSensitive() );
+    aCurrentSettings.bBackwards					= !m_pSearchEngine->GetDirection();
+    aCurrentSettings.bWildcard					= m_pSearchEngine->GetWildcard();
+    aCurrentSettings.bRegular					= m_pSearchEngine->GetRegular();
+    aCurrentSettings.bApproxSearch				= m_pSearchEngine->GetLevenshtein();
+    aCurrentSettings.bLevRelaxed				= m_pSearchEngine->GetLevRelaxed();
+    aCurrentSettings.nLevOther					= m_pSearchEngine->GetLevOther();
+    aCurrentSettings.nLevShorter				= m_pSearchEngine->GetLevShorter();
+    aCurrentSettings.nLevLonger					= m_pSearchEngine->GetLevLonger();
 
-    aCurrentSettings.bSoundsLikeCJK             = m_pSearchEngine->GetTransliteration();
-    aCurrentSettings.setTransliterationFlags    ( m_pSearchEngine->GetTransliterationFlags() );
+    aCurrentSettings.bSoundsLikeCJK				= m_pSearchEngine->GetTransliteration();
+    aCurrentSettings.setTransliterationFlags	( m_pSearchEngine->GetTransliterationFlags() );
 
     if (m_rbSearchForNull.IsChecked())
         aCurrentSettings.nSearchForType = 1;

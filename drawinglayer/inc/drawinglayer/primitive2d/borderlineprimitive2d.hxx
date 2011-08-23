@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,58 +51,58 @@ namespace drawinglayer
         {
         private:
             /// the line definition
-            basegfx::B2DPoint                               maStart;
-            basegfx::B2DPoint                               maEnd;
+            basegfx::B2DPoint								maStart;
+            basegfx::B2DPoint								maEnd;
 
             /// the widths of single/double line
-            double                                          mfLeftWidth;
-            double                                          mfDistance;
-            double                                          mfRightWidth;
+            double											mfLeftWidth;
+            double											mfDistance;
+            double											mfRightWidth;
 
             /// edge overlap sizes
-            double                                          mfExtendInnerStart;
-            double                                          mfExtendInnerEnd;
-            double                                          mfExtendOuterStart;
-            double                                          mfExtendOuterEnd;
+            double											mfExtendInnerStart;
+            double											mfExtendInnerEnd;
+            double											mfExtendOuterStart;
+            double											mfExtendOuterEnd;
 
             /// the line color
-            basegfx::BColor                                 maRGBColor;
+            basegfx::BColor									maRGBColor;
             short                                           mnStyle;
 
             /// bitfield
             /// flags to influence inside/outside creation
-            unsigned                                        mbCreateInside : 1;
-            unsigned                                        mbCreateOutside : 1;
+            unsigned										mbCreateInside : 1;
+            unsigned										mbCreateOutside : 1;
 
             /// local helpers
-            double getCorrectedLeftWidth() const
-            {
-                return basegfx::fTools::equal(1.0, mfLeftWidth) ? 0.0 : mfLeftWidth;
+            double getCorrectedLeftWidth() const 
+            { 
+                return basegfx::fTools::equal(1.0, mfLeftWidth) ? 0.0 : mfLeftWidth; 
+            }
+            
+            double getCorrectedDistance() const 
+            { 
+                return basegfx::fTools::equal(1.0, mfDistance) ? 0.0 : mfDistance; 
             }
 
-            double getCorrectedDistance() const
-            {
-                return basegfx::fTools::equal(1.0, mfDistance) ? 0.0 : mfDistance;
+            double getCorrectedRightWidth() const 
+            { 
+                return basegfx::fTools::equal(1.0, mfRightWidth) ? 0.0 : mfRightWidth; 
             }
-
-            double getCorrectedRightWidth() const
-            {
-                return basegfx::fTools::equal(1.0, mfRightWidth) ? 0.0 : mfRightWidth;
-            }
-
-            double getWidth() const
-            {
+            
+            double getWidth() const 
+            { 
                 return getCorrectedLeftWidth() + getCorrectedDistance() + getCorrectedRightWidth();
             }
 
             bool leftIsHairline() const
             {
-                return basegfx::fTools::equal(1.0, mfLeftWidth);
+                return basegfx::fTools::equal(1.0, mfLeftWidth); 
             }
 
             bool rightIsHairline() const
             {
-                return basegfx::fTools::equal(1.0, mfRightWidth);
+                return basegfx::fTools::equal(1.0, mfRightWidth); 
             }
 
             bool isInsideUsed() const

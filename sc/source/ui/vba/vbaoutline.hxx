@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,7 @@
 
 typedef InheritedHelperInterfaceImpl1< ov::excel::XOutline > ScVbaOutline_BASE;
 
-class ScVbaOutline :  public ScVbaOutline_BASE
+class ScVbaOutline :  public ScVbaOutline_BASE 
 {
     css::uno::Reference< css::sheet::XSheetOutline > mxOutline;
 public:
@@ -44,7 +44,7 @@ public:
          css::uno::Reference<css::sheet::XSheetOutline> outline): ScVbaOutline_BASE( xParent, xContext) , mxOutline(outline)
     {}
     virtual ~ScVbaOutline(){}
-
+    
     virtual void SAL_CALL ShowLevels( const css::uno::Any& RowLevels, const css::uno::Any& ColumnLevels ) throw (css::uno::RuntimeException) ;
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();

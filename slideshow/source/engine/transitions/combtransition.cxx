@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,28 +55,28 @@ basegfx::B2DPolyPolygon createClipPolygon(
     // create clip polygon in standard orientation (will later
     // be rotated to match direction vector)
     ::basegfx::B2DPolyPolygon aClipPoly;
-
+    
     // create nNumStrips/2 vertical strips
     for( int i=nOffset; i<nNumStrips; i+=2 )
     {
-        aClipPoly.append(
-            ::basegfx::tools::createPolygonFromRect(
+        aClipPoly.append( 
+            ::basegfx::tools::createPolygonFromRect( 
                 ::basegfx::B2DRectangle( double(i)/nNumStrips, 0.0,
                                          double(i+1)/nNumStrips, 1.0) ) );
-
+        
     }
-
+    
     // rotate polygons, such that the strips are parallel to
     // the given direction vector
     const ::basegfx::B2DVector aUpVec(0.0, 1.0);
     basegfx::B2DHomMatrix aMatrix(basegfx::tools::createRotateAroundPoint(0.5, 0.5, aUpVec.angle( rDirection )));
-
+    
     // blow up clip polygon to slide size
     aMatrix.scale( rSlideSize.getX(),
                    rSlideSize.getY() );
-
+    
     aClipPoly.transform( aMatrix );
-
+    
     return aClipPoly;
 }
 
@@ -100,7 +100,7 @@ CombTransition::CombTransition(
 {
 }
 
-void CombTransition::renderComb( double           t,
+void CombTransition::renderComb( double           t, 
                                  const ViewEntry& rViewEntry ) const
 {
     const SlideBitmapSharedPtr& pEnteringBitmap = getEnteringBitmap(rViewEntry);
@@ -108,7 +108,7 @@ void CombTransition::renderComb( double           t,
 
     if( !pEnteringBitmap || !pCanvas_ )
         return;
-
+    
     // calc bitmap offsets. The enter/leaving bitmaps are only
     // as large as the actual slides. For scaled-down
     // presentations, we have to move the left, top edge of
@@ -116,20 +116,20 @@ void CombTransition::renderComb( double           t,
     // given view transform. The aBitmapPosPixel local
     // variable is already in device coordinate space
     // (i.e. pixel).
-
+    
     // TODO(F2): Properly respect clip here. Might have to be transformed, too.
     const basegfx::B2DHomMatrix viewTransform( rViewEntry.mpView->getTransformation() );
     const basegfx::B2DPoint pageOrigin( viewTransform * basegfx::B2DPoint() );
-
+    
     // change transformation on cloned canvas to be in
     // device pixel
     cppcanvas::CanvasSharedPtr pCanvas( pCanvas_->clone() );
     basegfx::B2DPoint p;
-
+    
     // TODO(Q2): Use basegfx bitmaps here
     // TODO(F1): SlideBitmap is not fully portable between different canvases!
 
-    const basegfx::B2DSize enteringSizePixel(
+    const basegfx::B2DSize enteringSizePixel( 
         getEnteringSlideSizePixel( rViewEntry.mpView) );
 
     const basegfx::B2DVector aPushDirection = basegfx::B2DVector(
@@ -142,9 +142,9 @@ void CombTransition::renderComb( double           t,
         createClipPolygon( maPushDirectionUnit,
                            enteringSizePixel,
                            mnNumStripes, 1 ) );
-
+    
     SlideBitmapSharedPtr const & pLeavingBitmap = getLeavingBitmap(rViewEntry);
-    if( pLeavingBitmap )
+    if( pLeavingBitmap ) 
     {
         // render odd strips:
         pLeavingBitmap->clip( aClipPolygon1 );
@@ -152,7 +152,7 @@ void CombTransition::renderComb( double           t,
         p = basegfx::B2DPoint( pageOrigin + (t * aPushDirection) );
         pCanvas->setTransformation(basegfx::tools::createTranslateB2DHomMatrix(p.getX(), p.getY()));
         pLeavingBitmap->draw( pCanvas );
-
+        
         // render even strips:
         pLeavingBitmap->clip( aClipPolygon2 );
         // don't modify bitmap object (no move!):
@@ -160,17 +160,17 @@ void CombTransition::renderComb( double           t,
         pCanvas->setTransformation(basegfx::tools::createTranslateB2DHomMatrix(p.getX(), p.getY()));
         pLeavingBitmap->draw( pCanvas );
     }
-
+    
     // TODO(Q2): Use basegfx bitmaps here
     // TODO(F1): SlideBitmap is not fully portable between different canvases!
-
+    
     // render odd strips:
     pEnteringBitmap->clip( aClipPolygon1 );
     // don't modify bitmap object (no move!):
     p = basegfx::B2DPoint( pageOrigin + ((t - 1.0) * aPushDirection) );
     pCanvas->setTransformation(basegfx::tools::createTranslateB2DHomMatrix(p.getX(), p.getY()));
     pEnteringBitmap->draw( pCanvas );
-
+    
     // render even strips:
     pEnteringBitmap->clip( aClipPolygon2 );
     // don't modify bitmap object (no move!):
@@ -183,9 +183,9 @@ bool CombTransition::operator()( double t )
 {
     std::for_each( beginViews(),
                    endViews(),
-                   boost::bind( &CombTransition::renderComb,
-                                this,
-                                t,
+                   boost::bind( &CombTransition::renderComb, 
+                                this, 
+                                t, 
                                 _1 ));
 
     getScreenUpdater().notifyUpdate();

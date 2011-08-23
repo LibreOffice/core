@@ -55,7 +55,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
  /**
  * @file
@@ -75,7 +75,7 @@
 
 class LwpFoundry;
 /**
- * @brief   Base class of all Lwp VO objects
+ * @brief	Base class of all Lwp VO objects
 */
 class LwpObject
 {

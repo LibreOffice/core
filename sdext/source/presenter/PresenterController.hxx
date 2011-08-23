@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -169,7 +169,7 @@ public:
         const css::frame::FrameActionEvent& rEvent)
         throw (com::sun::star::uno::RuntimeException);
 
-
+    
     // XKeyListener
 
     virtual void SAL_CALL keyPressed (const css::awt::KeyEvent& rEvent)
@@ -193,16 +193,16 @@ public:
 
     virtual void SAL_CALL mouseReleased (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
-
+    
     virtual void SAL_CALL mouseEntered (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
-
+    
     virtual void SAL_CALL mouseExited (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
 
 
     // XMouseMotionListener
-
+    
     virtual void SAL_CALL mouseMoved (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
 
@@ -238,7 +238,7 @@ private:
     css::uno::Reference<css::util::XURLTransformer> mxUrlTransformer;
     ::rtl::Reference<PresenterAccessible> mpAccessibleObject;
     bool mbIsAccessibilityActive;
-
+    
     void InitializePresenterScreen (void);
     void InitializeSlideShowView (const css::uno::Reference<css::uno::XInterface>& rxView);
     void GetSlides (const sal_Int32 nOffset);
@@ -258,7 +258,7 @@ private:
             The modifier bit field as provided by the key up event.
     */
     void HandleNumericKeyPress (const sal_Int32 nKey, const sal_Int32 nModifiers);
-
+    
     void ThrowIfDisposed (void) const throw (::com::sun::star::lang::DisposedException);
 };
 

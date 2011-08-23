@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ SV_DECL_REF(DrawDocShell)
 class SD_DLLPUBLIC SdPageObjsTLB : public SvTreeListBox
 {
 private:
-
+    
     static BOOL  SD_DLLPRIVATE bIsInDrag;      // static, falls der Navigator im ExecuteDrag geloescht wird
 
 public:
@@ -75,15 +75,15 @@ public:
     class SdPageObjsTransferable : public SdTransferable
     {
     public:
-        SdPageObjsTransferable(
-            SdPageObjsTLB& rParent,
+        SdPageObjsTransferable( 
+            SdPageObjsTLB& rParent, 
             const INetBookmark& rBookmark,
             ::sd::DrawDocShell& rDocShell,
             NavigatorDragType eDragType,
             const ::com::sun::star::uno::Any& rTreeListBoxData );
         ::sd::DrawDocShell&     GetDocShell() const;
         NavigatorDragType   GetDragType() const;
-
+        
         static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
         static SdPageObjsTransferable* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
         /** Return a temporary transferable data flavor that is used
@@ -91,24 +91,24 @@ public:
             lifetime ends with the office application.
         */
         static sal_uInt32 GetListBoxDropFormatId (void);
-
+        
     private:
         /** Temporary drop flavor id that is used internally in the
             navigator.
         */
         static sal_uInt32 mnListBoxDropFormatId;
 
-        SdPageObjsTLB&      mrParent;
-        INetBookmark        maBookmark;
+        SdPageObjsTLB&		mrParent;
+        INetBookmark		maBookmark;
         ::sd::DrawDocShell&     mrDocShell;
         NavigatorDragType   meDragType;
         const ::com::sun::star::uno::Any maTreeListBoxData;
 
-        SD_DLLPRIVATE virtual               ~SdPageObjsTransferable();
-
-        SD_DLLPRIVATE virtual void      AddSupportedFormats();
-        SD_DLLPRIVATE virtual sal_Bool  GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-        SD_DLLPRIVATE virtual void      DragFinished( sal_Int8 nDropAction );
+        SD_DLLPRIVATE virtual				~SdPageObjsTransferable();
+        
+        SD_DLLPRIVATE virtual void		AddSupportedFormats();
+        SD_DLLPRIVATE virtual sal_Bool	GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        SD_DLLPRIVATE virtual void		DragFinished( sal_Int8 nDropAction );
 
         SD_DLLPRIVATE virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
     };
@@ -127,35 +127,35 @@ public:
     bool PageBelongsToCurrentShow (const SdPage* pPage) const;
 
 protected:
-
-    Window*                 mpParent;
-    const SdDrawDocument*   mpDoc;
-    SdDrawDocument*         mpBookmarkDoc;
-    SfxMedium*              mpMedium;
-    SfxMedium*              mpOwnMedium;
-    Image                   maImgOle;
-    Image                   maImgGraphic;
-    Image                   maImgOleH;
-    Image                   maImgGraphicH;
+    
+    Window* 				mpParent;
+    const SdDrawDocument*	mpDoc;
+    SdDrawDocument* 		mpBookmarkDoc;
+    SfxMedium*				mpMedium;
+    SfxMedium*				mpOwnMedium;
+    Image					maImgOle;
+    Image					maImgGraphic;
+    Image					maImgOleH;
+    Image					maImgGraphicH;
     BOOL                    mbLinkableSelected;
-    BOOL                    mbDragEnabled;
-    String                  maDocName;
-    ::sd::DrawDocShellRef       mxBookmarkDocShRef; // Zum Laden von Bookmarks
-    ::sd::DrawDocShell*         mpDropDocSh;
-    SdNavigatorWin*         mpDropNavWin;
+    BOOL					mbDragEnabled;
+    String					maDocName;
+    ::sd::DrawDocShellRef		mxBookmarkDocShRef;	// Zum Laden von Bookmarks
+    ::sd::DrawDocShell* 		mpDropDocSh;
+    SdNavigatorWin*			mpDropNavWin;
     SfxViewFrame*           mpFrame;
 
-    // DragSourceHelper
-    virtual void            StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    // DragSourceHelper		
+    virtual void			StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
     // DropTargetHelper
-    virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual sal_Int8		AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual	sal_Int8		ExecuteDrop( const ExecuteDropEvent& rEvt );
 
-    virtual void            RequestingChilds( SvLBoxEntry* pParent );
-
+    virtual void			RequestingChilds( SvLBoxEntry* pParent );
+    
     void                    DoDrag();
-    void                    OnDragFinished( sal_uInt8 nDropAction );
+    void					OnDragFinished( sal_uInt8 nDropAction );
 
     /** Return the name of the object.  When the object has no user supplied
         name and the bCreate flag is <TRUE/> then a name is created
@@ -173,7 +173,7 @@ protected:
     String GetObjectName (
         const SdrObject* pObject,
         const bool bCreate = true) const;
-    void                    CloseBookmarkDoc();
+    void                    CloseBookmarkDoc();	
                             DECL_STATIC_LINK(SdPageObjsTLB, ExecDragHdl, void*);
 
     /** Handle the reordering of entries in the navigator.  This method
@@ -184,37 +184,37 @@ protected:
         SvLBoxEntry*  pTarget,
         SvLBoxEntry*  pEntry,
         SvLBoxEntry*& rpNewParent,
-        ULONG&        rNewChildPos);
-
+        ULONG&		  rNewChildPos);
+    
     using Window::GetDropTarget;
     virtual SvLBoxEntry* GetDropTarget (const Point& rLocation);
 
 public:
-
+                            
                             SdPageObjsTLB( Window* pParent, const SdResId& rSdResId );
                             ~SdPageObjsTLB();
 
-    virtual void            SelectHdl();
-    virtual void            KeyInput( const KeyEvent& rKEvt );
-
-    void                    SetViewFrame( SfxViewFrame* pViewFrame ) { mpFrame = pViewFrame; }
-    SfxViewFrame*           GetViewFrame() const { return mpFrame; }
-
-    void                    Fill( const SdDrawDocument*, BOOL bAllPages, const String& rDocName );
-    void                    Fill( const SdDrawDocument*, SfxMedium* pSfxMedium, const String& rDocName );
+    virtual void			SelectHdl();
+    virtual void			KeyInput( const KeyEvent& rKEvt );
+                            
+    void					SetViewFrame( SfxViewFrame* pViewFrame ) { mpFrame = pViewFrame; }
+    SfxViewFrame*			GetViewFrame() const { return mpFrame; }
+                            
+    void					Fill( const SdDrawDocument*, BOOL bAllPages, const String& rDocName );
+    void					Fill( const SdDrawDocument*, SfxMedium* pSfxMedium, const String& rDocName );
     void                    SetShowAllShapes (const bool bShowAllShapes, const bool bFill);
     bool                    GetShowAllShapes (void) const;
-    BOOL                    IsEqualToDoc( const SdDrawDocument* pInDoc = NULL );
-    BOOL                    HasSelectedChilds( const String& rName );
-    BOOL                    SelectEntry( const String& rName );
-    String                  GetSelectEntry();
-    List*                   GetSelectEntryList( USHORT nDepth );
-    SdDrawDocument*         GetBookmarkDoc(SfxMedium* pMedium = NULL);
-    ::sd::DrawDocShell*         GetDropDocSh() { return(mpDropDocSh); }
-
+    BOOL					IsEqualToDoc( const SdDrawDocument* pInDoc = NULL );
+    BOOL					HasSelectedChilds( const String& rName );
+    BOOL					SelectEntry( const String& rName );
+    String					GetSelectEntry();
+    List*					GetSelectEntryList( USHORT nDepth );
+    SdDrawDocument*			GetBookmarkDoc(SfxMedium* pMedium = NULL);
+    ::sd::DrawDocShell*			GetDropDocSh() { return(mpDropDocSh); }
+    
     BOOL                    IsLinkableSelected() const { return mbLinkableSelected; }
-
-    static BOOL             IsInDrag();
+    
+    static BOOL				IsInDrag();
     using SvLBox::ExecuteDrop;
 
 private:
@@ -267,6 +267,6 @@ private:
         SdrObject& rObject) const;
 };
 
-#endif      // _SDTREELB_HXX
+#endif		// _SDTREELB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

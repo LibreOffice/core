@@ -62,14 +62,14 @@
  * 2005-01-19 create this file.
  * 2005-04-05 make it derive from XFContentContainer.
  ************************************************************************/
-#ifndef     _XFFOOTER_HXX
-#define     _XFFOOTER_HXX
+#ifndef		_XFFOOTER_HXX
+#define		_XFFOOTER_HXX
 
-#include    "xfcontentcontainer.hxx"
-#include    <vector>
+#include	"xfcontentcontainer.hxx"
+#include	<vector>
 
 /**
- * @descr   Foot obejct. It's just a container.
+ * @descr	Foot obejct. It's just a container.
  */
 class XFFooter : public XFContentContainer
 {
@@ -79,7 +79,7 @@ public:
     }
     virtual void ToXml(IXFStream *pStrm)
     {
-        IXFAttrList *pAttrList = pStrm->GetAttrList();
+        IXFAttrList	*pAttrList = pStrm->GetAttrList();
         pAttrList->Clear();
         pStrm->StartElement( A2OUSTR("style:footer") );
         XFContentContainer::ToXml(pStrm);

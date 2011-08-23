@@ -61,7 +61,7 @@ LwpLineNumberOptions::LwpLineNumberOptions(LwpObjectStream* pStrm)
     Read(pStrm);
 }
 /**
- * @descr       Read LwpLineNumberOptions from object stream
+ * @descr	 	Read LwpLineNumberOptions from object stream
  */
 void LwpLineNumberOptions::Read(LwpObjectStream *pStrm)
 {
@@ -73,7 +73,7 @@ void LwpLineNumberOptions::Read(LwpObjectStream *pStrm)
     pStrm->SkipExtra();
 }
 /**
- * @descr       set XFLineNumberConfig
+ * @descr	 	set XFLineNumberConfig
  */
 void LwpLineNumberOptions::RegisterStyle()
 {

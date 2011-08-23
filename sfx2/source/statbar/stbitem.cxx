@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -139,18 +139,18 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
 
 SfxStatusBarControl::SfxStatusBarControl
 (
-    USHORT      nSlotID,            /* Slot-Id, mit der diese Instanz
+    USHORT		nSlotID,			/* Slot-Id, mit der diese Instanz
                                        verbunden wird. Wurde bei der
                                        Registrierung eine Slot-Id != 0
                                        angegeben, ist dies immer die dort
                                        angegebene. */
     USHORT      nCtrlID,            /* ID of this controller in the status bar */
 
-    StatusBar&  rBar                /* Referenz auf die StatusBar, f"ur die
+    StatusBar&	rBar				/* Referenz auf die StatusBar, f"ur die
                                        dieses Control erzeugt wurde. */
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Konstruktor der Klasse SfxStatusBarControl. Die Subclasses werden
     bei Bedarf per Factory vom SFx erzeugt.
@@ -170,7 +170,7 @@ SfxStatusBarControl::SfxStatusBarControl
 
 SfxStatusBarControl::~SfxStatusBarControl()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Destruktor der Klasse SfxStatusBarControl. Die Instanzen dieser
     Klasse und deren Subklassen werden vom SFx zerst"ort.
@@ -431,9 +431,9 @@ throw ( uno::RuntimeException )
 
 void SfxStatusBarControl::StateChanged
 (
-    USHORT              nSID,
-    SfxItemState        eState,
-    const SfxPoolItem*  pState  /* Zeiger auf ein SfxPoolItem, welches nur
+    USHORT				nSID,
+    SfxItemState		eState,
+    const SfxPoolItem* 	pState	/* Zeiger auf ein SfxPoolItem, welches nur
                                    innerhalb dieses Methodenaufrufs g"ultig
                                    ist. Es kann ein 0-Pointer, ein Pointer
                                    auf ein SfxVoidItem oder auf den Typ, f"ur
@@ -441,7 +441,7 @@ void SfxStatusBarControl::StateChanged
                                    registriert ist vorkommen. */
 )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Die Basisimplementation versteht Items vom Type SfxStringItem, bei
     denen der Text in das Status-Zeilen-Feld eingetragen wird und
@@ -468,7 +468,7 @@ void SfxStatusBarControl::StateChanged
 
 BOOL SfxStatusBarControl::MouseButtonDown( const MouseEvent & )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese virtuelle Methode ist eine Weiterleitung des Events
     MouseButtonDown() der StatusBar, falls die Maus-Position innerhalb
@@ -480,7 +480,7 @@ BOOL SfxStatusBarControl::MouseButtonDown( const MouseEvent & )
 
     [Rueckgabewert]
 
-    BOOL                TRUE
+    BOOL				TRUE
                         das Event wurde bearbeitet und soll nicht an
                         die StatusBar weitergeleitet werden
 
@@ -497,7 +497,7 @@ BOOL SfxStatusBarControl::MouseButtonDown( const MouseEvent & )
 
 BOOL SfxStatusBarControl::MouseMove( const MouseEvent & )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese virtuelle Methode ist eine Weiterleitung des Events
     MouseMove() der StatusBar, falls die Maus-Position innerhalb
@@ -509,7 +509,7 @@ BOOL SfxStatusBarControl::MouseMove( const MouseEvent & )
 
     [Rueckgabewert]
 
-    BOOL                TRUE
+    BOOL				TRUE
                         das Event wurde bearbeitet und soll nicht an
                         die StatusBar weitergeleitet werden
 
@@ -526,7 +526,7 @@ BOOL SfxStatusBarControl::MouseMove( const MouseEvent & )
 
 BOOL SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese virtuelle Methode ist eine Weiterleitung des Events
     MouseButtonUp() der StatusBar, falls die Maus-Position innerhalb
@@ -538,7 +538,7 @@ BOOL SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
 
     [Rueckgabewert]
 
-    BOOL                TRUE
+    BOOL				TRUE
                         das Event wurde bearbeitet und soll nicht an
                         die StatusBar weitergeleitet werden
 
@@ -555,7 +555,7 @@ BOOL SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
 
 void SfxStatusBarControl::Command( const CommandEvent& )
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese virtuelle Methode wird gerufen, wenn f"ur dieses SfxStatusBarControl
     ein CommandEvent f"ur erkannt wurde.
@@ -570,7 +570,7 @@ void SfxStatusBarControl::Command( const CommandEvent& )
 
 void SfxStatusBarControl::Click()
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Diese virtuelle Methode wird gerufen, wenn der Anwender mit der Maus
     in das zu diesem Control geh"orige Feld der Statuszeile klickt.

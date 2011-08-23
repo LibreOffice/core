@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #define __FRAMEWORK_TABWIN_TABWINFACTORY_HXX_
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <stdtypes.h>
@@ -42,7 +42,7 @@
 #include <services.h>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -52,7 +52,7 @@
 #include <com/sun/star/awt/XToolkit.hpp>
 
 //_________________________________________________________________________________________________________________
-//  includes of other projects
+//	includes of other projects
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/ustring.hxx>
@@ -60,7 +60,7 @@
 namespace framework
 {
 
-class TabWinFactory :  protected ThreadHelpBase                                 ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+class TabWinFactory :  protected ThreadHelpBase							        ,	// Struct for right initalization of mutex member! Must be first of baseclasses.
                        public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XSingleComponentFactory, com::sun::star::lang::XServiceInfo>
 {
     public:
@@ -76,7 +76,7 @@ class TabWinFactory :  protected ThreadHelpBase                                 
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >              m_xToolkit;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >				 m_xToolkit;
 };
 
 }

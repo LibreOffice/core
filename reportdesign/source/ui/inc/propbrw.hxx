@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,8 +54,8 @@ class OObjectBase;
 class PropBrw : public DockingWindow , public SfxListener, public SfxBroadcaster
 {
 private:
-    OModuleClient       m_aModuleClient;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    OModuleClient	    m_aModuleClient;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > 
                         m_xInspectorContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                         m_xORB;
@@ -69,17 +69,17 @@ private:
                         m_xLastSection; /// is the previously displayed section
     ::rtl::OUString     m_sLastActivePage;
     ODesignView*        m_pDesignView;
-    OSectionView*       m_pView;
-    sal_Bool            m_bInitialStateChange;
+    OSectionView*	    m_pView;
+    sal_Bool		    m_bInitialStateChange;
 
     PropBrw(PropBrw&);
     void operator =(PropBrw&);
 protected:
-
+    
     virtual void Resize();
     virtual sal_Bool Close();
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> >
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> > 
         CreateCompPropSet(const SdrMarkList& rMarkList);
 
     void implSetNewObject(
@@ -96,16 +96,16 @@ protected:
     DECL_LINK( OnAsyncGetFocus, void* );
 
 public:
-    PropBrw(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
+    PropBrw(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&	_xORB
             ,Window* pParent
             ,ODesignView*  _pDesignView);
     virtual ~PropBrw();
 
     virtual void LoseFocus();
 
-    void    Update( OSectionView* m_pView );
-    void    Update( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xReportComponent);
-    inline OSectionView*    GetCurView() const { return m_pView; }
+    void	Update( OSectionView* m_pView );
+    void	Update( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xReportComponent);
+    inline OSectionView*	GetCurView() const { return m_pView; }
     ::rtl::OUString         getCurrentPage() const;
     void                    setCurrentPage(const ::rtl::OUString& _sLastActivePage);
 

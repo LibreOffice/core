@@ -3,7 +3,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -30,7 +30,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 /*************************************************************************
@@ -69,7 +69,7 @@ using namespace ::rtl;
 //=======================================================================
 SAL_IMPLEMENT_MAIN()
 {
-    Reference< XSimpleRegistry > xReg = createSimpleRegistry();
+    Reference< XSimpleRegistry > xReg = createSimpleRegistry(); 
     OSL_ENSURE( xReg.is(), "### cannot get service instance of \"com.sun.star.regiystry.SimpleRegistry\"!" );
 
     xReg->open(OUString::createFromAscii("counter.uno.rdb"), sal_False, sal_False);
@@ -92,17 +92,17 @@ SAL_IMPLEMENT_MAIN()
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), // loader for component
 #ifdef UNX
 #ifdef MACOSX
-            OUString::createFromAscii("counter.uno.dylib"),     // component location
+            OUString::createFromAscii("counter.uno.dylib"),		// component location
 #else
-            OUString::createFromAscii("counter.uno.so"),        // component location
+            OUString::createFromAscii("counter.uno.so"),		// component location
 #endif
 #else
-            OUString::createFromAscii("counter.uno.dll"),       // component location
+            OUString::createFromAscii("counter.uno.dll"),		// component location
 #endif
-            Reference< XSimpleRegistry >()   // registry omitted,
+            Reference< XSimpleRegistry >()	 // registry omitted,
                                              // defaulting to service manager registry used
             );
-
+        
         // get a counter instance
         Reference< XInterface > xx ;
         xx = xMgr->createInstanceWithContext(OUString::createFromAscii("foo.Counter"), xContext);

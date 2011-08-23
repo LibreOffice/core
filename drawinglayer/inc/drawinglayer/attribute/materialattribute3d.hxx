@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,14 +51,14 @@ namespace drawinglayer
         class MaterialAttribute3D
         {
         private:
-            ImpMaterialAttribute3D*                             mpMaterialAttribute3D;
+            ImpMaterialAttribute3D*								mpMaterialAttribute3D;
 
         public:
             // constructors/destructor
             MaterialAttribute3D(
-                const basegfx::BColor& rColor,
-                const basegfx::BColor& rSpecular,
-                const basegfx::BColor& rEmission,
+                const basegfx::BColor& rColor, 
+                const basegfx::BColor& rSpecular, 
+                const basegfx::BColor& rEmission, 
                 sal_uInt16 nSpecularIntensity);
             MaterialAttribute3D(const basegfx::BColor& rColor);
             MaterialAttribute3D();

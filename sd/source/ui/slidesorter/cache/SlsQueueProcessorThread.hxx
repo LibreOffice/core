@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,17 +41,17 @@ class SlideSorterView;
 namespace sd { namespace slidesorter { namespace cache {
 
 
-template <class Queue,
-          class RequestData,
-          class BitmapCache,
+template <class Queue, 
+          class RequestData, 
+          class BitmapCache, 
           class BitmapFactory>
-class QueueProcessorThread
+class QueueProcessorThread 
     : public ::osl::Thread
 {
 public:
     QueueProcessorThread (
-        view::SlideSorterView& rView,
-        Queue& rQueue,
+        view::SlideSorterView& rView, 
+        Queue& rQueue, 
         BitmapCache& rCache);
     ~QueueProcessorThread (void);
 
@@ -81,19 +81,19 @@ public:
     void SAL_CALL Terminate (void);
 
 protected:
-    /** This virutal method is called (among others?) from the
+    /**	This virutal method is called (among others?) from the
         inherited create method and acts as the main function of this
         thread.
     */
     virtual void SAL_CALL run (void);
 
-    /** Called after the thread is terminated via the terminate
+    /**	Called after the thread is terminated via the terminate
         method.  Used to kill the thread by calling delete on this.
-    */
+    */	
     virtual void SAL_CALL onTerminated (void);
 
 private:
-    /** Flag that indicates wether the onTerminated method has been already
+    /**	Flag that indicates wether the onTerminated method has been already
         called.  If so then a subsequent call to detach deletes the thread.
     */
     volatile bool mbIsTerminated;
@@ -169,7 +169,7 @@ void SAL_CALL QueueProcessorThread<Queue, Request, Cache, Factory>::run (void)
             TimeValue aTimeToWait;
             aTimeToWait.Seconds = 0;
             aTimeToWait.Nanosec = 50*1000*1000;
-            OSL_TRACE("QueueProcessorThread::run(): input pending: waiting %d nanoseconds",
+            OSL_TRACE("QueueProcessorThread::run(): input pending: waiting %d nanoseconds", 
                 aTimeToWait.Nanosec);
             wait (aTimeToWait);
         }
@@ -194,7 +194,7 @@ void QueueProcessorThread<Queue, Request, Cache, Factory>
     Request* pRequest = NULL;
     int nPriorityClass;
     bool bRequestIsValid = false;
-
+    
     do
     {
         OSL_TRACE ("QueueProcessorThread::ProcessQueueEntry(): testing for mbIsTerminated %p", this);
@@ -215,7 +215,7 @@ void QueueProcessorThread<Queue, Request, Cache, Factory>
             break;
 
         OSL_TRACE ("QueueProcessorThread::ProcessQueueEntry():    have mutexes %p", this);
-
+        
         // Get the requeuest with the highest priority from the queue.
         nPriorityClass = mrQueue.GetFrontPriorityClass();
         pRequest = &mrQueue.GetFront();
@@ -224,7 +224,7 @@ void QueueProcessorThread<Queue, Request, Cache, Factory>
 
 
         OSL_TRACE ("QueueProcessorThread::ProcessQueueEntry():using request %p for creating bitmap", pRequest);
-        OSL_TRACE ("QueueProcessorThread::ProcessQueueEntry():processing request for page %d with priority class ",
+        OSL_TRACE ("QueueProcessorThread::ProcessQueueEntry():processing request for page %d with priority class ", 
             pRequest->GetPage()->GetPageNum(), nPriorityClass);
         try
         {
@@ -253,9 +253,9 @@ void QueueProcessorThread<Queue, Request, Cache, Factory>
 
 
 
-template <class Queue,
-          class RequestData,
-          class BitmapCache,
+template <class Queue, 
+          class RequestData, 
+          class BitmapCache, 
           class BitmapFactory>
 void QueueProcessorThread<
     Queue, RequestData, BitmapCache, BitmapFactory
@@ -268,9 +268,9 @@ void QueueProcessorThread<
 
 
 
-template <class Queue,
-          class RequestData,
-          class BitmapCache,
+template <class Queue, 
+          class RequestData, 
+          class BitmapCache, 
           class BitmapFactory>
 void QueueProcessorThread<
     Queue, RequestData, BitmapCache, BitmapFactory
@@ -283,9 +283,9 @@ void QueueProcessorThread<
 
 
 
-template <class Queue,
-          class RequestData,
-          class BitmapCache,
+template <class Queue, 
+          class RequestData, 
+          class BitmapCache, 
           class BitmapFactory>
 void QueueProcessorThread<
     Queue, RequestData, BitmapCache, BitmapFactory
@@ -299,9 +299,9 @@ void QueueProcessorThread<
 
 
 
-template <class Queue,
-          class RequestData,
-          class BitmapCache,
+template <class Queue, 
+          class RequestData, 
+          class BitmapCache, 
           class BitmapFactory>
 void QueueProcessorThread<
     Queue, RequestData, BitmapCache, BitmapFactory
@@ -323,9 +323,9 @@ void QueueProcessorThread<
 
 /** This callback method is called when the run() method terminates.
 */
-template <class Queue,
-          class RequestData,
-          class BitmapCache,
+template <class Queue, 
+          class RequestData, 
+          class BitmapCache, 
           class BitmapFactory>
 void SAL_CALL QueueProcessorThread<
     Queue, RequestData, BitmapCache, BitmapFactory

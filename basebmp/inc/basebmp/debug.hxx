@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,13 @@ namespace basebmp
     class BitmapDevice;
 
     /** Dump content of BitmapDevice to given output stream.
-
-        @param rDevice
+        
+        @param rDevice   
         Device whose content should be dumped.
-
-        @param rOutputStream
-        Stream to write output to.
-    */
+    
+        @param rOutputStream    
+        Stream to write output to.  
+    */        
     void debugDump( const boost::shared_ptr< BitmapDevice >& rDevice,
                     ::std::ostream&                          rOutputStream );
 }

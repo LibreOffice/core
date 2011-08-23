@@ -19,8 +19,8 @@ class SvxColorWindow_Impl : public SfxPopupWindow
     using FloatingWindow::StateChanged;
 
 private:
-    const USHORT                                                        theSlotId;
-    ValueSet                                                            aColorSet;
+    const USHORT	                                                    theSlotId;
+    ValueSet		                                                    aColorSet;
     rtl::OUString                                                       maCommand;
 
 #if _SOLAR__PRIVATE
@@ -29,10 +29,10 @@ private:
 
 protected:
     virtual void    Resize();
-    virtual BOOL    Close();
+    virtual BOOL	Close();
 
 public:
-    SvxColorWindow_Impl( const rtl::OUString& rCommand,
+    SvxColorWindow_Impl( const rtl::OUString& rCommand, 
                          USHORT nSlotId,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                          const String& rWndTitle,

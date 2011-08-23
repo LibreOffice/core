@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -290,13 +290,13 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
     css::uno::Sequence<ttb::TestPolyStruct< ::sal_Int32> > arg35;
     css::uno::Sequence<ttb::TestPolyStruct<ttb::TestPolyStruct2< ::sal_Unicode, css::uno::Any> > > arg36;
     css::uno::Sequence<ttb::TestPolyStruct<ttb::TestPolyStruct2<
-        ttb::TestPolyStruct2< ::sal_Unicode,css::uno::Any >, ::rtl::OUString> > > arg37;
+        ttb::TestPolyStruct2< ::sal_Unicode,css::uno::Any >, ::rtl::OUString> > > arg37;        
     css::uno::Sequence<ttb::TestPolyStruct2< ::rtl::OUString, ttb::TestPolyStruct2<
         ::sal_Unicode, ttb::TestPolyStruct<css::uno::Any> > > > arg38;
     css::uno::Sequence<ttb::TestPolyStruct2<ttb::TestPolyStruct2<
         ::sal_Unicode, css::uno::Any>, ttb::TestPolyStruct< ::sal_Unicode> > > arg39;
     css::uno::Sequence<css::uno::Sequence<ttb::TestPolyStruct< ::sal_Unicode> > > arg40;
-    css::uno::Sequence<css::uno::Sequence<ttb::TestPolyStruct<ttb::TestPolyStruct2< ::sal_Unicode, css::uno::Any> > > >arg41;
+    css::uno::Sequence<css::uno::Sequence<ttb::TestPolyStruct<ttb::TestPolyStruct2< ::sal_Unicode, css::uno::Any> > > >arg41;                
     css::uno::Sequence<css::uno::Sequence<ttb::TestPolyStruct<
         ttb::TestPolyStruct2<ttb::TestPolyStruct2<sal_Unicode, css::uno::Any>, ::rtl::OUString> > > > arg42;
     css::uno::Sequence<css::uno::Sequence<ttb::TestPolyStruct2<
@@ -307,7 +307,7 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
 
     if (!(arguments.getLength() == 45
           && (arguments[0] >>= arg0) && arg0.member == cppu::UnoType<sal_Int32>::get()
-          && (arguments[1] >>= arg1) && arg1.member == arg1b
+          && (arguments[1] >>= arg1) && arg1.member == arg1b 
           && (arguments[2] >>= arg2) && arg2.member == sal_True
           && (arguments[3] >>= arg3) && arg3.member == SAL_MIN_INT8
           && (arguments[4] >>= arg4) && arg4.member == SAL_MIN_INT16
@@ -436,7 +436,7 @@ void Impl2::setatt1( double _att1 )throw (::com::sun::star::uno::RuntimeExceptio
 {
     m_attr1 = _att1;
 }
-
+ 
 ::sal_Int32 Impl2::fn11( ::sal_Int32 arg )
         throw (::com::sun::star::uno::RuntimeException)
 {

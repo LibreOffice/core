@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,16 +45,16 @@ class TokAssignment : public Token
 {
   public:
                         TokAssignment(
-                            const char *        i_sText )
-                                                :   sText(i_sText) {}
+                            const char *		i_sText )
+                                                :	sText(i_sText) {}
 
-    virtual void        Trigger(
-                            TokenInterpreter &  io_rInterpreter ) const;
+    virtual void		Trigger(
+                            TokenInterpreter &	io_rInterpreter ) const;
     virtual const char *
                         Text() const;
   private:
     // DATA
-    String              sText;
+    String 				sText;
 };
 
 

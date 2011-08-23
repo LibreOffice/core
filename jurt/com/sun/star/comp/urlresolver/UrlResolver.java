@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,8 +51,8 @@ import com.sun.star.uno.UnoRuntime;
 /**
  * This component gives a factory for an <code>UnoUrlResolver</code> service.
  * <p>
- * @version     $Revision: 1.6 $ $ $Date: 2008-04-11 11:12:25 $
- * @author      Kay Ramme
+ * @version 	$Revision: 1.6 $ $ $Date: 2008-04-11 11:12:25 $
+ * @author 	    Kay Ramme
  * @see         com.sun.star.brige.XBrideFactory
  * @see         com.sun.star.connection.Connector
  * @since       UDK1.0
@@ -74,7 +74,7 @@ public class UrlResolver {
             String conDcp = null;
             String protDcp = null;
             String rootOid = null;
-
+            
             if(dcp.indexOf(';') == -1) {// use old style
                 conDcp = dcp;
                 protDcp = "iiop";
@@ -84,28 +84,28 @@ public class UrlResolver {
                 int index = dcp.indexOf(':');
                 String url = dcp.substring(0, index).trim();
                 dcp = dcp.substring(index + 1).trim();
-
+                
                 index = dcp.indexOf(';');
                 conDcp = dcp.substring(0, index).trim();
                 dcp = dcp.substring(index + 1).trim();
-
+                
                 index = dcp.indexOf(';');
                 protDcp = dcp.substring(0, index).trim();
                 dcp = dcp.substring(index + 1).trim();
-
+                
                 rootOid = dcp.trim().trim();
             }
 
             Object rootObject = null;
             XBridgeFactory xBridgeFactory= null;
             try {
-                xBridgeFactory = UnoRuntime.queryInterface(XBridgeFactory.class,
+                xBridgeFactory = UnoRuntime.queryInterface(XBridgeFactory.class, 
                                                                           _xMultiServiceFactory.createInstance("com.sun.star.bridge.BridgeFactory"));
             } catch (com.sun.star.uno.Exception e) {
                 throw new com.sun.star.uno.RuntimeException(e.getMessage());
             }
             XBridge xBridge = xBridgeFactory.getBridge(conDcp + ";" + protDcp);
-
+            
             if(xBridge == null) {
                 Object connector= null;
                 try {
@@ -113,9 +113,9 @@ public class UrlResolver {
                 } catch (com.sun.star.uno.Exception e) {
                         throw new com.sun.star.uno.RuntimeException(e.getMessage());
                 }
-
+                
                 XConnector connector_xConnector = UnoRuntime.queryInterface(XConnector.class, connector);
-
+                
                 // connect to the server
                 XConnection xConnection = connector_xConnector.connect(conDcp);
                 try {
@@ -140,8 +140,8 @@ public class UrlResolver {
      * @param   regKey       the registryKey
      * @see                  com.sun.star.comp.loader.JavaLoader
      */
-    public static XSingleServiceFactory __getServiceFactory(String implName,
-                                                            XMultiServiceFactory multiFactory,
+    public static XSingleServiceFactory __getServiceFactory(String implName, 
+                                                            XMultiServiceFactory multiFactory, 
                                                             XRegistryKey regKey)
     {
         XSingleServiceFactory xSingleServiceFactory = null;
@@ -149,12 +149,12 @@ public class UrlResolver {
           if (implName.equals(UrlResolver.class.getName()) )
             xSingleServiceFactory = FactoryHelper.getServiceFactory(_UrlResolver.class,
                                                                     _UrlResolver.__serviceName,
-                                                                    multiFactory,
+                                                                    multiFactory, 
                                                                     regKey);
-
+        
         return xSingleServiceFactory;
     }
-
+    
     /**
      * Writes the service information into the given registry key.
      * This method is called by the <code>JavaLoader</code>

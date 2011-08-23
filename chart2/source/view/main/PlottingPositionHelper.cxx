@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -394,7 +394,7 @@ void PolarPlottingPositionHelper::setScales( const uno::Sequence< ExplicitScaleD
     double fTranslateY = fTranslate;
     double fTranslateZ = fTranslate;
 
-    double fScaleX = fScale;
+    double fScaleX = fScale;     
     double fScaleY = fScale;
     double fScaleZ = fScale;
 
@@ -422,7 +422,7 @@ void PolarPlottingPositionHelper::setScales( const uno::Sequence< ExplicitScaleD
 
     aRet.translate(fTranslateX, fTranslateY, fTranslateZ);//x first
     aRet.scale(fScaleX, fScaleY, fScaleZ);//x first
-
+    
     aRet = rMatrixScreenToScene * aRet;
     return aRet;
 }
@@ -452,11 +452,11 @@ double PolarPlottingPositionHelper::getWidthAngleDegree( double& fStartLogicValu
     double fStartAngleDegree = this->transformToAngleDegree( fStartLogicValueOnAngleAxis );
     double fEndAngleDegree   = this->transformToAngleDegree( fEndLogicValueOnAngleAxis );
     double fWidthAngleDegree = fEndAngleDegree - fStartAngleDegree;
-
+    
     if( ::rtl::math::approxEqual( fStartAngleDegree, fEndAngleDegree )
         && !::rtl::math::approxEqual( fStartLogicValueOnAngleAxis, fEndLogicValueOnAngleAxis ) )
         fWidthAngleDegree = 360.0;
-
+    
     while(fWidthAngleDegree<0.0)
         fWidthAngleDegree+=360.0;
     while(fWidthAngleDegree>360.0)
@@ -525,7 +525,7 @@ double PolarPlottingPositionHelper::transformToRadius( double fLogicValueOnRadiu
         double fY = m_bSwapXAndY ? getLogicMaxY() : fLogicValueOnRadiusAxis;
         if(bDoScaling)
             doLogicScaling( &fX, &fY, 0 );
-
+        
         fScaledLogicRadiusValue = m_bSwapXAndY ? fX : fY;
 
         bool bMinIsInnerRadius = true;
@@ -545,7 +545,7 @@ double PolarPlottingPositionHelper::transformToRadius( double fLogicValueOnRadiu
 
             double fMin = m_bSwapXAndY ? MinX : MinY;
             double fMax = m_bSwapXAndY ? MaxX : MaxY;
-
+            
             fInnerScaledLogicRadius = bMinIsInnerRadius ? fMin : fMax;
             fOuterScaledLogicRadius = bMinIsInnerRadius ? fMax : fMin;
         }
@@ -597,7 +597,7 @@ drawing::Position3D PolarPlottingPositionHelper::transformUnitCircleToScene( dou
         default: //NormalAxis_Z
             break;
     }
-
+    
     //!! applying matrix to vector does ignore translation, so it is important to use a B3DPoint here instead of B3DVector
     ::basegfx::B3DPoint aPoint(fX,fY,fZ);
     ::basegfx::B3DPoint aRet = m_aUnitCartesianToScene * aPoint;
@@ -607,7 +607,7 @@ drawing::Position3D PolarPlottingPositionHelper::transformUnitCircleToScene( dou
 drawing::Position3D PolarPlottingPositionHelper::transformAngleRadiusToScene( double fLogicValueOnAngleAxis, double fLogicValueOnRadiusAxis, double fLogicZ, bool bDoScaling ) const
 {
     double fUnitAngleDegree = this->transformToAngleDegree(fLogicValueOnAngleAxis,bDoScaling);
-    double fUnitRadius      = this->transformToRadius(fLogicValueOnRadiusAxis,bDoScaling);
+    double fUnitRadius      = this->transformToRadius(fLogicValueOnRadiusAxis,bDoScaling); 
 
     return transformUnitCircleToScene( fUnitAngleDegree, fUnitRadius, fLogicZ, bDoScaling );
 }

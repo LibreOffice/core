@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,10 +28,10 @@
 
 /*************************************************************************
  *
- *    ATTENTION
- *    This file is intended to supply the types and defines for Environment independent
- *    building of the packethandler
- *    Only adaption of this file should be necessary. Else it is a bug!
+ *	  ATTENTION
+ *	  This file is intended to supply the types and defines for	Environment independent
+ *	  building of the packethandler
+ *	  Only adaption of this file should be necessary. Else it is a bug!
  *    Eather including apropriate files or defining the types when not available in the environment
  *
  ************************************************************************/

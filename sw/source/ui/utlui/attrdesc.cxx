@@ -108,11 +108,11 @@ static sal_Char __READONLY_DATA sKomma[] = ", ";
 SfxItemPresentation SwFmtCharFmt::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    String&             rText,
+    SfxMapUnit			eCoreUnit,
+    SfxMapUnit			ePresUnit,
+    String& 			rText,
     const IntlWrapper*        /*pIntl*/
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -149,9 +149,9 @@ SfxItemPresentation SwFmtAutoFmt::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             rText,
+    String& 			rText,
     const IntlWrapper*        /*pIntl*/
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -177,9 +177,9 @@ SfxItemPresentation SwFmtINetFmt::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             rText,
+    String& 			rText,
     const IntlWrapper*        /*pIntl*/
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -218,7 +218,7 @@ SfxItemPresentation SwFmtRuby::GetPresentation( SfxItemPresentation ePres,
 }
 
 /*************************************************************************
-|*    class     SwFmtDrop
+|*    class		SwFmtDrop
 *************************************************************************/
 
 
@@ -227,9 +227,9 @@ SfxItemPresentation SwFmtDrop::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             rText,
+    String& 			rText,
     const IntlWrapper*        /*pIntl*/
-)   const
+)	const
 {
     rText.Erase();
     switch ( ePres )
@@ -262,7 +262,7 @@ SfxItemPresentation SwFmtDrop::GetPresentation
 }
 
 /*************************************************************************
-|*    class     SwRegisterItem
+|*    class		SwRegisterItem
 *************************************************************************/
 
 
@@ -271,9 +271,9 @@ SfxItemPresentation SwRegisterItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText,
+    XubString& 			rText,
     const IntlWrapper*        /*pIntl*/
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -293,7 +293,7 @@ SfxItemPresentation SwRegisterItem::GetPresentation
 }
 
 /*************************************************************************
-|*    class     SwNumRuleItem
+|*    class		SwNumRuleItem
 *************************************************************************/
 
 
@@ -302,9 +302,9 @@ SfxItemPresentation SwNumRuleItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    XubString&          rText,
+    XubString& 			rText,
     const IntlWrapper*        /*pIntl*/
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -358,18 +358,18 @@ SfxItemPresentation SwParaConnectBorderItem::GetPresentation
 
 
 /******************************************************************************
- *  Frame-Attribute:
+ *	Frame-Attribute:
  ******************************************************************************/
 
 
 SfxItemPresentation SwFmtFrmSize::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    String&             rText,
+    SfxMapUnit			eCoreUnit,
+    SfxMapUnit			ePresUnit,
+    String& 			rText,
     const IntlWrapper*        pIntl
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -428,9 +428,9 @@ SfxItemPresentation SwFmtHeader::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             rText,
+    String& 			rText,
     const IntlWrapper*        /*pIntl*/
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -458,9 +458,9 @@ SfxItemPresentation SwFmtFooter::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             rText,
+    String& 			rText,
     const IntlWrapper*        /*pIntl*/
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -485,9 +485,9 @@ SfxItemPresentation SwFmtSurround::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             rText,
+    String& 			rText,
     const IntlWrapper*        /*pIntl*/
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -537,17 +537,17 @@ SfxItemPresentation SwFmtSurround::GetPresentation
 
 
 //VertOrientation, wie und woran orientiert --
-//  sich der FlyFrm in der Vertikalen -----------
+//	sich der FlyFrm in der Vertikalen -----------
 
 
 SfxItemPresentation SwFmtVertOrient::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    String&             rText,
+    SfxMapUnit			eCoreUnit,
+    SfxMapUnit			ePresUnit,
+    String& 			rText,
     const IntlWrapper*        pIntl
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -598,17 +598,17 @@ SfxItemPresentation SwFmtVertOrient::GetPresentation
 }
 
 //HoriOrientation, wie und woran orientiert --
-//  sich der FlyFrm in der Hoizontalen ----------
+//	sich der FlyFrm in der Hoizontalen ----------
 
 
 SfxItemPresentation SwFmtHoriOrient::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
-    String&             rText,
+    SfxMapUnit			eCoreUnit,
+    SfxMapUnit			ePresUnit,
+    String& 			rText,
     const IntlWrapper*        pIntl
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -666,9 +666,9 @@ SfxItemPresentation SwFmtAnchor::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             rText,
+    String& 			rText,
     const IntlWrapper*        /*pIntl*/
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -707,9 +707,9 @@ SfxItemPresentation SwFmtPageDesc::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             rText,
+    String& 			rText,
     const IntlWrapper*        /*pIntl*/
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -737,11 +737,11 @@ SfxItemPresentation SwFmtPageDesc::GetPresentation
 SfxItemPresentation SwFmtCol::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
+    SfxMapUnit			eCoreUnit,
     SfxMapUnit          /*ePresUnit*/,
-    String&             rText,
+    String& 			rText,
     const IntlWrapper*        pIntl
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -784,9 +784,9 @@ SfxItemPresentation SwFmtURL::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             rText,
+    String& 			rText,
     const IntlWrapper*        /*pIntl*/
-)   const
+)	const
 {
     rText.Erase();
     switch ( ePres )
@@ -828,9 +828,9 @@ SfxItemPresentation SwFmtEditInReadonly::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             rText,
+    String& 			rText,
     const IntlWrapper*        /*pIntl*/
-)   const
+)	const
 {
     rText.Erase();
     switch ( ePres )
@@ -856,9 +856,9 @@ SfxItemPresentation SwFmtLayoutSplit::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             rText,
+    String& 			rText,
     const IntlWrapper*        /*pIntl*/
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -895,9 +895,9 @@ SfxItemPresentation SwFmtFtnEndAtTxtEnd::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             rText,
+    String& 			rText,
     const IntlWrapper*        /*pIntl*/
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -911,7 +911,7 @@ SfxItemPresentation SwFmtFtnEndAtTxtEnd::GetPresentation
                 switch( GetValue() )
                 {
                 case FTNEND_ATPGORDOCEND:
-//                  rText = SW_RESSTR( STR_LAYOUT_FTN );
+//					rText = SW_RESSTR( STR_LAYOUT_FTN );
                     break;
 
                 case FTNEND_ATTXTEND:
@@ -919,11 +919,11 @@ SfxItemPresentation SwFmtFtnEndAtTxtEnd::GetPresentation
 
                 case FTNEND_ATTXTEND_OWNNUMSEQ:
                     {
-//  String      sPrefix;
-//  String      sSuffix;
-//  SvxNumberType   aFmt;
-//  USHORT      nOffset;
-//                      rText +=
+//	String 		sPrefix;
+//	String 		sSuffix;
+//	SvxNumberType 	aFmt;
+//	USHORT 	  	nOffset;
+//						rText +=
                     }
                     break;
                 }
@@ -942,9 +942,9 @@ SfxItemPresentation SwFmtChain::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             rText,
+    String& 			rText,
     const IntlWrapper*        /*pIntl*/
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -979,9 +979,9 @@ SfxItemPresentation SwFmtLineNumber::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             rText,
+    String& 			rText,
     const IntlWrapper*    /*pIntl*/
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -1013,9 +1013,9 @@ SfxItemPresentation SwTextGridItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          /*eCoreUnit*/,
     SfxMapUnit          /*ePresUnit*/,
-    String&             rText,
+    String& 			rText,
     const IntlWrapper*  /*pIntl*/
-)   const
+)	const
 {
     switch ( ePres )
     {
@@ -1060,7 +1060,7 @@ SfxItemPresentation SwHeaderAndFooterEatSpacingItem::GetPresentation
     SfxMapUnit          /*ePresUnit*/,
     String&             /*rText*/,
     const IntlWrapper*        /*pIntl*/
-)   const
+)	const
 {
 //    rText.Erase();
 //    switch ( ePres )
@@ -1098,7 +1098,7 @@ SfxItemPresentation SwMirrorGrf::GetPresentation(
             case RES_MIRROR_GRAPH_VERT: nId = STR_VERT_MIRROR;  break;
             case RES_MIRROR_GRAPH_HOR:  nId = STR_HORI_MIRROR;  break;
             case RES_MIRROR_GRAPH_BOTH: nId = STR_BOTH_MIRROR;  break;
-            default:                    nId = 0;    break;
+            default:					nId = 0;	break;
             }
             if ( nId )
             {
@@ -1199,10 +1199,10 @@ SfxItemPresentation SwChannelGrf::GetPresentation(
             USHORT nId;
             switch ( Which() )
             {
-            case RES_GRFATR_CHANNELR:   nId = STR_CHANNELR; break;
-            case RES_GRFATR_CHANNELG:   nId = STR_CHANNELG; break;
-            case RES_GRFATR_CHANNELB:   nId = STR_CHANNELB; break;
-            default:                    nId = 0; break;
+            case RES_GRFATR_CHANNELR:	nId = STR_CHANNELR; break;
+            case RES_GRFATR_CHANNELG:	nId = STR_CHANNELG; break;
+            case RES_GRFATR_CHANNELB:	nId = STR_CHANNELB; break;
+            default:					nId = 0; break;
             }
             if( nId )
                 rText = SW_RESSTR( nId );
@@ -1306,10 +1306,10 @@ SfxItemPresentation SwDrawModeGrf::GetPresentation(
             switch ( GetValue() )
             {
 
-            case GRAPHICDRAWMODE_GREYS:     nId = STR_DRAWMODE_GREY; break;
+            case GRAPHICDRAWMODE_GREYS:		nId = STR_DRAWMODE_GREY; break;
             case GRAPHICDRAWMODE_MONO:      nId = STR_DRAWMODE_BLACKWHITE; break;
-            case GRAPHICDRAWMODE_WATERMARK: nId = STR_DRAWMODE_WATERMARK; break;
-            default:                        nId = STR_DRAWMODE_STD; break;
+            case GRAPHICDRAWMODE_WATERMARK:	nId = STR_DRAWMODE_WATERMARK; break;
+            default:						nId = STR_DRAWMODE_STD; break;
             }
             (rText = SW_RESSTR( STR_DRAWMODE ) ) += SW_RESSTR( nId );
         }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,8 +83,8 @@ struct IMPL_PrintListener_DataContainer : public SfxListener
     }
 
 
-    void Notify(            SfxBroadcaster& aBC     ,
-                    const   SfxHint&        aHint   ) ;
+    void Notify(			SfxBroadcaster&	aBC		,
+                    const	SfxHint&		aHint	) ;
 };
 
 awt::Size impl_Size_Object2Struct( const Size& aSize )
@@ -259,7 +259,7 @@ namespace
 }
 
 //________________________________________________________________________________________________________
-//  XPrintable
+//	XPrintable
 //________________________________________________________________________________________________________
 
 uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() throw(::com::sun::star::uno::RuntimeException)
@@ -267,20 +267,20 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
     // object already disposed?
     SolarMutexGuard aGuard;
 
-    // search for any view of this document that is currently printing
+    // search for any view of this document that is currently printing   	
     const Printer *pPrinter = NULL;
     SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ? SfxViewFrame::GetFirst( m_pData->m_pObjectShell, sal_False ) : 0;
     SfxViewFrame* pFirst = pViewFrm;
     while ( pViewFrm && !pPrinter )
-    {
+    {								
         pPrinter = pViewFrm->GetViewShell()->GetActivePrinter();
         pViewFrm = SfxViewFrame::GetNext( *pViewFrm, m_pData->m_pObjectShell, sal_False );
     }
-
+            
     // if no view is printing currently, use the permanent SfxPrinter instance
     if ( !pPrinter && pFirst )
         pPrinter = pFirst->GetViewShell()->GetPrinter(sal_True);
-
+        
     if ( !pPrinter )
         return uno::Sequence< beans::PropertyValue >();
 
@@ -318,7 +318,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
 }
 
 //________________________________________________________________________________________________________
-//  XPrintable
+//	XPrintable
 //________________________________________________________________________________________________________
 
 void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >& rPrinter,SfxPrinter*& pPrinter,sal_uInt16& nChangeFlags,SfxViewShell*& pViewSh)
@@ -442,8 +442,8 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
     if(nPaperFormat == view::PaperFormat_USER && aSetPaperSize.Width())
     {
         //JP 23.09.98 - Bug 56929 - MapMode von 100mm in die am
-        //          Device gesetzten umrechnen. Zusaetzlich nur dann
-        //          setzen, wenn sie wirklich veraendert wurden.
+        //			Device gesetzten umrechnen. Zusaetzlich nur dann
+        //			setzen, wenn sie wirklich veraendert wurden.
         aSetPaperSize = pPrinter->LogicToPixel( aSetPaperSize, MAP_100TH_MM );
         if( aSetPaperSize != pPrinter->GetPaperSizePixel() )
         {
@@ -540,7 +540,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
             try
             {
                 INetURLObject aSplitter(sTargetURL);
-                String        sFileName = aSplitter.getName(
+                String		  sFileName = aSplitter.getName(
                                             INetURLObject::LAST_SEGMENT,
                                             true,
                                             INetURLObject::DECODE_WITH_CHARSET);
@@ -596,7 +596,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     if ( !pView )
         return;
 
-//  SfxAllItemSet aArgs( pView->GetPool() );
+//	SfxAllItemSet aArgs( pView->GetPool() );
     sal_Bool bMonitor = sal_False;
     // We need this information at the end of this method, if we start the vcl printer
     // by executing the slot. Because if it is a ucb relevant URL we must wait for

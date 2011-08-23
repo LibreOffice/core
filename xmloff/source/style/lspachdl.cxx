@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@ using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_CASEMAP_NORMAL;
 
 // this is a copy of defines in svx/inc/escpitem.hxx
-#define DFLT_ESC_PROP    58
-#define DFLT_ESC_AUTO_SUPER 101
+#define DFLT_ESC_PROP	 58
+#define DFLT_ESC_AUTO_SUPER	101
 #define DFLT_ESC_AUTO_SUB  -101
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -61,7 +61,7 @@ XMLLineHeightHdl::~XMLLineHeightHdl()
 }
 
 sal_Bool XMLLineHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
-{
+{ 
     style::LineSpacing aLSp;
     sal_Int32 nTemp = 0;
 
@@ -90,7 +90,7 @@ sal_Bool XMLLineHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
 }
 
 sal_Bool XMLLineHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
-{
+{ 
     OUStringBuffer aOut;
 
     style::LineSpacing aLSp;
@@ -124,7 +124,7 @@ XMLLineHeightAtLeastHdl::~XMLLineHeightAtLeastHdl()
 }
 
 sal_Bool XMLLineHeightAtLeastHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
-{
+{ 
     style::LineSpacing aLSp;
 
     sal_Int32 nTemp;
@@ -138,7 +138,7 @@ sal_Bool XMLLineHeightAtLeastHdl::importXML( const OUString& rStrImpValue, uno::
 }
 
 sal_Bool XMLLineHeightAtLeastHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
-{
+{ 
     OUStringBuffer aOut;
 
     style::LineSpacing aLSp;
@@ -165,7 +165,7 @@ XMLLineSpacingHdl::~XMLLineSpacingHdl()
 }
 
 sal_Bool XMLLineSpacingHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
-{
+{ 
     style::LineSpacing aLSp;
     sal_Int32 nTemp;
 
@@ -179,7 +179,7 @@ sal_Bool XMLLineSpacingHdl::importXML( const OUString& rStrImpValue, uno::Any& r
 }
 
 sal_Bool XMLLineSpacingHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
-{
+{ 
     OUStringBuffer aOut;
 
     style::LineSpacing aLSp;

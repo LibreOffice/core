@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,8 +42,8 @@ namespace basegfx { class B2DHomMatrix; }
 
 /* Definition of internal::CachedPrimitiveBase class */
 
-namespace cppcanvas
-{
+namespace cppcanvas 
+{ 
     namespace internal
     {
         /** Base class providing cached re-rendering, if XCanvas
@@ -68,7 +68,7 @@ namespace cppcanvas
                 When true, this class only reuses the cached
                 primitive, if the overall transformation stays the
                 same. Otherwise, repaints are always performed via the
-                cached primitive.
+                cached primitive. 
              */
             CachedPrimitiveBase( const CanvasSharedPtr& rCanvas,
                                  bool                   bOnlyRedrawWithSameTransform );
@@ -80,13 +80,13 @@ namespace cppcanvas
             using Action::render;
 
         private:
-            virtual bool render( ::com::sun::star::uno::Reference<
+            virtual bool render( ::com::sun::star::uno::Reference< 
                                      ::com::sun::star::rendering::XCachedPrimitive >& rCachedPrimitive,
                                  const ::basegfx::B2DHomMatrix&                       rTransformation ) const = 0;
 
             CanvasSharedPtr                                             mpCanvas;
-            mutable ::com::sun::star::uno::Reference<
-                    ::com::sun::star::rendering::XCachedPrimitive >     mxCachedPrimitive;
+            mutable ::com::sun::star::uno::Reference< 
+                    ::com::sun::star::rendering::XCachedPrimitive > 	mxCachedPrimitive;
             mutable ::basegfx::B2DHomMatrix                             maLastTransformation;
             const bool                                                  mbOnlyRedrawWithSameTransform;
         };

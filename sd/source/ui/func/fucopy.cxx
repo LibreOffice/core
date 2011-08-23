@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,10 +63,10 @@ TYPEINIT1( FuCopy, FuPoor );
 \************************************************************************/
 
 FuCopy::FuCopy (
-    ViewShell* pViewSh,
-    ::sd::Window* pWin,
+    ViewShell* pViewSh, 
+    ::sd::Window* pWin, 
     ::sd::View* pView,
-    SdDrawDocument* pDoc,
+    SdDrawDocument* pDoc, 
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
@@ -99,7 +99,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             // Farb-Attribut angeben
             SfxItemSet aAttr( mpDoc->GetPool() );
             mpView->GetAttributes( aAttr );
-            const SfxPoolItem*  pPoolItem = NULL;
+            const SfxPoolItem*	pPoolItem = NULL;
 
             if( SFX_ITEM_SET == aAttr.GetItemState( XATTR_FILLSTYLE, TRUE, &pPoolItem ) )
             {
@@ -144,11 +144,11 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             }
         }
 
-        Rectangle           aRect;
-        INT32               lWidth = 0, lHeight = 0, lSizeX = 0L, lSizeY = 0L, lAngle = 0L;
-        UINT16              nNumber = 0;
-        Color               aStartColor, aEndColor;
-        BOOL                bColor = FALSE;
+        Rectangle	        aRect;
+        INT32		        lWidth = 0, lHeight = 0, lSizeX = 0L, lSizeY = 0L, lAngle = 0L;
+        UINT16		        nNumber = 0;
+        Color		        aStartColor, aEndColor;
+        BOOL		        bColor = FALSE;
         const SfxPoolItem*  pPoolItem = NULL;
 
         // Anzahl
@@ -201,19 +201,19 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             bWaiting = TRUE;
         }
 
-        const SdrMarkList   aMarkList( mpView->GetMarkedObjectList() );
-        const ULONG         nMarkCount = aMarkList.GetMarkCount();
-        SdrObject*          pObj = NULL;
+        const SdrMarkList 	aMarkList( mpView->GetMarkedObjectList() );
+        const ULONG			nMarkCount = aMarkList.GetMarkCount();
+        SdrObject*		    pObj = NULL;
 
         // Anzahl moeglicher Kopien berechnen
         aRect = mpView->GetAllMarkedRect();
-
+        
         if( lWidth < 0L )
         {
             long nTmp = ( aRect.Right() - aRect.Left() ) / -lWidth;
             nNumber = (UINT16) Min( nTmp, (long)nNumber );
         }
-
+        
         if( lHeight < 0L )
         {
             long nTmp = ( aRect.Bottom() - aRect.Top() ) / -lHeight;
@@ -237,16 +237,16 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 
             // make a copy of selected objects
             mpView->CopyMarked();
-
-            // get newly selected objects
+            
+            // get newly selected objects 
             SdrMarkList aCopyMarkList( mpView->GetMarkedObjectList() );
-            ULONG       j, nCopyMarkCount = aMarkList.GetMarkCount();
-
+            ULONG		j, nCopyMarkCount = aMarkList.GetMarkCount();
+                
             // set protection flags at marked copies to null
             for( j = 0; j < nCopyMarkCount; j++ )
             {
                 pObj = aCopyMarkList.GetMark( j )->GetMarkedSdrObj();
-
+                
                 if( pObj )
                 {
                     pObj->SetMoveProtect( FALSE );
@@ -265,7 +265,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 
             if( mpView->IsMoveAllowed() )
                 mpView->MoveAllMarked( Size( lSizeX, lSizeY ) );
-
+            
             // set protection flags at marked copies to original values
             if( nMarkCount == nCopyMarkCount )
             {
@@ -273,8 +273,8 @@ void FuCopy::DoExecute( SfxRequest& rReq )
                 {
                     SdrObject* pSrcObj = aMarkList.GetMark( j )->GetMarkedSdrObj();
                     SdrObject* pDstObj = aCopyMarkList.GetMark( j )->GetMarkedSdrObj();
-
-                    if( pSrcObj && pDstObj &&
+                
+                    if( pSrcObj && pDstObj && 
                         ( pSrcObj->GetObjInventor() == pDstObj->GetObjInventor() ) &&
                         ( pSrcObj->GetObjIdentifier() == pDstObj->GetObjIdentifier() ) )
                     {
@@ -313,6 +313,6 @@ void FuCopy::DoExecute( SfxRequest& rReq )
     }
 }
 
-} // end of namespace
+} // end of namespace 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

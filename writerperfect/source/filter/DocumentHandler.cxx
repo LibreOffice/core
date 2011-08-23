@@ -1,8 +1,8 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*
+/* 
  * Copyright (C) 2004 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2004 Net Integration Technologies (http://www.net-itech.com)
- *
+ * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -41,7 +41,7 @@ DocumentHandler::DocumentHandler(Reference < XDocumentHandler > &xHandler) :
 {
 }
 
-void DocumentHandler::startDocument()
+void DocumentHandler::startDocument() 
 {
     mxHandler->startDocument();
 }

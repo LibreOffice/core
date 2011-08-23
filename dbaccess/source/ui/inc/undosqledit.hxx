@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,11 +40,11 @@ namespace dbaui
     class OSqlEditUndoAct : public OCommentUndoAction
     {
     protected:
-        OSqlEdit*   m_pOwner;
-        String      m_strNextText;
+        OSqlEdit*	m_pOwner;
+        String		m_strNextText;
 
-        virtual void    Undo() { ToggleText(); }
-        virtual void    Redo() { ToggleText(); }
+        virtual void	Undo() { ToggleText(); }
+        virtual void	Redo() { ToggleText(); }
 
         void ToggleText();
     public:

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,121 +55,121 @@ public:
                     ScHeaderFooterChangedHint(USHORT nP);
                     ~ScHeaderFooterChangedHint();
 
-    USHORT          GetPart() const         { return nPart; }
+    USHORT			GetPart() const			{ return nPart; }
 };
 
 
-//  all ScSharedHeaderFooterEditSource objects for a single text share the same data
+//	all ScSharedHeaderFooterEditSource objects for a single text share the same data
 
 class ScSharedHeaderFooterEditSource : public SvxEditSource
 {
 private:
-    ScHeaderFooterTextData*     pTextData;
+    ScHeaderFooterTextData*		pTextData;
 
 protected:
-    ScHeaderFooterTextData*     GetTextData() const { return pTextData; }   // for ScHeaderFooterEditSource
+    ScHeaderFooterTextData*		GetTextData() const	{ return pTextData; }	// for ScHeaderFooterEditSource
 
 public:
                                 ScSharedHeaderFooterEditSource( ScHeaderFooterTextData* pData );
-    virtual                     ~ScSharedHeaderFooterEditSource();
+    virtual						~ScSharedHeaderFooterEditSource();
 
-    //  GetEditEngine is needed because the forwarder doesn't have field functions
-    ScEditEngineDefaulter*      GetEditEngine();
+    //	GetEditEngine is needed because the forwarder doesn't have field functions
+    ScEditEngineDefaulter*		GetEditEngine();
 
-    virtual SvxEditSource*      Clone() const ;
-    virtual SvxTextForwarder*   GetTextForwarder();
+    virtual SvxEditSource*		Clone() const ;
+    virtual SvxTextForwarder*	GetTextForwarder();
 
-    virtual void                UpdateData();
+    virtual void				UpdateData();
 
 };
 
-//  ScHeaderFooterEditSource with local copy of ScHeaderFooterTextData is used by field objects
+//	ScHeaderFooterEditSource with local copy of ScHeaderFooterTextData is used by field objects
 
 class ScHeaderFooterEditSource : public ScSharedHeaderFooterEditSource
 {
 public:
                                 ScHeaderFooterEditSource( ScHeaderFooterContentObj* pContent, USHORT nP );
                                 ScHeaderFooterEditSource( ScHeaderFooterContentObj& rContent, USHORT nP );
-    virtual                     ~ScHeaderFooterEditSource();
+    virtual						~ScHeaderFooterEditSource();
 
-    virtual SvxEditSource*      Clone() const;
+    virtual SvxEditSource*		Clone() const;
 };
 
 
-//  Data (incl. EditEngine) for cell EditSource is now shared in ScCellTextData
+//	Data (incl. EditEngine) for cell EditSource is now shared in ScCellTextData
 
 class ScSharedCellEditSource : public SvxEditSource
 {
 private:
-    ScCellTextData*         pCellTextData;
+    ScCellTextData*			pCellTextData;
 
 protected:
-    ScCellTextData*         GetCellTextData() const { return pCellTextData; }   // for ScCellEditSource
+    ScCellTextData*			GetCellTextData() const	{ return pCellTextData; }	// for ScCellEditSource
 
 public:
                                 ScSharedCellEditSource( ScCellTextData* pData );
-    virtual                     ~ScSharedCellEditSource();
+    virtual						~ScSharedCellEditSource();
 
-    //  GetEditEngine is needed because the forwarder doesn't have field functions
-    ScEditEngineDefaulter*      GetEditEngine();
+    //	GetEditEngine is needed because the forwarder doesn't have field functions
+    ScEditEngineDefaulter*		GetEditEngine();
 
-    virtual SvxEditSource*      Clone() const;
-    virtual SvxTextForwarder*   GetTextForwarder();
+    virtual SvxEditSource*		Clone() const;
+    virtual SvxTextForwarder*	GetTextForwarder();
 
-    virtual void                UpdateData();
+    virtual void				UpdateData();
 
-    void                        SetDoUpdateData(sal_Bool bValue);
-    sal_Bool                    IsDirty() const;
+    void						SetDoUpdateData(sal_Bool bValue);
+    sal_Bool					IsDirty() const;
 };
 
-//  ScCellEditSource with local copy of ScCellTextData is used by ScCellFieldsObj, ScCellFieldObj
+//	ScCellEditSource with local copy of ScCellTextData is used by ScCellFieldsObj, ScCellFieldObj
 
 class ScCellEditSource : public ScSharedCellEditSource
 {
 public:
                                 ScCellEditSource( ScDocShell* pDocSh, const ScAddress& rP );
-    virtual                     ~ScCellEditSource();
+    virtual						~ScCellEditSource();
 
-    virtual SvxEditSource*      Clone() const;
+    virtual SvxEditSource*		Clone() const;
 };
 
 
 class ScAnnotationEditSource : public SvxEditSource, public SfxListener
 {
 private:
-    ScDocShell*             pDocShell;
-    ScAddress               aCellPos;
+    ScDocShell*				pDocShell;
+    ScAddress				aCellPos;
     ScEditEngineDefaulter*  pEditEngine;
-    SvxEditEngineForwarder* pForwarder;
-    BOOL                    bDataValid;
+    SvxEditEngineForwarder*	pForwarder;
+    BOOL					bDataValid;
 
     SdrObject*                  GetCaptionObj();
 public:
                                 ScAnnotationEditSource(ScDocShell* pDocSh, const ScAddress& rP);
-    virtual                     ~ScAnnotationEditSource();
+    virtual						~ScAnnotationEditSource();
 
-    virtual SvxEditSource*      Clone() const ;
-    virtual SvxTextForwarder*   GetTextForwarder();
-    virtual void                UpdateData();
+    virtual SvxEditSource*		Clone() const ;
+    virtual SvxTextForwarder*	GetTextForwarder();
+    virtual void				UpdateData();
 
-    virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void				Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };
 
 
-//  EditSource with a shared forwarder for all children of one text object
+//	EditSource with a shared forwarder for all children of one text object
 
 class ScSimpleEditSource : public SvxEditSource
 {
 private:
-    SvxTextForwarder*   pForwarder;
+    SvxTextForwarder*	pForwarder;
 
 public:
                         ScSimpleEditSource( SvxTextForwarder* pForw );
-    virtual             ~ScSimpleEditSource();
+    virtual				~ScSimpleEditSource();
 
-    virtual SvxEditSource*      Clone() const ;
-    virtual SvxTextForwarder*   GetTextForwarder();
-    virtual void                UpdateData();
+    virtual SvxEditSource*		Clone() const ;
+    virtual SvxTextForwarder*	GetTextForwarder();
+    virtual void				UpdateData();
 
 };
 
@@ -180,14 +180,14 @@ private:
 
 public:
                         ScAccessibilityEditSource( ::std::auto_ptr < ScAccessibleTextData > pAccessibleCellTextData );
-    virtual             ~ScAccessibilityEditSource();
+    virtual				~ScAccessibilityEditSource();
 
-    virtual SvxEditSource*      Clone() const;
-    virtual SvxTextForwarder*   GetTextForwarder();
-    virtual SvxViewForwarder*   GetViewForwarder();
-    virtual SvxEditViewForwarder*   GetEditViewForwarder( sal_Bool bCreate = sal_False );
-    virtual void                UpdateData();
-    virtual SfxBroadcaster&     GetBroadcaster() const;
+    virtual SvxEditSource*		Clone() const;
+    virtual SvxTextForwarder*	GetTextForwarder();
+    virtual SvxViewForwarder*	GetViewForwarder();
+    virtual SvxEditViewForwarder*	GetEditViewForwarder( sal_Bool bCreate = sal_False );
+    virtual void				UpdateData();
+    virtual SfxBroadcaster&		GetBroadcaster() const;
 };
 
 #endif

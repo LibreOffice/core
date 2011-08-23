@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ namespace framework
 
 #ifdef WNT
 //_________________________________________________________________________________________________________________
-//  Windows
+//	Windows
 //_________________________________________________________________________________________________________________
 
 #define UNICODE
@@ -48,7 +48,7 @@ namespace framework
 #endif
 
 //_________________________________________________________________________________________________________________
-//  Win NT, Win 2000, Win XP
+//	Win NT, Win 2000, Win XP
 //_________________________________________________________________________________________________________________
 
 static DWORD WINAPI GetUserDomainW_NT( LPWSTR lpBuffer, DWORD nSize )
@@ -57,37 +57,37 @@ static DWORD WINAPI GetUserDomainW_NT( LPWSTR lpBuffer, DWORD nSize )
 }
 
 //_________________________________________________________________________________________________________________
-//  Win 9x,Win ME
+//	Win 9x,Win ME
 //_________________________________________________________________________________________________________________
 
 static DWORD WINAPI GetUserDomainW_WINDOWS( LPWSTR lpBuffer, DWORD nSize )
 {
-    HKEY    hkeyLogon;
-    HKEY    hkeyWorkgroup;
-    DWORD   dwResult = 0;
+    HKEY	hkeyLogon;
+    HKEY	hkeyWorkgroup;
+    DWORD	dwResult = 0;
 
 
-    if ( ERROR_SUCCESS  == RegOpenKeyEx(
-        HKEY_LOCAL_MACHINE,
-        TEXT("Network\\Logon"),
-        0, KEY_READ, &hkeyLogon ) )
+    if ( ERROR_SUCCESS  == RegOpenKeyEx( 
+        HKEY_LOCAL_MACHINE, 
+        TEXT("Network\\Logon"), 
+        0, KEY_READ, &hkeyLogon ) ) 
     {
-        DWORD   dwLogon = 0;
-        DWORD   dwLogonSize = sizeof(dwLogon);
+        DWORD	dwLogon = 0;
+        DWORD	dwLogonSize = sizeof(dwLogon);
         RegQueryValueEx( hkeyLogon, TEXT("LMLogon"), 0, NULL, (LPBYTE)&dwLogon, &dwLogonSize );
         RegCloseKey( hkeyLogon );
 
         if ( dwLogon )
         {
-            HKEY    hkeyNetworkProvider;
+            HKEY	hkeyNetworkProvider;
 
-            if ( ERROR_SUCCESS  == RegOpenKeyEx(
-                HKEY_LOCAL_MACHINE,
-                TEXT("SYSTEM\\CurrentControlSet\\Services\\MSNP32\\NetworkProvider"),
+            if ( ERROR_SUCCESS  == RegOpenKeyEx( 
+                HKEY_LOCAL_MACHINE, 
+                TEXT("SYSTEM\\CurrentControlSet\\Services\\MSNP32\\NetworkProvider"), 
                 0, KEY_READ, &hkeyNetworkProvider ) )
             {
-                DWORD   dwBufferSize = nSize;
-                LONG    lResult = RegQueryValueEx( hkeyNetworkProvider, TEXT("AuthenticatingAgent"), 0, NULL, (LPBYTE)lpBuffer, &dwBufferSize );
+                DWORD	dwBufferSize = nSize;
+                LONG	lResult = RegQueryValueEx( hkeyNetworkProvider, TEXT("AuthenticatingAgent"), 0, NULL, (LPBYTE)lpBuffer, &dwBufferSize );
 
                 if ( ERROR_SUCCESS == lResult || ERROR_MORE_DATA == lResult )
                     dwResult = dwBufferSize / sizeof(TCHAR);
@@ -101,8 +101,8 @@ static DWORD WINAPI GetUserDomainW_WINDOWS( LPWSTR lpBuffer, DWORD nSize )
         TEXT("SYSTEM\\CurrentControlSet\\Services\\VxD\\VNETSUP"),
         0, KEY_READ, &hkeyWorkgroup ) )
     {
-        DWORD   dwBufferSize = nSize;
-        LONG    lResult = RegQueryValueEx( hkeyWorkgroup, TEXT("Workgroup"), 0, NULL, (LPBYTE)lpBuffer, &dwBufferSize );
+        DWORD	dwBufferSize = nSize;
+        LONG	lResult = RegQueryValueEx( hkeyWorkgroup, TEXT("Workgroup"), 0, NULL, (LPBYTE)lpBuffer, &dwBufferSize );
 
         if ( ERROR_SUCCESS == lResult || ERROR_MORE_DATA == lResult )
             dwResult = dwBufferSize / sizeof(TCHAR);
@@ -116,16 +116,16 @@ static DWORD WINAPI GetUserDomainW_WINDOWS( LPWSTR lpBuffer, DWORD nSize )
 
 static rtl::OUString GetUserDomain()
 {
-    sal_Unicode aBuffer[256];
+    sal_Unicode	aBuffer[256];
 
-    long    nVersion = GetVersion();
-    DWORD   nResult;
+    long	nVersion = GetVersion();
+    DWORD	nResult;
 
     if ( nVersion < 0 )
         nResult = GetUserDomainW_WINDOWS( reinterpret_cast<LPWSTR>(aBuffer), sizeof( aBuffer ) );
     else
         nResult = GetUserDomainW_NT( reinterpret_cast<LPWSTR>(aBuffer), sizeof( aBuffer ) );
-
+    
     if ( nResult > 0 )
         return rtl::OUString( aBuffer );
     else
@@ -133,7 +133,7 @@ static rtl::OUString GetUserDomain()
 }
 
 //_________________________________________________________________________________________________________________
-//  Windows
+//	Windows
 //_________________________________________________________________________________________________________________
 
 rtl::OUString NetworkDomain::GetYPDomainName()
@@ -154,13 +154,13 @@ rtl::OUString NetworkDomain::GetNTDomainName()
 #include <osl/thread.h>
 
 //_________________________________________________________________________________________________________________
-//  Unix
+//	Unix
 //_________________________________________________________________________________________________________________
 
 #if defined( SOLARIS )
 
 //_________________________________________________________________________________________________________________
-//  Solaris
+//	Solaris
 //_________________________________________________________________________________________________________________
 
 #include <sys/systeminfo.h>
@@ -169,44 +169,44 @@ rtl::OUString NetworkDomain::GetNTDomainName()
 static rtl_uString *getDomainName()
 {
     /* Initialize and assume failure */
-    rtl_uString *ustrDomainName = NULL;
-
-    char    szBuffer[256];
-
-    long    nCopied = sizeof(szBuffer);
-    char    *pBuffer = szBuffer;
-    long    nBufSize;
-
+    rtl_uString	*ustrDomainName = NULL; 
+    
+    char	szBuffer[256];
+    
+    long	nCopied = sizeof(szBuffer);
+    char	*pBuffer = szBuffer;
+    long	nBufSize;
+    
     do
     {
         nBufSize = nCopied;
-        nCopied = sysinfo( SI_SRPC_DOMAIN, pBuffer, nBufSize );
-
-        /*  If nCopied is greater than buffersize we need to allocate
+        nCopied = sysinfo( SI_SRPC_DOMAIN, pBuffer, nBufSize );	
+    
+        /*	If nCopied is greater than buffersize we need to allocate
             a buffer with suitable size */
-
+        
         if ( nCopied > nBufSize )
             pBuffer = (char *)alloca( nCopied );
-
+        
     } while ( nCopied > nBufSize );
 
-    if ( -1 != nCopied  )
+    if ( -1 != nCopied 	)
     {
-        rtl_string2UString(
+        rtl_string2UString( 
             &ustrDomainName,
-            pBuffer,
-            nCopied - 1,
-            osl_getThreadTextEncoding(),
+            pBuffer, 
+            nCopied - 1, 
+            osl_getThreadTextEncoding(), 
             OSTRING_TO_OUSTRING_CVTFLAGS );
     }
-
+    
     return ustrDomainName;
 }
 
 #elif defined( LINUX ) /* endif SOLARIS */
 
 //_________________________________________________________________________________________________________________
-//  Linux
+//	Linux
 //_________________________________________________________________________________________________________________
 
 #include <unistd.h>
@@ -215,12 +215,12 @@ static rtl_uString *getDomainName()
 static rtl_uString *getDomainName()
 {
     /* Initialize and assume failure */
-    rtl_uString *ustrDomainName = NULL;
-
-    char    *pBuffer;
-    int     result;
-    size_t  nBufSize = 0;
-
+    rtl_uString	*ustrDomainName = NULL; 
+    
+    char	*pBuffer;
+    int		result;
+    size_t	nBufSize = 0;
+    
     do
     {
         nBufSize += 256; /* Increase buffer size by steps of 256 bytes */
@@ -230,24 +230,24 @@ static rtl_uString *getDomainName()
         is set to EINVAL. This only applies to libc. With glibc the name
         is truncated. */
     } while ( -1 == result && EINVAL == errno );
-
+    
     if ( 0 == result )
     {
-        rtl_string2UString(
+        rtl_string2UString( 
             &ustrDomainName,
-            pBuffer,
-            strlen( pBuffer ),
-            osl_getThreadTextEncoding(),
+            pBuffer, 
+            strlen( pBuffer ), 
+            osl_getThreadTextEncoding(), 
             OSTRING_TO_OUSTRING_CVTFLAGS );
     }
-
+    
     return ustrDomainName;
 }
 
-#else /* LINUX */
+#else /* LINUX */ 
 
 //_________________________________________________________________________________________________________________
-//  Other Unix
+//	Other Unix
 //_________________________________________________________________________________________________________________
 
 static rtl_uString *getDomainName()
@@ -258,12 +258,12 @@ static rtl_uString *getDomainName()
 #endif
 
 //_________________________________________________________________________________________________________________
-//  Unix
+//	Unix
 //_________________________________________________________________________________________________________________
 
 rtl::OUString NetworkDomain::GetYPDomainName()
 {
-    rtl_uString* pResult = getDomainName();
+    rtl_uString* pResult = getDomainName(); 
     if ( pResult )
         return rtl::OUString( pResult );
     else
@@ -278,7 +278,7 @@ rtl::OUString NetworkDomain::GetNTDomainName()
 #else /* UNIX */
 
 //_________________________________________________________________________________________________________________
-//  Other operating systems (non-Windows and non-Unix)
+//	Other operating systems (non-Windows and non-Unix)
 //_________________________________________________________________________________________________________________
 
 rtl::OUString NetworkDomain::GetYPDomainName()

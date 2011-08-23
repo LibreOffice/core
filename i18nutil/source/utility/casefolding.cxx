@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ static Mapping mapping_0130[] = {{0, 1, {0x0069, 0, 0}},{0, 1, {0x0130, 0, 0}}};
 #define langIs(lang) (aLocale.Language.compareToAscii(lang) == 0)
 
 // only check simple case, there is more complicated case need to be checked.
-#define type_i(ch) ((ch) == 0x0069 || (ch) == 0x006a)
+#define type_i(ch) ((ch) == 0x0069 || (ch) == 0x006a) 
 
 #define cased_letter(ch) (CaseMappingIndex[(ch)>>8] >= 0 && (CaseMappingValue[(CaseMappingIndex[(ch)>>8] << 8) + ((ch)&0xff)].type & CasedLetter))
 
@@ -74,7 +74,7 @@ Mapping& casefolding::getConditionalValue(const sal_Unicode* str, sal_Int32 pos,
             return (langIs("tr") || langIs("az")) ? mapping_0130[0] : mapping_0130[1];
         case 0x0069:
             return (langIs("tr") || langIs("az")) ? mapping_0069[0] : mapping_0069[1];
-        case 0x0049: return langIs("lt") && pos > len && accent_above(str[pos+1]) ? mapping_0049[0] :
+        case 0x0049: return langIs("lt") && pos > len && accent_above(str[pos+1]) ? mapping_0049[0] : 
                     (langIs("tr") || langIs("az")) ? mapping_0049[1] : mapping_0049[2];
         case 0x004a: return langIs("lt") && pos > len && accent_above(str[pos+1]) ? mapping_004a[0] : mapping_004a[1];
         case 0x012e: return langIs("lt") && pos > len && accent_above(str[pos+1]) ? mapping_012e[0] : mapping_012e[1];

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svl/svstdarr.hxx>
+#include <svl/svstdarr.hxx>		
 
 #include <vcl/timer.hxx>
 #include <svtools/svtabbx.hxx>
@@ -110,10 +110,10 @@ struct SfxStylesInfo_Impl
 
 struct SfxGroupInfo_Impl
 {
-    USHORT      nKind;
-    USHORT      nOrd;
-    void*       pObject;
-    BOOL        bWasOpened;
+    USHORT 		nKind;
+    USHORT 		nOrd;
+    void*		pObject;
+    BOOL		bWasOpened;
     String      sCommand;
     String      sLabel;
 
@@ -143,7 +143,7 @@ public:
     SvLBoxEntry*  GetEntry_Impl( USHORT nId );
     SvLBoxEntry*  GetEntry_Impl( const String& );
     USHORT        GetId( SvLBoxEntry *pEntry );
-    using Window::GetHelpText;
+    using Window::GetHelpText;  
     String        GetHelpText( SvLBoxEntry *pEntry );
     USHORT        GetCurId() { return GetId( FirstSelected() ); }
     String        GetCurCommand();
@@ -156,7 +156,7 @@ public:
 struct SvxConfigGroupBoxResource_Impl;
 class SfxConfigGroupListBox_Impl : public SvTreeListBox
 {
-    SvxConfigGroupBoxResource_Impl* pImp;
+    SvxConfigGroupBoxResource_Impl*	pImp;
     //SfxSlotPool*                    pSlotPool;
     SfxConfigFunctionListBox_Impl*  pFunctionListBox;
     SfxGroupInfoArr_Impl            aArr;
@@ -191,7 +191,7 @@ protected:
 
 public:
     SfxConfigGroupListBox_Impl ( Window* pParent,
-                                 const ResId&,
+                                 const ResId&, 
                                  ULONG nConfigMode = 0 );
     ~SfxConfigGroupListBox_Impl();
     void                ClearAll();

@@ -236,7 +236,7 @@ struct ImplSVWinData
     USHORT                  mnTrackFlags;       // tracking flags
     USHORT                  mnAutoScrollFlags;  // auto scroll flags
     BOOL                    mbNoDeactivate;     // TRUE: keine Deactivate durchfuehren
-    BOOL                    mbNoSaveFocus;      // TRUE: menues must not save/restore focus
+    BOOL					mbNoSaveFocus;		// TRUE: menues must not save/restore focus
     BOOL                    mbNoSaveBackground; // TRUE: save background is unnecessary or even less performant
 };
 
@@ -336,9 +336,9 @@ struct ImplSVData
     ULONG                   mnThreadCount;      // is VCL MultiThread enabled
     ImplConfigData*         mpFirstConfigData;  // Zeiger auf ersten Config-Block
     ImplTimerData*          mpFirstTimerData;   // list of all running timers
-    SalTimer*               mpSalTimer;         // interface to sal event loop/timers
-    SalI18NImeStatus*       mpImeStatus;        // interface to ime status window
-    SalSystem*              mpSalSystem;        // SalSystem interface
+    SalTimer*				mpSalTimer;			// interface to sal event loop/timers
+    SalI18NImeStatus*		mpImeStatus;		// interface to ime status window
+    SalSystem*				mpSalSystem;		// SalSystem interface
     ResMgr*                 mpResMgr;           // SV-Resource-Manager
     ULONG                   mnTimerPeriod;      // current timer period
     ULONG                   mnTimerUpdate;      // TimerCallbackProcs on stack
@@ -361,7 +361,7 @@ struct ImplSVData
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxAccessBridge;
     com::sun::star::uno::Reference< com::sun::star::frame::XSessionManagerClient > xSMClient;
-    ::vcl::SettingsConfigItem*          mpSettingsConfigItem;
+    ::vcl::SettingsConfigItem*			mpSettingsConfigItem;
     std::list< vcl::DeleteOnDeinitBase* >*   mpDeinitDeleteList;
 };
 

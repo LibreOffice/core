@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,12 +45,12 @@
 
 //=============================================================================
 
-module com { module sun { module star { module configuration {
+module com { module sun { module star { module configuration { 
 
 //=============================================================================
 /** provides access to a predefined heterogeneous group of values and nested
  trees as part of a hierarchy.
-
+ 
  <p>Provides access to, and information about, its children and descendants
  viewed either as properties or as contained elements.
  </p>
@@ -90,7 +90,7 @@ published service GroupAccess
  </p>
 
  <p>If such elements occur as properties or subproperties of an implementation,
- it is not specified whether direct subproperty access using
+ it is not specified whether direct subproperty access using 
  <type scope="com::sun::star::beans">XHierarchicalPropertySet</type> or
  <type scope="com::sun::star::beans">XMultiHierarchicalPropertySet</type> can
  be used to access descendants of such elements.
@@ -110,25 +110,25 @@ published service GroupAccess
     service PropertyHierarchy;
 
 /** provides access to the state of child elements of an implementation. [optional]
-
- <p>This interface should be present, if the hierarchy supports default values
+ 
+ <p>This interface should be present, if the hierarchy supports default values 
  for simple (non-object) properties and the group contains such properties.
  </p>
 
- <p>For properties that are objects themselves, the semantic documented for
+ <p>For properties that are objects themselves, the semantic documented for 
  service <type>HierarchyAccess</type> applies.
  </p>
  */
     [optional] interface com::sun::star::beans::XPropertyState;
 
-/** provides access to the states of multiple child elements of
+/** provides access to the states of multiple child elements of 
  an implementation. [optional]
 
- <p>This interface should be present, if the hierarchy supports default values
+ <p>This interface should be present, if the hierarchy supports default values 
  for simple (non-object) properties and the group contains such properties.
  </p>
 
- <p>For properties that are objects themselves, the semantic documented for
+ <p>For properties that are objects themselves, the semantic documented for 
  service <type>HierarchyAccess</type> applies.
  </p>
 */
@@ -137,7 +137,7 @@ published service GroupAccess
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 #endif
 

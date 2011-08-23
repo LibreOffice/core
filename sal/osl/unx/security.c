@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@
 
 #include "secimpl.h"
 
-static oslSecurityError SAL_CALL
+static oslSecurityError SAL_CALL 
 osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
                   oslSecurity* pSecurity);
 sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
@@ -187,7 +187,7 @@ oslSecurityError SAL_CALL osl_loginUser(
 }
 
 
-static oslSecurityError SAL_CALL
+static oslSecurityError SAL_CALL 
 osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
                oslSecurity* pSecurity)
 {
@@ -209,7 +209,7 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(
     (void) strPasswd; /* unused */
     (void) strFileServer; /* unused */
     (void) pSecurity; /* unused */
-    return osl_Security_E_UserUnknown;
+    return osl_Security_E_UserUnknown;   
 }
 
 
@@ -219,13 +219,13 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **ustrIdent
     sal_Char pszIdent[1024];
 
     pszIdent[0] = '\0';
-
+    
     bRet = osl_psz_getUserIdent(Security,pszIdent,sizeof(pszIdent));
 
     rtl_string2UString( ustrIdent, pszIdent, rtl_str_getLength( pszIdent ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
     OSL_ASSERT(*ustrIdent != NULL);
-
-    return bRet;
+    
+    return bRet;    
 }
 
 
@@ -254,17 +254,17 @@ sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
     sal_Char pszName[1024];
 
     pszName[0] = '\0';
-
+    
     bRet = osl_psz_getUserName(Security,pszName,sizeof(pszName));
-
+    
     rtl_string2UString( ustrName, pszName, rtl_str_getLength( pszName ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
     OSL_ASSERT(*ustrName != NULL);
-
+    
     return bRet;
 }
 
 
-
+ 
 static sal_Bool SAL_CALL osl_psz_getUserName(oslSecurity Security, sal_Char* pszName, sal_uInt32  nMax)
 {
     oslSecurityImpl *pSecImpl = (oslSecurityImpl *)Security;
@@ -283,7 +283,7 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
     sal_Char pszDirectory[PATH_MAX];
 
     pszDirectory[0] = '\0';
-
+    
     bRet = osl_psz_getHomeDir(Security,pszDirectory,sizeof(pszDirectory));
 
     if ( bRet == sal_True )
@@ -292,7 +292,7 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
         OSL_ASSERT(*pustrDirectory != NULL);
         osl_getFileURLFromSystemPath( *pustrDirectory, pustrDirectory );
     }
-
+    
     return bRet;
 }
 
@@ -309,7 +309,7 @@ static sal_Bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszD
     {
         sal_Char *pStr = NULL;
 #ifdef SOLARIS
-        char    buffer[8192];
+        char	buffer[8192];
 
         struct passwd pwd;
         struct passwd *ppwd;
@@ -345,7 +345,7 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
     sal_Char pszDirectory[PATH_MAX];
 
     pszDirectory[0] = '\0';
-
+    
     bRet = osl_psz_getConfigDir(Security,pszDirectory,sizeof(pszDirectory));
 
     if ( bRet == sal_True )
@@ -363,7 +363,7 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
 static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
 {
     sal_Char *pStr = getenv("XDG_CONFIG_HOME");
-
+    
     if ((pStr == NULL) || (strlen(pStr) == 0) ||
         (access(pStr, 0) != 0))
         return (osl_psz_getHomeDir(Security, pszDirectory, nMax));
@@ -380,7 +380,7 @@ static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* ps
  * as soon as we can bumb the baseline to Tiger (for NSApplicationSupportDirectory) and have
  * support for Objective-C in the build environment
  */
-
+ 
 #define MACOSX_CONFIG_DIR "/Library/Application Support"
 static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
 {
@@ -389,7 +389,7 @@ static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* ps
         strcat( pszDirectory, MACOSX_CONFIG_DIR );
         return sal_True;
     }
-
+    
     return sal_False;
 }
 

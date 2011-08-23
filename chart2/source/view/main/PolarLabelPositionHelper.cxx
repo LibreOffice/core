@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForLogicV
 {
     double fUnitCircleAngleDegree = m_pPosHelper->transformToAngleDegree( fLogicValueOnAngleAxis );
     double fUnitCircleRadius = m_pPosHelper->transformToRadius( fLogicValueOnRadiusAxis );
-
+    
     return getLabelScreenPositionAndAlignmentForUnitCircleValues(
            rAlignment, ::com::sun::star::chart::DataLabelPlacement::OUTSIDE
            , fUnitCircleAngleDegree, 0.0
@@ -83,7 +83,7 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
 {
     bool bCenter = (nLabelPlacement != ::com::sun::star::chart::DataLabelPlacement::OUTSIDE)
                 && (nLabelPlacement != ::com::sun::star::chart::DataLabelPlacement::INSIDE);
-
+    
     double fAngleDegree = fUnitCircleStartAngleDegree + fUnitCircleWidthAngleDegree/2.0;
     double fRadius = 0.0;
     if( !bCenter ) //e.g. for pure pie chart(one ring only) or for angle axis of polyar coordinate system
@@ -93,7 +93,7 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
 
     awt::Point aRet( this->transformSceneToScreenPosition(
         m_pPosHelper->transformUnitCircleToScene( fAngleDegree, fRadius, fLogicZ+0.5 ) ) );
-
+    
     if(3==m_nDimensionCount && nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::OUTSIDE)
     {
         //check wether the upper or the downer edge is more distant from the center

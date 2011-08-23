@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
-//  my own includes
+//	my own includes
 //_________________________________________________________________________________________________________________
 
 #include <services/layoutmanager.hxx>
@@ -49,7 +49,7 @@
 #include <uiconfiguration/globalsettings.hxx>
 
 //_________________________________________________________________________________________________________________
-//  interface includes
+//	interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -77,7 +77,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//	other includes
 //_________________________________________________________________________________________________________________
 #include <svtools/imgdef.hxx>
 #include <tools/diagnose_ex.h>
@@ -98,7 +98,7 @@
 #include <algorithm>
 #include <boost/bind.hpp>
 // ______________________________________________
-//  using namespace
+//	using namespace
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
@@ -154,7 +154,7 @@ static WindowAlign ImplConvertAlignment( sal_Int16 aAlignment )
 }
 
 //_________________________________________________________________________________________________________________
-//  Namespace
+//	Namespace
 //_________________________________________________________________________________________________________________
 //
 
@@ -341,14 +341,14 @@ static void impl_setDockingWindowVisibility( const css::uno::Reference< css::lan
 }
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
+//	XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( LayoutManager, LayoutManager_Base, LayoutManager_PBase )
 IMPLEMENT_FORWARD_XINTERFACE2( LayoutManager, LayoutManager_Base, LayoutManager_PBase )
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   LayoutManager                       ,
+DEFINE_XSERVICEINFO_MULTISERVICE        (   LayoutManager						,
                                             ::cppu::OWeakObject                 ,
-                                            SERVICENAME_LAYOUTMANAGER           ,
+                                            SERVICENAME_LAYOUTMANAGER			,
                                             IMPLEMENTATIONNAME_LAYOUTMANAGER
                                         )
 
@@ -3161,7 +3161,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
     Reference< XUIElement > xMenuBar( m_xMenuBar, UNO_QUERY );
     Reference< css::awt::XWindow > xContainerWindow( m_xContainerWindow );
     Reference< XComponent > xInplaceMenuBar( m_xInplaceMenuBar );
-    MenuBarManager* pInplaceMenuBar( m_pInplaceMenuBar );
+    MenuBarManager*	pInplaceMenuBar( m_pInplaceMenuBar );
     aReadLock.unlock();
 
     if (( xMenuBar.is() || xInplaceMenuBar.is() ) && xContainerWindow.is() )
@@ -6111,7 +6111,7 @@ void LayoutManager::implts_setDockingAreaWindowSizes( const css::awt::Rectangle&
 }
 
 //---------------------------------------------------------------------------------------------------------
-//  XMenuCloser
+//	XMenuCloser
 //---------------------------------------------------------------------------------------------------------
 void LayoutManager::implts_updateMenuBarClose()
 {
@@ -6288,7 +6288,7 @@ IMPL_LINK( LayoutManager, SettingsChanged, void*, EMPTYARG )
 }
 
 //---------------------------------------------------------------------------------------------------------
-//  XDockableWindowListener
+//	XDockableWindowListener
 //---------------------------------------------------------------------------------------------------------
 void SAL_CALL LayoutManager::startDocking( const ::com::sun::star::awt::DockingEvent& e ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -6923,7 +6923,7 @@ void LayoutManager::implts_notifyListeners( short nEvent, ::com::sun::star::uno:
 }
 
 //---------------------------------------------------------------------------------------------------------
-//  XWindowListener
+//	XWindowListener
 //---------------------------------------------------------------------------------------------------------
 void SAL_CALL LayoutManager::windowResized( const css::awt::WindowEvent& aEvent )
 throw( css::uno::RuntimeException )
@@ -7116,7 +7116,7 @@ void LayoutManager::implts_checkElementContainer()
 #endif
 
 //---------------------------------------------------------------------------------------------------------
-//  XFrameActionListener
+//	XFrameActionListener
 //---------------------------------------------------------------------------------------------------------
 void SAL_CALL LayoutManager::frameAction( const FrameActionEvent& aEvent )
 throw ( RuntimeException )
@@ -7461,7 +7461,7 @@ void SAL_CALL LayoutManager::elementReplaced( const ::com::sun::star::ui::Config
 }
 
 //---------------------------------------------------------------------------------------------------------
-//  OPropertySetHelper
+//	OPropertySetHelper
 //---------------------------------------------------------------------------------------------------------
 // XPropertySet helper
 sal_Bool SAL_CALL LayoutManager::convertFastPropertyValue( Any&       aConvertedValue ,

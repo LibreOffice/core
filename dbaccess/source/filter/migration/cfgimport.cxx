@@ -2,7 +2,7 @@
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -78,21 +78,21 @@ extern "C" void SAL_CALL createRegistryInfo_OCfgImport( )
     static ::dbacfg::OMultiInstanceAutoRegistration< ::dbacfg::OCfgImport > aAutoRegistration;
 }
 
-#define DATASOURCES             1
-#define DATASOURCE              2
-#define DATASOURCESETTINGS      3
-#define TABLES                  4
-#define QUERIES                 5
-#define BOOKMARKS               6
-#define DATASOURCESETTING       7
-#define BOOKMARK                8
-#define QUERY                   9
-#define TABLE                   10
-#define DATASETTINGS            11
-#define COLUMNS                 12
-#define COLUMN                  13
-#define NO_PROP                 14
-#define LOGINTIMEOUT            15
+#define DATASOURCES				1
+#define	DATASOURCE				2
+#define DATASOURCESETTINGS		3
+#define TABLES					4
+#define QUERIES					5
+#define BOOKMARKS				6
+#define DATASOURCESETTING		7
+#define BOOKMARK				8
+#define QUERY					9
+#define TABLE					10
+#define DATASETTINGS			11
+#define COLUMNS					12
+#define COLUMN					13
+#define NO_PROP					14
+#define LOGINTIMEOUT			15
 
 //--------------------------------------------------------------------------
 using namespace dbacfg;
@@ -297,20 +297,20 @@ void LoadTableFields(const Reference< XObjectInputStream>& _rxIn,Sequence<Proper
 // -----------------------------------------------------------------------------
 void LoadTableFieldDesc(const Reference< XObjectInputStream>& _rxIn,PropertyValue& _rProperty)
 {
-    ::rtl::OUString     aTableName;
-    ::rtl::OUString     aAliasName;     // table range
-    ::rtl::OUString     aFieldName;     // column
-    ::rtl::OUString     aFieldAlias;    // column alias
-    ::rtl::OUString     aDatabaseName;  // qualifier or catalog
-    ::rtl::OUString     aFunctionName;  // enth"alt den Funktionsnamen, nur wenn eFunctionType != FKT_NONE gesetzt
+    ::rtl::OUString		aTableName;
+    ::rtl::OUString		aAliasName;		// table range
+    ::rtl::OUString		aFieldName;		// column
+    ::rtl::OUString		aFieldAlias;	// column alias
+    ::rtl::OUString		aDatabaseName;	// qualifier or catalog
+    ::rtl::OUString		aFunctionName;	// enth"alt den Funktionsnamen, nur wenn eFunctionType != FKT_NONE gesetzt
 
-    sal_Int32           eDataType;
-    sal_Int32           eFunctionType;
-    sal_Int32           eFieldType;
-    sal_Int32           eOrderDir;
-    sal_Int32           nColWidth;
-    sal_Bool            bGroupBy;
-    sal_Bool            bVisible;
+    sal_Int32			eDataType;
+    sal_Int32			eFunctionType;
+    sal_Int32			eFieldType;
+    sal_Int32			eOrderDir;
+    sal_Int32			nColWidth;
+    sal_Bool			bGroupBy;
+    sal_Bool			bVisible;
 
     OStreamSection aSection(_rxIn.get());
     _rxIn >> aTableName;
@@ -403,7 +403,7 @@ sal_Bool isDocumentReport(const Reference< XMultiServiceFactory >& _xORB,const :
                 // get TypeName
                 ::rtl::OUString aTypeName = xTypeDetection->queryTypeByDescriptor( aMedDescr, sal_True );
                 const PropertyValue* pIter = aMedDescr.getConstArray();
-                const PropertyValue* pEnd     = pIter + aMedDescr.getLength();
+                const PropertyValue* pEnd	  = pIter + aMedDescr.getLength();
                 for( ; pIter != pEnd && !pIter->Name.equalsAscii( "FilterName" ); ++pIter)
                     ;
                 if ( aTypeName.getLength() && pIter == pEnd )
@@ -461,7 +461,7 @@ sal_Bool isDocumentReport(const Reference< XMultiServiceFactory >& _xORB,const :
                             Reference< XNameContainer> xControls(xForms->getByName(*elementNames),UNO_QUERY);
                             Sequence< ::rtl::OUString> aControlSeq = xControls.is() ? xControls->getElementNames() : Sequence< ::rtl::OUString>();
                             const ::rtl::OUString* pControlIter = aControlSeq.getConstArray();
-                            const ::rtl::OUString* pControlEnd  = pControlIter + aControlSeq.getLength();
+                            const ::rtl::OUString* pControlEnd	= pControlIter + aControlSeq.getLength();
                             for(;pControlIter != pControlEnd && !bForm;++pControlIter)
                             {
                                 Reference<XPropertySet> xProp(xControls->getByName(*pControlIter),UNO_QUERY);
@@ -575,7 +575,7 @@ void OCfgImport::setProperties(sal_Int16 _eType)
         OSL_ENSURE(m_aProperties[_eType].getLength() == m_aValues[_eType].getLength(),"Count is not equal!");
         try
         {
-            Reference< XMultiPropertySet >  xFormMultiSet;
+            Reference< XMultiPropertySet >	xFormMultiSet;
             if ( _eType == COLUMN )
                 xFormMultiSet.set(m_xCurrentColumn,UNO_QUERY);
             else if ( _eType == TABLE || _eType == QUERY )
@@ -961,7 +961,7 @@ void SAL_CALL  OCfgImport::overrideProperty(
                 {
                     m_bPropertyMayBeVoid = sal_False;
                     ::rtl::OUString sProp;
-                    if (      aName == CONFIGKEY_DEFSET_FILTER ) sProp = PROPERTY_FILTER;
+                    if (	  aName == CONFIGKEY_DEFSET_FILTER ) sProp = PROPERTY_FILTER;
                     else if ( aName == CONFIGKEY_DEFSET_FONT_NAME ) sProp = PROPERTY_FONTNAME;
                     else if ( aName == CONFIGKEY_DEFSET_ORDER ) sProp = PROPERTY_ORDER;
                     else if ( aName == CONFIGKEY_DEFSET_APPLYFILTER ) sProp = PROPERTY_APPLYFILTER;
@@ -1110,7 +1110,7 @@ void SAL_CALL  OCfgImport::setPropertyValue(
                             Sequence< PropertyValue > aLayout;
                             if ( aInputSequence.getLength() )
                             {
-                                Reference< XInputStream>       xInStreamHelper = new SequenceInputStream(aInputSequence);;  // used for wrapping sequence to xinput
+                                Reference< XInputStream>	   xInStreamHelper = new SequenceInputStream(aInputSequence);; 	// used for wrapping sequence to xinput
                                 Reference< XObjectInputStream> xInStream = Reference< XObjectInputStream >(m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")),UNO_QUERY);
                                 Reference< XInputStream> xMarkInStream = Reference< XInputStream >(m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")),UNO_QUERY);
                                 Reference< XActiveDataSink >(xMarkInStream,UNO_QUERY)->setInputStream(xInStreamHelper);

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -70,7 +70,7 @@ public class _XGoalSeek extends MultiMethodTest {
         if (ex != null) {
             throw new StatusException("Could not get a sheet.", ex);
         }
-
+        
         // set value and formula
         try {
             xSheet.getCellByPosition(3, 4).setValue(9);
@@ -82,7 +82,7 @@ public class _XGoalSeek extends MultiMethodTest {
             throw new StatusException("Could not get set formulas on the sheet.", e);
         }
     }
-
+    
     public void _seekGoal() {
         boolean result = true;
         double divergence = 0.01;
@@ -90,7 +90,7 @@ public class _XGoalSeek extends MultiMethodTest {
         log.println("Goal Result: " + goal.Result + "   Divergence: " + goal.Divergence);
         result &= goal.Divergence < divergence;
         result &= goal.Result > 16 - divergence || goal.Result < 16 + divergence;
-
+        
         goal = oObj.seekGoal(aFormula, aValue, "-4");
         log.println("Goal Result: " + goal.Result + "   Divergence: " + goal.Divergence);
         result &= goal.Divergence > 1/divergence;
@@ -106,7 +106,7 @@ public class _XGoalSeek extends MultiMethodTest {
         log.println("Goal Result: " + goal.Result + "   Divergence: " + goal.Divergence);
         result &= goal.Divergence < divergence;
         result &= goal.Result > 16 - divergence || goal.Result < 16 + divergence;
-
+        
         tRes.tested("seekGoal()", result);
     }
 }

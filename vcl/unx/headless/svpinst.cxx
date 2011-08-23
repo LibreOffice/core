@@ -74,9 +74,9 @@ SvpSalInstance* SvpSalInstance::s_pDefaultInstance = NULL;
 
 SvpSalInstance::SvpSalInstance()
 {
-    m_aTimeout.tv_sec       = 0;
-    m_aTimeout.tv_usec      = 0;
-    m_nTimeoutMS            = 0;
+    m_aTimeout.tv_sec 		= 0;
+    m_aTimeout.tv_usec		= 0;
+    m_nTimeoutMS 			= 0;
 
     m_pTimeoutFDS[0] = m_pTimeoutFDS[1] = -1;
     if (pipe (m_pTimeoutFDS) != -1)
@@ -459,8 +459,8 @@ void* SvpSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
 
 SvpSalYieldMutex::SvpSalYieldMutex()
 {
-    mnCount     = 0;
-    mnThreadId  = 0;
+    mnCount 	= 0;
+    mnThreadId	= 0;
 }
 
 void SvpSalYieldMutex::acquire()
@@ -499,9 +499,9 @@ sal_Bool SvpSalYieldMutex::tryToAcquire()
 
 void SvpSalInstance::StopTimer()
 {
-    m_aTimeout.tv_sec   = 0;
-    m_aTimeout.tv_usec  = 0;
-    m_nTimeoutMS        = 0;
+    m_aTimeout.tv_sec	= 0;
+    m_aTimeout.tv_usec	= 0;
+    m_nTimeoutMS		= 0;
 }
 
 void SvpSalInstance::StartTimer( ULONG nMS )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,23 +30,23 @@ package com.sun.star.comp.beans;
 import com.sun.star.uno.UnoRuntime;
 
 //==========================================================================
-/** Wrapper base class for UNO services which emulates the upcoming
+/**	Wrapper base class for UNO services which emulates the upcoming
      mode of automatic runtime Java classes to get rid of the need for
     queryInterface.
 
     Because its not worth the efford to create a runtime generated wrapper
     for this purpose, as it might be for OOo 2.0, you still have to use
     UnoRuntime.queryInterface() for interfaces which are optional or come
-    from a subclass.  But for non optional interfaces you can already
+    from a subclass.  But for non optional interfaces you can already 
     directly call their methods.
 
     This wrapper will only work for UNO objects via a bridge, not for
-    direct Java objects.
+    direct Java objects. 
 
     @since OOo 2.0.0
  */
 class Wrapper
-    implements
+    implements 
         com.sun.star.lib.uno.Proxy,
             // see the comment in com.sun.star.lib.uno.bridges.java_remote
             // .java_remote_bridge.mapInterfaceTo for the consequences of this
@@ -61,25 +61,25 @@ class Wrapper
     {
         xQueryInterface = (com.sun.star.uno.IQueryInterface) xProxy;
         xComponent = (com.sun.star.lang.XComponent)
-            UnoRuntime.queryInterface(
+            UnoRuntime.queryInterface( 
                 com.sun.star.lang.XComponent.class, xProxy );
     }
 
     //==============================================================
     // com.sun.star.uno.IQueryInterface
     //--------------------------------------------------------------
-
-    public String getOid()
+    
+    public String getOid() 
     {
         return xQueryInterface.getOid();
     }
 
-    public boolean isSame( Object aObject )
+    public boolean isSame( Object aObject ) 
     {
         return xQueryInterface.isSame( aObject );
     }
 
-    public Object queryInterface( com.sun.star.uno.Type aType )
+    public Object queryInterface( com.sun.star.uno.Type aType ) 
     {
 //System.err.println( "Wrapper::queryInterface(" + aType + ")" );
         return xQueryInterface.queryInterface( aType );
@@ -88,7 +88,7 @@ class Wrapper
     //==============================================================
     // com.sun.star.lang.XComponent
     //--------------------------------------------------------------
-
+    
     public void dispose(  )
     {
         xComponent.dispose();

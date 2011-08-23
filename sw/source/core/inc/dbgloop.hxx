@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,8 @@
 
 class SvStream;
 
-#define DBG_MAX_STACK   20      // Verschachtelungstiefe
-#define DBG_MAX_LOOP  1000      // das Abbruchkriterium
+#define DBG_MAX_STACK	20		// Verschachtelungstiefe
+#define DBG_MAX_LOOP  1000		// das Abbruchkriterium
 
 class DbgLoopStack
 {
@@ -65,8 +65,8 @@ inline void PrintLoopStack( SvStream &rOS ) //$ ostream
     DbgLoop::aDbgLoopStack.Print( rOS );
 }
 
-#define DBG_LOOP    DbgLoop aDbgLoop( (const void*)this );
-#define DBG_LOOP_RESET  DbgLoop aDbgLoop( 0 );
+#define DBG_LOOP	DbgLoop aDbgLoop( (const void*)this );
+#define DBG_LOOP_RESET	DbgLoop aDbgLoop( 0 );
 
 #else
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,36 +37,36 @@ class Paragraph;
 class ParagraphList : private List
 {
 private:
-    Link            aVisibleStateChangedHdl;
+    Link			aVisibleStateChangedHdl;
 
 public:
-    void            Clear( BOOL bDestroyParagraphs );
+    void			Clear( BOOL bDestroyParagraphs );
 
-    ULONG           GetParagraphCount() const           { return List::Count(); }
-    Paragraph*      GetParagraph( ULONG nPos ) const    { return (Paragraph*)List::GetObject( nPos ); }
+    ULONG			GetParagraphCount() const			{ return List::Count(); }
+    Paragraph*		GetParagraph( ULONG nPos ) const 	{ return (Paragraph*)List::GetObject( nPos ); }
 
-    ULONG           GetAbsPos( Paragraph* pParent ) const { return List::GetPos( pParent ); }
-    ULONG           GetVisPos( Paragraph* pParagraph );
+    ULONG			GetAbsPos( Paragraph* pParent ) const { return List::GetPos( pParent ); }
+    ULONG			GetVisPos( Paragraph* pParagraph );
 
-    void            Insert( Paragraph* pPara, ULONG nAbsPos = LIST_APPEND ) { List::Insert( pPara, nAbsPos ); }
-    void            Remove( ULONG nPara ) { List::Remove( nPara ); }
-    void            MoveParagraphs( ULONG nStart, ULONG nDest, ULONG nCount );
+    void			Insert( Paragraph* pPara, ULONG nAbsPos = LIST_APPEND ) { List::Insert( pPara, nAbsPos ); }
+    void			Remove( ULONG nPara ) { List::Remove( nPara ); }
+    void 			MoveParagraphs( ULONG nStart, ULONG nDest, ULONG nCount );
 
-    Paragraph*      NextVisible( Paragraph* ) const;
-    Paragraph*      PrevVisible( Paragraph* ) const;
-    Paragraph*      LastVisible() const;
+    Paragraph*		NextVisible( Paragraph* ) const;
+    Paragraph*		PrevVisible( Paragraph* ) const;
+    Paragraph*		LastVisible() const;
 
-    Paragraph*      GetParent( Paragraph* pParagraph /*, USHORT& rRelPos */ ) const;
-    BOOL            HasChilds( Paragraph* pParagraph ) const;
-    BOOL            HasHiddenChilds( Paragraph* pParagraph ) const;
-    BOOL            HasVisibleChilds( Paragraph* pParagraph ) const;
-    ULONG           GetChildCount( Paragraph* pParagraph ) const;
+    Paragraph*		GetParent( Paragraph* pParagraph /*, USHORT& rRelPos */ ) const;
+    BOOL			HasChilds( Paragraph* pParagraph ) const;
+    BOOL			HasHiddenChilds( Paragraph* pParagraph ) const;
+    BOOL			HasVisibleChilds( Paragraph* pParagraph ) const;
+    ULONG			GetChildCount( Paragraph* pParagraph ) const;
 
     void            Expand( Paragraph* pParent );
     void            Collapse( Paragraph* pParent );
 
-    void            SetVisibleStateChangedHdl( const Link& rLink ) { aVisibleStateChangedHdl = rLink; }
-    Link            GetVisibleStateChangedHdl() const { return aVisibleStateChangedHdl; }
+    void			SetVisibleStateChangedHdl( const Link& rLink ) { aVisibleStateChangedHdl = rLink; }
+    Link			GetVisibleStateChangedHdl() const { return aVisibleStateChangedHdl; }
 };
 
 #endif

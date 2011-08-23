@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,44 +24,44 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbcx_XDeleteRows_idl__
-#define __com_sun_star_sdbcx_XDeleteRows_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_SQLException_idl__
-#include <com/sun/star/sdbc/SQLException.idl>
-#endif
-
- module com {  module sun {  module star {  module sdbcx {
-
-
+#ifndef __com_sun_star_sdbcx_XDeleteRows_idl__ 
+#define __com_sun_star_sdbcx_XDeleteRows_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_sdbc_SQLException_idl__ 
+#include <com/sun/star/sdbc/SQLException.idl> 
+#endif 
+ 
+ module com {  module sun {  module star {  module sdbcx { 
+ 
+ 
 /** provides for the deletion of more than one row at a time.
  */
 published interface XDeleteRows: com::sun::star::uno::XInterface
-{
-
-    /** deletes one or more rows identified by their bookmarks.
-             @param rows
-                list of bookmarks identifying the rows.
-             @returns
-                an array of update counts containing one element for each
-                 row. The array is ordered according to the order in
-                which bookmarks were given.
-             @throws com::sun::star::sdbc::SQLException
-                if a fatal error occurs, for intance, the connection gets lost if bookmarks
+{ 
+     
+    /** deletes one or more rows identified by their bookmarks. 
+             @param rows 
+                list of bookmarks identifying the rows. 
+             @returns 
+                an array of update counts containing one element for each 
+                 row. The array is ordered according to the order in 
+                which bookmarks were given. 
+             @throws com::sun::star::sdbc::SQLException 
+                if a fatal error occurs, for intance, the connection gets lost if bookmarks 
                 are used which do not belong to the according result set.
      */
-    sequence<long> deleteRows([in]sequence<any> rows)
-        raises (com::sun::star::sdbc::SQLException);
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*===========================================================================
-===========================================================================*/
-#endif
+    sequence<long> deleteRows([in]sequence<any> rows) 
+        raises (com::sun::star::sdbc::SQLException); 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*=========================================================================== 
+===========================================================================*/ 
+#endif 

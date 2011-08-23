@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,16 +36,16 @@
 #include <viewopt.hxx>
 #include <crsskip.hxx>
 
-/*  Immer:
-    -   Zuruecksetzen des Cursorstacks
-    -   Timer nachtriggern
-    -   gfs. GCAttr
+/*	Immer:
+    -	Zuruecksetzen des Cursorstacks
+    -	Timer nachtriggern
+    -	gfs. GCAttr
 
     bei Selektion
-    -   SttSelect()
+    -	SttSelect()
 
     sonst
-    -   EndSelect()
+    -	EndSelect()
  */
 
 const long nReadOnlyScrollOfst = 10;
@@ -250,10 +250,10 @@ BOOL SwWrtShell::GoStart( BOOL bKeepArea, BOOL *pMoveTable,
         else if( bBoxSelection && pMoveTable )
         {
             // JP 09.01.96: wir haben eine Boxselektion (oder leere Zelle)
-            //              und wollen selektieren (pMoveTable wird im
-            //              SelAll gesetzt). Dann darf die Tabelle nicht
-            //              verlassen werden; sonst ist keine Selektion der
-            //              gesamten Tabelle moeglich!
+            // 				und wollen selektieren (pMoveTable wird im
+            //				SelAll gesetzt). Dann darf die Tabelle nicht
+            //				verlassen werden; sonst ist keine Selektion der
+            //				gesamten Tabelle moeglich!
             *pMoveTable = TRUE;
             return TRUE;
         }
@@ -403,9 +403,9 @@ BOOL SwWrtShell::EndPara( BOOL bSelect )
 
 
 /*------------------------------------------------------------------------
- Beschreibung:  Spaltenweises Springen
- Parameter:     mit oder ohne SSelection
- Return:        Erfolg oder Misserfolg
+ Beschreibung:	Spaltenweises Springen
+ Parameter: 	mit oder ohne SSelection
+ Return:		Erfolg oder Misserfolg
 ------------------------------------------------------------------------*/
 
 
@@ -522,7 +522,7 @@ BOOL SwWrtShell::PushCrsr(SwTwips lOffset, BOOL bSelect)
 
         if( bIsFrmSel )
         {
-//          CallChgLnk();
+//			CallChgLnk();
             // bei Frames immer nur die obere Ecke nehmen, damit dieser
             // wieder selektiert werden kann
             aOldRect.SSize( 5, 5 );
@@ -636,7 +636,7 @@ BOOL SwWrtShell::PageCrsr(SwTwips lOffset, BOOL bSelect)
         // da sie immer zu einer Anzeige des Cursors fuehrt, also auch,
         // wenn nach dem Blaettern in einen Bereich ohne gueltige Position
         // geblaettert wurde.
-        //  ViewShell::StartAction();
+        //	ViewShell::StartAction();
     PageMove eDir = lOffset > 0? MV_PAGE_DOWN: MV_PAGE_UP;
         // Richtungswechsel und Stack vorhanden
     if( eDir != ePageMove && ePageMove != MV_NO && PopCrsr( TRUE, bSelect ))

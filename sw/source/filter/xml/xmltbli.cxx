@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -114,12 +114,12 @@ static __FAR_DATA SvXMLTokenMapEntry aTableElemTokenMap[] =
 {
     { XML_NAMESPACE_TABLE, XML_TABLE_HEADER_COLUMNS,
             XML_TOK_TABLE_HEADER_COLS },
-    { XML_NAMESPACE_TABLE, XML_TABLE_COLUMNS,           XML_TOK_TABLE_COLS },
-    { XML_NAMESPACE_TABLE, XML_TABLE_COLUMN,            XML_TOK_TABLE_COL },
+    { XML_NAMESPACE_TABLE, XML_TABLE_COLUMNS,			XML_TOK_TABLE_COLS },
+    { XML_NAMESPACE_TABLE, XML_TABLE_COLUMN,			XML_TOK_TABLE_COL },
     { XML_NAMESPACE_TABLE, XML_TABLE_HEADER_ROWS,
             XML_TOK_TABLE_HEADER_ROWS },
-    { XML_NAMESPACE_TABLE, XML_TABLE_ROWS,              XML_TOK_TABLE_ROWS },
-    { XML_NAMESPACE_TABLE, XML_TABLE_ROW,               XML_TOK_TABLE_ROW },
+    { XML_NAMESPACE_TABLE, XML_TABLE_ROWS,				XML_TOK_TABLE_ROWS },
+    { XML_NAMESPACE_TABLE, XML_TABLE_ROW,				XML_TOK_TABLE_ROW },
     { XML_NAMESPACE_OFFICE, XML_DDE_SOURCE,
             XML_TOK_OFFICE_DDE_SOURCE },
 
@@ -128,7 +128,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTableElemTokenMap[] =
     // supported in Writer (they are Calc-only features), so we
     // support column groups by simply using the <table:table-columns>
     // token for column groups, too.
-    { XML_NAMESPACE_TABLE, XML_TABLE_COLUMN_GROUP,      XML_TOK_TABLE_COLS },
+    { XML_NAMESPACE_TABLE, XML_TABLE_COLUMN_GROUP,		XML_TOK_TABLE_COLS },
 
     XML_TOKEN_MAP_END
 };
@@ -175,17 +175,17 @@ class SwXMLTableCell_Impl
 
     OUString mXmlId;
 
-    OUString sFormula;  // cell formula; valid if length > 0
-    double dValue;      // formula value
+    OUString sFormula;	// cell formula; valid if length > 0
+    double dValue;		// formula value
 
-    SvXMLImportContextRef   xSubTable;
+    SvXMLImportContextRef	xSubTable;
 
     const SwStartNode *pStartNode;
     sal_uInt32 nRowSpan;
     sal_uInt32 nColSpan;
 
     sal_Bool bProtected : 1;
-    sal_Bool bHasValue; // determines whether dValue attribute is valid
+    sal_Bool bHasValue;	// determines whether dValue attribute is valid
     sal_Bool mbCovered;
     sal_Bool mbTextValue;
 
@@ -403,19 +403,19 @@ class SwXMLTableCellContext_Impl : public SvXMLImportContext
     OUString sSaveParaDefault;
     OUString mXmlId;
 
-    SvXMLImportContextRef   xMyTable;
+    SvXMLImportContextRef	xMyTable;
 
     double fValue;
     sal_Bool bHasValue;
     sal_Bool bHasTextValue;
     sal_Bool bProtect;
 
-    sal_uInt32                  nRowSpan;
-    sal_uInt32                  nColSpan;
-    sal_uInt32                  nColRepeat;
+    sal_uInt32 					nRowSpan;
+    sal_uInt32 					nColSpan;
+    sal_uInt32 					nColRepeat;
 
-    sal_Bool                    bHasTextContent : 1;
-    sal_Bool                    bHasTableContent : 1;
+    sal_Bool					bHasTextContent : 1;
+    sal_Bool					bHasTableContent : 1;
 
     SwXMLTableContext *GetTable() { return (SwXMLTableContext *)&xMyTable; }
 
@@ -724,7 +724,7 @@ void SwXMLTableCellContext_Impl::EndElement()
 
 class SwXMLTableColContext_Impl : public SvXMLImportContext
 {
-    SvXMLImportContextRef   xMyTable;
+    SvXMLImportContextRef	xMyTable;
 
     SwXMLTableContext *GetTable() { return (SwXMLTableContext *)&xMyTable; }
 
@@ -811,7 +811,7 @@ SwXMLTableColContext_Impl::~SwXMLTableColContext_Impl()
 
 class SwXMLTableColsContext_Impl : public SvXMLImportContext
 {
-    SvXMLImportContextRef   xMyTable;
+    SvXMLImportContextRef	xMyTable;
     sal_Bool bHeader;
 
     SwXMLTableContext *GetTable() { return (SwXMLTableContext *)&xMyTable; }
@@ -872,9 +872,9 @@ SvXMLImportContext *SwXMLTableColsContext_Impl::CreateChildContext(
 
 class SwXMLTableRowContext_Impl : public SvXMLImportContext
 {
-    SvXMLImportContextRef   xMyTable;
+    SvXMLImportContextRef	xMyTable;
 
-    sal_uInt32                  nRowRepeat;
+    sal_uInt32 					nRowRepeat;
 
     SwXMLTableContext *GetTable() { return (SwXMLTableContext *)&xMyTable; }
 
@@ -994,7 +994,7 @@ SvXMLImportContext *SwXMLTableRowContext_Impl::CreateChildContext(
 
 class SwXMLTableRowsContext_Impl : public SvXMLImportContext
 {
-    SvXMLImportContextRef   xMyTable;
+    SvXMLImportContextRef	xMyTable;
 
     sal_Bool bHeader;
 
@@ -1076,11 +1076,11 @@ public:
     virtual void StartElement(
         const Reference<xml::sax::XAttributeList> & xAttrList);
 
-    OUString& GetConnectionName()   { return sConnectionName; }
-    OUString& GetDDEApplication()   { return sDDEApplication; }
-    OUString& GetDDEItem()          { return sDDEItem; }
-    OUString& GetDDETopic()         { return sDDETopic; }
-    sal_Bool GetIsAutomaticUpdate() { return bIsAutomaticUpdate; }
+    OUString& GetConnectionName()	{ return sConnectionName; }
+    OUString& GetDDEApplication()	{ return sDDEApplication; }
+    OUString& GetDDEItem() 			{ return sDDEItem; }
+    OUString& GetDDETopic()			{ return sDDETopic; }
+    sal_Bool GetIsAutomaticUpdate()	{ return bIsAutomaticUpdate; }
 };
 
 TYPEINIT1( SwXMLDDETableContext_Impl, SvXMLImportContext );
@@ -1155,10 +1155,10 @@ String lcl_GenerateFldTypeName(OUString sPrefix, SwTableNode* pTableNode)
     {
         sPrefixStr = String('_');
     }
-//  else if (sPrefixStr.Copy(0, 1).IsAlphaAscii())
-//  {
-//      sPrefixStr.Insert('_', 0);
-//  }
+// 	else if (sPrefixStr.Copy(0, 1).IsAlphaAscii())
+// 	{
+// 		sPrefixStr.Insert('_', 0);
+// 	}
     // else: name is OK.
 
     // increase count until we find a name that is not yet taken
@@ -2542,8 +2542,8 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
             sal_Int32 nExtraAbs =
                     nAbsForRelWidth > nMinAbs ? nAbsForRelWidth - nMinAbs : (sal_Int32)0L;
 
-            sal_Bool bMin = sal_False;      // Do all columns get the mininum width?
-            sal_Bool bMinExtra = sal_False; // Do all columns get the minimum width plus
+            sal_Bool bMin = sal_False;		// Do all columns get the mininum width?
+            sal_Bool bMinExtra = sal_False;	// Do all columns get the minimum width plus
                                     // some extra space?
 
             if( nAbsForRelWidth <= nMinAbs )

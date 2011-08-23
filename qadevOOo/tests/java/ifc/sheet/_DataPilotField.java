@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ import lib.MultiPropertyTest;
 * @see com.sun.star.sheet.DataPilotField
 */
 public class _DataPilotField extends MultiPropertyTest {
-
+    
     /**
      *This class is destined to custom test of property <code>SortInfo</code>.
      */
@@ -64,13 +64,13 @@ public class _DataPilotField extends MultiPropertyTest {
      */
     public void _SortInfo() {
         testProperty("SortInfo", SortInfoTester);
-    }
-
+    } 
+    
     public void _HasSortInfo() {
         requiredMethod("SortInfo");
         testProperty("HasSortInfo");
     }
-
+    
     /**
      *This class is destined to custom test of property <code>LayoutInfo</code>.
      */
@@ -89,13 +89,13 @@ public class _DataPilotField extends MultiPropertyTest {
      */
     public void _LayoutInfo() {
         testProperty("LayoutInfo", LayoutInfoTester);
-    }
-
+    } 
+    
     public void _HasLayoutInfo() {
         requiredMethod("LayoutInfo");
         testProperty("HasLayoutInfo");
-    }
-
+    }    
+    
     /**
      *This class is destined to custom test of property <code>AutoShowInfo</code>.
      */
@@ -114,13 +114,13 @@ public class _DataPilotField extends MultiPropertyTest {
      */
     public void _AutoShowInfo() {
         testProperty("AutoShowInfo", AutoShowInfoTester);
-    }
-
+    } 
+    
     public void _HasAutoShowInfo() {
         requiredMethod("AutoShowInfo");
         testProperty("HasAutoShowInfo");
-    }
-
+    }        
+    
     /**
      *This class is destined to custom test of property <code>Reference</code>.
      */
@@ -139,13 +139,13 @@ public class _DataPilotField extends MultiPropertyTest {
      */
     public void _Reference() {
         testProperty("Reference", ReferenceTester);
-    }
-
+    } 
+    
     public void _HasReference() {
         requiredMethod("Reference");
         testProperty("HasReference");
-    }
-
+    }      
+    
     /*
      * this property can only set a true value to false, fo ungrouping purposes
      */
@@ -157,7 +157,7 @@ public class _DataPilotField extends MultiPropertyTest {
                 oObj.setPropertyValue ("IsGroupField", Boolean.FALSE);
                 Boolean propV = (Boolean) oObj.getPropertyValue ("IsGroupField");
                 result = !propV.booleanValue ();
-            }
+            } 
         } catch (Exception e) {
             log.println ("Exception while getting Property 'IsGroupField'"+e);
             result = false;

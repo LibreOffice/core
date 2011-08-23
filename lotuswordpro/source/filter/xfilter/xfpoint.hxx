@@ -61,8 +61,8 @@
  * Change History
  * 2004-2-18 create this file.
  ************************************************************************/
-#ifndef     _XFPOINT_HXX
-#define     _XFPOINT_HXX
+#ifndef		_XFPOINT_HXX
+#define		_XFPOINT_HXX
 
 class XFPoint
 {
@@ -79,29 +79,29 @@ public:
     }
 
 public:
-    void    SetX(double x)
+    void	SetX(double x)
     {
         m_fX = x;
     }
 
-    void    SetY(double y)
+    void	SetY(double y)
     {
         m_fY = y;
     }
 
-    double  GetX() const
+    double	GetX() const
     {
         return m_fX;
     }
 
-    double  GetY() const
+    double	GetY() const
     {
         return m_fY;
     }
 
 private:
-    double  m_fX;
-    double  m_fY;
+    double	m_fX;
+    double	m_fY;
 };
 
 #endif

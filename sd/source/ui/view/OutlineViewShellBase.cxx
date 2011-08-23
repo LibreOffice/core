@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ SfxViewShell* __EXPORT OutlineViewShellBase::CreateInstance (
     return pBase;
 }
 void OutlineViewShellBase::RegisterFactory( USHORT nPrio )
-{
+{ 
     pFactory = new SfxViewFactory(
         &CreateInstance,&InitFactory,nPrio,"Outline");
     InitFactory();
@@ -73,7 +73,7 @@ void OutlineViewShellBase::InitFactory()
 
 
 OutlineViewShellBase::OutlineViewShellBase (
-    SfxViewFrame* _pFrame,
+    SfxViewFrame* _pFrame, 
     SfxViewShell* pOldShell)
     : ImpressViewShellBase (_pFrame, pOldShell)
 {

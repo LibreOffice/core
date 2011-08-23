@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,19 +44,19 @@ module com { module sun { module star { module i18n {
 published constants Weekdays
 {
     /// Sunday
-    const short SUNDAY      = 0;
+    const short SUNDAY		= 0;
     /// Monday
-    const short MONDAY      = 1;
+    const short MONDAY		= 1;
     /// Tuesday
-    const short TUESDAY     = 2;
+    const short TUESDAY		= 2;
     /// Wednesday
-    const short WEDNESDAY   = 3;
+    const short WEDNESDAY	= 3;
     /// Thursday
-    const short THURSDAY    = 4;
+    const short THURSDAY	= 4;
     /// Friday
-    const short FRIDAY      = 5;
+    const short FRIDAY		= 5;
     /// Saturday
-    const short SATURDAY    = 6;
+    const short SATURDAY	= 6;
 };
 
 //=============================================================================

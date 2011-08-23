@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ class Sound;
 
 namespace sd {
 
-class FuSelection
+class FuSelection 
     : public FuDraw
 {
 public:
@@ -55,15 +55,15 @@ public:
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();		   // Function aktivieren
+    virtual void Deactivate();		   // Function deaktivieren
 
     virtual void SelectionHasChanged();
 
     void    SetEditMode(USHORT nMode);
     USHORT  GetEditMode() { return nEditMode; }
 
-    BOOL    AnimateObj(SdrObject* pObj, const Point& rPos);
+    BOOL	AnimateObj(SdrObject* pObj, const Point& rPos);
 
     /** is called when the currenct function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also
@@ -74,15 +74,15 @@ public:
     virtual bool cancel();
 
 protected:
-    FuSelection (ViewShell* pViewSh,
-        ::sd::Window* pWin,
+    FuSelection (ViewShell* pViewSh, 
+        ::sd::Window* pWin, 
         ::sd::View* pView,
-        SdDrawDocument* pDoc,
+        SdDrawDocument* pDoc, 
         SfxRequest& rReq);
 
     virtual ~FuSelection();
 
-    BOOL            bTempRotation;
+    BOOL			bTempRotation;
     BOOL            bSelectionChanged;
     BOOL            bHideAndAnimate;
     SdrHdl*         pHdl;
@@ -109,6 +109,6 @@ private:
 
 } // end of namespace sd
 
-#endif      // _SD_FUSEL_HXX
+#endif		// _SD_FUSEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

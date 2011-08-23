@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,7 +73,7 @@ using com::sun::star::lang::XServiceInfo;
 // -----------------------------------------------------------------------------
 
 PageInfo::PageInfo()
-:       meFadeEffect( FadeEffect_NONE ),
+:		meFadeEffect( FadeEffect_NONE ),
         meFadeSpeed( AnimationSpeed_MEDIUM ),
         mnDuration( 0 ),
         mnChange( 0 )
@@ -104,7 +104,7 @@ void PageInfo::addShape( ShapeInfo* pShapeInfo )
 // -----------------------------------------------------------------------------
 
 FlashExporter::FlashExporter(const Reference< XMultiServiceFactory > &rxMSF, sal_Int32 nJPEGCompressMode, sal_Bool bExportOLEAsJPEG)
-:   mxMSF( rxMSF ),
+:	mxMSF( rxMSF ),
     mpWriter( NULL ),
     mnJPEGcompressMode(nJPEGCompressMode),
     mbExportOLEAsJPEG(bExportOLEAsJPEG),
@@ -202,7 +202,7 @@ sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOut
 
         // AS: If the background is different than the previous slide,
         //  we have to remove the old one and place the new one.
-        if (nPage)
+        if (nPage) 
         {
             if (maPagesMap[nPage].mnBackgroundID != maPagesMap[nPage-1].mnBackgroundID)
             {
@@ -426,7 +426,7 @@ sal_uInt16 FlashExporter::exportDrawPageBackground(sal_uInt16 nPage, Reference< 
         //  the previous index.
         if (gPrivateCache.end() != it)
         {
-            maPagesMap[nPage].mnBackgroundID =
+            maPagesMap[nPage].mnBackgroundID = 
                 maPagesMap[it->second].mnBackgroundID;
             return it->second;
         }
@@ -448,7 +448,7 @@ sal_uInt16 FlashExporter::exportDrawPageBackground(sal_uInt16 nPage, Reference< 
 
     if (gMasterCache.end() != it)
     {
-        maPagesMap[nPage].mnBackgroundID =
+        maPagesMap[nPage].mnBackgroundID = 
             maPagesMap[it->second].mnBackgroundID;
 
         return it->second;                // AS: Yes, so don't export it again.
@@ -473,14 +473,14 @@ sal_uInt16 FlashExporter::exportMasterPageObjects(sal_uInt16 nPage, Reference< X
 
     if (gObjectCache.end() != it)
     {
-        maPagesMap[nPage].mnObjectsID =
+        maPagesMap[nPage].mnObjectsID = 
             maPagesMap[it->second].mnObjectsID;
 
         return it->second;                // AS: Yes, so don't export it again.
     }
 
     gObjectCache[shapesum] = nPage;
-
+    
     sal_uInt16 rObjectsID = mpWriter->startSprite();
     exportDrawPageContents( xMasterPage, false, true );
     mpWriter->endSprite();
@@ -521,7 +521,7 @@ void FlashExporter::exportShapes( Reference< XShapes >& xShapes, bool bStream, b
         {
             Reference< XShapes > xShapes2( xShape, UNO_QUERY );
             if( xShapes2.is() && xShape->getShapeType().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GroupShape")))
-                // export the contents of group shapes, but we only ever stream at the top
+                // export the contents of group shapes, but we only ever stream at the top 
                 // recursive level anyway, so pass false for streaming.
                 exportShapes( xShapes2, false, bMaster);
             else
@@ -602,10 +602,10 @@ void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
                 xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("TransparentColor") ) ) >>= pShapeInfo->mnBlueScreenColor;
             }
 
-//          long ZOrder;
-//          xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("ZOrder") ) ) >>= ZOrder;
+//			long ZOrder;
+//			xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("ZOrder") ) ) >>= ZOrder;
 
-            GDIMetaFile     aMtf;
+            GDIMetaFile		aMtf;
             Reference< XComponent > xComponent( xShape, UNO_QUERY );
 
             bool bIsOleObject = xShape->getShapeType().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.OLE2Shape"))
@@ -638,7 +638,7 @@ void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
 
             pShapeInfo->mnID = nID;
 
-//          pPageInfo->addShape( pShapeInfo );
+//			pPageInfo->addShape( pShapeInfo );
 
             mpWriter->placeShape( pShapeInfo->mnID, _uInt16(nPlaceDepth++), pShapeInfo->mnX, pShapeInfo->mnY );
 
@@ -661,7 +661,7 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
 
     utl::TempFile aFile;
     aFile.EnableKillingFile();
-
+    
     Sequence< PropertyValue > aFilterData(bExportAsJPEG ? 3 : 2);
     aFilterData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Version") );
     aFilterData[0].Value <<= (sal_Int32)6000;
@@ -705,8 +705,8 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
         Rectangle clipRect;
         for( ULONG i = 0, nCount = rMtf.GetActionCount(); i < nCount; i++ )
         {
-            const MetaAction*   pAction = rMtf.GetAction( i );
-            const USHORT        nType = pAction->GetType();
+            const MetaAction*	pAction = rMtf.GetAction( i );
+            const USHORT		nType = pAction->GetType();
 
             switch( nType )
             {
@@ -744,7 +744,7 @@ sal_uInt32 FlashExporter::ActionSummer(Reference< XShape >& xShape)
     {
         Reference< XComponent > xComponentShape( xShape, UNO_QUERY );
 
-        GDIMetaFile aMtf;
+        GDIMetaFile	aMtf;
         getMetaFile( xComponentShape, aMtf);
 
         return aMtf.GetChecksum();

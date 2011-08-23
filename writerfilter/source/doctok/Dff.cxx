@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,13 +37,13 @@ namespace doctok {
 
 typedef boost::shared_ptr<WW8Value> WW8ValueSharedPointer_t;
 
-DffRecord::DffRecord(WW8Stream & rStream, sal_uInt32 nOffset,
+DffRecord::DffRecord(WW8Stream & rStream, sal_uInt32 nOffset, 
                      sal_uInt32 nCount)
 : WW8StructBase(rStream, nOffset, nCount), bInitialized(false)
 {
 }
 
-DffRecord::DffRecord(WW8StructBase * pParent, sal_uInt32 nOffset,
+DffRecord::DffRecord(WW8StructBase * pParent, sal_uInt32 nOffset, 
                      sal_uInt32 nCount)
 : WW8StructBase(pParent, nOffset, nCount), bInitialized(false)
 {
@@ -82,7 +82,7 @@ sal_uInt32 DffRecord::calcSize() const
     case 0xf003:
     case 0xf004:
         nResult = getU32(0x4) + 8;
-
+        
         break;
     case 0xf700:
         nResult = 8;
@@ -120,7 +120,7 @@ void DffRecord::initChildren()
     {
         sal_uInt32 nOffset = 8;
         sal_uInt32 nCount = calcSize();
-
+        
         while (nCount - nOffset >= 8)
         {
             sal_uInt32 nSize = 0;
@@ -129,9 +129,9 @@ void DffRecord::initChildren()
 
             if (nSize == 0)
                 break;
-
+            
             mRecords.push_back(pRec);
-
+            
             nOffset += nSize;
         }
     }
@@ -156,11 +156,11 @@ void DffRecord::findRecords
     while (aIt != end())
     {
         Pointer_t pPointer = *aIt;
-        if (bAny || pPointer->getRecordType() == nType)
+        if (bAny || pPointer->getRecordType() == nType) 
             rRecords.push_back(pPointer);
 
         if (bRecursive)
-            pPointer->findRecords(nType, rRecords, bRecursive,
+            pPointer->findRecords(nType, rRecords, bRecursive, 
                                       bAny);
 
         ++aIt;
@@ -193,7 +193,7 @@ void DffRecord::resolve(Properties & rHandler)
 
     pVal = createValue(getU32(0x0));
     rHandler.attribute(NS_rtf::LN_dffheader, *pVal);
-
+        
     if (isContainer())
     {
         resolveChildren(rHandler);
@@ -259,7 +259,7 @@ public:
         case NS_rtf::LN_shpvalue:
             {
                 WW8Value & rTmpVal = dynamic_cast<WW8Value &>(val);
-                WW8ValueSharedPointer_t
+                WW8ValueSharedPointer_t 
                     pVal(dynamic_cast<WW8Value *>(rTmpVal.clone()));
                 mMap[nId] = pVal;
             }
@@ -303,7 +303,7 @@ sal_uInt32 DffRecord::getShapeBid()
                 nResult = pVal->getInt();
         }
     }
-
+        
     return nResult;
 }
 
@@ -336,11 +336,11 @@ string DffRecord::toString() const
 {
     char sBuffer[1024];
 
-    snprintf(sBuffer, sizeof(sBuffer),
+    snprintf(sBuffer, sizeof(sBuffer), 
              "<dffrecord type=\"%" SAL_PRIuUINT32 "\" instance=\"%" SAL_PRIuUINT32 "\" version=\"%" SAL_PRIuUINT32 "\">\n",
              getRecordType(), getInstance(), getVersion());
     string aResult = sBuffer;
-
+   
 
     if (!isContainer())
         aResult += mSequence.toString();
@@ -365,22 +365,22 @@ Sprm::Kind DffRecord::getKind()
     return Sprm::UNKNOWN;
 }
 
-DffBlock::DffBlock(WW8Stream & rStream, sal_uInt32 nOffset,
+DffBlock::DffBlock(WW8Stream & rStream, sal_uInt32 nOffset, 
                    sal_uInt32 nCount, sal_uInt32 nPadding)
 : WW8StructBase(rStream, nOffset, nCount), bInitialized(false),
   mnPadding(nPadding)
 {
 }
 
-DffBlock::DffBlock(WW8StructBase * pParent, sal_uInt32 nOffset,
+DffBlock::DffBlock(WW8StructBase * pParent, sal_uInt32 nOffset, 
                    sal_uInt32 nCount, sal_uInt32 nPadding)
-: WW8StructBase(pParent, nOffset, nCount), bInitialized(false),
+: WW8StructBase(pParent, nOffset, nCount), bInitialized(false), 
   mnPadding(nPadding)
 {
 }
 
 DffBlock::DffBlock(const DffBlock & rSrc)
-: WW8StructBase(rSrc), writerfilter::Reference<Properties>(rSrc),
+: WW8StructBase(rSrc), writerfilter::Reference<Properties>(rSrc), 
   bInitialized(false), mnPadding(rSrc.mnPadding)
 {
 }
@@ -389,7 +389,7 @@ void DffBlock::initChildren()
 {
     sal_uInt32 nOffset = 0;
     sal_uInt32 nCount = getCount();
-
+    
     while (nOffset < nCount)
     {
         sal_uInt32 nSize = 0;
@@ -400,9 +400,9 @@ void DffBlock::initChildren()
             break;
 
         mRecords.push_back(pDffRecord);
-
+        
         nOffset +=  nSize + mnPadding;
-    }
+    }    
 
     bInitialized = true;
 }
@@ -429,9 +429,9 @@ void DffBlock::findRecords
             rRecords.push_back(pPointer);
 
         if (bRecursive)
-            pPointer->findRecords(nType, rRecords, bRecursive,
+            pPointer->findRecords(nType, rRecords, bRecursive, 
                                   bAny);
-
+        
         ++aIt;
     }
 }
@@ -459,7 +459,7 @@ DffRecord::Pointer_t DffBlock::getShape(sal_uInt32 nSpid)
 
         Records_t aFSPs = pPointer->findRecords(0xf00a);
         Records_t::iterator aItFSP = aFSPs.begin();
-
+        
         if (aItFSP != aFSPs.end())
         {
             DffFSP * pFSP = dynamic_cast<DffFSP *>((*aItFSP).get());
@@ -485,7 +485,7 @@ DffRecord::Pointer_t DffBlock::getBlip(sal_uInt32 nBlip)
         nBlip--;
 
         Records_t aRecords = findRecords(0xf007);
-
+        
         if (nBlip < aRecords.size())
         {
             pResult = aRecords[nBlip];

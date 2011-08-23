@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,25 +43,25 @@ import org.openoffice.netbeans.modules.office.actions.OfficeDocumentCookie;
 
 public class OfficeDocumentChildren extends Children.Keys
     implements ChangeListener {
-
+    
     private OfficeDocumentCookie document = null;
-
+    
     public OfficeDocumentChildren(OfficeDocumentCookie cookie) {
         document = cookie;
     }
-
+    
     private void refreshKeys() {
         if (document == null) {
             setKeys(Collections.EMPTY_SET);
             return;
         }
-
+        
         Enumeration parcels = document.getParcels();
         if (parcels.hasMoreElements() != true) {
             setKeys(Collections.EMPTY_SET);
             return;
         }
-
+        
         ArrayList keys = new ArrayList();
         while (parcels.hasMoreElements()) {
             String parcel = (String)parcels.nextElement();
@@ -69,31 +69,31 @@ public class OfficeDocumentChildren extends Children.Keys
         }
         setKeys(keys);
     }
-
+    
     protected void addNotify() {
         super.addNotify();
         document.addChangeListener(this);
         refreshKeys();
     }
-
+    
     protected void removeNotify() {
         super.removeNotify();
         document.removeChangeListener(this);
         setKeys(Collections.EMPTY_SET);
     }
-
+    
     protected Node[] createNodes(Object key) {
         String name = (String)key;
         return new Node[] {new ParcelNode(name)};
     }
-
+    
     public void stateChanged(ChangeEvent e) {
         refreshKeys();
     }
-
+    
     private class ParcelNode extends AbstractNode {
         private String name;
-
+        
         public ParcelNode(String name) {
             super(Children.LEAF);
             this.name = name;
@@ -117,11 +117,11 @@ public class OfficeDocumentChildren extends Children.Keys
         public HelpCtx getHelpCtx() {
             return HelpCtx.DEFAULT_HELP;
         }
-
+        
         public boolean canDestroy() {
             return true;
         }
-
+        
         public void destroy() throws IOException {
             OfficeSettings settings = OfficeSettings.getDefault();
             String message = "If you already have this document open in " +

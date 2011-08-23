@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -108,7 +108,7 @@ namespace dbmm
         ~MacroMigrationDialogService();
 
     protected:
-        virtual Dialog* createDialog( Window* _pParent );
+        virtual Dialog*	createDialog( Window* _pParent );
         virtual void destroyDialog();
 
     private:
@@ -147,7 +147,7 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    Dialog* MacroMigrationDialogService::createDialog( Window* _pParent )
+    Dialog*	MacroMigrationDialogService::createDialog( Window* _pParent )
     {
         return new MacroMigrationDialog( _pParent, m_aContext, m_xDocument );
     }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <description xmlns="http://openoffice.org/extensions/description/2006"
     xmlns:xlink="http://www.w3.org/1999/xlink">
-    <version value="2.0" />
-    <identifier value="org.openoffice/framework/desktop/test/deployment/update/website_update/web7"/>
+    <version value="2.0" />    
+    <identifier value="org.openoffice/framework/desktop/test/deployment/update/website_update/web7"/> 
     <display-name>
       <name lang="en">web-based update test 1</name>
     </display-name>
@@ -18,7 +18,7 @@
       <name xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/publisher_en-US-region2.html" lang="en-US-region2">My OpenOffice en-US-region2</name>
       <name xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/publisher_en-region3.html" lang="en-region3">My OpenOffice en-region3</name>
     </publisher>
-
+    
     <release-notes>
       <src xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/release-notes_de.html" lang="de" />
       <src xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/release-notes_en.html" lang="en" />

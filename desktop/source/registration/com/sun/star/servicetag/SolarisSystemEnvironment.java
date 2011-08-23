@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@ package com.sun.star.servicetag;
 
 // The Service Tags team maintains the latest version of the implementation
 // for system environment data collection.  JDK will include a copy of
-// the most recent released version for a JDK release.  We rename
+// the most recent released version for a JDK release.	We rename
 // the package to com.sun.servicetag so that the Sun Connection
 // product always uses the latest version from the com.sun.scn.servicetags
 // package. JDK and users of the com.sun.servicetag API

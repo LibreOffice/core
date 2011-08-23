@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -232,17 +232,17 @@ struct OSArea {
     Color      aBgCol;
     RasterOp   eMix;
     RasterOp   eBgMix;
-    BOOL       bFill;
+    BOOL	   bFill;
     OSArea(){} ~OSArea(){}
 };
 
 struct OSPath
 {
-    OSPath*     pSucc;
-    sal_uInt32  nID;
+    OSPath*		pSucc;
+    sal_uInt32	nID;
     PolyPolygon aPPoly;
-    BOOL        bClosed;
-    BOOL        bStroke;
+    BOOL		bClosed;
+    BOOL		bStroke;
 
                 OSPath(){}
                 ~OSPath(){}
@@ -295,33 +295,33 @@ struct OSAttr {
     RasterOp eImgBgMix;
     long     nArcP, nArcQ, nArcR, nArcS;
     short    nChrAng;
-//  long     nChrBreakExtra;
+//	long     nChrBreakExtra;
     Size     aChrCellSize;
-//  BYTE     nChrDir;
-//  long     nChrExtra;
-//  BYTE     nChrPrec;
+//	BYTE     nChrDir;
+//	long     nChrExtra;
+//	BYTE     nChrPrec;
     ULONG    nChrSet;
-//  Size     aChrShear;
+//	Size     aChrShear;
     Point    aCurPos;
-//  long     nFracLinWidth;
-//  BYTE     nLinEnd;
-//  BYTE     nLinJoin;
+//	long     nFracLinWidth;
+//	BYTE     nLinEnd;
+//	BYTE     nLinJoin;
     PenStyle eLinStyle;
     USHORT   nLinWidth;
     Size     aMrkCellSize;
     BYTE     nMrkPrec;
     BYTE     nMrkSet;
     BYTE     nMrkSymbol;
-//  //...    aModTransform;
-//  Point    aPatRef;
-//  BYTE     nPatSet;
-    BOOL     bFill;
-//  ULONG    nPickId;
-//  //...    aSegBound;
+//	//...    aModTransform;
+//	Point    aPatRef;
+//	BYTE     nPatSet;
+    BOOL	 bFill;
+//	ULONG    nPickId;
+//	//...    aSegBound;
     USHORT   nStrLinWidth;
-//  BYTE     nTxtAlignHor,nTxtAlignVer;
-//  //...    aViewTransform;
-//  //...    aViewWindow;
+//	BYTE     nTxtAlignHor,nTxtAlignVer;
+//	//...    aViewTransform;
+//	//...    aViewWindow;
     OSAttr(){} ~OSAttr(){}
 };
 
@@ -380,34 +380,34 @@ private:
     Color GetPaletteColor(sal_uInt32 nIndex);
 
 
-    BOOL        IsLineInfo();
-    void        DrawPolyLine( const Polygon& rPolygon );
-    void        DrawPolygon( const Polygon& rPolygon );
-    void        DrawPolyPolygon( const PolyPolygon& rPolygon );
-    USHORT      ReadBigEndianWord();
-    ULONG       ReadBigEndian3BytesLong();
-    ULONG       ReadLittleEndian3BytesLong();
-    long        ReadCoord(BOOL b32);
-    Point       ReadPoint( const BOOL bAdjustBoundRect = TRUE );
-    RasterOp    OS2MixToRasterOp(BYTE nMix);
-    void        ReadLine(BOOL bGivenPos, USHORT nOrderLen);
-    void        ReadRelLine(BOOL bGivenPos, USHORT nOrderLen);
-    void        ReadBox(BOOL bGivenPos);
-    void        ReadBitBlt();
-    void        ReadChrStr(BOOL bGivenPos, BOOL bMove, BOOL bExtra, USHORT nOrderLen);
-    void        ReadArc(BOOL bGivenPos);
-    void        ReadFullArc(BOOL bGivenPos, USHORT nOrderSize);
-    void        ReadPartialArc(BOOL bGivenPos, USHORT nOrderSize);
-    void        ReadPolygons();
-    void        ReadBezier(BOOL bGivenPos, USHORT nOrderLen);
-    void        ReadFillet(BOOL bGivenPos, USHORT nOrderLen);
-    void        ReadFilletSharp(BOOL bGivenPos, USHORT nOrderLen);
-    void        ReadMarker(BOOL bGivenPos, USHORT nOrderLen);
-    void        ReadOrder(USHORT nOrderID, USHORT nOrderLen);
-    void        ReadDsc(USHORT nDscID, USHORT nDscLen);
-    void        ReadImageData(USHORT nDataID, USHORT nDataLen);
-    void        ReadFont(USHORT nFieldSize);
-    void        ReadField(USHORT nFieldType, USHORT nFieldSize);
+    BOOL		IsLineInfo();
+    void		DrawPolyLine( const Polygon& rPolygon );
+    void		DrawPolygon( const Polygon& rPolygon );
+    void		DrawPolyPolygon( const PolyPolygon& rPolygon );
+    USHORT		ReadBigEndianWord();
+    ULONG		ReadBigEndian3BytesLong();
+    ULONG		ReadLittleEndian3BytesLong();
+    long		ReadCoord(BOOL b32);
+    Point		ReadPoint( const BOOL bAdjustBoundRect = TRUE );
+    RasterOp	OS2MixToRasterOp(BYTE nMix);
+    void		ReadLine(BOOL bGivenPos, USHORT nOrderLen);
+    void		ReadRelLine(BOOL bGivenPos, USHORT nOrderLen);
+    void		ReadBox(BOOL bGivenPos);
+    void		ReadBitBlt();
+    void		ReadChrStr(BOOL bGivenPos, BOOL bMove, BOOL bExtra, USHORT nOrderLen);
+    void		ReadArc(BOOL bGivenPos);
+    void		ReadFullArc(BOOL bGivenPos, USHORT nOrderSize);
+    void		ReadPartialArc(BOOL bGivenPos, USHORT nOrderSize);
+    void		ReadPolygons();
+    void		ReadBezier(BOOL bGivenPos, USHORT nOrderLen);
+    void		ReadFillet(BOOL bGivenPos, USHORT nOrderLen);
+    void		ReadFilletSharp(BOOL bGivenPos, USHORT nOrderLen);
+    void		ReadMarker(BOOL bGivenPos, USHORT nOrderLen);
+    void		ReadOrder(USHORT nOrderID, USHORT nOrderLen);
+    void		ReadDsc(USHORT nDscID, USHORT nDscLen);
+    void		ReadImageData(USHORT nDataID, USHORT nDataLen);
+    void		ReadFont(USHORT nFieldSize);
+    void		ReadField(USHORT nFieldType, USHORT nFieldSize);
 
 public:
 
@@ -695,7 +695,7 @@ void OS2METReader::SetPen( const Color& rColor, USHORT nLineWidth, PenStyle ePen
             eLineStyle = LINE_DASH;
         break;
         case PEN_SOLID:
-        break;  // -Wall not handled...
+        break;	// -Wall not handled...
     }
     aLineInfo.SetStyle( eLineStyle );
 }
@@ -869,9 +869,9 @@ void OS2METReader::ReadRelLine(BOOL bGivenPos, USHORT nOrderLen)
 
 void OS2METReader::ReadBox(BOOL bGivenPos)
 {
-    BYTE        nFlags;
-    Point       P0;
-    long        nHRound,nVRound;
+    BYTE 		nFlags;
+    Point 		P0;
+    long 		nHRound,nVRound;
 
     *pOS2MET >> nFlags;
     pOS2MET->SeekRel(1);
@@ -1008,11 +1008,11 @@ void OS2METReader::ReadChrStr(BOOL bGivenPos, BOOL bMove, BOOL bExtra, USHORT nO
     }
     else
     {
-        Polygon aDummyPoly(4);
+        Polygon	aDummyPoly(4);
 
-        aDummyPoly.SetPoint( Point( aP0.X(), aP0.Y() ), 0);                                 // TOP LEFT
-        aDummyPoly.SetPoint( Point( aP0.X(), aP0.Y() - aSize.Height() ), 1);                // BOTTOM LEFT
-        aDummyPoly.SetPoint( Point( aP0.X() + aSize.Width(), aP0.Y() ), 2);                 // TOP RIGHT
+        aDummyPoly.SetPoint( Point( aP0.X(), aP0.Y() ), 0);									// TOP LEFT
+        aDummyPoly.SetPoint( Point( aP0.X(), aP0.Y() - aSize.Height() ), 1);				// BOTTOM LEFT
+        aDummyPoly.SetPoint( Point( aP0.X() + aSize.Width(), aP0.Y() ), 2);					// TOP RIGHT
         aDummyPoly.SetPoint( Point( aP0.X() + aSize.Width(), aP0.Y() - aSize.Height() ), 3);// BOTTOM RIGHT
         aDummyPoly.Rotate( aP0, (short)aAttr.nChrAng );
         if ( bMove )
@@ -1219,9 +1219,9 @@ void OS2METReader::ReadBezier(BOOL bGivenPos, USHORT nOrderLen)
     if( !( nNumPoints % 4 ) )
     {
         // create bezier polygon
-        const USHORT    nSegPoints = 25;
-        const USHORT    nSegments = aPolygon.GetSize() >> 2;
-        Polygon         aBezPoly( nSegments * nSegPoints );
+        const USHORT	nSegPoints = 25;
+        const USHORT	nSegments = aPolygon.GetSize() >> 2;
+        Polygon			aBezPoly( nSegments * nSegPoints );
 
         USHORT nSeg, nBezPos, nStartPos;
         for( nSeg = 0, nBezPos = 0, nStartPos = 0; nSeg < nSegments; nSeg++, nStartPos += 4 )
@@ -1529,14 +1529,14 @@ void OS2METReader::ReadOrder(USHORT nOrderID, USHORT nOrderLen)
         case GOrdFilPth:
         {
             sal_uInt32 nID;
-            UINT16  nDummy;
+            UINT16	nDummy;
             OSPath* p = pPathList;
 
             *pOS2MET >> nDummy
                      >> nID;
-
-            if ( ! ( nDummy & 0x20 ) )  // #30933# i do not know the exact meaning of this bit,
-            {                           // but if set it seems to be better not to fill this path
+        
+            if ( ! ( nDummy & 0x20 ) )	// #30933# i do not know the exact meaning of this bit,
+            {							// but if set it seems to be better not to fill this path
                 while( p && p->nID != nID )
                     p = p->pSucc;
 
@@ -1582,7 +1582,7 @@ void OS2METReader::ReadOrder(USHORT nOrderID, USHORT nOrderLen)
         case GOrdOutPth:
         {
             sal_uInt32 nID;
-            USHORT  i,nC;
+            USHORT	i,nC;
             OSPath* p=pPathList;
             pOS2MET->SeekRel(2);
             *pOS2MET >> nID;
@@ -2275,7 +2275,7 @@ void OS2METReader::ReadFont(USHORT nFieldSize)
                         pOS2MET->SeekRel(1);
                         pOS2MET->Read( &str, 32 );
                         str[ 32 ] = 0;
-                        String aStr( (const sal_Char*)str, gsl_getSystemTextEncoding() );
+                        String aStr( (const sal_Char*)str, gsl_getSystemTextEncoding() ); 
                         if ( aStr.CompareIgnoreCaseToAscii( "Helv" ) == COMPARE_EQUAL )
                             aStr = String::CreateFromAscii( "Helvetica" );
                         pF->aFont.SetName( aStr );
@@ -2741,9 +2741,9 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
 
 extern "C" BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL )
 {
-    OS2METReader    aOS2METReader;
-    GDIMetaFile     aMTF;
-    BOOL            bRet = FALSE;
+    OS2METReader 	aOS2METReader;
+    GDIMetaFile 	aMTF;
+    BOOL 			bRet = FALSE;
 
     aOS2METReader.ReadOS2MET( rStream, aMTF );
 

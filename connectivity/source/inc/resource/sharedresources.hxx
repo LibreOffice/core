@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -74,7 +74,7 @@ namespace connectivity
                 the ASCII string which is to search in the string. Must not be <NULL/>.
             @param  _rStringToSubstitute
                 the String which should substitute the ASCII pattern.
-
+            
             @return
                 the string from the resource file, with applied string substitution
         */
@@ -98,7 +98,7 @@ namespace connectivity
                 the ASCII string (2) which is to search in the string. Must not be <NULL/>.
             @param  _rStringToSubstitute2
                 the String which should substitute the ASCII pattern (2)
-
+            
             @return
                 the string from the resource file, with applied string substitution
         */
@@ -128,7 +128,7 @@ namespace connectivity
                 the ASCII string (3) which is to search in the string. Must not be <NULL/>.
             @param  _rStringToSubstitute3
                 the String which should substitute the ASCII pattern (3)
-
+            
             @return
                 the string from the resource file, with applied string substitution
         */

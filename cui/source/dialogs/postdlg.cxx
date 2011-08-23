@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svx/svxids.hrc>   // SID_ATTR_...
+#include <svx/svxids.hrc>	// SID_ATTR_...
 #include <svx/dialogs.hrc>  // RID_SVXDLG_POSTIT
 
 #define _SVX_POSTDLG_CXX
@@ -73,22 +73,22 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
 
     aPostItFL       ( this, CUI_RES( FL_POSTIT ) ),
     aLastEditLabelFT( this, CUI_RES( FT_LASTEDITLABEL ) ),
-    aLastEditFT     ( this, CUI_RES( FT_LASTEDIT ) ),
-    aEditFT         ( this, CUI_RES( FT_EDIT ) ),
-    aEditED         ( this, CUI_RES( ED_EDIT ) ),
+    aLastEditFT 	( this, CUI_RES( FT_LASTEDIT ) ),
+    aEditFT 		( this, CUI_RES( FT_EDIT ) ),
+    aEditED 		( this, CUI_RES( ED_EDIT ) ),
     aAuthorFT       ( this, CUI_RES( FT_AUTHOR) ),
     aAuthorBtn      ( this, CUI_RES( BTN_AUTHOR ) ),
     aOKBtn          ( this, CUI_RES( BTN_POST_OK ) ),
-    aCancelBtn      ( this, CUI_RES( BTN_POST_CANCEL ) ),
+    aCancelBtn		( this, CUI_RES( BTN_POST_CANCEL ) ),
     aHelpBtn        ( this, CUI_RES( BTN_POST_HELP ) ),
     aPrevBtn        ( this, CUI_RES( BTN_PREV ) ),
-    aNextBtn        ( this, CUI_RES( BTN_NEXT ) ),
+    aNextBtn		( this, CUI_RES( BTN_NEXT ) ),
 
-    rSet        ( rCoreSet ),
-    pOutSet     ( 0 )
+    rSet		( rCoreSet ),
+    pOutSet 	( 0 )
 
 {
-    if (bRedline)   // HelpIDs fuer Redlining
+    if (bRedline)	// HelpIDs fuer Redlining
     {
         SetHelpId(HID_REDLINING_DLG);
         aEditED.SetHelpId(HID_REDLINING_EDIT);
@@ -106,7 +106,7 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
     aEditED.SetFont( aFont );
 
     BOOL bNew = TRUE;
-    USHORT nWhich            = 0;
+    USHORT nWhich			 = 0;
 
     if ( !bPrevNext )
     {

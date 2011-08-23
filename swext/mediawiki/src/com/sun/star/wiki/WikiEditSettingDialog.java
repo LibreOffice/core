@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,18 +40,18 @@ import javax.net.ssl.SSLException;
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.*;
 
-public class WikiEditSettingDialog extends WikiDialog
+public class WikiEditSettingDialog extends WikiDialog 
 {
-
+    
     private final String sOKMethod = "OK";
 
-    String[] Methods =
+    String[] Methods = 
     {sOKMethod };
     private Hashtable setting;
     private boolean addMode;
     private boolean m_bAllowURLChange = true;
 
-    public WikiEditSettingDialog( XComponentContext xContext, String DialogURL )
+    public WikiEditSettingDialog( XComponentContext xContext, String DialogURL ) 
     {
         super( xContext, DialogURL );
         super.setMethods( Methods );
@@ -60,21 +60,21 @@ public class WikiEditSettingDialog extends WikiDialog
 
         InsertThrobber( 184, 20, 10, 10 );
         InitStrings( xContext );
-        InitSaveCheckbox( xContext, false );
+        InitSaveCheckbox( xContext, false );        
     }
-
-    public WikiEditSettingDialog( XComponentContext xContext, String DialogURL, Hashtable ht, boolean bAllowURLChange )
+    
+    public WikiEditSettingDialog( XComponentContext xContext, String DialogURL, Hashtable ht, boolean bAllowURLChange ) 
     {
         super( xContext, DialogURL );
         super.setMethods( Methods );
         setting = ht;
-
+        
         boolean bInitSaveCheckBox = false;
-
-        try
+        
+        try 
         {
             XPropertySet xUrlField = GetPropSet( "UrlField" );
-
+            
             xUrlField.setPropertyValue( "Text", ht.get( "Url" ) );
 
             GetPropSet( "UsernameField" ).setPropertyValue( "Text", ht.get( "Username" ) );
@@ -88,20 +88,20 @@ public class WikiEditSettingDialog extends WikiDialog
             // the password should be entered by the user or the Cancel should be pressed
             // GetPropSet( "PasswordField" ).setPropertyValue( "Text", ht.get( "Password" ));
         }
-        catch ( Exception ex )
+        catch ( Exception ex ) 
         {
             ex.printStackTrace();
-        }
+        } 
 
-        addMode = false;
+        addMode = false;        
         m_bAllowURLChange = bAllowURLChange;
-
+ 
         InsertThrobber( 184, 20, 10, 10 );
         InitStrings( xContext );
         InitSaveCheckbox( xContext, bInitSaveCheckBox );
     }
 
-    public boolean show( )
+    public boolean show( ) 
     {
         SetThrobberVisible( false );
         EnableControls( true );
@@ -127,7 +127,7 @@ public class WikiEditSettingDialog extends WikiDialog
         {
             e.printStackTrace();
         }
-
+        
         return bResult;
     }
 
@@ -136,7 +136,7 @@ public class WikiEditSettingDialog extends WikiDialog
         if ( !bEnable )
             SetFocusTo( "CancelButton" );
 
-        try
+        try 
         {
             GetPropSet( "UsernameField" ).setPropertyValue( "Enabled", new Boolean( bEnable ) );
             GetPropSet( "PasswordField" ).setPropertyValue( "Enabled", new Boolean( bEnable ) );
@@ -158,10 +158,10 @@ public class WikiEditSettingDialog extends WikiDialog
                 GetPropSet( "SaveBox" ).setPropertyValue( "Enabled", Boolean.FALSE );
             }
         }
-        catch ( Exception ex )
+        catch ( Exception ex ) 
         {
             ex.printStackTrace();
-        }
+        }         
     }
 
     private void InitStrings( XComponentContext xContext )
@@ -194,9 +194,9 @@ public class WikiEditSettingDialog extends WikiDialog
         catch( Exception e )
         {
             e.printStackTrace();
-        }
+        }        
     }
-
+ 
     public void DoLogin( XDialog xDialog )
     {
         String sRedirectURL = "";
@@ -235,12 +235,12 @@ public class WikiEditSettingDialog extends WikiDialog
                         sRedirectURL = aRequest.getResponseHeader( "Location" ).getValue();
 
                     aRequest.releaseConnection();
-
+                    
                     if ( sWebPage != null && sWebPage.length() > 0 )
                     {
                         //the URL is valid
                         String sMainURL = Helper.GetMainURL( sWebPage, sURL );
-
+                        
                         if ( sMainURL.equals( "" ) )
                         {
                             // TODO:
@@ -285,7 +285,7 @@ public class WikiEditSettingDialog extends WikiDialog
                                     Settings.getSettings( m_xContext ).addWikiCon( setting );
                                     Settings.getSettings( m_xContext ).storeConfiguration();
                                 }
-
+                                
                                 m_bAction = true;
                             }
                         }
@@ -341,7 +341,7 @@ public class WikiEditSettingDialog extends WikiDialog
             }
             essl.printStackTrace();
         }
-        catch ( Exception ex )
+        catch ( Exception ex ) 
         {
             if ( Helper.IsConnectionAllowed() )
             {
@@ -353,9 +353,9 @@ public class WikiEditSettingDialog extends WikiDialog
                                   false );
             }
             ex.printStackTrace();
-        }
+        } 
     }
-
+    
     public boolean callHandlerMethod( XDialog xDialog, Object EventObject, String MethodName )
     {
         if ( MethodName.equals( sOKMethod ) )
@@ -369,7 +369,7 @@ public class WikiEditSettingDialog extends WikiDialog
                 final XDialog xDialogForThread = xDialog;
                 final XComponentContext xContext = m_xContext;
                 final WikiEditSettingDialog aThis = this;
-
+                
                 // the thread name is used to allow the error dialogs
                 m_bThreadFinished = false;
                 m_aThread = new Thread( "com.sun.star.thread.WikiEditorSendingThread" )
@@ -387,7 +387,7 @@ public class WikiEditSettingDialog extends WikiDialog
                         aThis.SetThrobberVisible( false );
 
                         ThreadStop( true );
-
+                        
                         if ( m_bAction )
                             MainThreadDialogExecutor.Close( xContext, xDialogForThread );
                     }
@@ -420,7 +420,7 @@ public class WikiEditSettingDialog extends WikiDialog
 
         return false;
     }
-
+    
     public void windowClosed( EventObject e )
     {
         ThreadStop( false );

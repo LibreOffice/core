@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,10 +49,10 @@ static ::osl::Mutex& getHashMapMutex()
 
 struct NameTypeTable
 {
-    const char* pS;
-    MSO_SPT     pE;
+    const char*	pS;
+    MSO_SPT		pE;
 };
-static const NameTypeTable pNameTypeTableArray[] =
+static const NameTypeTable pNameTypeTableArray[] = 
 {
     { "non-primitive", mso_sptMin },
     { "rectangle", mso_sptRectangle },
@@ -259,7 +259,7 @@ static const NameTypeTable pNameTypeTableArray[] =
     { "mso-spt202", mso_sptTextBox }
 };
 
-    // gallery: quadrat
+    // gallery: quadrat		
     // gallery: round-quadrat
     // gallery: circle
     // gallery: circle-pie
@@ -289,7 +289,7 @@ static const NameTypeTable pNameTypeTableArray[] =
 MSO_SPT EnhancedCustomShapeTypeNames::Get( const rtl::OUString& rShapeType )
 {
     if ( !pHashMap )
-    {   // init hash map
+    {	// init hash map
         ::osl::MutexGuard aGuard( getHashMapMutex() );
         if ( !pHashMap )
         {

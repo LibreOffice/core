@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,8 @@ class SwDoc;
 
 class SwDPage : public FmFormPage, public SdrObjUserCall
 {
-    SdrPageGridFrameList*   pGridLst;
-    SwDoc&                  rDoc;
+    SdrPageGridFrameList*	pGridLst;
+    SwDoc& 					rDoc;
 
 public:
     SwDPage(SwDrawDocument& rNewModel, BOOL bMasterPage=FALSE);
@@ -57,7 +57,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
 };
 
-#endif     // _DPAGE_HXX
+#endif	   // _DPAGE_HXX
 
 
 

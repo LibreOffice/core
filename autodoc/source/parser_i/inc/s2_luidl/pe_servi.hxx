@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,33 +62,33 @@ class PE_Service : public UnoIDL_PE,
 {
   public:
                         PE_Service();
-    virtual             ~PE_Service();
+    virtual				~PE_Service();
 
-    virtual void        EstablishContacts(
-                            UnoIDL_PE *         io_pParentPE,
-                            ary::Repository &   io_rRepository,
+    virtual void	 	EstablishContacts(
+                            UnoIDL_PE *			io_pParentPE,
+                            ary::Repository &	io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
-    virtual void        ProcessToken(
-                            const Token &       i_rToken );
+    virtual void	  	ProcessToken(
+                            const Token &		i_rToken );
 
-    virtual void        Process_MetaType(
-                            const TokMetaType & i_rToken );
-    virtual void        Process_Identifier(
+    virtual void		Process_MetaType(
+                            const TokMetaType &	i_rToken );
+    virtual void		Process_Identifier(
                             const TokIdentifier &
                                                 i_rToken );
-    virtual void        Process_Punctuation(
+    virtual void		Process_Punctuation(
                             const TokPunctuation &
                                                 i_rToken );
-    virtual void        Process_Stereotype(
+    virtual void		Process_Stereotype(
                             const TokStereotype &
                                                 i_rToken );
-    virtual void        Process_Needs();
-    virtual void        Process_Observes();
-    virtual void        Process_Default();
+    virtual void		Process_Needs();
+    virtual void		Process_Observes();
+    virtual void		Process_Default();
 
   private:
-    void                On_Default();
+    void				On_Default();
 
     enum E_State
     {
@@ -109,32 +109,32 @@ class PE_Service : public UnoIDL_PE,
         e_STATES_MAX
     };
 
-    virtual void        InitData();
-    virtual void        TransferData();
-    virtual void        ReceiveData();
-    virtual UnoIDL_PE & MyPE();
+    virtual void		InitData();
+    virtual void		TransferData();
+    virtual void		ReceiveData();
+    virtual UnoIDL_PE &	MyPE();
 
-    void                StartProperty();
+    void				StartProperty();
 
 
     // DATA
-    E_State             eState;
+    E_State				eState;
     String              sData_Name;
-    bool                bIsPreDeclaration;
+    bool				bIsPreDeclaration;
     ary::idl::Service * pCurService;
     ary::idl::SglIfcService *
                         pCurSiService;
     ary::idl::Ce_id     nCurService;  // Needed for PE_Attribute.
 
-    Dyn<PE_Property>    pPE_Property;
-    ary::idl::Ce_id     nCurParsed_Property;
+    Dyn<PE_Property>	pPE_Property;
+    ary::idl::Ce_id		nCurParsed_Property;
 
-    Dyn<PE_Type>        pPE_Type;
-    ary::idl::Type_id   nCurParsed_Type;
+    Dyn<PE_Type>		pPE_Type;
+    ary::idl::Type_id	nCurParsed_Type;
 
-    Dyn<PE_Function>    pPE_Constructor;
+    Dyn<PE_Function>	pPE_Constructor;
 
-    bool                bOptionalMember;
+    bool				bOptionalMember;
 };
 
 

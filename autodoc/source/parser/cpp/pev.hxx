@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,25 +68,25 @@ class PeEnvironment : protected TokenProcessing_Types
 {
   public:
     // INQUIRY
-    virtual             ~PeEnvironment() {}
+    virtual				~PeEnvironment() {}
 
     // OPERATIONS
         // Token results
-    void                SetTokenResult(
-                            E_TokenDone         i_eDone,
-                            E_EnvStackAction    i_eWhat2DoWithEnvStack,
-                            ParseEnvironment *  i_pParseEnv2Push = 0 );
+    void				SetTokenResult(
+                            E_TokenDone			i_eDone,
+                            E_EnvStackAction	i_eWhat2DoWithEnvStack,
+                            ParseEnvironment *	i_pParseEnv2Push = 0 );
 
         // Owner stack
     void                OpenNamespace(
                             ary::cpp::Namespace &
                                                 io_rOpenedNamespace );
     void                OpenExternC(
-                            bool                i_bOnlyForOneDeclaration = false );
+                            bool				i_bOnlyForOneDeclaration = false );
     void                OpenClass(
-                            ary::cpp::Class &   io_rOpenedClass );
+                            ary::cpp::Class &	io_rOpenedClass );
     void                OpenEnum(
-                            ary::cpp::Enum &    io_rOpenedEnum );
+                            ary::cpp::Enum &	io_rOpenedEnum );
     void                CloseBlock();           /// Handles a '}' on file scope.
     void                CloseClass();
     void                CloseEnum();
@@ -141,18 +141,18 @@ class PeEnvironment : protected TokenProcessing_Types
 
   private:
     virtual void        do_SetTokenResult(
-                            E_TokenDone         i_eDone,
-                            E_EnvStackAction    i_eWhat2DoWithEnvStack,
-                            ParseEnvironment *  i_pParseEnv2Push ) = 0;
+                            E_TokenDone			i_eDone,
+                            E_EnvStackAction	i_eWhat2DoWithEnvStack,
+                            ParseEnvironment *	i_pParseEnv2Push ) = 0;
     virtual void        do_OpenNamespace(
                             ary::cpp::Namespace &
                                                 io_rOpenedNamespace ) = 0;
     virtual void        do_OpenExternC(
-                            bool                i_bOnlyForOneDeclaration ) = 0;
+                            bool				i_bOnlyForOneDeclaration ) = 0;
     virtual void        do_OpenClass(
-                            ary::cpp::Class &   io_rOpenedClass ) = 0;
+                            ary::cpp::Class &	io_rOpenedClass ) = 0;
     virtual void        do_OpenEnum(
-                            ary::cpp::Enum &    io_rOpenedEnum ) = 0;
+                            ary::cpp::Enum &	io_rOpenedEnum ) = 0;
     virtual void        do_CloseBlock() = 0;
     virtual void        do_CloseClass() = 0;
     virtual void        do_CloseEnum() = 0;
@@ -193,7 +193,7 @@ class PeEnvironment : protected TokenProcessing_Types
                         inq_AryGate() const = 0;
     virtual const ary::cpp::InputContext &
                         inq_Context() const = 0;
-    virtual String      inq_CurFileName() const = 0;
+    virtual String 		inq_CurFileName() const = 0;
     virtual uintt       inq_LineCount() const = 0;
     virtual bool        inq_IsWaitingFor_Recovery() const = 0;
     virtual bool        inq_IsExternC() const = 0;
@@ -204,9 +204,9 @@ class PeEnvironment : protected TokenProcessing_Types
 // IMPLEMENTATION
 
 inline void
-PeEnvironment::SetTokenResult( E_TokenDone          i_eDone,
-                               E_EnvStackAction     i_eWhat2DoWithEnvStack,
-                               ParseEnvironment *   i_pParseEnv2Push )
+PeEnvironment::SetTokenResult( E_TokenDone			i_eDone,
+                               E_EnvStackAction	    i_eWhat2DoWithEnvStack,
+                               ParseEnvironment *	i_pParseEnv2Push )
     { do_SetTokenResult(i_eDone, i_eWhat2DoWithEnvStack,  i_pParseEnv2Push); }
 inline void
 PeEnvironment::OpenNamespace( ary::cpp::Namespace & io_rOpenedNamespace )
@@ -215,7 +215,7 @@ inline void
 PeEnvironment::OpenExternC( bool i_bOnlyForOneDeclaration )
     { do_OpenExternC(i_bOnlyForOneDeclaration); }
 inline void
-PeEnvironment::OpenClass( ary::cpp::Class & io_rOpenedClass )
+PeEnvironment::OpenClass( ary::cpp::Class &	io_rOpenedClass )
     { do_OpenClass(io_rOpenedClass); }
 inline void
 PeEnvironment::OpenEnum( ary::cpp::Enum & io_rOpenedEnum )
@@ -283,7 +283,7 @@ PeEnvironment::AryGate() const
 inline const ary::cpp::InputContext &
 PeEnvironment::Context() const
     { return inq_Context(); }
-inline String
+inline String 
 PeEnvironment::CurFileName() const
     { return inq_CurFileName(); }
 inline uintt

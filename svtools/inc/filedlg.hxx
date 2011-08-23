@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,28 +43,28 @@ class ImpSvFileDlg;
 class SVT_DLLPUBLIC PathDialog : public ModalDialog
 {
 private:
-    friend class FileDialog;    // Imp...
+    friend class FileDialog;	// Imp...
 
-    ImpSvFileDlg*       pImpFileDlg;    // Implementation
-    Link                aOKHdlLink;     // Link zum OK-Handler
+    ImpSvFileDlg*		pImpFileDlg;	// Implementation
+    Link				aOKHdlLink; 	// Link zum OK-Handler
 
 protected:
-    UniString           aDfltExt;       // Default - Extension
+    UniString			aDfltExt;		// Default - Extension
 
 public:
                         PathDialog( Window* pParent, WinBits nWinStyle = 0, BOOL bCreateDir = TRUE );
                         ~PathDialog();
 
-    virtual long        OK();
+    virtual long		OK();
 
-    void                SetPath( const UniString& rNewPath );
-    void                SetPath( const Edit& rEdit );
-    UniString               GetPath() const;
+    void				SetPath( const UniString& rNewPath );
+    void				SetPath( const Edit& rEdit );
+    UniString				GetPath() const;
 
-    void                SetOKHdl( const Link& rLink ) { aOKHdlLink = rLink; }
-    const Link&         GetOKHdl() const { return aOKHdlLink; }
+    void				SetOKHdl( const Link& rLink ) { aOKHdlLink = rLink; }
+    const Link& 		GetOKHdl() const { return aOKHdlLink; }
 
-    virtual short       Execute();
+    virtual short		Execute();
 };
 
 // --------------
@@ -74,36 +74,36 @@ public:
 class SVT_DLLPUBLIC FileDialog : public PathDialog
 {
 private:
-    Link                aFileHdlLink;   // Link zum FileSelect-Handler
-    Link                aFilterHdlLink; // Link zum FilterSelect-Handler
+    Link				aFileHdlLink;	// Link zum FileSelect-Handler
+    Link				aFilterHdlLink; // Link zum FilterSelect-Handler
 
 public:
                         FileDialog( Window* pParent, WinBits nWinStyle );
                         ~FileDialog();
 
-    virtual void        FileSelect();
-    virtual void        FilterSelect();
+    virtual void		FileSelect();
+    virtual void		FilterSelect();
 
-    void                SetDefaultExt( const UniString& rExt ) { aDfltExt = rExt; }
-    const UniString&        GetDefaultExt() const { return aDfltExt; }
-    void                AddFilter( const UniString& rFilter, const UniString& rType );
-    void                RemoveFilter( const UniString& rFilter );
-    void                RemoveAllFilter();
-    void                SetCurFilter( const UniString& rFilter );
-    UniString               GetCurFilter() const;
-    USHORT              GetFilterCount() const;
-    UniString               GetFilterName( USHORT nPos ) const;
-    UniString               GetFilterType( USHORT nPos ) const;
+    void				SetDefaultExt( const UniString& rExt ) { aDfltExt = rExt; }
+    const UniString&		GetDefaultExt() const { return aDfltExt; }
+    void				AddFilter( const UniString& rFilter, const UniString& rType );
+    void				RemoveFilter( const UniString& rFilter );
+    void				RemoveAllFilter();
+    void				SetCurFilter( const UniString& rFilter );
+    UniString				GetCurFilter() const;
+    USHORT				GetFilterCount() const;
+    UniString				GetFilterName( USHORT nPos ) const;
+    UniString				GetFilterType( USHORT nPos ) const;
 
-    void                SetFileSelectHdl( const Link& rLink ) { aFileHdlLink = rLink; }
-    const Link&         GetFileSelectHdl() const { return aFileHdlLink; }
-    void                SetFilterSelectHdl( const Link& rLink ) { aFilterHdlLink = rLink; }
-    const Link&         GetFilterSelectHdl() const { return aFilterHdlLink; }
+    void				SetFileSelectHdl( const Link& rLink ) { aFileHdlLink = rLink; }
+    const Link& 		GetFileSelectHdl() const { return aFileHdlLink; }
+    void				SetFilterSelectHdl( const Link& rLink ) { aFilterHdlLink = rLink; }
+    const Link& 		GetFilterSelectHdl() const { return aFilterHdlLink; }
 
-    void                SetOkButtonText( const UniString& rText );
-    void                SetCancelButtonText( const UniString& rText );
+    void				SetOkButtonText( const UniString& rText );
+    void				SetCancelButtonText( const UniString& rText );
 };
 
-#endif  // _FILEDLG_HXX
+#endif	// _FILEDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

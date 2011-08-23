@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,10 +35,10 @@ public class AccessibleExtendedState extends AccessibleState {
     public static final AccessibleState MANAGES_DESCENDANTS;
     public static final AccessibleState SENSITIVE;
     public static final AccessibleState STALE;
-
+    
     static {
         DEFUNCT = new AccessibleExtendedState("defunct");
-
+        
         // JAVA 1.5: will come with manages_descendants and indeterminate
         INDETERMINATE = new AccessibleExtendedState("indeterminate");
         MANAGES_DESCENDANTS = new AccessibleExtendedState("managesDescendants");
@@ -46,7 +46,7 @@ public class AccessibleExtendedState extends AccessibleState {
         SENSITIVE = new AccessibleExtendedState("sensitive");
         STALE = new AccessibleExtendedState("stale");
     }
-
+    
     protected AccessibleExtendedState(String key) {
         super(key);
     }

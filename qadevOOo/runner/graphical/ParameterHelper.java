@@ -1,8 +1,8 @@
 /*
  * ************************************************************************
- *
+ * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -87,11 +87,11 @@ public class ParameterHelper
     private String m_sInputPath = null;
     private String m_sOutputPath = null;
 //    private String m_sReferencePath = null;
-
+    
     private TestParameters m_aCurrentParams;
 
     // private GlobalLogWriter m_aLog;
-
+    
     // CONSTRUCTOR
     private ParameterHelper(){}
 
@@ -100,10 +100,10 @@ public class ParameterHelper
             m_aCurrentParams = param;
             // m_aLog = log;
             // interpretReferenceType();
-            // interpretPrinterName();
+            // interpretPrinterName();        
         }
 
-
+    
     protected TestParameters getTestParameters()
         {
             return m_aCurrentParams;
@@ -120,7 +120,7 @@ public class ParameterHelper
             String sInputPath = (String)getTestParameters().get( PropertyName.DOC_COMPARATOR_INPUT_PATH );
             if (sInputPath == null || sInputPath.length() == 0)
             {
-                GlobalLogWriter.println("Please set input path (path to documents) " + PropertyName.DOC_COMPARATOR_INPUT_PATH + "=path.");
+                GlobalLogWriter.println("Please set input path (path to documents) " + PropertyName.DOC_COMPARATOR_INPUT_PATH + "=path.");            
             }
             else
             {
@@ -129,7 +129,7 @@ public class ParameterHelper
         }
         return m_sInputPath;
     }
-
+    
     public String getOutputPath()
     {
         if (m_sOutputPath == null)
@@ -137,7 +137,7 @@ public class ParameterHelper
             String sOutputPath = (String)getTestParameters().get( PropertyName.DOC_COMPARATOR_OUTPUT_PATH );
             if (sOutputPath == null || sOutputPath.length() == 0)
             {
-                GlobalLogWriter.println("Please set output path (path where to store document results) " + PropertyName.DOC_COMPARATOR_OUTPUT_PATH + "=path.");
+                GlobalLogWriter.println("Please set output path (path where to store document results) " + PropertyName.DOC_COMPARATOR_OUTPUT_PATH + "=path.");            
             }
             else
             {
@@ -163,7 +163,7 @@ public class ParameterHelper
 //        }
 //        return m_sReferencePath;
 //    }
-
+    
 
     public boolean isIncludeSubDirectories()
         {
@@ -189,7 +189,7 @@ public class ParameterHelper
             if (m_sReferenceType == null)
             {
                 // REFERENCE_TYPE ----------
-
+            
                 String sReferenceType = (String)getTestParameters().get( PropertyName.DOC_COMPARATOR_REFERENCE_TYPE );
                 if (sReferenceType == null || sReferenceType.length() == 0)
                 {
@@ -209,7 +209,7 @@ public class ParameterHelper
             if (m_sPrinterName == null)
             {
                 // PRINTER_NAME ----------
-
+            
                 String sPrinterName = (String)getTestParameters().get( PropertyName.DOC_COMPARATOR_PRINTER_NAME );
                 if (sPrinterName == null || sPrinterName.length() == 0)
                 {
@@ -223,11 +223,11 @@ public class ParameterHelper
             }
             return m_sPrinterName;
         }
-
+        
     PerformanceContainer m_aPerformanceContainer = null;
     /**
      * helper class for performance analyser features
-     * @return
+     * @return 
      */
     public PerformanceContainer getPerformance()
         {
@@ -237,17 +237,17 @@ public class ParameterHelper
             }
             return m_aPerformanceContainer;
         }
-
+    
     /**
      * Helper function to get the buildid of the current used OpenOffice.org
      * out of the AppExecutionCommand the build ID
-     * @return
+     * @return 
      */
     public String getBuildID()
         {
             String sAPP = (String)m_aCurrentParams.get(util.PropertyName.APP_EXECUTION_COMMAND);
             // return getBuildID(sAPP);
-//  TODO: here we need the getBuildID(string) method
+//  TODO: here we need the getBuildID(string) method 
             String sBuildID = BuildID.getBuildID(sAPP);
             return sBuildID;
         }
@@ -260,10 +260,10 @@ public class ParameterHelper
         return m_nResolutionInDPI;
     }
     // get methods
-    public XMultiServiceFactory getMultiServiceFactory()
+    public XMultiServiceFactory getMultiServiceFactory() 
         {
             XMultiServiceFactory xMSF = (XMultiServiceFactory)m_aCurrentParams.getMSF();
-
+            
             // check if MultiServiceFactory is given
             if (getReferenceType().toLowerCase().equals("pdf") ||
                 getReferenceType().toLowerCase().equals("ps") ||
@@ -285,7 +285,7 @@ public class ParameterHelper
     public boolean isHidden()
     {
         // HIDDEN
-
+    
         String sOfficeViewable = (String)m_aCurrentParams.get(PropertyName.OFFICE_VIEWABLE);
         if (sOfficeViewable != null)
         {
@@ -341,7 +341,7 @@ public class ParameterHelper
 //        if (m_sDefaultXMLFormatApplication == null)
 //        {
 //            // DEFAULT_XML_FORMAT_APP ------
-//
+//        
 //            String sDefaultXMLFormatApp = (String)m_aCurrentParams.get( PropertyName.DOC_COMPARATOR_DEFAULT_XML_FORMAT_APP );
 //            if (sDefaultXMLFormatApp == null || sDefaultXMLFormatApp.length() == 0)
 //            {
@@ -355,7 +355,7 @@ public class ParameterHelper
 //        return m_sDefaultXMLFormatApplication;
 //    }
 
-
+    
     // Pages -------------------------------------------------------------------
 
     /**
@@ -394,7 +394,7 @@ public class ParameterHelper
             }
             return true;
         }
-
+ 
     public boolean getOverwrite()
         {
             boolean bOverwrite = m_aCurrentParams.getBool( PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE);
@@ -409,7 +409,7 @@ public class ParameterHelper
             String sPrefix = (String)getTestParameters().get( PropertyName.DOC_COMPARATOR_HTML_OUTPUT_PREFIX );
             if (sPrefix == null || sPrefix.length() == 0)
             {
-                GlobalLogWriter.println("Please set html prefix " + PropertyName.DOC_COMPARATOR_HTML_OUTPUT_PREFIX + "=prefix.");
+                GlobalLogWriter.println("Please set html prefix " + PropertyName.DOC_COMPARATOR_HTML_OUTPUT_PREFIX + "=prefix.");            
             }
             else
             {

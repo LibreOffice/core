@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,7 +76,7 @@ class ContextForAry : public ary::cpp::InputContext,
     // LIFECYCLE
                         ContextForAry(
                             ary::cpp::Gate &  io_rAryGate );
-    virtual             ~ContextForAry();
+    virtual				~ContextForAry();
 
     // OPERATIONS
     void                ResetResult()           { aTokenResult.Reset(); }
@@ -105,18 +105,18 @@ class ContextForAry : public ary::cpp::InputContext,
 
     // Interface PeEnvironment
     virtual void        do_SetTokenResult(
-                            E_TokenDone         i_eDone,
-                            E_EnvStackAction    i_eWhat2DoWithEnvStack,
-                            ParseEnvironment *  i_pParseEnv2Push );
+                            E_TokenDone			i_eDone,
+                            E_EnvStackAction	i_eWhat2DoWithEnvStack,
+                            ParseEnvironment *	i_pParseEnv2Push );
     virtual void        do_OpenNamespace(
                             ary::cpp::Namespace &
                                                 io_rOpenedNamespace );
     virtual void        do_OpenExternC(
-                            bool                i_bOnlyForOneDeclaration );
+                            bool				i_bOnlyForOneDeclaration );
     virtual void        do_OpenClass(
-                            ary::cpp::Class &   io_rOpenedClass );
+                            ary::cpp::Class &	io_rOpenedClass );
     virtual void        do_OpenEnum(
-                            ary::cpp::Enum &    io_rOpenedEnum );
+                            ary::cpp::Enum &	io_rOpenedEnum );
     virtual void        do_CloseBlock();
     virtual void        do_CloseClass();
     virtual void        do_CloseEnum();
@@ -160,7 +160,7 @@ class ContextForAry : public ary::cpp::InputContext,
                         inq_AryGate() const;
     virtual const ary::cpp::InputContext &
                         inq_Context() const;
-    virtual String      inq_CurFileName() const;
+    virtual String		inq_CurFileName() const;
     virtual uintt       inq_LineCount() const;
     virtual bool        inq_IsWaitingFor_Recovery() const;
     virtual bool        inq_IsExternC() const;

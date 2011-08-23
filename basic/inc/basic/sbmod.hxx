@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,14 +51,14 @@ class SbModuleImpl;
 
 class SbModule : public SbxObject
 {
-    friend class    TestToolObj;    // allows module initialisation at runtime
-    friend class    SbiCodeGen;
-    friend class    SbMethod;
-    friend class    SbiRuntime;
-    friend class    StarBASIC;
-    friend class    SbClassModuleObject;
+    friend class	TestToolObj;	// allows module initialisation at runtime
+    friend class	SbiCodeGen;
+    friend class	SbMethod;
+    friend class	SbiRuntime;
+    friend class	StarBASIC;
+    friend class	SbClassModuleObject;
 
-    SbModuleImpl*   mpSbModuleImpl;     // Impl data
+    SbModuleImpl*	mpSbModuleImpl;		// Impl data
     std::vector< String > mModuleVariableNames;
     SbModule();
     SbModule(const SbModule&);
@@ -71,24 +71,24 @@ protected:
     SbiBreakpoints*     pBreaks;       // Breakpoints
     SbClassData*        pClassData;
     BOOL mbVBACompat;
-    INT32 mnType;
+    INT32 mnType; 
     SbxObjectRef pDocObject; // an impl object ( used by Document Modules )
-    bool    bIsProxyModule;
+    bool 	bIsProxyModule;
 
-    static void     implProcessModuleRunInit( ClassModuleRunInitItem& rItem );
-    void            StartDefinitions();
-    SbMethod*       GetMethod( const String&, SbxDataType );
-    SbProperty*     GetProperty( const String&, SbxDataType );
+    static void		implProcessModuleRunInit( ClassModuleRunInitItem& rItem );
+    void			StartDefinitions();
+    SbMethod*		GetMethod( const String&, SbxDataType );
+    SbProperty*		GetProperty( const String&, SbxDataType );
     SbProcedureProperty* GetProcedureProperty( const String&, SbxDataType );
     SbIfaceMapperMethod* GetIfaceMapperMethod( const String&, SbMethod* );
-    void            EndDefinitions( BOOL=FALSE );
-    USHORT          Run( SbMethod* );
-    void            RunInit();
-    void            ClearPrivateVars();
-    void            GlobalRunInit( BOOL bBasicStart );  // for all modules
-    void            GlobalRunDeInit( void );
-    const BYTE*     FindNextStmnt( const BYTE*, USHORT&, USHORT& ) const;
-    const BYTE*     FindNextStmnt( const BYTE*, USHORT&, USHORT&,
+    void			EndDefinitions( BOOL=FALSE );
+    USHORT 			Run( SbMethod* );
+    void			RunInit();
+    void 			ClearPrivateVars();
+    void			GlobalRunInit( BOOL bBasicStart );	// for all modules
+    void			GlobalRunDeInit( void );
+    const BYTE* 	FindNextStmnt( const BYTE*, USHORT&, USHORT& ) const;
+    const BYTE* 	FindNextStmnt( const BYTE*, USHORT&, USHORT&, 
                         BOOL bFollowJumps, const SbiImage* pImg=NULL ) const;
     virtual BOOL LoadData( SvStream&, USHORT );
     virtual BOOL StoreData( SvStream& ) const;
@@ -100,37 +100,37 @@ public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICMOD,2);
     TYPEINFO();
                     SbModule( const String&, BOOL bCompat = FALSE );
-    virtual void    SetParent( SbxObject* );
-    virtual void    Clear();
+    virtual void	SetParent( SbxObject* );
+    virtual void 	Clear();
 
     virtual SbxVariable* Find( const String&, SbxClassType );
 
-    virtual const String&   GetSource() const;
-    const ::rtl::OUString&  GetSource32() const;
-    const String&   GetComment() const            { return aComment; }
-    virtual void    SetSource( const String& r );
-    void            SetSource32( const ::rtl::OUString& r );
-    void            SetComment( const String& r );
+    virtual const String& 	GetSource() const;
+    const ::rtl::OUString& 	GetSource32() const;
+    const String&	GetComment() const            { return aComment; }
+    virtual void	SetSource( const String& r );
+    void	        SetSource32( const ::rtl::OUString& r );
+    void			SetComment( const String& r );
 
-    virtual BOOL    Compile();
-    BOOL            Disassemble( String& rText );
-    virtual BOOL    IsCompiled() const;
+    virtual BOOL	Compile();
+    BOOL 			Disassemble( String& rText );
+    virtual BOOL	IsCompiled() const;
     const SbxObject* FindType( String aTypeName ) const;
 
-    virtual BOOL    IsBreakable( USHORT nLine ) const;
-    virtual USHORT  GetBPCount() const;
-    virtual USHORT  GetBP( USHORT n ) const;
-    virtual BOOL    IsBP( USHORT nLine ) const;
-    virtual BOOL    SetBP( USHORT nLine );
-    virtual BOOL    ClearBP( USHORT nLine );
-    virtual void    ClearAllBP();
+    virtual BOOL	IsBreakable( USHORT nLine ) const;
+    virtual USHORT	GetBPCount() const;
+    virtual USHORT	GetBP( USHORT n ) const;
+    virtual BOOL	IsBP( USHORT nLine ) const;
+    virtual BOOL	SetBP( USHORT nLine );
+    virtual BOOL	ClearBP( USHORT nLine );
+    virtual void	ClearAllBP();
 
     // Lines of Subs
-    virtual SbMethod*   GetFunctionForLine( USHORT );
+    virtual SbMethod*	GetFunctionForLine( USHORT );
 
     // Store only image, no source (needed for new password protection)
-       BOOL StoreBinaryData( SvStream& );
-       BOOL StoreBinaryData( SvStream&, USHORT nVer );
+       BOOL StoreBinaryData( SvStream& );    
+       BOOL StoreBinaryData( SvStream&, USHORT nVer );    
     BOOL LoadBinaryData( SvStream&, USHORT nVer );
     BOOL LoadBinaryData( SvStream& );
     BOOL ExceedsLegacyModuleSize();
@@ -161,8 +161,8 @@ class SbClassModuleObject : public SbModule
 {
     SbClassModuleImpl* mpSbClassModuleImpl;
 
-    SbModule*   mpClassModule;
-    bool        mbInitializeEventDone;
+    SbModule*	mpClassModule;
+    bool		mbInitializeEventDone;
 
 public:
     TYPEINFO();

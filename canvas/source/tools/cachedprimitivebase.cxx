@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -45,9 +45,9 @@ using namespace ::com::sun::star;
 
 namespace canvas
 {
-    CachedPrimitiveBase::CachedPrimitiveBase( const rendering::ViewState&                   rUsedViewState,
-                                              const uno::Reference< rendering::XCanvas >&   rTarget,
-                                              bool                                          bFailForChangedViewTransform ) :
+    CachedPrimitiveBase::CachedPrimitiveBase( const rendering::ViewState&					rUsedViewState,
+                                              const uno::Reference< rendering::XCanvas >&	rTarget,
+                                              bool											bFailForChangedViewTransform ) :
         CachedPrimitiveBase_Base( m_aMutex ),
         maUsedViewState( rUsedViewState ),
         mxTarget( rTarget ),
@@ -72,9 +72,9 @@ namespace canvas
         ::basegfx::B2DHomMatrix aUsedTransformation;
         ::basegfx::B2DHomMatrix aNewTransformation;
 
-        ::basegfx::unotools::homMatrixFromAffineMatrix( aUsedTransformation,
+        ::basegfx::unotools::homMatrixFromAffineMatrix( aUsedTransformation, 
                                                         maUsedViewState.AffineTransform );
-        ::basegfx::unotools::homMatrixFromAffineMatrix( aNewTransformation,
+        ::basegfx::unotools::homMatrixFromAffineMatrix( aNewTransformation, 
                                                         aState.AffineTransform );
 
         const bool bSameViewTransforms( aUsedTransformation == aNewTransformation );
@@ -87,9 +87,9 @@ namespace canvas
             return rendering::RepaintResult::FAILED;
         }
 
-        return doRedraw( aState,
-                         maUsedViewState,
-                         mxTarget,
+        return doRedraw( aState, 
+                         maUsedViewState, 
+                         mxTarget, 
                          bSameViewTransforms );
     }
 
@@ -107,7 +107,7 @@ namespace canvas
     {
         uno::Sequence< ::rtl::OUString > aRet(1);
         aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
-
+        
         return aRet;
     }
 }

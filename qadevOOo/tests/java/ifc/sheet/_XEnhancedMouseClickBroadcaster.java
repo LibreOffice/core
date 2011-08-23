@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,13 +59,13 @@ public class _XEnhancedMouseClickBroadcaster extends MultiMethodTest {
     protected boolean mouseReleased = false;
     protected XEnhancedMouseClickHandler listener = new MyListener();
     private XModel docModel = null;
-
+    
     public void before() {
         docModel = (XModel) UnoRuntime.queryInterface(
                 XModel.class,tEnv.getObjRelation("FirstModel"));
         DesktopTools.bringWindowToFront(docModel);
     }
-
+    
     public void _addEnhancedMouseClickHandler() {
         oObj.addEnhancedMouseClickHandler(listener);
         clickOnSheet();
@@ -92,19 +92,19 @@ public class _XEnhancedMouseClickBroadcaster extends MultiMethodTest {
     protected boolean clickOnSheet() {
         log.println("try to open contex menu...");
         AccessibilityTools at = new AccessibilityTools();
-
+        
         XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)tParam.getMSF(), docModel);
-
+        
         XAccessible xRoot = at.getAccessibleObject(xWindow);
-
+        
         XInterface oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
-
+        
         XAccessibleComponent window = (XAccessibleComponent) UnoRuntime.queryInterface(
                 XAccessibleComponent.class, oObj);
-
+        
         Point point = window.getLocationOnScreen();
         Rectangle rect = window.getBounds();
-
+        
         log.println("klick mouse button...");
         try {
             Robot rob = new Robot();
@@ -122,11 +122,11 @@ public class _XEnhancedMouseClickBroadcaster extends MultiMethodTest {
             rob.mousePress(InputEvent.BUTTON1_MASK);
             System.out.println("Release Button");
             rob.mouseRelease(InputEvent.BUTTON1_MASK);
-            System.out.println("done "+rob.getAutoDelay());
+            System.out.println("done "+rob.getAutoDelay());            
         } catch (java.awt.AWTException e) {
             log.println("couldn't press mouse button");
         }
-
+                
 
         return true;
     }

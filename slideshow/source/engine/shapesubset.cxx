@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@ namespace slideshow
 {
     namespace internal
     {
-        ShapeSubset::ShapeSubset( const AttributableShapeSharedPtr&       rOriginalShape,
+        ShapeSubset::ShapeSubset( const AttributableShapeSharedPtr&	      rOriginalShape,
                                   const DocTreeNode&                      rTreeNode,
                                   const SubsettableShapeManagerSharedPtr& rShapeManager ) :
             mpOriginalShape( rOriginalShape ),
@@ -56,10 +56,10 @@ namespace slideshow
                               "ShapeSubset::ShapeSubset(): Invalid shape manager" );
         }
 
-        ShapeSubset::ShapeSubset( const ShapeSubsetSharedPtr&   rOriginalSubset,
-                                  const DocTreeNode&            rTreeNode ) :
-            mpOriginalShape( rOriginalSubset->mpSubsetShape ?
-                             rOriginalSubset->mpSubsetShape :
+        ShapeSubset::ShapeSubset( const ShapeSubsetSharedPtr&	rOriginalSubset,
+                                  const DocTreeNode&			rTreeNode ) :
+            mpOriginalShape( rOriginalSubset->mpSubsetShape ? 
+                             rOriginalSubset->mpSubsetShape : 
                              rOriginalSubset->mpOriginalShape ),
             mpSubsetShape(),
             maTreeNode( rTreeNode ),
@@ -73,7 +73,7 @@ namespace slideshow
                               "ShapeSubset::ShapeSubset(): Subset is bigger than parent" );
         }
 
-        ShapeSubset::ShapeSubset( const AttributableShapeSharedPtr&       rOriginalShape,
+        ShapeSubset::ShapeSubset( const AttributableShapeSharedPtr&	      rOriginalShape,
                                   const SubsettableShapeManagerSharedPtr& rShapeManager ) :
             mpOriginalShape( rOriginalShape ),
             mpSubsetShape(),
@@ -88,10 +88,10 @@ namespace slideshow
         {
             try
             {
-                // if not done yet: revoke subset from original
+                // if not done yet: revoke subset from original 
                 disableSubsetShape();
             }
-            catch (uno::Exception &)
+            catch (uno::Exception &) 
             {
                 OSL_ENSURE( false, rtl::OUStringToOString(
                                 comphelper::anyToString(
@@ -110,8 +110,8 @@ namespace slideshow
             if( !mpSubsetShape &&
                 !maTreeNode.isEmpty() )
             {
-                mpSubsetShape = mpShapeManager->getSubsetShape(
-                    mpOriginalShape,
+                mpSubsetShape = mpShapeManager->getSubsetShape( 
+                    mpOriginalShape, 
                     maTreeNode );
             }
 
@@ -137,7 +137,7 @@ namespace slideshow
         {
             return maTreeNode;
         }
-
+        
     }
 }
 

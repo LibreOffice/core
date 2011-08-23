@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,24 +64,24 @@ namespace vclcanvas
          */
         void spriteRedraw( OutputDevice&                      rOutDev,
                            const ::canvas::Sprite::Reference& rSprite )
-        {
+        {            
             // downcast to derived vclcanvas::Sprite interface, which
             // provides the actual redraw methods.
             ::boost::polymorphic_downcast< Sprite* >(rSprite.get())->redraw(rOutDev,
                                                                             true);
         }
 
-        double calcNumPixel( const ::canvas::Sprite::Reference& rSprite )
+        double calcNumPixel( const ::canvas::Sprite::Reference&	rSprite )
         {
-            const ::basegfx::B2DSize& rSize(
+            const ::basegfx::B2DSize& rSize( 
                 ::boost::polymorphic_downcast< Sprite* >(rSprite.get())->getSizePixel() );
 
             return rSize.getX() * rSize.getY();
         }
 
-        void repaintBackground( OutputDevice&               rOutDev,
-                                OutputDevice&               rBackBuffer,
-                                const ::basegfx::B2DRange&  rArea )
+        void repaintBackground( OutputDevice& 				rOutDev,
+                                OutputDevice& 				rBackBuffer,
+                                const ::basegfx::B2DRange&	rArea )
         {
             const ::Point& rPos( ::vcl::unotools::pointFromB2DPoint( rArea.getMinimum()) );
             const ::Size& rSize( ::vcl::unotools::sizeFromB2DSize( rArea.getRange()) );
@@ -93,7 +93,7 @@ namespace vclcanvas
                                      OutputDevice&                      rOutDev,
                                      const ::basegfx::B2IRange&         rArea )
         {
-            const Rectangle& rRequestedArea(
+            const Rectangle& rRequestedArea( 
                 ::vcl::unotools::rectangleFromB2IRectangle( rArea ) );
 
             // clip output to actual update region (otherwise a)
@@ -133,8 +133,8 @@ namespace vclcanvas
             adapted size.
          */
         void spriteRedrawStub2( OutputDevice&                       rOutDev,
-                                const ::basegfx::B2DPoint&          rOutPos,
-                                const ::canvas::Sprite::Reference&  rSprite )
+                                const ::basegfx::B2DPoint& 			rOutPos,
+                                const ::canvas::Sprite::Reference&	rSprite )
         {
             if( rSprite.is() )
             {
@@ -166,11 +166,11 @@ namespace vclcanvas
                     rSprite.get() )->redraw( rOutDev,
                                              false );
             }
-        }
+        } 
 
-        void renderInfoText( OutputDevice&          rOutDev,
+        void renderInfoText( OutputDevice& 			rOutDev,
                              const ::rtl::OUString& rStr,
-                             const Point&           rPos )
+                             const Point&		    rPos )
         {
             Font aVCLFont;
             aVCLFont.SetHeight( 20 );
@@ -200,7 +200,7 @@ namespace vclcanvas
 #endif
     }
 
-    void SpriteCanvasHelper::init( const OutDevProviderSharedPtr& rOutDev,
+    void SpriteCanvasHelper::init( const OutDevProviderSharedPtr& rOutDev, 
                                    SpriteCanvas&                  rOwningSpriteCanvas,
                                    ::canvas::SpriteRedrawManager& rManager,
                                    bool                           bProtect,
@@ -221,14 +221,14 @@ namespace vclcanvas
         CanvasHelper::disposing();
     }
 
-    uno::Reference< rendering::XAnimatedSprite > SpriteCanvasHelper::createSpriteFromAnimation(
+    uno::Reference< rendering::XAnimatedSprite > SpriteCanvasHelper::createSpriteFromAnimation( 
         const uno::Reference< rendering::XAnimation >&  )
     {
         return uno::Reference< rendering::XAnimatedSprite >();
     }
 
-    uno::Reference< rendering::XAnimatedSprite > SpriteCanvasHelper::createSpriteFromBitmaps(
-        const uno::Sequence< uno::Reference< rendering::XBitmap > >& ,
+    uno::Reference< rendering::XAnimatedSprite > SpriteCanvasHelper::createSpriteFromBitmaps( 
+        const uno::Sequence< uno::Reference< rendering::XBitmap > >& , 
         sal_Int8                                                      )
     {
         return uno::Reference< rendering::XAnimatedSprite >();
@@ -240,7 +240,7 @@ namespace vclcanvas
             return uno::Reference< rendering::XCustomSprite >(); // we're disposed
 
         return uno::Reference< rendering::XCustomSprite >(
-            new CanvasCustomSprite( spriteSize,
+            new CanvasCustomSprite( spriteSize, 
                                     *mpDevice,
                                     mpOwningSpriteCanvas,
                                     mpOwningSpriteCanvas->getFrontBuffer(),
@@ -253,9 +253,9 @@ namespace vclcanvas
     }
 
     sal_Bool SpriteCanvasHelper::updateScreen( sal_Bool bUpdateAll,
-                                               bool&    io_bSurfaceDirty )
+                                               bool&	io_bSurfaceDirty )
     {
-        if( !mpRedrawManager ||
+        if( !mpRedrawManager || 
             !mpOwningSpriteCanvas ||
             !mpOwningSpriteCanvas->getFrontBuffer() ||
             !mpOwningSpriteCanvas->getBackBuffer() )
@@ -266,15 +266,15 @@ namespace vclcanvas
         // commit to backbuffer
         flush();
 
-        OutputDevice&       rOutDev( mpOwningSpriteCanvas->getFrontBuffer()->getOutDev() );
+        OutputDevice& 		rOutDev( mpOwningSpriteCanvas->getFrontBuffer()->getOutDev() );
         BackBufferSharedPtr pBackBuffer( mpOwningSpriteCanvas->getBackBuffer() );
-        OutputDevice&       rBackOutDev( pBackBuffer->getOutDev() );
+        OutputDevice& 		rBackOutDev( pBackBuffer->getOutDev() );
 
         // actual OutputDevice is a shared resource - restore its
         // state when done.
         tools::OutDevStateKeeper aStateKeeper( rOutDev );
 
-        const Size  aOutDevSize( rBackOutDev.GetOutputSizePixel() );
+        const Size 	aOutDevSize( rBackOutDev.GetOutputSizePixel() );
         const Point aEmptyPoint(0,0);
 
         Window* pTargetWindow = NULL;
@@ -320,13 +320,13 @@ namespace vclcanvas
 
             maVDev->SetOutputSizePixel( aOutDevSize );
             maVDev->EnableMapMode( FALSE );
-            maVDev->DrawOutDev( aEmptyPoint, aOutDevSize,
-                                aEmptyPoint, aOutDevSize,
+            maVDev->DrawOutDev( aEmptyPoint, aOutDevSize, 
+                                aEmptyPoint, aOutDevSize, 
                                 rBackOutDev );
 
             // repaint all active sprites on top of background into
             // VDev.
-            mpRedrawManager->forEachSprite(
+            mpRedrawManager->forEachSprite( 
                 ::boost::bind(
                     &spriteRedraw,
                     ::boost::ref( maVDev.get() ),
@@ -335,9 +335,9 @@ namespace vclcanvas
             // flush to screen
             rOutDev.EnableMapMode( FALSE );
             rOutDev.SetClipRegion();
-            rOutDev.DrawOutDev( aEmptyPoint, aOutDevSize,
-                                aEmptyPoint, aOutDevSize,
-                                *maVDev );
+            rOutDev.DrawOutDev( aEmptyPoint, aOutDevSize, 
+                                aEmptyPoint, aOutDevSize, 
+                                *maVDev );        
         }
 
         // change record vector must be cleared, for the next turn of
@@ -355,9 +355,9 @@ namespace vclcanvas
 
 #if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
         static ::canvas::tools::ElapsedTime aElapsedTime;
-
+        
         // log time immediately after surface flip
-        OSL_TRACE( "SpriteCanvasHelper::updateScreen(): flip done at %f",
+        OSL_TRACE( "SpriteCanvasHelper::updateScreen(): flip done at %f", 
                    aElapsedTime.getElapsedTime() );
 #endif
 
@@ -381,15 +381,15 @@ namespace vclcanvas
                          mpOwningSpriteCanvas->getFrontBuffer(),
                          "SpriteCanvasHelper::backgroundPaint(): NULL device pointer " );
 
-        OutputDevice&       rOutDev( mpOwningSpriteCanvas->getFrontBuffer()->getOutDev() );
+        OutputDevice& 		rOutDev( mpOwningSpriteCanvas->getFrontBuffer()->getOutDev() );
         BackBufferSharedPtr pBackBuffer( mpOwningSpriteCanvas->getBackBuffer() );
-        OutputDevice&       rBackOutDev( pBackBuffer->getOutDev() );
+        OutputDevice& 		rBackOutDev( pBackBuffer->getOutDev() );
 
         repaintBackground( rOutDev, rBackOutDev, rUpdateRect );
     }
 
-    void SpriteCanvasHelper::scrollUpdate( const ::basegfx::B2DRange&                       rMoveStart,
-                                           const ::basegfx::B2DRange&                       rMoveEnd,
+    void SpriteCanvasHelper::scrollUpdate( const ::basegfx::B2DRange& 						rMoveStart, 
+                                           const ::basegfx::B2DRange& 						rMoveEnd,
                                            const ::canvas::SpriteRedrawManager::UpdateArea& rUpdateArea )
     {
         ENSURE_OR_THROW( mpOwningSpriteCanvas &&
@@ -397,9 +397,9 @@ namespace vclcanvas
                          mpOwningSpriteCanvas->getFrontBuffer(),
                          "SpriteCanvasHelper::scrollUpdate(): NULL device pointer " );
 
-        OutputDevice&       rOutDev( mpOwningSpriteCanvas->getFrontBuffer()->getOutDev() );
+        OutputDevice& 		rOutDev( mpOwningSpriteCanvas->getFrontBuffer()->getOutDev() );
         BackBufferSharedPtr pBackBuffer( mpOwningSpriteCanvas->getBackBuffer() );
-        OutputDevice&       rBackOutDev( pBackBuffer->getOutDev() );
+        OutputDevice& 		rBackOutDev( pBackBuffer->getOutDev() );
 
         const Size&                rTargetSizePixel( rOutDev.GetOutputSizePixel() );
         const ::basegfx::B2IRange  aOutputBounds( 0,0,
@@ -411,7 +411,7 @@ namespace vclcanvas
         // the destination area: otherwise, the next scroll update
         // would copy pixel that are not supposed to be part of
         // the sprite.
-        ::basegfx::B2IRange aSourceRect(
+        ::basegfx::B2IRange aSourceRect( 
             ::canvas::tools::spritePixelAreaFromB2DRange( rMoveStart ) );
         const ::basegfx::B2IRange& rDestRect(
             ::canvas::tools::spritePixelAreaFromB2DRange( rMoveEnd ) );
@@ -440,7 +440,7 @@ namespace vclcanvas
             // repaint all affected sprites directly to output device
             ::std::for_each( rUpdateArea.maComponentList.begin(),
                              rUpdateArea.maComponentList.end(),
-                             ::boost::bind(
+                             ::boost::bind( 
                                  &spriteRedrawStub3,
                                  ::boost::ref( rOutDev ),
                                  _1 ) );
@@ -454,11 +454,11 @@ namespace vclcanvas
                               ::Size( static_cast<sal_Int32>(aSourceRect.getRange().getX()),
                                       static_cast<sal_Int32>(aSourceRect.getRange().getY()) ) );
 
-            const ::canvas::SpriteRedrawManager::SpriteConnectedRanges::ComponentListType::const_iterator
+            const ::canvas::SpriteRedrawManager::SpriteConnectedRanges::ComponentListType::const_iterator 
                 aFirst( rUpdateArea.maComponentList.begin() );
-            ::canvas::SpriteRedrawManager::SpriteConnectedRanges::ComponentListType::const_iterator
+            ::canvas::SpriteRedrawManager::SpriteConnectedRanges::ComponentListType::const_iterator 
                   aSecond( aFirst ); ++aSecond;
-
+        
             ENSURE_OR_THROW( aFirst->second.getSprite().is(),
                               "VCLCanvas::scrollUpdate(): no sprite" );
 
@@ -489,7 +489,7 @@ namespace vclcanvas
                                         ::boost::ref(rBackOutDev),
                                         _1 ) );
     }
-
+    
     void SpriteCanvasHelper::opaqueUpdate( const ::basegfx::B2DRange&                          rTotalArea,
                                            const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites )
     {
@@ -512,12 +512,12 @@ namespace vclcanvas
         // repaint all affected sprites directly to output device
         ::std::for_each( rSortedUpdateSprites.begin(),
                          rSortedUpdateSprites.end(),
-                         ::boost::bind(
+                         ::boost::bind( 
                              &spriteRedrawStub,
                              ::boost::ref( rOutDev ),
                              _1 ) );
     }
-
+    
     void SpriteCanvasHelper::genericUpdate( const ::basegfx::B2DRange&                          rRequestedArea,
                                             const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites )
     {
@@ -526,9 +526,9 @@ namespace vclcanvas
                          mpOwningSpriteCanvas->getFrontBuffer(),
                          "SpriteCanvasHelper::genericUpdate(): NULL device pointer " );
 
-        OutputDevice&       rOutDev( mpOwningSpriteCanvas->getFrontBuffer()->getOutDev() );
+        OutputDevice& 		rOutDev( mpOwningSpriteCanvas->getFrontBuffer()->getOutDev() );
         BackBufferSharedPtr pBackBuffer( mpOwningSpriteCanvas->getBackBuffer() );
-        OutputDevice&       rBackOutDev( pBackBuffer->getOutDev() );
+        OutputDevice& 		rBackOutDev( pBackBuffer->getOutDev() );
 
         // limit size of update VDev to target outdev's size
         const Size& rTargetSizePixel( rOutDev.GetOutputSizePixel() );
@@ -537,7 +537,7 @@ namespace vclcanvas
         // a fraction of a sprite pixel...  Clip position at origin,
         // otherwise, truncation of size below might leave visible
         // areas uncovered by VDev.
-        const ::Point aOutputPosition(
+        const ::Point aOutputPosition( 
             ::std::max( sal_Int32( 0 ),
                         static_cast< sal_Int32 >(rRequestedArea.getMinX()) ),
             ::std::max( sal_Int32( 0 ),
@@ -546,7 +546,7 @@ namespace vclcanvas
         // fraction of a sprite pixel... Limit coverage of VDev to
         // output device's area (i.e. not only to total size, but to
         // cover _only_ the visible parts).
-        const ::Size aOutputSize(
+        const ::Size aOutputSize( 
             ::std::max( sal_Int32( 0 ),
                         ::std::min( static_cast< sal_Int32 >(rTargetSizePixel.Width() - aOutputPosition.X()),
                                     ::canvas::tools::roundUp( rRequestedArea.getMaxX() - aOutputPosition.X() ))),
@@ -568,7 +568,7 @@ namespace vclcanvas
         // repaint.
         if( aCurrOutputSize.Width() < aOutputSize.Width() ||
             aCurrOutputSize.Height() < aOutputSize.Height() )
-        {
+        {           
             // TODO(P1): Come up with a clever tactic to reduce maVDev
             // from time to time. Reduction with threshold (say, if
             // maVDev is more than twice too large) is not wise, as
@@ -580,10 +580,10 @@ namespace vclcanvas
         // paint background
         maVDev->EnableMapMode( FALSE );
         maVDev->SetClipRegion();
-        maVDev->DrawOutDev( aEmptyPoint, aOutputSize,
-                            aOutputPosition, aOutputSize,
+        maVDev->DrawOutDev( aEmptyPoint, aOutputSize, 
+                            aOutputPosition, aOutputSize, 
                             rBackOutDev );
-
+        
         // repaint all affected sprites on top of background into
         // VDev.
         ::std::for_each( rSortedUpdateSprites.begin(),
@@ -596,16 +596,16 @@ namespace vclcanvas
 
         // flush to screen
         rOutDev.EnableMapMode( FALSE );
-        rOutDev.DrawOutDev( aOutputPosition, aOutputSize,
-                            aEmptyPoint, aOutputSize,
-                            *maVDev );
+        rOutDev.DrawOutDev( aOutputPosition, aOutputSize, 
+                            aEmptyPoint, aOutputSize, 
+                            *maVDev );        
     }
-
+    
     void SpriteCanvasHelper::renderFrameCounter( OutputDevice& rOutDev )
     {
         const double denominator( maLastUpdate.getElapsedTime() );
         maLastUpdate.reset();
-
+                        
         ::rtl::OUString text( ::rtl::math::doubleToUString( denominator == 0.0 ? 100.0 : 1.0/denominator,
                                                             rtl_math_StringFormat_F,
                                                             2,'.',NULL,' ') );
@@ -617,7 +617,7 @@ namespace vclcanvas
         text += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM (" fps"));
 
         renderInfoText( rOutDev,
-                        text,
+                        text, 
                         Point(0, 0) );
     }
 
@@ -656,19 +656,19 @@ namespace vclcanvas
             sal_Int32 nCount(0);
 
             mpRedrawManager->forEachSprite( makeAdder(nCount,sal_Int32(1)) );
-            ::rtl::OUString text(
-                ::rtl::OUString::valueOf(
+            ::rtl::OUString text( 
+                ::rtl::OUString::valueOf( 
                     // disambiguate overload...
                     static_cast<sal_Int64>(nCount) ) );
 
             // pad with leading space
             while( text.getLength() < 3 )
                 text = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM (" ")) + text;
-
+            
             text = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("Sprites: ")) + text;
-
+            
             renderInfoText( rOutDev,
-                            text,
+                            text, 
                             Point(0, 30) );
         }
     }
@@ -688,31 +688,31 @@ namespace vclcanvas
                                                 ::boost::bind(
                                                     &calcNumPixel,
                                                     _1 ) ) );
-
+            
             static const int NUM_VIRDEV(2);
             static const int BYTES_PER_PIXEL(3);
-
+            
             const Size& rVDevSize( maVDev->GetOutputSizePixel() );
             const Size& rBackBufferSize( pBackBuffer->getOutDev().GetOutputSizePixel() );
-
+            
             const double nMemUsage( nPixel * NUM_VIRDEV * BYTES_PER_PIXEL +
                                     rVDevSize.Width()*rVDevSize.Height() * BYTES_PER_PIXEL +
                                     rBackBufferSize.Width()*rBackBufferSize.Height() * BYTES_PER_PIXEL );
-
+            
             ::rtl::OUString text( ::rtl::math::doubleToUString( nMemUsage / 1048576.0,
                                                                 rtl_math_StringFormat_F,
                                                                 2,'.',NULL,' ') );
-
+            
             // pad with leading space
             while( text.getLength() < 4 )
                 text = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM (" ")) + text;
-
-            text = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("Mem: ")) +
-                text +
+            
+            text = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("Mem: ")) + 
+                text + 
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("MB"));
-
+            
             renderInfoText( rOutDev,
-                            text,
+                            text, 
                             Point(0, 60) );
         }
     }

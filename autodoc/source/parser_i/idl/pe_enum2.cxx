@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,11 +51,11 @@ namespace uidl
 #ifdef DF
 #undef DF
 #endif
-#define DF  &PE_Enum::On_Default
+#define DF 	&PE_Enum::On_Default
 
 PE_Enum::F_TOK
 PE_Enum::aDispatcher[PE_Enum::e_STATES_MAX][PE_Enum::tt_MAX] =
-        {   {  DF, DF },  // e_none
+        { 	{  DF, DF },  // e_none
             {  &PE_Enum::On_expect_name_Identifier,
                    DF },  // expect_name
             {  DF, &PE_Enum::On_expect_curl_bracket_open_Punctuation },  // expect_curl_bracket_open
@@ -67,15 +67,15 @@ PE_Enum::aDispatcher[PE_Enum::e_STATES_MAX][PE_Enum::tt_MAX] =
 
 
 inline void
-PE_Enum::CallHandler( const char *      i_sTokenText,
-                          E_TokenType       i_eTokenType )
+PE_Enum::CallHandler( const char *		i_sTokenText,
+                          E_TokenType		i_eTokenType )
     { (this->*aDispatcher[eState][i_eTokenType])(i_sTokenText); }
 
 
 
 
 PE_Enum::PE_Enum()
-    :   eState(e_none),
+    :	eState(e_none),
         sData_Name(),
         nDataId(0),
         pPE_Value(0),
@@ -86,9 +86,9 @@ PE_Enum::PE_Enum()
 }
 
 void
-PE_Enum::EstablishContacts( UnoIDL_PE *                 io_pParentPE,
-                            ary::Repository &       io_rRepository,
-                            TokenProcessing_Result &    o_rResult )
+PE_Enum::EstablishContacts( UnoIDL_PE *					io_pParentPE,
+                            ary::Repository &		io_rRepository,
+                            TokenProcessing_Result & 	o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
     pPE_Value->EstablishContacts(this,io_rRepository,o_rResult);
@@ -227,11 +227,11 @@ PE_Enum::ReceiveData()
 
                     CreateSingleValue();
                     EmptySingleValueData();
-        }           break;
+        }			break;
         default:
                     SetResult(not_done, pop_failure);
                     eState = e_none;
-    }   // end switch
+    }	// end switch
 }
 
 void

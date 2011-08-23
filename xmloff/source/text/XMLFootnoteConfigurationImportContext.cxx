@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,10 +96,10 @@ XMLFootnoteConfigHelper::XMLFootnoteConfigHelper(
     const OUString& rLName,
     XMLFootnoteConfigurationImportContext& rConfigImport,
     sal_Bool bBegin)
-:   SvXMLImportContext(rImport, nPrfx, rLName)
-,   sBuffer()
-,   rConfig(rConfigImport)
-,   bIsBegin(bBegin)
+:	SvXMLImportContext(rImport, nPrfx, rLName)
+,	sBuffer()
+,	rConfig(rConfigImport)
+,	bIsBegin(bBegin)
 {
 }
 
@@ -113,7 +113,7 @@ void XMLFootnoteConfigHelper::EndElement()
     {
         rConfig.SetEndNotice(sBuffer.makeStringAndClear());
     }
-//  rConfig = NULL; // import contexts are ref-counted
+//	rConfig = NULL; // import contexts are ref-counted
 }
 
 void XMLFootnoteConfigHelper::Characters( const OUString& rChars )
@@ -134,26 +134,26 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList)
-:   SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XML_STYLE_FAMILY_TEXT_FOOTNOTECONFIG)
-,   sPropertyAnchorCharStyleName(RTL_CONSTASCII_USTRINGPARAM("AnchorCharStyleName"))
-,   sPropertyCharStyleName(RTL_CONSTASCII_USTRINGPARAM("CharStyleName"))
-,   sPropertyNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType"))
-,   sPropertyPageStyleName(RTL_CONSTASCII_USTRINGPARAM("PageStyleName"))
-,   sPropertyParagraphStyleName(RTL_CONSTASCII_USTRINGPARAM("ParaStyleName"))
-,   sPropertyPrefix(RTL_CONSTASCII_USTRINGPARAM("Prefix"))
-,   sPropertyStartAt(RTL_CONSTASCII_USTRINGPARAM("StartAt"))
-,   sPropertySuffix(RTL_CONSTASCII_USTRINGPARAM("Suffix"))
-,   sPropertyPositionEndOfDoc(RTL_CONSTASCII_USTRINGPARAM("PositionEndOfDoc"))
-,   sPropertyFootnoteCounting(RTL_CONSTASCII_USTRINGPARAM("FootnoteCounting"))
-,   sPropertyEndNotice(RTL_CONSTASCII_USTRINGPARAM("EndNotice"))
-,   sPropertyBeginNotice(RTL_CONSTASCII_USTRINGPARAM("BeginNotice"))
-,   sNumFormat(RTL_CONSTASCII_USTRINGPARAM("1"))
-,   sNumSync(RTL_CONSTASCII_USTRINGPARAM("false"))
-,   pAttrTokenMap(NULL)
-,   nOffset(0)
-,   nNumbering(FootnoteNumbering::PER_PAGE)
-,   bPosition(sal_False)
-,   bIsEndnote(sal_False)
+:	SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XML_STYLE_FAMILY_TEXT_FOOTNOTECONFIG)
+,	sPropertyAnchorCharStyleName(RTL_CONSTASCII_USTRINGPARAM("AnchorCharStyleName"))
+,	sPropertyCharStyleName(RTL_CONSTASCII_USTRINGPARAM("CharStyleName"))
+,	sPropertyNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType"))
+,	sPropertyPageStyleName(RTL_CONSTASCII_USTRINGPARAM("PageStyleName"))
+,	sPropertyParagraphStyleName(RTL_CONSTASCII_USTRINGPARAM("ParaStyleName"))
+,	sPropertyPrefix(RTL_CONSTASCII_USTRINGPARAM("Prefix"))
+,	sPropertyStartAt(RTL_CONSTASCII_USTRINGPARAM("StartAt"))
+,	sPropertySuffix(RTL_CONSTASCII_USTRINGPARAM("Suffix"))
+,	sPropertyPositionEndOfDoc(RTL_CONSTASCII_USTRINGPARAM("PositionEndOfDoc"))
+,	sPropertyFootnoteCounting(RTL_CONSTASCII_USTRINGPARAM("FootnoteCounting"))
+,	sPropertyEndNotice(RTL_CONSTASCII_USTRINGPARAM("EndNotice"))
+,	sPropertyBeginNotice(RTL_CONSTASCII_USTRINGPARAM("BeginNotice"))
+,	sNumFormat(RTL_CONSTASCII_USTRINGPARAM("1"))
+,	sNumSync(RTL_CONSTASCII_USTRINGPARAM("false"))
+,	pAttrTokenMap(NULL)
+,	nOffset(0)
+,	nNumbering(FootnoteNumbering::PER_PAGE)
+,	bPosition(sal_False)
+,	bIsEndnote(sal_False)
 {
     sal_Int16 nLength = xAttrList->getLength();
     for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
@@ -230,10 +230,10 @@ const SvXMLTokenMap&
 
 static SvXMLEnumMapEntry __READONLY_DATA aFootnoteNumberingMap[] =
 {
-    { XML_PAGE,             FootnoteNumbering::PER_PAGE },
-    { XML_CHAPTER,          FootnoteNumbering::PER_CHAPTER },
-    { XML_DOCUMENT,         FootnoteNumbering::PER_DOCUMENT },
-    { XML_TOKEN_INVALID,    0 },
+    { XML_PAGE,		        FootnoteNumbering::PER_PAGE },
+    { XML_CHAPTER,		    FootnoteNumbering::PER_CHAPTER },
+    { XML_DOCUMENT,	        FootnoteNumbering::PER_DOCUMENT },
+    { XML_TOKEN_INVALID, 	0 },
 };
 
 void XMLFootnoteConfigurationImportContext::StartElement(
@@ -417,10 +417,10 @@ void XMLFootnoteConfigurationImportContext::ProcessSettings(
     GetImport().GetMM100UnitConverter().convertNumFormat( nNumType, sNumFormat,
                                                      sNumSync );
     // #i61399: Corrupt file? It contains "Bullet" as numbering style for footnotes.
-    // Okay, even it seems to be corrupt, we will oversee this and set the style to ARABIC
+    // Okay, even it seems to be corrupt, we will oversee this and set the style to ARABIC 
     if( NumberingType::CHAR_SPECIAL == nNumType )
         nNumType = NumberingType::ARABIC;
-
+    
     aAny <<=  nNumType;
     rConfig->setPropertyValue(sPropertyNumberingType, aAny);
 

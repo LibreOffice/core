@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ using namespace svt;
 
 const sal_Unicode cNonBreakingSpace = 0xA0;
 
-namespace
+namespace 
 {
     struct ImplEnglishColors
     {
@@ -82,20 +82,20 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
     pFormatter = pFormatterP;
     bConvertMode = FALSE;
     //! All keywords MUST be UPPERCASE!
-    sKeyword[NF_KEY_E].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "E" ) );        // Exponent
-    sKeyword[NF_KEY_AMPM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(  "AM/PM" ) );    // AM/PM
-    sKeyword[NF_KEY_AP].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "A/P" ) );      // AM/PM short
-    sKeyword[NF_KEY_MI].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "M" ) );        // Minute
-    sKeyword[NF_KEY_MMI].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "MM" ) );       // Minute 02
-    sKeyword[NF_KEY_S].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "S" ) );        // Second
-    sKeyword[NF_KEY_SS].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "SS" ) );       // Second 02
-    sKeyword[NF_KEY_Q].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "Q" ) );        // Quarter short 'Q'
-    sKeyword[NF_KEY_QQ].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "QQ" ) );       // Quarter long
-    sKeyword[NF_KEY_NN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "NN" ) );       // Day of week short
-    sKeyword[NF_KEY_NNN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "NNN" ) );      // Day of week long
-    sKeyword[NF_KEY_NNNN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(  "NNNN" ) );     // Day of week long incl. separator
-    sKeyword[NF_KEY_WW].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "WW" ) );       // Week of year
-    sKeyword[NF_KEY_CCC].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "CCC" ) );      // Currency abbreviation
+    sKeyword[NF_KEY_E].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"E" ) );		// Exponent
+    sKeyword[NF_KEY_AMPM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"AM/PM" ) );	// AM/PM
+    sKeyword[NF_KEY_AP].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"A/P" ) );		// AM/PM short
+    sKeyword[NF_KEY_MI].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"M" ) );		// Minute
+    sKeyword[NF_KEY_MMI].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"MM" ) );		// Minute 02
+    sKeyword[NF_KEY_S].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"S" ) );		// Second
+    sKeyword[NF_KEY_SS].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"SS" ) );		// Second 02
+    sKeyword[NF_KEY_Q].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"Q" ) );		// Quarter short 'Q'
+    sKeyword[NF_KEY_QQ].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"QQ" ) );		// Quarter long
+    sKeyword[NF_KEY_NN].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"NN" ) );		// Day of week short
+    sKeyword[NF_KEY_NNN].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"NNN" ) );		// Day of week long
+    sKeyword[NF_KEY_NNNN].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"NNNN" ) );		// Day of week long incl. separator
+    sKeyword[NF_KEY_WW].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"WW" ) );		// Week of year
+    sKeyword[NF_KEY_CCC].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"CCC" ) );		// Currency abbreviation
     bKeywordsNeedInit = TRUE;   // locale dependent keywords
     bCompatCurNeedInit = TRUE;  // locale dependent compatibility currency strings
 
@@ -246,15 +246,15 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     sKeyword[NF_KEY_GENERAL] = pCharClass->upper( sNameStandardFormat );
 
     // preset new calendar keywords
-    sKeyword[NF_KEY_AAA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "AAA" ) );
-    sKeyword[NF_KEY_AAAA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(  "AAAA" ) );
-    sKeyword[NF_KEY_EC].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "E" ) );
-    sKeyword[NF_KEY_EEC].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "EE" ) );
-    sKeyword[NF_KEY_G].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "G" ) );
-    sKeyword[NF_KEY_GG].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "GG" ) );
-    sKeyword[NF_KEY_GGG].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "GGG" ) );
-    sKeyword[NF_KEY_R].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "R" ) );
-    sKeyword[NF_KEY_RR].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "RR" ) );
+    sKeyword[NF_KEY_AAA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(	"AAA" ) );
+    sKeyword[NF_KEY_AAAA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(	"AAAA" ) );
+    sKeyword[NF_KEY_EC].AssignAscii( RTL_CONSTASCII_STRINGPARAM(	"E" ) );
+    sKeyword[NF_KEY_EEC].AssignAscii( RTL_CONSTASCII_STRINGPARAM(	"EE" ) );
+    sKeyword[NF_KEY_G].AssignAscii( RTL_CONSTASCII_STRINGPARAM(		"G" ) );
+    sKeyword[NF_KEY_GG].AssignAscii( RTL_CONSTASCII_STRINGPARAM(	"GG" ) );
+    sKeyword[NF_KEY_GGG].AssignAscii( RTL_CONSTASCII_STRINGPARAM(	"GGG" ) );
+    sKeyword[NF_KEY_R].AssignAscii( RTL_CONSTASCII_STRINGPARAM(		"R" ) );
+    sKeyword[NF_KEY_RR].AssignAscii( RTL_CONSTASCII_STRINGPARAM(	"RR" ) );
 
     // Thai T NatNum special. Other locale's small letter 't' results in upper
     // case comparison not matching but length does in conversion mode. Ugly.
@@ -272,31 +272,31 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         case LANGUAGE_GERMAN_LIECHTENSTEIN:
         {
             //! all capital letters
-            sKeyword[NF_KEY_M].AssignAscii( RTL_CONSTASCII_STRINGPARAM(         "M" ) );            // month 1
-            sKeyword[NF_KEY_MM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(        "MM" ) );           // month 01
-            sKeyword[NF_KEY_MMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(       "MMM" ) );      // month Jan
-            sKeyword[NF_KEY_MMMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "MMMM" ) ); // month Januar
-            sKeyword[NF_KEY_MMMMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "MMMMM" ) );// month J
-            sKeyword[NF_KEY_H].AssignAscii( RTL_CONSTASCII_STRINGPARAM(         "H" ) );            // hour 2
-            sKeyword[NF_KEY_HH].AssignAscii( RTL_CONSTASCII_STRINGPARAM(        "HH" ) );           // hour 02
-            sKeyword[NF_KEY_D].AssignAscii( RTL_CONSTASCII_STRINGPARAM(         "T" ) );
-            sKeyword[NF_KEY_DD].AssignAscii( RTL_CONSTASCII_STRINGPARAM(        "TT" ) );
-            sKeyword[NF_KEY_DDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM(       "TTT" ) );
-            sKeyword[NF_KEY_DDDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "TTTT" ) );
-            sKeyword[NF_KEY_YY].AssignAscii( RTL_CONSTASCII_STRINGPARAM(        "JJ" ) );
-            sKeyword[NF_KEY_YYYY].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "JJJJ" ) );
-            sKeyword[NF_KEY_BOOLEAN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "LOGISCH" ) );
-            sKeyword[NF_KEY_COLOR].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "FARBE" ) );
-            sKeyword[NF_KEY_BLACK].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "SCHWARZ" ) );
-            sKeyword[NF_KEY_BLUE].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "BLAU" ) );
+            sKeyword[NF_KEY_M].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 		"M" ) ); 			// month 1
+            sKeyword[NF_KEY_MM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 		"MM" ) );			// month 01
+            sKeyword[NF_KEY_MMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 		"MMM" ) );		// month Jan
+            sKeyword[NF_KEY_MMMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 		"MMMM" ) );	// month Januar
+            sKeyword[NF_KEY_MMMMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"MMMMM" ) );// month J
+            sKeyword[NF_KEY_H].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 		"H" ) ); 			// hour 2
+            sKeyword[NF_KEY_HH].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 		"HH" ) );			// hour 02
+            sKeyword[NF_KEY_D].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 		"T" ) );
+            sKeyword[NF_KEY_DD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 		"TT" ) );
+            sKeyword[NF_KEY_DDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 		"TTT" ) );
+            sKeyword[NF_KEY_DDDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 		"TTTT" ) );
+            sKeyword[NF_KEY_YY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 		"JJ" ) );
+            sKeyword[NF_KEY_YYYY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 		"JJJJ" ) );
+            sKeyword[NF_KEY_BOOLEAN].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"LOGISCH" ) );
+            sKeyword[NF_KEY_COLOR].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"FARBE" ) );
+            sKeyword[NF_KEY_BLACK].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"SCHWARZ" ) );
+            sKeyword[NF_KEY_BLUE].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 		"BLAU" ) );
             sKeyword[NF_KEY_GREEN] = UniString( "GR" "\xDC" "N", RTL_TEXTENCODING_ISO_8859_1 );
-            sKeyword[NF_KEY_CYAN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "CYAN" ) );
-            sKeyword[NF_KEY_RED].AssignAscii( RTL_CONSTASCII_STRINGPARAM(       "ROT" ) );
-            sKeyword[NF_KEY_MAGENTA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "MAGENTA" ) );
-            sKeyword[NF_KEY_BROWN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "BRAUN" ) );
-            sKeyword[NF_KEY_GREY].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "GRAU" ) );
-            sKeyword[NF_KEY_YELLOW].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "GELB" ) );
-            sKeyword[NF_KEY_WHITE].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "WEISS" ) );
+            sKeyword[NF_KEY_CYAN].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 		"CYAN" ) );
+            sKeyword[NF_KEY_RED].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 		"ROT" ) );
+            sKeyword[NF_KEY_MAGENTA].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"MAGENTA" ) );
+            sKeyword[NF_KEY_BROWN].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"BRAUN" ) );
+            sKeyword[NF_KEY_GREY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 		"GRAU" ) );
+            sKeyword[NF_KEY_YELLOW].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"GELB" ) );
+            sKeyword[NF_KEY_WHITE].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"WEISS" ) );
         }
         break;
         default:
@@ -320,7 +320,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
                 case LANGUAGE_FRENCH_CANADIAN   :
                 case LANGUAGE_FRENCH_SWISS      :
                 case LANGUAGE_FRENCH_LUXEMBOURG :
-                case LANGUAGE_FRENCH_MONACO     :
+                case LANGUAGE_FRENCH_MONACO		:
                     sKeyword[NF_KEY_D].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "J" ) );
                     sKeyword[NF_KEY_DD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "JJ" ) );
                     sKeyword[NF_KEY_DDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "JJJ" ) );
@@ -365,7 +365,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
                 case LANGUAGE_FRENCH_CANADIAN   :
                 case LANGUAGE_FRENCH_SWISS      :
                 case LANGUAGE_FRENCH_LUXEMBOURG :
-                case LANGUAGE_FRENCH_MONACO     :
+                case LANGUAGE_FRENCH_MONACO		:
                 case LANGUAGE_PORTUGUESE           :
                 case LANGUAGE_PORTUGUESE_BRAZILIAN :
                 case LANGUAGE_SPANISH_MODERN      :
@@ -391,8 +391,8 @@ void ImpSvNumberformatScan::SetDependentKeywords()
                     sKeyword[NF_KEY_YY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "AA" ) );
                     sKeyword[NF_KEY_YYYY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "AAAA" ) );
                     // must exchange the day of week name code, same as Xcl
-                    sKeyword[NF_KEY_AAA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "OOO" ) );
-                    sKeyword[NF_KEY_AAAA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(  "OOOO" ) );
+                    sKeyword[NF_KEY_AAA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(	"OOO" ) );
+                    sKeyword[NF_KEY_AAAA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(	"OOOO" ) );
                 break;
                 case LANGUAGE_DUTCH         :
                 case LANGUAGE_DUTCH_BELGIAN :
@@ -432,17 +432,17 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             // boolean
             sKeyword[NF_KEY_BOOLEAN].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "BOOLEAN" ) );
             // colours
-            sKeyword[NF_KEY_COLOR].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "COLOR" ) );
-            sKeyword[NF_KEY_BLACK].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "BLACK" ) );
-            sKeyword[NF_KEY_BLUE].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "BLUE" ) );
-            sKeyword[NF_KEY_GREEN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "GREEN" ) );
-            sKeyword[NF_KEY_CYAN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "CYAN" ) );
-            sKeyword[NF_KEY_RED].AssignAscii( RTL_CONSTASCII_STRINGPARAM(       "RED" ) );
-            sKeyword[NF_KEY_MAGENTA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "MAGENTA" ) );
-            sKeyword[NF_KEY_BROWN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "BROWN" ) );
-            sKeyword[NF_KEY_GREY].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "GREY" ) );
-            sKeyword[NF_KEY_YELLOW].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "YELLOW" ) );
-            sKeyword[NF_KEY_WHITE].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "WHITE" ) );
+            sKeyword[NF_KEY_COLOR].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"COLOR" ) );
+            sKeyword[NF_KEY_BLACK].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"BLACK" ) );
+            sKeyword[NF_KEY_BLUE].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 		"BLUE" ) );
+            sKeyword[NF_KEY_GREEN].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"GREEN" ) );
+            sKeyword[NF_KEY_CYAN].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 		"CYAN" ) );
+            sKeyword[NF_KEY_RED].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 		"RED" ) );
+            sKeyword[NF_KEY_MAGENTA].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"MAGENTA" ) );
+            sKeyword[NF_KEY_BROWN].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"BROWN" ) );
+            sKeyword[NF_KEY_GREY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 		"GREY" ) );
+            sKeyword[NF_KEY_YELLOW].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"YELLOW" ) );
+            sKeyword[NF_KEY_WHITE].AssignAscii( RTL_CONSTASCII_STRINGPARAM( 	"WHITE" ) );
         }
         break;
     }
@@ -487,7 +487,7 @@ Color* ImpSvNumberformatScan::GetColor(String& sStr)
         if ( j < NF_MAX_DEFAULT_COLORS )
             i = j;
     }
-
+    
     Color* pResult = NULL;
     if (i >= NF_MAX_DEFAULT_COLORS)
     {
@@ -556,12 +556,12 @@ short ImpSvNumberformatScan::GetKeyWord( const String& sSymbol, xub_StrLen nPos 
     }
     // new keywords take precedence over old keywords
     if ( !bFound )
-    {   // skip the gap of colors et al between new and old keywords and search on
+    {	// skip the gap of colors et al between new and old keywords and search on
         i = NF_KEY_LASTKEYWORD;
         while ( i > 0 && sString.Search(pKeyword[i]) != 0 )
             i--;
         if ( i > NF_KEY_LASTOLDKEYWORD && sString != pKeyword[i] )
-        {   // found something, but maybe it's something else?
+        {	// found something, but maybe it's something else?
             // e.g. new NNN is found in NNNN, for NNNN we must search on
             short j = i - 1;
             while ( j > 0 && sString.Search(pKeyword[j]) != 0 )
@@ -575,7 +575,7 @@ short ImpSvNumberformatScan::GetKeyWord( const String& sSymbol, xub_StrLen nPos 
             LANGUAGE_ENGLISH_US && MsLangId::getRealLanguage( eNewLnge) ==
             LANGUAGE_THAI)
         i = NF_KEY_THAI_T;
-    return i;       // 0 => not found
+    return i;		// 0 => not found
 }
 
 //---------------------------------------------------------------------------
@@ -777,13 +777,13 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
                                         switch ( cNext )
                                         {
                                             case '+' :
-                                            case '-' :  // E+ E- combine to one symbol
+                                            case '-' :	// E+ E- combine to one symbol
                                                 sSymbol += cNext;
                                                 eType = NF_KEY_E;
                                                 nPos++;
                                             break;
                                             case '0' :
-                                            case '#' :  // scientific E without sign
+                                            case '#' :	// scientific E without sign
                                                 eType = NF_KEY_E;
                                             break;
                                         }
@@ -829,7 +829,7 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
                 {
                     short nTmpType = GetKeyWord( rStr, nPos-1 );
                     if ( nTmpType )
-                    {   // beginning of keyword, stop scan and put back
+                    {	// beginning of keyword, stop scan and put back
                         eType = NF_SYMBOLTYPE_STRING;
                         eState = SsStop;
                         nPos--;
@@ -842,7 +842,7 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
                     BOOL bDontStop = FALSE;
                     switch (cToken)
                     {
-                        case '/':                       // AM/PM, A/P
+                        case '/':						// AM/PM, A/P
                         {
                             sal_Unicode cNext = rStr.GetChar(nPos);
                             if ( cNext == 'P' || cNext == 'p' )
@@ -875,7 +875,7 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
             {
                 eState = SsStop;
                 sSymbol += cToken;
-                nRepPos = (nPos - nStart) - 1;  // everytime > 0!!
+                nRepPos = (nPos - nStart) - 1;	// everytime > 0!!
             }
             break;
             case SsGetBlank:
@@ -886,8 +886,8 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
             break;
             default:
             break;
-        }                                   // of switch
-    }                                       // of while
+        }									// of switch
+    } 										// of while
     if (eState == SsGetWord)
         eType = NF_SYMBOLTYPE_STRING;
     return eType;
@@ -911,20 +911,20 @@ xub_StrLen ImpSvNumberformatScan::Symbol_Division(const String& rString)
                 sal_Unicode c;
                 if ( nCPos == 0 ||
                     ((c = sString.GetChar(xub_StrLen(nCPos-1))) != '"'
-                            && c != '\\') )         // dm kann durch "dm
-                {                                   // \d geschuetzt werden
+                            && c != '\\') )			// dm kann durch "dm
+                {                   				// \d geschuetzt werden
                     nCurrPos = nCPos;
-                    nCPos = STRING_NOTFOUND;        // Abbruch
+                    nCPos = STRING_NOTFOUND;		// Abbruch
                 }
                 else
-                    nCPos++;                        // weitersuchen
+                    nCPos++;						// weitersuchen
             }
             else
-                nCPos = nQ + 1;                     // weitersuchen
+                nCPos = nQ + 1;						// weitersuchen
         }
     }
     nAnzStrings = 0;
-    BOOL bStar = FALSE;                 // wird bei '*'Detektion gesetzt
+    BOOL bStar = FALSE;					// wird bei '*'Detektion gesetzt
     Reset();
 
     xub_StrLen nPos = 0;
@@ -933,16 +933,16 @@ xub_StrLen ImpSvNumberformatScan::Symbol_Division(const String& rString)
     {
         nTypeArray[nAnzStrings] = Next_Symbol(rString, nPos, sStrArray[nAnzStrings]);
         if (nTypeArray[nAnzStrings] == NF_SYMBOLTYPE_STAR)
-        {                               // Ueberwachung des '*'
+        {								// Ueberwachung des '*'
             if (bStar)
-                return nPos;        // Fehler: doppelter '*'
+                return nPos;		// Fehler: doppelter '*'
             else
                 bStar = TRUE;
         }
         nAnzStrings++;
     }
 
-    return 0;                       // 0 => ok
+    return 0;						// 0 => ok
 }
 
 void ImpSvNumberformatScan::SkipStrings(USHORT& i, xub_StrLen& nPos)
@@ -1004,7 +1004,7 @@ sal_Unicode ImpSvNumberformatScan::PreviousChar(USHORT i)
     if (i > 0 && i < nAnzStrings)
     {
         i--;
-        while (i > 0 && (   nTypeArray[i] == NF_SYMBOLTYPE_EMPTY
+        while (i > 0 && ( 	nTypeArray[i] == NF_SYMBOLTYPE_EMPTY
                          || nTypeArray[i] == NF_SYMBOLTYPE_STRING
                          || nTypeArray[i] == NF_SYMBOLTYPE_STAR
                          || nTypeArray[i] == NF_SYMBOLTYPE_BLANK ) )
@@ -1050,11 +1050,11 @@ BOOL ImpSvNumberformatScan::IsLastBlankBeforeFrac(USHORT i)
                     sStrArray[i].GetChar(0) == ' ')
                 res = FALSE;
         }
-        if (!bStop)                                 // kein '/'
+        if (!bStop)									// kein '/'
             res = FALSE;
     }
     else
-        res = FALSE;                                // kein '/' mehr
+        res = FALSE;								// kein '/' mehr
 
     return res;
 }
@@ -1116,66 +1116,66 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String&)
         {                                       // keyword
             switch (nTypeArray[i])
             {
-                case NF_KEY_E:                          // E
+                case NF_KEY_E:			 				// E
                     eNewType = NUMBERFORMAT_SCIENTIFIC;
                 break;
-                case NF_KEY_AMPM:                       // AM,A,PM,P
+                case NF_KEY_AMPM:		 				// AM,A,PM,P
                 case NF_KEY_AP:
-                case NF_KEY_H:                          // H
-                case NF_KEY_HH:                         // HH
-                case NF_KEY_S:                          // S
-                case NF_KEY_SS:                         // SS
+                case NF_KEY_H:							// H
+                case NF_KEY_HH:							// HH
+                case NF_KEY_S:							// S
+                case NF_KEY_SS:							// SS
                     eNewType = NUMBERFORMAT_TIME;
                 break;
-                case NF_KEY_M:                          // M
-                case NF_KEY_MM:                         // MM
+                case NF_KEY_M:			 				// M
+                case NF_KEY_MM:			 				// MM
                 {                                       // minute or month
                     USHORT nIndexPre = PreviousKeyword(i);
                     USHORT nIndexNex = NextKeyword(i);
                     sal_Unicode cChar = PreviousChar(i);
-                    if (nIndexPre == NF_KEY_H   ||  // H
-                        nIndexPre == NF_KEY_HH  ||  // HH
-                        nIndexNex == NF_KEY_S   ||  // S
-                        nIndexNex == NF_KEY_SS  ||  // SS
+                    if (nIndexPre == NF_KEY_H	|| 	// H
+                        nIndexPre == NF_KEY_HH	|| 	// HH
+                        nIndexNex == NF_KEY_S	|| 	// S
+                        nIndexNex == NF_KEY_SS	||  // SS
                         cChar == '['  )     // [M
                     {
                         eNewType = NUMBERFORMAT_TIME;
-                        nTypeArray[i] -= 2;         // 6 -> 4, 7 -> 5
+                        nTypeArray[i] -= 2;			// 6 -> 4, 7 -> 5
                     }
                     else
                         eNewType = NUMBERFORMAT_DATE;
                 }
                 break;
-                case NF_KEY_MMM:                // MMM
-                case NF_KEY_MMMM:               // MMMM
-                case NF_KEY_MMMMM:              // MMMMM
-                case NF_KEY_Q:                  // Q
-                case NF_KEY_QQ:                 // QQ
-                case NF_KEY_D:                  // D
-                case NF_KEY_DD:                 // DD
-                case NF_KEY_DDD:                // DDD
-                case NF_KEY_DDDD:               // DDDD
-                case NF_KEY_YY:                 // YY
-                case NF_KEY_YYYY:               // YYYY
-                case NF_KEY_NN:                 // NN
-                case NF_KEY_NNN:                // NNN
-                case NF_KEY_NNNN:               // NNNN
-                case NF_KEY_WW :                // WW
-                case NF_KEY_AAA :               // AAA
-                case NF_KEY_AAAA :              // AAAA
-                case NF_KEY_EC :                // E
-                case NF_KEY_EEC :               // EE
-                case NF_KEY_G :                 // G
-                case NF_KEY_GG :                // GG
-                case NF_KEY_GGG :               // GGG
-                case NF_KEY_R :                 // R
-                case NF_KEY_RR :                // RR
+                case NF_KEY_MMM:				// MMM
+                case NF_KEY_MMMM:				// MMMM
+                case NF_KEY_MMMMM:				// MMMMM
+                case NF_KEY_Q:					// Q
+                case NF_KEY_QQ:					// QQ
+                case NF_KEY_D:					// D
+                case NF_KEY_DD:					// DD
+                case NF_KEY_DDD:				// DDD
+                case NF_KEY_DDDD:				// DDDD
+                case NF_KEY_YY:					// YY
+                case NF_KEY_YYYY:				// YYYY
+                case NF_KEY_NN:					// NN
+                case NF_KEY_NNN:				// NNN
+                case NF_KEY_NNNN:				// NNNN
+                case NF_KEY_WW :				// WW
+                case NF_KEY_AAA :				// AAA
+                case NF_KEY_AAAA :				// AAAA
+                case NF_KEY_EC :				// E
+                case NF_KEY_EEC :				// EE
+                case NF_KEY_G :					// G
+                case NF_KEY_GG :				// GG
+                case NF_KEY_GGG :				// GGG
+                case NF_KEY_R :					// R
+                case NF_KEY_RR :				// RR
                     eNewType = NUMBERFORMAT_DATE;
                 break;
-                case NF_KEY_CCC:                // CCC
+                case NF_KEY_CCC:				// CCC
                     eNewType = NUMBERFORMAT_CURRENCY;
                 break;
-                case NF_KEY_GENERAL:            // Standard
+                case NF_KEY_GENERAL:			// Standard
                     eNewType = NUMBERFORMAT_NUMBER;
                     bHaveGeneral = true;
                 break;
@@ -1219,26 +1219,26 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String&)
                     if ( i < nAnzStrings-1 &&
                             nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
                             sStrArray[i+1].GetChar(0) == '$' )
-                    {   // as of SV_NUMBERFORMATTER_VERSION_NEW_CURR
+                    {	// as of SV_NUMBERFORMATTER_VERSION_NEW_CURR
                         eNewType = NUMBERFORMAT_CURRENCY;
                         bMatchBracket = TRUE;
                     }
                     else if ( i < nAnzStrings-1 &&
                             nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
                             sStrArray[i+1].GetChar(0) == '~' )
-                    {   // as of SV_NUMBERFORMATTER_VERSION_CALENDAR
+                    {	// as of SV_NUMBERFORMATTER_VERSION_CALENDAR
                         eNewType = NUMBERFORMAT_DATE;
                         bMatchBracket = TRUE;
                     }
                     else
                     {
                         USHORT nIndexNex = NextKeyword(i);
-                        if (nIndexNex == NF_KEY_H   ||  // H
-                            nIndexNex == NF_KEY_HH  ||  // HH
-                            nIndexNex == NF_KEY_M   ||  // M
-                            nIndexNex == NF_KEY_MM  ||  // MM
-                            nIndexNex == NF_KEY_S   ||  // S
-                            nIndexNex == NF_KEY_SS   )  // SS
+                        if (nIndexNex == NF_KEY_H	|| 	// H
+                            nIndexNex == NF_KEY_HH	|| 	// HH
+                            nIndexNex == NF_KEY_M	|| 	// M
+                            nIndexNex == NF_KEY_MM	|| 	// MM
+                            nIndexNex == NF_KEY_S	|| 	// S
+                            nIndexNex == NF_KEY_SS   )	// SS
                             eNewType = NUMBERFORMAT_TIME;
                         else
                             return nPos;                // Error
@@ -1258,9 +1258,9 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String&)
         if (eScannedType == NUMBERFORMAT_UNDEFINED)
             eScannedType = eNewType;
         else if (eScannedType == NUMBERFORMAT_TEXT || eNewType == NUMBERFORMAT_TEXT)
-            eScannedType = NUMBERFORMAT_TEXT;               // Text bleibt immer Text
+            eScannedType = NUMBERFORMAT_TEXT;				// Text bleibt immer Text
         else if (eNewType == NUMBERFORMAT_UNDEFINED)
-        {                                           // bleibt wie bisher
+        {											// bleibt wie bisher
         }
         else if (eScannedType != eNewType)
         {
@@ -1273,7 +1273,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String&)
                         case NUMBERFORMAT_TIME:
                             eScannedType = NUMBERFORMAT_DATETIME;
                         break;
-                        case NUMBERFORMAT_FRACTION:         // DD/MM
+                        case NUMBERFORMAT_FRACTION: 		// DD/MM
                         break;
                         default:
                         {
@@ -1292,7 +1292,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String&)
                         case NUMBERFORMAT_DATE:
                             eScannedType = NUMBERFORMAT_DATETIME;
                         break;
-                        case NUMBERFORMAT_FRACTION:         // MM/SS
+                        case NUMBERFORMAT_FRACTION: 		// MM/SS
                         break;
                         default:
                         {
@@ -1311,7 +1311,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String&)
                         case NUMBERFORMAT_TIME:
                         case NUMBERFORMAT_DATE:
                         break;
-                        case NUMBERFORMAT_FRACTION:         // DD/MM
+                        case NUMBERFORMAT_FRACTION: 		// DD/MM
                         break;
                         default:
                         {
@@ -1328,7 +1328,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String&)
                 {
                     switch (eNewType)
                     {
-                        case NUMBERFORMAT_NUMBER:   // nur Zahl nach Prozent
+                        case NUMBERFORMAT_NUMBER:	// nur Zahl nach Prozent
                         break;
                         default:
                             return nPos;
@@ -1339,7 +1339,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String&)
                 {
                     switch (eNewType)
                     {
-                        case NUMBERFORMAT_NUMBER:   // nur Zahl nach E
+                        case NUMBERFORMAT_NUMBER:	// nur Zahl nach E
                         break;
                         default:
                             return nPos;
@@ -1368,7 +1368,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String&)
                 {
                     switch (eNewType)
                     {
-                        case NUMBERFORMAT_NUMBER:           // nur Zahl nach Bruch
+                        case NUMBERFORMAT_NUMBER:			// nur Zahl nach Bruch
                         break;
                         default:
                             return nPos;
@@ -1379,7 +1379,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String&)
                 break;
             }
         }
-        nPos = nPos + sStrArray[i].Len();           // Korrekturposition
+        nPos = nPos + sStrArray[i].Len();			// Korrekturposition
         i++;
         if ( bMatchBracket )
         {   // no type detection inside of matching brackets if [$...], [~...]
@@ -1401,10 +1401,10 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String&)
 
     if ((eScannedType == NUMBERFORMAT_NUMBER || eScannedType == NUMBERFORMAT_UNDEFINED)
          && nCurrPos != STRING_NOTFOUND && !bHaveGeneral)
-        eScannedType = NUMBERFORMAT_CURRENCY;   // old "automatic" currency
+        eScannedType = NUMBERFORMAT_CURRENCY;	// old "automatic" currency
     if (eScannedType == NUMBERFORMAT_UNDEFINED)
         eScannedType = NUMBERFORMAT_DEFINED;
-    return 0;                               // Alles ok
+    return 0;								// Alles ok
 }
 
 
@@ -1437,19 +1437,19 @@ int ImpSvNumberformatScan::FinalScanGetCalendar( xub_StrLen& nPos, USHORT& i,
             i < nAnzStrings-1 &&
             nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
             sStrArray[i+1].GetChar(0) == '~' )
-    {   // [~calendarID]
+    {	// [~calendarID]
         // as of SV_NUMBERFORMATTER_VERSION_CALENDAR
-        nPos = nPos + sStrArray[i].Len();           // [
+        nPos = nPos + sStrArray[i].Len();			// [
         nTypeArray[i] = NF_SYMBOLTYPE_CALDEL;
-        nPos = nPos + sStrArray[++i].Len();     // ~
-        sStrArray[i-1] += sStrArray[i];     // [~
+        nPos = nPos + sStrArray[++i].Len();		// ~
+        sStrArray[i-1] += sStrArray[i];		// [~
         nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
         rAnzResStrings--;
         if ( ++i >= nAnzStrings )
-            return -1;      // error
-        nPos = nPos + sStrArray[i].Len();           // calendarID
+            return -1;		// error
+        nPos = nPos + sStrArray[i].Len();			// calendarID
         String& rStr = sStrArray[i];
-        nTypeArray[i] = NF_SYMBOLTYPE_CALENDAR; // convert
+        nTypeArray[i] = NF_SYMBOLTYPE_CALENDAR;	// convert
         i++;
         while ( i < nAnzStrings &&
                 sStrArray[i].GetChar(0) != ']' )
@@ -1468,7 +1468,7 @@ int ImpSvNumberformatScan::FinalScanGetCalendar( xub_StrLen& nPos, USHORT& i,
             i++;
         }
         else
-            return -1;      // error
+            return -1;		// error
         return 1;
     }
     return 0;
@@ -1482,7 +1482,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
     String sOldDecSep       = pFormatter->GetNumDecimalSep();
     String sOldThousandSep  = pFormatter->GetNumThousandSep();
     String sOldDateSep      = pFormatter->GetDateSep();
-    String sOldTimeSep      = pLoc->getTimeSep();
+    String sOldTimeSep		= pLoc->getTimeSep();
     String sOldTime100SecSep= pLoc->getTime100SecSep();
     String sOldCurSymbol    = GetCurSymbol();
     String sOldCurString    = GetCurString();
@@ -1537,7 +1537,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         nAnzResStrings--;
                     }
                     break;
-                    case NF_KEY_GENERAL :   // #77026# "General" is the same as "@"
+                    case NF_KEY_GENERAL :	// #77026# "General" is the same as "@"
                     break;
                     default:
                     {
@@ -1549,7 +1549,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                 }
                 nPos = nPos + sStrArray[i].Len();
                 i++;
-            }                                       // of while
+            }										// of while
         }
         break;
         case NUMBERFORMAT_NUMBER:
@@ -1561,21 +1561,21 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
             sal_Unicode cThousandFill = ' ';
             while (i < nAnzStrings)
             {
-                if (eScannedType == NUMBERFORMAT_FRACTION &&    // special case
-                    nTypeArray[i] == NF_SYMBOLTYPE_DEL &&           // # ### #/#
+                if (eScannedType == NUMBERFORMAT_FRACTION &&  	// special case
+                    nTypeArray[i] == NF_SYMBOLTYPE_DEL && 			// # ### #/#
                     StringEqualsChar( sOldThousandSep, ' ' ) && // e.g. France or Sweden
                     StringEqualsChar( sStrArray[i], ' ' ) &&
                     !bFrac                          &&
                     IsLastBlankBeforeFrac(i) )
                 {
-                    nTypeArray[i] = NF_SYMBOLTYPE_STRING;           // del->string
+                    nTypeArray[i] = NF_SYMBOLTYPE_STRING;			// del->string
                 }                                               // kein Taus.p.
 
 
-                if (nTypeArray[i] == NF_SYMBOLTYPE_BLANK    ||
-                    nTypeArray[i] == NF_SYMBOLTYPE_STAR ||
-                    nTypeArray[i] == NF_KEY_CCC         ||  // CCC
-                    nTypeArray[i] == NF_KEY_GENERAL )       // Standard
+                if (nTypeArray[i] == NF_SYMBOLTYPE_BLANK	||
+                    nTypeArray[i] == NF_SYMBOLTYPE_STAR	||
+                    nTypeArray[i] == NF_KEY_CCC			||	// CCC
+                    nTypeArray[i] == NF_KEY_GENERAL )		// Standard
                 {
                     if (nTypeArray[i] == NF_KEY_GENERAL)
                     {
@@ -1587,12 +1587,12 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     i++;
                 }
                 else if (nTypeArray[i] == NF_SYMBOLTYPE_STRING ||  // Strings oder
-                         nTypeArray[i] > 0)                     // Keywords
+                         nTypeArray[i] > 0) 					// Keywords
                 {
                     if (eScannedType == NUMBERFORMAT_SCIENTIFIC &&
-                             nTypeArray[i] == NF_KEY_E)         // E+
+                             nTypeArray[i] == NF_KEY_E) 		// E+
                     {
-                        if (bExp)                               // doppelt
+                        if (bExp) 								// doppelt
                             return nPos;
                         bExp = TRUE;
                         nExpPos = i;
@@ -1606,10 +1606,10 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     else if (eScannedType == NUMBERFORMAT_FRACTION &&
                              sStrArray[i].GetChar(0) == ' ')
                     {
-                        if (!bBlank && !bFrac)  // nicht doppelt oder hinter /
+                        if (!bBlank && !bFrac)	// nicht doppelt oder hinter /
                         {
-                            if (bDecSep && nCounter > 0)    // Nachkommastellen
-                                return nPos;                // Fehler
+                            if (bDecSep && nCounter > 0)	// Nachkommastellen
+                                return nPos;				// Fehler
                             bBlank = TRUE;
                             nBlankPos = i;
                             nCntPre = nCounter;
@@ -1644,10 +1644,10 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         case '0':
                         case '?':
                         {
-                            if (nThousand > 0)                  // #... #
-                                return nPos;                    // Fehler
+                            if (nThousand > 0)					// #... #
+                                return nPos;					// Fehler
                             else if (bFrac && cHere == '0')
-                                return nPos;                    // 0 im Nenner
+                                return nPos;					// 0 im Nenner
                             nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
                             String& rStr = sStrArray[i];
                             nPos = nPos + rStr.Len();
@@ -1709,20 +1709,20 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         case '\'':
                         case ' ':
                         {
-                            sal_Unicode cSep = cHere;   // remember
+                            sal_Unicode cSep = cHere;	// remember
                             if ( StringEqualsChar( sOldThousandSep, cSep ) )
                             {
                                 // previous char with skip empty
                                 sal_Unicode cPre = PreviousChar(i);
                                 sal_Unicode cNext;
                                 if (bExp || bBlank || bFrac)
-                                {   // after E, / or ' '
+                                {	// after E, / or ' '
                                     if ( !StringEqualsChar( sOldThousandSep, ' ' ) )
                                     {
                                         nPos = nPos + sStrArray[i].Len();
                                         nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
                                         nAnzResStrings--;
-                                        i++;                // eat it
+                                        i++; 				// eat it
                                     }
                                     else
                                         nTypeArray[i] = NF_SYMBOLTYPE_STRING;
@@ -1730,10 +1730,10 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                 else if (i > 0 && i < nAnzStrings-1   &&
                                     (cPre == '#' || cPre == '0')      &&
                                     ((cNext = NextChar(i)) == '#' || cNext == '0')
-                                    )                   // #,#
+                                    )					// #,#
                                 {
                                     nPos = nPos + sStrArray[i].Len();
-                                    if (!bThousand)                 // only once
+                                    if (!bThousand)					// only once
                                     {
                                         bThousand = TRUE;
                                         cThousandFill = sStrArray[i+1].GetChar(0);
@@ -1747,9 +1747,9 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                 else if (i > 0 && (cPre == '#' || cPre == '0')
                                     && PreviousType(i) == NF_SYMBOLTYPE_DIGIT
                                     && nThousand < FLAG_STANDARD_IN_FORMAT )
-                                {                                   // #,,,,
+                                {									// #,,,,
                                     if ( StringEqualsChar( sOldThousandSep, ' ' ) )
-                                    {   // strange, those French..
+                                    {	// strange, those French..
                                         BOOL bFirst = TRUE;
                                         String& rStr = sStrArray[i];
                                         //  set a hard Non-Breaking Space or ConvertMode
@@ -1757,7 +1757,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                         while ( i < nAnzStrings
                                             && sStrArray[i] == sOldThousandSep
                                             && StringEqualsChar( sOldThousandSep, NextChar(i) ) )
-                                        {   // last was a space or another space
+                                        {	// last was a space or another space
                                             // is following => separator
                                             nPos = nPos + sStrArray[i].Len();
                                             if ( bFirst )
@@ -1777,7 +1777,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                         }
                                         if ( i < nAnzStrings-1
                                             && sStrArray[i] == sOldThousandSep )
-                                        {   // something following last space
+                                        {	// something following last space
                                             // => space if currency contained,
                                             // else separator
                                             nPos = nPos + sStrArray[i].Len();
@@ -1822,7 +1822,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                                 sStrArray[i] == sOldThousandSep);
                                     }
                                 }
-                                else                    // any grsep
+                                else 					// any grsep
                                 {
                                     nTypeArray[i] = NF_SYMBOLTYPE_STRING;
                                     String& rStr = sStrArray[i];
@@ -1842,15 +1842,15 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                             else if ( StringEqualsChar( sOldDecSep, cSep ) )
                             {
                                 if (bBlank || bFrac)    // . behind / or ' '
-                                    return nPos;        // error
-                                else if (bExp)          // behind E
+                                    return nPos;		// error
+                                else if (bExp)			// behind E
                                 {
                                     nPos = nPos + sStrArray[i].Len();
                                     nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
                                     nAnzResStrings--;
-                                    i++;                // eat it
+                                    i++; 				// eat it
                                 }
-                                else if (bDecSep)       // any .
+                                else if (bDecSep)		// any .
                                 {
                                     nTypeArray[i] = NF_SYMBOLTYPE_STRING;
                                     String& rStr = sStrArray[i];
@@ -1878,17 +1878,17 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
 
                                     i++;
                                 }
-                            }                           // of else = DecSep
-                            else                        // . without meaning
+                            } 							// of else = DecSep
+                            else						// . without meaning
                             {
                                 if (cSep == ' ' &&
                                     eScannedType == NUMBERFORMAT_FRACTION &&
                                     StringEqualsChar( sStrArray[i], ' ' ) )
                                 {
-                                    if (!bBlank && !bFrac)  // no dups
-                                    {                       // or behind /
+                                    if (!bBlank && !bFrac)	// no dups
+                                    {	                    // or behind /
                                         if (bDecSep && nCounter > 0)// dec.
-                                            return nPos;            // error
+                                            return nPos;			// error
                                         bBlank = TRUE;
                                         nBlankPos = i;
                                         nCntPre = nCounter;
@@ -1923,7 +1923,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                 if ( i == 0 ||
                                         (nTypeArray[i-1] != NF_SYMBOLTYPE_DIGIT &&
                                          nTypeArray[i-1] != NF_SYMBOLTYPE_EMPTY) )
-                                    return nPos ? nPos : 1; // /? not allowed
+                                    return nPos ? nPos : 1;	// /? not allowed
                                 else if (!bFrac || (bDecSep && nCounter > 0))
                                 {
                                     bFrac = TRUE;
@@ -1933,8 +1933,8 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                     nPos = nPos + sStrArray[i].Len();
                                     i++;
                                 }
-                                else                // / doppelt od. , imZaehl
-                                    return nPos;    // Fehler
+                                else 				// / doppelt od. , imZaehl
+                                    return nPos;	// Fehler
                             }
                             else
                             {
@@ -1950,20 +1950,20 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                     i < nAnzStrings-1 &&
                                     nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
                                     sStrArray[i+1].GetChar(0) == '$' )
-                            {   // [$DM-xxx]
+                            {	// [$DM-xxx]
                                 // ab SV_NUMBERFORMATTER_VERSION_NEW_CURR
-                                nPos = nPos + sStrArray[i].Len();           // [
+                                nPos = nPos + sStrArray[i].Len();			// [
                                 nTypeArray[i] = NF_SYMBOLTYPE_CURRDEL;
-                                nPos = nPos + sStrArray[++i].Len();     // $
-                                sStrArray[i-1] += sStrArray[i];     // [$
+                                nPos = nPos + sStrArray[++i].Len();		// $
+                                sStrArray[i-1] += sStrArray[i];		// [$
                                 nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
                                 nAnzResStrings--;
                                 if ( ++i >= nAnzStrings )
-                                    return nPos;        // Fehler
-                                nPos = nPos + sStrArray[i].Len();           // DM
+                                    return nPos;		// Fehler
+                                nPos = nPos + sStrArray[i].Len();			// DM
                                 String& rStr = sStrArray[i];
                                 String* pStr = &sStrArray[i];
-                                nTypeArray[i] = NF_SYMBOLTYPE_CURRENCY; // wandeln
+                                nTypeArray[i] = NF_SYMBOLTYPE_CURRENCY;	// wandeln
                                 BOOL bHadDash = FALSE;
                                 i++;
                                 while ( i < nAnzStrings &&
@@ -2001,7 +2001,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                     i++;
                                 }
                                 else
-                                    return nPos;        // Fehler
+                                    return nPos;		// Fehler
                             }
                             else
                             {
@@ -2011,7 +2011,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                             }
                         }
                         break;
-                        default:                    // andere Dels
+                        default:					// andere Dels
                         {
                             if (eScannedType == NUMBERFORMAT_PERCENT &&
                                     cHere == '%')
@@ -2022,8 +2022,8 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                             i++;
                         }
                         break;
-                    }                               // of switch (Del)
-                }                                   // of else Del
+                    }								// of switch (Del)
+                }									// of else Del
                 else if ( nTypeArray[i] == NF_SYMBOLTYPE_COMMENT )
                 {
                     String& rStr = sStrArray[i];
@@ -2040,7 +2040,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     nPos = nPos + sStrArray[i].Len();
                     i++;
                 }
-            }                                       // of while
+            }                                  		// of while
             if (eScannedType == NUMBERFORMAT_FRACTION)
             {
                 if (bFrac)
@@ -2067,13 +2067,13 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     if (bBlank)
                         nMaxPos = nBlankPos;
                     else
-                        nMaxPos = 0;                // no grouping
+                        nMaxPos = 0;				// no grouping
                 }
-                else if (bDecSep)                   // decimal separator present
+                else if (bDecSep)					// decimal separator present
                     nMaxPos = nDecPos;
-                else if (bExp)                      // 'E' exponent present
+                else if (bExp)						// 'E' exponent present
                     nMaxPos = nExpPos;
-                else                                // up to end
+                else								// up to end
                     nMaxPos = i;
                 // Insert separators at proper positions.
                 xub_StrLen nCount = 0;
@@ -2127,7 +2127,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                 }
             }
         }
-        break;                                      // of NUMBERFORMAT_NUMBER
+        break;										// of NUMBERFORMAT_NUMBER
         case NUMBERFORMAT_DATE:
         {
             while (i < nAnzStrings)
@@ -2165,7 +2165,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         else if ( (nCalRet = FinalScanGetCalendar( nPos, i, nAnzResStrings )) != 0 )
                         {
                             if ( nCalRet < 0  )
-                                return nPos;        // error
+                                return nPos;		// error
                         }
                         else
                         {
@@ -2178,45 +2178,45 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     case NF_KEY_THAI_T :
                         bThaiT = true;
                         // fall thru
-                    case NF_KEY_M:                          // M
-                    case NF_KEY_MM:                         // MM
-                    case NF_KEY_MMM:                        // MMM
-                    case NF_KEY_MMMM:                       // MMMM
-                    case NF_KEY_MMMMM:                      // MMMMM
-                    case NF_KEY_Q:                          // Q
-                    case NF_KEY_QQ:                         // QQ
-                    case NF_KEY_D:                          // D
-                    case NF_KEY_DD:                         // DD
-                    case NF_KEY_DDD:                        // DDD
-                    case NF_KEY_DDDD:                       // DDDD
-                    case NF_KEY_YY:                         // YY
-                    case NF_KEY_YYYY:                       // YYYY
-                    case NF_KEY_NN:                         // NN
-                    case NF_KEY_NNN:                        // NNN
-                    case NF_KEY_NNNN:                       // NNNN
-                    case NF_KEY_WW :                        // WW
-                    case NF_KEY_AAA :                       // AAA
-                    case NF_KEY_AAAA :                      // AAAA
-                    case NF_KEY_EC :                        // E
-                    case NF_KEY_EEC :                       // EE
-                    case NF_KEY_G :                         // G
-                    case NF_KEY_GG :                        // GG
-                    case NF_KEY_GGG :                       // GGG
-                    case NF_KEY_R :                         // R
-                    case NF_KEY_RR :                        // RR
-                        sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                    case NF_KEY_M:							// M
+                    case NF_KEY_MM:							// MM
+                    case NF_KEY_MMM:						// MMM
+                    case NF_KEY_MMMM:						// MMMM
+                    case NF_KEY_MMMMM:						// MMMMM
+                    case NF_KEY_Q:							// Q
+                    case NF_KEY_QQ:							// QQ
+                    case NF_KEY_D:							// D
+                    case NF_KEY_DD:							// DD
+                    case NF_KEY_DDD:						// DDD
+                    case NF_KEY_DDDD:						// DDDD
+                    case NF_KEY_YY:							// YY
+                    case NF_KEY_YYYY:						// YYYY
+                    case NF_KEY_NN:							// NN
+                    case NF_KEY_NNN:						// NNN
+                    case NF_KEY_NNNN:						// NNNN
+                    case NF_KEY_WW :						// WW
+                    case NF_KEY_AAA :						// AAA
+                    case NF_KEY_AAAA :						// AAAA
+                    case NF_KEY_EC :						// E
+                    case NF_KEY_EEC :						// EE
+                    case NF_KEY_G :							// G
+                    case NF_KEY_GG :						// GG
+                    case NF_KEY_GGG :						// GGG
+                    case NF_KEY_R :							// R
+                    case NF_KEY_RR :						// RR
+                        sStrArray[i] = sKeyword[nTypeArray[i]];	// tTtT -> TTTT
                         nPos = nPos + sStrArray[i].Len();
                         i++;
                     break;
-                    default:                            // andere Keywords
+                    default:							// andere Keywords
                         nTypeArray[i] = NF_SYMBOLTYPE_STRING;
                         nPos = nPos + sStrArray[i].Len();
                         i++;
                     break;
                 }
-            }                                       // of while
+            }										// of while
         }
-        break;                                      // of NUMBERFORMAT_DATE
+        break;										// of NUMBERFORMAT_DATE
         case NUMBERFORMAT_TIME:
         {
             while (i < nAnzStrings)
@@ -2264,16 +2264,16 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                 return nPos;
                             case '[':
                             {
-                                if (bThousand)              // doppelt
+                                if (bThousand)				// doppelt
                                     return nPos;
-                                bThousand = TRUE;           // bei Time frei
+                                bThousand = TRUE;			// bei Time frei
                                 sal_Unicode cChar = pChrCls->upper( NextChar(i) ).GetChar(0);
                                 if ( cChar == cOldKeyH )
-                                    nThousand = 1;      // H
+                                    nThousand = 1;		// H
                                 else if ( cChar == cOldKeyMI )
-                                    nThousand = 2;      // M
+                                    nThousand = 2;		// M
                                 else if ( cChar == cOldKeyS )
-                                    nThousand = 3;      // S
+                                    nThousand = 3;		// S
                                 else
                                     return nPos;
                                 nPos = nPos + sStrArray[i].Len();
@@ -2282,7 +2282,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                             break;
                             case ']':
                             {
-                                if (!bThousand)             // kein [ vorher
+                                if (!bThousand)				// kein [ vorher
                                     return nPos;
                                 nPos = nPos + sStrArray[i].Len();
                                 i++;
@@ -2329,11 +2329,11 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         i++;
                     }
                     break;
-                    case NF_KEY_AMPM:                       // AM/PM
-                    case NF_KEY_AP:                         // A/P
+                    case NF_KEY_AMPM:						// AM/PM
+                    case NF_KEY_AP:							// A/P
                     {
-                        bExp = TRUE;                    // missbraucht fuer A/P
-                        sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                        bExp = TRUE;					// missbraucht fuer A/P
+                        sStrArray[i] = sKeyword[nTypeArray[i]];	// tTtT -> TTTT
                         nPos = nPos + sStrArray[i].Len();
                         i++;
                     }
@@ -2341,19 +2341,19 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     case NF_KEY_THAI_T :
                         bThaiT = true;
                         // fall thru
-                    case NF_KEY_MI:                         // M
-                    case NF_KEY_MMI:                        // MM
-                    case NF_KEY_H:                          // H
-                    case NF_KEY_HH:                         // HH
-                    case NF_KEY_S:                          // S
-                    case NF_KEY_SS:                         // SS
+                    case NF_KEY_MI:							// M
+                    case NF_KEY_MMI:						// MM
+                    case NF_KEY_H:							// H
+                    case NF_KEY_HH:							// HH
+                    case NF_KEY_S:							// S
+                    case NF_KEY_SS:							// SS
                     {
-                        sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                        sStrArray[i] = sKeyword[nTypeArray[i]];	// tTtT -> TTTT
                         nPos = nPos + sStrArray[i].Len();
                         i++;
                     }
                     break;
-                    default:                            // andere Keywords
+                    default:							// andere Keywords
                     {
                         nTypeArray[i] = NF_SYMBOLTYPE_STRING;
                         nPos = nPos + sStrArray[i].Len();
@@ -2361,12 +2361,12 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     }
                     break;
                 }
-            }                                       // of while
-            nCntPost = nCounter;                    // Zaehler der Nullen
+            }                   					// of while
+            nCntPost = nCounter;					// Zaehler der Nullen
             if (bExp)
-                nCntExp = 1;                        // merkt AM/PM
+                nCntExp = 1;						// merkt AM/PM
         }
-        break;                                      // of NUMBERFORMAT_TIME
+        break;										// of NUMBERFORMAT_TIME
         case NUMBERFORMAT_DATETIME:
         {
             BOOL bTimePart = FALSE;
@@ -2397,7 +2397,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         if ( (nCalRet = FinalScanGetCalendar( nPos, i, nAnzResStrings )) != 0 )
                         {
                             if ( nCalRet < 0  )
-                                return nPos;        // error
+                                return nPos;		// error
                         }
                         else
                         {
@@ -2469,55 +2469,55 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         }
                     }
                     break;
-                    case NF_KEY_AMPM:                       // AM/PM
-                    case NF_KEY_AP:                         // A/P
+                    case NF_KEY_AMPM:						// AM/PM
+                    case NF_KEY_AP:							// A/P
                     {
                         bTimePart = TRUE;
-                        bExp = TRUE;                    // missbraucht fuer A/P
-                        sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                        bExp = TRUE;					// missbraucht fuer A/P
+                        sStrArray[i] = sKeyword[nTypeArray[i]];	// tTtT -> TTTT
                         nPos = nPos + sStrArray[i].Len();
                         i++;
                     }
                     break;
-                    case NF_KEY_MI:                         // M
-                    case NF_KEY_MMI:                        // MM
-                    case NF_KEY_H:                          // H
-                    case NF_KEY_HH:                         // HH
-                    case NF_KEY_S:                          // S
-                    case NF_KEY_SS:                         // SS
+                    case NF_KEY_MI:							// M
+                    case NF_KEY_MMI:						// MM
+                    case NF_KEY_H:							// H
+                    case NF_KEY_HH:							// HH
+                    case NF_KEY_S:							// S
+                    case NF_KEY_SS:							// SS
                         bTimePart = TRUE;
-                        sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                        sStrArray[i] = sKeyword[nTypeArray[i]];	// tTtT -> TTTT
                         nPos = nPos + sStrArray[i].Len();
                         i++;
                     break;
-                    case NF_KEY_M:                          // M
-                    case NF_KEY_MM:                         // MM
-                    case NF_KEY_MMM:                        // MMM
-                    case NF_KEY_MMMM:                       // MMMM
-                    case NF_KEY_MMMMM:                      // MMMMM
-                    case NF_KEY_Q:                          // Q
-                    case NF_KEY_QQ:                         // QQ
-                    case NF_KEY_D:                          // D
-                    case NF_KEY_DD:                         // DD
-                    case NF_KEY_DDD:                        // DDD
-                    case NF_KEY_DDDD:                       // DDDD
-                    case NF_KEY_YY:                         // YY
-                    case NF_KEY_YYYY:                       // YYYY
-                    case NF_KEY_NN:                         // NN
-                    case NF_KEY_NNN:                        // NNN
-                    case NF_KEY_NNNN:                       // NNNN
-                    case NF_KEY_WW :                        // WW
-                    case NF_KEY_AAA :                       // AAA
-                    case NF_KEY_AAAA :                      // AAAA
-                    case NF_KEY_EC :                        // E
-                    case NF_KEY_EEC :                       // EE
-                    case NF_KEY_G :                         // G
-                    case NF_KEY_GG :                        // GG
-                    case NF_KEY_GGG :                       // GGG
-                    case NF_KEY_R :                         // R
-                    case NF_KEY_RR :                        // RR
+                    case NF_KEY_M:							// M
+                    case NF_KEY_MM:							// MM
+                    case NF_KEY_MMM:						// MMM
+                    case NF_KEY_MMMM:						// MMMM
+                    case NF_KEY_MMMMM:						// MMMMM
+                    case NF_KEY_Q:							// Q
+                    case NF_KEY_QQ:							// QQ
+                    case NF_KEY_D:							// D
+                    case NF_KEY_DD:							// DD
+                    case NF_KEY_DDD:						// DDD
+                    case NF_KEY_DDDD:						// DDDD
+                    case NF_KEY_YY:							// YY
+                    case NF_KEY_YYYY:						// YYYY
+                    case NF_KEY_NN:							// NN
+                    case NF_KEY_NNN:						// NNN
+                    case NF_KEY_NNNN:						// NNNN
+                    case NF_KEY_WW :						// WW
+                    case NF_KEY_AAA :						// AAA
+                    case NF_KEY_AAAA :						// AAAA
+                    case NF_KEY_EC :						// E
+                    case NF_KEY_EEC :						// EE
+                    case NF_KEY_G :							// G
+                    case NF_KEY_GG :						// GG
+                    case NF_KEY_GGG :						// GGG
+                    case NF_KEY_R :							// R
+                    case NF_KEY_RR :						// RR
                         bTimePart = FALSE;
-                        sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                        sStrArray[i] = sKeyword[nTypeArray[i]];	// tTtT -> TTTT
                         nPos = nPos + sStrArray[i].Len();
                         i++;
                     break;
@@ -2527,18 +2527,18 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         nPos = nPos + sStrArray[i].Len();
                         i++;
                     break;
-                    default:                            // andere Keywords
+                    default:							// andere Keywords
                         nTypeArray[i] = NF_SYMBOLTYPE_STRING;
                         nPos = nPos + sStrArray[i].Len();
                         i++;
                     break;
                 }
-            }                                       // of while
+            }										// of while
             nCntPost = nCounter;                    // decimals (100th seconds)
             if (bExp)
-                nCntExp = 1;                        // merkt AM/PM
+                nCntExp = 1;						// merkt AM/PM
         }
-        break;                                      // of NUMBERFORMAT_DATETIME
+        break;										// of NUMBERFORMAT_DATETIME
         default:
         break;
     }
@@ -2552,7 +2552,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
         SetNatNumModifier(1);
 
     if ( bConvertMode )
-    {   // strings containing keywords of the target locale must be quoted, so
+    {	// strings containing keywords of the target locale must be quoted, so
         // the user sees the difference and is able to edit the format string
         for ( i=0; i < nAnzStrings; i++ )
         {
@@ -2560,9 +2560,9 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     sStrArray[i].GetChar(0) != '\"' )
             {
                 if ( bConvertSystemToSystem && eScannedType == NUMBERFORMAT_CURRENCY )
-                {   // don't stringize automatic currency, will be converted
+                {	// don't stringize automatic currency, will be converted
                     if ( sStrArray[i] == sOldCurSymbol )
-                        continue;   // for
+                        continue;	// for
                     // DM might be splitted into D and M
                     if ( sStrArray[i].Len() < sOldCurSymbol.Len() &&
                             pChrCls->toUpper( sStrArray[i], 0, 1 ).GetChar(0) ==
@@ -2585,7 +2585,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                 nAnzResStrings--;
                             }
                             i = j - 1;
-                            continue;   // for
+                            continue;	// for
                         }
                     }
                 }
@@ -2597,7 +2597,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     {
                         rStr.Insert( '\"', 0 );
                         rStr += '\"';
-                        break;  // for
+                        break;	// for
                     }
                 }
             }
@@ -2667,9 +2667,9 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     else
                         rString += sStrArray[i];
                     if ( RemoveQuotes( sStrArray[i] ) > 0 )
-                    {   // update currency up to quoted string
+                    {	// update currency up to quoted string
                         if ( eScannedType == NUMBERFORMAT_CURRENCY )
-                        {   // dM -> DM  or  DM -> $  in old automatic
+                        {	// dM -> DM  or  DM -> $  in old automatic
                             // currency formats, oh my ..., why did we ever
                             // introduce them?
                             String aTmp( pChrCls->toUpper(
@@ -2702,9 +2702,9 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     i++;
                 } while ( i < nAnzStrings && nTypeArray[i] == NF_SYMBOLTYPE_STRING );
                 if ( i < nAnzStrings )
-                    i--;    // enter switch on next symbol again
+                    i--;	// enter switch on next symbol again
                 if ( eScannedType == NUMBERFORMAT_CURRENCY && nStringPos < rString.Len() )
-                {   // same as above, since last RemoveQuotes
+                {	// same as above, since last RemoveQuotes
                     String aTmp( pChrCls->toUpper(
                         sStrArray[iPos], nArrPos,
                         sStrArray[iPos].Len()-nArrPos ) );
@@ -2773,12 +2773,12 @@ xub_StrLen ImpSvNumberformatScan::RemoveQuotes( String& rStr )
 
 xub_StrLen ImpSvNumberformatScan::ScanFormat( String& rString, String& rComment )
 {
-    xub_StrLen res = Symbol_Division(rString);  //lexikalische Analyse
+    xub_StrLen res = Symbol_Division(rString);	//lexikalische Analyse
     if (!res)
         res = ScanType(rString);            // Erkennung des Formattyps
     if (!res)
-        res = FinalScan( rString, rComment );   // Typabhaengige Endanalyse
-    return res;                             // res = Kontrollposition
+        res = FinalScan( rString, rComment );	// Typabhaengige Endanalyse
+    return res;								// res = Kontrollposition
                                             // res = 0 => Format ok
 }
 

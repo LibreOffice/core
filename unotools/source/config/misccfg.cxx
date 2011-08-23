@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +43,8 @@
 
 #define DEFAULT_TAB 2000
 
-#define DEF_INCH    2540L
-#define DEF_RELTWIP 1440L
+#define DEF_INCH	2540L
+#define DEF_RELTWIP	1440L
 
 using namespace rtl;
 using namespace com::sun::star::uno;
@@ -59,32 +59,32 @@ static sal_Int32 nRefCount = 0;
 
 class SfxMiscCfg : public utl::ConfigItem
 {
-    BOOL            bPaperSize;     // printer warnings
-    BOOL            bPaperOrientation;
-    BOOL            bNotFound;
-    sal_Int32       nYear2000;      // two digit year representation
+    BOOL			bPaperSize;     // printer warnings
+    BOOL			bPaperOrientation;
+    BOOL			bNotFound;
+    sal_Int32		nYear2000;		// two digit year representation
 
     const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
-    void                    Load();
+    void					Load();
 
 public:
     SfxMiscCfg( );
     ~SfxMiscCfg( );
 
-    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
-    virtual void            Commit();
+    virtual void 			Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    virtual void			Commit();
 
-    BOOL        IsNotFoundWarning()     const {return bNotFound;}
-    void        SetNotFoundWarning( BOOL bSet);
+    BOOL		IsNotFoundWarning() 	const {return bNotFound;}
+    void		SetNotFoundWarning(	BOOL bSet);
 
-    BOOL        IsPaperSizeWarning()    const {return bPaperSize;}
-    void        SetPaperSizeWarning(BOOL bSet);
+    BOOL		IsPaperSizeWarning() 	const {return bPaperSize;}
+    void		SetPaperSizeWarning(BOOL bSet);
 
-    BOOL        IsPaperOrientationWarning()     const {return bPaperOrientation;}
-    void        SetPaperOrientationWarning( BOOL bSet);
+    BOOL		IsPaperOrientationWarning() 	const {return bPaperOrientation;}
+    void		SetPaperOrientationWarning(	BOOL bSet);
 
                 // 0 ... 99
-    sal_Int32   GetYear2000()           const { return nYear2000; }
+    sal_Int32	GetYear2000()			const { return nYear2000; }
     void        SetYear2000( sal_Int32 nSet );
 
 };
@@ -100,7 +100,7 @@ SfxMiscCfg::SfxMiscCfg() :
     nYear2000( 1930 )
 {
     RTL_LOGFILE_CONTEXT(aLog, "svl SfxMiscCfg::SfxMiscCfg()");
-
+    
     Load();
 }
 /* -----------------------------02.03.01 15:31--------------------------------
@@ -160,10 +160,10 @@ const Sequence<OUString>& SfxMiscCfg::GetPropertyNames()
     {
         static const char* aPropNames[] =
         {
-               "Print/Warning/PaperSize",               //  0
-               "Print/Warning/PaperOrientation",        //  1
-               "Print/Warning/NotFound",                //  2
-            "DateFormat/TwoDigitYear",              //  3
+               "Print/Warning/PaperSize",				//  0
+               "Print/Warning/PaperOrientation",		//  1
+               "Print/Warning/NotFound",				//  2
+            "DateFormat/TwoDigitYear",            	//  3
         };
         const int nCount = 4;
         aNames.realloc(nCount);
@@ -191,7 +191,7 @@ void SfxMiscCfg::Load()
             {
                 switch(nProp)
                 {
-                    case  0: bPaperSize        = *(sal_Bool*)pValues[nProp].getValue(); break;      //"Print/Warning/PaperSize",
+                    case  0: bPaperSize 	   = *(sal_Bool*)pValues[nProp].getValue(); break;		//"Print/Warning/PaperSize",
                     case  1: bPaperOrientation = *(sal_Bool*)pValues[nProp].getValue();  break;     //"Print/Warning/PaperOrientation",
                     case  2: bNotFound         = *(sal_Bool*)pValues[nProp].getValue()  ;  break;   //"Print/Warning/NotFound",
                     case  3: pValues[nProp] >>= nYear2000;break;                                    //"DateFormat/TwoDigitYear",
@@ -221,7 +221,7 @@ void SfxMiscCfg::Commit()
     {
         switch(nProp)
         {
-            case  0: pValues[nProp].setValue(&bPaperSize, rType);break;  //"Print/Warning/PaperSize",
+            case  0: pValues[nProp].setValue(&bPaperSize, rType);break;	 //"Print/Warning/PaperSize",
             case  1: pValues[nProp].setValue(&bPaperOrientation, rType);break;     //"Print/Warning/PaperOrientation",
             case  2: pValues[nProp].setValue(&bNotFound, rType);break;   //"Print/Warning/NotFound",
             case  3: pValues[nProp] <<= nYear2000;break;                 //"DateFormat/TwoDigitYear",
@@ -267,17 +267,17 @@ MiscCfg::~MiscCfg( )
     }
 }
 
-BOOL MiscCfg::IsNotFoundWarning()   const
+BOOL MiscCfg::IsNotFoundWarning() 	const
 {
     return pImpl->IsNotFoundWarning();
 }
 
-void MiscCfg::SetNotFoundWarning(   BOOL bSet)
+void MiscCfg::SetNotFoundWarning(	BOOL bSet)
 {
     pImpl->SetNotFoundWarning( bSet );
 }
 
-BOOL MiscCfg::IsPaperSizeWarning()  const
+BOOL MiscCfg::IsPaperSizeWarning() 	const
 {
     return pImpl->IsPaperSizeWarning();
 }
@@ -287,12 +287,12 @@ void MiscCfg::SetPaperSizeWarning(BOOL bSet)
     pImpl->SetPaperSizeWarning( bSet );
 }
 
-BOOL MiscCfg::IsPaperOrientationWarning()   const
+BOOL MiscCfg::IsPaperOrientationWarning() 	const
 {
     return pImpl->IsPaperOrientationWarning();
 }
 
-void MiscCfg::SetPaperOrientationWarning(   BOOL bSet)
+void MiscCfg::SetPaperOrientationWarning(	BOOL bSet)
 {
     pImpl->SetPaperOrientationWarning( bSet );
 }

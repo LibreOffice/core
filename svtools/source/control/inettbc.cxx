@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -97,7 +97,7 @@ public:
     SvStringsDtor*                  pURLs;
     SvStringsDtor*                  pCompletions;
     const IUrlFilter*               pUrlFilter;
-    ::std::vector< WildCard >       m_aFilters;
+    ::std::vector< WildCard >		m_aFilters;
 
     static sal_Bool TildeParsing( String& aText, String& aBaseUrl );
 
@@ -115,18 +115,18 @@ class SvtMatchContext_Impl : public ::osl::Thread
 {
     static ::osl::Mutex*            pDirMutex;
 
-    SvStringsDtor                   aPickList;
+    SvStringsDtor 					aPickList;
     SvStringsDtor*                  pCompletions;
     SvStringsDtor*                  pURLs;
-    svtools::AsynchronLink          aLink;
-    String                          aBaseURL;
+    svtools::AsynchronLink 			aLink;
+    String							aBaseURL;
     String                          aText;
-    SvtURLBox*                      pBox;
+    SvtURLBox* 						pBox;
     BOOL                            bStop;
-    BOOL                            bOnlyDirectories;
-    BOOL                            bNoSelection;
+    BOOL							bOnlyDirectories;
+    BOOL							bNoSelection;
 
-    DECL_STATIC_LINK(               SvtMatchContext_Impl, Select_Impl, void* );
+    DECL_STATIC_LINK( 				SvtMatchContext_Impl, Select_Impl, void* );
 
     virtual void SAL_CALL           onTerminated( );
     virtual void SAL_CALL           run();
@@ -140,7 +140,7 @@ public:
 
                                     SvtMatchContext_Impl( SvtURLBox* pBoxP, const String& rText );
                                     ~SvtMatchContext_Impl();
-    void                            Stop();
+    void          					Stop();
 };
 
 ::osl::Mutex* SvtMatchContext_Impl::pDirMutex = 0;
@@ -417,9 +417,9 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
         try
         {
             uno::Reference< XDynamicResultSet > xDynResultSet;
-            ResultSetInclude eInclude = INCLUDE_FOLDERS_AND_DOCUMENTS;
+            ResultSetInclude eInclude =	INCLUDE_FOLDERS_AND_DOCUMENTS;
             if ( bOnlyDirectories )
-                eInclude =  INCLUDE_FOLDERS_ONLY;
+                eInclude =	INCLUDE_FOLDERS_ONLY;
 
             xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
 
@@ -553,7 +553,7 @@ String SvtURLBox::ParseSmart( String aText, String aBaseURL, String aWorkDir )
             // HRO: I suppose this hack should only be done for Windows !!!???
 #ifdef WNT
             // HRO: INetURLObject::smatRel2Abs does not recognize '\\' as a relative path
-            //      but in case of "\\\\" INetURLObject is right - this is an absolute path !
+            //		but in case of "\\\\" INetURLObject is right - this is an absolute path !
 
             if( aText.Search( '\\' ) == 0 && (aText.Len() < 2 || aText.GetChar( 1 ) != '\\') )
             {

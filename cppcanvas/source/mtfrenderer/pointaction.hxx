@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@ namespace basegfx {
 
 /* Definition of internal::PointActionFactory class */
 
-namespace cppcanvas
-{
+namespace cppcanvas 
+{ 
     namespace internal
     {
         struct OutDevState;
@@ -53,18 +53,18 @@ namespace cppcanvas
             text layout) is Canvas-dependent.
          */
         class PointActionFactory
-        {
-        public:
+        { 
+        public: 
             /// Point in current color
-            static ActionSharedPtr createPointAction( const ::basegfx::B2DPoint&,
-                                                      const CanvasSharedPtr&,
-                                                      const OutDevState& );
-
+            static ActionSharedPtr createPointAction( const ::basegfx::B2DPoint&,  
+                                                      const CanvasSharedPtr&, 
+                                                      const OutDevState& ); 
+            
             /// Point in given color
-            static ActionSharedPtr createPointAction( const ::basegfx::B2DPoint&,
-                                                      const CanvasSharedPtr&,
-                                                      const OutDevState&,
-                                                      const ::Color&        );
+            static ActionSharedPtr createPointAction( const ::basegfx::B2DPoint&,  
+                                                      const CanvasSharedPtr&, 
+                                                      const OutDevState&, 
+                                                      const ::Color&		); 
 
         private:
             // static factory, disable big four
@@ -73,7 +73,7 @@ namespace cppcanvas
             PointActionFactory(const PointActionFactory&);
             PointActionFactory& operator=( const PointActionFactory& );
         };
-    }
+    } 
 }
 
 #endif /* _CPPCANVAS_POINTACTION_HXX */

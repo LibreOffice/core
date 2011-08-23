@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -30,11 +30,11 @@
 #include "globals.hrc"
 #include "app.hrc"
 #include "swerror.h"
-#include "comcore.hrc" // MS:   Warum gibst auf der Core-Seite
- //         jetzt Resourcen
+#include "comcore.hrc" // MS: 	Warum gibst auf der Core-Seite
+ // 		jetzt Resourcen
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Strings
+    Beschreibung:	Strings
  --------------------------------------------------------------------*/
 
 String STR_COMCORE_READERROR
@@ -46,7 +46,7 @@ String STR_COMCORE_CANT_SHOW
     Text [ en-US ] = "Graphic cannot be displayed." ;
 };
 /*--------------------------------------------------------------------
-    Beschreibung:   Boxes
+    Beschreibung:	Boxes
  --------------------------------------------------------------------*/
 InfoBox ERR_CLPBRD_WRITE
 {
@@ -58,8 +58,8 @@ InfoBox ERR_CLPBRD_READ
 };
 
 
-#define ERR_CODE( class, err )  (class | (err - ERROR_SW_BASE))
-#define WARN_CODE( class, err ) (class | ( err - WARN_SW_BASE))
+#define ERR_CODE( class, err )	(class | (err - ERROR_SW_BASE))
+#define WARN_CODE( class, err )	(class | ( err - WARN_SW_BASE))
 
 Resource RID_SW_ERRHDL
 {

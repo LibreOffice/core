@@ -628,7 +628,7 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
     if( pExtensionPath == NULL )
         key = processLang( Language ) + dbFileName;
     else
-        key = *pExtensionPath + Language + dbFileName;      // make unique, don't change language
+        key = *pExtensionPath + Language + dbFileName;		// make unique, don't change language
 
     std::pair< DatabasesTable::iterator,bool > aPair =
         m_aDatabases.insert( DatabasesTable::value_type( key,0 ) );
@@ -826,6 +826,8 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
 
     for( sal_uInt32 i = 0; i < id.size(); ++i )
     {
+        DBData aDBData;
+
         listId[i] = id[i];
         listAnchor[i] = anchor[i];
 
@@ -837,7 +839,6 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
             DBHelp* pDBHelp = pDb->getDBHelp();
             if( pDBHelp != NULL )
             {
-                DBData aDBData;
                 bool bSuccess = pDBHelp->getValueForKey( idi, aDBData );
                 if( bSuccess )
                 {
@@ -1595,7 +1596,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPack
 
     if( m_iUserPackage == m_aUserPackagesSeq.getLength() )
     {
-        m_eState = SHARED_EXTENSIONS;       // Later: SHARED_MODULE
+        m_eState = SHARED_EXTENSIONS;		// Later: SHARED_MODULE
     }
     else
     {
@@ -1762,7 +1763,7 @@ Db* DataBaseIterator::nextDb( rtl::OUString* o_pExtensionPath, rtl::OUString* o_
         {
             case INITIAL_MODULE:
                 pRetDb = m_rDatabases.getBerkeley( m_aInitialModule, m_aLanguage, m_bHelpText );
-                m_eState = USER_EXTENSIONS;     // Later: SHARED_MODULE
+                m_eState = USER_EXTENSIONS;		// Later: SHARED_MODULE
                 break;
 
             // Later:
@@ -1884,7 +1885,7 @@ rtl::OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
 
                 o_rbExtension = false;
 
-                m_eState = USER_EXTENSIONS;     // Later: SHARED_MODULE
+                m_eState = USER_EXTENSIONS;		// Later: SHARED_MODULE
                 break;
 
             // Later:
@@ -1964,7 +1965,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
         {
             case INITIAL_MODULE:
                 xNA = m_rDatabases.jarFile( m_aInitialModule, m_aLanguage );
-                m_eState = USER_EXTENSIONS;     // Later: SHARED_MODULE
+                m_eState = USER_EXTENSIONS;		// Later: SHARED_MODULE
                 break;
 
             // Later:
@@ -2091,7 +2092,7 @@ rtl::OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o
                 o_rbTemporary = false;
                 o_rbExtension = false;
 
-                m_eState = USER_EXTENSIONS;     // Later: SHARED_MODULE
+                m_eState = USER_EXTENSIONS;		// Later: SHARED_MODULE
                 break;
 
             // Later:

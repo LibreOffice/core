@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -39,7 +39,7 @@
 
 namespace vclcanvas
 {
-    class WindowOutDevHolder : public OutDevProvider,
+    class WindowOutDevHolder : public OutDevProvider, 
                                private ::boost::noncopyable
     {
     public:
@@ -47,7 +47,7 @@ namespace vclcanvas
                                            ::com::sun::star::awt::XWindow>& xWin );
 
     private:
-        virtual OutputDevice&       getOutDev() { return mrOutputWindow; }
+        virtual OutputDevice& 		getOutDev() { return mrOutputWindow; }
         virtual const OutputDevice& getOutDev() const { return mrOutputWindow; }
 
         // TODO(Q2): Lifetime issue. Though WindowGraphicDeviceBase
@@ -60,7 +60,7 @@ namespace vclcanvas
         // vcl/source/window/window.cxx is broken, that disposes the
         // canvas during window deletion, we're riding a dead horse
         // here
-        Window& mrOutputWindow;
+        Window& mrOutputWindow; 
     };
 }
 

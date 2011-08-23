@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ namespace dbaui
         void    updateHelpText();
 
     protected:
-        virtual void        PreparePaint( SvLBoxEntry* _pEntry );
+        virtual void	    PreparePaint( SvLBoxEntry* _pEntry );
         virtual Rectangle   GetFocusRect( SvLBoxEntry* _pEntry, long _nLine );
         virtual void        ModelHasCleared();
 
@@ -108,7 +108,7 @@ namespace dbaui
 
         TaskEntry( const sal_Char* _pAsciiUNOCommand, USHORT _nHelpID, USHORT _nTitleResourceID, bool _bHideWhenDisabled = false );
     };
-    typedef ::std::vector< TaskEntry >  TaskEntryList;
+    typedef ::std::vector< TaskEntry >	TaskEntryList;
 
     struct TaskPaneData
     {
@@ -120,13 +120,13 @@ namespace dbaui
 
     class OTasksWindow : public Window
     {
-        OCreationList                       m_aCreation;
-        FixedText                           m_aDescription;
-        FixedText                           m_aHelpText;
-        FixedLine                           m_aFL;
-        OApplicationDetailView*             m_pDetailView;
+        OCreationList						m_aCreation;
+        FixedText							m_aDescription;
+        FixedText							m_aHelpText;
+        FixedLine							m_aFL;
+        OApplicationDetailView*				m_pDetailView;
 
-        DECL_LINK( OnEntrySelectHdl,        SvTreeListBox* );
+        DECL_LINK( OnEntrySelectHdl,		SvTreeListBox* );
         void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt);
@@ -137,7 +137,7 @@ namespace dbaui
         // window overloads
         virtual void Resize();
 
-        OApplicationDetailView* getDetailView() const { return m_pDetailView; }
+        OApplicationDetailView*	getDetailView() const { return m_pDetailView; }
 
         /// fills the Creation listbox with the necessary strings and images
         void fillTaskEntryList( const TaskEntryList& _rList );
@@ -154,11 +154,11 @@ namespace dbaui
     class OApplicationDetailView : public OSplitterView
                                  , public IClipboardTest
     {
-        Splitter                            m_aHorzSplitter;
-        OTitleWindow                        m_aTasks;
-        OTitleWindow                        m_aContainer;
-        OAppBorderWindow&                   m_rBorderWin;       // my parent
-        OAppDetailPageHelper*               m_pControlHelper;
+        Splitter							m_aHorzSplitter;
+        OTitleWindow						m_aTasks;		
+        OTitleWindow						m_aContainer;
+        OAppBorderWindow&					m_rBorderWin;		// my parent
+        OAppDetailPageHelper*				m_pControlHelper;
         ::std::vector< TaskPaneData >       m_aTaskPaneData;
         MnemonicGenerator                   m_aExternalMnemonics;
 
@@ -171,19 +171,19 @@ namespace dbaui
         OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode);
         virtual ~OApplicationDetailView();
         // window overloads
-        //  virtual void Resize();
+        //	virtual void Resize();
         virtual void GetFocus();
 
         /** creates the tables page
-            @param  _xConnection
+            @param	_xConnection
                 The connection to get the table names
         */
         void createTablesPage(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
 
         /** creates the page for the specific type.
-            @param  _eType
+            @param	_eType
                 The type which should be created. E_TABLE isn't allowed.
-            @param  _xContainer
+            @param	_xContainer
                 The container of the elements to be inserted.
         */
         void createPage(ElementType _eType,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer);
@@ -201,17 +201,17 @@ namespace dbaui
         inline OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
         inline OTasksWindow& getTasksWindow() const { return *static_cast< OTasksWindow* >( m_aTasks.getChildWindow() ); }
 
-        sal_Bool isCutAllowed() ;
-        sal_Bool isCopyAllowed()    ;
-        sal_Bool isPasteAllowed();
+        sal_Bool isCutAllowed()	;	
+        sal_Bool isCopyAllowed()	;	
+        sal_Bool isPasteAllowed();	
         virtual sal_Bool hasChildPathFocus() { return HasChildPathFocus(); }
         void copy();
         void cut();
         void paste();
 
         /** return the qualified name.
-            @param  _pEntry
-                The entry of a table, or query, form, report to get the qualified name.
+            @param	_pEntry
+                The entry of a table, or query, form, report to get the qualified name. 
                 If the entry is <NULL/>, the first selected is chosen.
             @return
                 the qualified name
@@ -252,7 +252,7 @@ namespace dbaui
         ElementType getElementType() const;
 
         /** clears the detail pages.
-            @param  _bTaskAlso
+            @param	_bTaskAlso
                 If <TRUE/> the task window will also be cleared.
         */
         void clearPages(sal_Bool _bTaskAlso = sal_True);
@@ -264,7 +264,7 @@ namespace dbaui
         sal_Int32 getSelectionCount();
 
         /** returns the element names which are selected
-            @param  _rNames
+            @param	_rNames
                 The list will be filled.
         */
         void getSelectionElementNames(::std::vector< ::rtl::OUString>& _rNames ) const;
@@ -290,13 +290,13 @@ namespace dbaui
         void selectElements(const ::com::sun::star::uno::Sequence< ::rtl::OUString>& _aNames);
 
         /** adds a new object to the detail page.
-            @param  _eType
+            @param	_eType
                 The type where the entry shold be appended.
-            @param  _rName
+            @param	_rName
                 The name of the object to be inserted
-            @param  _rObject
+            @param	_rObject
                 The object to add.
-            @param  _rxConn
+            @param	_rxConn
                 If we insert a table, the connection must be set.
         */
         SvLBoxEntry* elementAdded(ElementType eType
@@ -304,13 +304,13 @@ namespace dbaui
                         ,const ::com::sun::star::uno::Any& _rObject );
 
         /** replaces a objects name with a new one
-            @param  _eType
+            @param	_eType
                 The type where the entry shold be appended.
-            @param  _rOldName
+            @param	_rOldName
                 The old name of the object to be replaced
-            @param  _rNewName
+            @param	_rNewName
                 The new name of the object to be replaced
-            @param  _rxConn
+            @param	_rxConn
                 If we insert a table, the connection must be set.
             @param  _xObject
                 The object which was replaced
@@ -320,11 +320,11 @@ namespace dbaui
                         ,const ::rtl::OUString& _rNewName );
 
         /** removes an element from the detail page.
-            @param  _eType
+            @param	_eType
                 The type where the entry shold be appended.
-            @param  _rName
+            @param	_rName
                 The name of the element to be removed.
-            @param  _rxConn
+            @param	_rxConn
                 If we remove a table, the connection must be set.
         */
         void elementRemoved(ElementType _eType
@@ -338,27 +338,27 @@ namespace dbaui
 
 
         /** switches to the given preview mode
-            @param  _eMode
+            @param	_eMode
                 the mode to set for the preview
         */
         void switchPreview(PreviewMode _eMode);
 
         /** shows the Preview of the content when it is enabled.
-            @param  _xContent
+            @param	_xContent
                 The content which must support the "preview" command.
         */
         void showPreview(const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _xContent);
 
         /** shows the Preview of a table or query
-            @param  _sDataSourceName
+            @param	_sDataSourceName
                 the name of the data source
-            @param  _sName
+            @param	_sName
                 the name of table or query
-            @param  _bTable
+            @param	_bTable
                 <TRUE/> if it is a table, otherwise <FALSE/>
-            @return void
+            @return	void
         */
-        void showPreview(   const ::rtl::OUString& _sDataSourceName,
+        void showPreview(	const ::rtl::OUString& _sDataSourceName,
                             const ::rtl::OUString& _sName,
                             sal_Bool _bTable);
 

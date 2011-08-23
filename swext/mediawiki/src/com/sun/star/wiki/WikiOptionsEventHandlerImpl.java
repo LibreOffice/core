@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,7 +63,7 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
     private XControlContainer m_xControlContainer;
 
     Settings m_aSettings;
-
+    
     public WikiOptionsEventHandlerImpl( XComponentContext xContext )
     {
         m_xContext = xContext;
@@ -96,7 +96,7 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
                 catch ( Exception ex )
                 {
                     ex.printStackTrace();
-                }
+                } 
             }
         }
     }
@@ -166,7 +166,7 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
         XPropertySet xListProps = GetPropSet("WikiList");
         if ( xListProps != null )
         {
-            try
+            try 
             {
                 short[] pSel = (short []) xListProps.getPropertyValue("SelectedItems");
                 String[] pItems = (String []) GetPropSet("WikiList").getPropertyValue("StringItemList");
@@ -200,16 +200,16 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
     }
 
     // com.sun.star.lang.XServiceInfo:
-    public String getImplementationName()
+    public String getImplementationName() 
     {
          return m_sImplementationName;
     }
 
-    public boolean supportsService( String sService )
+    public boolean supportsService( String sService ) 
     {
         int len = m_pServiceNames.length;
 
-        for( int i=0; i < len; i++ )
+        for( int i=0; i < len; i++ ) 
         {
             if ( sService.equals( m_pServiceNames[i] ))
                 return true;
@@ -217,7 +217,7 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
         return false;
     }
 
-    public String[] getSupportedServiceNames()
+    public String[] getSupportedServiceNames() 
     {
         return m_pServiceNames;
     }
@@ -246,12 +246,12 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
                             m_xControlContainer = (XControlContainer)UnoRuntime.queryInterface(
                                                             XControlContainer.class, m_xDialog );
                             m_aSettings = Settings.getSettings( m_xContext );
-                            m_aSettings.loadConfiguration(); // throw away all the noncommited changes
+                            m_aSettings.loadConfiguration(); // throw away all the noncommited changes 
                             InitStrings();
                         }
                         else if ( m_aSettings != null )
                             m_aSettings.loadConfiguration(); // throw away all the noncommited changes
-
+                            
                         RefreshView();
                         CheckButtonState();
                     }
@@ -283,7 +283,7 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
         {
             CheckButtonState();
         }
-
+        
         return true;
     }
 

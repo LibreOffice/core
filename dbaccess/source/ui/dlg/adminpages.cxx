@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,7 +92,7 @@ namespace dbaui
     OGenericAdministrationPage::~OGenericAdministrationPage()
     {
         DELETEZ(m_pFT_HeaderText);
-
+    
         DBG_DTOR(OGenericAdministrationPage,NULL);
     }
 
@@ -186,7 +186,7 @@ namespace dbaui
             fillControls(aControlList);
             ::std::for_each(aControlList.begin(),aControlList.end(),TSaveValueWrapperFunctor());
         }
-
+        
         if ( bReadonly )
         {
             fillWindows(aControlList);
@@ -264,7 +264,7 @@ namespace dbaui
 
     // -----------------------------------------------------------------------
     IMPL_LINK(OGenericAdministrationPage, OnTestConnectionClickHdl, PushButton*, /*_pButton*/)
-    {
+    {        
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         sal_Bool bSuccess = sal_False;
         if ( m_pAdminDialog )
@@ -294,7 +294,7 @@ namespace dbaui
                 else
                 {
                     eImage = OSQLMessageBox::Error;
-                    aMessage = String(ModuleRes(STR_CONNECTION_NO_SUCCESS));
+                    aMessage = String(ModuleRes(STR_CONNECTION_NO_SUCCESS));				
                 }
                 OSQLMessageBox aMsg( this, sTitle, aMessage, WB_OK, eImage );
                 aMsg.Execute();
@@ -333,7 +333,7 @@ namespace dbaui
     }
 
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

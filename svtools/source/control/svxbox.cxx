@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ SvxListBox::SvxListBox(Window* pParent, const ResId& rId):
 
 __EXPORT SvxListBox::~SvxListBox()
 {
-    aEntryLst.DeleteAndDestroy(0,   aEntryLst.Count());
+    aEntryLst.DeleteAndDestroy(0,	aEntryLst.Count());
     aDelEntryLst.DeleteAndDestroy(0, aDelEntryLst.Count());
 }
 
@@ -102,7 +102,7 @@ void SvxListBox::InitListBox()
     // Verwaltung fuer die Stringlist aus der Resource aufbauen
     USHORT nSize = GetEntryCount();
     for(USHORT i=0; i < nSize; ++i)
-    {   const SvxBoxEntry* pTmp = new SvxBoxEntry(ListBox::GetEntry(i), i);
+    {	const SvxBoxEntry* pTmp = new SvxBoxEntry(ListBox::GetEntry(i), i);
         const SvxBoxEntry* &rpTmp = pTmp;
         aEntryLst.Insert(rpTmp, aEntryLst.Count());
     }
@@ -228,7 +228,7 @@ USHORT SvxListBox::GetModifiedCount() const
     USHORT nMod  = 0;
     USHORT nSize = aEntryLst.Count();
     for(USHORT i=0; i < nSize; ++i)
-    {   if(aEntryLst[i]->bModified)
+    {	if(aEntryLst[i]->bModified)
             nMod++;
     }
     return nMod;
@@ -245,8 +245,8 @@ void SvxListBox::ModifyEntry(USHORT nPos, const String& rName)
 
     SvxBoxEntry* pEntry = aEntryLst[nPos];
     aEntryLst.Remove(nPos, 1);
-    aEntryLst[nPos]->aName      = rName;
-    aEntryLst[nPos]->bModified  = TRUE;
+    aEntryLst[nPos]->aName 		= rName;
+    aEntryLst[nPos]->bModified 	= TRUE;
     ListBox::RemoveEntry(nPos);
 
     InsertSorted(pEntry);
@@ -261,8 +261,8 @@ const SvxBoxEntry& SvxListBox::GetModifiedEntry(USHORT nPos) const
     USHORT nSize = aEntryLst.Count();
     USHORT nMod  = 0;
     for(USHORT i=0; i < nSize; ++i)
-    {   if(aEntryLst[i]->bModified)
-        {   if(nMod == nPos)
+    {	if(aEntryLst[i]->bModified)
+        {	if(nMod == nPos)
                 return *aEntryLst[i];
             nMod++;
         }
@@ -297,14 +297,14 @@ USHORT SvxListBox::GetNewCount() const
     USHORT nNew = 0;
     USHORT nSize = aEntryLst.Count();
     for(USHORT i=0; i < nSize; ++i)
-    {   if(aEntryLst[i]->bNew)
+    {	if(aEntryLst[i]->bNew)
             nNew++;
     }
     return nNew;
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Alle neuen Eintraege ueberpruefen
+     Beschreibung:	Alle neuen Eintraege ueberpruefen
  --------------------------------------------------------------------*/
 
 const SvxBoxEntry& SvxListBox::GetNewEntry(USHORT nPos) const
@@ -312,8 +312,8 @@ const SvxBoxEntry& SvxListBox::GetNewEntry(USHORT nPos) const
     USHORT nSize = aEntryLst.Count();
     USHORT nNew  = 0;
     for(USHORT i=0; i < nSize; ++i)
-    {   if(aEntryLst[i]->bNew)
-        {   if(nNew == nPos)
+    {	if(aEntryLst[i]->bNew)
+        {	if(nNew == nPos)
                 return *aEntryLst[i];
             nNew++;
         }
@@ -357,7 +357,7 @@ SvxComboBox::SvxComboBox(Window* pParent, const ResId& rId, USHORT nStyleBits ):
 
 __EXPORT SvxComboBox::~SvxComboBox()
 {
-    aEntryLst.DeleteAndDestroy(0,   aEntryLst.Count());
+    aEntryLst.DeleteAndDestroy(0,	aEntryLst.Count());
     aDelEntryLst.DeleteAndDestroy(0, aDelEntryLst.Count());
 }
 
@@ -370,7 +370,7 @@ void SvxComboBox::InitComboBox()
     // Verwaltung fuer die Stringlist aus der Resource aufbauen
     USHORT nSize = GetEntryCount();
     for(USHORT i=0; i < nSize; ++i)
-    {   const SvxBoxEntry* pTmp = new SvxBoxEntry(ComboBox::GetEntry(i), i);
+    {	const SvxBoxEntry* pTmp = new SvxBoxEntry(ComboBox::GetEntry(i), i);
         const SvxBoxEntry* &rpTmp = pTmp;
         aEntryLst.Insert(rpTmp, aEntryLst.Count());
     }
@@ -470,7 +470,7 @@ USHORT SvxComboBox::GetModifiedCount() const
     USHORT nMod  = 0;
     USHORT nSize = aEntryLst.Count();
     for(USHORT i=0; i < nSize; ++i)
-    {   if(aEntryLst[i]->bModified)
+    {	if(aEntryLst[i]->bModified)
             nMod++;
     }
     return nMod;
@@ -487,8 +487,8 @@ void SvxComboBox::ModifyEntry(USHORT nPos, const String& rName)
 
     SvxBoxEntry* pEntry = aEntryLst[nPos];
     aEntryLst.Remove(nPos, 1);
-    aEntryLst[nPos]->aName      = rName;
-    aEntryLst[nPos]->bModified  = TRUE;
+    aEntryLst[nPos]->aName 		= rName;
+    aEntryLst[nPos]->bModified 	= TRUE;
     ComboBox::RemoveEntry(nPos);
 
     InsertSorted(pEntry);
@@ -503,8 +503,8 @@ const SvxBoxEntry& SvxComboBox::GetModifiedEntry(USHORT nPos) const
     USHORT nSize = aEntryLst.Count();
     USHORT nMod  = 0;
     for(USHORT i=0; i < nSize; ++i)
-    {   if(aEntryLst[i]->bModified)
-        {   if(nMod == nPos)
+    {	if(aEntryLst[i]->bModified)
+        {	if(nMod == nPos)
                 return *aEntryLst[i];
             nMod++;
         }
@@ -539,14 +539,14 @@ USHORT SvxComboBox::GetNewCount() const
     USHORT nNew = 0;
     USHORT nSize = aEntryLst.Count();
     for(USHORT i=0; i < nSize; ++i)
-    {   if(aEntryLst[i]->bNew)
+    {	if(aEntryLst[i]->bNew)
             nNew++;
     }
     return nNew;
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Alle neuen Eintraege ueberpruefen
+     Beschreibung:	Alle neuen Eintraege ueberpruefen
  --------------------------------------------------------------------*/
 
 const SvxBoxEntry& SvxComboBox::GetNewEntry(USHORT nPos) const
@@ -554,8 +554,8 @@ const SvxBoxEntry& SvxComboBox::GetNewEntry(USHORT nPos) const
     USHORT nSize = aEntryLst.Count();
     USHORT nNew  = 0;
     for(USHORT i=0; i < nSize; ++i)
-    {   if(aEntryLst[i]->bNew)
-        {   if(nNew == nPos)
+    {	if(aEntryLst[i]->bNew)
+        {	if(nNew == nPos)
                 return *aEntryLst[i];
             nNew++;
         }
@@ -589,7 +589,7 @@ void __EXPORT SvxComboBox::KeyInput( const KeyEvent& rKEvt )
         if( cChar == sal_Unicode( '/' ) || cChar == sal_Unicode( ' ' ) )
             return;
 #else
-        if( cChar == sal_Unicode( ':' ) || cChar == sal_Unicode( '\\' ) ||
+        if( cChar == sal_Unicode( ':' ) || cChar == sal_Unicode( '\\' ) || 
             cChar == sal_Unicode( '.' ) || cChar == sal_Unicode( ' ' ) )
             return;
 #endif

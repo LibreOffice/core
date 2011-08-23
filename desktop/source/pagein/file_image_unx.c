@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -100,7 +100,7 @@ int file_image_pagein (file_image * image)
     if ((w.m_size = image->m_size) == 0)
         return (0);
 
-    if (madvise (w.m_base, w.m_size, MADV_WILLNEED) == -1)
+    if (madvise (w.m_base, w.m_size, MADV_WILLNEED) == -1) 
     {
 #ifndef MACOSX
         return (errno);
@@ -111,7 +111,7 @@ int file_image_pagein (file_image * image)
     }
 
 
-#ifndef MACOSX
+#ifndef MACOSX	
     if ((s = sysconf (_SC_PAGESIZE)) == -1)
         s = 0x1000;
 #else

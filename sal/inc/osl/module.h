@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,14 +25,14 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+ 
 /** @HTML */
 
 #ifndef _OSL_MODULE_H_
 #define _OSL_MODULE_H_
 
-#   include <rtl/ustring.h>
-#   include <rtl/tencinfo.h>
+#	include <rtl/ustring.h>
+#	include <rtl/tencinfo.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -67,7 +67,7 @@ typedef void* oslModule;
     @see osl_getFunctionSymbol.
     @see osl_getModuleURLFromFunctionAddress.
 */
-typedef void ( SAL_CALL *oslGenericFunction )( void );
+typedef void ( SAL_CALL *oslGenericFunction )( void ); 
 
 /** Load a shared library or module.
     @param strModuleName denotes the name of the module to be loaded.
@@ -100,35 +100,35 @@ oslModule SAL_CALL osl_loadModuleRelative(
     This function can be used to search for a function symbol in the process address space.
     Do not use the returned handle as an argument to osl_unloadModule. On Unix platforms,
     pModuleName gets ignored and the special handle RTLD_DEFAULT is returned.
-
+    
     @param pModuleName
     [in] denotes the name of the module to search for. Ignored on Unix
-
+    
     @param pResult
     [out] a pointer to a oslModule that is updated with the requested module handle
     on success.
-
-    @return
+    
+    @return 
     sal_True if the module handle could be retrieved and has been copied to *pResult.
     sal_False if the module has not been loaded yet.
-
+    
     @see osl_getFunctionSymbol
     @see osl_getAsciiFunctionSymbol
 */
 sal_Bool SAL_CALL osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult);
 
-/** Release the module
+/** Release the module 
 */
 void SAL_CALL osl_unloadModule(oslModule Module);
 
-/** lookup the specified symbol name.
+/** lookup the specified symbol name. 
     @return address of the symbol or NULL if lookup failed.
 */
 void* SAL_CALL osl_getSymbol( oslModule Module, rtl_uString *strSymbolName);
 
 /** Lookup the specified function symbol name.
 
-    osl_getFunctionSymbol is an alternative function for osl_getSymbol.
+    osl_getFunctionSymbol is an alternative function for osl_getSymbol. 
     Use Function pointer as symbol address to conceal type conversion.
 
     @param Module
@@ -136,7 +136,7 @@ void* SAL_CALL osl_getSymbol( oslModule Module, rtl_uString *strSymbolName);
 
     @param ustrFunctionSymbolName
     [in] Name of the function that will be looked up.
-
+   
     @return
     <dl>
     <dt>Function address.</dt>
@@ -144,7 +144,7 @@ void* SAL_CALL osl_getSymbol( oslModule Module, rtl_uString *strSymbolName);
     <dt>NULL</dt>
     <dd>lookup failed or the parameter are invalid.</dd>
     </dl>
-
+   
     @see osl_getSymbol
     @see osl_getAsciiFunctionSymbol
 */
@@ -152,15 +152,15 @@ oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString
 
 /** Lookup the specified function symbol name.
 
-    osl_getAsciiFunctionSymbol is an alternative function for osl_getFunctionSymbol.
+    osl_getAsciiFunctionSymbol is an alternative function for osl_getFunctionSymbol. 
     It expects the C-style function name string to contain ascii characters only.
 
     @param Module
     [in] a module handle as returned by osl_loadModule or osl_getModuleHandle
 
     @param pFunctionSymbolName
-    [in] Name of the function that will be looked up.
-
+    [in] Name of the function that will be looked up. 
+   
     @return
     <dl>
     <dt>Function address.</dt>
@@ -168,7 +168,7 @@ oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString
     <dt>NULL</dt>
     <dd>lookup failed or the parameter are invalid.</dd>
     </dl>
-
+   
     @see osl_getModuleHandle
     @see osl_getFunctionSymbol
 */
@@ -180,19 +180,19 @@ oslGenericFunction SAL_CALL osl_getAsciiFunctionSymbol(oslModule Module, const s
     @param pustrURL receives the URL of the module that is mapped at pv.
     @return sal_True on success, sal_False if no module can be found at the specified address.
 */
-sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL );
+sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL ); 
 
 /** Lookup URL of module which is mapped at the specified function address.
 
-    osl_getModuleURLFromFunctionAddress is an alternative function for osl_getModuleURLFromAddress.
+    osl_getModuleURLFromFunctionAddress is an alternative function for osl_getModuleURLFromAddress. 
     Use Function pointer as symbol address to conceal type conversion.
-
+   
     @param pf
     [in] function address in oslGenericFunction format.
-
+           
     @param pustrFunctionURL
     [out] receives the URL of the module that is mapped at pf.
-
+   
     @return
     <dl>
     <dt>sal_True</dt>
@@ -200,7 +200,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL 
     <dt>sal_False</dt>
     <dd>no module can be found at the specified function address or parameter is somewhat invalid.</dd>
     </dl>
-
+   
     @see osl_getModuleURLFromAddress
 */
 sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress( oslGenericFunction pf, rtl_uString **pustrFunctionURL );

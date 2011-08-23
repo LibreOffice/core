@@ -1,6 +1,6 @@
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
+* 
 * Copyright 2008 by Sun Microsystems, Inc.
 *
 * OpenOffice.org - a multi-platform office productivity suite
@@ -30,11 +30,11 @@
 #ifndef __com_sun_star_sdb_XRowsChangeBroadcaster_idl__
 #define __com_sun_star_sdb_XRowsChangeBroadcaster_idl__
 
-#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/uno/XInterface.idl> 
 
 //=============================================================================
 
-module com { module sun { module star { module sdb {
+module com { module sun { module star { module sdb { 
 
 interface XRowsChangeListener;
 
@@ -59,7 +59,7 @@ interface XRowsChangeBroadcaster
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; 
 
 //=============================================================================
 

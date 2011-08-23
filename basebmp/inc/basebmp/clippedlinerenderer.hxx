@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace basebmp
 // factored-out bresenham setup code, which is used from two different
 // places in renderClippedLine() below. Admittedly messy for the long
 // parameter list...
-inline bool prepareClip( sal_Int32  a1,
+inline bool prepareClip( sal_Int32  a1, 
                          sal_Int32  a2,
                          sal_Int32  b1,
                          sal_Int32  da,
@@ -51,7 +51,7 @@ inline bool prepareClip( sal_Int32  a1,
                          sal_Int32& o_bs,
                          int        sa,
                          int        sb,
-                         sal_Int32& io_rem,
+                         sal_Int32& io_rem, 
                          int&       o_n,
                          sal_uInt32 clipCode1,
                          sal_uInt32 clipCount1,
@@ -98,7 +98,7 @@ inline bool prepareClip( sal_Int32  a1,
         if( clipCode1 & (aMinFlag|aMaxFlag) )
         {
             cb = (ca + da - !bRoundTowardsPt2) / (2*da);
-
+            
             if( sb >= 0 )
             {
                 o_bs = b1 + cb;
@@ -111,7 +111,7 @@ inline bool prepareClip( sal_Int32  a1,
                 if( o_bs < bMin )
                     return false;
             }
-
+            
             io_rem += ca - 2*da*cb;
         }
         else
@@ -129,7 +129,7 @@ inline bool prepareClip( sal_Int32  a1,
                 if( o_as < aMin )
                     return false;
             }
-
+            
             io_rem += 2*db*ca - cb;
         }
     }
@@ -147,7 +147,7 @@ inline bool prepareClip( sal_Int32  a1,
             cb = 2*da*((clipCode2 & bMinFlag) ? b1 - bMin : bMax - b1);
             clipCode2 &= (cb + da < ca + bRoundTowardsPt2) ? ~(aMinFlag|aMaxFlag) : ~(bMinFlag|bMaxFlag);
         }
-
+        
         if( clipCode2 & (aMinFlag|aMaxFlag) )
             o_n = (clipCode2 & aMinFlag) ? o_as - aMin : aMax - o_as;
         else
@@ -187,7 +187,7 @@ inline bool prepareClip( sal_Int32  a1,
 
     @param end
     right-bottom image iterator
-
+    
     @param acc
     Image accessor
 
@@ -197,20 +197,20 @@ inline bool prepareClip( sal_Int32  a1,
     pixel, the pixel closer to pt1 will be chosen. Giving true here
     makes renderClippedLine() choose pt2 in those cases.
  */
-template< class Iterator, class Accessor >
+template< class Iterator, class Accessor > 
 void renderClippedLine( basegfx::B2IPoint             aPt1,
                         basegfx::B2IPoint             aPt2,
                         const basegfx::B2IRange&      rClipRect,
                         typename Accessor::value_type color,
-                        Iterator                      begin,
-                        Accessor                      acc,
+                        Iterator                      begin, 
+                        Accessor                      acc, 
                         bool                          bRoundTowardsPt2=false )
 {
     // Algorithm according to Steven Eker's 'Pixel-perfect line clipping',
     // Graphics Gems V, pp. 314-322
-    sal_uInt32 clipCode1 = basegfx::tools::getCohenSutherlandClipFlags(aPt1,
+    sal_uInt32 clipCode1 = basegfx::tools::getCohenSutherlandClipFlags(aPt1, 
                                                                        rClipRect);
-    sal_uInt32 clipCode2 = basegfx::tools::getCohenSutherlandClipFlags(aPt2,
+    sal_uInt32 clipCode2 = basegfx::tools::getCohenSutherlandClipFlags(aPt2, 
                                                                        rClipRect);
 
     if( clipCode1 & clipCode2 )
@@ -219,7 +219,7 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
     sal_uInt32 clipCount1 = basegfx::tools::getNumberOfClipPlanes(clipCode1);
     sal_uInt32 clipCount2 = basegfx::tools::getNumberOfClipPlanes(clipCode2);
 
-    if( (clipCode1 != 0 && clipCode2 == 0)
+    if( (clipCode1 != 0 && clipCode2 == 0) 
         || (clipCount1 == 2 && clipCount2 == 1) )
     {
         std::swap(clipCount2,clipCount1);
@@ -241,7 +241,7 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
         adx *= -1;
         sx = -1;
     }
-
+    
     // TODO(E1): This might overflow
     sal_Int32 ady = y2 - y1;
     int sy = 1;
@@ -250,7 +250,7 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
         ady *= -1;
         sy = -1;
     }
-
+    
     int n  = 0;
     sal_Int32 xs = x1;
     sal_Int32 ys = y1;
@@ -269,7 +269,7 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
                         bRoundTowardsPt2 ));
 
         Iterator currIter( begin + vigra::Diff2D(0,ys) );
-        typename vigra::IteratorTraits<Iterator>::row_iterator
+        typename vigra::IteratorTraits<Iterator>::row_iterator 
             rowIter( currIter.rowIterator() + xs );
 
         adx *= 2;
@@ -308,7 +308,7 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
             {
                 acc.set(color, rowIter);
 
-                if( --n < 0 )
+                if( --n < 0 ) 
                     break;
 
                 if( rem >= 0 )
@@ -345,7 +345,7 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
                         bRoundTowardsPt2 ));
 
         Iterator currIter( begin + vigra::Diff2D(xs,0) );
-        typename vigra::IteratorTraits<Iterator>::column_iterator
+        typename vigra::IteratorTraits<Iterator>::column_iterator 
             colIter( currIter.columnIterator() + ys );
 
         adx *= 2;
@@ -365,7 +365,7 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
                     xs += sx;
                     ys += sy;
                     rem -= ady;
-
+                    
                     currIter.x += sx;
                     colIter = currIter.columnIterator() + ys;
                 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -151,7 +151,7 @@ public class SdUnoOutlineView extends TestCase {
             e.printStackTrace( log );
             throw new StatusException("Couldn't create document", e);
         }
-
+        
         XDrawPagesSupplier oDPS = (XDrawPagesSupplier)
             UnoRuntime.queryInterface(XDrawPagesSupplier.class, xImpressDoc);
         XDrawPages the_pages = oDPS.getDrawPages();
@@ -200,7 +200,7 @@ public class SdUnoOutlineView extends TestCase {
                                 XWindow.class,aModel2.getCurrentController());
 
         oObj = aModel.getCurrentController();
-
+                
 
         log.println( "creating a new environment for impress view object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
@@ -213,7 +213,7 @@ public class SdUnoOutlineView extends TestCase {
         tEnv.addObjRelation("FirstModel", aModel);
 
         tEnv.addObjRelation("XUserInputInterception.XModel", aModel);
-
+        
         XFrame the_frame = the_Desk.getCurrentFrame();
         tEnv.addObjRelation("Frame", the_frame);
 

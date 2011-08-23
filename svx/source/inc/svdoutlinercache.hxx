@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -38,12 +38,12 @@ class SdrOutliner;
 class SdrOutlinerCache
 {
 private:
-    SdrModel*   mpModel;
+    SdrModel*	mpModel;
 
-    SdrOutliner*    mpModeOutline;
-    SdrOutliner*    mpModeText;
+    SdrOutliner*	mpModeOutline;
+    SdrOutliner*	mpModeText;
 public:
-    SdrOutlinerCache( SdrModel* pModel );
+    SdrOutlinerCache( SdrModel*	pModel );
     ~SdrOutlinerCache();
 
     SdrOutliner* createOutliner( sal_uInt16 nOutlinerMode );

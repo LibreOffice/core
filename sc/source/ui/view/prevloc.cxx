@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,11 +56,11 @@ enum ScPreviewLocationType
 
 struct ScPreviewLocationEntry
 {
-    ScPreviewLocationType   eType;
-    Rectangle               aPixelRect;
-    ScRange                 aCellRange;
-    BOOL                    bRepeatCol;
-    BOOL                    bRepeatRow;
+    ScPreviewLocationType	eType;
+    Rectangle				aPixelRect;
+    ScRange					aCellRange;
+    BOOL					bRepeatCol;
+    BOOL					bRepeatRow;
 
     ScPreviewLocationEntry( ScPreviewLocationType eNewType, const Rectangle& rPixel, const ScRange& rRange,
                             BOOL bRepCol, BOOL bRepRow ) :
@@ -113,12 +113,12 @@ void ScPreviewTableInfo::LimitToArea( const Rectangle& rPixelArea )
 {
     if ( pColInfo )
     {
-        //  cells completely left of the visible area
+        //	cells completely left of the visible area
         SCCOL nStart = 0;
         while ( nStart < nCols && pColInfo[nStart].nPixelEnd < rPixelArea.Left() )
             ++nStart;
 
-        //  cells completely right of the visible area
+        //	cells completely right of the visible area
         SCCOL nEnd = nCols;
         while ( nEnd > 0 && pColInfo[nEnd-1].nPixelStart > rPixelArea.Right() )
             --nEnd;
@@ -134,18 +134,18 @@ void ScPreviewTableInfo::LimitToArea( const Rectangle& rPixelArea )
                 SetColInfo( nNewCount, pNewInfo );
             }
             else
-                SetColInfo( 0, NULL );      // all invisible
+                SetColInfo( 0, NULL );		// all invisible
         }
     }
 
     if ( pRowInfo )
     {
-        //  cells completely above the visible area
+        //	cells completely above the visible area
         SCROW nStart = 0;
         while ( nStart < nRows && pRowInfo[nStart].nPixelEnd < rPixelArea.Top() )
             ++nStart;
 
-        //  cells completely below the visible area
+        //	cells completely below the visible area
         SCROW nEnd = nRows;
         while ( nEnd > 0 && pRowInfo[nEnd-1].nPixelStart > rPixelArea.Bottom() )
             --nEnd;
@@ -161,7 +161,7 @@ void ScPreviewTableInfo::LimitToArea( const Rectangle& rPixelArea )
                 SetRowInfo( nNewCount, pNewInfo );
             }
             else
-                SetRowInfo( 0, NULL );      // all invisible
+                SetRowInfo( 0, NULL );		// all invisible
         }
     }
 }
@@ -231,7 +231,7 @@ void ScPreviewLocationData::AddCellRange( const Rectangle& rRect, const ScRange&
 
 void ScPreviewLocationData::AddColHeaders( const Rectangle& rRect, SCCOL nStartCol, SCCOL nEndCol, BOOL bRepCol )
 {
-    SCTAB nTab = 0; //! ?
+    SCTAB nTab = 0;	//! ?
     ScRange aRange( nStartCol, 0, nTab, nEndCol, 0, nTab );
     Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
     aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_COLHEADER, aPixelRect, aRange, bRepCol, FALSE ) );
@@ -239,7 +239,7 @@ void ScPreviewLocationData::AddColHeaders( const Rectangle& rRect, SCCOL nStartC
 
 void ScPreviewLocationData::AddRowHeaders( const Rectangle& rRect, SCROW nStartRow, SCROW nEndRow, BOOL bRepRow )
 {
-    SCTAB nTab = 0; //! ?
+    SCTAB nTab = 0;	//! ?
     ScRange aRange( 0, nStartRow, nTab, 0, nEndRow, nTab );
     Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
     aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_ROWHEADER, aPixelRect, aRange, FALSE, bRepRow ) );
@@ -247,7 +247,7 @@ void ScPreviewLocationData::AddRowHeaders( const Rectangle& rRect, SCROW nStartR
 
 void ScPreviewLocationData::AddHeaderFooter( const Rectangle& rRect, BOOL bHeader, BOOL bLeft )
 {
-    ScRange aRange;     //! ?
+    ScRange aRange;		//! ?
     Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
 
     ScPreviewLocationType eType = bHeader ?
@@ -534,7 +534,7 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
                 aMainRect.Top() = pEntry->aPixelRect.Top();
                 aMainRect.Bottom() = pEntry->aPixelRect.Bottom();
             }
-            nTab = pEntry->aCellRange.aStart.Tab();     //! store separately?
+            nTab = pEntry->aCellRange.aStart.Tab();		//! store separately?
         }
         else if ( pEntry->eType == SC_PLOC_ROWHEADER )
         {
@@ -553,7 +553,7 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
     }
 
     //
-    //  get column info
+    //	get column info
     //
 
     SCCOL nColCount = 0;
@@ -623,7 +623,7 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
         rInfo.SetColInfo( 0, NULL );
 
     //
-    //  get row info
+    //	get row info
     //
 
     SCROW nRowCount = 0;
@@ -692,7 +692,7 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
         rInfo.SetRowInfo( 0, NULL );
 
     //
-    //  limit to visible area
+    //	limit to visible area
     //
 
     rInfo.SetTab( nTab );

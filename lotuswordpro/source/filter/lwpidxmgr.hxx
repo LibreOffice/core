@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #ifndef _LWPINDEXMANAGER_HXX
@@ -70,7 +70,7 @@
 #include "lwpobjstrm.hxx"
 
 /**
- * @brief   key structure used to map id to offset
+ * @brief	key structure used to map id to offset
 */
 struct LwpKey
 {
@@ -78,7 +78,7 @@ struct LwpKey
     sal_uInt32 offset;
 };
 /**
- * @brief   LwpIndexManager, to read all index records and maintain the index information
+ * @brief	LwpIndexManager, to read all index records and maintain the index information
 */
 class LwpIndexManager
 {
@@ -87,27 +87,27 @@ public:
     ~LwpIndexManager();
 protected:
     static const sal_uInt8 MAXOBJECTIDS;
-    std::vector<LwpKey*> m_ObjectKeys;  //the <id, offset> ordered vector
-    std::vector<LwpKey*> m_RootObjs;        //For those object ids in RootObjIndex
-    std::vector<sal_uInt32> m_TimeTable;    //Time table for object low id compression
+    std::vector<LwpKey*> m_ObjectKeys;	//the <id, offset> ordered vector
+    std::vector<LwpKey*> m_RootObjs;		//For those object ids in RootObjIndex
+    std::vector<sal_uInt32> m_TimeTable;	//Time table for object low id compression
 
     //sal_uInt16 m_nKeyCount;
-    sal_uInt32 m_nKeyCount;     //the count of all object
-    std::vector<sal_uInt32> m_TempVec;  // a temp vector , store the offset of leafindex
+    sal_uInt32 m_nKeyCount;		//the count of all object
+    std::vector<sal_uInt32> m_TempVec;	// a temp vector , store the offset of leafindex
 
-    sal_uInt32 m_ChildIndex[256];   //Offset of leaf index
+    sal_uInt32 m_ChildIndex[256];	//Offset of leaf index
     sal_uInt16 m_nLeafCount;
 protected:
-    void ReadRootData(LwpObjectStream *pObjStrm );  //Read root index data
+    void ReadRootData(LwpObjectStream *pObjStrm );	//Read root index data
 
 
     //Add new method to handle ObjIndex
     void ReadObjIndexData(LwpObjectStream* pObjStrm);
-    void ReadObjIndex( LwpSvStream *pStrm );    //Read Obj index
+    void ReadObjIndex( LwpSvStream *pStrm );	//Read Obj index
 
 
-    void ReadLeafIndex( LwpSvStream *pStrm );   //Read leaf index obj
-    void ReadLeafData( LwpObjectStream *pStrm );    //Read leaf index obj data
+    void ReadLeafIndex( LwpSvStream *pStrm );	//Read leaf index obj
+    void ReadLeafData( LwpObjectStream *pStrm );	//Read leaf index obj data
     void ReadTimeTable( LwpObjectStream *pStrm );
 public:
     void Read( LwpSvStream *pStrm );

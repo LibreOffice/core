@@ -42,9 +42,9 @@
 
 #ifdef UNICODE
 #define _UNICODE
-#define _tstring    wstring
+#define _tstring	wstring
 #else
-#define _tstring    string
+#define _tstring	string
 #endif
 #include <tchar.h>
 #include <string>

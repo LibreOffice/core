@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,8 +49,8 @@
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::accessibility;
+using namespace	::com::sun::star;
+using namespace	::com::sun::star::accessibility;
 
     //=====  internal  ========================================================
 
@@ -231,7 +231,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 }
 
 //===== internal ==============================================================
-rtl::OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleDescription(void)
+rtl::OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleDescription(void) 
     throw(uno::RuntimeException)
 {
     rtl::OUString sDesc;
@@ -292,7 +292,7 @@ Rectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen(void) const
     return aRect;
 }
 
-Rectangle ScAccessiblePageHeaderArea::GetBoundingBox(void) const
+Rectangle ScAccessiblePageHeaderArea::GetBoundingBox(void) const 
     throw (::com::sun::star::uno::RuntimeException)
 {
     Rectangle aRect;
@@ -307,7 +307,7 @@ Rectangle ScAccessiblePageHeaderArea::GetBoundingBox(void) const
             aRect = aNewRect;
         }
     }
-
+    
     return aRect;
 }
 

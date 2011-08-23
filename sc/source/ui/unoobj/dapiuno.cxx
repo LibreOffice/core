@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -222,7 +222,7 @@ GeneralFunction ScDataPilotConversion::FirstFunc( USHORT nBits )
 
 USHORT ScDataPilotConversion::FunctionBit( GeneralFunction eFunc )
 {
-    USHORT nRet = PIVOT_FUNC_NONE;  // 0
+    USHORT nRet = PIVOT_FUNC_NONE;	// 0
     switch (eFunc)
     {
         case GeneralFunction_SUM:       nRet = PIVOT_FUNC_SUM;       break;
@@ -275,7 +275,7 @@ ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const String& rN
             }
         }
     }
-    return NULL;    // nicht gefunden
+    return NULL;	// nicht gefunden
 }
 
 String lcl_CreatePivotName( ScDocShell* pDocShell )
@@ -287,7 +287,7 @@ String lcl_CreatePivotName( ScDocShell* pDocShell )
         if ( pColl )
             return pColl->CreateNewName();
     }
-    return String();                    // sollte nicht vorkommen
+    return String();					// sollte nicht vorkommen
 }
 
 sal_Int32 lcl_GetObjectIndex( ScDPObject* pDPObj, const ScFieldIdentifier& rFieldId )
@@ -324,12 +324,12 @@ ScDataPilotTablesObj::~ScDataPilotTablesObj()
 
 void ScDataPilotTablesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //! Referenz-Update
+    //!	Referenz-Update
 
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = NULL;		// ungueltig geworden
     }
 }
 
@@ -343,9 +343,9 @@ ScDataPilotTableObj* ScDataPilotTablesObj::GetObjectByIndex_Impl( sal_Int32 nInd
         ScDPCollection* pColl = pDoc->GetDPCollection();
         if ( pColl )
         {
-            //  count tables on this sheet
-            //  api only handles sheet data at this time
-            //! allow all data sources!!!
+            //	count tables on this sheet
+            //	api only handles sheet data at this time
+            //!	allow all data sources!!!
             sal_Int32 nFound = 0;
             USHORT nCount = pColl->GetCount();
             for (USHORT i=0; i<nCount; i++)
@@ -469,7 +469,7 @@ void SAL_CALL ScDataPilotTablesObj::removeByName( const OUString& aName )
     if (pDPObj && pDocShell)
     {
         ScDBDocFunc aFunc(*pDocShell);
-        aFunc.DataPilotUpdate( pDPObj, NULL, TRUE, TRUE );  // remove - incl. undo etc.
+        aFunc.DataPilotUpdate( pDPObj, NULL, TRUE, TRUE );	// remove - incl. undo etc.
     }
     else
         throw RuntimeException();       // no other exceptions specified
@@ -494,9 +494,9 @@ sal_Int32 SAL_CALL ScDataPilotTablesObj::getCount() throw(RuntimeException)
         ScDPCollection* pColl = pDoc->GetDPCollection();
         if ( pColl )
         {
-            //  count tables on this sheet
-            //  api only handles sheet data at this time
-            //! allow all data sources!!!
+            //	count tables on this sheet
+            //	api only handles sheet data at this time
+            //!	allow all data sources!!!
 
             USHORT nFound = 0;
             USHORT nCount = pColl->GetCount();
@@ -557,9 +557,9 @@ Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
         ScDPCollection* pColl = pDoc->GetDPCollection();
         if ( pColl )
         {
-            //  count tables on this sheet
-            //  api only handles sheet data at this time
-            //! allow all data sources!!!
+            //	count tables on this sheet
+            //	api only handles sheet data at this time
+            //!	allow all data sources!!!
 
             USHORT nFound = 0;
             USHORT nCount = pColl->GetCount();
@@ -601,8 +601,8 @@ sal_Bool SAL_CALL ScDataPilotTablesObj::hasByName( const OUString& aName )
             USHORT nCount = pColl->GetCount();
             for (USHORT i=0; i<nCount; i++)
             {
-                //  api only handles sheet data at this time
-                //! allow all data sources!!!
+                //	api only handles sheet data at this time
+                //!	allow all data sources!!!
 
                 ScDPObject* pDPObj = (*pColl)[i];
                 if ( pDPObj->GetOutRange().aStart.Tab() == nTab &&
@@ -685,12 +685,12 @@ Sequence<sal_Int8> SAL_CALL ScDataPilotDescriptorBase::getImplementationId()
 
 void ScDataPilotDescriptorBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //! Referenz-Update?
+    //!	Referenz-Update?
 
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = NULL;		// ungueltig geworden
     }
 }
 
@@ -1221,13 +1221,13 @@ void SAL_CALL ScDataPilotTableObj::setName( const OUString& aNewName )
     ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName);
     if (pDPObj)
     {
-        //! test for existing names !!!
+        //!	test for existing names !!!
 
         String aString(aNewName);
-        pDPObj->SetName( aString );     //! Undo - DBDocFunc ???
+        pDPObj->SetName( aString );		//! Undo - DBDocFunc ???
         aName = aString;
 
-        //  DataPilotUpdate would do too much (output table is not changed)
+        //	DataPilotUpdate would do too much (output table is not changed)
         GetDocShell()->SetDocumentModified();
     }
 }
@@ -1249,9 +1249,9 @@ void SAL_CALL ScDataPilotTableObj::setTag( const OUString& aNewTag )
     if (pDPObj)
     {
         String aString(aNewTag);
-        pDPObj->SetTag( aString );      //! Undo - DBDocFunc ???
+        pDPObj->SetTag( aString );		//! Undo - DBDocFunc ???
 
-        //  DataPilotUpdate would do too much (output table is not changed)
+        //	DataPilotUpdate would do too much (output table is not changed)
         GetDocShell()->SetDocumentModified();
     }
 }
@@ -1266,11 +1266,11 @@ CellRangeAddress SAL_CALL ScDataPilotTableObj::getOutputRange() throw(RuntimeExc
     if (pDPObj)
     {
         ScRange aRange(pDPObj->GetOutRange());
-        aRet.Sheet       = aRange.aStart.Tab();
+        aRet.Sheet		 = aRange.aStart.Tab();
         aRet.StartColumn = aRange.aStart.Col();
-        aRet.StartRow    = aRange.aStart.Row();
-        aRet.EndColumn   = aRange.aEnd.Col();
-        aRet.EndRow      = aRange.aEnd.Row();
+        aRet.StartRow	 = aRange.aStart.Row();
+        aRet.EndColumn	 = aRange.aEnd.Col();
+        aRet.EndRow		 = aRange.aEnd.Row();
     }
     return aRet;
 }
@@ -1284,10 +1284,10 @@ void SAL_CALL ScDataPilotTableObj::refresh() throw(RuntimeException)
         RefreshDPObject( pDPObj, NULL, GetDocShell(), TRUE, TRUE );
     //if (pDPObj)
     //{
-    //  ScDPObject* pNew = new ScDPObject(*pDPObj);
-    //  ScDBDocFunc aFunc(*GetDocShell());
-    //  aFunc.DataPilotUpdate( pDPObj, pNew, TRUE, TRUE );
-    //  delete pNew;        // DataPilotUpdate copies settings from "new" object
+    //	ScDPObject* pNew = new ScDPObject(*pDPObj);
+    //	ScDBDocFunc aFunc(*GetDocShell());
+    //	aFunc.DataPilotUpdate( pDPObj, pNew, TRUE, TRUE );
+    //	delete pNew;		// DataPilotUpdate copies settings from "new" object
     //}
 
 }
@@ -1851,12 +1851,12 @@ OUString SAL_CALL ScDataPilotFieldObj::getName() throw(RuntimeException)
         if( pDim->IsDataLayout() )
             aName = OUString( RTL_CONSTASCII_USTRINGPARAM( SC_DATALAYOUT_NAME ) );
         else
-        {
+        {                                                            
             const rtl::OUString* pLayoutName = pDim->GetLayoutName();
-            if (pLayoutName)
-                aName = *pLayoutName;
-            else
-                aName = pDim->GetName();
+            if (pLayoutName)                                         
+                aName = *pLayoutName;                                 
+            else                                                     
+                aName = pDim->GetName();                              
         }                                                                }
     return aName;
 }
@@ -1905,7 +1905,7 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_ORIENT ) )
     {
-        //! test for correct enum type?
+        //!	test for correct enum type?
         DataPilotFieldOrientation eOrient = (DataPilotFieldOrientation)
                             ScUnoHelpFunctions::GetEnumFromAny( aValue );
         setOrientation( eOrient );

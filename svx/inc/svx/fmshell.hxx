@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -83,14 +83,14 @@ class SVX_DLLPUBLIC FmFormShell : public SfxShell
     friend class FmFormView;
     friend class FmXFormShell;
 
-    FmXFormShell*   m_pImpl;
-    FmFormView*     m_pFormView;
-    FmFormModel*    m_pFormModel;
-    SfxViewShell*   m_pParentShell;
+    FmXFormShell*	m_pImpl;
+    FmFormView*		m_pFormView;
+    FmFormModel*	m_pFormModel;
+    SfxViewShell*	m_pParentShell;
 
-    sal_uInt16  m_nLastSlot;
-    sal_Bool    m_bDesignMode : 1;
-    sal_Bool    m_bHasForms : 1;    // flag storing if the forms on a page exist,
+    sal_uInt16	m_nLastSlot;
+    sal_Bool	m_bDesignMode : 1;
+    sal_Bool	m_bHasForms	: 1;	// flag storing if the forms on a page exist,
                                         // only for the DesignMode, see UIFeatureChanged!
 
     // the marks of a FormView have changed...
@@ -100,7 +100,7 @@ class SVX_DLLPUBLIC FmFormShell : public SfxShell
 
     class FormShellWaitObject
     {
-        Window* m_pWindow;
+        Window*	m_pWindow;
     public:
         FormShellWaitObject(const FmFormShell* _pShell);
         ~FormShellWaitObject();
@@ -139,8 +139,8 @@ public:
     void        ForgetActiveControl();
     void        SetControlActivationHandler( const Link& _rHdl );
 
-    virtual void    Activate(sal_Bool bMDI);
-    virtual void    Deactivate(sal_Bool bMDI);
+    virtual void	Activate(sal_Bool bMDI);
+    virtual void	Deactivate(sal_Bool bMDI);
 
     // helper methods for implementing XFormLayerAccess
     SdrUnoObj* GetFormControl(
@@ -170,7 +170,7 @@ public:
                 const SdrView& i_rView,
                 const OutputDevice& i_rDevice
             ) const;
-
+        
     sal_Bool    IsDesignMode() const { return m_bDesignMode; }
     void        SetDesignMode( sal_Bool _bDesignMode );
 

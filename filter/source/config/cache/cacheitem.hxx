@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,7 +67,7 @@ struct BaseLock
 };
 
 
-typedef ::comphelper::SequenceAsVector< ::rtl::OUString > OUStringList;
+typedef ::comphelper::SequenceAsVector< ::rtl::OUString > OUStringList; 
 
 //_______________________________________________
 
@@ -167,12 +167,12 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
                     the list of possible ones.
          */
         void validateUINames(const ::rtl::OUString& sActLocale);
-
+        
         //---------------------------------------
 
         /** @short  convert this structure to a seq< PropertyValue >
                     and ignore all empty properties!
-
+                    
             @descr  Normaly the converter routines of the base class
                     SequenceAsHashMap do this job already.
                     But it doesnt provide a "pack" mechanism to
@@ -228,22 +228,22 @@ struct  FlatDetectionInfo
 {
     // the internal type name
     ::rtl::OUString sType;
-
+    
     // this type was found by a matching the URL extension
     sal_Bool bMatchByExtension;
-
+    
     // this type was found by a matching URL Pattern
     sal_Bool bMatchByPattern;
-
+    
     // the user selected this type explicitly
     sal_Bool bPreselectedAsType;
-
+    
     // the user selected this type implicit by selecting a corresponding filter
     sal_Bool bPreselectedByFilter;
-
+    
     // the user selected this type implicit by selecting a corresponding office module
     sal_Bool bPreselectedByDocumentService;
-
+    
     FlatDetectionInfo()
         : sType                        (::rtl::OUString())
         , bMatchByExtension            (sal_False        )

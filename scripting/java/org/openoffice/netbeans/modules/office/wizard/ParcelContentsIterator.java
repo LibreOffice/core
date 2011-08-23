@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,15 +64,15 @@ import org.openoffice.netbeans.modules.office.filesystem.OpenOfficeDocFileSystem
  * @author tomaso
  */
 public class ParcelContentsIterator implements TemplateWizard.Iterator {
-
+    
 
     // private static final long serialVersionUID = ...L;
-
+    
     // You should define what panels you want to use here:
-
+    
     public static final String PROP_LANGUAGE =
         ParcelFolder.LANGUAGE_ATTRIBUTE;
-
+    
     protected WizardDescriptor.Panel[] createPanels() {
         return new WizardDescriptor.Panel[] {
             // keep the default 2nd panel:
@@ -80,22 +80,22 @@ public class ParcelContentsIterator implements TemplateWizard.Iterator {
             new ParcelPropertiesPanel(),
         };
     }
-
+    
     // And the list of step names:
-
+    
     protected String[] createSteps() {
         return new String[] {
             // null,
             "Parcel Properties",
         };
     }
-
+    
     private DataFolder checkTarget(DataFolder folder) {
         FileObject fo = folder.getPrimaryFile();
-
+        
         try {
             FileSystem fs = fo.getFileSystem();
-
+            
             if (fs instanceof OpenOfficeDocFileSystem && fo.isRoot()) {
                 FileObject scripts =
                     fo.getFileObject(OpenOfficeDocFileSystem.SCRIPTS_ROOT);
@@ -116,7 +116,7 @@ public class ParcelContentsIterator implements TemplateWizard.Iterator {
         }
         return folder;
     }
-
+    
     public Set instantiate(TemplateWizard wiz) throws IOException {
         String name = wiz.getTargetName();
         DataFolder targetFolder = wiz.getTargetFolder();
@@ -132,10 +132,10 @@ public class ParcelContentsIterator implements TemplateWizard.Iterator {
         } else {
             result = template.createFromTemplate(targetFolder, name);
         }
-
+        
         FileObject recipe = result.getPrimaryFile();
 
-        FileObject contents =
+        FileObject contents = 
             recipe.getFileObject(ParcelZipper.CONTENTS_DIRNAME);
 
         if (contents != null) {
@@ -147,16 +147,16 @@ public class ParcelContentsIterator implements TemplateWizard.Iterator {
             DataFolder parent = DataFolder.findFolder(contents);
             ParcelContentsFolder.createEmptyScript(parent, language);
         }
-
+        
         return Collections.singleton(result);
     }
-
+    
     // --- The rest probably does not need to be touched. ---
-
+    
     private transient int index;
     private transient WizardDescriptor.Panel[] panels;
     private transient TemplateWizard wiz;
-
+    
     // You can keep a reference to the TemplateWizard which can
     // provide various kinds of useful information such as
     // the currently selected target name.
@@ -188,16 +188,16 @@ public class ParcelContentsIterator implements TemplateWizard.Iterator {
         this.wiz = null;
         panels = null;
     }
-
+    
     // --- WizardDescriptor.Iterator METHODS: ---
     // Note that this is very similar to WizardDescriptor.Iterator, but with a
     // few more options for customization. If you e.g. want to make panels appear
     // or disappear dynamically, go ahead.
-
+    
     public String name() {
         return "";
     }
-
+    
     public boolean hasNext() {
         return index < panels.length - 1;
     }
@@ -215,7 +215,7 @@ public class ParcelContentsIterator implements TemplateWizard.Iterator {
     public WizardDescriptor.Panel current() {
         return panels[index];
     }
-
+    
     // If nothing unusual changes in the middle of the wizard, simply:
     public final void addChangeListener(ChangeListener l) {}
     public final void removeChangeListener(ChangeListener l) {}
@@ -250,5 +250,5 @@ public class ParcelContentsIterator implements TemplateWizard.Iterator {
         listeners = new HashSet(1);
     }
      */
-
+    
 }

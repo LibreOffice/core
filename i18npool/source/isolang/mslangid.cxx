@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -444,7 +444,7 @@ LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang )
             nLang = LANGUAGE_LUXEMBOURGISH_LUXEMBOURG;
             break;
 
-        // The following are not strictly obsolete but should be mapped to a
+        // The following are not strictly obsolete but should be mapped to a 
         // replacement locale when encountered.
 
         // no_NO is an alias for nb_NO
@@ -452,7 +452,7 @@ LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang )
             nLang = LANGUAGE_NORWEGIAN_BOKMAL;
             break;
 
-        // #i94435# A Spanish variant that differs only in collation details we
+        // #i94435# A Spanish variant that differs only in collation details we 
         // do not support.
         case LANGUAGE_SPANISH_DATED:
             nLang = LANGUAGE_SPANISH_MODERN;

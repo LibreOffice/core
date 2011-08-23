@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,7 +26,7 @@
  ************************************************************************/
 /*
  * Created on 2005
- *  by Christian Schmidt
+ *	by Christian Schmidt
  */
 package com.sun.star.tooling.converter;
 
@@ -35,7 +35,7 @@ import java.util.Map;
 /**
  * Helps resolving restype descriptors used outside the tool to
  * restype descriptors used by this  tool
- *
+ * 
  * @author Christian Schmidt 2005
  *
  */
@@ -44,20 +44,20 @@ public class ResTypeResolver {
     final static String[] outFields={"res","res-quickhelp","res-help","res-title"};
     final static Map internKeys=new ExtMap(inFields,outFields);
     final static Map externKeys=new ExtMap(outFields,inFields);
-
+    
     /**
      * Get the intern key depending to the given extern key
-     *
+     * 
      * @param externKey the externKey {"res","res-quickhelp","res-help","title"}
      * @return the depending intern key
      */
     public static String getInternKey(String externKey){
         return (String)externKeys.get(externKey);
     }
-
+    
     /**
      * Get the extern key to the given intern key
-     *
+     * 
      * @param internKey the internal key
      * @return the external key
      */

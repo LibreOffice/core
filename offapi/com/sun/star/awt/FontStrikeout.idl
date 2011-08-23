@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,68 +24,68 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_FontStrikeout_idl__
-#define __com_sun_star_awt_FontStrikeout_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
-/** These values are used to specify the kind of strikeout.
-
+#ifndef __com_sun_star_awt_FontStrikeout_idl__ 
+#define __com_sun_star_awt_FontStrikeout_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module awt {  
+ 
+//============================================================================= 
+ 
+/** These values are used to specify the kind of strikeout. 
+         
     <p>They may be expanded in future versions.</p>
  */
 published constants FontStrikeout
-{
-    //-------------------------------------------------------------------------
-
+{ 
+    //------------------------------------------------------------------------- 
+        
     /** specifies not to strike out the characters.
      */
-    const short NONE = 0;
-
-    //-------------------------------------------------------------------------
-
+    const short NONE = 0; 
+ 
+    //------------------------------------------------------------------------- 
+        
     /** specifies to strike out the characters with a single line.
      */
-    const short SINGLE = 1;
-
-    //-------------------------------------------------------------------------
-
+    const short SINGLE = 1; 
+ 
+    //------------------------------------------------------------------------- 
+        
     /** specifies to strike out the characters with a double line.
      */
-    const short DOUBLE = 2;
-
-    //-------------------------------------------------------------------------
-
+    const short DOUBLE = 2; 
+ 
+    //------------------------------------------------------------------------- 
+        
     /** The strikeout mode is not specified.
      */
-    const short DONTKNOW = 3;
-
-    //-------------------------------------------------------------------------
-
+    const short DONTKNOW = 3; 
+ 
+    //------------------------------------------------------------------------- 
+        
     /** specifies to strike out the characters with a bold line.
      */
-    const short BOLD = 4;
-
-    //-------------------------------------------------------------------------
-
+    const short BOLD = 4; 
+ 
+    //------------------------------------------------------------------------- 
+        
     /** specifies to strike out the characters with slashes.
      */
-    const short SLASH = 5;
-
-    //-------------------------------------------------------------------------
-
+    const short SLASH = 5; 
+ 
+    //------------------------------------------------------------------------- 
+     
     /** specifies to strike out the characters with X's.
      */
-    const short X = 6;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    const short X = 6; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,15 +48,15 @@ namespace frm
     {
         // das Original, falls ich die Format-Properties meines aggregierten Models gefaket, d.h. von dem Feld, an das
         // ich gebunden bin, weitergereicht habe (nur gueltig wenn loaded)
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>   m_xOriginalFormatter;
-        ::com::sun::star::util::Date        m_aNullDate;
-        ::com::sun::star::uno::Any          m_aSaveValue;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>	m_xOriginalFormatter;
+        ::com::sun::star::util::Date		m_aNullDate;
+        ::com::sun::star::uno::Any			m_aSaveValue;
 
-        sal_Int32                           m_nFieldType;
-        sal_Int16                           m_nKeyType;
-        sal_Bool                            m_bOriginalNumeric      : 1,
-                                            m_bNumeric              : 1;    // analog fuer TreatAsNumeric-Property
-
+        sal_Int32							m_nFieldType;
+        sal_Int16							m_nKeyType;
+        sal_Bool							m_bOriginalNumeric		: 1,
+                                            m_bNumeric				: 1;	// analog fuer TreatAsNumeric-Property
+                                            
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>  calcDefaultFormatsSupplier() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>  calcFormFormatsSupplier() const;
@@ -156,10 +156,10 @@ namespace frm
     //= OFormattedControl
     //==================================================================
     typedef ::cppu::ImplHelper1< ::com::sun::star::awt::XKeyListener> OFormattedControl_BASE;
-    class OFormattedControl :    public OBoundControl
+    class OFormattedControl :	 public OBoundControl
                                 ,public OFormattedControl_BASE
     {
-        sal_uInt32              m_nKeyEvent;
+        sal_uInt32				m_nKeyEvent;
 
     public:
         OFormattedControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);

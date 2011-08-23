@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #define INCLUDED_unotools_DYNAMICMENUOPTIONS_HXX
 
 //_________________________________________________________________________________________________________________
-//  includes
+//	includes
 //_________________________________________________________________________________________________________________
 
 #include "unotools/unotoolsdllapi.h"
@@ -40,11 +40,11 @@
 #include <unotools/options.hxx>
 
 //_________________________________________________________________________________________________________________
-//  types, enums, ...
+//	types, enums, ...
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @descr          The method GetList() returns a list of property values.
+    @descr			The method GetList() returns a list of property values.
                     Use follow defines to seperate values by names.
 *//*-*************************************************************************************************************/
 #define DYNAMICMENU_PROPERTYNAME_URL                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"             ))
@@ -62,12 +62,12 @@ enum EDynamicMenuType
     E_HELPBOOKMARKS =   2
 };
 //_________________________________________________________________________________________________________________
-//  forward declarations
+//	forward declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short          forward declaration to our private date container implementation
-    @descr          We use these class as internal member to support small memory requirements.
+    @short			forward declaration to our private date container implementation
+    @descr			We use these class as internal member to support small memory requirements.
                     You can create the container if it is neccessary. The class which use these mechanism
                     is faster and smaller then a complete implementation!
 *//*-*************************************************************************************************************/
@@ -75,65 +75,65 @@ enum EDynamicMenuType
 class SvtDynamicMenuOptions_Impl;
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          collect informations about dynamic menus
     @descr          Make it possible to configure dynamic menu structures of menus like "new" or "wizard".
 
-    @implements     -
-    @base           -
+    @implements		-
+    @base			-
 
-    @devstatus      ready to use
+    @devstatus		ready to use
 *//*-*************************************************************************************************************/
 
 class UNOTOOLS_DLLPUBLIC SvtDynamicMenuOptions: public utl::detail::Options
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //	public methods
     //-------------------------------------------------------------------------------------------------------------
 
     public:
 
         //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
+        //	constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      standard constructor and destructor
-            @descr      This will initialize an instance with default values.
+            @short		standard constructor and destructor
+            @descr		This will initialize an instance with default values.
                         We implement these class with a refcount mechanism! Every instance of this class increase it
                         at create and decrease it at delete time - but all instances use the same data container!
                         He is implemented as a static member ...
 
-            @seealso    member m_nRefCount
-            @seealso    member m_pDataContainer
+            @seealso	member m_nRefCount
+            @seealso	member m_pDataContainer
 
-            @param      -
-            @return     -
+            @param		-
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
          SvtDynamicMenuOptions();
         virtual ~SvtDynamicMenuOptions();
 
         //---------------------------------------------------------------------------------------------------------
-        //  interface
+        //	interface
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      clear complete sepcified list
+            @short		clear complete sepcified list
             @descr      Call this methods to clear the whole list.
                         To fill it again use AppendItem().
 
-            @seealso    -
+            @seealso	-
 
             @param      "eMenu" select right menu to clear.
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         void Clear( EDynamicMenuType eMenu );
@@ -143,7 +143,7 @@ class UNOTOOLS_DLLPUBLIC SvtDynamicMenuOptions: public utl::detail::Options
             @descr      Call it to get all entries of an dynamic menu.
                         We return a list of all nodes with his names and properties.
 
-            @seealso    -
+            @seealso	-
 
             @param      "eMenu" select right menu.
             @return     A list of menu items is returned.
@@ -158,16 +158,16 @@ class UNOTOOLS_DLLPUBLIC SvtDynamicMenuOptions: public utl::detail::Options
             @descr      You can append items to a menu only - removing isn't allowed for a special item!
                         We support a nothing or all mechanism only! Clear all or append something ...
 
-            @seealso    method Clear()
+            @seealso	method Clear()
 
             @param      "eMenu"             select right menu.
             @param      "sURL"              URL for dispatch
             @param      "sTitle"            label of menu entry
             @param      "sImageIdentifier"  icon identifier
             @param      "sTargetName"       target for dispatch
-            @return     -
+            @return		-
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         void AppendItem(            EDynamicMenuType    eMenu            ,
@@ -177,29 +177,29 @@ class UNOTOOLS_DLLPUBLIC SvtDynamicMenuOptions: public utl::detail::Options
                             const   ::rtl::OUString&    sTargetName      );
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
+    //	private methods
     //-------------------------------------------------------------------------------------------------------------
 
     private:
 
         /*-****************************************************************************************************//**
-            @short      return a reference to a static mutex
-            @descr      These class is partially threadsafe (for de-/initialization only).
+            @short		return a reference to a static mutex
+            @descr		These class is partially threadsafe (for de-/initialization only).
                         All access methods are'nt safe!
                         We create a static mutex only for one ime and use at different times.
 
-            @seealso    -
+            @seealso	-
 
-            @param      -
-            @return     A reference to a static mutex member.
+            @param		-
+            @return		A reference to a static mutex member.
 
-            @onerror    -
+            @onerror	-
         *//*-*****************************************************************************************************/
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private member
+    //	private member
     //-------------------------------------------------------------------------------------------------------------
 
     private:

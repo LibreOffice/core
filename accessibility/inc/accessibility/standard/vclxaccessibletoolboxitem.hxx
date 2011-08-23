@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,48 +57,48 @@ class VCLXAccessibleToolBoxItem : public AccessibleTextHelper_BASE,
                                   public VCLXAccessibleToolBoxItem_BASE
 {
 private:
-    ::rtl::OUString         m_sOldName;
-    ToolBox*                m_pToolBox;
-    VCLExternalSolarLock*   m_pExternalLock;
-    sal_Int32               m_nIndexInParent;
-    sal_Int16               m_nRole;
-    USHORT                  m_nItemId;
-    sal_Bool                m_bHasFocus;
-    sal_Bool                m_bIsChecked;
+    ::rtl::OUString			m_sOldName;
+    ToolBox*				m_pToolBox;
+    VCLExternalSolarLock*	m_pExternalLock;
+    sal_Int32				m_nIndexInParent;
+    sal_Int16 				m_nRole;
+    USHORT					m_nItemId;
+    sal_Bool				m_bHasFocus;
+    sal_Bool				m_bIsChecked;
     bool                    m_bIndeterminate;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >    m_xChild;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >	m_xChild;
 
 public:
-    inline sal_Int32    getIndexInParent() const                    { return m_nIndexInParent; }
-    inline void         setIndexInParent( sal_Int32 _nNewIndex )    { m_nIndexInParent = _nNewIndex; }
+    inline sal_Int32	getIndexInParent() const					{ return m_nIndexInParent; }
+    inline void			setIndexInParent( sal_Int32 _nNewIndex )	{ m_nIndexInParent = _nNewIndex; }
 
 protected:
     virtual ~VCLXAccessibleToolBoxItem();
 
-    virtual void SAL_CALL                   disposing();
+    virtual void SAL_CALL					disposing();
 
     /// implements the calculation of the bounding rectangle
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL   implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL	implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // OCommonAccessibleText
-    virtual ::rtl::OUString                             implGetText();
-    virtual ::com::sun::star::lang::Locale              implGetLocale();
-    virtual void                                        implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
+    virtual ::rtl::OUString								implGetText();
+    virtual ::com::sun::star::lang::Locale				implGetLocale();
+    virtual void										implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
 
     ::rtl::OUString GetText( bool _bAsName );
 
 public:
-    VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_Int32 _nPos );
+    VCLXAccessibleToolBoxItem( ToolBox*	_pToolBox, sal_Int32 _nPos );
 
-    void                SetFocus( sal_Bool _bFocus );
-    inline sal_Bool     HasFocus() const { return m_bHasFocus; }
-    void                SetChecked( sal_Bool _bCheck );
-    inline sal_Bool     IsChecked() const { return m_bIsChecked; }
+    void				SetFocus( sal_Bool _bFocus );
+    inline sal_Bool		HasFocus() const { return m_bHasFocus; }
+    void				SetChecked( sal_Bool _bCheck );
+    inline sal_Bool		IsChecked() const { return m_bIsChecked; }
     void                SetIndeterminate( bool _bIndeterminate );
     inline bool         IsIndeterminate() const { return m_bIndeterminate; }
-    inline void         ReleaseToolBox() { m_pToolBox = NULL; }
-    void                NameChanged();
+    inline void			ReleaseToolBox() { m_pToolBox = NULL; }
+    void				NameChanged();
     void                SetChild( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _xChild );
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                         GetChild() const { return m_xChild; }
@@ -145,7 +145,7 @@ public:
     virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleExtendedComponent
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(	) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::awt::FontDescriptor SAL_CALL getFontMetrics( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >& xFont ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getTitledBorderText(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getToolTipText(  ) throw (::com::sun::star::uno::RuntimeException);

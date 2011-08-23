@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -120,12 +120,12 @@ final class WSEncoder {
 
         Vector allRecs = new Vector();
         int nElements = elements.size();
-
+        
         // Count up the number of paragraphs, atoms, and characters.
         int currElement = 0;
         while (currElement < nElements) {
             Wse e = (Wse)elements.elementAt(currElement++);
-            if (e.getClass() == WsePara.class)
+            if (e.getClass() == WsePara.class) 
                 nrParagraphs++;
             if (e.getClass() == WseTextRun.class) {
                 nrAtoms++;
@@ -144,12 +144,12 @@ final class WSEncoder {
         currRecLen += header.getByteCount();
 
         if (ft != null) {
-            System.arraycopy(ft.getBytes(), 0, currRec, currRecLen,
+            System.arraycopy(ft.getBytes(), 0, currRec, currRecLen, 
                              ft.getByteCount());
             currRecLen += ft.getByteCount();
         }
         if (ct != null) {
-            System.arraycopy(ct.getBytes(), 0, currRec, currRecLen,
+            System.arraycopy(ct.getBytes(), 0, currRec, currRecLen, 
                              ct.getByteCount());
             currRecLen += ct.getByteCount();
         }
@@ -162,10 +162,10 @@ final class WSEncoder {
                 System.arraycopy(e.getBytes(), 0, currRec, currRecLen, length);
                 currRecLen += length;
         } else {
-                // Copy in enough to get to full size, then create a
+                // Copy in enough to get to full size, then create a 
                 // new Record and add it to the Vector.
                 int firstPartLen = 4096 - currRecLen;
-                System.arraycopy(e.getBytes(), 0, currRec, currRecLen,
+                System.arraycopy(e.getBytes(), 0, currRec, currRecLen, 
                                  firstPartLen);
                 Record r = new Record(currRec);
                 allRecs.addElement(r);
@@ -188,7 +188,7 @@ final class WSEncoder {
 
 
         // Record 0 is the WordSmith header.  Do it last since it
-        // contains totals for the entire document.  It goes
+        // contains totals for the entire document.  It goes 
         // before everything else.
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(bos);

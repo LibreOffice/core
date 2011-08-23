@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,24 +43,24 @@ namespace dbaui
     /* this class allows to browse through the collection of forms and reports
     */
     class OCollectionView : public ModalDialog
-    {
-        FixedText       m_aFTCurrentPath;
-        ImageButton     m_aNewFolder;
-        ImageButton     m_aUp;
-        SvtFileView     m_aView;
-        FixedText       m_aFTName;
-        Edit            m_aName;
-        FixedLine       m_aFL;
-        PushButton      m_aPB_OK;
-        CancelButton    m_aPB_CANCEL;
-        HelpButton      m_aPB_HELP;
-        String          m_sPath;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>                  m_xContent;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
-        Size            m_aDlgSize;
-        Size            m_a6Size;
-        sal_Int32       m_nFixDeltaHeight;
-        sal_Bool        m_bCreateForm;
+    {		
+        FixedText		m_aFTCurrentPath;
+        ImageButton		m_aNewFolder;
+        ImageButton		m_aUp;
+        SvtFileView		m_aView;
+        FixedText		m_aFTName;
+        Edit			m_aName;	
+        FixedLine		m_aFL;
+        PushButton		m_aPB_OK;
+        CancelButton	m_aPB_CANCEL;
+        HelpButton		m_aPB_HELP;
+        String			m_sPath;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>					m_xContent;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >	m_xORB;
+        Size			m_aDlgSize;
+        Size			m_a6Size;
+        sal_Int32		m_nFixDeltaHeight;
+        sal_Bool		m_bCreateForm;
 
         DECL_LINK(Up_Click,PushButton*);
         DECL_LINK(NewFolder_Click,PushButton*);
@@ -80,7 +80,7 @@ namespace dbaui
         ::rtl::OUString getName() const;
     };
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 

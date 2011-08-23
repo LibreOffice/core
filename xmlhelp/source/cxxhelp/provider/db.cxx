@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,8 +54,8 @@ namespace db_internal
     static inline int check_error(int dberr, const char * where)
     {
         (void)where;
-
-        // if (dberr) raise_error(dberr,where);
+        
+        // if (dberr) raise_error(dberr,where); 
         return dberr;
     }
 }
@@ -94,8 +94,8 @@ bool DBHelp::implReadLenAndData( const char* pData, int& riPos, DBData& rValue )
 
 #ifdef TEST_DBHELP
 
-typedef std::pair< rtl::OString, rtl::OString >     KeyValPair;
-typedef std::vector< KeyValPair >                   KeyValPairVector;
+typedef std::pair< rtl::OString, rtl::OString >		KeyValPair;
+typedef std::vector< KeyValPair >					KeyValPairVector;
 
 void testWriteKeyValue( FILE* pFile, const KeyValPair& rKeyValPair )
 {
@@ -484,7 +484,7 @@ void DBHelp::stopIteration( void )
 
 
 Db::Db()
-{
+{  
     db_internal::check_error( db_create(&m_pDBP,0,0),"Db::Db" );
     m_pDBHelp = NULL;
 }
@@ -506,27 +506,27 @@ int Db::close(u_int32_t flags)
 {
     int error = m_pDBP->close(m_pDBP,flags);
     m_pDBP = 0;
-    return db_internal::check_error(error,"Db::close");
+    return db_internal::check_error(error,"Db::close"); 
 }
 
-int Db::open(DB_TXN *txnid,
+int Db::open(DB_TXN *txnid, 
              const char *file,
-             const char *database,
-             DBTYPE type,
-             u_int32_t flags,
+             const char *database, 
+             DBTYPE type, 
+             u_int32_t flags, 
              int mode)
 {
     int err = m_pDBP->open(m_pDBP,txnid,file,database,type,flags,mode);
     return db_internal::check_error( err,"Db::open" );
 }
 
-
+    
 int Db::get(DB_TXN *txnid, Dbt *key, Dbt *data, u_int32_t flags)
 {
     int err = m_pDBP->get(m_pDBP,txnid,key,data,flags);
 
     // these are non-exceptional outcomes
-    if (err != DB_NOTFOUND && err != DB_KEYEMPTY)
+    if (err != DB_NOTFOUND && err != DB_KEYEMPTY) 
         db_internal::check_error( err,"Db::get" );
 
     return err;
@@ -536,7 +536,7 @@ int Db::cursor(DB_TXN *txnid, Dbc **cursorp, u_int32_t flags)
 {
     DBC * dbc = 0;
     int error = m_pDBP->cursor(m_pDBP,txnid,&dbc,flags);
-
+  
     if (!db_internal::check_error(error,"Db::cursor"))
         *cursorp = new Dbc(dbc);
 
@@ -550,7 +550,7 @@ Dbc::Dbc(DBC * dbc)
 {
 }
 
-Dbc::~Dbc()
+Dbc::~Dbc() 
 {
 }
 
@@ -566,7 +566,7 @@ int Dbc::get(Dbt *key, Dbt *data, u_int32_t flags)
     int err = m_pDBC->c_get(m_pDBC,key,data,flags);
 
     // these are non-exceptional outcomes
-    if (err != DB_NOTFOUND && err != DB_KEYEMPTY)
+    if (err != DB_NOTFOUND && err != DB_KEYEMPTY) 
         db_internal::check_error( err, "Dbcursor::get" );
 
     return err;
@@ -576,7 +576,7 @@ int Dbc::get(Dbt *key, Dbt *data, u_int32_t flags)
 
 
 Dbt::Dbt()
-{
+{  
     using namespace std;
     DBT * thispod = this;
     memset(thispod, 0, sizeof *thispod);
@@ -603,7 +603,7 @@ Dbt::Dbt(const Dbt & other)
 
 Dbt& Dbt::operator = (const Dbt & other)
 {
-    if (this != &other)
+    if (this != &other) 
     {
         using namespace std;
         const DBT *otherpod = &other;
@@ -614,12 +614,12 @@ Dbt& Dbt::operator = (const Dbt & other)
 }
 */
 
-Dbt::~Dbt()
+Dbt::~Dbt() 
 {
 }
 
 void * Dbt::get_data() const
-{
+{ 
     return this->data;
 }
 
@@ -629,17 +629,17 @@ void Dbt::set_data(void *value)
 }
 
 u_int32_t Dbt::get_size() const
-{
+{ 
     return this->size;
 }
 
 void Dbt::set_size(u_int32_t value)
 {
-    this->size = value;
+    this->size = value; 
 }
 
 void Dbt::set_flags(u_int32_t value)
-{
+{ 
     this->flags = value;
 }
 
@@ -648,10 +648,10 @@ void Dbt::set_flags(u_int32_t value)
 void db_internal::raise_error(int dberr, const char * where)
 {
     if (!where) where = "<unknown>";
-
+    
     const char * dberrmsg = db_strerror(dberr);
     if (!dberrmsg || !*dberrmsg) dberrmsg = "<unknown DB error>";
-
+    
     rtl::OString msg = where;
     msg += ": ";
     msg += dberrmsg;

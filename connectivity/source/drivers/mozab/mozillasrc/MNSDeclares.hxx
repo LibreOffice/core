@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,16 +27,16 @@
  ************************************************************************/
 
 #ifndef _CONNECTIVITY_MAB_NS_DECLARES_HXX_
-#define _CONNECTIVITY_MAB_NS_DECLARES_HXX_
+#define _CONNECTIVITY_MAB_NS_DECLARES_HXX_ 
 
 #include <sal/types.h>
 
 
-const   sal_Int32 RowStates_Normal = 0;
-const   sal_Int32 RowStates_Inserted = 1;
-const   sal_Int32 RowStates_Updated = 2;
-const   sal_Int32 RowStates_Deleted  = 4;
-const   sal_Int32 RowStates_Error  = 32;
+const	sal_Int32 RowStates_Normal = 0;
+const	sal_Int32 RowStates_Inserted = 1;
+const	sal_Int32 RowStates_Updated = 2;
+const	sal_Int32 RowStates_Deleted  = 4;
+const	sal_Int32 RowStates_Error  = 32;
 
 namespace connectivity{
     namespace mozab{

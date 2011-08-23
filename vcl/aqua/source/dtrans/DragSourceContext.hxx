@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,16 +52,16 @@ public:
   DragSourceContext(DragSource* pSource);
   ~DragSourceContext();
 
-  virtual sal_Int32 SAL_CALL getCurrentCursor(  )
+  virtual sal_Int32 SAL_CALL getCurrentCursor(  ) 
     throw( com::sun::star::uno::RuntimeException);
 
-  virtual void SAL_CALL setCursor( sal_Int32 cursorId )
+  virtual void SAL_CALL setCursor( sal_Int32 cursorId ) 
     throw( com::sun::star::uno::RuntimeException);
 
-  virtual void SAL_CALL setImage( sal_Int32 imageId )
+  virtual void SAL_CALL setImage( sal_Int32 imageId ) 
     throw( com::sun::star::uno::RuntimeException);
 
-  virtual void SAL_CALL transferablesFlavorsChanged(  )
+  virtual void SAL_CALL transferablesFlavorsChanged(  ) 
     throw( com::sun::star::uno::RuntimeException);
 
 private:

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 namespace cppu
 {
 /** One struct instance represents all data necessary for registering one service implementation.
-
+   
  */
 struct ImplementationEntry
 {
@@ -97,7 +97,7 @@ sal_Bool component_writeInfoHelper(
                            This is a reference to the registry key, where the implementation
                            data has been written to.
     @param entries         Each element of the entries-array must contains a function pointer
-                           table for creating a factor of the implementation. The end of the array
+                           table for creating a factor of the implementation. The end of the array 
                            must be marked with a 0 entry in the create-function.
     @return 0 if the helper failed to instantiate a factory, otherwise an acquired pointer
             to a factory.

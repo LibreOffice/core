@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ class Properties;
 /** This class is a factory for the creation of objects that represent page
     objects (shapes).  This includes the contact objects of the drawing
     layer.
-
+    
     <p>The factory methods are called by the model::PageDescriptor and the
     standard implementations of the contact objects.</p>
 

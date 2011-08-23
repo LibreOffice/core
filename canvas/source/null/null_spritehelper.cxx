@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,9 +63,9 @@ namespace nullcanvas
         mbTextureDirty( true )
     {
     }
-
-    void SpriteHelper::init( const geometry::RealSize2D&    rSpriteSize,
-                             const SpriteCanvasRef&         rSpriteCanvas )
+    
+    void SpriteHelper::init( const geometry::RealSize2D&	rSpriteSize,
+                             const SpriteCanvasRef&			rSpriteCanvas )
     {
         ENSURE_OR_THROW( rSpriteCanvas.get(),
                           "SpriteHelper::init(): Invalid device, sprite canvas or surface" );

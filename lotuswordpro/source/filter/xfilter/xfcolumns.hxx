@@ -61,18 +61,18 @@
  * Change History
  * 2005-01-17 create this file.
  ************************************************************************/
-#ifndef     _XFCOLUMNS_HXX
-#define     _XFCOLUMNS_HXX
+#ifndef		_XFCOLUMNS_HXX
+#define		_XFCOLUMNS_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcolor.hxx"
-#include    <vector>
+#include	"xfglobal.hxx"
+#include	"xfcolor.hxx"
+#include	<vector>
 
-#define     XFCOLUMNS_FLAG_SEPERATOR    0X00000001
-#define     XFCOLUMNS_FLAG_GAP          0X00000010
+#define		XFCOLUMNS_FLAG_SEPERATOR	0X00000001
+#define		XFCOLUMNS_FLAG_GAP			0X00000010
 
 /**
- * @descr   Columns object for page or section.
+ * @descr	Columns object for page or section.
  */
 class XFColumn : public IXFObject
 {
@@ -86,32 +86,32 @@ public:
 
 public:
     /**
-     * @descr   Set column relative width.
+     * @descr	Set column relative width.
      */
-    void    SetRelWidth(sal_Int32 width);
+    void	SetRelWidth(sal_Int32 width);
 
     /**
-     * @descr   return column relative width.
+     * @descr	return column relative width.
      */
     sal_Int32 GetRelWidth();
 
     /**
-     * @descr   Set column margin left and margin right.
+     * @descr	Set column margin left and margin right.
      */
-    void    SetMargins(double left, double right);
+    void	SetMargins(double left, double right);
 
     /**
-     * @descr   return column left margin.
+     * @descr	return column left margin.
      */
-    double  GetMarginLeft();
+    double	GetMarginLeft();
 
     /**
-     * @descr   return column right margin.
+     * @descr	return column right margin.
      */
-    double  GetMarginRight();
+    double	GetMarginRight();
 
     /**
-     * @descr   output column style as an xml node.
+     * @descr	output column style as an xml node.
      */
     virtual void ToXml(IXFStream *pStrm);
 
@@ -120,9 +120,9 @@ public:
     friend class XFColumns;
 
 private:
-    sal_Int32   m_nRelWidth;
-    double      m_fMarginLeft;
-    double      m_fMarginRight;
+    sal_Int32	m_nRelWidth;
+    double		m_fMarginLeft;
+    double		m_fMarginRight;
 };
 
 class XFColumnSep : public IXFObject
@@ -135,21 +135,21 @@ public:
         m_eVertAlign = enumXFAlignMiddle;
     }
 public:
-    void    SetRelHeight(sal_Int32 height);
-    void    SetWidth(double width);
-    void    SetColor(XFColor& color);
-    void    SetVerticalAlign(enumXFAlignType align);
+    void	SetRelHeight(sal_Int32 height);
+    void	SetWidth(double width);
+    void	SetColor(XFColor& color);
+    void	SetVerticalAlign(enumXFAlignType align);
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
     friend bool operator==(XFColumnSep& sep1, XFColumnSep& sep2);
     friend bool operator!=(XFColumnSep& sep1, XFColumnSep& sep2);
     friend class XFColumns;
 private:
-    sal_Int32   m_nRelHeight;
-    double      m_fWidth;
-    XFColor     m_aColor;
-    enumXFAlignType m_eVertAlign;
+    sal_Int32	m_nRelHeight;
+    double		m_fWidth;
+    XFColor		m_aColor;
+    enumXFAlignType	m_eVertAlign;
 };
 
 class XFColumns
@@ -161,19 +161,19 @@ public:
         m_fGap = 0;
     }
 public:
-    void    SetSeperator(sal_Int32 height, double width, XFColor color = XFColor(0,0,0),enumXFAlignType align = enumXFAlignMiddle);
-    void    SetSeperator(XFColumnSep& aSeperator);
-    void    SetGap(double fGap);
-    void    SetCount(sal_uInt16 nCount);
-    void    AddColumn(XFColumn& column);
-    sal_Int32   GetCount();
+    void	SetSeperator(sal_Int32 height, double width, XFColor color = XFColor(0,0,0),enumXFAlignType align = enumXFAlignMiddle);
+    void	SetSeperator(XFColumnSep& aSeperator);
+    void	SetGap(double fGap);
+    void	SetCount(sal_uInt16 nCount);
+    void	AddColumn(XFColumn& column);
+    sal_Int32	GetCount();
 
-    void    ToXml(IXFStream *pStrm);
+    void	ToXml(IXFStream *pStrm);
 private:
-    sal_Int32   m_nFlag;
+    sal_Int32	m_nFlag;
     sal_uInt16  m_nCount;
-    double      m_fGap;
-    std::vector<XFColumn>   m_aColumns;
+    double		m_fGap;
+    std::vector<XFColumn>	m_aColumns;
     XFColumnSep m_aSeperator;
 
 };

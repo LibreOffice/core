@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,7 @@ namespace pdfi
     class ImageContainer;
     class PDFIProcessor;
     class ElementFactory;
-
+    
 
     struct EmitContext
     {
@@ -58,7 +58,7 @@ namespace pdfi
             ImageContainer&                          _rImages,
             PDFIProcessor&                           _rProcessor,
             const com::sun::star::uno::Reference<
-            com::sun::star::task::XStatusIndicator>& _xStatusIndicator,
+            com::sun::star::task::XStatusIndicator>& _xStatusIndicator,  
             com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >  xContext)
         :
             rEmitter(_rEmitter),
@@ -75,7 +75,7 @@ namespace pdfi
         PDFIProcessor&  rProcessor;
         com::sun::star::uno::Reference<
             com::sun::star::task::XStatusIndicator> xStatusIndicator;
-        com::sun::star::uno::Reference<
+        com::sun::star::uno::Reference< 
             com::sun::star::uno::XComponentContext >  m_xContext;
     };
 
@@ -105,20 +105,20 @@ namespace pdfi
             pNewParent must not be NULL
         */
         static void setParent( std::list<Element*>::iterator& el, Element* pNewParent );
-
+        
         double              x, y, w, h;
         sal_Int32           StyleId;
         Element*            Parent;
         std::list<Element*> Children;
     };
-
+    
     struct ListElement : public Element
     {
         ListElement() : Element( NULL ) {}
         // ElementTreeVisitable
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& );
     };
-
+    
     struct HyperlinkElement : public Element
     {
         friend class ElementFactory;
@@ -131,10 +131,10 @@ namespace pdfi
 
         rtl::OUString URI;
     };
-
+    
     struct GraphicalElement : public Element
     {
-    protected:
+    protected: 
         GraphicalElement( Element* pParent, sal_Int32 nGCId )
         : Element( pParent ), GCId( nGCId ), MirrorVertical( false ) {}
 
@@ -142,7 +142,7 @@ namespace pdfi
         sal_Int32 GCId;
         bool      MirrorVertical;
     };
-
+    
     struct DrawElement : public GraphicalElement
     {
     protected:
@@ -153,7 +153,7 @@ namespace pdfi
         bool      isCharacter;
         sal_Int32 ZOrder;
     };
-
+    
     struct FrameElement : public DrawElement
     {
         friend class ElementFactory;
@@ -165,7 +165,7 @@ namespace pdfi
         // ElementTreeVisitable
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& );
     };
-
+    
     struct TextElement : public GraphicalElement
     {
         friend class ElementFactory;
@@ -176,7 +176,7 @@ namespace pdfi
     public:
         // ElementTreeVisitable
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& );
-
+       
         rtl::OUStringBuffer Text;
         sal_Int32           FontId;
     };
@@ -190,7 +190,7 @@ namespace pdfi
     public:
         // ElementTreeVisitable
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt );
-
+        
         // returns true only if only a single line is contained
         bool isSingleLined( PDFIProcessor& rProc ) const;
         // returns the highest line height of the contained textelements
@@ -198,13 +198,13 @@ namespace pdfi
         double getLineHeight( PDFIProcessor& rProc ) const;
         // returns the first text element child; does not recurse through subparagraphs
         TextElement* getFirstTextChild() const;
-
+        
         enum ParagraphType { Normal, Headline };
         ParagraphType       Type;
     bool bRtl;
     };
 
-    struct PolyPolyElement : public DrawElement
+    struct PolyPolyElement : public DrawElement 
     {
         friend class ElementFactory;
     protected:
@@ -214,17 +214,17 @@ namespace pdfi
     public:
         // ElementTreeVisitable
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt );
-
+     
         void updateGeometry();
 
 #if OSL_DEBUG_LEVEL > 1
         virtual void emitStructure( int nLevel );
 #endif
-
+        
         basegfx::B2DPolyPolygon PolyPoly;
         sal_Int8                Action;
     };
-
+    
     struct ImageElement : public DrawElement
     {
         friend class ElementFactory;
@@ -235,7 +235,7 @@ namespace pdfi
     public:
         // ElementTreeVisitable
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& );
-
+       
         ImageId Image;
     };
 
@@ -256,13 +256,13 @@ namespace pdfi
 
         // ElementTreeVisitable
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt );
-
-        void emitPageAnchoredElements( EmitContext& rEmitContext );
+       
+        void emitPageAnchoredElements( EmitContext& rEmitContext );        
         static void updateParagraphGeometry( Element* pEle );
         void resolveHyperlinks();
         void resolveFontStyles( PDFIProcessor& rProc );
         void resolveUnderlines( PDFIProcessor& rProc );
-
+        
         sal_Int32      PageNumber;
         ListElement    Hyperlinks; // contains not yet realized links on this page
         double         TopMargin;
@@ -280,12 +280,12 @@ namespace pdfi
         DocumentElement() : Element( NULL ) {}
     public:
         virtual ~DocumentElement();
-
+        
         // ElementTreeVisitable
-        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& );
-
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ); 
+       
     };
-
+    
     // this class is the differentiator of document types: it will create
     // Element objects with an optimize() method suitable for the document type
     class ElementFactory
@@ -293,15 +293,15 @@ namespace pdfi
     public:
         ElementFactory() {}
         virtual ~ElementFactory();
-
+        
         virtual HyperlinkElement* createHyperlinkElement( Element* pParent, const rtl::OUString& rURI )
         { return new HyperlinkElement( pParent, rURI ); }
-
+        
         virtual TextElement* createTextElement( Element* pParent, sal_Int32 nGCId, sal_Int32 nFontId )
         { return new TextElement( pParent, nGCId, nFontId ); }
         virtual ParagraphElement* createParagraphElement( Element* pParent )
         { return new ParagraphElement( pParent ); }
-
+        
         virtual FrameElement* createFrameElement( Element* pParent, sal_Int32 nGCId )
         { return new FrameElement( pParent, nGCId ); }
         virtual PolyPolyElement*
@@ -312,13 +312,13 @@ namespace pdfi
         { return new PolyPolyElement( pParent, nGCId, rPolyPoly, nAction ); }
         virtual ImageElement* createImageElement( Element* pParent, sal_Int32 nGCId, ImageId nImage )
         { return new ImageElement( pParent, nGCId, nImage ); }
-
+        
         virtual PageElement* createPageElement( Element* pParent,
                                                 sal_Int32 nPageNr )
         { return new PageElement( pParent, nPageNr ); }
         virtual DocumentElement* createDocumentElement()
         { return new DocumentElement(); }
-    };
+    };    
 }
 
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,10 +58,10 @@ class BookmarkPopup_Impl : public PopupMenu
 public:
     BookmarkPopup_Impl();
 
-    USHORT          GetCurId() const { return nCurId; }
+    USHORT			GetCurId() const { return nCurId; }
 
 private:
-    USHORT          nCurId;
+    USHORT			nCurId;
 
     virtual void    Select();
 };

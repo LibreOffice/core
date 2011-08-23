@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,16 +42,16 @@ bool InitAtkBridge(void)
     const char* pVersion = atk_get_toolkit_version();
     if( ! pVersion )
         return false;
-
+    
     unsigned int major, minor, micro;
-
+    
     /* check gail minimum version requirements */
     if( sscanf( pVersion, "%u.%u.%u", &major, &minor, &micro) < 3 )
     {
         // g_warning( "unable to parse gail version number" );
         return false;
     }
-
+    
     if( ( (major << 16) | (minor << 8) | micro ) < ( (1 << 16) | 8 << 8 | 6 ) )
     {
         g_warning( "libgail >= 1.8.6 required for accessibility support" );
@@ -60,15 +60,15 @@ bool InitAtkBridge(void)
 
     /* Initialize the AtkUtilityWrapper class */
     g_type_class_unref( g_type_class_ref( OOO_TYPE_ATK_UTIL ) );
-
+    
     /* Initialize the GailWindow wrapper class */
     g_type_class_unref( g_type_class_ref( OOO_TYPE_WINDOW_WRAPPER ) );
-
+    
     /* Register AtkObject wrapper factory */
     AtkRegistry * registry = atk_get_default_registry();
     if( registry )
         atk_registry_set_factory_type( registry, OOO_TYPE_FIXED, OOO_TYPE_WRAPPER_FACTORY );
-
+    
     return true;
 }
 

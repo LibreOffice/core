@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,8 +56,8 @@ static BOOL ImplIsSysWindowOrChild( HWND hWndParent, HWND hWndChild )
 
 static Os2SalObject* ImplFindOs2SalObject( HWND hWndChild )
 {
-    SalData*    pSalData = GetSalData();
-    Os2SalObject*   pObject = pSalData->mpFirstObject;
+    SalData*	pSalData = GetSalData();
+    Os2SalObject*	pObject = pSalData->mpFirstObject;
     while ( pObject )
     {
         if ( ImplIsSysWindowOrChild( pObject->mhWndChild, hWndChild ) )
@@ -77,8 +77,8 @@ BOOL EXPENTRY SalSysMsgProc( HAB /* hAB */, QMSG* pMsg, ULONG /* fs */ )
          (pMsg->msg == WM_BUTTON2DOWN) ||
          (pMsg->msg == WM_BUTTON3DOWN) )
     {
-        SalData*    pSalData = GetSalData();
-        Os2SalObject*   pObject = ImplFindOs2SalObject( pMsg->hwnd );
+        SalData*	pSalData = GetSalData();
+        Os2SalObject*	pObject = ImplFindOs2SalObject( pMsg->hwnd );
         if ( pObject )
             WinPostMsg( pObject->mhWnd, SALOBJ_MSG_TOTOP, 0, 0 );
     }
@@ -95,9 +95,9 @@ BOOL EXPENTRY SalSysMsgProc( HAB /* hAB */, QMSG* pMsg, ULONG /* fs */ )
 MRESULT EXPENTRY SalSysObjWndProc( HWND hWnd, ULONG nMsg,
                                    MPARAM nMP1, MPARAM nMP2 )
 {
-    Os2SalObject*   pSysObj;
-    MRESULT     nRet = 0;
-    int         bDef = TRUE;
+    Os2SalObject*	pSysObj;
+    MRESULT 	nRet = 0;
+    int 		bDef = TRUE;
 
 #if OSL_DEBUG_LEVEL>0
     debug_printf( "SalSysObjWndProc hWnd 0x%x nMsg %d\n", hWnd, nMsg);
@@ -111,8 +111,8 @@ MRESULT EXPENTRY SalSysObjWndProc( HWND hWnd, ULONG nMsg,
             break;
         case WM_PAINT:
             {
-            HPS     hPS;
-            RECTL   aRect;
+            HPS 	hPS;
+            RECTL	aRect;
             hPS = WinBeginPaint( hWnd, NULLHANDLE, &aRect );
             WinEndPaint( hPS );
             bDef = FALSE;
@@ -194,8 +194,8 @@ MRESULT EXPENTRY SalSysObjWndProc( HWND hWnd, ULONG nMsg,
 MRESULT EXPENTRY SalSysObjChildWndProc( HWND hWnd, ULONG nMsg,
                                         MPARAM nMP1, MPARAM nMP2 )
 {
-    MRESULT     nRet = 0;
-    int         bDef = TRUE;
+    MRESULT 	nRet = 0;
+    int 		bDef = TRUE;
 
     debug_printf( "SalSysObjChildWndProc hWnd 0x%x nMsg %d\n", hWnd, nMsg);
 
@@ -210,8 +210,8 @@ MRESULT EXPENTRY SalSysObjChildWndProc( HWND hWnd, ULONG nMsg,
             break;
         case WM_PAINT:
             {
-            HPS     hPS;
-            RECTL   aRect;
+            HPS 	hPS;
+            RECTL	aRect;
             hPS = WinBeginPaint( hWnd, NULLHANDLE, &aRect );
             WinEndPaint( hPS );
             bDef = FALSE;
@@ -229,8 +229,8 @@ MRESULT EXPENTRY SalSysObjChildWndProc( HWND hWnd, ULONG nMsg,
 MRESULT EXPENTRY SalSysObjClipWndProc( HWND hWnd, ULONG nMsg,
                                        MPARAM nMP1, MPARAM nMP2 )
 {
-    MRESULT     nRet = 0;
-    int         bDef = TRUE;
+    MRESULT 	nRet = 0;
+    int 		bDef = TRUE;
 
     debug_printf( "SalSysObjClipWndProc hWnd 0x%x nMsg %d\n", hWnd, nMsg);
 
@@ -283,8 +283,8 @@ MRESULT EXPENTRY SalSysObjClipWndProc( HWND hWnd, ULONG nMsg,
             break;
         case WM_PAINT:
             {
-            HPS     hPS;
-            RECTL   aRect;
+            HPS 	hPS;
+            RECTL	aRect;
             hPS = WinBeginPaint( hWnd, NULLHANDLE, &aRect );
             WinEndPaint( hPS );
             bDef = FALSE;
@@ -384,15 +384,15 @@ Os2SalObject::Os2SalObject()
 {
     SalData* pSalData = GetSalData();
 
-    mhLastClipWnd       = HWND_TOP;
+    mhLastClipWnd		= HWND_TOP;
 
-    mhWnd               = 0;
-    mhWndChild      = 0;
-    mhLastFocusWnd  = 0;
-    maSysData.nSize = sizeof( SystemEnvData );
-    mnHeight            = 0;
-    mpInst          = NULL;
-    mpProc          = ImplSalObjCallbackDummy;
+    mhWnd				= 0;
+    mhWndChild 		= 0;
+    mhLastFocusWnd 	= 0;
+    maSysData.nSize	= sizeof( SystemEnvData );
+    mnHeight			= 0;
+    mpInst 			= NULL;
+    mpProc 			= ImplSalObjCallbackDummy;
 
     // Hook installieren, wenn es das erste Os2SalObject ist
     if ( !pSalData->mpFirstObject )

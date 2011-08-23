@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ extern int getRepFamilyName(const char* , char *, double &ratio);
 #define rendEl(x)       rDocumentHandler->endElement(x)
 #define rchars(x)       rDocumentHandler->characters(x)
 #define padd(x,y,z)     pList->addAttribute(x,y,z)
-#define Double2Str(x)   OUString::valueOf((double)(x))
+#define Double2Str(x)	OUString::valueOf((double)(x))
 #define WTI(x)          ((double)(x) / 1800.)     // unit => inch
 #define WTMM(x)     ((double)(x) / 1800. * 25.4)  // unit => mm
 #define WTSM(x)     ((int)((x) / 1800. * 2540))   // unit ==> 1/100 mm
@@ -2052,8 +2052,8 @@ void HwpReader::makeTableStyle(Table *tbl)
             }
         }
         if(cl->shade != 0)
-            padd(ascii("fo:background-color"), sXML_CDATA,
-                ascii(hcolor2str(sal::static_int_cast<uchar>(cl->color),
+            padd(ascii("fo:background-color"), sXML_CDATA, 
+                ascii(hcolor2str(sal::static_int_cast<uchar>(cl->color), 
                                 sal::static_int_cast<uchar>(cl->shade), buf)));
 
         rstartEl(ascii("style:properties"), rList);
@@ -2115,9 +2115,9 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
             padd(ascii("svg:stroke-width"), sXML_CDATA,
                 Double2Str( WTMM(hdo->property.line_width)) + ascii("mm" ));
             color = hdo->property.line_color;
-            sprintf( buf, "#%02x%02x%02x",
-                    sal_uInt16(color & 0xff),
-                    sal_uInt16((color >> 8) & 0xff),
+            sprintf( buf, "#%02x%02x%02x", 
+                    sal_uInt16(color & 0xff), 
+                    sal_uInt16((color >> 8) & 0xff), 
                     sal_uInt16((color >>16) & 0xff) );
             padd(ascii("svg:stroke-color"), sXML_CDATA, ascii( buf) );
         }
@@ -2222,8 +2222,8 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                 if( color < 0xffffff )
                 {
                     sprintf( buf, "#%02x%02x%02x",
-                        sal_uInt16(color & 0xff),
-                        sal_uInt16((color >> 8) & 0xff),
+                        sal_uInt16(color & 0xff), 
+                        sal_uInt16((color >> 8) & 0xff), 
                         sal_uInt16((color >>16) & 0xff) );
                     padd(ascii("draw:fill-color"), sXML_CDATA, ascii( buf) );
                     padd(ascii("draw:fill-hatch-solid"), sXML_CDATA, ascii("true"));
@@ -2233,8 +2233,8 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
             {
                 padd(ascii("draw:fill"), sXML_CDATA, ascii("solid"));
                 sprintf( buf, "#%02x%02x%02x",
-                    sal_uInt16(color & 0xff),
-                    sal_uInt16((color >> 8) & 0xff),
+                    sal_uInt16(color & 0xff), 
+                    sal_uInt16((color >> 8) & 0xff), 
                     sal_uInt16((color >>16) & 0xff) );
                 padd(ascii("draw:fill-color"), sXML_CDATA, ascii( buf) );
             }
@@ -2464,7 +2464,7 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
         }
         if(cell->shade != 0)
             padd(ascii("fo:background-color"), sXML_CDATA, ascii(hcolor2str(
-            sal::static_int_cast<uchar>(cell->color),
+            sal::static_int_cast<uchar>(cell->color), 
             sal::static_int_cast<uchar>(cell->shade), buf)));
     }
     rstartEl(ascii("style:properties"), rList);
@@ -2689,10 +2689,10 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
                       Double2Str(WTMM(fstyle->margin[1][3])) + ascii("mm"));
           }
         if(cell->shade != 0)
-            padd(ascii("fo:background-color"), sXML_CDATA,
+            padd(ascii("fo:background-color"), sXML_CDATA, 
             ascii(hcolor2str(
-                sal::static_int_cast<uchar>(cell->color),
-                sal::static_int_cast<uchar>(cell->shade),
+                sal::static_int_cast<uchar>(cell->color), 
+                sal::static_int_cast<uchar>(cell->shade), 
                 buf)));
     }
     else if( fstyle->boxtype == 'E' )
@@ -3787,7 +3787,7 @@ void HwpReader::makeFormula(TxtBox * hbox)
         pPar = pPar->Next();
     }
     mybuf[l] = '\0';
-//   rchars(ascii(mybuf));
+//	 rchars(ascii(mybuf));
 //#ifndef UDK100
     Formula *form = new Formula(mybuf);
     form->setDocumentHandler(rDocumentHandler);
@@ -4066,7 +4066,7 @@ void HwpReader::makePicture(Picture * hbox)
 }
 
 
-#define DBL(x)  ((x) * (x))
+#define DBL(x)	((x) * (x))
 void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 {
     int x = hbox->pgx;
@@ -4593,7 +4593,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                             drawobj->property.pPara )
                         {
                             HWPPara *pPara = drawobj->property.pPara;
-                            //  parsePara(pPara);
+                            //	parsePara(pPara);
                             while(pPara)
                             {
                                 make_text_p1( pPara );

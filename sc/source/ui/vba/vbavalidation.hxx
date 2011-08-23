@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,9 +36,9 @@
 typedef InheritedHelperInterfaceImpl1<ov::excel::XValidation > ValidationImpl_BASE;
 
 class ScVbaValidation : public ValidationImpl_BASE
-{
+{		
     css::uno::Reference< css::table::XCellRange > m_xRange;
-
+    
 public:
     ScVbaValidation( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::table::XCellRange >& xRange ) : ValidationImpl_BASE( xParent, xContext ), m_xRange( xRange) {}
     // Attributes
@@ -69,6 +69,6 @@ public:
 
 };
 
-#endif
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

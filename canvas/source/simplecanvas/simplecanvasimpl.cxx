@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -57,16 +57,16 @@ using namespace canvas;
 
 namespace
 {
-    inline uno::Sequence< double > color2Sequence( sal_Int32 const& nColor      )
+    inline uno::Sequence< double > color2Sequence( sal_Int32 const& nColor  	)
     {
         // TODO(F3): Color management
         uno::Sequence< double > aRes( 4 );
-
-        aRes[0] = static_cast<sal_uInt8>( (nColor&0xFF000000U) >> 24U ) / 255.0;
-        aRes[1] = static_cast<sal_uInt8>( (nColor&0x00FF0000U) >> 16U ) / 255.0;
-        aRes[2] = static_cast<sal_uInt8>( (nColor&0x0000FF00U) >>  8U ) / 255.0;
-        aRes[3] = static_cast<sal_uInt8>( (nColor&0x000000FFU) )        / 255.0;
-
+        
+        aRes[0] = static_cast<sal_uInt8>( (nColor&0xFF000000U) >> 24U ) / 255.0; 
+        aRes[1] = static_cast<sal_uInt8>( (nColor&0x00FF0000U) >> 16U ) / 255.0; 
+        aRes[2] = static_cast<sal_uInt8>( (nColor&0x0000FF00U) >>  8U ) / 255.0; 
+        aRes[3] = static_cast<sal_uInt8>( (nColor&0x000000FFU) )        / 255.0; 
+        
         return aRes;
     }
 
@@ -86,7 +86,7 @@ namespace
         uno::Reference< rendering::XPolyPolygon2D > xRes(
             xDevice->createCompatibleLinePolyPolygon( sequenceSequence ),
             uno::UNO_QUERY );
-        if( xRes.is() )
+        if( xRes.is() ) 
             xRes->setClosed( 0, sal_True );
         return xRes;
     }
@@ -118,7 +118,7 @@ namespace
 
 
     typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::rendering::XSimpleCanvas,
-                                              ::com::sun::star::lang::XServiceName >    SimpleCanvasBase;
+                                              ::com::sun::star::lang::XServiceName >	SimpleCanvasBase;
 
     class SimpleCanvasImpl : private cppu::BaseMutex,
                              public SimpleCanvasBase
@@ -130,7 +130,7 @@ namespace
         }
 
         rendering::RenderState createStrokingRenderState() const
-        {
+        { 
             return rendering::RenderState(maRenderState.m_aTransformation,
                                           *maRenderState.m_aRectClip,
                                           *maRenderState.m_aPenColor,
@@ -143,7 +143,7 @@ namespace
         }
 
         rendering::RenderState createFillingRenderState() const
-        {
+        { 
             return rendering::RenderState(maRenderState.m_aTransformation,
                                           *maRenderState.m_aRectClip,
                                           *maRenderState.m_aFillColor,
@@ -174,7 +174,7 @@ namespace
             mxCanvas( grabCanvas(aArguments) ),
             maFont(boost::bind( &rendering::XCanvas::createFont,
                                 boost::cref(mxCanvas),
-                                _1,
+                                _1, 
                                 uno::Sequence< beans::PropertyValue >(),
                                 geometry::Matrix2D() )),
             maViewState(),
@@ -193,18 +193,18 @@ namespace
         }
 
         // Ifc XSimpleCanvas
-        virtual void SAL_CALL selectFont( const ::rtl::OUString& sFontName,
-                                          double                 size,
-                                          ::sal_Bool             bold,
+        virtual void SAL_CALL selectFont( const ::rtl::OUString& sFontName, 
+                                          double                 size, 
+                                          ::sal_Bool             bold, 
                                           ::sal_Bool             italic ) throw (uno::RuntimeException)
         {
             ::osl::MutexGuard aGuard( m_aMutex );
-
+            
             maFont->FontDescription.FamilyName = sFontName;
             maFont->CellSize = size;
-            maFont->FontDescription.FontDescription.Weight =
+            maFont->FontDescription.FontDescription.Weight = 
                 bold ? rendering::PanoseWeight::BOLD : rendering::PanoseWeight::MEDIUM;
-            maFont->FontDescription.FontDescription.Letterform =
+            maFont->FontDescription.FontDescription.Letterform = 
                 italic ? rendering::PanoseLetterForm::OBLIQUE_CONTACT : rendering::PanoseLetterForm::ANYTHING;
         }
 
@@ -240,7 +240,7 @@ namespace
                                 createFillingRenderState());
         }
 
-        virtual void SAL_CALL drawLine( const geometry::RealPoint2D& aStartPoint,
+        virtual void SAL_CALL drawLine( const geometry::RealPoint2D& aStartPoint, 
                                         const geometry::RealPoint2D& aEndPoint ) throw (uno::RuntimeException)
         {
             ::osl::MutexGuard aGuard( m_aMutex );
@@ -281,8 +281,8 @@ namespace
                                           createStrokingRenderState());
         }
 
-        virtual void SAL_CALL drawText( const rendering::StringContext& aText,
-                                        const geometry::RealPoint2D&    aOutPos,
+        virtual void SAL_CALL drawText( const rendering::StringContext& aText, 
+                                        const geometry::RealPoint2D&    aOutPos, 
                                         ::sal_Int8                      nTextDirection ) throw (uno::RuntimeException)
         {
             ::osl::MutexGuard aGuard( m_aMutex );
@@ -297,7 +297,7 @@ namespace
                                nTextDirection);
         }
 
-        virtual void SAL_CALL drawBitmap( const uno::Reference< rendering::XBitmap >& xBitmap,
+        virtual void SAL_CALL drawBitmap( const uno::Reference< rendering::XBitmap >& xBitmap, 
                                           const geometry::RealPoint2D&                aLeftTop ) throw (uno::RuntimeException)
         {
             ::osl::MutexGuard aGuard( m_aMutex );
@@ -380,7 +380,7 @@ namespace
 
         uno::Reference<rendering::XCanvas> mxCanvas;
         SimpleFont                         maFont;
-        rendering::ViewState               maViewState;
+        rendering::ViewState               maViewState;   
         SimpleRenderState                  maRenderState;
     };
 

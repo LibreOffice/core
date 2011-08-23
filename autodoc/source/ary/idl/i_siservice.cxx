@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -110,7 +110,7 @@ attr::BaseInterface( const CodeEntity & i_ce )
 
 void
 attr::Get_Constructors( Dyn_CeIterator &    o_result,
-                        const CodeEntity &  i_ce )
+                        const CodeEntity &	i_ce )
 {
     o_result = new SCI_Vector<Ce_id>( sglifcservice_cast(i_ce).aConstructors );
 }

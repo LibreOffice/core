@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -125,7 +125,7 @@ public:
         URLs.
     */
     const ::std::vector<rtl::OUString>& GetResourceURLs (void) const;
-
+    
     //===== XResourceId =======================================================
 
     virtual ::rtl::OUString SAL_CALL
@@ -164,7 +164,7 @@ public:
                 css::drawing::framework::XResourceId>& rxResourceId,
             css::drawing::framework::AnchorBindingMode eMode)
         throw(css::uno::RuntimeException);
-
+    
     virtual sal_Bool SAL_CALL
         isBoundToURL (
             const ::rtl::OUString& rsAnchorURL,

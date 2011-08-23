@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,7 +37,7 @@ import lib.MultiMethodTest;
  */
 public class _XDocumentInfoSupplier extends MultiMethodTest {
     public XDocumentInfoSupplier oObj = null;
-
+    
     public void _getDocumentInfo() {
         // returns a com.sun.star.document.DocumentInfo
         XDocumentInfo info = oObj.getDocumentInfo();
@@ -50,7 +50,7 @@ public class _XDocumentInfoSupplier extends MultiMethodTest {
             e.printStackTrace((java.io.PrintWriter)log);
             title = null;
         }
-        log.println("Got document title: " + title);
+        log.println("Got document title: " + title); 
         tRes.tested("getDocumentInfo()", title != null);
     }
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ class TargetDragContext: public WeakImplHelper1<XDropTargetDragContext>
     // some calls to the functions of XDropTargetDragContext are delegated
     // to non-interface functions of m_pDropTarget
     DropTarget* m_pDropTarget;
-
+    
     TargetDragContext();
     TargetDragContext( const TargetDragContext&);
     TargetDragContext &operator= ( const TargetDragContext&);
@@ -54,7 +54,7 @@ public:
     TargetDragContext( DropTarget* pTarget);
     ~TargetDragContext();
 
-    virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation )
+    virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation ) 
         throw( RuntimeException);
     virtual void SAL_CALL rejectDrag(  )
         throw( RuntimeException);

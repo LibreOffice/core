@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ public:
           mnContextSize( 0 )
     { }
 
-    EvaluationContext(
+    EvaluationContext( 
         const com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>& xContextNode,
         const com::sun::star::uno::Reference<com::sun::star::xforms::XModel>& xModel,
         const com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>& xNamespaces,

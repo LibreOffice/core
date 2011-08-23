@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,9 +42,9 @@ public class ReportImplementationHelper
     protected int m_nDefaultPageOrientation;
 
     /**
-     *
+     * 
      * @param _aMSF
-     * @param _nOrientation
+     * @param _nOrientation 
      */
     public ReportImplementationHelper(XMultiServiceFactory _aMSF, int _nOrientation)
     {

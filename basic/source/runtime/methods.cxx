@@ -111,7 +111,7 @@ SbxVariable* getDefaultProp( SbxVariable* pRef );
 #endif
 
 #ifdef WIN
-#include <dos.h>      // _dos_getfileattr
+#include <dos.h>	  // _dos_getfileattr
 #include <errno.h>
 #endif
 
@@ -425,7 +425,7 @@ RTLFUNC(CurDir)
     // DirEntry-Funktionalitaet keine Moeglichkeit besteht, das aktuelle so
     // zu ermitteln, dass eine virtuelle URL geliefert werden koennte.
 
-//  rPar.Get(0)->PutEmpty();
+//	rPar.Get(0)->PutEmpty();
 #if defined (WIN) || defined (WNT) || defined (OS2)
     int nCurDir = 0;  // Current dir // JSM
     if ( rPar.Count() == 2 )
@@ -1165,9 +1165,9 @@ RTLFUNC(InStrRev)
 
 
 /*
-    Int( 2.8 )  =  2.0
+    Int( 2.8 ) 	=  2.0
     Int( -2.8 ) = -3.0
-    Fix( 2.8 )  =  2.0
+    Fix( 2.8 ) 	=  2.0
     Fix( -2.8 ) = -2.0    <- !!
 */
 
@@ -1789,8 +1789,8 @@ RTLFUNC(Val)
 
         String aStr( rPar.Get(1)->GetString() );
 // lt. Mikkysoft bei Kommas abbrechen!
-//      for( USHORT n=0; n < aStr.Len(); n++ )
-//          if( aStr[n] == ',' ) aStr[n] = '.';
+//		for( USHORT n=0; n < aStr.Len(); n++ )
+//			if( aStr[n] == ',' ) aStr[n] = '.';
 
         FilterWhiteSpace( aStr );
         if ( aStr.GetBuffer()[0] == '&' && aStr.Len() > 1 )
@@ -1889,7 +1889,7 @@ BOOL implDateSerial( INT16 nYear, INT16 nMonth, INT16 nDay, double& rdRet )
 
         // adjust year based on month value
         // e.g. 2000, 0, xx = 1999, 12, xx ( or December of the previous year )
-        //      2000, 13, xx = 2001, 1, xx ( or January of the following year )
+        //		2000, 13, xx = 2001, 1, xx ( or January of the following year )
         if( ( nMonth < 1 ) || ( nMonth > 12 ) )
         {
             // inacurrate around leap year, don't use days to calculate,
@@ -1902,7 +1902,7 @@ BOOL implDateSerial( INT16 nYear, INT16 nMonth, INT16 nDay, double& rdRet )
 
         // adjust day value,
         // e.g. 2000, 2, 0 = 2000, 1, 31 or the last day of the previous month
-        //      2000, 1, 32 = 2000, 2, 1 or the first day of the following month
+        //		2000, 1, 32 = 2000, 2, 1 or the first day of the following month
         if( ( nDay < 1 ) || ( nDay > aCurDate.GetDaysInMonth() ) )
             aCurDate += nDay - 1;
         else
@@ -1996,7 +1996,7 @@ RTLFUNC(TimeSerial)
     INT16 nMinute = rPar.Get(2)->GetInteger();
     INT16 nSecond = rPar.Get(3)->GetInteger();
     if ((nHour < 0 || nHour > 23)   ||
-        (nMinute < 0 || nMinute > 59 )  ||
+        (nMinute < 0 || nMinute > 59 )	||
         (nSecond < 0 || nSecond > 59 ))
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -2026,7 +2026,7 @@ RTLFUNC(DateValue)
             pFormatter = pINST->GetNumberFormatter();
         else
         {
-            sal_uInt32 n;   // Dummy
+            sal_uInt32 n;	// Dummy
             SbiInstance::PrepareNumberFormatter( pFormatter, n, n, n );
         }
 
@@ -2088,7 +2088,7 @@ RTLFUNC(TimeValue)
             pFormatter = pINST->GetNumberFormatter();
         else
         {
-            sal_uInt32 n;   // Dummy
+            sal_uInt32 n;	// Dummy
             SbiInstance::PrepareNumberFormatter( pFormatter, n, n, n );
         }
 
@@ -2304,7 +2304,7 @@ RTLFUNC(Time)
             }
             else
             {
-                sal_uInt32 n;   // Dummy
+                sal_uInt32 n;	// Dummy
                 SbiInstance::PrepareNumberFormatter( pFormatter, n, nIndex, n );
             }
 
@@ -2361,7 +2361,7 @@ RTLFUNC(Date)
             }
             else
             {
-                sal_uInt32 n;   // Dummy
+                sal_uInt32 n;	// Dummy
                 SbiInstance::PrepareNumberFormatter( pFormatter, nIndex, n, n );
             }
 
@@ -2725,7 +2725,7 @@ RTLFUNC(Dir)
                     if( pRTLData->sFullNameToBeChecked.Len() > 0 )
                     {
                         sal_Bool bExists = sal_False;
-                        try { bExists = xSFI->exists( aFileURLStr ); }
+                        try	{ bExists = xSFI->exists( aFileURLStr ); }
                         catch( Exception & ) {}
 
                         String aNameOnlyStr;
@@ -3204,7 +3204,7 @@ RTLFUNC(FileDateTime)
         }
         else
         {
-            sal_uInt32 n;   // Dummy
+            sal_uInt32 n;	// Dummy
             SbiInstance::PrepareNumberFormatter( pFormatter, n, n, nIndex );
         }
 
@@ -3243,7 +3243,7 @@ RTLFUNC(EOF)
         if ( pSbStrm->IsText() )
         {
             char cBla;
-            (*pSvStrm) >> cBla; // koennen wir noch ein Zeichen lesen
+            (*pSvStrm) >> cBla;	// koennen wir noch ein Zeichen lesen
             bIsEof = pSvStrm->IsEof();
             if ( !bIsEof )
                 pSvStrm->SeekRel( -1 );
@@ -3270,7 +3270,7 @@ RTLFUNC(FileAttr)
     else
     {
         INT16 nChannel = rPar.Get(1)->GetInteger();
-//      nChannel--;
+//		nChannel--;
         SbiIoSystem* pIO = pINST->GetIoSystem();
         SbiStream* pSbStrm = pIO->GetStream( nChannel );
         if ( !pSbStrm )
@@ -3365,7 +3365,7 @@ RTLFUNC(Seek)
         return;
     }
     INT16 nChannel = rPar.Get(1)->GetInteger();
-//  nChannel--;
+//	nChannel--;
     SbiIoSystem* pIO = pINST->GetIoSystem();
     SbiStream* pSbStrm = pIO->GetStream( nChannel );
     if ( !pSbStrm )
@@ -3380,7 +3380,7 @@ RTLFUNC(Seek)
         ULONG nPos = pStrm->Tell();
         if( pSbStrm->IsRandom() )
             nPos = nPos / pSbStrm->GetBlockLen();
-        nPos++; // Basic zaehlt ab 1
+        nPos++;	// Basic zaehlt ab 1
         rPar.Get(0)->PutLong( (INT32)nPos );
     }
     else                // Seek-Statement
@@ -3458,7 +3458,7 @@ RTLFUNC(Rnd)
 //
 //  WindowStyles (VBA-kompatibel):
 //      2 == Minimized
-//      3 == Maximized
+//	    3 == Maximized
 //     10 == Full-Screen (Textmodus-Anwendungen OS/2, WIN95, WNT)
 //
 // !!!HACK der WindowStyle wird im Creator an Application::StartApp
@@ -4060,7 +4060,7 @@ RTLFUNC(RGB)
         return;
     }
 
-    ULONG nRed   = rPar.Get(1)->GetInteger() & 0xFF;
+    ULONG nRed	 = rPar.Get(1)->GetInteger() & 0xFF;
     ULONG nGreen = rPar.Get(2)->GetInteger() & 0xFF;
     ULONG nBlue  = rPar.Get(3)->GetInteger() & 0xFF;
     ULONG nRGB;
@@ -4223,7 +4223,7 @@ RTLFUNC(StrConv)
             pArray->unoAddDim( 0, -1 );
         }
 
-        for( USHORT i=0; i< nArraySize; i++)
+        for( USHORT	i=0; i< nArraySize; i++)
         {
             SbxVariable* pNew = new SbxVariable( SbxBYTE );
             pNew->PutByte(*pChar);
@@ -4385,7 +4385,7 @@ RTLFUNC(MsgBox)
 
     static const WinBits nStyleMap[] =
     {
-        WB_OK,              // MB_OK
+        WB_OK,				// MB_OK
         WB_OK_CANCEL,       // MB_OKCANCEL
         WB_ABORT_RETRY_IGNORE,    // MB_ABORTRETRYIGNORE
         WB_YES_NO_CANCEL,   // MB_YESNOCANCEL
@@ -4478,7 +4478,7 @@ RTLFUNC(MsgBox)
     {
         nMappedRet = nRet;
         if( nMappedRet == 0 )
-            nMappedRet = 3; // Abort
+            nMappedRet = 3;	// Abort
     }
     else
         nMappedRet = nButtonMap[ nRet ];

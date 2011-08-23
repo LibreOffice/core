@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,8 +58,8 @@ extern "C" void SAL_CALL preload_initializeModule()
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
 component_getImplementationEnvironment(
-                const sal_Char  **ppEnvTypeName,
-                uno_Environment **  /*ppEnv*/
+                const sal_Char	**ppEnvTypeName,
+                uno_Environment	**  /*ppEnv*/
             )
 {
     preload_initializeModule();

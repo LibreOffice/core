@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,10 +42,10 @@ Control DLG_CUSTOMANIMATIONPANE
     {
         OutputSize = TRUE;
         Size = MAP_APPFONT( 260, 8 );
-
+        
         Text [ en-US ] = "Effect";
     };
-
+    
     PushButton PB_ADD_EFFECT
     {
         HelpId = HID_SD_CUSTOMANIMATIONPANE_PB_ADD_EFFECT;
@@ -55,7 +55,7 @@ Control DLG_CUSTOMANIMATIONPANE
 
         Text [ en-US ] = "~Add...";
     };
-
+    
     PushButton PB_CHANGE_EFFECT
     {
         HelpId = HID_SD_CUSTOMANIMATIONPANE_PB_CHANGE_EFFECT;
@@ -65,7 +65,7 @@ Control DLG_CUSTOMANIMATIONPANE
 
         Text [ en-US ] = "~Change...";
     };
-
+    
     PushButton PB_REMOVE_EFFECT
     {
         HelpId = HID_SD_CUSTOMANIMATIONPANE_PB_REMOVE_EFFECT;
@@ -75,15 +75,15 @@ Control DLG_CUSTOMANIMATIONPANE
 
         Text [ en-US ] = "~Remove";
     };
-
+        
     FixedLine FL_MODIFY
     {
         OutputSize = TRUE;
         Size = MAP_APPFONT( 260, 8 );
-
+        
         Text [ en-US ] = "Modify effect";
     };
-
+    
     FixedText FT_START
     {
         OutputSize = TRUE;
@@ -107,7 +107,7 @@ Control DLG_CUSTOMANIMATIONPANE
             < "After previous" ; > ;
         };
     };
-
+    
     FixedText FT_PROPERTY
     {
         OutputSize = TRUE;
@@ -133,7 +133,7 @@ Control DLG_CUSTOMANIMATIONPANE
         Size = MAP_APPFONT( 16, 14 );
 
         Text [ en-US ] = "~...";
-
+        
         QuickHelpText [en-US ] = "Effect Options";
     };
 
@@ -142,9 +142,9 @@ Control DLG_CUSTOMANIMATIONPANE
         OutputSize = TRUE;
         Size = MAP_APPFONT( 42, 8 );
 
-        Text [ en-US ] = "Sp~eed";
+        Text [ en-US ] = "Sp~eed";		
     };
-
+    
     ComboBox CB_SPEED
     {
         HelpId = HID_SD_CUSTOMANIMATIONPANE_CB_SPEED;
@@ -160,15 +160,15 @@ Control DLG_CUSTOMANIMATIONPANE
         TabStop = TRUE;
         Border = TRUE;
     };
-
+    
     FixedText FT_CHANGE_ORDER
     {
         OutputSize = TRUE;
         Size = MAP_APPFONT( 42, 8 );
 
-        Text [ en-US ] = "Change order:";
+        Text [ en-US ] = "Change order:";		
     };
-
+    
     PushButton PB_MOVE_UP
     {
         HelpId = HID_SD_CUSTOMANIMATIONPANE_PB_MOVE_UP;
@@ -185,7 +185,7 @@ Control DLG_CUSTOMANIMATIONPANE
         Size = MAP_APPFONT( 16, 14 );
     };
 
-    FixedLine FL_SEPERATOR1
+    FixedLine FL_SEPERATOR1	
     {
         OutputSize = TRUE;
         Size = MAP_APPFONT( 8, 8 );
@@ -196,7 +196,7 @@ Control DLG_CUSTOMANIMATIONPANE
         HelpId = HID_SD_CUSTOMANIMATIONPANE_PB_PLAY;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE;
-
+        
         Text [ en-US ] = "~Play";
     };
 
@@ -205,7 +205,7 @@ Control DLG_CUSTOMANIMATIONPANE
         HelpId = HID_SD_CUSTOMANIMATIONPANE_PB_SLIDE_SHOW;
         Size = MAP_APPFONT ( 80 , 14 ) ;
         TabStop = TRUE;
-
+        
         Text [ en-US ] = "Slide Sho~w";
     };
 
@@ -213,13 +213,13 @@ Control DLG_CUSTOMANIMATIONPANE
     {
         Size = MAP_APPFONT( 8, 8 );
     };
-
+    
     CheckBox CB_AUTOPREVIEW
     {
         HelpId = HID_SD_CUSTOMANIMATIONPANE_CB_AUTOPREVIEW;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Automatic pre~view" ;
+        Text [ en-US ] = "Automatic pre~view" ;	
     };
 };
 

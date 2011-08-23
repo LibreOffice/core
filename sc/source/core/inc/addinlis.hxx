@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,7 +29,7 @@
 #ifndef SC_ADDINLIS_HXX
 #define SC_ADDINLIS_HXX
 
-#include "adiasync.hxx"         // for ScAddInDocs PtrArr
+#include "adiasync.hxx"			// for ScAddInDocs PtrArr
 #include <tools/list.hxx>
 #include <com/sun/star/sheet/XResultListener.hpp>
 #include <com/sun/star/sheet/XVolatileResult.hpp>
@@ -48,10 +48,10 @@ class ScAddInListener : public cppu::WeakImplHelper2<
 {
 private:
     com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult> xVolRes;
-    com::sun::star::uno::Any    aResult;
-    ScAddInDocs*                pDocs;          // documents where this is used
+    com::sun::star::uno::Any	aResult;
+    ScAddInDocs*				pDocs;			// documents where this is used
 
-    static List                 aAllListeners;
+    static List					aAllListeners;
 
                             // always allocated via CreateListener
                             ScAddInListener(
@@ -60,29 +60,29 @@ private:
                                 ScDocument* pD );
 
 public:
-    virtual                 ~ScAddInListener();
+    virtual					~ScAddInListener();
 
                             // create Listener and put it into global list
-    static ScAddInListener* CreateListener(
+    static ScAddInListener*	CreateListener(
                                 com::sun::star::uno::Reference<
                                     com::sun::star::sheet::XVolatileResult> xVR,
                                 ScDocument* pDoc );
 
-    static ScAddInListener* Get( com::sun::star::uno::Reference<
+    static ScAddInListener*	Get( com::sun::star::uno::Reference<
                                     com::sun::star::sheet::XVolatileResult> xVR );
-    static void             RemoveDocument( ScDocument* pDocument );
+    static void				RemoveDocument( ScDocument* pDocument );
 
-    BOOL                    HasDocument( ScDocument* pDoc ) const   { return pDocs->Seek_Entry( pDoc ); }
-    void                    AddDocument( ScDocument* pDoc )         { pDocs->Insert( pDoc ); }
-    const com::sun::star::uno::Any& GetResult() const               { return aResult; }
+    BOOL					HasDocument( ScDocument* pDoc ) const	{ return pDocs->Seek_Entry( pDoc ); }
+    void					AddDocument( ScDocument* pDoc )			{ pDocs->Insert( pDoc ); }
+    const com::sun::star::uno::Any& GetResult() const				{ return aResult; }
 
 
                             // XResultListener
-    virtual void SAL_CALL   modified( const ::com::sun::star::sheet::ResultEvent& aEvent )
+    virtual void SAL_CALL	modified( const ::com::sun::star::sheet::ResultEvent& aEvent )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XEventListener
-    virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& Source )
+    virtual void SAL_CALL	disposing( const ::com::sun::star::lang::EventObject& Source )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo

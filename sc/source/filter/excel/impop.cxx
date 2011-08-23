@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -129,14 +129,14 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
 {
     mnLastRefIdx = 0;
     nBdshtTab = 0;
-    nIxfeIndex = 0;     // zur Sicherheit auf 0
+    nIxfeIndex = 0;		// zur Sicherheit auf 0
 
     // Root-Daten fuellen - nach new's ohne Root als Parameter
     pExcRoot = &GetOldRoot();
     pExcRoot->pIR = this;   // ExcRoot -> XclImpRoot
     pExcRoot->eDateiTyp = BiffX;
-    pExcRoot->pExtSheetBuff = new ExtSheetBuffer( pExcRoot );   //&aExtSheetBuff;
-    pExcRoot->pShrfmlaBuff = new ShrfmlaBuffer( pExcRoot );     //&aShrfrmlaBuff;
+    pExcRoot->pExtSheetBuff = new ExtSheetBuffer( pExcRoot );	//&aExtSheetBuff;
+    pExcRoot->pShrfmlaBuff = new ShrfmlaBuffer( pExcRoot );		//&aShrfrmlaBuff;
     pExcRoot->pExtNameBuff = new ExtNameBuff ( *this );
 
     pExtNameBuff = new NameBuffer( pExcRoot );          //#94039# prevent empty rootdata
@@ -184,7 +184,7 @@ void ImportExcel::ReadFileSharing()
     {
         if( SfxItemSet* pItemSet = GetMedium().GetItemSet() )
             pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, TRUE ) );
-
+            
         if( SfxObjectShell* pShell = GetDocShell() )
         {
             if( nRecommendReadOnly != 0 )
@@ -384,14 +384,14 @@ void ImportExcel::Window1()
 
 void ImportExcel::Row25( void )
 {
-    UINT16  nRow, nRowHeight;
+    UINT16	nRow, nRowHeight;
 
     aIn >> nRow;
     aIn.Ignore( 4 );   // Mic und Mac ueberspringen
 
     if( ValidRow( nRow ) )
     {
-        aIn >> nRowHeight;  // direkt in Twips angegeben
+        aIn >> nRowHeight;	// direkt in Twips angegeben
         aIn.Ignore( 2 );
 
         if( GetBiff() == EXC_BIFF2 )
@@ -400,7 +400,7 @@ void ImportExcel::Row25( void )
         }
         else
         {// -------------------- BIFF5
-            UINT16  nGrbit;
+            UINT16	nGrbit;
 
             aIn.Ignore( 2 );   // reserved
             aIn >> nGrbit;
@@ -431,7 +431,7 @@ void ImportExcel::Bof2( void )
 
 void ImportExcel::Eof( void )
 {
-    //  POST: darf nur nach einer GUELTIGEN Tabelle gerufen werden!
+    //	POST: darf nur nach einer GUELTIGEN Tabelle gerufen werden!
     EndSheet();
     IncCurrScTab();
 }
@@ -467,8 +467,8 @@ void ImportExcel:: WinProtection( void )
 
 void ImportExcel::Columndefault( void )
 {// Default Cell Attributes
-    UINT16  nColMic, nColMac;
-    BYTE    nOpt0;
+    UINT16	nColMic, nColMac;
+    BYTE	nOpt0;
 
     aIn >> nColMic >> nColMac;
 
@@ -485,7 +485,7 @@ void ImportExcel::Columndefault( void )
         aIn >> nOpt0;
         aIn.Ignore( 2 );   // nur 0. Attribut-Byte benutzt
 
-        if( nOpt0 & 0x80 )  // Col hidden?
+        if( nOpt0 & 0x80 )	// Col hidden?
             pColRowBuff->HideCol( nCol );
     }
 }
@@ -493,18 +493,18 @@ void ImportExcel::Columndefault( void )
 
 void ImportExcel::Array25( void )
 {
-    UINT16      nFirstRow, nLastRow, nFormLen;
-    BYTE        nFirstCol, nLastCol;
+    UINT16		nFirstRow, nLastRow, nFormLen;
+    BYTE		nFirstCol, nLastCol;
 
     aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol;
 
     if( GetBiff() == EXC_BIFF2 )
-    {//                     BIFF2
+    {//						BIFF2
         aIn.Ignore( 1 );
         nFormLen = aIn.ReaduInt8();
     }
     else
-    {//                     BIFF5
+    {//						BIFF5
         aIn.Ignore( 6 );
         aIn >> nFormLen;
     }
@@ -512,7 +512,7 @@ void ImportExcel::Array25( void )
     if( ValidColRow( nLastCol, nLastRow ) )
     {
         // jetzt steht Lesemarke auf Formel, Laenge in nFormLen
-        const ScTokenArray* pErgebnis;
+        const ScTokenArray*	pErgebnis;
 
         pFormConv->Reset( ScAddress( static_cast<SCCOL>(nFirstCol),
                     static_cast<SCROW>(nFirstRow), GetCurrScTab() ) );
@@ -520,7 +520,7 @@ void ImportExcel::Array25( void )
 
         DBG_ASSERT( pErgebnis, "*ImportExcel::Array25(): ScTokenArray ist NULL!" );
 
-        ScMarkData          aMarkData;
+        ScMarkData			aMarkData;
         aMarkData.SelectOneTable( GetCurrScTab() );
         pD->InsertMatrixFormula( static_cast<SCCOL>(nFirstCol),
                 static_cast<SCROW>(nFirstRow), static_cast<SCCOL>(nLastCol),
@@ -532,7 +532,7 @@ void ImportExcel::Array25( void )
 
 void ImportExcel::Rec1904( void )
 {
-    UINT16  n1904;
+    UINT16	n1904;
 
     aIn >> n1904;
 
@@ -548,8 +548,8 @@ void ImportExcel::Rec1904( void )
 
 void ImportExcel::Externname25( void )
 {
-    UINT32      nRes;
-    UINT16      nOpt;
+    UINT32		nRes;
+    UINT16		nOpt;
 
     aIn >> nOpt >> nRes;
 
@@ -573,8 +573,8 @@ void ImportExcel::Externname25( void )
 
 void ImportExcel::Colwidth( void )
 {// Column Width
-    BYTE    nColFirst, nColLast;
-    UINT16  nColWidth;
+    BYTE	nColFirst, nColLast;
+    UINT16	nColWidth;
 
     aIn >> nColFirst >> nColLast >> nColWidth;
 
@@ -653,8 +653,8 @@ void ImportExcel::Builtinfmtcnt( void )
 
 void ImportExcel::Colinfo( void )
 {// Column Formatting Information
-    UINT16  nColFirst, nColLast, nColWidth, nXF;
-    UINT16  nOpt;
+    UINT16	nColFirst, nColLast, nColWidth, nXF;
+    UINT16	nOpt;
 
     aIn >> nColFirst >> nColLast >> nColWidth >> nXF >> nOpt;
 
@@ -754,8 +754,8 @@ void ImportExcel::ReadUsesElfs()
 
 void ImportExcel::Hideobj( void )
 {
-    UINT16      nHide;
-    ScVObjMode  eOle, eChart, eDraw;
+    UINT16		nHide;
+    ScVObjMode	eOle, eChart, eDraw;
 
     aIn >> nHide;
 
@@ -763,17 +763,17 @@ void ImportExcel::Hideobj( void )
 
     switch( nHide )
     {
-        case 1:                         // Placeholders
-            eOle   = VOBJ_MODE_SHOW;    // in Excel 97 werden nur Charts als Platzhalter angezeigt
-            eChart = VOBJ_MODE_SHOW;    //#i80528# VOBJ_MODE_DUMMY replaced by VOBJ_MODE_SHOW now
+        case 1:							// Placeholders
+            eOle   = VOBJ_MODE_SHOW;	// in Excel 97 werden nur Charts als Platzhalter angezeigt
+            eChart = VOBJ_MODE_SHOW;	//#i80528# VOBJ_MODE_DUMMY replaced by VOBJ_MODE_SHOW now
             eDraw  = VOBJ_MODE_SHOW;
             break;
-        case 2:                         // Hide all
+        case 2:							// Hide all
             eOle   = VOBJ_MODE_HIDE;
             eChart = VOBJ_MODE_HIDE;
             eDraw  = VOBJ_MODE_HIDE;
             break;
-        default:                        // Show all
+        default:						// Show all
             eOle   = VOBJ_MODE_SHOW;
             eChart = VOBJ_MODE_SHOW;
             eDraw  = VOBJ_MODE_SHOW;
@@ -802,8 +802,8 @@ void ImportExcel::Standardwidth( void )
 
 void ImportExcel::Shrfmla( void )
 {
-    UINT16              nFirstRow, nLastRow, nLenExpr;
-    BYTE                nFirstCol, nLastCol;
+    UINT16				nFirstRow, nLastRow, nLenExpr;
+    BYTE				nFirstCol, nLastCol;
 
     aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol;
     aIn.Ignore( 2 );
@@ -811,7 +811,7 @@ void ImportExcel::Shrfmla( void )
 
     // jetzt steht Lesemarke an der Formel
 
-    const ScTokenArray* pErgebnis;
+    const ScTokenArray*	pErgebnis;
 
     pFormConv->Reset();
     pFormConv->Convert( pErgebnis, maStrm, nLenExpr, true, FT_SharedFormula );
@@ -927,7 +927,7 @@ void ImportExcel::Olesize( void )
 
 void ImportExcel::Row34( void )
 {
-    UINT16  nRow, nRowHeight, nGrbit, nXF;
+    UINT16	nRow, nRowHeight, nGrbit, nXF;
 
     aIn >> nRow;
     aIn.Ignore( 4 );   // Mic und Mac ueberspringen
@@ -936,7 +936,7 @@ void ImportExcel::Row34( void )
 
     if( ValidRow( nScRow ) )
     {
-        aIn >> nRowHeight;  // direkt in Twips angegeben
+        aIn >> nRowHeight;	// direkt in Twips angegeben
         aIn.Ignore( 4 );
 
         aIn >> nGrbit >> nXF;
@@ -972,8 +972,8 @@ void ImportExcel::Bof3( void )
 
 void ImportExcel::Array34( void )
 {
-    UINT16                  nFirstRow, nLastRow, nFormLen;
-    BYTE                    nFirstCol, nLastCol;
+    UINT16					nFirstRow, nLastRow, nFormLen;
+    BYTE					nFirstCol, nLastCol;
 
     aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol;
     aIn.Ignore( (GetBiff() >= EXC_BIFF5) ? 6 : 2 );
@@ -982,7 +982,7 @@ void ImportExcel::Array34( void )
     if( ValidColRow( nLastCol, nLastRow ) )
     {
         // jetzt steht Lesemarke auf Formel, Laenge in nFormLen
-        const ScTokenArray* pErgebnis;
+        const ScTokenArray*	pErgebnis;
 
         pFormConv->Reset( ScAddress( static_cast<SCCOL>(nFirstCol),
                     static_cast<SCROW>(nFirstRow), GetCurrScTab() ) );
@@ -990,7 +990,7 @@ void ImportExcel::Array34( void )
 
         DBG_ASSERT( pErgebnis, "+ImportExcel::Array34(): ScTokenArray ist NULL!" );
 
-        ScMarkData          aMarkData;
+        ScMarkData			aMarkData;
         aMarkData.SelectOneTable( GetCurrScTab() );
         pD->InsertMatrixFormula( static_cast<SCCOL>(nFirstCol),
                 static_cast<SCROW>(nFirstRow), static_cast<SCCOL>(nLastCol),
@@ -1034,7 +1034,7 @@ void ImportExcel::TableOp( void )
             SCTAB nTab = GetCurrScTab();
             switch( aTabOpParam.nMode )
             {
-                case 0:     // COL
+                case 0:		// COL
                     aTabOpParam.aRefFormulaCell.Set(
                             static_cast<SCCOL>(nFirstCol),
                             static_cast<SCROW>(nFirstRow - 1), nTab, FALSE,
@@ -1048,7 +1048,7 @@ void ImportExcel::TableOp( void )
                             FALSE );
                     nRow++;
                 break;
-                case 1:     // ROW
+                case 1:		// ROW
                     aTabOpParam.aRefFormulaCell.Set(
                             static_cast<SCCOL>(nFirstCol - 1),
                             static_cast<SCROW>(nFirstRow), nTab, FALSE, FALSE,
@@ -1062,7 +1062,7 @@ void ImportExcel::TableOp( void )
                             FALSE );
                     nCol++;
                 break;
-                case 2:     // TWO-INPUT
+                case 2:		// TWO-INPUT
                     aTabOpParam.aRefFormulaCell.Set(
                             static_cast<SCCOL>(nFirstCol - 1),
                             static_cast<SCROW>(nFirstRow - 1), nTab, FALSE,
@@ -1111,9 +1111,9 @@ void ImportExcel::Bof4( void )
 
 void ImportExcel::Bof5( void )
 {
-    //POST: eDateiTyp = Typ der zu lesenden Datei
-    UINT16      nSubType, nVers;
-    BiffTyp     eDatei;
+    //POST:	eDateiTyp = Typ der zu lesenden Datei
+    UINT16		nSubType, nVers;
+    BiffTyp		eDatei;
 
     maStrm.DisableDecryption();
     maStrm >> nVers >> nSubType;
@@ -1252,8 +1252,8 @@ void ImportExcel::PostDocLoad( void )
     // root data owns the extended document options -> create a new object
     GetDoc().SetExtDocOptions( new ScExtDocOptions( GetExtDocOptions() ) );
 
-    const SCTAB     nLast = pD->GetTableCount();
-    const ScRange*      p;
+    const SCTAB		nLast = pD->GetTableCount();
+    const ScRange*		p;
 
     if( pExcRoot->pPrintRanges->HasRanges() )
     {
@@ -1291,8 +1291,8 @@ void ImportExcel::PostDocLoad( void )
                 DBG_ASSERT( pExcRoot->pPrintTitles->GetActList(),
                     "-ImportExcel::PostDocLoad(): Imaginaere Tabelle gefunden!" );
 
-                BOOL    bRowVirgin = TRUE;
-                BOOL    bColVirgin = TRUE;
+                BOOL	bRowVirgin = TRUE;
+                BOOL	bColVirgin = TRUE;
 
                 while( p )
                 {

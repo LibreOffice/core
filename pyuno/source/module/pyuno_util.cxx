@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -198,7 +198,7 @@ void logReply(
     const char *intro,
     void * ptr,
     const rtl::OUString & aFunctionName,
-    const Any &returnValue,
+    const Any &returnValue, 
     const Sequence< Any > & aParams )
 {
     rtl::OUStringBuffer buf( 128 );
@@ -219,7 +219,7 @@ void logReply(
         }
     }
     log( cargo,LogLevel::CALL, buf.makeStringAndClear() );
-
+    
 }
 
 void logCall( RuntimeCargo *cargo, const char *intro,

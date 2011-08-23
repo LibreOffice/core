@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #include "lwpobjfactory.hxx"
@@ -115,13 +115,13 @@ LwpObjectFactory::LwpObjectFactory(LwpSvStream* pSvStream)
 
 LwpObjectFactory::~LwpObjectFactory()
 {
-//  m_pMgr = NULL;
+//	m_pMgr = NULL;
     if(!m_ObjList.empty())
         ClearObjectMap();
 }
 
 /**
- * @descr       create the single object factory
+ * @descr		create the single object factory
 */
 /*
 LwpObjectFactory* LwpObjectFactory::Instance(LwpSvStream* pStream)
@@ -136,7 +136,7 @@ LwpObjectFactory* LwpObjectFactory::Instance(LwpSvStream* pStream)
     return(m_pMgr);
 }*/
 /**
- * @descr       clear object map and delete all objects
+ * @descr		clear object map and delete all objects
 */
 void LwpObjectFactory::ClearObjectMap()
 {
@@ -150,7 +150,7 @@ void LwpObjectFactory::ClearObjectMap()
     m_ObjList.clear();
 }
 /**
- * @descr       read the index manager
+ * @descr		read the index manager
 */
 void LwpObjectFactory::ReadIndex(LwpSvStream* pStrm)
 {
@@ -158,7 +158,7 @@ void LwpObjectFactory::ReadIndex(LwpSvStream* pStrm)
 }
 
 /**
- * @descr       create all kinds of objects except lwp7
+ * @descr		create all kinds of objects except lwp7
 */
 LwpObject* LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObjectHeader &objHdr)
 {
@@ -352,7 +352,7 @@ LwpObject* LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObjectHeader &objH
             newObj = new LwpTabPiece(objHdr, m_pSvStream);
             break;
         }
-        case VO_PARABACKGROUNDPIECE:    //perhaps wrong.
+        case VO_PARABACKGROUNDPIECE:	//perhaps wrong.
         {
             newObj = new LwpBackgroundPiece(objHdr, m_pSvStream);
             break;
@@ -719,8 +719,8 @@ LwpObject* LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObjectHeader &objH
     return(newObj);
 }
 /**
- * @descr       query object by object id
- *          object is created if not in the factory
+ * @descr		query object by object id
+ *			object is created if not in the factory
 */
 LwpObject* LwpObjectFactory::QueryObject(const LwpObjectID &objID)
 {
@@ -742,7 +742,7 @@ LwpObject* LwpObjectFactory::QueryObject(const LwpObjectID &objID)
 }
 
 /**
- * @descr       find object in the factory per the object id
+ * @descr		find object in the factory per the object id
 */
 LwpObject* LwpObjectFactory::FindObject(const LwpObjectID &objID)
 {
@@ -756,7 +756,7 @@ LwpObject* LwpObjectFactory::FindObject(const LwpObjectID &objID)
     }
 }
 /**
- * @descr       release object in the factory per the object id
+ * @descr		release object in the factory per the object id
 */
 void LwpObjectFactory::ReleaseObject(const LwpObjectID &objID)
 {

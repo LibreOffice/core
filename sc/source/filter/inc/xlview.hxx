@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,8 +89,8 @@ const sal_uInt16 EXC_ID_SCL                 = 0x00A0;
 
 // (0x0862) SHEETEXT ----------------------------------------------------------
 
-const sal_uInt16 EXC_ID_SHEETEXT            = 0x0862;   /// header id for sheetext
-const sal_uInt8 EXC_SHEETEXT_TABCOLOR       = 0x7F;     /// mask for tab color
+const sal_uInt16 EXC_ID_SHEETEXT            = 0x0862; 	/// header id for sheetext
+const sal_uInt8 EXC_SHEETEXT_TABCOLOR       = 0x7F; 	/// mask for tab color
 const sal_uInt16 EXC_COLOR_NOTABBG          = 0x7F;     /// Excel ignores Tab color when set to this value...
 // Structs ====================================================================
 

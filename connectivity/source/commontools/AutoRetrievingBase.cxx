@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,7 +35,7 @@ namespace connectivity
     ::rtl::OUString OAutoRetrievingBase::getTransformedGeneratedStatement(const ::rtl::OUString& _sInsertStatement) const
     {
         ::rtl::OUString sStmt = _sInsertStatement;
-        OSL_ENSURE( m_bAutoRetrievingEnabled,"Illegal call here. isAutoRetrievingEnabled is false!");
+        OSL_ENSURE(	m_bAutoRetrievingEnabled,"Illegal call here. isAutoRetrievingEnabled is false!");
         sStmt = sStmt.toAsciiUpperCase();
         ::rtl::OUString sStatement;
         if ( sStmt.compareToAscii("INSERT",6) == 0 )
@@ -60,7 +60,7 @@ namespace connectivity
                         sStmt = sStmt.copy(1);
                 }
                 while (sStmt.indexOf(' ') == 0 );
-
+                
                 nIntoIndex = 0;
                 ::rtl::OUString sTableName = sStmt.getToken(0,' ',nIntoIndex);
                 sStatement = sStatement.replaceAt(nIndex,sTable.getLength(),sTableName);

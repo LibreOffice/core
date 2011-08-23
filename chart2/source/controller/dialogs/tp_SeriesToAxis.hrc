@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,15 +27,15 @@
 
 #include "ResourceIds.hrc"
 
-#define GRP_OPT_AXIS                1
-#define RBT_OPT_AXIS_1              2
-#define RBT_OPT_AXIS_2              3
-#define MT_GAP                      4
-#define MT_OVERLAP                  5
-#define FT_GAP                      6
-#define FT_OVERLAP                  7
-#define GB_BAR                      8
-#define CB_CONNECTOR                9
+#define GRP_OPT_AXIS				1
+#define RBT_OPT_AXIS_1				2
+#define RBT_OPT_AXIS_2				3
+#define MT_GAP						4
+#define MT_OVERLAP					5
+#define FT_GAP						6
+#define FT_OVERLAP					7
+#define GB_BAR						8
+#define CB_CONNECTOR				9
 #define CB_BARS_SIDE_BY_SIDE       10
 #define FL_PLOT_OPTIONS            11
 #define FT_MISSING_VALUES          12

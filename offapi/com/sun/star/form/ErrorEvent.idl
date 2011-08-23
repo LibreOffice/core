@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,20 +24,20 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_form_ErrorEvent_idl__
-#define __com_sun_star_form_ErrorEvent_idl__
-
-#ifndef __com_sun_star_lang_EventObject_idl__
-#include <com/sun/star/lang/EventObject.idl>
-#endif
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module form {
-
-//=============================================================================
-
+#ifndef __com_sun_star_form_ErrorEvent_idl__ 
+#define __com_sun_star_form_ErrorEvent_idl__ 
+ 
+#ifndef __com_sun_star_lang_EventObject_idl__ 
+#include <com/sun/star/lang/EventObject.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module form { 
+ 
+//============================================================================= 
+ 
 // DocMerge from xml: struct com::sun::star::form::ErrorEvent
 /** occurs in case of fired database exceptions triggered by
     a database form.
@@ -45,16 +45,16 @@
     @deprecated
  */
 published struct ErrorEvent: com::sun::star::lang::EventObject
-{
-    any Reason;
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-/*=============================================================================
-
-=============================================================================*/
-#endif
+{ 
+    any Reason; 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; }; 
+ 
+/*============================================================================= 
+ 
+=============================================================================*/ 
+#endif 

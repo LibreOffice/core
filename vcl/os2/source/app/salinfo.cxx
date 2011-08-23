@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,7 +131,7 @@ int Os2SalSystem::ShowNativeMessageBox(const String& rTitle, const String& rMess
         pSVData->mpIntroWindow->Hide();
 
     return WinMessageBox(
-        HWND_DESKTOP, HWND_DESKTOP,
+        HWND_DESKTOP, HWND_DESKTOP, 
         (PSZ)CHAR_POINTER(rMessage),
         (PSZ)CHAR_POINTER(rTitle),
         0, nFlags);

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,7 +44,7 @@
 #include <doc.hxx>
 #include <docary.hxx>
 #include <frame.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>			// fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <undobj.hxx>
@@ -218,7 +218,7 @@ SwUndoDrawGroup::~SwUndoDrawGroup()
             delete pTmp->pFmt;
     }
     else
-        delete pObjArr->pFmt;       // das GroupObject-Format
+        delete pObjArr->pFmt;		// das GroupObject-Format
 
     delete [] pObjArr;
 }
@@ -230,7 +230,7 @@ void SwUndoDrawGroup::Undo( SwUndoIter& )
     // das Group-Object sichern
     SwDrawFrmFmt* pFmt = pObjArr->pFmt;
     SwDrawContact* pDrawContact = (SwDrawContact*)pFmt->FindContactObj();
-    SdrObject* pObj = pDrawContact->GetMaster();
+    SdrObject* pObj	= pDrawContact->GetMaster();
     pObjArr->pObj = pObj;
 
     //loescht sich selbst!
@@ -383,7 +383,7 @@ SwUndoDrawUnGroup::~SwUndoDrawUnGroup()
             delete pTmp->pFmt;
     }
     else
-        delete pObjArr->pFmt;       // das GroupObject-Format
+        delete pObjArr->pFmt;		// das GroupObject-Format
 
     delete [] pObjArr;
 }

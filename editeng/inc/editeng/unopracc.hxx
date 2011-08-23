@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,12 +35,12 @@
 class SvxEditSource;
 
 /** Wraps SvxUnoTextRangeBase and provides us with the text properties
-
+ 
     Inherits from SvxUnoTextRangeBase and provides XPropertySet and
     XMultiPropertySet interfaces. Just set the selection to the
     required text range and return a reference to a XPropertySet.
  */
-class SvxAccessibleTextPropertySet : public SvxUnoTextRangeBase,
+class SvxAccessibleTextPropertySet : public SvxUnoTextRangeBase, 
                                      public ::com::sun::star::lang::XTypeProvider,
                                      public ::cppu::OWeakObject
 {
@@ -50,7 +50,7 @@ public:
 
     // XTextRange
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > SAL_CALL getText() throw (::com::sun::star::uno::RuntimeException);
-
+ 
     // uno::XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

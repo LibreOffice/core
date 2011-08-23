@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ typedef void (SAL_CALL * remote_DispatchMethod)(
     remote_Interface * pRemoteI, typelib_TypeDescription const * pMemberType,
     void * pReturn, void * pArgs[], uno_Any ** ppException );
 
-/**
+/** 
    @internal
  */
 typedef void ( SAL_CALL * requestClientSideDispatcher ) (

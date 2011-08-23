@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 class AstInterfaceMember : public AstDeclaration
 {
 public:
-    AstInterfaceMember(const sal_uInt32 flags, AstInterface* pRealInterface,
+    AstInterfaceMember(const sal_uInt32 flags, AstInterface* pRealInterface, 
                        const ::rtl::OString& name, AstScope* pScope)
         : AstDeclaration(NT_interface_member, name, pScope)
         , m_flags(flags)
@@ -43,11 +43,11 @@ public:
 
     AstInterface* getRealInterface()
         { return m_pRealInterface; }
-    sal_Bool isOptional()
+    sal_Bool isOptional() 
         { return ((m_flags & AF_OPTIONAL) == AF_OPTIONAL); }
 private:
-    const sal_uInt32    m_flags;
-    AstInterface*       m_pRealInterface;
+    const sal_uInt32	m_flags;
+    AstInterface*		m_pRealInterface;
 };
 
 #endif // _IDLC_ASTINTERFACEMEMBER_HXX_

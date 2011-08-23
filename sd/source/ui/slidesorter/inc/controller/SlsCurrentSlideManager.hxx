@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,7 +75,7 @@ public:
     /** Release all references to model data.
     */
     void PrepareModelChange (void);
-
+    
     /** Modify inner state in reaction to a change of the SlideSorterModel.
     */
     void HandleModelChange (void);

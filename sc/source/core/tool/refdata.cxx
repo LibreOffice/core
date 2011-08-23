@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -244,7 +244,7 @@ ScComplexRefData& ScComplexRefData::Extend( const ScSingleRefData & rRef, const 
         Ref2.SetColRel( aRef.IsColRel());
     if (Ref2.nRow == aRef.nRow)
         Ref2.SetRowRel( aRef.IsRowRel());
-    // $Sheet1.$A$5:$A$6 => $Sheet1.$A$5:$A$5:$A$6 => $Sheet1.$A$5:$A$6, and
+    // $Sheet1.$A$5:$A$6 => $Sheet1.$A$5:$A$5:$A$6 => $Sheet1.$A$5:$A$6, and 
     // not $Sheet1.$A$5:Sheet1.$A$6 (with invisible second 3D, but relative).
     if (Ref2.nTab == aRef.nTab)
         Ref2.SetTabRel( bInherit3Dtemp ? Ref1.IsTabRel() : aRef.IsTabRel());

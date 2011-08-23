@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,11 +59,11 @@ namespace svx
         ,m_aURL             (this, CUI_RES(CMB_URL))
         ,m_aBrowseFile      (this, CUI_RES(PB_BROWSEFILE))
         ,m_aNameLabel       (this, CUI_RES(FT_NAME))
-        ,m_aName            (this, CUI_RES(ET_NAME))
+        ,m_aName			(this, CUI_RES(ET_NAME))
         ,m_aBottomLine      (this, CUI_RES(FL_BOTTOM))
-        ,m_aOK              (this, CUI_RES(BTN_OK))
+        ,m_aOK				(this, CUI_RES(BTN_OK))
         ,m_aCancel          (this, CUI_RES(BTN_CANCEL))
-        ,m_aHelp            (this, CUI_RES(BTN_HELP))
+        ,m_aHelp			(this, CUI_RES(BTN_HELP))
         ,m_bCreatingNew(_bCreateNew)
     {
         String sText = String( CUI_RES( m_bCreatingNew ? STR_NEW_LINK : STR_EDIT_LINK ) );
@@ -83,7 +83,7 @@ namespace svx
 
         validate();
 
-        //  m_aURL.SetHelpId( HID_DOCLINKEDIT_URL );
+        //	m_aURL.SetHelpId( HID_DOCLINKEDIT_URL );
         m_aURL.SetDropDownLineCount( 5 );
     }
 
@@ -105,7 +105,7 @@ namespace svx
     //------------------------------------------------------------------
     void ODocumentLinkDialog::validate( )
     {
-
+        
         m_aOK.Enable( (0 != m_aName.GetText().Len()) && ( 0 != m_aURL.GetText().Len() ) );
     }
 
@@ -156,7 +156,7 @@ namespace svx
                 sMsg.SearchAndReplaceAscii("$file$", sCurrentText);
                 InfoBox aError(this, sMsg);
                 aError.Execute();
-
+                
                 m_aName.SetSelection(Selection(0,sCurrentText.Len()));
                 m_aName.GrabFocus();
                 return 0L;
@@ -190,7 +190,7 @@ namespace svx
             return 0L;
 
         if (0 == m_aName.GetText().Len())
-        {   // default the name to the base of the chosen URL
+        {	// default the name to the base of the chosen URL
             INetURLObject aParser;
 
             aParser.SetSmartProtocol(INET_PROT_FILE);
@@ -220,7 +220,7 @@ namespace svx
     }
 
 //......................................................................
-}   // namespace svx
+}	// namespace svx
 //......................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

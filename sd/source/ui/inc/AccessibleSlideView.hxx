@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,7 +54,7 @@ class Window;
 // - AccessibleSlideViewObject -
 // -----------------------------
 
-class AccessibleSlideViewObject : public ::cppu::WeakImplHelper6<
+class AccessibleSlideViewObject : public ::cppu::WeakImplHelper6< 
     ::com::sun::star::lang::XUnoTunnel,
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
@@ -69,8 +69,8 @@ private:
     AccessibleSlideView*                                                                                                    mpManager;
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32                                                                                                              mnClientId;
-    sal_uInt16                                                                                                              mnPage;
-    sal_Bool                                                                                                                mbVisible;
+    sal_uInt16		                                                                                                        mnPage;
+    sal_Bool		                                                                                                        mbVisible;
     sal_Bool                                                                                                                mbValid;
 
 private:
@@ -109,21 +109,21 @@ private:
     virtual ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getForeground (void)
+    virtual sal_Int32 SAL_CALL getForeground (void) 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getBackground (void)
+    virtual sal_Int32 SAL_CALL getBackground (void) 
         throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XServiceInfo  ====================================================
 
-    /** Returns an identifier for the implementation of this object.
+    /**	Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Return whether the specified service is supported by this class.
+    /**	Return whether the specified service is supported by this class.
     */
     virtual sal_Bool SAL_CALL
         supportsService (const ::rtl::OUString& sServiceName)
@@ -138,9 +138,9 @@ private:
 public:
 
     static AccessibleSlideViewObject* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
-
-public:
-
+                        
+public:                 
+                        
                                 AccessibleSlideViewObject( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxParent, sal_uInt16 nPage, sal_Bool bVisible );
                                 ~AccessibleSlideViewObject();
 
@@ -152,16 +152,16 @@ public:
     void Destroyed (void);
 
     sal_uInt16                  GetPageNum() const { return mnPage; }
-
-    void                        SetVisible( sal_Bool bVisible );
-    sal_Bool                    IsVisible() const;
+    
+    void			            SetVisible( sal_Bool bVisible );
+    sal_Bool		            IsVisible() const;
 };
 
 // -----------------------
 // - AccessibleSlideView -
 // -----------------------
 
-class AccessibleSlideView : public ::cppu::WeakImplHelper7<
+class AccessibleSlideView : public ::cppu::WeakImplHelper7< 
     ::com::sun::star::lang::XUnoTunnel,
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
@@ -175,8 +175,8 @@ public:
     static AccessibleSlideView* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
 
     AccessibleSlideView(
-        SdDrawDocument& rDoc,
-        ::sd::SlideView& rView,
+        SdDrawDocument& rDoc, 
+        ::sd::SlideView& rView, 
         ::sd::Window& rParentWindow);
     virtual ~AccessibleSlideView (void);
 
@@ -191,8 +191,8 @@ public:
     ::sd::SlideView* GetSlideView() const { return mpView; }
     ::sd::Window* GetParentWindow() const { return mpParentWindow; }
 
-    void                        SetPageVisible( sal_uInt16 nPage, sal_Bool bVisible );
-    void                        Reset();
+    void			            SetPageVisible( sal_uInt16 nPage, sal_Bool bVisible );
+    void			            Reset();
     void                        FocusHasChanged( USHORT nOldFocusPage, USHORT nNewFocusPage );
 
 
@@ -241,10 +241,10 @@ private:
     virtual ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getForeground (void)
+    virtual sal_Int32 SAL_CALL getForeground (void) 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getBackground (void)
+    virtual sal_Int32 SAL_CALL getBackground (void) 
         throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleSelection
@@ -258,13 +258,13 @@ private:
 
     //=====  XServiceInfo  ====================================================
 
-    /** Returns an identifier for the implementation of this object.
+    /**	Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Return whether the specified service is supported by this class.
+    /**	Return whether the specified service is supported by this class.
     */
     virtual sal_Bool SAL_CALL
         supportsService (const ::rtl::OUString& sServiceName)

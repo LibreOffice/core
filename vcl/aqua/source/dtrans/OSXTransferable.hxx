@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ public:
 
   explicit OSXTransferable(com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> rXMimeCntFactory,
                            DataFlavorMapperPtr_t pDataFlavorMapper,
-                           NSPasteboard* pasteboard);
+                           NSPasteboard* pasteboard); 
 
   virtual ~OSXTransferable();
 
@@ -66,13 +66,13 @@ public:
   // XTransferable
   //------------------------------------------------------------------------
 
-  virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
+  virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) 
     throw( ::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException );
 
-  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  )
+  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) 
     throw( ::com::sun::star::uno::RuntimeException );
-
-  virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
+    
+  virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) 
     throw( ::com::sun::star::uno::RuntimeException );
 
   //------------------------------------------------------------------------
@@ -88,11 +88,11 @@ public:
   bool compareDataFlavors( const com::sun::star::datatransfer::DataFlavor& lhs,
                            const com::sun::star::datatransfer::DataFlavor& rhs );
 
-  bool cmpAllContentTypeParameter( const com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentType > xLhs,
+  bool cmpAllContentTypeParameter( const com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentType > xLhs, 
                                    const com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentType > xRhs ) const;
 
 private:
-  com::sun::star::uno::Sequence< com::sun::star::datatransfer::DataFlavor > mFlavorList;
+  com::sun::star::uno::Sequence< com::sun::star::datatransfer::DataFlavor > mFlavorList;	
   ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
   DataFlavorMapperPtr_t mDataFlavorMapper;
   NSPasteboard* mPasteboard;

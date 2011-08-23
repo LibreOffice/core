@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -149,7 +149,7 @@ void ODbAdminDialog::impl_selectDataSource(const ::com::sun::star::uno::Any& _aD
     {
         case  ::dbaccess::DST_DBASE:
             addDetailPage(PAGE_DBASE, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateDbase);
-            //  bResetPasswordRequired = sal_True;
+            //	bResetPasswordRequired = sal_True;
             break;
 
         case  ::dbaccess::DST_ADO:
@@ -158,7 +158,7 @@ void ODbAdminDialog::impl_selectDataSource(const ::com::sun::star::uno::Any& _aD
 
         case  ::dbaccess::DST_FLAT:
             addDetailPage(PAGE_TEXT, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateText);
-            //  bResetPasswordRequired = sal_True;
+            //	bResetPasswordRequired = sal_True;
             break;
 
         case  ::dbaccess::DST_ODBC:
@@ -188,7 +188,7 @@ void ODbAdminDialog::impl_selectDataSource(const ::com::sun::star::uno::Any& _aD
         case  ::dbaccess::DST_LDAP:
             addDetailPage(PAGE_LDAP,STR_PAGETITLE_ADVANCED,ODriversSettings::CreateLDAP);
             break;
-        case  ::dbaccess::DST_USERDEFINE1:  /// first user defined driver
+        case  ::dbaccess::DST_USERDEFINE1:	/// first user defined driver
         case  ::dbaccess::DST_USERDEFINE2:
         case  ::dbaccess::DST_USERDEFINE3:
         case  ::dbaccess::DST_USERDEFINE4:
@@ -228,7 +228,7 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
     // are set. Select another data source of the same type, where the indirect props are not set (yet). Then,
     // the indirect property values of the first ds are shown in the second ds ...)
     const ODbDataSourceAdministrationHelper::MapInt2String& rMap = m_pImpl->getIndirectProperties();
-    for (   ODbDataSourceAdministrationHelper::ConstMapInt2StringIterator aIndirect = rMap.begin();
+    for	(	ODbDataSourceAdministrationHelper::ConstMapInt2StringIterator aIndirect = rMap.begin();
             aIndirect != rMap.end();
             ++aIndirect
         )
@@ -282,7 +282,7 @@ sal_Bool ODbAdminDialog::saveDatasource()
 ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
 {
     if (!PrepareLeaveCurrentPage())
-    {   // the page did not allow us to leave
+    {	// the page did not allow us to leave
         return AR_KEEP;
     }
 
@@ -331,7 +331,7 @@ Reference< XDriver > ODbAdminDialog::getDriver()
     return m_pImpl->getDriver();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ODbAdminDialog::getDatasourceType(const SfxItemSet& _rSet) const
+::rtl::OUString	ODbAdminDialog::getDatasourceType(const SfxItemSet& _rSet) const
 {
     return m_pImpl->getDatasourceType(_rSet);
 }
@@ -351,7 +351,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     const ::rtl::OUString sFilterAll( "%", 1, RTL_TEXTENCODING_ASCII_US );
     // create and initialize the defaults
     _rppDefaults = new SfxPoolItem*[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1];
-    SfxPoolItem** pCounter = _rppDefaults;  // want to modify this without affecting the out param _rppDefaults
+    SfxPoolItem** pCounter = _rppDefaults;	// want to modify this without affecting the out param _rppDefaults
     *pCounter++ = new SfxStringItem(DSID_NAME, String());
     *pCounter++ = new SfxStringItem(DSID_ORIGINALNAME, String());
     *pCounter++ = new SfxStringItem(DSID_CONNECTURL, String());
@@ -509,9 +509,9 @@ void ODbAdminDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, 
     _rppDefaults = NULL;
         // no need to explicitly delete the defaults, this has been done by the ReleaseDefaults
 }
-
+                     
 //.........................................................................
-}   // namespace dbaui
+}	// namespace dbaui
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

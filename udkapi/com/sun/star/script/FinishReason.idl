@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,39 +24,39 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_script_FinishReason_idl__
-#define __com_sun_star_script_FinishReason_idl__
-
-
-//=============================================================================
-
- module com {  module sun {  module star {  module script {
-
-//=============================================================================
+#ifndef __com_sun_star_script_FinishReason_idl__ 
+#define __com_sun_star_script_FinishReason_idl__ 
+ 
+ 
+//============================================================================= 
+ 
+ module com {  module sun {  module star {  module script {  
+ 
+//============================================================================= 
 /** contains the response for a scripting engine termination.
     @deprecated
  */
 published enum FinishReason
-{
-    //-------------------------------------------------------------------------
+{ 
+    //------------------------------------------------------------------------- 
     /** script in the engine terminated normally.
      */
-    OK,
-
-    //-------------------------------------------------------------------------
+    OK, 
+ 
+    //------------------------------------------------------------------------- 
     /** script in the engine was cancelled.
      */
-    Cancel,
-
-    //-------------------------------------------------------------------------
+    Cancel, 
+ 
+    //------------------------------------------------------------------------- 
     /** error occurred during script execution or compiling.
      */
-    Error
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    Error 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

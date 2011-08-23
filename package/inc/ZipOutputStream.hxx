@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,23 +46,23 @@ class ZipOutputStream
 {
 protected:
     com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xStream;
-    ::std::vector < ZipEntry * >            aZipList;
+    ::std::vector < ZipEntry * >			aZipList;
     com::sun::star::uno::Sequence < sal_Int8 > aBuffer, aEncryptionBuffer;
-    ::rtl::OUString     sComment;
-    Deflater            aDeflater;
-    rtlCipher           aCipher;
-    rtlDigest           aDigest;
-    CRC32               aCRC;
-    ByteChucker         aChucker;
-    ZipEntry            *pCurrentEntry;
-    sal_Int16           nMethod, nLevel, mnDigested;
-    sal_Bool            bFinished, bEncryptCurrentEntry;
-    EncryptionData      *pCurrentEncryptData;
+    ::rtl::OUString		sComment;
+    Deflater			aDeflater;
+    rtlCipher 			aCipher;
+    rtlDigest 			aDigest;
+    CRC32				aCRC;
+    ByteChucker			aChucker;
+    ZipEntry 			*pCurrentEntry;
+    sal_Int16			nMethod, nLevel, mnDigested;
+    sal_Bool			bFinished, bEncryptCurrentEntry;
+    EncryptionData 		*pCurrentEncryptData;
 
 public:
     ZipOutputStream( com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > &xOStream );
     ~ZipOutputStream();
-
+    
     // rawWrite to support a direct write to the output stream
     void SAL_CALL rawWrite( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
@@ -74,7 +74,7 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setLevel( sal_Int32 nNewLevel )
         throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL putNextEntry( ZipEntry& rEntry,
+    void SAL_CALL putNextEntry( ZipEntry& rEntry, 
             rtl::Reference < EncryptionData > &rData,
             sal_Bool bEncrypt = sal_False )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);

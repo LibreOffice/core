@@ -2,7 +2,7 @@
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
- *
+ *  
  *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
@@ -29,7 +29,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
  *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ *     
  *************************************************************************/
 
 // __________ Imports __________
@@ -73,7 +73,7 @@ public class DrawViewDemo
             // get the remote office context of a running office (a new office
             // instance is started if necessary)
             com.sun.star.uno.XComponentContext xOfficeContext = Helper.connect();
-
+            
             // suppress Presentation Autopilot when opening the document
             // properties are the same as described for
             // com.sun.star.document.MediaDescriptor
@@ -81,19 +81,19 @@ public class DrawViewDemo
             pPropValues[ 0 ] = new PropertyValue();
             pPropValues[ 0 ].Name = "Silent";
             pPropValues[ 0 ].Value = new Boolean( true );
-
+            
             java.io.File sourceFile = new java.io.File(args[0]);
             StringBuffer sUrl = new StringBuffer("file:///");
             sUrl.append(sourceFile.getCanonicalPath().replace('\\', '/'));
-
+            
             xComponent = Helper.createDocument( xOfficeContext,
                                                 sUrl.toString(), "_blank", 0,
                                                 pPropValues );
             XModel xModel =
                 (XModel)UnoRuntime.queryInterface(
                     XModel.class, xComponent );
-
-
+            
+            
             // print all available properties of first view
             System.out.println("*** print all available properties of first view");
             XViewDataSupplier xViewDataSupplier =
@@ -104,15 +104,15 @@ public class DrawViewDemo
             {
                 PropertyValue[] aPropSeq = (PropertyValue[])
                     xIndexAccess.getByIndex( 0 );
-
+                
                 for( int i = 0; i < aPropSeq.length; i++ )
                 {
                     System.out.println( aPropSeq[ i ].Name + " = " +
                                         aPropSeq[ i ].Value );
                 }
             }
-
-
+            
+            
             // print all properties that are supported by the controller
             // and change into masterpage mode
             System.out.println("*** print all properties that are supported by the controller");
@@ -128,7 +128,7 @@ public class DrawViewDemo
             }
             System.out.println("*** change into masterpage mode");
             xPropSet.setPropertyValue( "IsMasterPageMode", new Boolean( true ) );
-
+            
         }
         catch( Exception ex )
         {

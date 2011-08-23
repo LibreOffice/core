@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,7 +31,7 @@
 #include <breakiterator_th.hxx>
 #include <wtt.h>
 
-#include <string.h> // for memset
+#include <string.h>	// for memset
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -39,9 +39,9 @@ using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//  ----------------------------------------------------
-//  class Breakiterator_th
-//  ----------------------------------------------------;
+//	----------------------------------------------------
+//	class Breakiterator_th
+//	----------------------------------------------------;
 BreakIterator_th::BreakIterator_th()
 {
     cBreakIterator = "com.sun.star.i18n.BreakIterator_th";
@@ -58,9 +58,9 @@ BreakIterator_th::~BreakIterator_th()
  * cell composition states
  */
 
-#define ST_COM  1   // Compose the following character with leading char and display in the same cell
-#define ST_NXT  2   // display the following character in the next cell
-#define ST_NDP  3   // non-display
+#define ST_COM	1	// Compose the following character with leading char and display in the same cell
+#define ST_NXT	2	// display the following character in the next cell
+#define ST_NDP	3	// non-display
 
 static const sal_Int16 thaiCompRel[MAX_CT][MAX_CT] = {
     //  C  N  C  L  F  F  F  B  B  B  T  A  A  A  A  A  A
@@ -113,7 +113,7 @@ static sal_Int32 SAL_CALL getACell(const sal_Unicode *text, sal_Int32 pos, sal_I
     return curr;
 }
 
-#define is_Thai(c)  (0x0e00 <= c && c <= 0x0e7f) // Unicode definition for Thai
+#define is_Thai(c)	(0x0e00 <= c && c <= 0x0e7f) // Unicode definition for Thai
 
 void SAL_CALL BreakIterator_th::makeIndex(const OUString& Text, sal_Int32 nStartPos)
     throw(RuntimeException)

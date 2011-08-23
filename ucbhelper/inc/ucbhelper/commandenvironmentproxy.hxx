@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ class CommandEnvironmentProxy : public cppu::OWeakObject,
     CommandEnvironmentProxy_Impl* m_pImpl;
 
 private:
-    CommandEnvironmentProxy( const CommandEnvironmentProxy& );            // n.i.
+    CommandEnvironmentProxy( const CommandEnvironmentProxy& ); 			  // n.i.
     CommandEnvironmentProxy& operator=( const CommandEnvironmentProxy& ); // n.i.
 
 public:
@@ -69,7 +69,7 @@ public:
       */
     CommandEnvironmentProxy(
             const com::sun::star::uno::Reference<
-                com::sun::star::ucb::XCommandEnvironment >& rxEnv );
+                com::sun::star::ucb::XCommandEnvironment >&	rxEnv );
     /**
       * Destructor.
       */

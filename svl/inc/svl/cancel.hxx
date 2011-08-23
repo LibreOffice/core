@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ typedef SvPtrarr SfxCancellables_Impl;
 class SVL_DLLPUBLIC SfxCancelManager: public SfxBroadcaster
 , public SvWeakBase
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     An Instanzen dieser Klasse k"onnen nebenl"aufige Prozesse angemeldet
     werden, um vom Benutzer abbrechbar zu sein. Werden abbrechbare
@@ -71,22 +71,22 @@ class SVL_DLLPUBLIC SfxCancelManager: public SfxBroadcaster
 */
 
 {
-    SfxCancelManager*       _pParent;
-    SfxCancellables_Impl    _aJobs;
+    SfxCancelManager*		_pParent;
+    SfxCancellables_Impl 	_aJobs;
 
 public:
                             SfxCancelManager( SfxCancelManager *pParent = 0 );
                             ~SfxCancelManager();
 
     BOOL                    CanCancel() const;
-    void                    Cancel( BOOL bDeep );
-    SfxCancelManager*       GetParent() const { return _pParent; }
+    void					Cancel( BOOL bDeep );
+    SfxCancelManager*		GetParent() const { return _pParent; }
 
-    void                    InsertCancellable( SfxCancellable *pJob );
-    void                    RemoveCancellable( SfxCancellable *pJob );
-    USHORT                  GetCancellableCount() const
+    void					InsertCancellable( SfxCancellable *pJob );
+    void					RemoveCancellable( SfxCancellable *pJob );
+    USHORT					GetCancellableCount() const
                             { return _aJobs.Count(); }
-    SfxCancellable*         GetCancellable( USHORT nPos ) const
+    SfxCancellable* 		GetCancellable( USHORT nPos ) const
                             { return (SfxCancellable*) _aJobs[nPos]; }
 };
 
@@ -95,7 +95,7 @@ SV_DECL_WEAK( SfxCancelManager )
 
 class SVL_DLLPUBLIC SfxCancellable
 
-/*  [Beschreibung]
+/*	[Beschreibung]
 
     Instanzen dieser Klasse werden immer an einem Cancel-Manager angemeldet,
     der dadurch dem Benutzer signalisieren kann, ob abbrechbare Prozesse
@@ -116,27 +116,27 @@ class SVL_DLLPUBLIC SfxCancellable
 */
 
 {
-    SfxCancelManager*       _pMgr;
-    BOOL                    _bCancelled;
-    String                  _aTitle;
+    SfxCancelManager*		_pMgr;
+    BOOL					_bCancelled;
+    String					_aTitle;
 
 public:
                             SfxCancellable( SfxCancelManager *pMgr,
                                             const String &rTitle )
-                            :   _pMgr( pMgr ),
+                            :	_pMgr( pMgr ),
                                 _bCancelled( FALSE ),
                                 _aTitle( rTitle )
                             { pMgr->InsertCancellable( this ); }
 
-    virtual                 ~SfxCancellable();
+    virtual 				~SfxCancellable();
 
-    void                    SetManager( SfxCancelManager *pMgr );
+    void					SetManager( SfxCancelManager *pMgr );
     SfxCancelManager*       GetManager() const { return _pMgr; }
 
-    virtual void            Cancel();
-    BOOL                    IsCancelled() const { return _bCancelled; }
-    operator                BOOL() const { return _bCancelled; }
-    const String&           GetTitle() const { return _aTitle; }
+    virtual void			Cancel();
+    BOOL					IsCancelled() const { return _bCancelled; }
+    operator 				BOOL() const { return _bCancelled; }
+    const String&			GetTitle() const { return _aTitle; }
 };
 
 #endif

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,15 +42,15 @@
 // log message to disk.
 void logMessage( char* msg)
 {
-    PPIB    pib;
-    CHAR    szApplicationName[_MAX_PATH];
-    CHAR    szDrive[_MAX_PATH];
-    CHAR    szDir[_MAX_PATH];
-    CHAR    szFileName[_MAX_PATH];
-    CHAR    szExt[_MAX_PATH];
-    FILE*   log;
-    time_t  timeOfDay;
-    struct tm* localTime;
+    PPIB	pib;
+    CHAR	szApplicationName[_MAX_PATH];
+    CHAR	szDrive[_MAX_PATH];
+    CHAR	szDir[_MAX_PATH];
+    CHAR	szFileName[_MAX_PATH];
+    CHAR	szExt[_MAX_PATH];
+    FILE*	log;
+    time_t	timeOfDay;
+    struct tm* localTime; 
 
     // get executable fullpath
     DosGetInfoBlocks(NULL, &pib);
@@ -72,27 +72,27 @@ void logMessage( char* msg)
 // dump comand line arguments
 void dumpArgs( int argc, char *argv[] )
 {
-    int i;
-
+    int	i;
+    
     logMessage( "Start of command line arguments dump:");
     for( i=0; i<argc; i++)
     logMessage( argv[i]);
 }
 
-/*
+/* 
  * The intended use of this tool is to pass the argument to
- * the default URL exe.
+ * the default URL exe. 
  */
 int main(int argc, char *argv[] )
 {
-    APIRET  rc;
+    APIRET	rc;
     RESULTCODES result = {0};
-    char        szAppFromINI[_MAX_PATH];
-    char        szDirFromINI[_MAX_PATH];
-    char        szCmdLine[1024];
-    char        szFail[ _MAX_PATH];
-    ULONG   ulSID;
-    PID         pid;
+    char 		szAppFromINI[_MAX_PATH];
+    char 		szDirFromINI[_MAX_PATH];
+    char 		szCmdLine[1024];
+    char     	szFail[ _MAX_PATH];
+    ULONG 	ulSID;
+    PID 		pid;
 
     // check parameters
     if (argc != 2)

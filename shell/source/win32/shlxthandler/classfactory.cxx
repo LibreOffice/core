@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,8 +51,8 @@ long CClassFactory::s_ServerLocks = 0;
 //
 //-----------------------------
 
-CClassFactory::CClassFactory(const CLSID& clsid) :
-    m_RefCnt(1),
+CClassFactory::CClassFactory(const CLSID& clsid) : 
+    m_RefCnt(1),	
     m_Clsid(clsid)
 {
     InterlockedIncrement(&g_DllRefCnt);
@@ -75,7 +75,7 @@ HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface(REFIID riid, void __RPC_
 {
     *ppvObject = 0;
 
-    if (IID_IUnknown == riid || IID_IClassFactory == riid)
+    if (IID_IUnknown == riid || IID_IClassFactory == riid) 
     {
         IUnknown* pUnk = this;
         pUnk->AddRef();
@@ -89,7 +89,7 @@ HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface(REFIID riid, void __RPC_
 //-----------------------------
 //
 //-----------------------------
-
+        
 ULONG STDMETHODCALLTYPE CClassFactory::AddRef(void)
 {
     return InterlockedIncrement(&m_RefCnt);
@@ -98,7 +98,7 @@ ULONG STDMETHODCALLTYPE CClassFactory::AddRef(void)
 //-----------------------------
 //
 //-----------------------------
-
+        
 ULONG STDMETHODCALLTYPE CClassFactory::Release(void)
 {
     long refcnt = InterlockedDecrement(&m_RefCnt);
@@ -113,28 +113,28 @@ ULONG STDMETHODCALLTYPE CClassFactory::Release(void)
 // IClassFactory methods
 //-----------------------------
 
-HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
+HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance( 
             IUnknown __RPC_FAR *pUnkOuter,
             REFIID riid,
             void __RPC_FAR *__RPC_FAR *ppvObject)
 {
     if ((pUnkOuter != NULL))
         return CLASS_E_NOAGGREGATION;
-
+    
     IUnknown* pUnk = 0;
 
     if (CLSID_PROPERTYSHEET_HANDLER == m_Clsid)
         pUnk = static_cast<IShellExtInit*>(new CPropertySheet());
 
     else if (CLSID_INFOTIP_HANDLER == m_Clsid)
-        pUnk = static_cast<IQueryInfo*>(new CInfoTip());
-
+        pUnk = static_cast<IQueryInfo*>(new CInfoTip());		
+    
     else if (CLSID_COLUMN_HANDLER == m_Clsid)
         pUnk = static_cast<IColumnProvider*>(new CColumnInfo());
 
     else if (CLSID_THUMBVIEWER_HANDLER == m_Clsid)
         pUnk = static_cast<IExtractImage*>(new CThumbviewer());
-
+        
     POST_CONDITION(pUnk != 0, "Could not create COM object");
 
     if (0 == pUnk)
@@ -151,14 +151,14 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
 //-----------------------------
 //
 //-----------------------------
-
+        
 HRESULT STDMETHODCALLTYPE CClassFactory::LockServer(BOOL fLock)
 {
-    if (fLock)
-        InterlockedIncrement(&s_ServerLocks);
+    if (fLock) 
+        InterlockedIncrement(&s_ServerLocks); 
     else
         InterlockedDecrement(&s_ServerLocks);
-
+    
     return S_OK;
 }
 

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,19 +44,19 @@ ScVbaScrollBar::ScVbaScrollBar(  const css::uno::Reference< ov::XHelperInterface
 }
 
 // Attributes
-uno::Any SAL_CALL
+uno::Any SAL_CALL 
 ScVbaScrollBar::getValue() throw (css::uno::RuntimeException)
 {
     return  m_xProps->getPropertyValue( SCROLLVALUE );
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaScrollBar::setValue( const uno::Any& _value ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_xProps->setPropertyValue( SCROLLVALUE, _value );
 }
 
-::sal_Int32 SAL_CALL
+::sal_Int32 SAL_CALL 
 ScVbaScrollBar::getMax() throw (uno::RuntimeException)
 {
     sal_Int32 nMax = 0;
@@ -64,13 +64,13 @@ ScVbaScrollBar::getMax() throw (uno::RuntimeException)
     return nMax;
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaScrollBar::setMax( sal_Int32 nVal ) throw (uno::RuntimeException)
 {
-    m_xProps->setPropertyValue( SCROLLMAX, uno::makeAny( nVal ) );
+    m_xProps->setPropertyValue( SCROLLMAX, uno::makeAny( nVal ) ); 
 }
 
-::sal_Int32 SAL_CALL
+::sal_Int32 SAL_CALL 
 ScVbaScrollBar::getMin() throw (uno::RuntimeException)
 {
     sal_Int32 nVal = 0;
@@ -78,19 +78,19 @@ ScVbaScrollBar::getMin() throw (uno::RuntimeException)
     return nVal;
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaScrollBar::setMin( sal_Int32 nVal ) throw (uno::RuntimeException)
 {
-    m_xProps->setPropertyValue( SCROLLMIN, uno::makeAny( nVal ) );
+    m_xProps->setPropertyValue( SCROLLMIN, uno::makeAny( nVal ) ); 
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaScrollBar::setLargeChange( ::sal_Int32 _largechange ) throw (uno::RuntimeException)
 {
     m_xProps->setPropertyValue( LARGECHANGE, uno::makeAny( _largechange ) );
 }
 
-::sal_Int32 SAL_CALL
+::sal_Int32 SAL_CALL 
 ScVbaScrollBar::getLargeChange() throw (uno::RuntimeException)
 {
     sal_Int32 nVal = 0;
@@ -98,7 +98,7 @@ ScVbaScrollBar::getLargeChange() throw (uno::RuntimeException)
     return nVal;
 }
 
-::sal_Int32 SAL_CALL
+::sal_Int32 SAL_CALL 
 ScVbaScrollBar::getSmallChange() throw (uno::RuntimeException)
 {
     sal_Int32 nSmallChange = 0;
@@ -106,20 +106,20 @@ ScVbaScrollBar::getSmallChange() throw (uno::RuntimeException)
     return nSmallChange;
 }
 
-void SAL_CALL
+void SAL_CALL 
 ScVbaScrollBar::setSmallChange( ::sal_Int32 _smallchange ) throw (uno::RuntimeException)
 {
     m_xProps->setPropertyValue( SMALLCHANGE, uno::makeAny( _smallchange ) );
 }
 
-rtl::OUString&
+rtl::OUString& 
 ScVbaScrollBar::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaScrollBar") );
     return sImplName;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< rtl::OUString > 
 ScVbaScrollBar::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

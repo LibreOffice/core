@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,24 +42,24 @@
 #include "securityengine.hxx"
 
 class EncryptionEngine : public cppu::ImplInheritanceHelper1
-<
-    SecurityEngine,
+< 
+    SecurityEngine, 
     com::sun::star::xml::crypto::sax::XBlockerMonitor
 >
 /****** encryptionEngine.hxx/CLASS encryptionEngine ***************************
  *
  *   NAME
- *  EncryptionEngine -- Base class of Encryptor and Decryptor
+ *	EncryptionEngine -- Base class of Encryptor and Decryptor
  *
  *   FUNCTION
- *  Maintains common members and methods related with encryption.
+ *	Maintains common members and methods related with encryption.
  *
  *   HISTORY
- *  05.01.2004 -    Interface supported: XBlockerMonitor
+ *	05.01.2004 -	Interface supported: XBlockerMonitor
  *
  *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
+ *	Michael Mi
+ *	Email: michael.mi@sun.com
  ******************************************************************************/
 {
 protected:
@@ -67,29 +67,29 @@ protected:
      * the Encryption bridge component, which performs encrypt and decrypt
      * operation based on xmlsec library.
      */
-    com::sun::star::uno::Reference<
+    com::sun::star::uno::Reference< 
         com::sun::star::xml::crypto::XXMLEncryption > m_xXMLEncryption;
 
     /*
      * the Id of template blocker.
      */
     sal_Int32 m_nIdOfBlocker;
-
+    
 protected:
     EncryptionEngine( );
     virtual ~EncryptionEngine(){};
-
-    virtual void tryToPerform( )
+    
+    virtual void tryToPerform( ) 
         throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
-    virtual void clearUp( ) const;
+    virtual void clearUp( ) const;	
     virtual bool checkReady() const;
-
+    
     /*
      * starts the main function. This method will be implemented by any sub-class.
      * For a Encryptor, it performs encryption operation;
      * for a Decryptor, decryption operation is performed.
      */
-    virtual void startEngine( const com::sun::star::uno::Reference<
+    virtual void startEngine( const com::sun::star::uno::Reference< 
         com::sun::star::xml::crypto::XXMLEncryptionTemplate >&)
         throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException)
         {};

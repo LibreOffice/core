@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -53,7 +53,7 @@ public class LocationTest {
          */
         static private final String __serviceName =
         "com.sun.star.comp.smoketest.LocationTest";
-
+    
         /** The initial component contextr, that gives access to
          * the service manager, supported singletons, ...
          * It's often later used
@@ -64,7 +64,7 @@ public class LocationTest {
          * It's often later used
          */
         private XMultiComponentFactory m_xMCF;
-
+    
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
          * @param xmultiservicefactoryInitialization A special service factory
          * could be introduced while initializing.
@@ -72,13 +72,13 @@ public class LocationTest {
         public _LocationTest(XComponentContext xCompContext) {
             try {
                 m_cmpCtx = xCompContext;
-                m_xMCF = m_cmpCtx.getServiceManager();
+                m_xMCF = m_cmpCtx.getServiceManager();                
             }
             catch( Exception e ) {
                 e.printStackTrace();
             }
         }
-
+        
         /** This method returns an array of all supported service names.
          * @return Array of supported service names.
          */
@@ -94,7 +94,7 @@ public class LocationTest {
             String[] sSupportedServiceNames = { __serviceName };
             return sSupportedServiceNames;
         }
-
+      
         /** This method returns true, if the given service will be
          * supported by the component.
          * @param sServiceName Service name.
@@ -103,16 +103,16 @@ public class LocationTest {
         public boolean supportsService( String sServiceName ) {
             return sServiceName.equals( __serviceName );
         }
-
+    
         /** Return the class name of the component.
          * @return Class name of the component.
          */
         public String getImplementationName() {
             return  _LocationTest.class.getName();
-        }
+        }        
     }
-
-
+  
+    
     /**
      * Gives a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
@@ -126,11 +126,11 @@ public class LocationTest {
     public static XSingleComponentFactory __getComponentFactory(String sImplName)
     {
         XSingleComponentFactory xFactory = null;
-
+    
         if ( sImplName.equals( _LocationTest.class.getName() ) )
             xFactory = Factory.createComponentFactory(_LocationTest.class,
                                              _LocationTest.getServiceNames());
-
+        
         return xFactory;
     }
 

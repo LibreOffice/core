@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ namespace basegfx
     class B2DVector;
     class B2DPoint;
 }
-namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering 
 {
     struct RenderState;
 } } } }
@@ -63,8 +63,8 @@ namespace cppcanvas
             sets up the transformation and the clip from the
             OutDevState.
          */
-        void initRenderState( ::com::sun::star::rendering::RenderState& renderState,
-                              const ::cppcanvas::internal::OutDevState&         outdevState );
+        void initRenderState( ::com::sun::star::rendering::RenderState&	renderState,
+                              const ::cppcanvas::internal::OutDevState&			outdevState );
 
         /** Calc output offset relative to baseline
 
@@ -80,8 +80,8 @@ namespace cppcanvas
             @param rVDev
             VDev to obtain font metrics from.
          */
-        ::Size getBaselineOffset( const ::cppcanvas::internal::OutDevState& outdevState,
-                                  const VirtualDevice&                      rVDev );
+        ::Size getBaselineOffset( const ::cppcanvas::internal::OutDevState&	outdevState,
+                                  const VirtualDevice&						rVDev );
 
         /** Construct a matrix that converts from logical to pixel
             coordinate system.
@@ -97,8 +97,8 @@ namespace cppcanvas
 
             @return the calculated transformation matrix.
          */
-        ::basegfx::B2DHomMatrix& calcLogic2PixelLinearTransform( ::basegfx::B2DHomMatrix&   o_rMatrix,
-                                                                 const VirtualDevice&       rVDev );
+        ::basegfx::B2DHomMatrix& calcLogic2PixelLinearTransform( ::basegfx::B2DHomMatrix&	o_rMatrix,
+                                                                 const VirtualDevice& 		rVDev );
 
         /** Construct a matrix that converts from logical to pixel
             coordinate system.
@@ -112,8 +112,8 @@ namespace cppcanvas
 
             @return the calculated transformation matrix.
          */
-        ::basegfx::B2DHomMatrix& calcLogic2PixelAffineTransform( ::basegfx::B2DHomMatrix&   o_rMatrix,
-                                                                 const VirtualDevice&       rVDev );
+        ::basegfx::B2DHomMatrix& calcLogic2PixelAffineTransform( ::basegfx::B2DHomMatrix&	o_rMatrix,
+                                                                 const VirtualDevice& 		rVDev );
 
         /** This method modifies the clip, to cancel the given
             transformation.
@@ -140,11 +140,11 @@ namespace cppcanvas
 
             @return true, if the clip has changed, false if not
          */
-        bool modifyClip( ::com::sun::star::rendering::RenderState&          o_rRenderState,
-                         const struct ::cppcanvas::internal::OutDevState&   rOutdevState,
-                         const CanvasSharedPtr&                             rCanvas,
-                         const ::Point&                                     rOffset,
-                         const ::basegfx::B2DVector*                        pScaling,
+        bool modifyClip( ::com::sun::star::rendering::RenderState&			o_rRenderState,
+                         const struct ::cppcanvas::internal::OutDevState&	rOutdevState,
+                         const CanvasSharedPtr&								rCanvas,
+                         const ::Point&										rOffset,
+                         const ::basegfx::B2DVector*						pScaling,
                          const double*                                      pRotation );
 
         /** This method modifies the clip, to cancel the given
@@ -172,11 +172,11 @@ namespace cppcanvas
 
             @return true, if the clip has changed, false if not
          */
-        bool modifyClip( ::com::sun::star::rendering::RenderState&          o_rRenderState,
-                         const struct ::cppcanvas::internal::OutDevState&   rOutdevState,
-                         const CanvasSharedPtr&                             rCanvas,
-                         const ::basegfx::B2DPoint&                         rOffset,
-                         const ::basegfx::B2DVector*                        pScaling,
+        bool modifyClip( ::com::sun::star::rendering::RenderState&			o_rRenderState,
+                         const struct ::cppcanvas::internal::OutDevState&	rOutdevState,
+                         const CanvasSharedPtr&								rCanvas,
+                         const ::basegfx::B2DPoint&							rOffset,
+                         const ::basegfx::B2DVector*						pScaling,
                          const double*                                      pRotation );
 
         /** This method modifies the clip, to cancel the given
@@ -198,10 +198,10 @@ namespace cppcanvas
 
             @return true, if the clip has changed, false if not
          */
-        bool modifyClip( ::com::sun::star::rendering::RenderState&          o_rRenderState,
-                         const struct ::cppcanvas::internal::OutDevState&   rOutdevState,
-                         const CanvasSharedPtr&                             rCanvas,
-                         const ::basegfx::B2DHomMatrix&                     rTransform );
+        bool modifyClip( ::com::sun::star::rendering::RenderState&			o_rRenderState,
+                         const struct ::cppcanvas::internal::OutDevState&	rOutdevState,
+                         const CanvasSharedPtr&								rCanvas,
+                         const ::basegfx::B2DHomMatrix&						rTransform );
 
         struct TextLineInfo
         {
@@ -210,9 +210,9 @@ namespace cppcanvas
                           const double& rOverlineOffset,
                           const double& rUnderlineOffset,
                           const double& rStrikeoutOffset,
-                          sal_Int8      nOverlineStyle,
-                          sal_Int8      nUnderlineStyle,
-                          sal_Int8      nStrikeoutStyle ) :
+                          sal_Int8		nOverlineStyle,
+                          sal_Int8		nUnderlineStyle,
+                          sal_Int8		nStrikeoutStyle ) :
                 mnLineHeight( rLineHeight ),
                 mnOverlineHeight( rOverlineHeight ),
                 mnOverlineOffset( rOverlineOffset ),
@@ -224,27 +224,27 @@ namespace cppcanvas
             {
             }
 
-            double      mnLineHeight;
-            double      mnOverlineHeight;
-            double      mnOverlineOffset;
-            double      mnUnderlineOffset;
-            double      mnStrikeoutOffset;
-            sal_Int8    mnOverlineStyle;
-            sal_Int8    mnUnderlineStyle;
-            sal_Int8    mnStrikeoutStyle;
+            double 		mnLineHeight;
+            double 		mnOverlineHeight;
+            double 		mnOverlineOffset;
+            double 		mnUnderlineOffset;
+            double 		mnStrikeoutOffset;
+            sal_Int8	mnOverlineStyle;
+            sal_Int8	mnUnderlineStyle;
+            sal_Int8	mnStrikeoutStyle;
         };
 
         /** Transform given bounds to device coordinate system.
          */
-        ::basegfx::B2DRange calcDevicePixelBounds( const ::basegfx::B2DRange&                       rBounds,
-                                                   const ::com::sun::star::rendering::ViewState&    viewState,
-                                                   const ::com::sun::star::rendering::RenderState&  renderState );
+        ::basegfx::B2DRange calcDevicePixelBounds( const ::basegfx::B2DRange& 						rBounds,
+                                                   const ::com::sun::star::rendering::ViewState&	viewState,
+                                                   const ::com::sun::star::rendering::RenderState&	renderState );
 
         /** Generate text underline/strikeout info struct from OutDev
             state.
          */
-        TextLineInfo createTextLineInfo( const ::VirtualDevice&                     rVDev,
-                                         const ::cppcanvas::internal::OutDevState&  rState );
+        TextLineInfo createTextLineInfo( const ::VirtualDevice& 					rVDev,
+                                         const ::cppcanvas::internal::OutDevState&	rState );
 
         /** Create a poly-polygon representing the given combination
             of overline, strikeout and underline.
@@ -258,13 +258,13 @@ namespace cppcanvas
             @param rTextLineInfo
             Common info needed for overline/strikeout/underline generation
          */
-        ::basegfx::B2DPolyPolygon createTextLinesPolyPolygon( const double&         rStartOffset,
-                                                              const double&         rLineWidth,
-                                                              const TextLineInfo&   rTextLineInfo );
+        ::basegfx::B2DPolyPolygon createTextLinesPolyPolygon( const double&			rStartOffset,
+                                                              const double&			rLineWidth,
+                                                              const TextLineInfo&	rTextLineInfo );
 
         ::basegfx::B2DPolyPolygon createTextLinesPolyPolygon( const ::basegfx::B2DPoint rStartPos,
-                                                              const double&             rLineWidth,
-                                                              const TextLineInfo&       rTextLineInfo );
+                                                              const double&				rLineWidth,
+                                                              const TextLineInfo&		rTextLineInfo );
     }
 }
 

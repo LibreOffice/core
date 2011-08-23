@@ -61,11 +61,11 @@
  * Change History
  * 2004-02-21 create this file.
  ************************************************************************/
-#ifndef     _XFDRAWLINESTYLE_HXX
-#define     _XFDRAWLINESTYLE_HXX
+#ifndef		_XFDRAWLINESTYLE_HXX
+#define		_XFDRAWLINESTYLE_HXX
 
-#include    "xfstyle.hxx"
-#include    "xfcolor.hxx"
+#include	"xfstyle.hxx"
+#include	"xfcolor.hxx"
 
 /**
  * @brief
@@ -78,75 +78,75 @@ public:
 
 public:
     /**
-     * @descr   Set line width.
+     * @descr	Set line width.
      */
-    void    SetWidth(double width);
+    void	SetWidth(double width);
 
     /**
-     * @descr   Set line color.
+     * @descr	Set line color.
      */
-    void    SetColor(const XFColor& color);
+    void	SetColor(const XFColor& color);
 
     /**
-     * @descr   Set line transparency.
+     * @descr	Set line transparency.
      */
-    void    SetTransparency(sal_Int32 transparency);
+    void	SetTransparency(sal_Int32 transparency);
 
     /**
-     * @descr   Set line type, solid,dash,dot?
+     * @descr	Set line type, solid,dash,dot?
      */
-    void    SetLineStyle(enumXFLineStyle style);
+    void	SetLineStyle(enumXFLineStyle style);
 
     /**
-     * @descr   Set first dot number of dash line.
+     * @descr	Set first dot number of dash line.
      */
-    void    SetDot1Number(sal_Int32 number);
+    void	SetDot1Number(sal_Int32 number);
 
     /**
-     * @descr   Set second dot number of dash line.
+     * @descr	Set second dot number of dash line.
      */
-    void    SetDot2Number(sal_Int32 number);
+    void	SetDot2Number(sal_Int32 number);
 
     /**
-     * @descr   Set first dot length.
+     * @descr	Set first dot length.
      */
-    void    SetDot1Length(double length);
+    void	SetDot1Length(double length);
 
     /**
-     * @descr   Set second dot length.
+     * @descr	Set second dot length.
      */
-    void    SetDot2Length(double length);
+    void	SetDot2Length(double length);
 
     /**
-     * @descr   Set space between dash dot.
+     * @descr	Set space between dash dot.
      */
-    void    SetSpace(double space);
+    void	SetSpace(double space);
 
     /**
-     * @descr   decide whether it's a solid line.
+     * @descr	decide whether it's a solid line.
      */
-    sal_Bool    IsSolid();
+    sal_Bool	IsSolid();
 
-    double  GetWidth();
+    double	GetWidth();
 
-    XFColor GetColor();
+    XFColor	GetColor();
 
-    sal_Int32   GetTransparency();
+    sal_Int32	GetTransparency();
 
-    virtual enumXFStyle GetStyleFamily();
+    virtual enumXFStyle	GetStyleFamily();
 
-    virtual void    ToXml(IXFStream *pStrm);
+    virtual void	ToXml(IXFStream *pStrm);
 
 private:
-    enumXFLineStyle m_eLineStyle;
-    XFColor m_aColor;
-    double  m_fWidth;
-    sal_Int32   m_nTransparency;
-    sal_Int32   m_nNumber1;
-    sal_Int32   m_nNumber2;
-    double  m_fSpace;
-    double  m_fLength1;
-    double  m_fLength2;
+    enumXFLineStyle	m_eLineStyle;
+    XFColor	m_aColor;
+    double	m_fWidth;
+    sal_Int32	m_nTransparency;
+    sal_Int32	m_nNumber1;
+    sal_Int32	m_nNumber2;
+    double	m_fSpace;
+    double	m_fLength1;
+    double	m_fLength2;
 };
 
 inline void XFDrawLineStyle::SetWidth(double width)
@@ -164,27 +164,27 @@ inline void XFDrawLineStyle::SetTransparency(sal_Int32 transparency)
     m_nTransparency = transparency;
 }
 
-inline void XFDrawLineStyle::SetLineStyle(enumXFLineStyle style)
+inline void	XFDrawLineStyle::SetLineStyle(enumXFLineStyle style)
 {
     m_eLineStyle = style;
 }
 
-inline void XFDrawLineStyle::SetDot1Number(sal_Int32 number)
+inline void	XFDrawLineStyle::SetDot1Number(sal_Int32 number)
 {
     m_nNumber1 = number;
 }
 
-inline void XFDrawLineStyle::SetDot2Number(sal_Int32 number)
+inline void	XFDrawLineStyle::SetDot2Number(sal_Int32 number)
 {
     m_nNumber2 = number;
 }
 
-inline void XFDrawLineStyle::SetDot1Length(double length)
+inline void	XFDrawLineStyle::SetDot1Length(double length)
 {
     m_fLength1 = length;
 }
 
-inline void XFDrawLineStyle::SetDot2Length(double length)
+inline void	XFDrawLineStyle::SetDot2Length(double length)
 {
     m_fLength2 = length;
 }
@@ -194,7 +194,7 @@ inline void XFDrawLineStyle::SetSpace(double space)
     m_fSpace = space;
 }
 
-inline sal_Bool XFDrawLineStyle::IsSolid()
+inline sal_Bool	XFDrawLineStyle::IsSolid()
 {
     return (m_eLineStyle==enumXFLineSolid);
 }

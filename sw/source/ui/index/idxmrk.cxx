@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <multmrk.hxx>
-#include <swundo.hxx>                   // fuer Undo-Ids
+#include <swundo.hxx>               	// fuer Undo-Ids
 #include <cmdid.h>
 #include <index.hrc>
 #include <idxmrk.hrc>
@@ -70,7 +70,7 @@
 
 SFX_IMPL_CHILDWINDOW(SwInsertIdxMarkWrapper, FN_INSERT_IDX_ENTRY_DLG)
 
-SwInsertIdxMarkWrapper::SwInsertIdxMarkWrapper( Window *pParentWindow,
+SwInsertIdxMarkWrapper::SwInsertIdxMarkWrapper(	Window *pParentWindow,
                             sal_uInt16 nId,
                             SfxBindings* pBindings,
                             SfxChildWinInfo* pInfo ) :
@@ -81,7 +81,7 @@ SwInsertIdxMarkWrapper::SwInsertIdxMarkWrapper( Window *pParentWindow,
     pAbstDlg = pFact->CreateIndexMarkFloatDlg( DLG_INSIDXMARK , pBindings, this, pParentWindow, pInfo );
     OSL_ENSURE(pAbstDlg, "Dialogdiet fail!");
     pWindow = pAbstDlg->GetWindow();
-    pWindow->Show();    // at this point,because before pSh has to be initialized in ReInitDlg()
+    pWindow->Show();	// at this point,because before pSh has to be initialized in ReInitDlg()
                         // -> Show() will invoke StateChanged() and save pos
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 }
@@ -93,14 +93,14 @@ SfxChildWinInfo SwInsertIdxMarkWrapper::GetInfo() const
     return aInfo;
 }
 
-void    SwInsertIdxMarkWrapper::ReInitDlg(SwWrtShell& rWrtShell)
+void	SwInsertIdxMarkWrapper::ReInitDlg(SwWrtShell& rWrtShell)
 {
     pAbstDlg->ReInitDlg(rWrtShell);
 }
 
 SFX_IMPL_CHILDWINDOW(SwInsertAuthMarkWrapper, FN_INSERT_AUTH_ENTRY_DLG)
 
-SwInsertAuthMarkWrapper::SwInsertAuthMarkWrapper(   Window *pParentWindow,
+SwInsertAuthMarkWrapper::SwInsertAuthMarkWrapper(	Window *pParentWindow,
                             sal_uInt16 nId,
                             SfxBindings* pBindings,
                             SfxChildWinInfo* pInfo ) :
@@ -121,7 +121,7 @@ SfxChildWinInfo SwInsertAuthMarkWrapper::GetInfo() const
     return aInfo;
 }
 
-void    SwInsertAuthMarkWrapper::ReInitDlg(SwWrtShell& rWrtShell)
+void	SwInsertAuthMarkWrapper::ReInitDlg(SwWrtShell& rWrtShell)
 {
     pAbstDlg->ReInitDlg(rWrtShell);
 }

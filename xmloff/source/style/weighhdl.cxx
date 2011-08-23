@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,20 +55,20 @@ struct FontWeightMapper
     USHORT nValue;
 };
 
-FontWeightMapper const aFontWeightMap[] =
+FontWeightMapper const aFontWeightMap[] =	
 {
-    { ::com::sun::star::awt::FontWeight::DONTKNOW,              0 },
-    { ::com::sun::star::awt::FontWeight::THIN,                  100 },
-    { ::com::sun::star::awt::FontWeight::ULTRALIGHT,            150 },
-    { ::com::sun::star::awt::FontWeight::LIGHT,                 250 },
-    { ::com::sun::star::awt::FontWeight::SEMILIGHT,             350 },
-    { ::com::sun::star::awt::FontWeight::NORMAL,                400 },
-    { ::com::sun::star::awt::FontWeight::NORMAL,                450 },
-    { ::com::sun::star::awt::FontWeight::SEMIBOLD,              600 },
-    { ::com::sun::star::awt::FontWeight::BOLD,                  700 },
-    { ::com::sun::star::awt::FontWeight::ULTRABOLD,             800 },
-    { ::com::sun::star::awt::FontWeight::BLACK,                 900 },
-    { ::com::sun::star::awt::FontWeight::DONTKNOW,             1000 }
+    { ::com::sun::star::awt::FontWeight::DONTKNOW,				0 },
+    { ::com::sun::star::awt::FontWeight::THIN,					100 },
+    { ::com::sun::star::awt::FontWeight::ULTRALIGHT,			150 },
+    { ::com::sun::star::awt::FontWeight::LIGHT,					250 },
+    { ::com::sun::star::awt::FontWeight::SEMILIGHT,				350 },
+    { ::com::sun::star::awt::FontWeight::NORMAL,				400 },
+    { ::com::sun::star::awt::FontWeight::NORMAL,				450 },
+    { ::com::sun::star::awt::FontWeight::SEMIBOLD,				600 },
+    { ::com::sun::star::awt::FontWeight::BOLD,					700 },
+    { ::com::sun::star::awt::FontWeight::ULTRABOLD,				800 },
+    { ::com::sun::star::awt::FontWeight::BLACK,					900 },
+    { ::com::sun::star::awt::FontWeight::DONTKNOW,			   1000 }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -82,7 +82,7 @@ XMLFontWeightPropHdl::~XMLFontWeightPropHdl()
 }
 
 sal_Bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
-{
+{ 
     sal_Bool bRet = sal_False;
     sal_uInt16 nWeight = 0;
 
@@ -126,11 +126,11 @@ sal_Bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rVa
         }
     }
 
-    return bRet;
+    return bRet; 
 }
 
 sal_Bool XMLFontWeightPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
-{
+{ 
     sal_Bool bRet = sal_False;
 
     float fValue = float();

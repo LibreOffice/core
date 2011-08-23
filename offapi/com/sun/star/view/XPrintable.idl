@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,53 +24,53 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_view_XPrintable_idl__
-#define __com_sun_star_view_XPrintable_idl__
-
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
-#include <com/sun/star/beans/PropertyValue.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-
-//=============================================================================
-
-module com {  module sun {  module star {  module view {
-
-//=============================================================================
-
+#ifndef __com_sun_star_view_XPrintable_idl__ 
+#define __com_sun_star_view_XPrintable_idl__ 
+ 
+#ifndef __com_sun_star_uno_XInterface_idl__ 
+#include <com/sun/star/uno/XInterface.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_beans_PropertyValue_idl__ 
+#include <com/sun/star/beans/PropertyValue.idl> 
+#endif 
+ 
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__ 
+#include <com/sun/star/lang/IllegalArgumentException.idl> 
+#endif 
+ 
+ 
+//============================================================================= 
+ 
+module com {  module sun {  module star {  module view {  
+ 
+//============================================================================= 
+ 
 /** offers printing functionality.
  */
 published interface XPrintable: com::sun::star::uno::XInterface
-{
-    //-------------------------------------------------------------------------
-    /** @returns
-            a descriptor of the current printer.
-
-        <p>The attributes of the current printer are used for formatting.
-
+{ 
+    //------------------------------------------------------------------------- 
+    /** @returns 
+            a descriptor of the current printer. 
+         
+        <p>The attributes of the current printer are used for formatting. 
+         
         @see PrinterDescriptor
      */
-    sequence<com::sun::star::beans::PropertyValue> getPrinter();
-
-    //-------------------------------------------------------------------------
+    sequence<com::sun::star::beans::PropertyValue> getPrinter(); 
+ 
+    //------------------------------------------------------------------------- 
     /** assigns a new printer to the object.
 
         <p>Setting a new printer will cause reformatting.
-
+        
         @see PrinterDescriptor
      */
-    void setPrinter( [in] sequence<com::sun::star::beans::PropertyValue> aPrinter )
-            raises( com::sun::star::lang::IllegalArgumentException );
-
-    //-------------------------------------------------------------------------
+    void setPrinter( [in] sequence<com::sun::star::beans::PropertyValue> aPrinter ) 
+            raises( com::sun::star::lang::IllegalArgumentException ); 
+ 
+    //------------------------------------------------------------------------- 
     /** prints the object.
 
         @param xOptions
@@ -79,13 +79,13 @@ published interface XPrintable: com::sun::star::uno::XInterface
 
         @see PrintOptions
      */
-    void print( [in] sequence<com::sun::star::beans::PropertyValue> xOptions )
-            raises( com::sun::star::lang::IllegalArgumentException );
-
-};
-
-//=============================================================================
-
-}; }; }; };
-
-#endif
+    void print( [in] sequence<com::sun::star::beans::PropertyValue> xOptions ) 
+            raises( com::sun::star::lang::IllegalArgumentException ); 
+ 
+}; 
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
+#endif 

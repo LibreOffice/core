@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,36 +46,36 @@ module com { module sun { module star { module ui { module dialogs {
 //=============================================================================
 /** Specifies a FolderPicker interface.
 */
-
+ 
 published interface XFolderPicker: com::sun::star::ui::dialogs::XExecutableDialog
 {
     //-------------------------------------------------------------------------
-    /** Sets the root directory that the FolderPicker should display.
-        It is not specified which root directory the FolderPicker
+    /**	Sets the root directory that the FolderPicker should display.
+        It is not specified which root directory the FolderPicker 
         chooses if the specified root directory doesn't exist.
-
+        
         @param aDirectory
-        Specifies the root directory in url format, conform to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
-
-        @throws com::sun::star::lang::IllegalArgumentException
+        Specifies the root directory in url format, conform to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>. 
+        
+        @throws	com::sun::star::lang::IllegalArgumentException
         if the given url is invalid.
     */
     void setDisplayDirectory( [in] string aDirectory )
         raises( ::com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
-    /** Returns the root directory that the FolderPicker is showing. The
-        return value is undefined if the client did not choose a root directory
+    /**	Returns the root directory that the FolderPicker is showing. The 
+        return value is undefined if the client did not choose a root directory 
         or the previously specified root directory doesn't exist.
 
-        @returns
+        @returns 
         The directory in url format.
      */
     string getDisplayDirectory();
 
     //-------------------------------------------------------------------------
     /** Returns the selected directory as url conform to <a href="http://www.w3.org/Addressing/rfc1738.txt">Rfc1738</a>.
-
+        
         @returns
         The selected directory as url if the user did close the dialog with ok
         else the returned value is undefined.
@@ -83,9 +83,9 @@ published interface XFolderPicker: com::sun::star::ui::dialogs::XExecutableDialo
     string getDirectory( );
 
     //-------------------------------------------------------------------------
-    /** The implementation may optionally show the given text as a description
-        for the user within the dialog, e.g. "Please select a directory".
-        If the client doesn't set a description the dialog may show a default
+    /** The implementation may optionally show the given text as a description 
+        for the user within the dialog, e.g. "Please select a directory". 
+        If the client doesn't set a description the dialog may show a default 
         description.
     */
     void setDescription( [in] string aDescription );

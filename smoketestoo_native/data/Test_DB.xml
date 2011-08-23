@@ -45,23 +45,23 @@ Const sTestString = &quot;Automatical Test&quot;
 
 
     On Local Error GoTo DBERROR
-
+    
     nCurrentAction = cLogfileFailed
     FileChannel% = OpenLogDat (GetLogFileName(FilterType))
 
     nCurrentAction = cDBService
     sCurrentMessage = cMessageDatabaseService + &quot; &quot; + cUnoDatabaseContext
-
+    
     oDBContext = CreateUnoService(cUnoDatabaseContext)
     sDBName=&quot;Bibliography&quot; &apos;Names of Databases
-
+    
     nCurrentAction = cDBOpen
     sCurrentMessage = cMessageDatabaseOpen
-
+    
     oDataSource = oDBContext.GetByName(sDBName)
     sTable=oDataSource.Tables.ElementNames(0)
     oDBConnection = oDBContext.GetByName(sDBName).GetConnection(&quot;&quot;,&quot;&quot;)
-
+    
     LogState (not IsNull (oDBConnection), &quot;Database &quot;+ cMessageDatabaseOpen, FileChannel)
     LogState (not IsNull (oDBConnection), &quot;Database &quot;+ cMessageDatabaseOpen, MainFileChannel)
     SetStatus (FilterType, cDBOpen, not IsNull (oDBConnection))
@@ -69,9 +69,9 @@ Const sTestString = &quot;Automatical Test&quot;
            Close #FileChannel%
         Exit Sub
     End If
-
+    
     &apos; Database is open now
-
+    
     nCurrentAction = cDBService
     sCurrentMessage = cMessageDatabaseService + &quot; &quot; + cUnoRowSet
     oRowSet = createUnoService(cUnoRowSet)
@@ -86,10 +86,10 @@ Const sTestString = &quot;Automatical Test&quot;
         LogState (not IsNull (oRowSet), &quot;Database &quot;+ cMessageDatabaseService, MainFileChannel)
         SetStatus (FilterType, cDBService, not IsNull (oRowSet))
     End If
-
+    
     nCurrentAction = cDBInsert
     sCurrentMessage = cMessageDatabaseInsert
-
+    
     oRowSet.ActiveConnection = oDBConnection
 
     oRowSet.CommandType = com.sun.star.sdb.CommandType.COMMAND
@@ -101,16 +101,16 @@ Const sTestString = &quot;Automatical Test&quot;
 
     oRowSet.insertRow()
     nRowCount=oRowSet.RowCount
-
+    
     oRowSet.moveToCurrentRow()
-
+    
     bResult = (oRowSet.getString(5) = sTestString)
     LogState (bResult, &quot;Database &quot;+ cMessageDatabaseInsert, FileChannel)
     LogState (bResult, &quot;Database &quot;+ cMessageDatabaseInsert, MainFileChannel)
     SetStatus (FilterType, cDBInsert, bResult)
-
+    
     &apos;delete only if insert passed
-
+    
     if (bResult) Then
         nCurrentAction = cDBDelete
         sCurrentMessage = cMessageDatabaseDelete
@@ -123,10 +123,10 @@ Const sTestString = &quot;Automatical Test&quot;
         LogState (bResult, &quot;Database &quot;+ cMessageDatabaseDelete, FileChannel)
         LogState (bResult, &quot;Database &quot;+ cMessageDatabaseDelete, MainFileChannel)
         SetStatus (FilterType, cDBDelete, bResult)
-    End If
+    End If	
 
     &apos; read other record
-
+    
     nCurrentAction = cDBSeek
     sCurrentMessage = cMessageDatabaseSeek
     oRowSet.first()
@@ -134,7 +134,7 @@ Const sTestString = &quot;Automatical Test&quot;
     LogState (bResult, &quot;Database &quot;+ cMessageDatabaseSeek, FileChannel)
     LogState (bResult, &quot;Database &quot;+ cMessageDatabaseSeek, MainFileChannel)
     SetStatus (FilterType, cDBSeek, bResult)
-
+    
     nCurrentAction = cDBClose
     sCurrentMessage = cMessageDatabaseClose
     oDBConnection.Dispose()
@@ -145,9 +145,9 @@ Const sTestString = &quot;Automatical Test&quot;
     Print #FileChannel, &quot;---&quot;
     Close #FileChannel%
     Exit Sub &apos; Without error
-
+    
     DBERROR:
-    If  (nCurrentAction = cLogfileFailed) then
+    If 	(nCurrentAction = cLogfileFailed) then
         SetStatus (FilterType, cDBOpen, False)
         Exit Sub
     else
@@ -155,7 +155,7 @@ Const sTestString = &quot;Automatical Test&quot;
         LogState (False, &quot;Database &quot;+ sCurrentMessage, MainFileChannel)
         SetStatus (FilterType, nCurrentAction, False)
         Close #FileChannel%
-    End If
+    End If	
     Exit Sub &apos; With error
 End Sub
 </script:module>

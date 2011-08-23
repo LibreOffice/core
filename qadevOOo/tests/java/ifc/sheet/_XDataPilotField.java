@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,11 +55,11 @@ public class _XDataPilotField extends MultiMethodTest {
                 Object element = xIA.getByIndex(k);
                 log.println("Element " + k + " = " + element);
             } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                log.println("Unexpected Exception while getting by Index (" + k +
+                log.println("Unexpected Exception while getting by Index (" + k + 
                             ")" + e.getMessage());
                 res &= false;
             } catch (com.sun.star.lang.WrappedTargetException e) {
-                log.println("Unexpected Exception while getting by Index (" + k +
+                log.println("Unexpected Exception while getting by Index (" + k + 
                             ")" + e.getMessage());
                 res &= false;
             }

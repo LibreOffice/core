@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -80,7 +80,7 @@ public class OListBoxControl extends TestCase {
         } catch (com.sun.star.util.CloseVetoException e) {
             log.println("couldn't close document");
         } catch (com.sun.star.lang.DisposedException e) {
-            log.println("couldn't close document");
+            log.println("couldn't close document");            
         }
     }
 
@@ -146,16 +146,16 @@ public class OListBoxControl extends TestCase {
         // Adding relation for XWindow
         XWindow forObjRel = (XWindow)
                             UnoRuntime.queryInterface(XWindow.class, anotherCtrl);
-
+        
         XWindow objWin = (XWindow)
                             UnoRuntime.queryInterface(XWindow.class, oObj);
 
         tEnv.addObjRelation("XWindow.AnotherWindow",forObjRel);
         tEnv.addObjRelation("XWindow.ControlShape",aShape);
-
+        
         tEnv.addObjRelation("Win1",objWin);
         tEnv.addObjRelation("Win2",forObjRel);
-
+        
         tEnv.addObjRelation("CONTROL",anotherCtrl);
 
         // adding relation for XChangeBroadcaster

@@ -19,7 +19,7 @@ import com.sun.star.beans.*;
 import com.sun.star.lang.*;
 
 
-public class EmbedContFrame extends Frame
+public class EmbedContFrame extends Frame 
 {
     WindowListener m_aCloser = new WindowAdapter()
     {
@@ -30,7 +30,7 @@ public class EmbedContFrame extends Frame
         }
     };
 
-    public EmbedContFrame( String sName )
+    public EmbedContFrame( String sName ) 
     {
         super( sName );
         addWindowListener( m_aCloser );
@@ -82,18 +82,18 @@ public class EmbedContFrame extends Frame
         // Get component context
         XComponentContext xComponentContext =
             com.sun.star.comp.helper.Bootstrap.createInitialComponentContext( null );
-
+        
         // initial serviceManager
         XMultiComponentFactory xLocalServiceManager = xComponentContext.getServiceManager();
-
+                
         // create a connector, so that it can contact the office
         Object  oUrlResolver  = xLocalServiceManager.createInstanceWithContext( "com.sun.star.bridge.UnoUrlResolver",
                                                                                 xComponentContext );
         XUnoUrlResolver xUrlResolver = (XUnoUrlResolver)UnoRuntime.queryInterface( XUnoUrlResolver.class, oUrlResolver );
-
+        
         Object oInitialObject = xUrlResolver.resolve( sConnectionString );
         XNamingService xName = (XNamingService)UnoRuntime.queryInterface( XNamingService.class, oInitialObject );
-
+        
         XMultiServiceFactory xMSF = null;
         if( xName != null ) {
             Object oMSF = xName.getRegisteredObject( "StarOffice.ServiceManager" );
@@ -101,8 +101,8 @@ public class EmbedContFrame extends Frame
         }
         else
             System.out.println( "Error: Can't get XNamingService interface from url resolver!" );
-
+        
         return xMSF;
     }
-}
+}  
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,8 +58,8 @@ public class _XScriptInfo extends MultiMethodTest {
 
     public void _getLogicalName() {
         boolean result = true;
-
-        Collection c =
+        
+        Collection c = 
             (Collection) tEnv.getObjRelation("_getLogicalName");
 
         Iterator tests;
@@ -89,8 +89,8 @@ public class _XScriptInfo extends MultiMethodTest {
 
     public void _getParcelURI() {
         boolean result = true;
-
-        Collection c =
+        
+        Collection c = 
             (Collection) tEnv.getObjRelation("_getParcelURI");
 
         Iterator tests;
@@ -119,8 +119,8 @@ public class _XScriptInfo extends MultiMethodTest {
 
     public void _getLanguage() {
         boolean result = true;
-
-        Collection c =
+        
+        Collection c = 
             (Collection) tEnv.getObjRelation("_getLanguage");
 
         Iterator tests;
@@ -149,8 +149,8 @@ public class _XScriptInfo extends MultiMethodTest {
 
     public void _getFunctionName() {
         boolean result = true;
-
-        Collection c =
+        
+        Collection c = 
             (Collection) tEnv.getObjRelation("_getFunctionName");
 
         Iterator tests;
@@ -179,8 +179,8 @@ public class _XScriptInfo extends MultiMethodTest {
 
     public void _getLanguageProperties() {
         boolean result = true;
-
-        Collection c =
+        
+        Collection c = 
             (Collection) tEnv.getObjRelation("_getLanguageProperties");
 
         Iterator tests;
@@ -219,8 +219,8 @@ public class _XScriptInfo extends MultiMethodTest {
 
     public void _getFileSetNames() {
         boolean result = true;
-
-        Collection c =
+        
+        Collection c = 
             (Collection) tEnv.getObjRelation("_getFileSetNames");
 
         Iterator tests;
@@ -256,8 +256,8 @@ public class _XScriptInfo extends MultiMethodTest {
 
     public void _getFilesInFileSet() {
         boolean result = true;
-
-        Collection c =
+        
+        Collection c = 
             (Collection) tEnv.getObjRelation("_getFilesInFileSet");
 
         Iterator tests;
@@ -294,8 +294,8 @@ public class _XScriptInfo extends MultiMethodTest {
 
     public void _getDescription() {
         boolean result = true;
-
-        Collection c =
+        
+        Collection c = 
             (Collection) tEnv.getObjRelation("_getDescription");
 
         Iterator tests;

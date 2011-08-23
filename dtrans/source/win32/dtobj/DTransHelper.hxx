@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -75,9 +75,9 @@ public:
     };
 
 public:
-    CStgTransferHelper(
-        sal_Bool bAutoInit = sal_False,
-        HGLOBAL  hGlob = NULL,
+    CStgTransferHelper( 
+        sal_Bool bAutoInit = sal_False, 
+        HGLOBAL  hGlob = NULL, 
         sal_Bool bDelStgOnRelease = sal_False );
 
     ~CStgTransferHelper( );
@@ -88,25 +88,25 @@ public:
     HGLOBAL SAL_CALL getHGlobal( ) const;
     void    SAL_CALL getIStream( LPSTREAM* ppStream );
 
-    void SAL_CALL init(
-        SIZE_T newSize,
-        sal_uInt32 uiFlags = GHND,
+    void SAL_CALL init( 
+        SIZE_T newSize, 
+        sal_uInt32 uiFlags = GHND, 
         sal_Bool bDelStgOnRelease = sal_False );
 
-    void SAL_CALL init(
-        HGLOBAL hGlob,
+    void SAL_CALL init( 
+        HGLOBAL hGlob, 
         sal_Bool bDelStgOnRelease = sal_False );
 
     // returns the size of the managed memory
     sal_uInt32 SAL_CALL memSize( CLIPFORMAT cf = CF_INVALID ) const;
-
-    // free the global memory and necessary
+    
+    // free the global memory and necessary 
     // release the internal stream pointer
     void SAL_CALL cleanup( );
 
 private:
     LPSTREAM m_lpStream;
-    sal_Bool m_bDelStgOnRelease;
+    sal_Bool m_bDelStgOnRelease;	
 
 private:
     CStgTransferHelper( const CStgTransferHelper& );
@@ -115,7 +115,7 @@ private:
 
 //-------------------------------------------------------------------------
 // something like an auto-pointer - allows access to the memory belonging
-// to a HGLOBAL and automatically unlocks a global memory at destruction
+// to a HGLOBAL and automatically unlocks a global memory at destruction 
 // time
 //-------------------------------------------------------------------------
 
@@ -133,7 +133,7 @@ public:
         m_pGlobMem( NULL )
     {
     }
-
+    
 
     //---------------------------------------------
     // ctor
@@ -157,7 +157,7 @@ public:
     }
 
     //---------------------------------------------
-    // lock the global memory (initializes a
+    // lock the global memory (initializes a 
     // pointer to this memory)
     //---------------------------------------------
 
@@ -182,17 +182,17 @@ public:
         GlobalUnlock( m_hGlob );
         m_bIsLocked = FALSE;
         m_pGlobMem = NULL;
-
+        
         return ( NO_ERROR == GetLastError( ) );
     }
 
     //---------------------------------------------
-    // locks the global memory and returns a
+    // locks the global memory and returns a 
     // pointer to this memory
     //---------------------------------------------
 
     LPVOID GetMemPtr( )
-    {
+    {		
         Lock( );
         return m_pGlobMem;
     }

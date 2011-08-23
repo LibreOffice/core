@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -54,10 +54,10 @@ namespace x11 {
         Reference< ::com::sun::star::datatransfer::XTransferable > m_aContents;
         Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner > m_aOwner;
 
-        SelectionManager&                                       m_rSelectionManager;
-        Reference< ::com::sun::star::lang::XInitialization >    m_xSelectionManager;
+        SelectionManager&										m_rSelectionManager;
+        Reference< ::com::sun::star::lang::XInitialization >	m_xSelectionManager;
         ::std::list< Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener > > m_aListeners;
-        Atom                                                    m_aSelection;
+        Atom													m_aSelection;
 
     protected:
 
@@ -76,7 +76,7 @@ namespace x11 {
         static X11Clipboard* get( const ::rtl::OUString& rDisplayName, Atom aSelection );
 
         /*
-         *  XInitialization
+         *	XInitialization
          */
         virtual void SAL_CALL initialize( const Sequence< Any >& arguments ) throw(  ::com::sun::star::uno::Exception );
 
@@ -84,29 +84,29 @@ namespace x11 {
          * XServiceInfo
          */
 
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+        virtual ::rtl::OUString SAL_CALL getImplementationName(	 )
             throw(RuntimeException);
 
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) 
             throw(RuntimeException);
 
-        virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+        virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) 
             throw(RuntimeException);
 
         /*
          * XClipboard
          */
 
-        virtual Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents()
+        virtual Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents() 
             throw(RuntimeException);
 
-        virtual void SAL_CALL setContents(
-            const Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans,
-            const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
+        virtual void SAL_CALL setContents( 
+            const Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans, 
+            const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner ) 
             throw(RuntimeException);
 
-        virtual ::rtl::OUString SAL_CALL getName()
-            throw(RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getName() 
+            throw(RuntimeException);	   
 
         /*
          * XClipboardEx
@@ -118,16 +118,16 @@ namespace x11 {
         /*
          * XClipboardNotifier
          */
-        virtual void SAL_CALL addClipboardListener(
-            const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
+        virtual void SAL_CALL addClipboardListener( 
+            const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener ) 
             throw(RuntimeException);
 
-        virtual void SAL_CALL removeClipboardListener(
-            const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
-            throw(RuntimeException);
+        virtual void SAL_CALL removeClipboardListener( 
+            const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener ) 
+            throw(RuntimeException);	 
 
         /*
-         *  SelectionAdaptor
+         *	SelectionAdaptor
          */
         virtual Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable();
         virtual void clearTransferable();
@@ -138,7 +138,7 @@ namespace x11 {
 // ------------------------------------------------------------------------
 
     Sequence< ::rtl::OUString > SAL_CALL X11Clipboard_getSupportedServiceNames();
-    Reference< XInterface > SAL_CALL X11Clipboard_createInstance(
+    Reference< XInterface > SAL_CALL X11Clipboard_createInstance( 
         const Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMultiServiceFactory);
 
 // ------------------------------------------------------------------------

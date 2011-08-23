@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,7 +34,7 @@
 #include <sfx2/objsh.hxx>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase1.hxx>	// helper for implementations
 #include <swunodef.hxx>
 #include <cppuhelper/weakref.hxx>
 
@@ -56,7 +56,7 @@ namespace com{ namespace sun{ namespace star {
 class SwScannerEventListener : public ::cppu::WeakImplHelper1<
     STAR_NMSPC::lang::XEventListener >
 {
-    SwView* pView;
+    SwView*	pView;
 
 public:
 
@@ -74,7 +74,7 @@ public:
 class SwClipboardChangeListener : public ::cppu::WeakImplHelper1<
     CLIP_NMSPC::XClipboardListener >
 {
-    SwView* pView;
+    SwView*	pView;
 
     // XEventListener
     virtual void SAL_CALL disposing( const STAR_NMSPC::lang::EventObject& rEventObject )
@@ -86,7 +86,7 @@ class SwClipboardChangeListener : public ::cppu::WeakImplHelper1<
 
 public:
     SwClipboardChangeListener( SwView& rView ) : pView( &rView ) {}
-    virtual ~SwClipboardChangeListener();
+    virtual	~SwClipboardChangeListener();
 
     void ViewDestroyed() { pView = 0; }
 
@@ -97,10 +97,10 @@ class SwMailMergeConfigItem;
 
 class SwView_Impl
 {
-    STAR_REFERENCE( lang::XEventListener )  xScanEvtLstnr;
-    STAR_REFERENCE( lang::XEventListener )  xClipEvtLstnr;
-    STAR_REFERENCE( frame::XDispatchProviderInterceptor )   xDisProvInterceptor;
-    STAR_REFERENCE( view::XSelectionSupplier )              *pxXTextView;       // UNO object
+    STAR_REFERENCE( lang::XEventListener ) 	xScanEvtLstnr;
+    STAR_REFERENCE( lang::XEventListener ) 	xClipEvtLstnr;
+    STAR_REFERENCE( frame::XDispatchProviderInterceptor )	xDisProvInterceptor;
+    STAR_REFERENCE( view::XSelectionSupplier ) 				*pxXTextView;		// UNO object
     com::sun::star::uno::WeakReference< com::sun::star::lang::XUnoTunnel > xTransferable;
 
     // temporary document for printing text of selection / multi selection
@@ -109,9 +109,9 @@ class SwView_Impl
     SfxObjectShellRef           aEmbeddedObjRef;
 
     SwView* pView;
-    SwScannerEventListener*     pScanEvtLstnr;
-    SwClipboardChangeListener*  pClipEvtLstnr;
-    ShellModes                  eShellMode;
+    SwScannerEventListener* 	pScanEvtLstnr;
+    SwClipboardChangeListener*	pClipEvtLstnr;
+    ShellModes 					eShellMode;
 
     SwMailMergeConfigItem*      pConfigItem;
     sal_uInt16                  nMailMergeRestartPage;
@@ -129,18 +129,18 @@ public:
     SwView_Impl(SwView* pShell);
     ~SwView_Impl();
 
-    void                            SetShellMode(ShellModes eSet);
+    void							SetShellMode(ShellModes eSet);
 
     ::com::sun::star::view::XSelectionSupplier* GetUNOObject();
-    SwXTextView*                    GetUNOObject_Impl();
+    SwXTextView*					GetUNOObject_Impl();
     void                            Invalidate();
 
-    ShellModes                      GetShellMode() {return eShellMode;}
+    ShellModes						GetShellMode() {return eShellMode;}
 
     void                            ExecuteScan(SfxRequest& rReq);
-    SwScannerEventListener&         GetScannerEventListener();
+    SwScannerEventListener& 		GetScannerEventListener();
 
-    void                            AddClipboardListener();
+    void 							AddClipboardListener();
 
     SfxObjectShellRef &             GetTmpSelectionDoc()    { return xTmpSelDocSh; }
 

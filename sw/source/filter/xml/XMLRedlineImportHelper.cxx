@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -102,7 +102,7 @@ SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> & rRange )
 class XTextRangeOrNodeIndexPosition
 {
     Reference<XTextRange> xRange;
-    SwNodeIndex* pIndex;    /// pIndex will point to the *previous* node
+    SwNodeIndex* pIndex;	/// pIndex will point to the *previous* node
 
 public:
     XTextRangeOrNodeIndexPosition();
@@ -131,7 +131,7 @@ XTextRangeOrNodeIndexPosition::~XTextRangeOrNodeIndexPosition()
 
 void XTextRangeOrNodeIndexPosition::Set( Reference<XTextRange> & rRange )
 {
-    xRange = rRange->getStart();    // set bookmark
+    xRange = rRange->getStart();	// set bookmark
     if (NULL != pIndex)
     {
         delete pIndex;
@@ -145,7 +145,7 @@ void XTextRangeOrNodeIndexPosition::Set( SwNodeIndex& rIndex )
         delete pIndex;
 
     pIndex = new SwNodeIndex(rIndex);
-    (*pIndex)-- ;   // previous node!!!
+    (*pIndex)-- ;	// previous node!!!
     xRange = NULL;
 }
 
@@ -186,7 +186,7 @@ void XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos)
     else
     {
         rPos.nNode = *pIndex;
-        rPos.nNode++;           // pIndex points to previous index !!!
+        rPos.nNode++;			// pIndex points to previous index !!!
         rPos.nContent.Assign( rPos.nNode.GetNode().GetCntntNode(), 0 );
     }
 }
@@ -218,9 +218,9 @@ public:
     RedlineType_t eType;
 
     // info fields:
-    OUString sAuthor;               /// change author string
-    OUString sComment;              /// change comment string
-    util::DateTime aDateTime;       /// change DateTime
+    OUString sAuthor;				/// change author string
+    OUString sComment;				/// change comment string
+    util::DateTime aDateTime;		/// change DateTime
     sal_Bool bMergeLastParagraph;   /// the SwRedline::IsDelLastPara flag
 
     // each position can may be either empty, an XTextRange, or an SwNodeIndex
@@ -558,7 +558,7 @@ void XMLRedlineImportHelper::SetCursor(
 }
 
 void XMLRedlineImportHelper::AdjustStartNodeCursor(
-    const OUString& rId,        /// ID used in RedlineAdd() call
+    const OUString& rId,		/// ID used in RedlineAdd() call
     sal_Bool /*bStart*/,
     Reference<XTextRange> & /*rRange*/)
 {
@@ -709,13 +709,13 @@ SwRedlineData* XMLRedlineImportHelper::ConvertRedline(
 
     // 2) util::DateTime -> DateTime
     DateTime aDT;
-    aDT.SetYear(    pRedlineInfo->aDateTime.Year );
-    aDT.SetMonth(   pRedlineInfo->aDateTime.Month );
-    aDT.SetDay(     pRedlineInfo->aDateTime.Day );
-    aDT.SetHour(    pRedlineInfo->aDateTime.Hours );
-    aDT.SetMin(     pRedlineInfo->aDateTime.Minutes );
-    aDT.SetSec(     pRedlineInfo->aDateTime.Seconds );
-    aDT.Set100Sec(  pRedlineInfo->aDateTime.HundredthSeconds );
+    aDT.SetYear(	pRedlineInfo->aDateTime.Year );
+    aDT.SetMonth(	pRedlineInfo->aDateTime.Month );
+    aDT.SetDay(		pRedlineInfo->aDateTime.Day );
+    aDT.SetHour(	pRedlineInfo->aDateTime.Hours );
+    aDT.SetMin(		pRedlineInfo->aDateTime.Minutes );
+    aDT.SetSec(		pRedlineInfo->aDateTime.Seconds );
+    aDT.Set100Sec(	pRedlineInfo->aDateTime.HundredthSeconds );
 
     // 3) recursively convert next redline
     //    ( check presence and sanity of hierarchical redline info )
@@ -731,8 +731,8 @@ SwRedlineData* XMLRedlineImportHelper::ConvertRedline(
     SwRedlineData* pData = new SwRedlineData(pRedlineInfo->eType,
                                              nAuthorId, aDT,
                                              pRedlineInfo->sComment,
-                                             pNext, // next data (if available)
-                                             NULL); // no extra data
+                                             pNext,	// next data (if available)
+                                             NULL);	// no extra data
 
     return pData;
 }

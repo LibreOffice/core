@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,18 +73,18 @@ int SAL_CALL main(int argc, char ** argv) \
 /* Sorry but this is neccessary cause HINSTANCE is a typedef that differs (C++ causes an error) */
 
 #ifndef WINAPI
-#   define WINAPI   __stdcall
+#	define WINAPI	__stdcall
 #endif
 
 #if !defined(DECLARE_HANDLE)
-#   ifdef STRICT
+#	ifdef STRICT
         typedef void *HANDLE;
-#       define DECLARE_HANDLE(name) struct name##__ { int unused; }; typedef struct name##__ *name
-#   else
+#		define DECLARE_HANDLE(name) struct name##__ { int unused; }; typedef struct name##__ *name
+#	else
         typedef void *PVOID;
         typedef PVOID HANDLE;
-#       define DECLARE_HANDLE(name) typedef HANDLE name
-#   endif
+#		define DECLARE_HANDLE(name) typedef HANDLE name
+#	endif
 DECLARE_HANDLE(HINSTANCE);
 #endif
 
@@ -98,9 +98,9 @@ int WINAPI WinMain( HINSTANCE _hinst, HINSTANCE _dummy, char* _cmdline, int _nsh
     return main(argc, argv); \
 }
 
-#else   /* ! SAL_W32 */
+#else	/* ! SAL_W32 */
 
-# define SAL_WIN_WinMain
+# define SAL_WIN_WinMain 
 
 #endif /* ! SAL_W32 */
 
@@ -140,9 +140,9 @@ int WINAPI WinMain( HINSTANCE _hinst, HINSTANCE _dummy, char* _cmdline, int _nsh
 */
 
 #ifdef __cplusplus
-}   /* extern "C" */
+}	/* extern "C" */
 #endif
 
-#endif  /* _SAL_MAIN_H_ */
+#endif	/* _SAL_MAIN_H_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

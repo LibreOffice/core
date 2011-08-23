@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,8 +35,8 @@
 
 void CGM::ImplDoClass1()
 {
-    long    nInteger, nI0, nI1;
-    sal_uInt32  nUInteger;
+    long	nInteger, nI0, nI1;
+    sal_uInt32	nUInteger;
 
     switch ( mnElementID )
     {
@@ -71,8 +71,8 @@ void CGM::ImplDoClass1()
         case 0x05 : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Real Precision" )
         {
             nUInteger = ImplGetUI16( 4 );
-            nI0 = ImplGetI( pElement->nIntegerPrecision );  // exponent
-            nI1 = ImplGetI( pElement->nIntegerPrecision );  // mantisse
+            nI0 = ImplGetI( pElement->nIntegerPrecision );	// exponent
+            nI1 = ImplGetI( pElement->nIntegerPrecision );	// mantisse
             switch( nUInteger )
             {
                 case 0 :
@@ -163,7 +163,7 @@ void CGM::ImplDoClass1()
             else
             {
                 nI1 = 8;
-                mbStatus = sal_False;                               // CMYK is not supported
+                mbStatus = sal_False;								// CMYK is not supported
             }
             for ( nI0 = 0; nI0 < nI1; nI0++ )
             {
@@ -214,14 +214,14 @@ void CGM::ImplDoClass1()
         case 0x0f : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Character Coding Announcer" )
             pElement->eCharacterCodingA = (CharacterCodingA)ImplGetUI16();
         break;
-        case 0x10 : ComOut( CGM_LEVEL2, "Name Precision" ) break;                   // NS
-        case 0x11 : ComOut( CGM_LEVEL2, "Maximum VDC Extent" ) break;               // NS
-        case 0x12 : ComOut( CGM_LEVEL2, "Segment Priority Extent" ) break;          // NS
-        case 0x13 : ComOut( CGM_LEVEL3, "Color Model" ) break;                      // NS
-        case 0x14 : ComOut( CGM_LEVEL3, "Color Calibration" ) break;                // NS
-        case 0x15 : ComOut( CGM_LEVEL3, "Font Properties" ) break;                  // NS
-        case 0x16 : ComOut( CGM_LEVEL3, "Glyph Mapping" ) break;                    // NS
-        case 0x17 : ComOut( CGM_LEVEL3, "Symbol Library List" ) break;              // NS
+        case 0x10 : ComOut( CGM_LEVEL2, "Name Precision" ) break;					// NS
+        case 0x11 : ComOut( CGM_LEVEL2, "Maximum VDC Extent" ) break;				// NS
+        case 0x12 : ComOut( CGM_LEVEL2, "Segment Priority Extent" ) break;			// NS
+        case 0x13 : ComOut( CGM_LEVEL3, "Color Model" ) break;						// NS
+        case 0x14 : ComOut( CGM_LEVEL3, "Color Calibration" ) break;				// NS
+        case 0x15 : ComOut( CGM_LEVEL3, "Font Properties" ) break;					// NS
+        case 0x16 : ComOut( CGM_LEVEL3, "Glyph Mapping" ) break;					// NS
+        case 0x17 : ComOut( CGM_LEVEL3, "Symbol Library List" ) break;				// NS
         case 0xfc : ComOut( CGM_GDSF_ONLY, "Inquire Function Support" ) break;
         case 0xfa : ComOut( CGM_GDSF_ONLY, "End Metafile Defaults Replacement" ) break;
         case 0xf8 : ComOut( CGM_GDSF_ONLY, "Set Color Value Desc Extent" ) break;

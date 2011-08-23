@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -99,7 +99,7 @@ class SwXCell : public SwXCellBaseClass,
 
     const SfxItemPropertySet*   m_pPropSet;
     SwTableBox*                 pBox;       // only set in non-XML import
-    const SwStartNode*      pStartNode; // only set in XML import
+    const SwStartNode* 		pStartNode; // only set in XML import
 
     // table position where pBox was found last
     sal_uInt16              nFndPos;
@@ -115,7 +115,7 @@ protected:
     bool IsValid() const;
 
     virtual ~SwXCell();
-
+    
 public:
     SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, sal_uInt16 nPos=USHRT_MAX );
     SwXCell(SwFrmFmt* pTblFmt, const SwStartNode& rStartNode); // XML import interface
@@ -174,8 +174,8 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 
     SwTableBox*   GetTblBox()const {return pBox;}
-    static SwXCell*     CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTbl = 0 );
-    SwTableBox*     FindBox(SwTable* pTable, SwTableBox* pBox);
+    static SwXCell*		CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTbl = 0 );
+    SwTableBox* 	FindBox(SwTable* pTable, SwTableBox* pBox);
 
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 };
@@ -190,7 +190,7 @@ class SwXTextTableRow : public cppu::WeakImplHelper2
     public SwClient
 {
     const SfxItemPropertySet*   m_pPropSet;
-    SwTableLine*            pLine;
+    SwTableLine* 			pLine;
 
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 protected:
@@ -218,7 +218,7 @@ public:
     //SwClient
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
-    const SwTableLine*  GetTblRow() const {return pLine;}
+    const SwTableLine* 	GetTblRow() const {return pLine;}
     static SwTableLine* FindLine(SwTable* pTable, SwTableLine* pLine);
 };
 /* -----------------20.07.98 13:03-------------------
@@ -233,10 +233,10 @@ class SW_DLLPUBLIC SwXTextTableCursor : public SwXTextTableCursor_Base
     ,public SwClient
     ,public OTextCursorHelper
 {
-    SwDepend                aCrsrDepend;
+    SwDepend 				aCrsrDepend;
     const SfxItemPropertySet*   m_pPropSet;
 
-    //  SwUnoCrsr*      GetCrsr() const { return (SwUnoCrsr*)aCrsrDepend.GetRegisteredIn(); }
+    //	SwUnoCrsr* 		GetCrsr() const { return (SwUnoCrsr*)aCrsrDepend.GetRegisteredIn(); }
 
 protected:
     virtual ~SwXTextTableCursor();
@@ -247,7 +247,7 @@ public:
 
 
     DECLARE_XINTERFACE()
-
+    
     //XTextTableCursor
     virtual ::rtl::OUString SAL_CALL getRangeName(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL gotoCellByName( const ::rtl::OUString& aCellName, sal_Bool bExpand ) throw(::com::sun::star::uno::RuntimeException);
@@ -278,14 +278,14 @@ public:
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     // ITextCursorHelper
-    virtual const SwPaM*        GetPaM() const;
-    virtual SwPaM*              GetPaM();
-    virtual const SwDoc*        GetDoc() const;
-    virtual SwDoc*              GetDoc();
+    virtual const SwPaM*		GetPaM() const;
+    virtual	SwPaM*				GetPaM();
+    virtual const SwDoc* 		GetDoc() const;
+    virtual SwDoc* 				GetDoc();
 
-    const SwUnoCrsr*            GetCrsr() const;
-    SwUnoCrsr*                  GetCrsr();
-    SwFrmFmt*       GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+    const SwUnoCrsr*			GetCrsr() const;
+    SwUnoCrsr*					GetCrsr();
+    SwFrmFmt* 		GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 };
 
 /*-----------------11.12.97 09:38-------------------
@@ -317,20 +317,20 @@ class SwXTextTable : public cppu::WeakImplHelper10
 >,
     public SwClient
 {
-    SwEventListenerContainer        aLstnrCntnr;
-    SwChartEventListenerContainer   aChartLstnrCntnr;
+    SwEventListenerContainer		aLstnrCntnr;
+    SwChartEventListenerContainer	aChartLstnrCntnr;
     const SfxItemPropertySet*       m_pPropSet;
 
     // Descriptor-interface
-    SwTableProperties_Impl*     pTableProps;
-    String                      m_sTableName;
-    sal_Bool                        bIsDescriptor;
-    unsigned short              nRows;
-    unsigned short              nColumns;
+    SwTableProperties_Impl*		pTableProps;
+    String 						m_sTableName;
+    sal_Bool 						bIsDescriptor;
+    unsigned short 				nRows;
+    unsigned short 				nColumns;
 
 
-    sal_Bool                        bFirstRowAsLabel    :1;
-    sal_Bool                        bFirstColumnAsLabel :1;
+    sal_Bool						bFirstRowAsLabel 	:1;
+    sal_Bool						bFirstColumnAsLabel	:1;
 protected:
     virtual ~SwXTextTable();
 public:
@@ -412,9 +412,9 @@ public:
 
     void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
-    sal_uInt16          getRowCount(void);
-    sal_uInt16          getColumnCount(void);
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >     GetRangeByName(SwFrmFmt* pFmt, SwTable* pTable,
+    sal_uInt16 			getRowCount(void);
+    sal_uInt16 			getColumnCount(void);
+    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >  	GetRangeByName(SwFrmFmt* pFmt, SwTable* pTable,
                         const String& sTLName, const String& sBRName,
                         SwRangeDescriptor& rDesc);
 
@@ -439,16 +439,16 @@ class SwXCellRange : public cppu::WeakImplHelper7
 >,
     public SwClient
 {
-    SwDepend                        aCursorDepend; //the cursor is removed after the doc has been removed
-    SwChartEventListenerContainer   aChartLstnrCntnr;
+    SwDepend						aCursorDepend; //the cursor is removed after the doc has been removed
+    SwChartEventListenerContainer	aChartLstnrCntnr;
 
-    SwRangeDescriptor           aRgDesc;
+    SwRangeDescriptor 			aRgDesc;
     const SfxItemPropertySet*   m_pPropSet;
 
-    SwUnoCrsr*                  pTblCrsr;
+    SwUnoCrsr* 					pTblCrsr;
 
-    sal_Bool                        bFirstRowAsLabel    :1;
-    sal_Bool                        bFirstColumnAsLabel :1;
+    sal_Bool						bFirstRowAsLabel 	:1;
+    sal_Bool						bFirstColumnAsLabel	:1;
 
 public:
     SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt, SwRangeDescriptor& rDesc);
@@ -506,9 +506,9 @@ public:
     //SwClient
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
-    SwFrmFmt*   GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
-    sal_uInt16      getRowCount(void);
-    sal_uInt16      getColumnCount(void);
+    SwFrmFmt* 	GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+    sal_uInt16 		getRowCount(void);
+    sal_uInt16 		getColumnCount(void);
 
     const SwUnoCrsr* GetTblCrsr() const;
 
@@ -518,7 +518,7 @@ public:
             ::com::sun::star::uno::Sequence< ::rtl::OUString > *pTxtSeq,
             ::com::sun::star::uno::Sequence< double > *pDblSeq,
             sal_Bool bForceNumberResults = sal_False ) throw (::com::sun::star::uno::RuntimeException);
-
+    
 };
 /* -----------------03.02.99 07:31-------------------
  *
@@ -536,17 +536,17 @@ protected:
     virtual ~SwXTableRows();
 public:
     SwXTableRows(SwFrmFmt& rFrmFmt);
-
+    
 
     TYPEINFO();
 
 // automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
-//  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  > getIdlClasses(void) throw( ::com::sun::star::uno::RuntimeException );
+//	virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  > getIdlClasses(void) throw( ::com::sun::star::uno::RuntimeException );
 
 // automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
-//  virtual sal_Bool        queryInterface( ::com::sun::star::uno::Uik aUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  & rOut );
+//	virtual sal_Bool		queryInterface( ::com::sun::star::uno::Uik aUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  & rOut );
 
-//  SMART_UNO_DECLARATION( SwXTableRows, UsrObject );
+//	SMART_UNO_DECLARATION( SwXTableRows, UsrObject );
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -585,16 +585,16 @@ protected:
     virtual ~SwXTableColumns();
 public:
     SwXTableColumns(SwFrmFmt& rFrmFmt);
-
+    
 
     TYPEINFO();
 // automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
-//  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  > getIdlClasses(void) throw( ::com::sun::star::uno::RuntimeException );
+//	virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  > getIdlClasses(void) throw( ::com::sun::star::uno::RuntimeException );
 
 // automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
-//  virtual sal_Bool        queryInterface( ::com::sun::star::uno::Uik aUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  & rOut );
+//	virtual sal_Bool		queryInterface( ::com::sun::star::uno::Uik aUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  & rOut );
 
-//  SMART_UNO_DECLARATION( SwXTableColumns, UsrObject );
+//	SMART_UNO_DECLARATION( SwXTableColumns, UsrObject );
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException );

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -118,7 +118,7 @@ namespace svt
             // the WizardDialog does not allow non-linear transitions (e.g. it's
             // not possible to add pages in a non-linear order), so we need some own maintainance data
 
-        sal_Bool                        m_bAutoNextButtonState;
+        sal_Bool						m_bAutoNextButtonState;
 
         bool                            m_bTravelingSuspended;
 
@@ -202,7 +202,7 @@ namespace svt
             m_pPrevPage->Show();
 
             if (_nButtonFlags & WZB_NEXT)
-                AddButton( m_pPrevPage, ( WIZARDDIALOG_BUTTON_SMALLSTDOFFSET_X) );      // half x-offset to the next button
+                AddButton( m_pPrevPage, ( WIZARDDIALOG_BUTTON_SMALLSTDOFFSET_X) );		// half x-offset to the next button
             else
                 AddButton( m_pPrevPage, WIZARDDIALOG_BUTTON_STDOFFSET_X );
             SetPrevButton( m_pPrevPage );
@@ -372,14 +372,14 @@ namespace svt
 
             // is it a button?
             WindowType eType = pChildLoop->GetType();
-            if  (   (WINDOW_BUTTON == eType)
-                ||  (WINDOW_PUSHBUTTON == eType)
-                ||  (WINDOW_OKBUTTON == eType)
-                ||  (WINDOW_CANCELBUTTON == eType)
-                ||  (WINDOW_HELPBUTTON == eType)
-                ||  (WINDOW_IMAGEBUTTON == eType)
-                ||  (WINDOW_MENUBUTTON == eType)
-                ||  (WINDOW_MOREBUTTON == eType)
+            if	(	(WINDOW_BUTTON == eType)
+                ||	(WINDOW_PUSHBUTTON == eType)
+                ||	(WINDOW_OKBUTTON == eType)
+                ||	(WINDOW_CANCELBUTTON == eType)
+                ||	(WINDOW_HELPBUTTON == eType)
+                ||	(WINDOW_IMAGEBUTTON == eType)
+                ||	(WINDOW_MENUBUTTON == eType)
+                ||	(WINDOW_MOREBUTTON == eType)
                 )
             {
                 pChildLoop->SetStyle(pChildLoop->GetStyle() & ~WB_DEFBUTTON);
@@ -745,7 +745,7 @@ namespace svt
     }
 
 //.........................................................................
-}   // namespace svt
+}	// namespace svt
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

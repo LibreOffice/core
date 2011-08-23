@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@
 #include <ndtxt.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
-#include <pam.hxx>                  // fuer SwPosition
+#include <pam.hxx>					// fuer SwPosition
 #include <fldbas.hxx>
 #include <errhdl.hxx>
 #include <paratr.hxx>
@@ -72,9 +72,9 @@
 #include <ftnfrm.hxx>
 #include <ftnboss.hxx>
 #include <rootfrm.hxx>
-#include <pagedesc.hxx>             // fuer SwPageDesc
-#include <expfld.hxx>               // fuer SwTblField
-#include <section.hxx>              // fuer SwSection
+#include <pagedesc.hxx>				// fuer SwPageDesc
+#include <expfld.hxx>				// fuer SwTblField
+#include <section.hxx>				// fuer SwSection
 #include <mvsave.hxx>
 #include <swcache.hxx>
 #include <SwGrammarMarkUp.hxx>
@@ -180,7 +180,7 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
                     if( !GoPrevSection( &aTmp, TRUE, FALSE ) ||
                         aTmp.GetNode().FindTableNode() !=
                             pNode->FindTableNode() )
-                        return pNode;       // schade, das wars
+                        return pNode;		// schade, das wars
                 }
                 else
                     aTmp = *pNd->StartOfSectionNode();
@@ -284,7 +284,7 @@ xub_StrLen SwTxtNode::Len() const
 
 /*---------------------------------------------------------------------------
  * lcl_ChangeFtnRef
- *  After a split node, it's necessary to actualize the ref-pointer of the
+ * 	After a split node, it's necessary to actualize the ref-pointer of the
  *  ftnfrms.
  * --------------------------------------------------------------------------*/
 
@@ -395,11 +395,11 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
     if ( GetDepends() && m_Text.Len() && (nTxtLen / 2) < nSplitPos )
     {
 // JP 25.04.95: Optimierung fuer SplitNode:
-//              Wird am Ende vom Node gesplittet, dann verschiebe die
-//              Frames vom akt. auf den neuen und erzeuge fuer den akt.
-//              neue. Dadurch entfaellt das neu aufbauen vom Layout.
+//				Wird am Ende vom Node gesplittet, dann verschiebe die
+//				Frames vom akt. auf den neuen und erzeuge fuer den akt.
+//				neue. Dadurch entfaellt das neu aufbauen vom Layout.
 
-        LockModify();   // Benachrichtigungen abschalten
+        LockModify();	// Benachrichtigungen abschalten
 
         // werden FlyFrames mit verschoben, so muessen diese nicht ihre
         // Frames zerstoeren. Im SwTxtFly::SetAnchor wird es abgefragt!
@@ -449,7 +449,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
             // alle zeichengebundenen Rahmen, die im neuen Absatz laden
             // muessen aus den alten Frame entfernt werden:
             // JP 01.10.96: alle leeren und nicht zu expandierenden
-            //              Attribute loeschen
+            //				Attribute loeschen
             if ( HasHints() )
             {
                 for ( USHORT j = m_pSwpHints->Count(); j; )
@@ -497,7 +497,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
             SetInCache( FALSE );
         }
 
-        UnlockModify(); // Benachrichtigungen wieder freischalten
+        UnlockModify();	// Benachrichtigungen wieder freischalten
 
         const SwRootFrm * const pRootFrm = pNode->GetDoc()->GetRootFrm();
         // If there is an accessible layout we must call modify even
@@ -523,7 +523,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         {
             MoveTxtAttr_To_AttrSet();
         }
-        pNode->MakeFrms( *this );       // neue Frames anlegen.
+        pNode->MakeFrms( *this );		// neue Frames anlegen.
         lcl_ChangeFtnRef( *this );
     }
     else
@@ -547,7 +547,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         CutText( pNode, aIdx, nSplitPos );
 
         // JP 01.10.96: alle leeren und nicht zu expandierenden
-        //              Attribute loeschen
+        //				Attribute loeschen
         if ( HasHints() )
         {
             for ( USHORT j = m_pSwpHints->Count(); j; )
@@ -585,7 +585,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
 
         if ( GetDepends() )
         {
-            MakeFrms( *pNode );     // neue Frames anlegen.
+            MakeFrms( *pNode );		// neue Frames anlegen.
         }
         lcl_ChangeFtnRef( *pNode );
     }
@@ -1257,7 +1257,7 @@ SwTxtNode::GetTxtAttrAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
 }
 
 /*************************************************************************
- *                          CopyHint()
+ *							CopyHint()
  *************************************************************************/
 
 SwCharFmt* lcl_FindCharFmt( const SwCharFmts* pCharFmts, const XubString& rName )
@@ -1371,8 +1371,8 @@ void lcl_CopyHint( const USHORT nWhich, const SwTxtAttr * const pHt,
                 }
             }
             //JP 24.04.98: Bug 49753 - ein TextNode muss am Attribut
-            //              gesetzt sein, damit die Vorlagen erzeugt
-            //              werden koenne
+            //				gesetzt sein, damit die Vorlagen erzeugt
+            //				werden koenne
             SwTxtINetFmt* const pINetHt = static_cast<SwTxtINetFmt*>(pNewHt);
             if ( !pINetHt->GetpTxtNode() )
             {
@@ -1399,12 +1399,12 @@ void lcl_CopyHint( const USHORT nWhich, const SwTxtAttr * const pHt,
 }
 
 /*************************************************************************
-|*  SwTxtNode::CopyAttr()
-|*  Beschreibung    kopiert Attribute an der Position nStart in pDest.
-|*  BP 7.6.93:      Es werden mit Absicht nur die Attribute _mit_ EndIdx
-|*                  kopiert! CopyAttr wird vornehmlich dann gerufen,
-|*                  wenn Attribute fuer einen Node mit leerem String
-|*                  gesetzt werden sollen.
+|*	SwTxtNode::CopyAttr()
+|*	Beschreibung	kopiert Attribute an der Position nStart in pDest.
+|*	BP 7.6.93:		Es werden mit Absicht nur die Attribute _mit_ EndIdx
+|*					kopiert! CopyAttr wird vornehmlich dann gerufen,
+|*					wenn Attribute fuer einen Node mit leerem String
+|*					gesetzt werden sollen.
 *************************************************************************/
 
 void SwTxtNode::CopyAttr( SwTxtNode *pDest, const xub_StrLen nTxtStartIdx,
@@ -1420,7 +1420,7 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const xub_StrLen nTxtStartIdx,
             SwTxtAttr *const pHt = m_pSwpHints->GetTextHint(i);
             xub_StrLen const nAttrStartIdx = *pHt->GetStart();
             if ( nTxtStartIdx < nAttrStartIdx )
-                break;      // ueber das Textende, da nLen == 0
+                break;		// ueber das Textende, da nLen == 0
 
             const xub_StrLen *const pEndIdx = pHt->GetEnd();
             if ( pEndIdx && !pHt->HasDummyChar() )
@@ -1461,9 +1461,9 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const xub_StrLen nTxtStartIdx,
 }
 
 /*************************************************************************
-|*  SwTxtNode::Copy()
-|*  Beschreibung        kopiert Zeichen und Attibute in pDest,
-|*                      wird angehaengt
+|*	SwTxtNode::Copy()
+|*	Beschreibung		kopiert Zeichen und Attibute in pDest,
+|*						wird angehaengt
 *************************************************************************/
 
 // --> OD 2008-11-18 #i96213#
@@ -1486,7 +1486,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
                       const bool bForceCopyOfAllAttrs )
 {
     xub_StrLen nTxtStartIdx = rStart.GetIndex();
-    xub_StrLen nDestStart = rDestStart.GetIndex();      // alte Pos merken
+    xub_StrLen nDestStart = rDestStart.GetIndex();		// alte Pos merken
 
     if (pDest->GetDoc()->IsClipBoard() && this->GetNum())
     {
@@ -1535,8 +1535,8 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     // 1. Text kopieren
     const xub_StrLen oldLen = pDest->m_Text.Len();
     //JP 15.02.96: Bug 25537 - Attributbehandlung am Ende fehlt! Darum
-    //              ueber die InsertMethode den Text einfuegen und nicht
-    //              selbst direkt
+    //				ueber die InsertMethode den Text einfuegen und nicht
+    //				selbst direkt
     pDest->InsertText( m_Text.Copy( nTxtStartIdx, nLen ), rDestStart,
                    IDocumentContentOperations::INS_EMPTYEXPAND );
 
@@ -1610,11 +1610,11 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
         const USHORT nWhich = pHt->Which();
 
         // JP 26.04.94: REFMARK's werden nie kopiert. Hat das Refmark aber
-        //              keinen Bereich umspannt, so steht im Text ein 255
-        //              dieses muss entfernt werden. Trick: erst kopieren,
-        //              erkennen und sammeln, nach dem kopieren Loeschen.
-        //              Nimmt sein Zeichen mit ins Grab !!
-        // JP 14.08.95: Duerfen RefMarks gemovt werden?
+        //				keinen Bereich umspannt, so steht im Text ein 255
+        //				dieses muss entfernt werden. Trick: erst kopieren,
+        //				erkennen und sammeln, nach dem kopieren Loeschen.
+        //				Nimmt sein Zeichen mit ins Grab !!
+        // JP 14.08.95:	Duerfen RefMarks gemovt werden?
         int bCopyRefMark = RES_TXTATR_REFMARK == nWhich && ( bUndoNodes ||
                            (!pOtherDoc ? GetDoc()->IsCopyIsMove()
                                       : 0 == pOtherDoc->GetRefMark(
@@ -1825,11 +1825,11 @@ void SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
 
 /*************************************************************************
 |*
-|*  SwTxtNode::Cut()
+|*	SwTxtNode::Cut()
 |*
-|*  Beschreibung        text.doc
-|*  Ersterstellung      VB 20.03.91
-|*  Letzte Aenderung    JP 11.08.94
+|*	Beschreibung		text.doc
+|*	Ersterstellung		VB 20.03.91
+|*	Letzte Aenderung	JP 11.08.94
 |*
 *************************************************************************/
 
@@ -1880,7 +1880,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
     }
 
     xub_StrLen nTxtStartIdx = rStart.GetIndex();
-    xub_StrLen nDestStart = rDestStart.GetIndex();      // alte Pos merken
+    xub_StrLen nDestStart = rDestStart.GetIndex();		// alte Pos merken
     const xub_StrLen nInitSize = pDest->m_Text.Len();
 
     // wird in sich selbst verschoben, muss es gesondert behandelt werden !!
@@ -1938,7 +1938,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
                     if( pEndIdx )
                         *pHt->GetEnd() = *pEndIdx - nTxtStartIdx;
                     aArr.C40_INSERT( SwTxtAttr, pHt, aArr.Count() );
-                    continue;           // while-Schleife weiter, ohne ++ !
+                    continue;			// while-Schleife weiter, ohne ++ !
                 }
                     // das Ende liegt dahinter
                 else if (RES_TXTATR_REFMARK != nWhich && !pHt->HasDummyChar())
@@ -2016,7 +2016,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         pDest->m_Text.Insert( m_Text, nTxtStartIdx, nLen, nDestStart );
         m_Text.Erase( nTxtStartIdx, nLen );
         nLen = pDest->m_Text.Len() - nInitSize; // update w/ current size!
-        if( !nLen )                 // String nicht gewachsen ??
+        if( !nLen )					// String nicht gewachsen ??
             return;
 
         if( bUpdate )
@@ -2138,7 +2138,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
                     {
                         GetDoc()->GetDocShell()->Broadcast( SfxSimpleHint(SFX_HINT_USER04));
                     }
-                    continue;           // while-Schleife weiter, ohne ++ !
+                    continue;			// while-Schleife weiter, ohne ++ !
                 }
                     // das Ende liegt dahinter
                 else if( RES_TXTATR_REFMARK != nWhich || bUndoNodes )
@@ -2166,7 +2166,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         // sollten jetzt noch leere Attribute rumstehen, dann haben diese
         // eine hoehere Praezedenz. Also herausholen und das Array updaten.
         // Die dabei entstehenden leeren Hints werden von den gesicherten
-        // "uebergeplaettet".   (Bug: 6977)
+        // "uebergeplaettet".	(Bug: 6977)
         if( m_pSwpHints && nAttrCnt < m_pSwpHints->Count() )
         {
             SwpHts aArr( 5 );
@@ -2317,14 +2317,14 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
 }
 
 /***********************************************************************
-#*  Class       :   SwTxtNode
-#*  Methode     :   GCAttr
+#*	Class		:	SwTxtNode
+#*	Methode 	:	GCAttr
 #*
-#*  Beschreibung
-#*                  text.doc
+#*	Beschreibung
+#*					text.doc
 #*
-#*  Datum       :   MS 28.11.90
-#*  Update      :   VB 24.07.91
+#*	Datum		:	MS 28.11.90
+#*	Update		:	VB 24.07.91
 #***********************************************************************/
 
 void SwTxtNode::GCAttr()
@@ -2479,7 +2479,7 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
         pNewAttrSet = new SwAttrSet( *GetpSwAttrSet() );
         const SfxItemSet* pTmpSet = GetpSwAttrSet();
 
-        if( bNext )     // der naechste erbt keine Breaks!
+        if( bNext )		// der naechste erbt keine Breaks!
             pTmpSet = pNewAttrSet;
 
         // PageBreaks/PageDesc/ColBreak rausschmeissen.
@@ -2569,7 +2569,7 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
     // nochmal uebergeplaettet werden !!
     if( pColl != pNode->GetTxtColl() ||
         ( bChgFollow && pColl != GetTxtColl() ))
-        return pNode;       // mehr duerfte nicht gemacht werden oder ????
+        return pNode;		// mehr duerfte nicht gemacht werden oder ????
 
     pNode->_ChgTxtCollUpdateNum( 0, pColl ); // fuer Nummerierung/Gliederung
     if( bNext || !bChgFollow )
@@ -2628,7 +2628,7 @@ SwCntntNode* SwTxtNode::AppendNode( const SwPosition & rPos )
 }
 
 /*************************************************************************
- *                      SwTxtNode::GetTxtAttr
+ *						SwTxtNode::GetTxtAttr
  *************************************************************************/
 
 SwTxtAttr * SwTxtNode::GetTxtAttrForCharAt( const xub_StrLen nIndex,
@@ -3037,7 +3037,7 @@ BOOL SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
             const xub_StrLen nAttrStartIdx = *pHt->GetStart();
             const USHORT nWhich = pHt->Which();
             if (nIdx + nLen <= nAttrStartIdx)
-                break;      // ueber das Textende
+                break;		// ueber das Textende
 
             const xub_StrLen *pEndIdx = pHt->GetEnd();
             if( pEndIdx && *pEndIdx > nIdx &&
@@ -3067,7 +3067,7 @@ BOOL SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                                 ->ExpandField(GetDoc()->IsClipBoard()));
                         if( aExpand.Len() )
                         {
-                            aDestIdx++;     // dahinter einfuegen;
+                            aDestIdx++;		// dahinter einfuegen;
                             rDestNd.InsertText( aExpand, aDestIdx );
                             aDestIdx = nInsPos + nAttrStartIdx;
                             nInsPos = nInsPos + aExpand.Len();
@@ -3221,11 +3221,11 @@ XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
                     else
                     {
                         aRedlArr.Insert( GetTxt().Len(), aRedlArr.Count() );
-                        break;      // mehr kann nicht kommen
+                        break; 		// mehr kann nicht kommen
                     }
                 }
                 else
-                    break;      // mehr kann nicht kommen
+                    break; 		// mehr kann nicht kommen
             }
         }
     }
@@ -3517,10 +3517,10 @@ void SwTxtNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
     m_bNotifiable = false;
 
     // Bug 24616/24617:
-    //      Modify ueberladen, damit beim Loeschen von Vorlagen diese
-    //      wieder richtig verwaltet werden (Outline-Numerierung!!)
-    //  Bug25481:
-    //      bei Nodes im Undo nie _ChgTxtCollUpdateNum rufen.
+    // 		Modify ueberladen, damit beim Loeschen von Vorlagen diese
+    // 		wieder richtig verwaltet werden (Outline-Numerierung!!)
+    // 	Bug25481:
+    //		bei Nodes im Undo nie _ChgTxtCollUpdateNum rufen.
     if( pOldValue && pNewValue && RES_FMT_CHG == pOldValue->Which() &&
         pRegisteredIn == ((SwFmtChg*)pNewValue)->pChangedFmt &&
         GetNodes().IsDocNodes() )
@@ -4260,7 +4260,7 @@ namespace {
                 {
                     mbAddTxtNodeToList = true;
                     // --> OD 2010-05-12 #i105562#
-                    //
+                    // 
                     mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
                     // <--
                 }

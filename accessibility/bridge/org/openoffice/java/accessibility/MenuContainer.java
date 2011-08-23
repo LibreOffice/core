@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,20 +32,20 @@ import javax.accessibility.AccessibleContext;
 import com.sun.star.uno.*;
 import com.sun.star.accessibility.*;
 
-/**
+/** 
  * Specialized container for MenuBar and Popup-Menu(s)
  * FIXME: join with Menu ?
  */
 public class MenuContainer extends Container implements javax.accessibility.Accessible {
 
     protected XAccessibleSelection unoAccessibleSelection = null;
-
+    
     protected MenuContainer(javax.accessibility.AccessibleRole role, XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
         super(role, xAccessible, xAccessibleContext);
     }
-
+    
     protected class AccessibleMenuContainerListener extends AccessibleContainerListener {
-
+        
         protected AccessibleMenuContainerListener() {
             super();
         }
@@ -63,18 +63,18 @@ public class MenuContainer extends Container implements javax.accessibility.Acce
             }
         }
     }
-
+    
     protected XAccessibleEventListener createEventListener() {
         return new AccessibleMenuContainerListener();
     }
-
+    
     /** Creates the AccessibleContext associated with this object */
     public javax.accessibility.AccessibleContext createAccessibleContext() {
         return new AccessibleMenuContainer();
     }
 
     protected class AccessibleMenuContainer extends AccessibleContainer implements javax.accessibility.AccessibleSelection {
-
+        
         protected AccessibleMenuContainer() {
             unoAccessibleSelection = (XAccessibleSelection) UnoRuntime.queryInterface(XAccessibleSelection.class,
                     unoAccessibleContext);
@@ -103,7 +103,7 @@ public class MenuContainer extends Container implements javax.accessibility.Acce
         public void addAccessibleSelection(int i) {
             try {
                 javax.accessibility.Accessible a = getAccessibleChild(i);
-
+            
                 // selecting menu items invokes the click action in Java 1.5
                 if( a instanceof MenuItem )
                     a.getAccessibleContext().getAccessibleAction().doAccessibleAction(0);

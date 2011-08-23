@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -62,7 +62,7 @@ namespace dbtools
     protected:
         DECLARE_STL_STDKEY_SET( rtl_TextEncoding, TextEncBag );
 
-        TextEncBag  m_aEncodings;
+        TextEncBag	m_aEncodings;
 
     public:
         class CharsetIterator;
@@ -78,25 +78,25 @@ namespace dbtools
         /** find the given text encoding in the map.
             @return the <em>end</em> iterator if the encoding could not be found.
         */
-        CharsetIterator find(const rtl_TextEncoding _eEncoding) const;
+        CharsetIterator	find(const rtl_TextEncoding _eEncoding) const;
         /** find the given IANA name in the map.
             @return the <em>end</em> iterator if the IANA name could not be found.
         */
-        CharsetIterator find(const ::rtl::OUString& _rIanaName, const IANA&) const;
+        CharsetIterator	find(const ::rtl::OUString& _rIanaName, const IANA&) const;
 
-        sal_Int32   size() const { ensureConstructed( ); return m_aEncodings.size(); }
+        sal_Int32	size() const { ensureConstructed( ); return m_aEncodings.size(); }
 
         /// get access to the first element of the charset collection
-        CharsetIterator begin() const;
+        CharsetIterator	begin() const;
         /// get access to the (last + 1st) element of the charset collection
-        CharsetIterator end() const;
+        CharsetIterator	end() const;
 
     protected:
         // needed because we want to call a virtual method during construction
                 void lateConstruct();
-        inline  void ensureConstructed( ) const { if ( m_aEncodings.empty() ) const_cast< OCharsetMap* >( this )->lateConstruct(); }
+        inline	void ensureConstructed( ) const { if ( m_aEncodings.empty() ) const_cast< OCharsetMap* >( this )->lateConstruct(); }
 
-        virtual sal_Bool approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const;
+        virtual	sal_Bool approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const;
     };
 
     //-------------------------------------------------------------------------
@@ -106,14 +106,14 @@ namespace dbtools
     {
         friend class OCharsetMap::CharsetIterator;
 
-        rtl_TextEncoding    m_eEncoding;
-        ::rtl::OUString     m_aIanaName;
+        rtl_TextEncoding	m_eEncoding;
+        ::rtl::OUString		m_aIanaName;
 
     public:
         CharsetIteratorDerefHelper(const CharsetIteratorDerefHelper& _rSource);
 
-        rtl_TextEncoding    getEncoding() const { return m_eEncoding; }
-        ::rtl::OUString     getIanaName() const { return m_aIanaName; }
+        rtl_TextEncoding	getEncoding() const	{ return m_eEncoding; }
+        ::rtl::OUString		getIanaName() const	{ return m_aIanaName; }
 
     protected:
         CharsetIteratorDerefHelper();
@@ -132,11 +132,11 @@ namespace dbtools
         friend OOO_DLLPUBLIC_DBTOOLS bool operator==(const CharsetIterator& lhs, const CharsetIterator& rhs);
         friend bool operator!=(const CharsetIterator& lhs, const CharsetIterator& rhs) { return !(lhs == rhs); }
 
-//      friend sal_Int32 operator-(const CharsetIterator& lhs, const CharsetIterator& rhs);
+//		friend sal_Int32 operator-(const CharsetIterator& lhs, const CharsetIterator& rhs);
 
     protected:
-        const OCharsetMap*                      m_pContainer;
-        OCharsetMap::TextEncBag::const_iterator m_aPos;
+        const OCharsetMap*						m_pContainer;
+        OCharsetMap::TextEncBag::const_iterator	m_aPos;
 
     public:
         CharsetIterator(const CharsetIterator& _rSource);
@@ -148,21 +148,21 @@ namespace dbtools
         // can return a pointer or b) introduce a -> operator on the CharsetIteratorDerefHelper, too.
 
         /// prefix increment
-        const CharsetIterator&  operator++();
+        const CharsetIterator&	operator++();
         /// postfix increment
-        const CharsetIterator   operator++(int) { CharsetIterator hold(*this); ++*this; return hold; }
+        const CharsetIterator	operator++(int) { CharsetIterator hold(*this); ++*this; return hold; }
 
         /// prefix decrement
-        const CharsetIterator&  operator--();
+        const CharsetIterator&	operator--();
         /// postfix decrement
-        const CharsetIterator   operator--(int) { CharsetIterator hold(*this); --*this; return hold; }
+        const CharsetIterator	operator--(int) { CharsetIterator hold(*this); --*this; return hold; }
 
     protected:
         CharsetIterator(const OCharsetMap* _pContainer, OCharsetMap::TextEncBag::const_iterator _aPos );
     };
 
 //.........................................................................
-}   // namespace dbtools
+}	// namespace dbtools
 //.........................................................................
 
 #endif // _DBHELPER_DBCHARSET_HXX_

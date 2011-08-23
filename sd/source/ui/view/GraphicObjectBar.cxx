@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,7 @@ GraphicObjectBar::GraphicObjectBar (
     ViewShell* pSdViewShell,
     ::sd::View* pSdView )
     : SfxShell (pSdViewShell->GetViewShell()),
-      mpView     ( pSdView ),
+      mpView	 ( pSdView ),
       mpViewSh ( pSdViewShell ),
       nMappedSlotFilter ( SID_GRFFILTER_INVERT )
 {
@@ -128,8 +128,8 @@ void GraphicObjectBar::Execute( SfxRequest& rReq )
 
 void GraphicObjectBar::GetFilterState( SfxItemSet& rSet )
 {
-    const SdrMarkList&  rMarkList = mpView->GetMarkedObjectList();
-    BOOL                bEnable = FALSE;
+    const SdrMarkList&	rMarkList = mpView->GetMarkedObjectList();
+    BOOL				bEnable = FALSE;
 
     if( rMarkList.GetMarkCount() == 1 )
     {
@@ -157,15 +157,15 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest& rReq )
         {
             GraphicObject aFilterObj( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
 
-            if( SVX_GRAPHICFILTER_ERRCODE_NONE ==
+            if( SVX_GRAPHICFILTER_ERRCODE_NONE == 
                 SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ) )
             {
                 SdrPageView* pPageView = mpView->GetSdrPageView();
 
                 if( pPageView )
                 {
-                    SdrGrafObj* pFilteredObj = (SdrGrafObj*) pObj->Clone();
-                    String      aStr( mpView->GetDescriptionOfMarkedObjects() );
+                    SdrGrafObj*	pFilteredObj = (SdrGrafObj*) pObj->Clone();
+                    String		aStr( mpView->GetDescriptionOfMarkedObjects() );
 
                     aStr.Append( sal_Unicode(' ') );
                     aStr.Append( String( SdResId( STR_UNDO_GRAFFILTER ) ) );

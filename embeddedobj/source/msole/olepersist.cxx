@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -330,8 +330,8 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToGetAcceptableFormat_Impl( 
         return xStream;
     }
 
-//  sal_Bool bSetSizeToRepl = sal_False;
-//  awt::Size aSizeToSet;
+//	sal_Bool bSetSizeToRepl = sal_False;
+//	awt::Size aSizeToSet;
 
     sal_uInt32 nHeaderOffset = 0;
     if ( ( nRead >= 8 && aData[0] == -1 && aData[1] == -1 && aData[2] == -1 && aData[3] == -1 )
@@ -352,19 +352,19 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToGetAcceptableFormat_Impl( 
             nHeaderOffset += nLen - 4;
         }
 
-//      if ( aData[4] == 3 )
-//      {
-//          try
-//          {
+//		if ( aData[4] == 3 )
+//		{
+//			try
+//			{
 //
-//              aSizeToSet = getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
-//              aSizeToSet.Width /= 364; //2540; // let the size be in inches, as wmf requires
-//              aSizeToSet.Height /= 364; //2540; // let the size be in inches, as wmf requires
-//              bSetSizeToRepl = sal_True;
-//          }
-//          catch( uno::Exception& )
-//          {}
-//      }
+//				aSizeToSet = getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+//				aSizeToSet.Width /= 364; //2540; // let the size be in inches, as wmf requires
+//				aSizeToSet.Height /= 364; //2540; // let the size be in inches, as wmf requires
+//				bSetSizeToRepl = sal_True;
+//			}
+//			catch( uno::Exception& )
+//			{}
+//		}
     }
     else if ( nRead > 4 )
     {
@@ -391,46 +391,46 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToGetAcceptableFormat_Impl( 
 
         // if it is windows metafile the size must be provided
         // the solution is not used currently
-//      if ( bSetSizeToRepl && abs( aSizeToSet.Width ) < 0xFFFF && abs( aSizeToSet.Height ) < 0xFFFF )
-//      {
-//          uno::Sequence< sal_Int8 > aHeader(22);
-//          sal_uInt8* pBuffer = (sal_uInt8*)aHeader.getArray();
+//		if ( bSetSizeToRepl && abs( aSizeToSet.Width ) < 0xFFFF && abs( aSizeToSet.Height ) < 0xFFFF )
+//		{
+//			uno::Sequence< sal_Int8 > aHeader(22);
+//			sal_uInt8* pBuffer = (sal_uInt8*)aHeader.getArray();
 //
-//          // write 0x9ac6cdd7L
-//          pBuffer[0] = 0xd7;
-//          pBuffer[1] = 0xcd;
-//          pBuffer[2] = 0xc6;
-//          pBuffer[3] = 0x9a;
+//			// write 0x9ac6cdd7L
+//			pBuffer[0] = 0xd7;
+//			pBuffer[1] = 0xcd;
+//			pBuffer[2] = 0xc6;
+//			pBuffer[3] = 0x9a;
 //
-//          // following data seems to have no value
-//          pBuffer[4] = 0;
-//          pBuffer[5] = 0;
+//			// following data seems to have no value
+//			pBuffer[4] = 0;
+//			pBuffer[5] = 0;
 //
-//          // must be set to 0
-//          pBuffer[6] = 0;
-//          pBuffer[7] = 0;
-//          pBuffer[8] = 0;
-//          pBuffer[9] = 0;
+//			// must be set to 0
+//			pBuffer[6] = 0;
+//			pBuffer[7] = 0;
+//			pBuffer[8] = 0;
+//			pBuffer[9] = 0;
+//			
+//			// width of the picture
+//			pBuffer[10] = abs( aSizeToSet.Width ) % 0x100;
+//			pBuffer[11] = ( abs( aSizeToSet.Width ) / 0x100 ) % 0x100;
 //
-//          // width of the picture
-//          pBuffer[10] = abs( aSizeToSet.Width ) % 0x100;
-//          pBuffer[11] = ( abs( aSizeToSet.Width ) / 0x100 ) % 0x100;
+//			// height of the picture
+//			pBuffer[12] = abs( aSizeToSet.Height ) % 0x100;
+//			pBuffer[13] = ( abs( aSizeToSet.Height ) / 0x100 ) % 0x100;
 //
-//          // height of the picture
-//          pBuffer[12] = abs( aSizeToSet.Height ) % 0x100;
-//          pBuffer[13] = ( abs( aSizeToSet.Height ) / 0x100 ) % 0x100;
+//			// write 2540
+//			pBuffer[14] = 0x6c; //0xec;
+//			pBuffer[15] = 0x01; //0x09;
 //
-//          // write 2540
-//          pBuffer[14] = 0x6c; //0xec;
-//          pBuffer[15] = 0x01; //0x09;
+//			// fill with 0
+//			for ( sal_Int32 nInd = 16; nInd < 22; nInd++ )
+//				pBuffer[nInd] = 0;
 //
-//          // fill with 0
-//          for ( sal_Int32 nInd = 16; nInd < 22; nInd++ )
-//              pBuffer[nInd] = 0;
-//
-//          xResultOut->writeBytes( aHeader );
-//      }
-
+//			xResultOut->writeBytes( aHeader );
+//		}
+        
         xSeek->seek( nHeaderOffset ); // header size for these formats
         ::comphelper::OStorageHelper::CopyInputToOutput( xInStream, xResultOut );
         xResultOut->closeOutput();
@@ -535,7 +535,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
         // write width
         for ( nIndex = 0; nIndex < 4; nIndex++ )
         {
-            aData[nIndex] = (sal_Int8)( aSize.Width % 0x100 );
+            aData[nIndex] = (sal_Int8)( aSize.Width % 0x100 ); 
             aSize.Width /= 0x100;
         }
         xTempOutStream->writeBytes( aData );
@@ -543,11 +543,11 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
         // write height
         for ( nIndex = 0; nIndex < 4; nIndex++ )
         {
-            aData[nIndex] = (sal_Int8)( aSize.Height % 0x100 );
+            aData[nIndex] = (sal_Int8)( aSize.Height % 0x100 ); 
             aSize.Height /= 0x100;
         }
         xTempOutStream->writeBytes( aData );
-
+        
         // write garbage, it will be overwritten by the size
         xTempOutStream->writeBytes( aData );
 
@@ -566,7 +566,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
         }
         for ( sal_Int32 nInd = 0; nInd < 4; nInd++ )
         {
-            aData[nInd] = (sal_Int8)( ( (sal_uInt64) nLength ) % 0x100 );
+            aData[nInd] = (sal_Int8)( ( (sal_uInt64) nLength ) % 0x100 ); 
             nLength /= 0x100;
         }
         xTempSeek->seek( 36 );
@@ -649,7 +649,7 @@ sal_Bool OleEmbeddedObject::HasVisReplInStream()
             RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::HasVisualReplInStream, analizing" );
 
             uno::Reference< io::XInputStream > xStream;
-
+            
             OSL_ENSURE( !m_pOleComponent || m_aTempURL.getLength(), "The temporary file must exist if there is a component!\n" );
             if ( m_aTempURL.getLength() )
             {
@@ -702,7 +702,7 @@ sal_Bool OleEmbeddedObject::HasVisReplInStream()
                 }
 
                 SetVisReplInStream( bExists );
-            }
+            }	
         }
     }
 
@@ -831,7 +831,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                                     }
 #endif
                                 }
-
+    
                                 xResult = TryToRetrieveCachedVisualRepresentation_Impl( xStream, sal_False );
                             }
                         }
@@ -1033,7 +1033,7 @@ void OleEmbeddedObject::OnClosed_Impl()
             uno::Reference< io::XInputStream > xInStream = m_xObjectStream->getInputStream();
             if ( !xInStream.is() )
                 throw io::IOException(); // TODO: access denied
-
+    
             m_aTempURL = GetNewFilledTempFile_Impl( xInStream, m_xFactory );
         }
     }
@@ -1155,7 +1155,7 @@ void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream >
         throw io::IOException(); // TODO:
 
     // TODO: should the view replacement be in the stream ???
-    //       probably it must be specified on storing
+    //		 probably it must be specified on storing
 }
 #endif
 //------------------------------------------------------
@@ -1275,7 +1275,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
             // and there is no need to cache it even if it is thrown away because the object
             // is not changed by StoreTo action
 
-            uno::Reference< io::XStream > xTmpCVRepresentation =
+            uno::Reference< io::XStream > xTmpCVRepresentation = 
                         TryToRetrieveCachedVisualRepresentation_Impl( xTargetStream );
 
             // the locally retrieved representation is always preferable
@@ -1355,7 +1355,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
         }
 
         // TODO: register listeners for storages above, in case they are disposed
-        //       an exception will be thrown on saveCompleted( true )
+        // 		 an exception will be thrown on saveCompleted( true )
     }
     else
     {

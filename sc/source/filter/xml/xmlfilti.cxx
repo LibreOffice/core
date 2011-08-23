@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -519,7 +519,7 @@ void ScXMLDPFilterContext::EndElement()
     aFilterFields.bRegExp = bUseRegularExpressions;
     aFilterFields.bCaseSens = bIsCaseSensitive;
     aFilterFields.bDuplicate = !bSkipDuplicates;
-//  pDataPilotTable->SetFilterUseRegularExpressions(bUseRegularExpressions);
+//	pDataPilotTable->SetFilterUseRegularExpressions(bUseRegularExpressions);
     if (bCopyOutputData)
     {
         pDataPilotTable->SetFilterOutputPosition(aOutputPosition);
@@ -527,8 +527,8 @@ void ScXMLDPFilterContext::EndElement()
     }
     else
         pDataPilotTable->SetFilterCopyOutputData(sal_False);
-//  pDataPilotTable->SetFilterIsCaseSensitive(bIsCaseSensitive);
-//  pDataPilotTable->SetFilterSkipDuplicates(bSkipDuplicates);
+//	pDataPilotTable->SetFilterIsCaseSensitive(bIsCaseSensitive);
+//	pDataPilotTable->SetFilterSkipDuplicates(bSkipDuplicates);
     pDataPilotTable->SetSourceQueryParam(aFilterFields);
     if (bConditionSourceRange)
         pDataPilotTable->SetFilterSourceRange(aConditionSourceRangeAddress);

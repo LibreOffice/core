@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,14 +46,14 @@ public:                     // public for Sal Implementation
 
     // SalGraphics or NULL, but two Graphics for all SalVirtualDevices
     // must be returned
-    virtual SalGraphics*            GetGraphics() = 0;
-    virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) = 0;
+    virtual SalGraphics*			GetGraphics() = 0;
+    virtual void					ReleaseGraphics( SalGraphics* pGraphics ) = 0;
 
                             // Set new size, without saving the old contents
     virtual BOOL                    SetSize( long nNewDX, long nNewDY ) = 0;
 
     /// Get actual VDev size in pixel
-    virtual void                    GetSize( long& rWidth, long& rHeight ) = 0;
+    virtual void				    GetSize( long& rWidth, long& rHeight ) = 0;
 };
 
 #endif // _SV_SALVD_HXX

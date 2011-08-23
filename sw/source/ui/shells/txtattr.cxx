@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -67,8 +67,8 @@
 #include <SwStyleNameMapper.hxx>
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"
-const SwTwips lFontInc = 2 * 20;           // ==> PointToTwips(2)
-const SwTwips lFontMaxSz = 72 * 20;        // ==> PointToTwips(72)
+const SwTwips lFontInc = 2 * 20;		   // ==> PointToTwips(2)
+const SwTwips lFontMaxSz = 72 * 20; 	   // ==> PointToTwips(72)
 
 
 
@@ -254,7 +254,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
                     if (bGrow)
                     {
                         if( lSize == lFontMaxSz )
-                            break;      // das wars, hoeher gehts nicht
+                            break;		// das wars, hoeher gehts nicht
                         if( ( lSize += lFontInc ) > lFontMaxSz )
                             lSize = lFontMaxSz;
                     }
@@ -316,14 +316,14 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
 
     switch (rReq.GetSlot())
     {
-    case FN_SET_LEFT_PARA:          lcl_SetAdjust(ADJLEFT,aSet);    break;
-    case FN_SET_RIGHT_PARA:         lcl_SetAdjust(ADJRIGHT,aSet);   break;
-    case FN_SET_CENTER_PARA:        lcl_SetAdjust(ADJCENTER,aSet);  break;
-    case SID_ATTR_PARA_ADJUST_BLOCK:lcl_SetAdjust(ADJBLOCK,aSet);   break;
+    case FN_SET_LEFT_PARA:			lcl_SetAdjust(ADJLEFT,aSet); 	break;
+    case FN_SET_RIGHT_PARA:			lcl_SetAdjust(ADJRIGHT,aSet); 	break;
+    case FN_SET_CENTER_PARA:        lcl_SetAdjust(ADJCENTER,aSet); 	break;
+    case SID_ATTR_PARA_ADJUST_BLOCK:lcl_SetAdjust(ADJBLOCK,aSet); 	break;
 
-    case FN_SET_LINE_SPACE_1:   lcl_SetLineSpace(100,aSet);     break;
-    case FN_SET_LINE_SPACE_15:  lcl_SetLineSpace(150,aSet);     break;
-    case FN_SET_LINE_SPACE_2:   lcl_SetLineSpace(200,aSet);     break;
+    case FN_SET_LINE_SPACE_1:	lcl_SetLineSpace(100,aSet); 	break;
+    case FN_SET_LINE_SPACE_15:  lcl_SetLineSpace(150,aSet); 	break;
+    case FN_SET_LINE_SPACE_2:	lcl_SetLineSpace(200,aSet); 	break;
 
     default:
         OSL_ENSURE(false, "SwTextShell::ExecParaAttr wrong Dispatcher");
@@ -377,10 +377,10 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
             }
         }
         break;
-        case SID_ATTR_PARA_ADJUST_LEFT:     eAdjst =  SVX_ADJUST_LEFT;      goto SET_ADJUST;
-        case SID_ATTR_PARA_ADJUST_RIGHT:    eAdjst =  SVX_ADJUST_RIGHT;     goto SET_ADJUST;
-        case SID_ATTR_PARA_ADJUST_CENTER:   eAdjst =  SVX_ADJUST_CENTER;    goto SET_ADJUST;
-        case SID_ATTR_PARA_ADJUST_BLOCK:    eAdjst =  SVX_ADJUST_BLOCK;     goto SET_ADJUST;
+        case SID_ATTR_PARA_ADJUST_LEFT:		eAdjst =  SVX_ADJUST_LEFT;		goto SET_ADJUST;
+        case SID_ATTR_PARA_ADJUST_RIGHT:	eAdjst =  SVX_ADJUST_RIGHT;		goto SET_ADJUST;
+        case SID_ATTR_PARA_ADJUST_CENTER:   eAdjst =  SVX_ADJUST_CENTER;	goto SET_ADJUST;
+        case SID_ATTR_PARA_ADJUST_BLOCK:	eAdjst =  SVX_ADJUST_BLOCK;		goto SET_ADJUST;
 SET_ADJUST:
         {
             aSet.Put(SvxAdjustItem(eAdjst,RES_PARATR_ADJUST));
@@ -396,9 +396,9 @@ SET_ADJUST:
                 aSet.Put( aLineSpace );
             }
         break;
-        case SID_ATTR_PARA_LINESPACE_10:    ePropL = 100;   goto SET_LINESPACE;
-        case SID_ATTR_PARA_LINESPACE_15:    ePropL = 150;   goto SET_LINESPACE;
-        case SID_ATTR_PARA_LINESPACE_20:    ePropL = 200;   goto SET_LINESPACE;
+        case SID_ATTR_PARA_LINESPACE_10:	ePropL = 100;	goto SET_LINESPACE;
+        case SID_ATTR_PARA_LINESPACE_15:	ePropL = 150;	goto SET_LINESPACE;
+        case SID_ATTR_PARA_LINESPACE_20:	ePropL = 200;	goto SET_LINESPACE;
 
 SET_LINESPACE:
         {
@@ -549,7 +549,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( GetView().GetWindow(), aSet,
+                SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( GetView().GetWindow(), aSet, 
                     rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), DLG_SWDROPCAPS );
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if (pDlg->Execute() == RET_OK)
@@ -582,7 +582,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
             if(pItem)
             {
                 SfxItemSet aCoreSet( GetPool(),
-                    RES_PAGEDESC,   RES_PAGEDESC,
+                    RES_PAGEDESC,	RES_PAGEDESC,
                     SID_ATTR_PARA_MODEL, SID_ATTR_PARA_MODEL, 0);
                 aCoreSet.Put(*pItem);
                 SfxToSwPageDescAttr( rSh, aCoreSet);
@@ -612,7 +612,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
     sal_Bool bFlag = sal_False;
     SfxBoolItem aFlagItem;
     const SfxPoolItem* pItem = 0;
-    int eAdjust = -1;   // Illegaler Wert, um DONTCARE zu erkennen
+    int eAdjust = -1;	// Illegaler Wert, um DONTCARE zu erkennen
     SfxItemState eState = aCoreSet.GetItemState(RES_PARATR_ADJUST, FALSE, &pItem);
 
     if( SFX_ITEM_DEFAULT == eState )

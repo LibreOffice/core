@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,12 +60,12 @@ namespace svt
 #define ROW_DATE_CREATE     4
 #define ROW_IS_FOLDER       5
 #define ROW_TARGET_URL      6
-#define ROW_IS_HIDDEN       7
-#define ROW_IS_VOLUME       8
-#define ROW_IS_REMOTE       9
-#define ROW_IS_REMOVEABLE   10
-#define ROW_IS_FLOPPY       11
-#define ROW_IS_COMPACTDISC  12
+#define ROW_IS_HIDDEN		7
+#define ROW_IS_VOLUME		8
+#define ROW_IS_REMOTE		9
+#define ROW_IS_REMOVEABLE	10
+#define ROW_IS_FLOPPY		11
+#define ROW_IS_COMPACTDISC	12
 
 #define CONVERT_DATETIME( aUnoDT, aToolsDT ) \
     aToolsDT = ::DateTime( Date( aUnoDT.Day, aUnoDT.Month, aUnoDT.Year ), \
@@ -103,7 +103,7 @@ namespace svt
         ,m_pFilter               ( NULL            )
         ,m_pTranslator           ( _pTranslator    )
         ,m_bCancelled            ( false           )
-        ,m_rBlackList            ( ::com::sun::star::uno::Sequence< ::rtl::OUString >() )
+        ,m_rBlackList			 ( ::com::sun::star::uno::Sequence< ::rtl::OUString >() )
     {
     }
 
@@ -125,9 +125,9 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    EnumerationResult FileViewContentEnumerator::enumerateFolderContentSync(
-        const FolderDescriptor& _rFolder,
-        const IUrlFilter* _pFilter,
+    EnumerationResult FileViewContentEnumerator::enumerateFolderContentSync( 
+        const FolderDescriptor& _rFolder, 
+        const IUrlFilter* _pFilter, 
         const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList )
     {
         {
@@ -170,7 +170,7 @@ namespace svt
     {
         return osl_incrementInterlockedCount( &m_refCount );
     }
-
+    
     //--------------------------------------------------------------------
     oslInterlockedCount SAL_CALL FileViewContentEnumerator::release()
     {
@@ -188,7 +188,7 @@ namespace svt
         EnumerationResult eResult = ERROR;
         try
         {
-
+            
             Reference< XResultSet > xResultSet;
             Sequence< OUString > aProps(12);
 
@@ -403,7 +403,7 @@ namespace svt
             if ( entryName.equals(  m_rBlackList[i] ) )
                 return true;
         }
-
+        
         return false;
     }
 

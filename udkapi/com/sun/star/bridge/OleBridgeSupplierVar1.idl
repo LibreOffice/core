@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,19 +24,19 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_bridge_OleBridgeSupplierVar1_idl__
-#define __com_sun_star_bridge_OleBridgeSupplierVar1_idl__
-
-#ifndef __com_sun_star_bridge_OBridgeSupplier2_idl__
-#include <com/sun/star/bridge/OleBridgeSupplier2.idl>
+#ifndef __com_sun_star_bridge_OleBridgeSupplierVar1_idl__ 
+#define __com_sun_star_bridge_OleBridgeSupplierVar1_idl__ 
+ 
+#ifndef __com_sun_star_bridge_OBridgeSupplier2_idl__ 
+#include <com/sun/star/bridge/OleBridgeSupplier2.idl> 
 #endif
 
 
- module com {  module sun {  module star {  module bridge {
-
+ module com {  module sun {  module star {  module bridge {  
+ 
 
 /** maps UNO types to COM types and vice versa. It is optimized for use in a
-     remote szenario. <p>
+     remote szenario. <p> 
 The functionality is basically the same as
 <type scope="com::sun::star::bridge">OleBridgeSupplier2</type>.
 However, the implementation should be optimized for remote access. For example, it could
@@ -49,10 +49,10 @@ published service OleBridgeSupplierVar1
     service OleBridgeSupplier2;
 
 };
+ 
+//============================================================================= 
+ 
+}; }; }; };  
+ 
 
-//=============================================================================
-
-}; }; }; };
-
-
-#endif
+#endif 

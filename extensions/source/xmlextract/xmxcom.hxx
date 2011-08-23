@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,18 +48,18 @@
 
 // -----------------------------------------------------------------------------
 
-#define NMSP_CPPU       ::cppu
-#define NMSP_RTL        ::rtl
-#define NMSP_UNO        ::com::sun::star::uno
-#define NMSP_LANG       ::com::sun::star::lang
-#define NMSP_IO         ::com::sun::star::io
+#define NMSP_CPPU		::cppu
+#define NMSP_RTL		::rtl
+#define NMSP_UNO		::com::sun::star::uno
+#define NMSP_LANG		::com::sun::star::lang
+#define NMSP_IO			::com::sun::star::io
 #define NMSP_REGISTRY   ::com::sun::star::registry
 
 
-#define REF( _def_Obj )                     NMSP_UNO::Reference< _def_Obj >
-#define SEQ( _def_Obj )                     NMSP_UNO::Sequence< _def_Obj >
-#define ANY                                 NMSP_UNO::Any
-#define B2UCONST( _def_pChar )              (NMSP_RTL::OUString(RTL_CONSTASCII_USTRINGPARAM(_def_pChar )))
+#define REF( _def_Obj )						NMSP_UNO::Reference< _def_Obj >
+#define SEQ( _def_Obj )						NMSP_UNO::Sequence< _def_Obj > 
+#define ANY									NMSP_UNO::Any
+#define B2UCONST( _def_pChar )				(NMSP_RTL::OUString(RTL_CONSTASCII_USTRINGPARAM(_def_pChar )))
 
 #endif // _XMXCOM_HXX
 

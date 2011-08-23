@@ -59,7 +59,7 @@
  ************************************************************************/
 /*************************************************************************
  * Change History
- Jan 2005           Created
+ Jan 2005			Created
  ************************************************************************/
 
 #include "lwpdlvlist.hxx"
@@ -70,7 +70,7 @@ LwpDLVList::LwpDLVList(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpObject(objHdr, pStrm)
 {}
 /**
- * @descr       Read LwpDLVList data from object stream
+ * @descr		Read LwpDLVList data from object stream
  **/
 void LwpDLVList::Read()
 {
@@ -88,7 +88,7 @@ LwpDLNFVList::LwpDLNFVList(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
         : LwpDLVList(objHdr, pStrm)
 {}
 /**
- * @descr       Read LwpDLNFVList data from object stream
+ * @descr		Read LwpDLNFVList data from object stream
  **/
 void LwpDLNFVList::Read()
 {
@@ -109,7 +109,7 @@ void LwpDLNFVList::Read()
     ReadName(pObjStrm);
 }
 /**
- * @descr       Read name of LwpDLNFVList from object stream
+ * @descr		Read name of LwpDLNFVList from object stream
  **/
 void LwpDLNFVList::ReadName(LwpObjectStream* pObjStrm)
 {
@@ -118,15 +118,15 @@ void LwpDLNFVList::ReadName(LwpObjectStream* pObjStrm)
         pObjStrm->SkipExtra();
 }
 /**
- * @descr       ctor of LwpDLNFPVList from object stream
- *          Note that m_bHasProperties is initialized to true
+ * @descr		ctor of LwpDLNFPVList from object stream
+ *			Note that m_bHasProperties is initialized to true
  **/
 LwpDLNFPVList::LwpDLNFPVList(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpDLNFVList(objHdr, pStrm),
     m_bHasProperties(sal_True),m_pPropList(NULL)
 {}
 /**
- * @descr       Read name of LwpDLNFVList from object stream
+ * @descr		Read name of LwpDLNFVList from object stream
  **/
 void LwpDLNFPVList::Read()
 {
@@ -137,7 +137,7 @@ void LwpDLNFPVList::Read()
     pObjStrm->SkipExtra();
 }
 /**
- * @descr       Read property list
+ * @descr		Read property list
  **/
 void LwpDLNFPVList::ReadPropertyList(LwpObjectStream* pObjStrm)
 {
@@ -152,7 +152,7 @@ void LwpDLNFPVList::ReadPropertyList(LwpObjectStream* pObjStrm)
     }
 }
 /**
- * @descr       release property list
+ * @descr		release property list
  **/
 LwpDLNFPVList::~LwpDLNFPVList()
 {
@@ -163,7 +163,7 @@ LwpDLNFPVList::~LwpDLNFPVList()
 }
 
 /**
- * @descr       Read head id and tail id
+ * @descr		Read head id and tail id
  **/
 void LwpDLVListHeadTail::Read(LwpObjectStream* pObjStrm)
 {
@@ -178,7 +178,7 @@ void LwpDLVListHeadTail::Read(LwpObjectStream* pObjStrm)
     }
 }
 /**
- * @descr       Read head id
+ * @descr		Read head id
  **/
 void LwpDLVListHead::Read(LwpObjectStream* pObjStrm)
 {

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -132,7 +132,7 @@ public class _CellProperties extends MultiPropertyTest {
             protected Object getNewValue(String propName, Object oldValue) {
                 XNameContainer NC = null;
                 try {
-                    NC = (XNameContainer)
+                    NC = (XNameContainer) 
                     AnyConverter.toObject(new Type(XNameContainer.class),oldValue);
                     NC.insertByName("MyAttribute",
                         new AttributeData("","CDATA","Value"));

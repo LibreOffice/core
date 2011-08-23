@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,14 +37,14 @@
   #include <sal/typesizes.h>
 #elif defined(WNT) || defined(OS2)
   /* FIXME: autogeneration of type sizes on Win32/Win64? */
-  #define SAL_TYPES_ALIGNMENT2      1
-  #define SAL_TYPES_ALIGNMENT4      1
-  #define SAL_TYPES_ALIGNMENT8      1
-  #define SAL_TYPES_SIZEOFSHORT     2
-  #define SAL_TYPES_SIZEOFINT       4
-  #define SAL_TYPES_SIZEOFLONG      4
-  #define SAL_TYPES_SIZEOFLONGLONG      8
-  #define SAL_TYPES_SIZEOFPOINTER       4
+  #define SAL_TYPES_ALIGNMENT2		1
+  #define SAL_TYPES_ALIGNMENT4		1
+  #define SAL_TYPES_ALIGNMENT8		1
+  #define SAL_TYPES_SIZEOFSHORT		2
+  #define SAL_TYPES_SIZEOFINT 		4
+  #define SAL_TYPES_SIZEOFLONG		4
+  #define SAL_TYPES_SIZEOFLONGLONG		8
+  #define SAL_TYPES_SIZEOFPOINTER		4
 #endif
 
 #ifdef __cplusplus
@@ -57,13 +57,13 @@ extern "C" {
 
 /* Boolean */
 typedef unsigned char sal_Bool;
-#   define sal_False ((sal_Bool)0)
-#   define sal_True  ((sal_Bool)1)
-
+#   define sal_False ((sal_Bool)0)                
+#   define sal_True  ((sal_Bool)1) 
+  
 /* char is assumed to always be 1 byte long */
 typedef signed char         sal_Int8;
 typedef unsigned char       sal_uInt8;
-
+  
 #if SAL_TYPES_SIZEOFSHORT == 2
     typedef signed short      sal_Int16;
     typedef unsigned short    sal_uInt16;
@@ -151,7 +151,7 @@ typedef unsigned char            sal_uChar;
     #define SAL_UNICODE_NOTEQUAL_WCHAR_T
     typedef sal_uInt16          sal_Unicode;
 #endif
-
+  
 typedef void *                   sal_Handle;
 
 /* sal_Size should currently be the native width of the platform */
@@ -164,7 +164,7 @@ typedef void *                   sal_Handle;
 #else
     #error "Please make sure SAL_TYPES_SIZEOFPOINTER is defined for your architecture/compiler"
 #endif
-
+  
 /* sal_PtrDiff holds the result of a pointer subtraction */
 #if SAL_TYPES_SIZEOFPOINTER == 4
     typedef sal_Int32           sal_PtrDiff;
@@ -185,7 +185,7 @@ typedef void *                   sal_Handle;
 #endif
 
 /* sal_IntPtr, sal_uIntPtr are integer types designed to hold pointers so that any valid
- * pointer to void can be converted to this type and back to a pointer to void and the
+ * pointer to void can be converted to this type and back to a pointer to void and the 
  * result will compare to the original pointer */
 #if SAL_TYPES_SIZEOFPOINTER == 4
     typedef sal_Int32           sal_IntPtr;
@@ -208,7 +208,7 @@ typedef void *                   sal_Handle;
 /********************************************************************************/
 /* Useful defines
  */
-
+  
 /* The following SAL_MIN_INTn defines codify the assumption that the signed
  * sal_Int types use two's complement representation.  Defining them as
  * "-0x7F... - 1" instead of as "-0x80..." prevents warnings about applying the
@@ -228,11 +228,11 @@ typedef void *                   sal_Handle;
 #define SAL_MAX_UINT64        ((sal_uInt64) SAL_CONST_UINT64(0xFFFFFFFFFFFFFFFF))
 
 #if SAL_TYPES_SIZEOFLONG == 4
-#define SAL_MAX_SSIZE       SAL_MAX_INT32
-#define SAL_MAX_SIZE        SAL_MAX_UINT32
+#define SAL_MAX_SSIZE		SAL_MAX_INT32
+#define SAL_MAX_SIZE		SAL_MAX_UINT32
 #elif SAL_TYPES_SIZEOFLONG == 8
-#define SAL_MAX_SSIZE       SAL_MAX_INT64
-#define SAL_MAX_SIZE        SAL_MAX_UINT64
+#define SAL_MAX_SSIZE		SAL_MAX_INT64
+#define SAL_MAX_SIZE		SAL_MAX_UINT64
 #endif
 
 #if defined(SAL_W32) || defined(SAL_OS2) || defined(SAL_UNX)
@@ -314,7 +314,7 @@ typedef void *                   sal_Handle;
 #ifdef SAL_W32
 #   pragma pack(push, 8)
 #elif defined(SAL_OS2)
-#   pragma pack(push, 4)
+#	pragma pack(push, 4)
 #endif
 
 /** This is the binary specification of a SAL sequence.
@@ -324,13 +324,13 @@ typedef struct _sal_Sequence
 {
     /** reference count of sequence<br>
     */
-    sal_Int32           nRefCount;
+    sal_Int32			nRefCount;
     /** element count<br>
     */
-    sal_Int32           nElements;
+    sal_Int32			nElements;
     /** elements array<br>
     */
-    char                elements[1];
+    char				elements[1];
 } sal_Sequence;
 
 #define SAL_SEQUENCE_HEADER_SIZE ((sal_Size)&((sal_Sequence *)0)->elements)
@@ -360,12 +360,12 @@ typedef struct _sal_Sequence
 
 /** Definition of function throw clause macros.  These have been introduced
     to reduce code size by balancing out compiler bugs.
-
+    
     These macros are ONLY for function declarations,
     use common C++ throw statement for throwing exceptions, e.g.
     throw RuntimeException();
-
-    SAL_THROW()          should be used for all C++ functions, e.g. SAL_THROW( () )
+    
+    SAL_THROW()			 should be used for all C++ functions, e.g. SAL_THROW( () )
     SAL_THROW_EXTERN_C() should be used for all C functions
 */
 #ifdef __cplusplus

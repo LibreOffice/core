@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,14 +32,14 @@
 namespace rptui
 {
 using namespace ::com::sun::star;
-DBG_NAME( rpt_OReportRuler )
+DBG_NAME( rpt_OReportRuler )	
 OReportRuler::OReportRuler(Window* _pParent,OReportWindow* _pReportWindow,const uno::Reference< report::XSection >& _xSection)
 :Window(_pParent)
 ,m_pParent(_pReportWindow)
 {
     DBG_CTOR( rpt_OReportRuler,NULL);
     SetMapMode( MapMode( MAP_100TH_MM ) );
-
+    
     Show();
 }
 //------------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -105,18 +105,18 @@ SvxHyperlinkDlg::SvxHyperlinkDlg( SfxBindings *_pBindings, Window* pParent) :
     ToolBox             ( pParent, SVX_RES( RID_SVXDLG_HYPERLINK ) ),
     SfxControllerItem   ( SID_HYPERLINK_SETLINK, *_pBindings ),
 
-    aForwarder          ( SID_HYPERLINK_GETLINK, *this ),
+    aForwarder			( SID_HYPERLINK_GETLINK, *this ),
     aHyperlinkDlgForward( SID_HYPERLINK_DIALOG , *this),
 
-    aNameCB             ( this, SVX_RES( CB_NAME ) ),
-    aUrlFT              ( this, SVX_RES( FT_URL ) ),
-    aUrlCB              ( this, SVX_RES( CB_URL ) ),
+    aNameCB				( this, SVX_RES( CB_NAME ) ),
+    aUrlFT				( this, SVX_RES( FT_URL ) ),
+    aUrlCB				( this, SVX_RES( CB_URL ) ),
     aSearchConfig       (sal_True),
-    sAddress            ( SVX_RES( STR_ADDRESS ) ),
-    sExplorer           ( SVX_RES( STR_EXPLORER ) ),
-    sSearchTitle        ( SVX_RES( STR_BOOKMARK_SEARCH ) ),
-    aLinkPopup          ( SVX_RES( RID_SVXMN_HYPERLINK ) ),
-    pTargetMenu         ( NULL ),
+    sAddress			( SVX_RES( STR_ADDRESS ) ),
+    sExplorer			( SVX_RES( STR_EXPLORER ) ),
+    sSearchTitle		( SVX_RES( STR_BOOKMARK_SEARCH ) ),
+    aLinkPopup			( SVX_RES( RID_SVXMN_HYPERLINK ) ),
+    pTargetMenu			( NULL ),
 
     bNoDoc              ( TRUE ),
     bSend               ( FALSE ),
@@ -156,9 +156,9 @@ SvxHyperlinkDlg::SvxHyperlinkDlg( SfxBindings *_pBindings, Window* pParent) :
     if ( sItemText.Len() > 0 )
         SetItemText( CB_NAME, sItemText );
 
-    SetSizePixel(CalcWindowSizePixel());    // Groesse initialisieren
+    SetSizePixel(CalcWindowSizePixel());	// Groesse initialisieren
 
-    nMaxHeight = GetSizePixel().Height();   // Hoehe nochmal merken, da sie veraendert wurde
+    nMaxHeight = GetSizePixel().Height();	// Hoehe nochmal merken, da sie veraendert wurde
                                             // SetSizePixel ruft Resize-Handler!
 
     Show();
@@ -226,21 +226,21 @@ void SvxHyperlinkDlg::Resize()
 
     ToolBox::Resize();
 
-    if (nWidth) // nWidth ist manchmal 0
+    if (nWidth)	// nWidth ist manchmal 0
     {
         long nDeltaW = nMaxWidth - nWidth + aUrlCB.LogicToPixel(Size(3, 1)).Width() + 1;
 
         long nNewUrlWidth = aUrlCB.CalcResizeWidth(nDeltaW);
         long nNewNameWidth = aNameCB.CalcResizeWidth(nDeltaW);
 
-        if (nNewUrlWidth && nNewNameWidth)  // Flackern reduzieren
+        if (nNewUrlWidth && nNewNameWidth)	// Flackern reduzieren
         {
             SetUpdateMode(FALSE);
 
             // Comboboxen resizen
             aUrlCB.DoResize(nNewUrlWidth);
             aNameCB.DoResize(nNewNameWidth);
-            RecalcItems();  // Alle Elemente neu anordnen
+            RecalcItems();	// Alle Elemente neu anordnen
 
             SetUpdateMode(TRUE);
         }
@@ -324,7 +324,7 @@ void SvxHyperlinkDlg::StateChanged( USHORT nSID, SfxItemState eState,
                 aUrlCB.SetText(sUrl);
             }
             else if (aUrlCB.GetEntryCount())
-            {   // Letzten Eintrag wieder selektieren
+            {	// Letzten Eintrag wieder selektieren
                 aNameCB.SetText(aNameCB.GetEntry(0));
                 aUrlCB.SetText(aUrlCB.GetEntry(0));
             }
@@ -349,7 +349,7 @@ IMPL_LINK( SvxHyperlinkDlg, TBClickHdl, ToolBox *, pBox )
     {
         case BTN_LINK:
         {
-            if (!bSend) // Link ins Dokument einfuegen
+            if (!bSend)	// Link ins Dokument einfuegen
                 SendToApp(HLINK_DEFAULT);
         }
         break;
@@ -402,7 +402,7 @@ IMPL_LINK( SvxHyperlinkDlg, DropdownClick, ToolBox *, pBox )
         case BTN_LINK:
         {
             // Link-Popup anstossen
-            EndSelection(); // Vor dem Execute, damit Popup den Focus bekommt
+            EndSelection();	// Vor dem Execute, damit Popup den Focus bekommt
             aLinkPopup.EnableItem(MN_BUTTON, !bHtmlMode);
             aLinkPopup.Execute( this, GetItemRect( BTN_LINK ), FLOATWIN_POPUPMODE_DOWN );
         }
@@ -480,7 +480,7 @@ void SvxHyperlinkDlg::TargetMenu(const String& rSelEntry, BOOL bExecute)
 
     SfxViewFrame* pVwFrm = SfxViewFrame::Current();
 
-    if (pVwFrm) // Alle moeglichen Target Frames zusammensammeln und anzeigen
+    if (pVwFrm)	// Alle moeglichen Target Frames zusammensammeln und anzeigen
     {
         TargetList aList;
         pVwFrm->GetTopFrame().GetTargetList(aList);
@@ -533,10 +533,10 @@ IMPL_LINK( SvxHyperlinkDlg, LinkPopupSelectHdl, Menu *, pMenu )
 {
     switch (pMenu->GetCurItemId())
     {
-        case MN_FIELD:  // URL als Hyperlink ins Dok einfuegen
+        case MN_FIELD:	// URL als Hyperlink ins Dok einfuegen
             SendToApp(HLINK_FIELD);
             break;
-        case MN_BUTTON: // URL als Button ins Dok einfuegen
+        case MN_BUTTON:	// URL als Button ins Dok einfuegen
             SendToApp(HLINK_BUTTON);
             break;
     }
@@ -870,7 +870,7 @@ long HyperCombo::Notify( NotifyEvent& rNEvt )
     long nHandled = 0;
     static BOOL bLocked = FALSE;
 
-    if (bLocked)    // Keine weiteren RETURNs annehmen (nicht Reentrant!)
+    if (bLocked)	// Keine weiteren RETURNs annehmen (nicht Reentrant!)
         return nHandled;
 
     bLocked = TRUE;
@@ -924,7 +924,7 @@ long HyperCombo::CalcResizeWidth( long nW )
     if (nNewWidth != GetSizePixel().Width())
         return nNewWidth;
     else
-        return 0;   // Kein Resize notwendig
+        return 0;	// Kein Resize notwendig
 }
 
 /*--------------------------------------------------------------------

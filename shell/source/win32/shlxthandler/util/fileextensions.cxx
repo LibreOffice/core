@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -36,15 +36,15 @@
 //------------------------------------
 
 const std::string WRITER_FILE_EXTENSIONS   = "sxwstwsxgodtottodm";
-const std::string CALC_FILE_EXTENSIONS     = "sxcstcodsots";
+const std::string CALC_FILE_EXTENSIONS     = "sxcstcodsots";    
 const std::string DRAW_FILE_EXTENSIONS     = "sxdstdodgotg";
 const std::string IMPRESS_FILE_EXTENSIONS  = "sxistiodpotp";
 const std::string MATH_FILE_EXTENSIONS     = "sxmodf";
 const std::string WEB_FILE_EXTENSIONS      = "oth";
 const std::string DATABASE_FILE_EXTENSIONS = "odb";
-
+    
 FileExtensionEntry OOFileExtensionTable[] = {
-    { ".sxw", L".sxw", "soffice.StarWriterDocument.6"      },
+    { ".sxw", L".sxw", "soffice.StarWriterDocument.6"      }, 
     { ".sxc", L".sxc", "soffice.StarCalcDocument.6"        },
     { ".sxi", L".sxi", "soffice.StarImpressDocument.6"     },
     { ".sxd", L".sxd", "soffice.StarDrawDocument.6"        },
@@ -53,21 +53,21 @@ FileExtensionEntry OOFileExtensionTable[] = {
     { ".sxg", L".sxg", "soffice.StarWriterGlobalDocument.6"},
     { ".std", L".std", "soffice.StarDrawTemplate.6"        },
     { ".sti", L".sti", "soffice.StarImpressTemplate.6"     },
-    { ".stc", L".stc", "soffice.StarCalcTemplate.6"        },
-    { ".odt", L".odt", "opendocument.WriterDocument.1"       },
+    { ".stc", L".stc", "soffice.StarCalcTemplate.6"        },		
+    { ".odt", L".odt", "opendocument.WriterDocument.1"       },	
     { ".ott", L".ott", "opendocument.WriterTemplate.1"       },
     { ".odm", L".odm", "opendocument.WriterGlobalDocument.1" },
     { ".oth", L".oth", "opendocument.WriterWebTemplate.1"    },
-    { ".ods", L".ods", "opendocument.CalcDocument.1"         },
-    { ".ots", L".ots", "opendocument.CalcTemplate.1"         },
-    { ".odg", L".odg", "opendocument.DrawDocument.1"         },
-    { ".otg", L".otg", "opendocument.DrawTemplate.1"         },
-    { ".odp", L".odp", "opendocument.ImpressDocument.1"      },
+    { ".ods", L".ods", "opendocument.CalcDocument.1"         },	
+    { ".ots", L".ots", "opendocument.CalcTemplate.1"         },		
+    { ".odg", L".odg", "opendocument.DrawDocument.1"         },	
+    { ".otg", L".otg", "opendocument.DrawTemplate.1"         },		
+    { ".odp", L".odp", "opendocument.ImpressDocument.1"      },	
     { ".otp", L".otp", "opendocument.ImpressTemplate.1"      },
     { ".odf", L".odf", "opendocument.MathDocument.1"         },
     { ".odb", L".odb", "opendocument.DatabaseDocument.1"     }
     };
-
+     
 
 size_t OOFileExtensionTableSize = SAL_N_ELEMENTS(OOFileExtensionTable);
 
@@ -92,7 +92,7 @@ std::string get_file_name_extension(const std::string& file_name)
 File_Type_t get_file_type(const std::string& file_name)
 {
     std::string fext = get_file_name_extension(file_name);
-
+    
     if (std::string::npos != WRITER_FILE_EXTENSIONS.find(fext))
         return WRITER;
     else if (std::string::npos != CALC_FILE_EXTENSIONS.find(fext))
@@ -107,7 +107,7 @@ File_Type_t get_file_type(const std::string& file_name)
         return WEB;
     else if (std::string::npos != DATABASE_FILE_EXTENSIONS.find(fext))
         return DATABASE;
-    else
+    else 
         return UNKNOWN;
 }
 

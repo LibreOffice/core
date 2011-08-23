@@ -78,7 +78,7 @@ using namespace com::sun::star::bridge::oleautomation;
 using namespace com::sun::star::bridge::ModelDependent;
 
 #define JSCRIPT_ID_PROPERTY L"_environment"
-#define JSCRIPT_ID          L"jscript"
+#define JSCRIPT_ID			L"jscript"
 namespace ole_adapter
 {
 
@@ -128,7 +128,7 @@ IUnknownWrapper_Impl::~IUnknownWrapper_Impl()
 
     // remove entries in global maps
     typedef hash_map<sal_uInt32, sal_uInt32>::iterator _IT;
-    _IT it= WrapperToAdapterMap.find( (sal_uInt32) xIntRoot);
+    _IT it=	WrapperToAdapterMap.find( (sal_uInt32) xIntRoot);
     if( it != WrapperToAdapterMap.end())
     {
         sal_uInt32 adapter= it->second;
@@ -1078,9 +1078,9 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
     }
 
 
-    CComVariant     varResult;
-    ExcepInfo       excepinfo;
-    unsigned int    uArgErr;
+    CComVariant		varResult;
+    ExcepInfo 		excepinfo;
+    unsigned int 	uArgErr;
     DISPPARAMS dispparams= { pVarParams, NULL, parameterCount, 0};
     // Get the DISPID
     FuncDesc aDesc(getTypeInfo());
@@ -1161,7 +1161,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
         {
             try
             {
-                if( pMethod )
+                if( pMethod	)
                     variantToAny(&varResult, ret, Type( pMethod->pReturnTypeRef), sal_False);
                 else
                     variantToAny(&varResult, ret, sal_False);
@@ -1185,7 +1185,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
 
     if( !bConvRet) // conversion of return or out parameter failed
         throw CannotConvertException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Call to COM object failed. Conversion of return or out value failed")),
-                                      Reference<XInterface>( static_cast<XWeak*>(this), UNO_QUERY   ), TypeClass_UNKNOWN,
+                                      Reference<XInterface>( static_cast<XWeak*>(this), UNO_QUERY	), TypeClass_UNKNOWN,
                                       FailReason::UNKNOWN, 0);// lookup error code
     // conversion of return or out parameter failed
     switch (hr)
@@ -1421,7 +1421,7 @@ sal_Bool IUnknownWrapper_Impl::isJScriptObject()
         if( disp)
         {
             CComVariant result;
-            if( SUCCEEDED(  disp.GetPropertyByName( JSCRIPT_ID_PROPERTY, &result)))
+            if( SUCCEEDED(	disp.GetPropertyByName( JSCRIPT_ID_PROPERTY, &result)))
             {
                 if(result.vt == VT_BSTR)
                 {
@@ -1473,10 +1473,10 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
     Any ret;
     HRESULT result;
 
-    DISPPARAMS      dispparams = {NULL, NULL, 0, 0};
-    CComVariant     varResult;
-    ExcepInfo       excepinfo;
-    unsigned int    uArgErr;
+    DISPPARAMS 		dispparams = {NULL, NULL, 0, 0};
+    CComVariant		varResult;
+    ExcepInfo 		excepinfo;
+    unsigned int 	uArgErr;
     sal_Int32       i = 0;
     sal_Int32 nUnoArgs = Params.getLength();
     DISPID idPropertyPut = DISPID_PROPERTYPUT;
@@ -1779,7 +1779,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
             }
             // in parameter no VT_BYREF except for array, interfaces
             else
-            {   // void any stands for optional param
+            {	// void any stands for optional param
                 if (i < nUnoArgs && anyArg.getValueTypeClass() != TypeClass_VOID)
                 {
                     anyToVariant( & arArgs[revIndex], anyArg, varType);
@@ -2029,7 +2029,7 @@ bool IUnknownWrapper_Impl::getDispid(const OUString& sFuncName, DISPID * id)
 {
     OSL_ASSERT(m_spDispatch);
     LPOLESTR lpsz = const_cast<LPOLESTR> (reinterpret_cast<LPCOLESTR>(sFuncName.getStr()));
-    HRESULT hr = m_spDispatch->GetIDsOfNames(IID_NULL, &lpsz, 1, LOCALE_USER_DEFAULT, id);
+    HRESULT	hr = m_spDispatch->GetIDsOfNames(IID_NULL, &lpsz, 1, LOCALE_USER_DEFAULT, id);
     return hr == S_OK ? true : false;
 }
 void IUnknownWrapper_Impl::getFuncDesc(const OUString & sFuncName, FUNCDESC ** pFuncDesc)

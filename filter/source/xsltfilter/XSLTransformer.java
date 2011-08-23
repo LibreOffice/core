@@ -1,7 +1,7 @@
 /************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -220,7 +220,7 @@ public class XSLTransformer
             @Override
             public void run() {
 
-                // Local variabes used outside try block in finally block
+                // Local variabes used outside try block in finally block                  
                 InputStream is = null;
                 Source source = null;
                 BufferedOutputStream os = null;
@@ -249,7 +249,7 @@ public class XSLTransformer
 
                     is = new BufferedInputStream(
                             new XInputStreamToInputStreamAdapter(m_xis));
-                    //Source xmlsource = new StreamSource(xmlinput);
+                    //Source xmlsource = new StreamSource(xmlinput);    
                     SAXParserFactory spf = SAXParserFactory.newInstance();
                     spf.setValidating(false);
                     spf.setNamespaceAware(true);
@@ -281,7 +281,7 @@ public class XSLTransformer
 
                     synchronized (transformers) {
                         java.lang.ref.WeakReference ref = null;
-                        // try to get the transformer reference from the cache
+                        // try to get the transformer reference from the cache                        
                         if ((ref = (java.lang.ref.WeakReference) transformers.get(stylesheeturl)) == null ||
                                 (transformation = ((Transformation) ref.get())) == null ||
                                 ((Transformation) ref.get()).lastmod < lastmod) {
@@ -290,7 +290,7 @@ public class XSLTransformer
                             if (ref != null) {
                                 transformers.remove(stylesheeturl);
                             }
-                            // create new transformer for this stylesheet
+                            // create new transformer for this stylesheet                                                                                   
                             TransformerFactory tfactory = TransformerFactory.newInstance();
                             debug("TransformerFactory is '" + tfactory.getClass().getName() + "'");
                 // some external saxons (Debian, Ubuntu, ...) have this disabled
@@ -298,7 +298,7 @@ public class XSLTransformer
                 tfactory.setAttribute(FeatureKeys.ALLOW_EXTERNAL_FUNCTIONS, new Boolean(true));
                             transformer = tfactory.newTransformer(new StreamSource(stylesheeturl));
                             transformer.setOutputProperty("encoding", "UTF-8");
-                            // transformer.setURIResolver(XSLTransformer.this);
+                            // transformer.setURIResolver(XSLTransformer.this);                  
 
                             // store the transformation into the cache
                             transformation = new Transformation();

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,15 +47,15 @@ namespace framework
 namespace css = ::com::sun::star;
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//	declarations
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
+//	XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_MULTISERVICE_2 (    UriAbbreviation                                                         ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2 (	UriAbbreviation															,
                                         ::cppu::OWeakObject                                                     ,
-                                        SERVICENAME_STRINGABBREVIATION                                          ,
+                                        SERVICENAME_STRINGABBREVIATION										    ,
                                         IMPLEMENTATIONNAME_URIABBREVIATION
                                     )
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,23 +92,23 @@ public class ModuleUIConfigurationManager extends TestCase {
      */
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         TestEnvironment tEnv = null;
-
+        
         try {
             xMSF = (XMultiServiceFactory)tParam.getMSF();
-
+            
             log.println("Creating instance...");
             xTextDoc = WriterTools.createTextDoc(xMSF);
-
+            
             Object o = (XInterface)xMSF.createInstance("com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
             XModuleUIConfigurationManagerSupplier xMUICMS = (XModuleUIConfigurationManagerSupplier)
             UnoRuntime.queryInterface(XModuleUIConfigurationManagerSupplier.class, o);
-
+            
             util.dbg.printInterfaces(xMUICMS);
             oObj = xMUICMS.getUIConfigurationManager("com.sun.star.text.TextDocument");
 
-            log.println("TestObject: " + utils.getImplName(oObj));
+            log.println("TestObject: " + utils.getImplName(oObj)); 
             tEnv = new TestEnvironment(oObj);
-
+            
             XNameAccess xMM = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class, xMSF.createInstance("com.sun.star.comp.framework.ModuleManager"));
             String[] names = xMM.getElementNames();
 
@@ -116,13 +116,13 @@ public class ModuleUIConfigurationManager extends TestCase {
             XSingleServiceFactory xStorageService = (XSingleServiceFactory)
                     UnoRuntime.queryInterface(XSingleServiceFactory.class, o);
             Object[]props = new Object[2];
-
+            
             String aFile = util.utils.getOfficeTempDir(xMSF) + "dummyFile.dat";
             log.println("storage file : '"+ aFile + "'");
-
+            
             props[0] = aFile;
             props[1] = new Integer(ElementModes.READWRITE);
-            xStore = (XStorage)UnoRuntime.queryInterface(XStorage.class, xStorageService.createInstanceWithArguments(props));
+            xStore = (XStorage)UnoRuntime.queryInterface(XStorage.class, xStorageService.createInstanceWithArguments(props)); 
 
             PropertyValue[] initProps = new PropertyValue[4];
             PropertyValue propVal = new PropertyValue();
@@ -131,8 +131,8 @@ public class ModuleUIConfigurationManager extends TestCase {
             initProps[0] = propVal;
             propVal = new PropertyValue();
             propVal.Name = "UserConfigStorage";
-            propVal.Value = xStore;
-            initProps[1] = propVal;
+            propVal.Value = xStore; 
+            initProps[1] = propVal; 
             propVal = new PropertyValue();
             propVal.Name = "ModuleIdentifier";
             propVal.Value = "swriter";
@@ -140,24 +140,24 @@ public class ModuleUIConfigurationManager extends TestCase {
             propVal = new PropertyValue();
             propVal.Name = "UserRootCommit";
             propVal.Value = (XTransactedObject)UnoRuntime.queryInterface(XTransactedObject.class, xStore);
-            initProps[3] = propVal;
-
-
+            initProps[3] = propVal; 
+            
+            
             tEnv.addObjRelation("XInitialization.args", initProps);
-
+            
             // the short cut manager service name
-            // 2do: correct the service name when it's no longer in
-            tEnv.addObjRelation("XConfigurationManager.ShortCutManager",
+            // 2do: correct the service name when it's no longer in 
+            tEnv.addObjRelation("XConfigurationManager.ShortCutManager", 
                 "com.sun.star.ui.ModuleAcceleratorConfiguration");
-
+            
             // the resourceURL
             tEnv.addObjRelation("XModuleUIConfigurationManager.ResourceURL",
                                             "private:resource/menubar/menubar");
-            tEnv.addObjRelation("XUIConfiguration.XUIConfigurationListenerImpl",
-                            new ConfigurationListener(log,
+            tEnv.addObjRelation("XUIConfiguration.XUIConfigurationListenerImpl", 
+                            new ConfigurationListener(log, 
                             (XUIConfigurationManager)UnoRuntime.queryInterface(
                             XUIConfigurationManager.class, oObj), xMSF));
-            tEnv.addObjRelation("XModuleUIConfigurationManagerSupplier.ConfigManagerImplementationName",
+            tEnv.addObjRelation("XModuleUIConfigurationManagerSupplier.ConfigManagerImplementationName", 
                         "com.sun.star.comp.framework.ModuleUIConfigurationManager");
         }
         catch(com.sun.star.uno.Exception e) {
@@ -166,7 +166,7 @@ public class ModuleUIConfigurationManager extends TestCase {
         }
         return tEnv;
     }
-
+    
     /**
      * An implementation of the _XUIConfiguration.XUIConfigurationListenerImpl
      * interface to trigger the event for a listener call.
@@ -177,7 +177,7 @@ public class ModuleUIConfigurationManager extends TestCase {
         private PrintWriter log = null;
         private XUIConfigurationManager xUIManager = null;
         private XMultiServiceFactory xMSF = null;
-
+        
         public ConfigurationListener(PrintWriter _log, XUIConfigurationManager xUIManager, XMultiServiceFactory xMSF) {
             log = _log;
             this.xUIManager = xUIManager;
@@ -193,7 +193,7 @@ public class ModuleUIConfigurationManager extends TestCase {
 
                 PropertyValue[]prop = _XUIConfigurationManager.createMenuBarEntry(
                                         "Trigger Event", xMenuBarSettings, xMSF, log);
-                _XUIConfigurationManager.createMenuBarItem("Click for Macro",
+                _XUIConfigurationManager.createMenuBarItem("Click for Macro", 
                                 (XIndexContainer)UnoRuntime.queryInterface(
                                 XIndexContainer.class, prop[3].Value), log);
                 XIndexContainer x = (XIndexContainer)UnoRuntime.queryInterface(XIndexContainer.class, xMenuBarSettings);
@@ -241,5 +241,5 @@ public class ModuleUIConfigurationManager extends TestCase {
             log.println("_XUIConfiguration.XUIConfigurationListenerImpl.elementReplaced.");
         }
     }
-
+    
 }

@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ namespace sd {
 
 TYPEINIT1( FuFormatPaintBrush, FuText );
 
-FuFormatPaintBrush::FuFormatPaintBrush( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+FuFormatPaintBrush::FuFormatPaintBrush( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq ) 
 : FuText(pViewSh, pWin, pView, pDoc, rReq)
 , mbPermanent( false )
 , mbOldIsQuickTextEditMode( true )
@@ -91,7 +91,7 @@ void FuFormatPaintBrush::DoExecute( SfxRequest& rReq )
 void FuFormatPaintBrush::implcancel()
 {
     if( mpViewShell && mpViewShell->GetViewFrame() )
-    {
+    {			
         SfxViewFrame* pViewFrame = mpViewShell->GetViewFrame();
         pViewFrame->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
         pViewFrame->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
@@ -150,7 +150,7 @@ BOOL FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
         unmarkimpl( mpView );
 
         if( aVEvt.pObj )
-        {
+        {	
             USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
             BOOL bToggle = FALSE;
             mpView->MarkObj(mpWindow->PixelToLogic( rMEvt.GetPosPixel() ), nHitLog, bToggle, FALSE);
@@ -259,7 +259,7 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
     if(mpItemSet.get() && (rMarkList.GetMarkCount() == 1) )
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-
+    
         if( mpDoc->IsUndoEnabled() )
         {
             String sLabel( mpViewShell->GetViewShellBase().RetrieveLabelFromCommand( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FormatPaintbrush" ) ) ) );
@@ -268,7 +268,7 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
         }
 
         mpView->ApplyFormatPaintBrush( *mpItemSet.get(), bNoCharacterFormats, bNoParagraphFormats );
-
+        
         if( mpDoc->IsUndoEnabled() )
         {
             mpDoc->EndUndo();
@@ -280,7 +280,7 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
 {
     const SdrMarkList& rMarkList = rDrawViewShell.GetDrawView()->GetMarkedObjectList();
     const ULONG nMarkCount = rMarkList.GetMarkCount();
-
+    
     if( nMarkCount == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();

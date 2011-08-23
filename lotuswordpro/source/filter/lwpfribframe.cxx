@@ -59,7 +59,7 @@
  */
 /*************************************************************************
  * Change History
- Mar 2005       Created
+ Mar 2005		Created
  ************************************************************************/
 #include "lwpfribframe.hxx"
 #include "xfilter/xfstylemanager.hxx"

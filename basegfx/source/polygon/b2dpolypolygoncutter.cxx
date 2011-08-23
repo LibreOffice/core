@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,9 +52,9 @@ namespace basegfx
 
         struct StripHelper
         {
-            B2DRange                                maRange;
-            sal_Int32                               mnDepth;
-            B2VectorOrientation                     meOrinetation;
+            B2DRange								maRange;
+            sal_Int32								mnDepth;
+            B2VectorOrientation						meOrinetation;
         };
 
         //////////////////////////////////////////////////////////////////////////////
@@ -120,7 +120,7 @@ namespace basegfx
 
         class solver
         {
-        private:
+        private:   
             const B2DPolyPolygon    maOriginal;
             PNV                     maPNV;
             VNV                     maVNV;
@@ -175,7 +175,7 @@ namespace basegfx
                     // b is right turn seen from a, test if Test is right of both and so outside (left is seeen as inside)
                     const bool bBoolA(fTools::lessOrEqual(rVecA.cross(rTest), 0.0));
                     const bool bBoolB(fTools::moreOrEqual(rVecB.cross(rTest), 0.0));
-
+                    
                     return (!(bBoolA && bBoolB));
                 }
             }
@@ -206,7 +206,7 @@ namespace basegfx
                 // Use maOriginalNext, not maNext to create the original (yet unchanged)
                 // curve segment. Otherwise, this segment would NOT ne correct.
                 const B2DVector& rCPB(bPrev ? maVNV[maPNV[rPN.mnIP].mnI].maOriginalNext : maVNV[maPNV[rPN.mnIN].mnI].maPrev);
-
+                
                 return B2DCubicBezier(rStart, rStart + rCPA, rEnd + rCPB, rEnd);
             }
 
@@ -222,7 +222,7 @@ namespace basegfx
                         // deadend on A (identical edge)
                         return;
                     }
-
+                    
                     const B2DCubicBezier aNextB(createSegment(rPNb, false));
                     const B2DCubicBezier aPrevB(createSegment(rPNb, true));
 
@@ -299,7 +299,7 @@ namespace basegfx
                             const B2DVector aNextCA(aNextA.interpolatePoint(0.5) - aNextA.getStartPoint());
                             const B2DVector aPrevCB(aPrevB.interpolatePoint(0.5) - aPrevB.getStartPoint());
                             const bool bEnter(impLeftOfEdges(aPrevCA, aNextCA, aPrevCB));
-
+                            
                             const B2DCubicBezier aNextA2(createSegment(*pPNa2, false));
                             const B2DCubicBezier aPrevA2(createSegment(*pPNa2, true));
                             const B2DCubicBezier aNextB2(createSegment(*pPNb2, false));
@@ -307,7 +307,7 @@ namespace basegfx
                             const B2DVector aNextCA2(aNextA2.interpolatePoint(0.5) - aNextA2.getStartPoint());
                             const B2DVector aNextCB2(aNextB2.interpolatePoint(0.5) - aNextB2.getStartPoint());
                             const bool bLeave(impLeftOfEdges(aPrevCA2, aNextCA2, aNextCB2));
-
+                        
                             if(bEnter != bLeave)
                             {
                                 // crossover
@@ -569,7 +569,7 @@ namespace basegfx
 
                             // fill data
                             sal_uInt32 nInsertIndex(0);
-
+                            
                             for(a = 0; a < nOriginalCount; a++)
                             {
                                 const B2DPolygon aCandidate(aGeometry.getB2DPolygon(a));
@@ -613,11 +613,11 @@ namespace basegfx
                             {
                                 const B2DPoint& rPoint = pPNCurr->maPoint;
                                 aNewPart.append(rPoint);
-
+                                
                                 if(mbIsCurve)
                                 {
                                     const VN& rVNCurr = maVNV[pPNCurr->mnI];
-
+                                    
                                     if(!rVNCurr.maPrev.equalZero())
                                     {
                                         aNewPart.setPrevControlPoint(aNewPart.count() - 1, rPoint + rVNCurr.maPrev);
@@ -629,7 +629,7 @@ namespace basegfx
                                     }
                                 }
 
-                                pPNCurr->mnI = SAL_MAX_UINT32;
+                                pPNCurr->mnI = SAL_MAX_UINT32; 
                                 nCountdown--;
                                 pPNCurr = &(maPNV[pPNCurr->mnIN]);
                             }
@@ -814,7 +814,7 @@ namespace basegfx
         {
             solver aSolver(rCandidate);
             B2DPolyPolygon aRetval(stripNeutralPolygons(aSolver.getB2DPolyPolygon()));
-
+            
             return correctOrientations(aRetval);
         }
 
@@ -822,7 +822,7 @@ namespace basegfx
         {
             solver aSolver(rCandidate);
             B2DPolyPolygon aRetval(stripNeutralPolygons(aSolver.getB2DPolyPolygon()));
-
+            
             return correctOrientations(aRetval);
         }
 
@@ -845,7 +845,7 @@ namespace basegfx
                 aRetval.append(rCandidateB);
                 aRetval = solveCrossovers(aRetval);
                 aRetval = stripNeutralPolygons(aRetval);
-
+                
                 return stripDispensablePolygons(aRetval, false);
             }
         }
@@ -870,7 +870,7 @@ namespace basegfx
                 aRetval.append(rCandidateB);
                 aRetval = solveCrossovers(aRetval);
                 aRetval = stripNeutralPolygons(aRetval);
-
+                
                 return correctOrientations(aRetval);
             }
         }
@@ -895,7 +895,7 @@ namespace basegfx
                 aRetval.append(rCandidateB);
                 aRetval = solveCrossovers(aRetval);
                 aRetval = stripNeutralPolygons(aRetval);
-
+                
                 return stripDispensablePolygons(aRetval, true);
             }
         }
@@ -914,11 +914,11 @@ namespace basegfx
             {
                 // Make B topologically to holes and append to A
                 B2DPolyPolygon aRetval(rCandidateB);
-
+                
                 aRetval.flip();
                 aRetval.append(rCandidateA);
 
-                // solve crossovers and throw away all sub-polygons which have a
+                // solve crossovers and throw away all sub-polygons which have a 
                 // depth other than 0.
                 aRetval = basegfx::tools::solveCrossovers(aRetval);
                 aRetval = basegfx::tools::stripNeutralPolygons(aRetval);
@@ -930,7 +930,7 @@ namespace basegfx
         B2DPolyPolygon mergeToSinglePolyPolygon(const std::vector< basegfx::B2DPolyPolygon >& rInput)
         {
             std::vector< basegfx::B2DPolyPolygon > aInput(rInput);
-
+            
             // first step: prepareForPolygonOperation and simple merge of non-overlapping
             // PolyPolygons for speedup; this is possible for the wanted OR-operation
             if(aInput.size())

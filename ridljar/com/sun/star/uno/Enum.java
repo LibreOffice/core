@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -27,20 +27,20 @@
 
 package com.sun.star.uno;
 
-/**
- * The Enum class is the base class for all classes generated
+/** 
+ * The Enum class is the base class for all classes generated 
  * as java binding for the IDL type enum.
- * Each java mapped enum class provides static member of this class
+ * Each java mapped enum class provides static member of this class 
  * which represents the enum values.
- * You cannot create a object of this class or subclass direct, to
+ * You cannot create a object of this class or subclass direct, to 
  * avoid enum values with integer values outside the defined range.
  * <p>
- * @version     $Revision: 1.5 $ $ $Date: 2008-04-11 11:11:59 $
+ * @version 	$Revision: 1.5 $ $ $Date: 2008-04-11 11:11:59 $
  */
 public abstract class Enum {
     private int m_value;
 
-    /**
+    /**	
      * Constructs a enum value.
      * <p>
      * @param  value   the integer value of this enum value.
@@ -49,13 +49,13 @@ public abstract class Enum {
         m_value = value;
     }
 
-    /**
+    /** 
      * Get the integer value of an enum value.
      * <p>
      * @return   the integer value.
      */
     public final int getValue() {
-        return m_value;
+        return m_value;	
     }
 }
 

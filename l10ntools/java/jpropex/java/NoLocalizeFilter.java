@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,13 +33,13 @@ import java.util.regex.*;
 public class NoLocalizeFilter extends FilterInputStream
 {
     InputStream in;
-    Pattern p = Pattern.compile("#[\\s]*x-no-translate");
+    Pattern p = Pattern.compile("#[\\s]*x-no-translate");            
 
     public NoLocalizeFilter( InputStream in ) {
         super(in);
         this.in = in;
     }
-    public int read(byte[] b, int off, int len) throws IOException
+    public int read(byte[] b, int off, int len) throws IOException 
     {
         String search = new String( b );
         Matcher m = p.matcher( search );

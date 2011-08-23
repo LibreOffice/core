@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,7 +49,7 @@ DBG_NAME( rpt_OXMLFormattedField )
 OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport,
                 sal_uInt16 nPrfx, const ::rtl::OUString& rLName
                 ,const uno::Reference< xml::sax::XAttributeList > & _xAttrList
-                ,const uno::Reference< XFormattedField > & _xComponent
+                ,const uno::Reference< XFormattedField > & _xComponent 
                 ,OXMLTable* _pContainer
                 ,bool _bPageCount) :
     OXMLReportElementBase( rImport, nPrfx, rLName,_xComponent.get(),_pContainer)
@@ -71,7 +71,7 @@ OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport,
 
             switch( rTokenMap.Get( nPrefix, sLocalName ) )
             {
-                case XML_TOK_DATA_FORMULA:
+                case XML_TOK_DATA_FORMULA: 
                     _xComponent->setDataField(ORptFilter::convertFormula(sValue));
                     break;
                 case XML_TOK_SELECT_PAGE:

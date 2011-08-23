@@ -544,7 +544,7 @@ public:
     BYTE bHasHdr : 1;
     BYTE bHasFtr : 1;
     BYTE bSubstituteBullets : 1; // true: SubstituteBullet() gets called
-
+    
     bool mbExportModeRTF;
 
     SwDoc *pDoc;
